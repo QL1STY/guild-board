@@ -2,8 +2,8 @@ import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vitest/config'
 
 /**
- * The site's browser demo (`npm run build:site-demo`, mode `site-demo`, whose `.env.site-demo` sets VITE_SITE_DEMO=1): the same
- * interface, served from /guild-board/demo/ on GitHub Pages, with its answers read from the recording that
+ * The site's browser demo (`npm run build:site-demo`, mode `site-demo`, which alone sets VITE_SITE_DEMO, here and not in a `.env`
+ * file, as the public tree carries none): the same interface, served from /guild-board/demo/ on GitHub Pages, with its answers read from the recording that
  * tools/record-site-demo.py wrote into `site-demo/` (served as the build's public folder). No other build has any of it.
  */
 const SITE_DEMO_BASE = '/guild-board/demo/'
@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: site ? [react(), noReferrer(), wideViewport()] : [react()],
     base: site ? SITE_DEMO_BASE : '/',
-    ...(site ? { publicDir: 'site-demo' } : {}),
+    ...(site ? { publicDir: 'site-demo', define: { 'import.meta.env.VITE_SITE_DEMO': JSON.stringify('1') } } : {}),
     build: { outDir: site ? 'dist-site' : 'dist', emptyOutDir: true },
     // Vitest loads every stylesheet as an empty one, except those a test reads as text: `import css from './x.css?raw'`.
     test: { include: ['src/**/*.test.ts'], environment: 'node', css: { include: [/\.css\?raw$/] } },
