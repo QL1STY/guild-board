@@ -52,6 +52,13 @@ print("acquired" if guard.acquire() else "refused", guard.notify_running(sys.arg
 CODE = "abcDEF0123456789_-abcdef"
 
 
+def _answer(qtbot, start: subprocess.Popen) -> tuple[str, str]:
+    """What a second start printed. Qt runs meanwhile: the first Guild Board's answer to it goes out on Qt's loop, and a test
+    that sat in communicate() would let the second start wait for an answer that never leaves, and report no one there."""
+    qtbot.waitUntil(lambda: start.poll() is not None, timeout=15_000)
+    return start.communicate(timeout=15)
+
+
 def test_a_second_start_on_the_same_folder_brings_the_first_to_the_front(qtbot, tmp_path):
     first = InstanceGuard(tmp_path / "data")
     assert first.acquire()
@@ -59,7 +66,7 @@ def test_a_second_start_on_the_same_folder_brings_the_first_to_the_front(qtbot, 
     script.write_text(SECOND_START, encoding="utf-8")
     with qtbot.waitSignal(first.activated, timeout=15_000):
         second = subprocess.Popen([sys.executable, str(script), str(tmp_path / "data")], stdout=subprocess.PIPE, text=True)
-    assert second.communicate(timeout=15)[0].split() == ["refused", "True"]
+    assert _answer(qtbot, second)[0].split() == ["refused", "True"]
     first.release()
     third = InstanceGuard(tmp_path / "data")
     assert third.acquire()  # once the first has closed, the folder is free again
@@ -75,7 +82,7 @@ def test_a_later_start_can_ask_the_first_to_quit(qtbot, tmp_path):
         second = subprocess.Popen(
             [sys.executable, str(script), str(tmp_path / "data"), "quit"], stdout=subprocess.PIPE, text=True
         )
-    assert second.communicate(timeout=15)[0].split() == ["refused", "True"]
+    assert _answer(qtbot, second)[0].split() == ["refused", "True"]
     first.release()
 
 
@@ -91,7 +98,7 @@ def test_a_second_start_hands_the_link_to_the_first(qtbot, tmp_path):
             stdout=subprocess.PIPE, text=True,
         )
     assert heard.args == [CODE]
-    assert second.communicate(timeout=15)[0].split() == ["refused", "True"]
+    assert _answer(qtbot, second)[0].split() == ["refused", "True"]
     first.release()
 
 
@@ -105,7 +112,7 @@ def test_a_message_that_holds_no_code_only_shows_the_window(qtbot, tmp_path):
         second = subprocess.Popen(
             [sys.executable, str(script), str(tmp_path / "data"), "invite ../x\n"], stdout=subprocess.PIPE, text=True,
         )
-    second.communicate(timeout=15)
+    _answer(qtbot, second)
     first.release()
 
 
@@ -377,7 +384,7 @@ def test_a_connection_that_says_nothing_is_dropped(qtbot, tmp_path, monkeypatch)
     script.write_text(SECOND_START, encoding="utf-8")
     with qtbot.waitSignal(first.activated, timeout=15_000):  # a start that speaks is still heard
         second = subprocess.Popen([sys.executable, str(script), str(tmp_path / "data")], stdout=subprocess.PIPE, text=True)
-    assert second.communicate(timeout=15)[0].split() == ["refused", "True"]
+    assert _answer(qtbot, second)[0].split() == ["refused", "True"]
     first.release()
 
 
@@ -496,10 +503,10 @@ def test_a_guild_board_that_stops_listening_is_no_longer_reached(qtbot, tmp_path
     once = [sys.executable, str(script), str(tmp_path / "data"), "once"]
     with qtbot.waitSignal(first.activated, timeout=15_000):
         reached = subprocess.Popen(once, stdout=subprocess.PIPE, text=True)
-    assert reached.communicate(timeout=15)[0].split() == ["refused", "True"]  # while it listens, one try reaches it
+    assert _answer(qtbot, reached)[0].split() == ["refused", "True"]  # while it listens, one try reaches it
     first.stop_listening()
     with qtbot.assertNotEmitted(first.activated):
         turned_away = subprocess.Popen(once, stdout=subprocess.PIPE, text=True)
         qtbot.waitUntil(lambda: turned_away.poll() is not None, timeout=15_000)
-    assert turned_away.communicate(timeout=15)[0].split() == ["refused", "False"]
+    assert _answer(qtbot, turned_away)[0].split() == ["refused", "False"]
     first.release()
