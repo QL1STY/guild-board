@@ -173,7 +173,12 @@ function useArtEdge(src: string | null): number {
       const drawn = canvas.getContext('2d', { willReadFrequently: true })
       if (drawn === null) return
       drawn.drawImage(image, 0, 0, 32, 16)
-      const light = pictureLight(drawn.getImageData(0, 0, 32, 16).data)
+      let light: number
+      try {
+        light = pictureLight(drawn.getImageData(0, 0, 32, 16).data)
+      } catch {
+        return // a picture from another site (the browser demo's) cannot be read back: its edge stays as it is
+      }
       artLights.set(src, light)
       setEdge(edgeOf(light))
     }

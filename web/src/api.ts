@@ -57,14 +57,29 @@ export function answerWithin(path: string): number {
  */
 export type RequestOptions = { keepalive?: boolean; signal?: AbortSignal }
 
-async function request<T>(
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-  path: string,
-  body?: unknown,
-  options: RequestOptions = {},
-): Promise<T> {
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
+
+/**
+ * Answers a call in place of the core. The installed app has none: only the site's browser demo sets one (sitedemo.ts, built in
+ * only when VITE_SITE_DEMO is set), which reads recorded answers and refuses what the page sends. Nothing sets it otherwise.
+ */
+export type Transport = (method: Method, path: string, body: unknown) => Promise<unknown>
+
+let transport: Transport | null = null
+
+export function setTransport(next: Transport | null): void {
+  transport = next
+}
+
+/** Whether the calls are answered by a transport and there is no core, so no stream of its events either. */
+export function callsAreAnswered(): boolean {
+  return transport !== null
+}
+
+async function request<T>(method: Method, path: string, body?: unknown, options: RequestOptions = {}): Promise<T> {
   const { signal } = options
   signal?.throwIfAborted()
+  if (transport !== null) return (await transport(method, path, body)) as T
   const limit = new AbortController()
   const timer = setTimeout(() => limit.abort(), answerWithin(path))
   const callOff = () => limit.abort()

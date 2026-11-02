@@ -15,6 +15,7 @@ from guildboard.achievements.commissions import commission_stages
 from guildboard.achievements.notes import AchievementNotes
 from guildboard.gameday import days_inclusive, game_day, game_day_start, server_tz
 from guildboard.ledger.demo import demo_diary_entries
+from guildboard.metrics import Label
 from guildboard.pulls import ALL_POOLS, WINDOW_DAYS
 from guildboard.records import (
     GROUPS,
@@ -617,10 +618,13 @@ DEMO_PULLS_NOW = datetime(2026, 10, 13, 8, 0, tzinfo=timezone.utc)
 DEMO_ABOUT = date(2026, 11, 11)  # the wishlist entry's day
 BANNERS_START = datetime(2026, 9, 23, 5, 0, tzinfo=timezone.utc)
 BANNERS_END = datetime(2026, 10, 24, 6, 0, tzinfo=timezone.utc)
-DEMO_BANNERS = (  # announcement id, name, pool, featured
-    (33201, "Void Star's Advent", "character", ("Skirk",)),
-    (33202, "La Chanson Cerise", "character", ("Escoffier",)),
-    (33203, "Epitome Invocation", "weapon", ("Azurelight", "Symphonist of Scents")),
+DEMO_BANNERS = (  # announcement id, name, pool, featured, the official picture of the announcement
+    (33201, "Void Star's Advent", "character", ("Skirk",),
+     "https://sdk.hoyoverse.com/upload/ann/2026/09/23/8668a2e84580c1426c290a447320bcd9_5708783295049261864_transformed.jpg"),
+    (33202, "La Chanson Cerise", "character", ("Escoffier",),
+     "https://sdk.hoyoverse.com/upload/ann/2026/09/23/e77eb5aab52127e55989bb8162d671d8_5676769242945454268_transformed.jpg"),
+    (33203, "Epitome Invocation", "weapon", ("Azurelight", "Symphonist of Scents"),
+     "https://sdk.hoyoverse.com/upload/ann/2026/09/23/ccc187c09296b4a1990c8cf98dcadb46_5421147638874447905_transformed.jpg"),
 )
 
 
@@ -700,12 +704,15 @@ def seed_wishes(store: Store, now: datetime) -> None:
 
 def seed_banners(store: Store, now: datetime) -> None:
     """The demo's banners, while none are kept: the two character banners and the weapon banner of 2026-09-23, which
-    end on 2026-10-24 at the demo's own now, moved with the seed's now. The demo downloads nothing, so they have no art;
-    the page draws the sign. One transaction."""
+    end on 2026-10-24 at the demo's own now, moved with the seed's now. Each names the official picture of its announcement,
+    as the label banner.<ann_id> the icon route serves; the demo downloads nothing, so its icon cache never fetches it and the
+    page draws the sign (the site's recording and screenshots read the pictures from these addresses). One transaction."""
     if store.banners():
         return
     shift = _shift(now)
-    store.replace_banners(
-        BannerRow(ann_id, name, pool, featured, "", BANNERS_START + shift, BANNERS_END + shift, now)
-        for ann_id, name, pool, featured in DEMO_BANNERS
-    )
+    with store.transaction():
+        store.replace_banners(
+            BannerRow(ann_id, name, pool, featured, art_url, BANNERS_START + shift, BANNERS_END + shift, now)
+            for ann_id, name, pool, featured, art_url in DEMO_BANNERS
+        )
+        store.upsert_labels([Label(f"banner.{ann_id}", name, "banner", None, art_url) for ann_id, name, _, _, art_url in DEMO_BANNERS], now)

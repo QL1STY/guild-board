@@ -18,8 +18,18 @@ import App from './App.tsx'
 // shows the overlay's window over the game once the page has loaded. App keeps the class in step with later addresses.
 if (window.location.hash.startsWith('#/overlay')) document.documentElement.classList.add('ov-doc')
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+async function start(): Promise<void> {
+  // The site's browser demo (VITE_SITE_DEMO, `npm run build:site-demo`) has no core: its answers are a recording. In every other
+  // build this is false at build time, and the demo's code and data are not in the bundle.
+  if (import.meta.env.VITE_SITE_DEMO === '1') {
+    const { startSiteDemo } = await import('./sitedemo.ts')
+    await startSiteDemo()
+  }
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+}
+
+void start()

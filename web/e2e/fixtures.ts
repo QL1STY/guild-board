@@ -83,6 +83,8 @@ type Options = {
   bigArt: boolean
   /** The folder of the real charts for the demo core of tools/stars_core.py, which the stars' proof uses; empty for none. */
   realCharts: string
+  /** The demo core of tools/site_demo_core.py, whose models name each picture of the demo's list (the site's screenshots use it). */
+  siteArt: boolean
 }
 
 function firstLine(child: ChildProcess): Promise<string> {
@@ -107,15 +109,19 @@ export const test = base.extend<Options & { core: Core; api: Api }>({
   weekAndEndgame: [true, { option: true }],
   bigArt: [false, { option: true }],
   realCharts: ['', { option: true }],
+  siteArt: [false, { option: true }],
 
-  core: async ({ mode, demoNow, weekAndEndgame, bigArt, realCharts }, use) => {
+  core: async ({ mode, demoNow, weekAndEndgame, bigArt, realCharts, siteArt }, use) => {
     const dataDir = mkdtempSync(path.join(tmpdir(), 'guildboard-e2e-'))
     const args = ['--no-shell', '--port', '0', '--data-dir', dataDir]
     if (mode === 'demo') args.unshift('--demo', '--demo-now', demoNow)
     if (mode === 'demo' && weekAndEndgame) args.push('--week-and-endgame')
-    const program = (bigArt || realCharts !== '') && mode === 'demo' ? pythonProgram : coreProgram
+    const program = (bigArt || realCharts !== '' || siteArt) && mode === 'demo' ? pythonProgram : coreProgram
     if (bigArt && mode === 'demo') {
       args.splice(0, args.length, path.join(projectRoot, 'tools', 'memory_core.py'), '--data-dir', dataDir, '--demo-now', demoNow)
+      if (weekAndEndgame) args.push('--week-and-endgame')
+    } else if (siteArt && mode === 'demo') {
+      args.splice(0, args.length, path.join(projectRoot, 'tools', 'site_demo_core.py'), '--data-dir', dataDir, '--demo-now', demoNow)
       if (weekAndEndgame) args.push('--week-and-endgame')
     } else if (realCharts !== '' && mode === 'demo') {
       args.splice(0, args.length, path.join(projectRoot, 'tools', 'stars_core.py'), '--data-dir', dataDir, '--demo-now', demoNow, '--charts', realCharts)

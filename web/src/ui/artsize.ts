@@ -69,7 +69,22 @@ export function askedSize(size: number, quality: PictureQuality): number | null 
 
 /** The address of a picture of the art cache with the size asked for (none: the original); any other address is as it was. */
 export function sizedArt(src: string | null, size: number | null): string | null {
+  const sized = sizedAddress(src, size)
+  return sized !== null && artMap !== null ? artMap(sized) : sized
+}
+
+function sizedAddress(src: string | null, size: number | null): string | null {
   if (src === null || src === '') return null
   if (!src.startsWith('/api/art/') || src.includes('?') || size === null) return src
   return `${src}?size=${size}`
+}
+
+let artMap: ((address: string) => string) | null = null
+
+/**
+ * Where a picture of the art cache is read from, if not from the core: only the site's browser demo sets one (sitedemo.ts), as it
+ * has no core. The installed app never does, so its pictures come from its own core alone.
+ */
+export function mapArtAddresses(map: ((address: string) => string) | null): void {
+  artMap = map
 }

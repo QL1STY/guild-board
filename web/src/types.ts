@@ -120,6 +120,8 @@ export type Settings = {
   gallery_folder: string
   /** How large the Characters pages' big pictures are fetched (the Characters design, 11.7): the originals, at most 1,536 pixels, at most 1,024. */
   picture_quality: 'high' | 'medium' | 'low'
+  /** The window's frame limit goes, from the next start: off by default. */
+  smooth_animations: boolean
   /** The currency of the Ledger's "Spent on Genshin": 'PLN' (the default), 'EUR' or 'USD'. */
   spending_currency: 'PLN' | 'EUR' | 'USD'
   /** The player's corrections to the price list, by currency and then pack id; a pack left out keeps the default. */

@@ -18,7 +18,7 @@ from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox, QSystemTra
 
 from guildboard.__main__ import default_web_dir
 from guildboard.backups import BackupRefused
-from guildboard.config import AppPaths, Settings
+from guildboard.config import AppPaths, Settings, load_settings
 from guildboard.core import Core
 from guildboard.hotkeys import Hotkey, parse_hotkey
 from guildboard.logging_setup import setup_logging
@@ -750,6 +750,12 @@ def _started_by_the_shortcut(folder: Path) -> bool:
 
 
 COLLECTION_FLAG = "--js-flags=--expose-gc-as=gbCollect"
+# Qt WebEngine holds its window at 60 frames a second on any monitor, and no switch sets another rate; this one takes the
+# limit away, and Qt then draws at the monitor's rate (163 a second on a 165 Hz screen, measured on 2026-11-02). The engine
+# also computes far more than it shows while anything moves (1,700 a second, about three cores in a nonstop test; 51 to
+# 117% of a core walking the demo's pages; nothing more at rest) and the switch is the whole engine's, the map and the
+# overlay included, so it stays the player's choice, off by default.
+FRAME_LIMIT_FLAG = "--disable-frame-rate-limit"
 # What a Guild Board on the player's own data never takes from the environment it was started in (L31): every switch of
 # the engine's (QTWEBENGINE_CHROMIUM_FLAGS), since a list of the dangerous ones is never whole, and these two of Qt's: its
 # remote debugging, an unauthenticated endpoint on 127.0.0.1 through which any program of any account on the PC could
@@ -758,7 +764,7 @@ COLLECTION_FLAG = "--js-flags=--expose-gc-as=gbCollect"
 UNSAFE_VARIABLES = ("QTWEBENGINE_REMOTE_DEBUGGING", "QTWEBENGINE_DISABLE_SANDBOX")
 
 
-def configure_qt(*, demo: bool = False) -> list[str]:
+def configure_qt(*, demo: bool = False, smooth: bool = False) -> list[str]:
     """Before Qt starts: on a real display Qt would save its graphics pipelines in a folder of its own,
     %LOCALAPPDATA%\\Guild Board\\cache, outside the data folder (H1). Guild Board keeps no such cache.
     It draws with Windows' default, Direct3D: with OpenGL the map moved without black squares, but the overlay's
@@ -770,7 +776,8 @@ def configure_qt(*, demo: bool = False) -> list[str]:
     a page that looks for the well-known `gc` does not find it.
     Outside the demo, the engine starts with the shell's own switch alone, and without Qt's debugging and sandbox
     switch-off: what was left out is given back by name, for the log, which opens later. A switch's value is not
-    given: it could hold anything, so a word that is no switch (starts with neither "-" nor "/") is only counted."""
+    given: it could hold anything, so a word that is no switch (starts with neither "-" nor "/") is only counted.
+    `smooth` is the player's Smooth animations (FRAME_LIMIT_FLAG), read once here, so a change takes effect at the next start."""
     os.environ["QSG_RHI_DISABLE_DISK_CACHE"] = "1"
     flags = os.environ.get("QTWEBENGINE_CHROMIUM_FLAGS", "").split()
     left_out: list[str] = []
@@ -784,6 +791,8 @@ def configure_qt(*, demo: bool = False) -> list[str]:
         flags = []
     if COLLECTION_FLAG not in flags:
         flags.append(COLLECTION_FLAG)
+    if smooth and FRAME_LIMIT_FLAG not in flags:
+        flags.append(FRAME_LIMIT_FLAG)
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = " ".join(flags)
     QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_DisableShaderDiskCache, True)
     return left_out
@@ -799,7 +808,7 @@ def run_shell(
     demo_now: datetime | None = None,
     invite: str | None = None,
 ) -> int:
-    left_out = configure_qt(demo=demo)
+    left_out = configure_qt(demo=demo, smooth=load_settings(paths.settings_path).smooth_animations)
     app = QApplication.instance() or QApplication([sys.argv[0]])
     app.setApplicationName("Guild Board")
     app.setQuitOnLastWindowClosed(False)

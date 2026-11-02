@@ -110,6 +110,14 @@ def test_the_picture_quality_is_high_until_the_player_chooses_and_takes_only_its
         assert saved["picture_quality"] == "low", refused
 
 
+def test_smooth_animations_stay_off_until_the_player_turns_them_on(client, core):
+    assert client.get("/api/settings").json()["smooth_animations"] is False
+    assert client.put("/api/settings", json={"smooth_animations": True}).json()["smooth_animations"] is True
+    assert load_settings(core.paths.settings_path).smooth_animations is True
+    for refused in ("yes", 1, None):
+        assert client.put("/api/settings", json={"smooth_animations": refused}).json()["smooth_animations"] is True, refused
+
+
 def test_a_settings_change_is_an_event(client, core):
     queue = core.bus.subscribe()
     assert client.put("/api/settings", json={"overlay_lines": False}).json()["overlay_lines"] is False

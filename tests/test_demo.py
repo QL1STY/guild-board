@@ -434,7 +434,16 @@ def test_the_demo_banners_end_ten_days_after_the_demo_start(store):
     ]
     for banner in banners:
         assert (banner.starts_at, banner.ends_at) == (datetime(2026, 9, 23, 5, tzinfo=UTC), datetime(2026, 10, 24, 6, tzinfo=UTC))
-        assert (banner.art_url, banner.read_at) == ("", NOW)  # the demo downloads nothing
+        assert banner.read_at == NOW
         assert banner.ends_at - NOW == timedelta(days=10, hours=22)
+    # Each has the official picture of its announcement (the demo itself downloads nothing: its icon cache refuses, so the page
+    # draws the sign; the site's recording and screenshots read them from these addresses), and the label the icon route serves.
+    assert [banner.art_url for banner in banners] == [
+        "https://sdk.hoyoverse.com/upload/ann/2026/09/23/8668a2e84580c1426c290a447320bcd9_5708783295049261864_transformed.jpg",
+        "https://sdk.hoyoverse.com/upload/ann/2026/09/23/e77eb5aab52127e55989bb8162d671d8_5676769242945454268_transformed.jpg",
+        "https://sdk.hoyoverse.com/upload/ann/2026/09/23/ccc187c09296b4a1990c8cf98dcadb46_5421147638874447905_transformed.jpg",
+    ]
+    for banner in banners:
+        assert store.label(f"banner.{banner.ann_id}").icon_url == banner.art_url
     seed_banners(store, NOW + timedelta(days=1))  # a later start keeps them as they are
     assert store.banners() == banners

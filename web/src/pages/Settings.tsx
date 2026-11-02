@@ -751,6 +751,23 @@ function PictureQualityRow({ live, settings }: { live: Live; settings: SettingsM
   )
 }
 
+/** The window's frame limit (configure_qt in the shell), which the engine reads once as it starts. */
+function SmoothAnimations({ live, settings }: { live: Live; settings: SettingsModel }) {
+  const { notice, run } = useAction(live)
+  const [on, choose] = useSetting(live, settings, 'smooth_animations', run)
+  return (
+    <>
+      <Row
+        name="Smooth animations"
+        sentence="Moves at your monitor's full rate instead of 60 frames a second. Uses more of your computer while anything moves, so leave it off if the game feels slower. Starts the next time you open Guild Board."
+      >
+        <Switch on={on} label="Smooth animations" className="set-switch" onPress={() => choose(!on)} />
+      </Row>
+      <Notice text={notice} />
+    </>
+  )
+}
+
 function Overlay({ live, settings }: { live: Live; settings: SettingsModel }) {
   const [open, setOpen] = useState(false)
   const id = useId()
@@ -1334,6 +1351,7 @@ export function Settings({ live }: { live: Live }) {
             <StartWithWindows live={live} status={status} settings={settings} />
             <Notifications live={live} settings={settings} />
             <PictureQualityRow live={live} settings={settings} />
+            <SmoothAnimations live={live} settings={settings} />
             <Overlay live={live} settings={settings} />
           </Group>
           <Group name="Extras" sign="cells">

@@ -1,0 +1,108 @@
+# Builds Guild Board's site and puts it on GitHub Pages: the page (site/), its fonts, the real interface running on a recording of the
+# demo (demo/) and the screenshots of its tabs (shots/). The recording is made here, by tools/record-site-demo.py, on the demo core's
+# made-up data. The screenshots are not in this branch: they are taken from the real interface by `npm run screens:site` on the
+# maintainer's PC and kept in the branch site-assets, in shots/, which this workflow checks out into the site. A site without its
+# pictures is no site, so a missing branch or a missing picture fails the build.
+#
+# The build can read the repository and nothing more. The right to write to Pages is held by the deploy job alone, which runs none
+# of the repository's code. Each action is pinned to the full SHA of a commit, with its version in a comment: a tag can be moved.
+name: Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'web/**'
+      - 'tools/record-site-demo.py'
+      - 'tools/site_demo_core.py'
+      - 'tools/assemble-site.py'
+      - 'src/guildboard/characters/demo/pictures.json'
+      - '.github/workflows/site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Windows, as the app is: the demo core that is recorded is the one the tests and the installer start.
+    runs-on: windows-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Check out
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Check out the screenshots
+        id: pictures
+        # The branch site-assets holds shots/board.png, achievements.png, pulls.png, stats.png and overlay.png.
+        continue-on-error: true
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: site-assets
+          path: site-assets
+          persist-credentials: false
+
+      - name: Stop if the screenshots are missing
+        if: steps.pictures.outcome == 'failure'
+        shell: pwsh
+        run: |
+          Write-Output "::error::The branch site-assets does not exist, so the site has no screenshots. Make it with the pictures from npm run screens:site, in a folder shots/, and run this again: a site without its pictures is no site."
+          exit 1
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c7f87aa956e4c323abf06d5dec078e358f6b4d04 # v6.0.0
+
+      - name: Install Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install the Python packages, as uv.lock names them
+        run: uv sync --frozen
+
+      - name: Install the packages of the interface
+        run: npm ci --prefix web
+
+      - name: Record the demo
+        run: uv run --frozen python tools/record-site-demo.py
+
+      - name: Build the demo for the site
+        run: npm run build:site-demo --prefix web
+
+      - name: Put the site together
+        # It fails, saying which, when the demo or one of the five screenshots is missing.
+        run: uv run --frozen python tools/assemble-site.py --out _site --demo web/dist-site --shots site-assets/shots --require-all
+
+      - name: Keep the site for Pages
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check that Pages is set up for this repository
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

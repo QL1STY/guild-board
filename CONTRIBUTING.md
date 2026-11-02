@@ -19,6 +19,18 @@ Write the test first, and make one commit for each task.
 - `uv run pytest` runs the Python tests. A few need Windows.
 - In `web/`, `npm ci` once, then `npm test` for the unit tests and `npm run e2e` for the browser tests, which build the interface and run each against a fresh demo core in Microsoft Edge.
 
+## The site
+
+The public site is in `site/`: one page (`index.html`, `site.css`, `site.js`) with no framework and no build step of its own, and no tracker, cookie or third-party script. Its only request is one read of GitHub's public API, in the visitor's browser, for the latest release's version, size and SHA-256. Beside it, the build puts the fonts (copied from the interface's npm package, never from Google), the real interface running on a recording of the demo (`demo/`) and the screenshots of the tabs (`shots/`).
+
+- To look at the page alone: `python -m http.server --directory site 8080`, and open `http://127.0.0.1:8080`. It then has no fonts of its own, no demo and no pictures.
+- To look at the whole site, in this order:
+  1. `uv run python tools/record-site-demo.py` starts the demo core in a temporary data folder (no way to the internet) and writes every answer the interface reads into `web/site-demo/recording`. It stops that core by its process id. The recording holds made-up data only.
+  2. `npm run build:site-demo` in `web/` builds the interface for the site into `web/dist-site`. That build alone (`VITE_SITE_DEMO=1`, from `web/.env.site-demo`) reads the recording instead of a core, answers whatever a page sends with "This is a recording, so nothing here changes. Install Guild Board to use it.", leaves out the event stream and reads the demo's pictures from HoYoverse's own addresses (`src/guildboard/characters/demo/pictures.json`). The installed app's build has none of this, and `tests/test_site_demo_build.py` checks that.
+  3. `npm run screens:site` in `web/` takes the four screenshots (Board, Achievements, Pulls, Stats, each 1,640 by 1,000) from the real interface into `screenshots/site`. It reads HoYoverse's picture hosts, and nothing else. No picture is committed to this repository. The overlay's picture is one of the real overlay over the game, taken by hand and named `overlay.png`.
+  4. `uv run python tools/assemble-site.py --out _site --demo web/dist-site --shots screenshots/site` puts the site together in `_site` (ignored by git), and `python -m http.server --directory _site 8080` serves it. The demo is built for the address `/guild-board/demo/`, so to open it from a local server, serve the folder under `guild-board`: copy `_site` to a folder with that name, and serve its parent.
+- `.github/workflows/site.yml` does steps 1, 2 and 4 on a push to `main` that touches `site/`, `web/` or the recording tool, and deploys to GitHub Pages. The screenshots are kept on the branch `site-assets` of the repository, in `shots/`, which the workflow checks out; without that branch the build fails.
+
 ## The rules that are never broken
 
 These are enforced by `tests/test_handsoff.py`, which may only be tightened. If it fails, fix the code, not the test. The full text is in [`CLAUDE.md`](CLAUDE.md); in short:

@@ -1010,6 +1010,39 @@ def test_the_pages_can_ask_for_a_collection_and_only_the_demo_keeps_a_flag_alrea
     assert os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] == "--js-flags=--expose-gc-as=gbCollect"
 
 
+def test_the_frame_limit_goes_only_when_the_player_turned_on_smooth_animations(monkeypatch):
+    # Qt WebEngine holds its window at 60 frames a second whatever the monitor does; no switch sets another rate.
+    monkeypatch.setenv("QTWEBENGINE_CHROMIUM_FLAGS", "")
+    monkeypatch.delenv("QTWEBENGINE_REMOTE_DEBUGGING", raising=False)  # configure_qt() drops these two from the
+    monkeypatch.delenv("QTWEBENGINE_DISABLE_SANDBOX", raising=False)  # environment: the test gives them back after
+    configure_qt()
+    assert "--disable-frame-rate-limit" not in os.environ["QTWEBENGINE_CHROMIUM_FLAGS"]
+    configure_qt(smooth=True)
+    assert os.environ["QTWEBENGINE_CHROMIUM_FLAGS"].split().count("--disable-frame-rate-limit") == 1
+    configure_qt(demo=True, smooth=True)
+    assert os.environ["QTWEBENGINE_CHROMIUM_FLAGS"].split().count("--disable-frame-rate-limit") == 1  # once, in the demo too
+
+
+def test_the_shell_starts_the_engine_with_the_saved_choice(monkeypatch, tmp_path):
+    from guildboard.shell import app as app_module
+
+    class Started(Exception):
+        pass
+
+    def configure(*, demo: bool = False, smooth: bool = False) -> list[str]:
+        told.append((demo, smooth))
+        raise Started
+
+    told: list[tuple[bool, bool]] = []
+    monkeypatch.setattr(app_module, "configure_qt", configure)
+    paths = AppPaths(tmp_path)
+    for saved in (False, True):
+        save_settings(paths.settings_path, Settings(smooth_animations=saved))
+        with pytest.raises(Started):
+            app_module.run_shell(paths, demo=False)
+    assert told == [(False, False), (False, True)]
+
+
 def test_a_remote_page_sees_the_collection_under_its_private_name_and_nothing_else(tmp_path):
     # L30: the flag is the whole engine's, so a page whose origin is HoYoLAB's sees the collection as the interface does:
     # the accepted exception tests/test_handsoff.py records, with its reason. The well-known name `gc` stays away. A flag

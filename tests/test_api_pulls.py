@@ -136,7 +136,8 @@ def test_the_demo_answers_its_made_up_history(tmp_path, clock):
         assert [banner["name"] for banner in model["banners"]] == [
             "Void Star's Advent", "La Chanson Cerise", "Epitome Invocation",
         ]
-        assert all(banner["running"] and banner["art"] is None for banner in model["banners"])
+        assert all(banner["running"] for banner in model["banners"])
+        assert [banner["art"] for banner in model["banners"]] == [f"/api/icon/banner.{id}" for id in (33201, 33202, 33203)]
         savings = model["savings"]
         assert (savings["set"], savings["pulls"]) == ({"primogems": 9840, "fates": 14, "set_at": iso(NOW)}, 75)
         assert savings["income_per_day"] is not None  # the demo's diary

@@ -4,7 +4,7 @@ import { defineConfig } from '@playwright/test'
  * Not a test run: it takes pictures to be looked at, into the `screenshots` folder at the root of the repository (git
  * ignores it; GB_SCREENS_DIR names another), each group in a folder of its own. `npm run screens` takes the stage 2A
  * pictures. Every other group has its own tag and its own command, so that the commands never take each other's
- * pictures: @1b (`screens:1b`), @look, @overlay, @scaling, @pulls, @topbar, @ledger, @characters, @friends and @readme.
+ * pictures: @1b (`screens:1b`), @look, @overlay, @scaling, @pulls, @topbar, @ledger, @characters, @friends, @readme and @site.
  */
 export default defineConfig({
   testDir: 'screens',

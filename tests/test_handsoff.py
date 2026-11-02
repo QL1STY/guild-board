@@ -1902,6 +1902,10 @@ def test_the_engine_opens_nothing_to_pages_but_the_accepted_collection(monkeypat
     monkeypatch.setenv("QTWEBENGINE_CHROMIUM_FLAGS", "--remote-debugging-port=9222 --js-flags=--allow-natives-syntax")
     shell_app.configure_qt()
     assert os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] == ACCEPTED_ENGINE_FLAG
+    # The one other switch is the player's Smooth animations, which only takes the frame limit away.
+    assert shell_app.FRAME_LIMIT_FLAG == "--disable-frame-rate-limit"
+    shell_app.configure_qt(smooth=True)
+    assert os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] == f"{ACCEPTED_ENGINE_FLAG} --disable-frame-rate-limit"
     named = {
         name for name, text in _sources() if re.search(r"QTWEBENGINE_CHROMIUM_FLAGS|--js-flags|expose-gc", text)
     }

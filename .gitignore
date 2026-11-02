@@ -12,6 +12,10 @@ __pycache__/
 # Web build
 node_modules/
 web/dist/
+# The site's browser demo: its build, and the recording its answers are read from (tools/record-site-demo.py)
+web/dist-site/
+web/site-demo/
+_site/
 
 # Local data never belongs in the repository
 *.db

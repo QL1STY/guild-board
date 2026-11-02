@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { api, messageOf } from './api.ts'
+import { api, callsAreAnswered, messageOf } from './api.ts'
 import { setPictureQuality } from './ui/pictureQuality.ts'
 import type { PullsImportEvent, Settings, Status } from './types.ts'
 
@@ -222,6 +222,11 @@ export type StreamLike = {
   addEventListener(name: string, listener: (event: MessageEvent<string>) => void): void
 }
 
+/** The stream of a page that has no core to listen to (the site's recording): it never says anything, and closing it is nothing. */
+function idleStream(): StreamLike & { close(): void; onerror: unknown } {
+  return { addEventListener: () => undefined, close: () => undefined, onerror: null }
+}
+
 /** What the page does with the events of the stream. */
 export type StreamHandlers = {
   /** The stream opened: the status as the core had it, as JSON. */
@@ -312,7 +317,7 @@ export function useLive(): Live {
 
   useEffect(() => {
     void refresh()
-    const stream = new EventSource('/api/events')
+    const stream = callsAreAnswered() ? idleStream() : new EventSource('/api/events')
     // The events of a tenth of a second are taken together: one read of the status and one new read of the pages for all
     // of them, where a sync's four events made four of each (audit L23).
     const events = coalescer<string>((names) => {

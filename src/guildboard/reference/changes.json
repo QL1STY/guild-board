@@ -1,4 +1,26 @@
 {
+  "1.0.0": [
+    {
+      "kind": "new",
+      "title": "Guild Board is open source",
+      "text": "The code is public under the MIT licence, and Settings has an About section with the licences and the privacy notice."
+    },
+    {
+      "kind": "new",
+      "title": "Smooth animations",
+      "text": "A new switch in Settings moves the window at your monitor's full rate instead of 60 frames a second. It is off by default."
+    },
+    {
+      "kind": "new",
+      "title": "Cloud space",
+      "text": "Settings shows how much of your online space your synced data takes."
+    },
+    {
+      "kind": "better",
+      "title": "No e-mail address online",
+      "text": "Signing in with Discord now asks only for your name and picture, and no e-mail address is kept."
+    }
+  ],
   "0.8.0": [
     {
       "kind": "new",

@@ -554,6 +554,20 @@ test('the picture quality is a plain choice of three, High until chosen, and it 
   await expect.poll(async () => (await api.get<Settings>('/api/settings')).picture_quality).toBe('high')
 })
 
+test('Smooth animations stay off until the switch is pressed, and it says what they cost and when they start', async ({ page, api }) => {
+  const row = guildBoard(page).locator('.set-row', { hasText: 'Smooth animations' })
+  await expect(row).toContainText("Moves at your monitor's full rate instead of 60 frames a second.")
+  await expect(row).toContainText('Starts the next time you open Guild Board.')
+  const smooth = row.getByRole('button', { name: 'Smooth animations' })
+  await expect(smooth).toHaveAttribute('aria-pressed', 'false')
+  await smooth.click()
+  await expect.poll(async () => (await api.get<Settings>('/api/settings')).smooth_animations).toBe(true)
+  await page.reload()
+  await expect(smooth).toHaveAttribute('aria-pressed', 'true')
+  await smooth.click()
+  await expect.poll(async () => (await api.get<Settings>('/api/settings')).smooth_animations).toBe(false)
+})
+
 test('the gallery switch saves gallery_enabled, and the gallery is not asked while it is off', async ({ page, api }) => {
   const asked: string[] = []
   page.on('request', (request) => {
