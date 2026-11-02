@@ -77,7 +77,9 @@ jobs:
         run: npm ci --prefix web
 
       - name: Run the Python tests
-        # They start Guild Board off-screen (tests/test_handsoff.py), so they run here as on the maintainer's PC.
+        # They start Guild Board off-screen (tests/test_handsoff.py), so they run here as on the maintainer's PC. Windows
+        # PowerShell, as the release scripts' tests start it: from PowerShell 7 it would inherit a module path it cannot use.
+        shell: powershell
         run: uv run --frozen python -m pytest -q -p no:cacheprovider
 
       - name: Run the interface's tests
@@ -85,7 +87,7 @@ jobs:
         run: npx vitest run
 
       - name: Build the installer
-        shell: pwsh
+        shell: powershell
         run: powershell -ExecutionPolicy Bypass -File build-installer.ps1
 
       - name: Write the installer's SHA-256

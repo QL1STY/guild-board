@@ -442,7 +442,8 @@ def test_only_this_user_may_connect(qtbot, tmp_path):
     who = subprocess.run(["whoami", "/user", "/fo", "csv", "/nh"], capture_output=True, encoding="oem", errors="replace")
     user = who.stdout.strip().rsplit(",", 1)[-1].strip('"')
     assert user.startswith("S-1-5-")
-    assert _pipe_access(first._name) == {user}
+    # Windows writes a few accounts by a letter pair: the built-in Administrator, as a build server runs as, is LA.
+    assert _pipe_access(first._name) == ({"LA"} if user.endswith("-500") else {user})
     first.release()
 
 
