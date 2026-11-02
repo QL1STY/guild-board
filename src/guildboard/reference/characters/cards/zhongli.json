@@ -1,0 +1,39 @@
+{
+  "key": "zhongli",
+  "name": "Zhongli",
+  "element": "Geo",
+  "weapon_type": "Polearm",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["protector", "support"],
+  "keeps_alive": true,
+  "scaling": "hp",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 110},
+  "mains": {"sands": ["hp_pct"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "cr"]},
+  "weights": {"hp_pct": "wants", "hp": "some", "er": "some", "cr": "some", "cd": "none", "atk_pct": "none", "atk": "none", "em": "none", "dmg": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["archaic-petra"], "pieces": "4"},
+    {"sets": ["deepwood-memories"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"}
+  ],
+  "weapons": ["black-tassel", "favonius-lance", "dialogues-of-the-desert-sages", "staff-of-homa", "frostbreath", "engulfing-lightning", "the-catch"],
+  "partners": ["Pyro", "Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources: the shield build is HP% on Sands, Goblet and Circlet (KQM allows CRIT Rate on the Circlet with Favonius Lance), with 4pc Tenacity of the Millelith first. KQM's other sets are Archaic Petra, Deepwood Memories, Instructor, Silken Moon's Serenade and Scroll of the Hero of Cinder City for teams; Game8's Geo Sub-DPS build (ATK% Sands, Geo DMG Goblet, CRIT Circlet, Noblesse Oblige or Archaic Petra, Staff of Homa first) is kept as sets and weapons only. Weapons differ in the lead: Game8 Black Tassel, KQM Favonius Lance, both kept. Talent order: KQM gives none; Game8 gives Skill > Burst > Normal Attack for the support build (Burst first for the Sub-DPS), so the Skill leads. The kit's 'check' line is the Skill's Hold DMG (80% to 144%, elemental curve), an ATK-based hit beside the Max HP shield; the damage talent is the Skill because it carries the shield, the pillar and the resonance hits; his Burst (Planet Befall, 401% at level 1) is the nuke in the sub-DPS build. ER is KQM's 100-110 for a Burst every other rotation (110 used; 120-140 with one other Geo unit if every rotation, 175-220 with none). No HP or CRIT goal is given. Partners are inferred: his shield and shred suit any damage dealer.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/zhongli-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/305858", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/46", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,19 @@
+{
+  "key": "noelle", "name": "Noelle", "element": "Geo", "weapon_type": "Claymore", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "protector"], "keeps_alive": true, "scaling": "def",
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "physical",
+  "goals": {"er": 155},
+  "mains": {"sands": ["def_pct", "er", "atk_pct"], "goblet": ["dmg", "def_pct"], "circlet": ["cr", "cd", "def_pct"]},
+  "weights": {"def_pct": "wants", "cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "some", "atk": "some", "def": "some", "em": "none", "hp_pct": "none", "hp": "none"},
+  "sets": [{"sets": ["husk-of-opulent-dreams"], "pieces": "4"}, {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["archaic-petra"], "pieces": "4"}],
+  "weapons": ["redhorn-stonethresher", "serpent-spine", "gest-of-the-mighty-wolf", "whiteblind", "skyward-pride"],
+  "partners": ["Geo", "Hydro"], "partner_roles": ["support", "healer"], "teams": [],
+  "notes": "A 4-star Geo claymore main DPS who also shields and heals. Her Burst (Sweeping Time) adds ATK equal to a share of her DEF (40% DEF at level 1) and her Normal Attacks are the damage, so the scaling stat is DEF and the damage talent is the Normal Attack, on the physical table (hit 1 is 79.1% at level 1 and rises by a factor of 1.082 at level 2, the physical curve; her hits turn to Geo DMG with the Burst, so the Geo DMG Bonus is what she wants) (the 'check' lines Burst DMG and Skill DMG in the Burst are ATK multipliers). Both sources put the Normal Attack first and the Burst second (Game8's support build puts the Skill first). Both agree on 4pc Husk of Opulent Dreams as best; Game8 adds Marechaussee Hunter and, for the support build, Archaic Petra. The mains differ: Game8 gives DEF% Sands, a Geo DMG Goblet and a CRIT Circlet; KQM gives ATK% on all three until C6 or Burst level 10, then DEF%. The card lists DEF% first and ATK% as the early option. A third source (genshin.gg, 2026-10-30) agrees on 4pc Husk of Opulent Dreams first, a DEF% or ER Sands, a Geo DMG Goblet and a CRIT Circlet, and gives Redhorn Stonethresher, Gest of the Mighty Wolf, Serpent Spine and Beacon of the Reed Sea; ER is added to the Sands as the second choice. The weapons agree on Redhorn Stonethresher first and Serpent Spine, with Whiteblind on both KQM's and Game8's lists. Neither source gives stat goals; the only goal is KQM's ER of 125-155% for Albedo or Chiori with another Geo unit (200% or more with no Geo teammate).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/noelle-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297523", "checked": "2026-10-29"},
+    {"url": "https://genshin.gg/characters/noelle/", "checked": "2026-10-30"}
+  ],
+  "checked": "2026-10-30"
+}

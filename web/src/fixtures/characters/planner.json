@@ -1,0 +1,555 @@
+{
+  "key": "sandrone",
+  "name": "Sandrone",
+  "element": "Cryo",
+  "pronouns": {
+    "she": "she",
+    "her": "her",
+    "hers": "her"
+  },
+  "icon": "/api/art/sandrone",
+  "damage_role": true,
+  "now_build": {
+    "level": 90,
+    "refinement": 1,
+    "weapon_level": 90
+  },
+  "plan": {
+    "level": 90,
+    "talents": {
+      "normal": 10,
+      "skill": 10,
+      "burst": 10
+    },
+    "weapon": "a-teaspoon-of-transcendence",
+    "weapon_level": 90,
+    "refinement": 1,
+    "set": {
+      "sets": [
+        "disenchantment-in-deep-shadow"
+      ],
+      "pieces": "4"
+    },
+    "mains": {
+      "sands": "atk_pct",
+      "goblet": "dmg",
+      "circlet": "cr"
+    },
+    "level_pieces": [
+      "plume"
+    ],
+    "typed": null,
+    "weights": {
+      "cr": "wants",
+      "cd": "wants",
+      "atk_pct": "wants",
+      "er": "wants",
+      "em": "some",
+      "atk": "some",
+      "hp_pct": "none",
+      "hp": "none",
+      "def_pct": "none",
+      "def": "none"
+    }
+  },
+  "now": {
+    "readiness": 89,
+    "damage": 100
+  },
+  "with_plan": {
+    "readiness": 99,
+    "damage": 135,
+    "change": 35
+  },
+  "talents": [
+    {
+      "kind": "normal",
+      "label": "Normal Attack",
+      "name": "Formule Phenomenale: Self-Evident Proposition",
+      "icon": "/api/art/sandrone-normal",
+      "now": 9,
+      "target": 10,
+      "bonus": 0,
+      "max": 10
+    },
+    {
+      "kind": "skill",
+      "label": "Elemental Skill",
+      "name": "Formule Phenomenale: Differential Analysis",
+      "icon": "/api/art/sandrone-skill",
+      "now": 10,
+      "target": 10,
+      "bonus": 0,
+      "max": 10
+    },
+    {
+      "kind": "burst",
+      "label": "Elemental Burst",
+      "name": "Formule Phenomenale: Q.E.D.",
+      "icon": "/api/art/sandrone-burst",
+      "now": 10,
+      "target": 10,
+      "bonus": 0,
+      "max": 10
+    }
+  ],
+  "weapons": [
+    {
+      "key": "a-teaspoon-of-transcendence",
+      "name": "A Teaspoon of Transcendence",
+      "icon": "/api/art/a-teaspoon-of-transcendence",
+      "text": "Base ATK 674, Crit DMG 44.1%. ATK +28%. Charged Attack hits raise her Stellar DMG; that part is not counted.",
+      "tag": "Hers"
+    },
+    {
+      "key": "verdict",
+      "name": "Verdict",
+      "icon": "/api/art/verdict",
+      "text": "Base ATK 674, Crit Rate 22.1%. ATK +20%. Its Elemental Skill bonus needs Crystallize; not counted.",
+      "tag": null
+    },
+    {
+      "key": "a-thousand-blazing-suns",
+      "name": "A Thousand Blazing Suns",
+      "icon": "/api/art/a-thousand-blazing-suns",
+      "text": "Base ATK 741, Crit Rate 11.0%. After her Skill or Burst: Crit DMG +20% and ATK +28% for 6s. Counted as met.",
+      "tag": null
+    },
+    {
+      "key": "gest-of-the-mighty-wolf",
+      "name": "Gest of the Mighty Wolf",
+      "icon": "/api/art/gest-of-the-mighty-wolf",
+      "text": "Base ATK 608, Crit Rate 33.1%. ATK SPD +10%, and DMG stacks from her hits; the stacks are not counted.",
+      "tag": null
+    }
+  ],
+  "refinement_note": "ATK % +28% now",
+  "sets": [
+    {
+      "key": "disenchantment-in-deep-shadow",
+      "name": "Disenchantment in Deep Shadow",
+      "icon": "/api/art/disenchantment-in-deep-shadow",
+      "text": "4 pieces, ATK +18%",
+      "tag": null
+    },
+    {
+      "key": "scarlet-proof",
+      "name": "Scarlet Proof",
+      "icon": "/api/art/scarlet-proof",
+      "text": "4 pieces, ATK +18%",
+      "tag": null
+    },
+    {
+      "key": "blizzard-strayer",
+      "name": "Blizzard Strayer",
+      "icon": "/api/art/blizzard-strayer",
+      "text": "4 pieces, Cryo DMG +15%",
+      "tag": null
+    },
+    {
+      "key": "disenchantment-in-deep-shadow+blizzard-strayer",
+      "name": "2 and 2: Deep Shadow, Blizzard Strayer",
+      "icon": "/api/art/disenchantment-in-deep-shadow+blizzard-strayer",
+      "text": "ATK +18%, Cryo +15%",
+      "tag": null
+    }
+  ],
+  "set_text": "2 pieces: ATK +18%. 4 pieces: Superconduct DMG +80%, and +16% Crit Rate against opponents affected by Superconduct.",
+  "mains": [
+    {
+      "slot": "sands",
+      "icon": "/api/art/slot-sands",
+      "options": [
+        {
+          "key": "atk_pct",
+          "label": "ATK %"
+        },
+        {
+          "key": "er",
+          "label": "Energy Recharge"
+        },
+        {
+          "key": "em",
+          "label": "Elemental Mastery"
+        }
+      ],
+      "now": "atk_pct",
+      "chosen": "atk_pct"
+    },
+    {
+      "slot": "goblet",
+      "icon": "/api/art/slot-goblet",
+      "options": [
+        {
+          "key": "dmg",
+          "label": "Cryo DMG Bonus"
+        },
+        {
+          "key": "atk_pct",
+          "label": "ATK %"
+        }
+      ],
+      "now": "atk_pct",
+      "chosen": "dmg"
+    },
+    {
+      "slot": "circlet",
+      "icon": "/api/art/slot-circlet",
+      "options": [
+        {
+          "key": "cr",
+          "label": "Crit Rate"
+        },
+        {
+          "key": "cd",
+          "label": "Crit DMG"
+        },
+        {
+          "key": "atk_pct",
+          "label": "ATK %"
+        }
+      ],
+      "now": "cr",
+      "chosen": "cr"
+    }
+  ],
+  "level_pieces": [
+    {
+      "slot": "plume",
+      "label": "Plume",
+      "note": "Level the Plume from +16 to +20: +53 ATK, and one more roll, three times in four into a stat she wants",
+      "on": true
+    }
+  ],
+  "weights": [
+    {
+      "key": "cr",
+      "label": "Crit Rate",
+      "weight": "wants"
+    },
+    {
+      "key": "cd",
+      "label": "Crit DMG",
+      "weight": "wants"
+    },
+    {
+      "key": "atk_pct",
+      "label": "ATK %",
+      "weight": "wants"
+    },
+    {
+      "key": "er",
+      "label": "Energy Recharge",
+      "weight": "wants"
+    },
+    {
+      "key": "em",
+      "label": "Elemental Mastery",
+      "weight": "some"
+    },
+    {
+      "key": "atk",
+      "label": "ATK",
+      "weight": "some"
+    },
+    {
+      "key": "hp_pct",
+      "label": "HP %",
+      "weight": "none"
+    },
+    {
+      "key": "hp",
+      "label": "HP",
+      "weight": "none"
+    },
+    {
+      "key": "def_pct",
+      "label": "DEF %",
+      "weight": "none"
+    },
+    {
+      "key": "def",
+      "label": "DEF",
+      "weight": "none"
+    }
+  ],
+  "stats": [
+    {
+      "key": "atk",
+      "label": "ATK",
+      "now": 2964.1,
+      "now_text": "2,964",
+      "plan": 2543.64,
+      "plan_text": "2,544",
+      "scale": 4000,
+      "goal": 2600,
+      "change_text": "−420",
+      "how": "Now 2,964, with the plan 2,544. Her goal: 2,600."
+    },
+    {
+      "key": "cr",
+      "label": "Crit Rate",
+      "now": 79.4,
+      "now_text": "79.4%",
+      "plan": 80.22,
+      "plan_text": "80.2%",
+      "scale": 100,
+      "goal": 75,
+      "change_text": "+0.8",
+      "how": "Now 79.4%, with the plan 80.2%. Her goal: 75.0%. In combat, with set effects met: 96.2%."
+    },
+    {
+      "key": "cd",
+      "label": "Crit DMG",
+      "now": 176.5,
+      "now_text": "176.5%",
+      "plan": 178.15,
+      "plan_text": "178.2%",
+      "scale": 300,
+      "goal": 200,
+      "change_text": "+1.7",
+      "how": "Now 176.5%, with the plan 178.2%. Her goal: 200.0%."
+    },
+    {
+      "key": "dmg",
+      "label": "Cryo DMG Bonus",
+      "now": 0.0,
+      "now_text": "0.0%",
+      "plan": 46.6,
+      "plan_text": "46.6%",
+      "scale": 100,
+      "goal": 46.6,
+      "change_text": "+46.6",
+      "how": "Now 0.0%, with the plan 46.6%. Her goal: 46.6%."
+    },
+    {
+      "key": "er",
+      "label": "Energy Recharge",
+      "now": 122.7,
+      "now_text": "122.7%",
+      "plan": 124.08,
+      "plan_text": "124.1%",
+      "scale": 200,
+      "goal": 130,
+      "change_text": "+1.4",
+      "how": "Now 122.7%, with the plan 124.1%. Her goal: 130.0%."
+    },
+    {
+      "key": "em",
+      "label": "Elemental Mastery",
+      "now": 59.0,
+      "now_text": "59",
+      "plan": 59.0,
+      "plan_text": "59",
+      "scale": 500,
+      "goal": null,
+      "change_text": "no change",
+      "how": "Now 59, with the plan 59."
+    },
+    {
+      "key": "hp",
+      "label": "Max HP",
+      "now": 20152.37,
+      "now_text": "20,152",
+      "plan": 20215.87,
+      "plan_text": "20,216",
+      "scale": 40000,
+      "goal": null,
+      "change_text": "+64",
+      "how": "Now 20,152, with the plan 20,216."
+    },
+    {
+      "key": "def",
+      "label": "DEF",
+      "now": 814.0,
+      "now_text": "814",
+      "plan": 814.0,
+      "plan_text": "814",
+      "scale": 2000,
+      "goal": null,
+      "change_text": "no change",
+      "how": "Now 814, with the plan 814."
+    }
+  ],
+  "goals_met": null,
+  "warning": null,
+  "try": {
+    "crit_value": 28.0,
+    "rolls_wanted": 6,
+    "rolls_all": 6,
+    "change": 9,
+    "against": "against the plan's goblet"
+  },
+  "takes": {
+    "today_note": "Today her book domain is open. Six runs of Overturned Roost and The Doctor finish her Normal Attack: 150 of your 200 resin, with 50 left for her pieces.",
+    "materials": [
+      {
+        "key": "philosophies-of-vagrancy",
+        "name": "Philosophies of Vagrancy",
+        "icon": "/api/art/philosophies-of-vagrancy",
+        "held": 9,
+        "held_exact": true,
+        "needed": 16,
+        "state": "missing",
+        "source": "Overturned Roost, open Wednesday, Saturday and Sunday",
+        "typed": false
+      },
+      {
+        "key": "precision-drive-shaft",
+        "name": "Precision Drive Shaft",
+        "icon": "/api/art/precision-drive-shaft",
+        "held": 12,
+        "held_exact": true,
+        "needed": 12,
+        "state": "ready",
+        "source": "Drops in Nod-Krai",
+        "typed": false
+      },
+      {
+        "key": "madman-s-restraint",
+        "name": "Madman's Restraint",
+        "icon": "/api/art/madman-s-restraint",
+        "held": 1,
+        "held_exact": true,
+        "needed": 2,
+        "state": "missing",
+        "source": "The Doctor, a weekly boss",
+        "typed": false
+      },
+      {
+        "key": "crown-of-insight",
+        "name": "Crown of Insight",
+        "icon": "/api/art/crown-of-insight",
+        "held": 2,
+        "held_exact": true,
+        "needed": 1,
+        "state": "ready",
+        "source": "Events and the Battle Pass",
+        "typed": false
+      },
+      {
+        "key": "mora",
+        "name": "Mora",
+        "icon": "/api/art/mora",
+        "held": 2410000,
+        "held_exact": true,
+        "needed": 700000,
+        "state": "ready",
+        "source": "You have plenty",
+        "typed": false
+      }
+    ],
+    "resin_today": [
+      {
+        "label": "Her book, 6 runs",
+        "resin": 120
+      },
+      {
+        "label": "The Doctor",
+        "resin": 30
+      },
+      {
+        "label": "Her pieces",
+        "resin": 40
+      }
+    ],
+    "resin_cap": 200,
+    "find": [
+      {
+        "label": "A Cryo DMG Bonus goblet with a crit substat",
+        "icon": "/api/art/slot-goblet",
+        "per_run": 0.00554,
+        "paths": [
+          {
+            "label": "Sanctifying Elixir: you choose its main stat and two substats",
+            "odds": "Certain",
+            "best": true
+          },
+          {
+            "label": "Any artifact domain",
+            "odds": "1 in 181 runs",
+            "best": false
+          },
+          {
+            "label": "Her set's domain only",
+            "odds": "1 in 361 runs",
+            "best": false
+          },
+          {
+            "label": "Strongbox, her set, 3 artifacts a try",
+            "odds": "1 in 192 tries",
+            "best": false
+          }
+        ],
+        "note": "Any artifact domain works: one piece from another set keeps her 4-piece bonus."
+      }
+    ]
+  },
+  "days": {
+    "points": [
+      0.011,
+      0.0593,
+      0.1051,
+      0.1487,
+      0.1902,
+      0.2297,
+      0.2673,
+      0.303,
+      0.337,
+      0.3693,
+      0.4001,
+      0.4293,
+      0.4571,
+      0.4836,
+      0.5088,
+      0.5327,
+      0.5555,
+      0.5772,
+      0.5978,
+      0.6174,
+      0.636,
+      0.6538,
+      0.6707,
+      0.6867,
+      0.702,
+      0.7165,
+      0.7303,
+      0.7435,
+      0.756,
+      0.7679,
+      0.7792,
+      0.79,
+      0.8002,
+      0.8099,
+      0.8192,
+      0.828,
+      0.8364,
+      0.8444,
+      0.852,
+      0.8592,
+      0.8661,
+      0.8726,
+      0.8788,
+      0.8847,
+      0.8903,
+      0.8957,
+      0.9008,
+      0.9056,
+      0.9102,
+      0.9146
+    ],
+    "half": "Sun 8 Nov",
+    "most": "Thu 10 Dec",
+    "talents_on": "today",
+    "summary": "Normal Attack 10 today. The new piece: half a chance by Sun 8 Nov, nine in ten by Thu 10 Dec, at 9 runs a day."
+  },
+  "in_focus": 1,
+  "sync": {
+    "can_refresh": true,
+    "wait_minutes": null,
+    "reading": false,
+    "read_at": "2026-10-25T07:00:00+00:00",
+    "calculator": "on",
+    "message": null
+  }
+}

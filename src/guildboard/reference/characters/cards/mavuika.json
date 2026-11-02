@@ -1,0 +1,18 @@
+{
+  "key": "mavuika", "name": "Mavuika", "element": "Pyro", "weapon_type": "Claymore", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 2500, "cr": 50, "cd": 200},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cd", "cr"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "er": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["obsidian-codex"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["unfinished-reverie"], "pieces": "4"}],
+  "weapons": ["a-thousand-blazing-suns", "beacon-of-the-reed-sea", "wolf-s-gravestone", "serpent-spine", "the-unforged", "verdict"],
+  "partners": ["Hydro", "Pyro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Pyro main DPS. Both sources put the Burst first (Hour of Burning Skies, 444.8% to 800.6% at levels 1 to 2, which also powers the Flamestrider Normal Attacks through Fighting Spirit), with the Skill second; Game8 reverses them only for the off-field build. Every line scales with ATK on the elemental curve. The sources agree on 4pc Obsidian Codex as best (Scroll of the Hero of Cinder City is the alternative in both, and her best off-field), ATK% Sands (KQM also allows EM), Pyro DMG Goblet and a CRIT Circlet, and on A Thousand Blazing Suns first. KQM's second set is Marechaussee Hunter with Furina, and Unfinished Reverie for Burning teams. Goals are Game8's: ATK 2,000-2,500 (upper end), CRIT Rate 40-50%, CRIT DMG 200% or above. Game8 says ER is not needed, so none is set; its EM of 150-250 is for Vaporize and Melt only and is not set.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/mavuika-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/461999", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

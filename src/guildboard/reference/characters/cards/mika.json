@@ -1,0 +1,18 @@
+{
+  "key": "mika", "name": "Mika", "element": "Cryo", "weapon_type": "Polearm", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "hp",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 200},
+  "mains": {"sands": ["er", "hp_pct"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "heal", "cr"]},
+  "weights": {"er": "wants", "hp_pct": "wants", "cr": "some", "hp": "some", "atk_pct": "none", "atk": "none", "em": "none", "cd": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["ocean-hued-clam"], "pieces": "4"}, {"sets": ["song-of-days-past"], "pieces": "4"}, {"sets": ["the-exile"], "pieces": "4"}],
+  "weapons": ["favonius-lance", "dialogues-of-the-desert-sages", "rightful-reward", "prototype-starglitter", "black-tassel"],
+  "partners": ["Pyro", "Cryo"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Cryo healer. The Burst (Skyfeather Song) heals on his Max HP, so HP is the scaling stat and the Burst is the talent that matters; his Skill (Starfrost Swirl) scales with ATK but only gives the Soulwind ATK SPD bonus and a Physical DMG bonus. KQM puts the Burst first or level with the Skill; Game8 puts the Skill first; the card follows KQM (Burst >= Skill). Both sources give 4pc Noblesse Oblige as best, ER or HP% Sands, an HP% Goblet, an HP%, Healing Bonus or CRIT Rate Circlet, and Favonius Lance, Dialogues of the Desert Sages, Rightful Reward and Black Tassel. The other sets are KQM's. The ER goal is Game8's 200%; KQM's depends on the weapon (105-140% with Dialogues of the Desert Sages R5, 160-210% with Rightful Reward R3, 175-230% with Favonius Lance, 190-250% otherwise). No source gives other stat goals.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/mika-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/390096", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

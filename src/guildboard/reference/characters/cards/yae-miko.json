@@ -1,0 +1,39 @@
+{
+  "key": "yae-miko",
+  "name": "Yae Miko",
+  "element": "Electro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 70, "cd": 175, "er": 140, "em": 200},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["atk_pct", "dmg", "em"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "em": "wants", "er": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["disenchantment-in-deep-shadow"], "pieces": "4"},
+    {"sets": ["golden-troupe"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["heart-of-the-furnace"], "pieces": "4"},
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"},
+    {"sets": ["unfinished-reverie"], "pieces": "4"}
+  ],
+  "weapons": ["kagura-s-verity", "a-thousand-floating-dreams", "reliquary-of-truth", "vivid-notions", "skyward-atlas", "the-widsith", "flowing-purity", "echoes-of-the-heart", "lost-prayer-to-the-sacred-winds"],
+  "partners": ["Dendro", "Pyro", "Anemo"],
+  "partner_roles": ["support", "damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on Skill > Burst > Normal Attack, Kagura's Verity first and the same weapon pool (A Thousand Floating Dreams, Skyward Atlas, The Widsith, Flowing Purity), an ATK% or EM Sands, a CRIT Circlet, and on the sets by team: 4pc Disenchantment in Deep Shadow for Stellar-Conduct (Gilded Dreams second, with Heart of the Furnace KQM) and 4pc Golden Troupe otherwise (Gilded Dreams second; Game8 adds Gladiator's Finale; KQM adds Unfinished Reverie, Silken Moon's Serenade and Night of the Sky's Unveiling for Lunar-Charged). The Goblet is ATK% for Stellar-Conduct and Electro DMG otherwise (KQM allows EM). Sesshou Sakura (60.7% to 109.2% at level 1 and 10 for Level 1, elemental curve) is the damage, and her EM passive raises it. Goals are Game8's: ATK 2,000 or more, CR 60-70, CD 175 or above, EM 100-200 (upper ends); ER is Game8's 130-140 with a second Electro unit (160 or more solo, which it does not recommend), and KQM's 140-150 with Raiden at C0 (100 from C1). Partners are inferred (Dendro for Aggravate, Pyro for Overloaded, Anemo for Stellar-Conduct).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/yae-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/327533", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

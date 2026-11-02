@@ -1,0 +1,19 @@
+{
+  "key": "amber", "name": "Amber", "element": "Pyro", "weapon_type": "Bow", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 170},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["instructor"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}],
+  "weapons": ["elegy-for-the-end", "favonius-warbow", "sacrificial-bow"],
+  "partners": ["Hydro", "Cryo"], "partner_roles": ["damage"], "teams": [],
+  "notes": "Both sources give her two builds: a Burst support (Fiery Rain, 1074% ATK in total at level 13) and a Melt Charged Shot carry. The card follows the support build because Game8 lists it first and KQM names it too, and both put the Burst first. The Melt build wants a Shimenawa's Reminiscence or Wanderer's Troupe set with an EM or ATK% Sands and The First Great Magic. KQM's Burst-support ER is 165-175% with a Favonius Warbow and no team proc, so ER 170% is the goal; with Elegy it is 225-240%. Neither source gives crit or ATK goals. The Explosion DMG line marked 'check' is ATK-based. Amber is a 4-star filler and both sources have little for her, so confidence is low.",
+  "confidence": "low", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/amber-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297535", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/14", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

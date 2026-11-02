@@ -1,0 +1,19 @@
+{
+  "key": "razor", "name": "Razor", "element": "Electro", "weapon_type": "Claymore", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "physical",
+  "goals": {"atk": 2000, "cr": 80, "cd": 140, "er": 130},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg", "phys", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"}, {"sets": ["echoes-of-an-offering"], "pieces": "4"}, {"sets": ["thundering-fury"], "pieces": "4"}, {"sets": ["pale-flame"], "pieces": "4"}, {"sets": ["gladiator-s-finale"], "pieces": "4"}],
+  "weapons": ["a-thousand-blazing-suns", "redhorn-stonethresher", "beacon-of-the-reed-sea", "gest-of-the-mighty-wolf", "wolf-s-gravestone", "serpent-spine"],
+  "partners": ["Electro", "Dendro"], "partner_roles": ["support", "healer"], "teams": [],
+  "notes": "A 4-star Electro claymore main DPS whose Normal Attacks carry him; the damage talent is the Normal Attack on the physical table (hit 1 is 95.9% at level 1 and goes up by the physical curve; his Skill and Burst are on the elemental curve). Both sources put the Normal Attack first, then the Burst, then the Skill. The sources split on the build, so a third source was read (genshin.gg, 2026-10-30). KQM covers three builds (Physical, Aggravate, transformative) and puts 4pc Pale Flame first for Physical and 4pc Thundering Fury for Aggravate and Quickbloom; Game8 gives one Hexerei Electro build (4pc A Day Carved From Rising Winds, Echoes of an Offering, Electro DMG Goblet) and genshin.gg gives the same two sets first, then Gladiator's Finale, Thundering Fury and Emblem of Severed Fate, with an ATK% Sands, an Electro DMG Goblet and a CRIT Circlet. Two of three sources therefore give the Electro build, and the card lists it first, with KQM's Physical option (Pale Flame, Physical DMG Goblet) kept as the second choice; the Goblet order is dmg, phys, atk_pct. The weapons: Game8's best is A Thousand Blazing Suns, genshin.gg's Gest of the Mighty Wolf, KQM's Beacon of the Reed Sea; Redhorn Stonethresher, Beacon and Serpent Spine are on two or three lists. Goals are Game8's: ATK 2,000 or above, CRIT Rate 70-80% (upper end), CRIT DMG 140% or above, ER 130% or above; KQM gives 100-130% for double Electro and 140-180% solo.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/razor-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297519", "checked": "2026-10-29"},
+    {"url": "https://genshin.gg/characters/razor/", "checked": "2026-10-30"}
+  ],
+  "checked": "2026-10-30"
+}

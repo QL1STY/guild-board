@@ -1,0 +1,11 @@
+{
+  "checked_against": "7.1",
+  "note": "Totals for regions that are finished and no longer growing. A type that is missing here is shown as a count without a total.",
+  "oculi": {
+    "anemo": 66,
+    "geo": 131,
+    "electro": 181,
+    "dendro": 271,
+    "hydro": 271
+  }
+}

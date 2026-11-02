@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sets.json: each artifact set's 2-piece and 4-piece effects, structured, by set key",
+  "type": "object",
+  "required": ["sets", "checked", "sources"],
+  "additionalProperties": false,
+  "properties": {
+    "checked": {"type": ["string", "null"]},
+    "sources": {"type": "array"},
+    "sets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "two", "four"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "two": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["stat", "values", "when"],
+              "additionalProperties": false,
+              "properties": {
+                "stat": {"enum": ["hp", "atk", "def", "hp_pct", "atk_pct", "def_pct", "em", "er", "cr", "cd", "dmg", "heal", "phys"]},
+                "values": {"type": "array", "items": {"type": "number"}, "minItems": 1, "maxItems": 1},
+                "when": {"enum": ["always", "met"]},
+                "condition": {"type": "string"}
+              }
+            }
+          },
+          "four": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["stat", "values", "when"],
+              "additionalProperties": false,
+              "properties": {
+                "stat": {"enum": ["hp", "atk", "def", "hp_pct", "atk_pct", "def_pct", "em", "er", "cr", "cd", "dmg", "heal", "phys"]},
+                "values": {"type": "array", "items": {"type": "number"}, "minItems": 1, "maxItems": 1},
+                "when": {"enum": ["always", "met"]},
+                "condition": {"type": "string"}
+              }
+            }
+          },
+          "icons": {"type": "object", "additionalProperties": {"type": "string"}},
+          "entry": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

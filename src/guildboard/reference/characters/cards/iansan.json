@@ -1,0 +1,34 @@
+{
+  "key": "iansan",
+  "name": "Iansan",
+  "element": "Electro",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["atk_pct"], "circlet": ["atk_pct", "cr"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "cr": "some", "atk": "some", "cd": "none", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"}
+  ],
+  "weapons": ["symphonist-of-scents", "calamity-queller", "engulfing-lightning", "favonius-lance", "tamayuratei-no-ohanashi", "vortex-vanquisher", "skyward-spine", "lumidouce-elegy"],
+  "partners": ["Electro", "Pyro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree: 4pc Scroll of the Hero of Cinder City (Noblesse Oblige as KQM's second), ATK% or ER sands, ATK% goblet and circlet (KQM adds CRIT Rate with Favonius Lance), Symphonist of Scents first, Burst first. Neither source states an ER or ATK goal, so goals are empty; the confidence is medium because the sources agree but give nothing numeric. Her Burst buffs the team's ATK, so the Burst is the damage talent. Partners: Electro and Pyro characters (Nightsoul teams), from the kit; no team list in the sources.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/iansan-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/345881", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7502", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

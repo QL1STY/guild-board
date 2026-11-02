@@ -1,0 +1,14 @@
+{
+  "pools": {
+    "character":  {"hard": 90, "soft": 74, "four": 10, "base": 0.006, "step": 0.06, "featured": 0.55, "types": ["301", "400"]},
+    "weapon":     {"hard": 80, "soft": 63, "four": 10, "base": 0.007, "step": 0.07, "featured": 0.75, "types": ["302"]},
+    "standard":   {"hard": 90, "soft": 74, "four": 10, "base": 0.006, "step": 0.06, "featured": null, "types": ["200"]},
+    "chronicled": {"hard": 90, "soft": 74, "four": 10, "base": 0.006, "step": 0.06, "featured": 0.5,  "types": ["500"]},
+    "novice":     {"hard": 90, "soft": 74, "four": 10, "base": 0.006, "step": 0.06, "featured": null, "types": ["100"]}
+  },
+  "standard_five_stars": {
+    "character": [{"name": "Diluc", "since": "2020-09-28"}, {"name": "Jean", "since": "2020-09-28"}, {"name": "Keqing", "since": "2020-09-28"}, {"name": "Mona", "since": "2020-09-28"}, {"name": "Qiqi", "since": "2020-09-28"}, {"name": "Tighnari", "since": "2022-09-28"}, {"name": "Dehya", "since": "2023-04-12"}, {"name": "Yumemizuki Mizuki", "since": "2025-03-26"}],
+    "weapon": [{"name": "Amos' Bow", "since": "2020-09-28"}, {"name": "Aquila Favonia", "since": "2020-09-28"}, {"name": "Lost Prayer to the Sacred Winds", "since": "2020-09-28"}, {"name": "Primordial Jade Winged-Spear", "since": "2020-09-28"}, {"name": "Skyward Atlas", "since": "2020-09-28"}, {"name": "Skyward Blade", "since": "2020-09-28"}, {"name": "Skyward Harp", "since": "2020-09-28"}, {"name": "Skyward Pride", "since": "2020-09-28"}, {"name": "Skyward Spine", "since": "2020-09-28"}, {"name": "Wolf's Gravestone", "since": "2020-09-28"}]
+  },
+  "sources": ["Genshin Impact Wiki, Wish and Wanderlust Invocation, read 2026-10-23", "the game's Details text as the wiki quotes it: Capturing Radiance's consolidated 55%"]
+}

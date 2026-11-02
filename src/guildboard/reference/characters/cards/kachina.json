@@ -1,0 +1,128 @@
+{
+  "key": "kachina",
+  "name": "Kachina",
+  "element": "Geo",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": [
+    "she",
+    "her",
+    "her"
+  ],
+  "roles": [
+    "damage",
+    "support"
+  ],
+  "keeps_alive": false,
+  "scaling": "def",
+  "damage_talent": "skill",
+  "talent_priority": [
+    "skill",
+    "burst",
+    "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+    "def": 2000,
+    "cr": 55,
+    "cd": 110,
+    "er": 180,
+    "dmg": 46.6
+  },
+  "mains": {
+    "sands": [
+      "def_pct",
+      "er"
+    ],
+    "goblet": [
+      "dmg",
+      "def_pct"
+    ],
+    "circlet": [
+      "cr",
+      "cd"
+    ]
+  },
+  "weights": {
+    "def_pct": "wants",
+    "er": "wants",
+    "cr": "wants",
+    "cd": "wants",
+    "dmg": "wants",
+    "def": "some",
+    "atk_pct": "none",
+    "atk": "none",
+    "em": "none",
+    "hp_pct": "none",
+    "hp": "none"
+  },
+  "sets": [
+    {
+      "sets": [
+        "scroll-of-the-hero-of-cinder-city"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "archaic-petra"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "noblesse-oblige"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "tenacity-of-the-millelith"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "obsidian-codex"
+      ],
+      "pieces": "4"
+    }
+  ],
+  "weapons": [
+    "footprint-of-the-rainbow",
+    "favonius-lance",
+    "engulfing-lightning",
+    "deathmatch",
+    "staff-of-the-scarlet-sands"
+  ],
+  "partners": [
+    "Geo"
+  ],
+  "partner_roles": [
+    "support",
+    "damage"
+  ],
+  "teams": [],
+  "notes": "Both sources: 4pc Scroll of the Hero of Cinder City, DEF% sands, Geo DMG goblet, CRIT circlet, Footprint of the Rainbow first. Goals are Game8's: DEF 2,000+, CRIT Rate 50-60 (55), CRIT DMG 100-120 (110). ER differs a lot: Game8 130-150 with another Geo character and 180-200 solo; KQM 165-195 for a C0 double Geo team with Favonius Lance and 215-265 without. 180 is used, inside KQM's with-Favonius range and Game8's solo range; this is why the confidence is medium. Kit: her Skill (Turbo Twirly, DEF-scaling, elemental curve) is the damage; Normal Attack priority is last in both (KQM: character level > Skill > Burst). Re-checked against a third source (genshin-builds.com, October 29, 2026): sets Scroll of the Hero of Cinder City, Archaic Petra, Noblesse Oblige, Tenacity of the Millelith (as here); sands DEF% or ER, goblet Geo DMG or DEF%, circlet CRIT Rate or CRIT DMG; substats ER > CRIT Rate > CRIT DMG > DEF%; Skill > Burst > Normal Attack; weapons Favonius Lance, Footprint of the Rainbow, Engulfing Lightning (the community's most used is Footprint). It gives no numeric goals and calls her personal scaling low, so it does not settle the ER difference; ER 180 stays inside both KQM's with-Favonius range and Game8's solo range. The ER sands and DEF% goblet were added from it.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {
+      "url": "https://keqingmains.com/q/kachina-quickguide/",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://game8.co/games/Genshin-Impact/archives/462004",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://wiki.hoyolab.com/pc/genshin/entry/6318",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://genshin-builds.com/en/character/kachina",
+      "checked": "2026-10-29"
+    }
+  ],
+  "checked": "2026-10-29"
+}

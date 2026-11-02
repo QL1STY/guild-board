@@ -1,0 +1,413 @@
+{
+  "after": false,
+  "modes": [
+    {
+      "key": "abyss",
+      "label": "Spiral Abyss",
+      "value": "33 of 36 stars",
+      "text": "Your two teams for floor 12 are 77% ready. Resets Mon 16 Nov.",
+      "ready": 77
+    },
+    {
+      "key": "theater",
+      "label": "Imaginarium Theater",
+      "value": "Cryo, Electro, Anemo",
+      "text": "7 ready in these elements, 1 full team. Ends Sat 31 Oct.",
+      "ready": 75
+    },
+    {
+      "key": "stygian",
+      "label": "Stygian Onslaught",
+      "value": "Difficulty 5 of 6",
+      "text": "A fitting team for each of the 3 bosses, 79% ready on average.",
+      "ready": 79
+    }
+  ],
+  "abyss": [
+    {
+      "label": "First half",
+      "lead_element": "Dendro",
+      "members": [
+        {
+          "key": "nefer",
+          "name": "Nefer",
+          "icon": "/api/art/nefer",
+          "role": "damage",
+          "ready": 88
+        },
+        {
+          "key": "dahlia",
+          "name": "Dahlia",
+          "icon": "/api/art/dahlia",
+          "role": "protector",
+          "ready": 58
+        },
+        {
+          "key": "lauma",
+          "name": "Lauma",
+          "icon": "/api/art/lauma",
+          "role": "support",
+          "ready": 80
+        },
+        {
+          "key": "columbina",
+          "name": "Columbina",
+          "icon": "/api/art/columbina",
+          "role": "support",
+          "ready": 82
+        }
+      ],
+      "ready": 79,
+      "note": "Its weakest member is Dahlia, at 58%."
+    },
+    {
+      "label": "Second half",
+      "lead_element": "Cryo",
+      "members": [
+        {
+          "key": "sandrone",
+          "name": "Sandrone",
+          "icon": "/api/art/sandrone",
+          "role": "damage",
+          "ready": 78
+        },
+        {
+          "key": "ineffa",
+          "name": "Ineffa",
+          "icon": "/api/art/ineffa",
+          "role": "support",
+          "ready": 76
+        },
+        {
+          "key": "lan-yan",
+          "name": "Lan Yan",
+          "icon": "/api/art/lan-yan",
+          "role": "protector",
+          "ready": 72
+        },
+        {
+          "key": "jahoda",
+          "name": "Jahoda",
+          "icon": "/api/art/jahoda",
+          "role": "healer",
+          "ready": 70
+        }
+      ],
+      "ready": 75,
+      "note": "You lost a star in 12-3, second half with this team. Its weakest member is Jahoda, at 70%."
+    }
+  ],
+  "stygian": [
+    {
+      "name": "Guardian Blade of Drifting Snow",
+      "does_well": [
+        "Pyro"
+      ],
+      "does_badly": [
+        "Cryo"
+      ],
+      "team": {
+        "label": "Guardian Blade of Drifting Snow",
+        "lead_element": "Dendro",
+        "members": [
+          {
+            "key": "nefer",
+            "name": "Nefer",
+            "icon": "/api/art/nefer",
+            "role": "damage",
+            "ready": 88
+          },
+          {
+            "key": "dahlia",
+            "name": "Dahlia",
+            "icon": "/api/art/dahlia",
+            "role": "protector",
+            "ready": 58
+          },
+          {
+            "key": "lauma",
+            "name": "Lauma",
+            "icon": "/api/art/lauma",
+            "role": "support",
+            "ready": 80
+          },
+          {
+            "key": "columbina",
+            "name": "Columbina",
+            "icon": "/api/art/columbina",
+            "role": "support",
+            "ready": 82
+          }
+        ],
+        "ready": 79,
+        "note": null
+      }
+    },
+    {
+      "name": "Fae of Crystalline Flesh",
+      "does_well": [
+        "Cryo",
+        "Hydro"
+      ],
+      "does_badly": [
+        "Dendro"
+      ],
+      "team": {
+        "label": "Fae of Crystalline Flesh",
+        "lead_element": "Cryo",
+        "members": [
+          {
+            "key": "sandrone",
+            "name": "Sandrone",
+            "icon": "/api/art/sandrone",
+            "role": "damage",
+            "ready": 78
+          },
+          {
+            "key": "ineffa",
+            "name": "Ineffa",
+            "icon": "/api/art/ineffa",
+            "role": "support",
+            "ready": 76
+          },
+          {
+            "key": "lan-yan",
+            "name": "Lan Yan",
+            "icon": "/api/art/lan-yan",
+            "role": "protector",
+            "ready": 72
+          },
+          {
+            "key": "columbina",
+            "name": "Columbina",
+            "icon": "/api/art/columbina",
+            "role": "support",
+            "ready": 82
+          }
+        ],
+        "ready": 77,
+        "note": null
+      }
+    },
+    {
+      "name": "Chimeric Winged Lion",
+      "does_well": [
+        "Dendro"
+      ],
+      "does_badly": [
+        "Hydro"
+      ],
+      "team": {
+        "label": "Chimeric Winged Lion",
+        "lead_element": "Dendro",
+        "members": [
+          {
+            "key": "nefer",
+            "name": "Nefer",
+            "icon": "/api/art/nefer",
+            "role": "damage",
+            "ready": 88
+          },
+          {
+            "key": "ineffa",
+            "name": "Ineffa",
+            "icon": "/api/art/ineffa",
+            "role": "support",
+            "ready": 76
+          },
+          {
+            "key": "lauma",
+            "name": "Lauma",
+            "icon": "/api/art/lauma",
+            "role": "support",
+            "ready": 80
+          },
+          {
+            "key": "iansan",
+            "name": "Iansan",
+            "icon": "/api/art/iansan",
+            "role": "support",
+            "ready": 66
+          }
+        ],
+        "ready": 80,
+        "note": null
+      }
+    }
+  ],
+  "theater": {
+    "month": "2026-10",
+    "elements": [
+      "Cryo",
+      "Electro",
+      "Anemo"
+    ],
+    "calendar_elements": [
+      "Cryo",
+      "Electro",
+      "Anemo"
+    ],
+    "from_calendar": true,
+    "cast": [
+      {
+        "element": "Cryo",
+        "ready": 2,
+        "members": [
+          {
+            "key": "sandrone",
+            "name": "Sandrone",
+            "icon": "/api/art/sandrone",
+            "ready": 78,
+            "counted": true
+          },
+          {
+            "key": "odette",
+            "name": "Odette",
+            "icon": "/api/art/odette",
+            "ready": 64,
+            "counted": true
+          }
+        ],
+        "thinnest": false
+      },
+      {
+        "element": "Electro",
+        "ready": 3,
+        "members": [
+          {
+            "key": "ineffa",
+            "name": "Ineffa",
+            "icon": "/api/art/ineffa",
+            "ready": 76,
+            "counted": true
+          },
+          {
+            "key": "iansan",
+            "name": "Iansan",
+            "icon": "/api/art/iansan",
+            "ready": 66,
+            "counted": true
+          },
+          {
+            "key": "alyosha",
+            "name": "Alyosha",
+            "icon": "/api/art/alyosha",
+            "ready": 52,
+            "counted": true
+          }
+        ],
+        "thinnest": false
+      },
+      {
+        "element": "Anemo",
+        "ready": 2,
+        "members": [
+          {
+            "key": "lan-yan",
+            "name": "Lan Yan",
+            "icon": "/api/art/lan-yan",
+            "ready": 72,
+            "counted": true
+          },
+          {
+            "key": "jahoda",
+            "name": "Jahoda",
+            "icon": "/api/art/jahoda",
+            "ready": 70,
+            "counted": true
+          },
+          {
+            "key": "vesna",
+            "name": "Vesna",
+            "icon": "/api/art/vesna",
+            "ready": 40,
+            "counted": false
+          }
+        ],
+        "thinnest": true
+      }
+    ],
+    "teams": [
+      {
+        "label": "Sandrone's team",
+        "lead_element": "Cryo",
+        "members": [
+          {
+            "key": "sandrone",
+            "name": "Sandrone",
+            "icon": "/api/art/sandrone",
+            "role": "damage",
+            "ready": 78
+          },
+          {
+            "key": "ineffa",
+            "name": "Ineffa",
+            "icon": "/api/art/ineffa",
+            "role": "support",
+            "ready": 76
+          },
+          {
+            "key": "lan-yan",
+            "name": "Lan Yan",
+            "icon": "/api/art/lan-yan",
+            "role": "protector",
+            "ready": 72
+          },
+          {
+            "key": "jahoda",
+            "name": "Jahoda",
+            "icon": "/api/art/jahoda",
+            "role": "healer",
+            "ready": 70
+          }
+        ],
+        "ready": 75,
+        "note": null
+      }
+    ],
+    "close": [
+      {
+        "key": "vesna",
+        "name": "Vesna",
+        "icon": "/api/art/vesna",
+        "element": "Anemo",
+        "ready": 40,
+        "to_go": 10
+      }
+    ]
+  },
+  "clear": [
+    {
+      "key": "sandrone",
+      "icon": "/api/art/sandrone",
+      "title": "Finish Sandrone's plan",
+      "text": "Sandrone leads your weaker Abyss team, the one that lost a star in 12-3, second half. Her plan takes her from 78% to 91%.",
+      "action": "planner",
+      "target": "sandrone"
+    },
+    {
+      "key": "vesna",
+      "icon": "/api/art/vesna",
+      "title": "Build Vesna to level 70",
+      "text": "The Theater's Anemo cast is your thinnest, with 2 ready. Vesna would make 3.",
+      "action": "focus",
+      "target": "vesna"
+    },
+    {
+      "key": "durin",
+      "icon": "/api/art/durin",
+      "title": "Build Durin for the Guardian Blade of Drifting Snow",
+      "text": "Pyro does well against it, and none of your teams leads with Pyro yet.",
+      "action": "focus",
+      "target": "durin"
+    }
+  ],
+  "sync": {
+    "can_refresh": true,
+    "wait_minutes": null,
+    "reading": false,
+    "read_at": "2026-10-25T07:00:00+00:00",
+    "calculator": "on",
+    "message": null
+  }
+}

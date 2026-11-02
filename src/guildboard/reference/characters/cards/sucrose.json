@@ -1,0 +1,18 @@
+{
+  "key": "sucrose", "name": "Sucrose", "element": "Anemo", "weapon_type": "Catalyst", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false, "scaling": "em",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"em": 800, "er": 160},
+  "mains": {"sands": ["em"], "goblet": ["em"], "circlet": ["em"]},
+  "weights": {"em": "wants", "er": "wants", "cr": "none", "cd": "none", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["viridescent-venerer"], "pieces": "4"}, {"sets": ["instructor"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["deepwood-memories"], "pieces": "4"}],
+  "weapons": ["sacrificial-fragments", "sunny-morning-sleep-in", "a-thousand-floating-dreams", "wandering-evenstar", "starcaller-s-watch", "magic-guide"],
+  "partners": ["Pyro", "Hydro", "Electro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Anemo EM buffer and Swirler. Her Skill (211% ATK at level 1) and Burst deal ATK-scaling damage, but her A4 passive shares her EM and her Swirl damage and buffs take it, so EM is the scaling stat. Both sources put the Skill first and the Burst second (KQM: character level 90 far above all three). They agree on EM on every slot, 4pc Viridescent Venerer as best (Game8: Instructor as the alternate; KQM adds Scroll of the Hero of Cinder City, Deepwood Memories and Silken Moon's Serenade for her teams) and on Sacrificial Fragments, Sunny Morning Sleep-In and Wandering Evenstar. Goals are Game8's: EM 800 or above and ER 130-160% (upper end); KQM gives no numbers.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/sucrose-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297525", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

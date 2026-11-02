@@ -1,0 +1,112 @@
+@ viridescent-venerer
++ dmg 15 met 2 Anemo DMG Bonus, for an Anemo character
+~ no stat in the 4-piece: Swirl reaction DMG +60% and Stellar Swirl reaction DMG +20%, and an Elemental RES decrease of 40% on opponents, not counted
+
+@ emblem-of-severed-fate
++ er 20 always 2
++ dmg 75 met 4 Elemental Burst DMG at the cap (25% of Energy Recharge, up to 75%)
+
+@ prayers-for-wisdom
+~ only a 1-piece effect, which is not a stat: affected by Electro for 40% less time
+
+@ prayers-for-illumination
+~ only a 1-piece effect, which is not a stat: affected by Pyro for 40% less time
+
+@ prayers-for-destiny
+~ only a 1-piece effect, which is not a stat: affected by Hydro for 40% less time
+
+@ prayers-to-springtime
+~ only a 1-piece effect, which is not a stat: affected by Cryo for 40% less time
+
+@ crimson-witch-of-flames
++ dmg 15 met 2 Pyro DMG Bonus, for a Pyro character
++ dmg 22.5 met 4 Pyro DMG Bonus, further, at 3 stacks, 10s after using an Elemental Skill (each stack adds 50% of the 2-piece bonus), for a Pyro character
+= the text gives 50% of the 2-piece's starting value (15%) and 3 stacks, not 22.5; 22.5 is 15% x 50% x 3
+~ not counted: Overloaded and Burning DMG +40%, Vaporize and Melt DMG +15%
+
+@ lavawalker
++ dmg 35 met 4 against opponents affected by Pyro
+~ not counted: Pyro RES +40% (2-piece)
+
+@ ocean-hued-clam
++ heal 15 always 2
+~ no stat in the 4-piece: a Sea-Dyed Foam that explodes for 90% of the healing accumulated, not counted
+
+@ wanderer-s-troupe
++ em 80 always 2
++ dmg 35 met 4 Charged Attack DMG, if the wearer uses a Catalyst or a Bow
+
+@ the-exile
++ er 20 always 2
+~ no stat of the wearer in the 4-piece: regenerates 2 Energy for the other party members every 2s for 6s, not counted
+
+@ heart-of-depth
++ dmg 15 met 2 Hydro DMG Bonus, for a Hydro character
++ dmg 30 met 4 Normal and Charged Attack DMG, 15s after using an Elemental Skill
+
+@ martial-artist
++ dmg 15 met 2 Normal and Charged Attack DMG
++ dmg 25 met 4 Normal and Charged Attack DMG, 8s after using an Elemental Skill
+
+@ bloodstained-chivalry
++ phys 25 always 2
++ dmg 50 met 4 Charged Attack DMG, 10s after defeating an opponent
+~ not counted: Charged Attack stamina cost reduced to 0
+
+@ echoes-of-an-offering
++ atk_pct 18 always 2
+~ no % stat in the 4-piece: Valley Rite adds Normal Attack DMG of 70% of ATK as flat DMG with a 36% chance, not counted
+
+@ noblesse-oblige
++ dmg 20 met 2 Elemental Burst DMG
++ atk_pct 20 met 4 for all party members including the wearer, 12s after using an Elemental Burst
+
+@ instructor
++ em 80 always 2
++ em 120 met 4 for all party members including the wearer, 8s after an Elemental Reaction is triggered
+
+@ berserker
++ cr 12 always 2
++ cr 24 met 4 additionally, when HP is below 70%
+
+@ archaic-petra
++ dmg 15 met 2 Geo DMG Bonus, for a Geo character
++ dmg 35 met 4 DMG Bonus for the Element of the Crystallize shard or Lunar-Crystallize reaction, for all party members, 10s (only one Element at a time)
+
+@ thundersoother
++ dmg 35 met 4 against opponents affected by Electro
+~ not counted: Electro RES +40% (2-piece)
+
+@ defender-s-will
++ def_pct 30 always 2
+~ no stat in the 4-piece: Elemental RES +30% for each different Element in the party, not counted
+
+@ scholar
++ er 20 always 2
+~ no stat of the wearer in the 4-piece: Energy for party members with a Bow or Catalyst, not counted
+
+@ thundering-fury
++ dmg 15 met 2 Electro DMG Bonus, for an Electro character
+~ no stat in the 4-piece: Overloaded, Electro-Charged, Superconduct, Hyperbloom, Aggravate and Lunar-Charged DMG bonuses and Elemental Skill CD decrease, not counted
+
+@ tiny-miracle
+~ no stat: All Elemental RES +20% (2-piece) and +30% to the Element of incoming DMG (4-piece), not counted
+
+@ husk-of-opulent-dreams
++ def_pct 30 always 2
++ def_pct 6*4 met 4 at 4 stacks of Curiosity
++ dmg 6*4 met 4 Geo DMG Bonus at 4 stacks of Curiosity, for a Geo character
+
+@ tenacity-of-the-millelith
++ hp_pct 20 always 2
++ atk_pct 20 met 4 for all nearby party members including the wearer, 3s after an Elemental Skill hits an opponent
+~ not counted: Shield Strength +30% for nearby party members
+
+@ brave-heart
++ atk_pct 18 always 2
++ dmg 30 met 4 against opponents with more than 50% HP
+
+@ blizzard-strayer
++ dmg 15 met 2 Cryo DMG Bonus, for a Cryo character
++ cr 20 met 4 against opponents affected by Cryo
++ cr 20 met 4 an additional bonus against Frozen opponents

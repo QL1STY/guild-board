@@ -1,0 +1,38 @@
+{
+  "key": "traveler-dendro",
+  "name": "Traveler (Dendro)",
+  "element": "Dendro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["they", "them", "their"],
+  "roles": ["support", "damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 200},
+  "mains": {"sands": ["er", "em", "atk_pct"], "goblet": ["dmg", "em"], "circlet": ["cr", "cd", "em"]},
+  "weights": {"er": "wants", "em": "wants", "cr": "some", "cd": "some", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["deepwood-memories"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["flower-of-paradise-lost"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"}
+  ],
+  "weapons": ["freedom-sworn", "favonius-sword", "sacrificial-sword", "skyward-blade", "fleuve-cendre-ferryman", "sapwood-blade", "festering-desire", "iron-sting"],
+  "partners": ["Electro", "Hydro", "Pyro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Deepwood Memories first, Burst > Skill > Normal Attack, an ER-first Sands (EM or ATK% after it), a Dendro DMG Goblet (EM for the pure-reaction build) and a CRIT Circlet. KQM adds Noblesse Oblige (Aggravate), Emblem of Severed Fate, Gilded Dreams, Flower of Paradise Lost and Instructor as fits for particular teams; Game8's second set is Gilded Dreams for its reaction build. Weapons differ in the lead: Game8 puts Freedom-Sworn first, KQM lists Favonius Sword, Sacrificial Sword and Skyward Blade first and Freedom-Sworn under other options; the list keeps Game8's first and KQM's after it. The Burst's Explosion (400.8% to 721.4%, elemental curve) is the damage line. ER is KQM's range by rotation (250-300 with one Skill solo Dendro, 200-250 with two Skills, 160-200 with a second Dendro unit); 200 is used for the usual two-Skill team. No source gives ATK or CRIT goals. Partners are inferred from the Aggravate, Bloom and Quicken teams KQM names.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/dendro-traveler-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/381807", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2674", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

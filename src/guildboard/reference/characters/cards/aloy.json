@@ -1,0 +1,20 @@
+{
+  "key": "aloy", "name": "Aloy", "element": "Cryo", "weapon_type": "Bow", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 125, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "em", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["blizzard-strayer"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}],
+  "weapons": ["thundering-pulse", "polar-star", "skyward-harp"],
+  "partners": ["Hydro", "Pyro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Cryo bow main DPS whose Burst is the biggest hit (647% ATK at level 10), so the Burst is first for both sources. The sources differ on sets: KQM lists Emblem of Severed Fate, Gilded Dreams and Lavawalker for its builds and Blizzard Strayer for her personal damage, Game8 lists Wanderer's Troupe and Blizzard Strayer. A third source, genshin.gg's Aloy page (checked 2026-10-29), lists 4pc Noblesse Oblige, 2pc Blizzard Strayer with 2pc Noblesse Oblige, and 4pc Emblem of Severed Fate; so the card puts Blizzard Strayer first (named by all three), then Noblesse Oblige (KQM and genshin.gg) and Emblem of Severed Fate (KQM and genshin.gg); Game8's Wanderer's Troupe is left out. The Sands is ATK% in both main builds and ATK% or EM at genshin.gg; KQM also allows ER for reverse-melt play. Game8 and genshin.gg both put Thundering Pulse first, then genshin.gg has Polar Star and Skyward Harp second and third; KQM calls her signature Polar Star best, so the card puts Thundering Pulse first by the majority and keeps Polar Star second. Neither source gives crit or ATK goals, so those are left to the role's defaults. ER 125% is KQM's range for a second Cryo character or Sacrificial Bow; solo Cryo needs about 140-165%. DMG 46.6% is the Cryo Goblet's main stat.",
+  "confidence": "low", "early": false,
+  "sources": [
+    {"url": "https://genshin.gg/characters/aloy/", "checked": "2026-10-29"},
+    {"url": "https://keqingmains.com/q/aloy-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/337957", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/13", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

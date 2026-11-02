@@ -1,0 +1,120 @@
+@ sacrificer-s-staff
++ atk_pct 8/10/12/14/16*3 met at 3 stacks, 6s after an Elemental Skill hits an opponent
++ er 6/7.5/9/10.5/12*3 met at 3 stacks, 6s after an Elemental Skill hits an opponent
+
+@ bloodsoaked-ruins
++ cd 28/35/42/49/56 met Requiem of Ruin, 6s after triggering a Lunar-Charged reaction
+~ not counted: Lunar-Charged DMG +36%/48%/60%/72%/84% for 3.5s after an Elemental Burst, and Elemental Energy
+
+@ etherlight-spindlelute
++ em 100/125/150/175/200 met 20s after using an Elemental Skill
+
+@ nightweaver-s-looking-glass
++ em 60/75/90/105/120 met Prayer of the Far North, 4.5s after the Elemental Skill deals Hydro or Dendro DMG
++ em 60/75/90/105/120 met New Moon Verse, 10s after a nearby party member triggers a Lunar-Bloom reaction
+~ not counted: party Bloom, Hyperbloom, Burgeon and Lunar-Bloom DMG when both effects are in effect
+
+@ snare-hook
++ em 60/75/90/105/120 met 12s after causing an Elemental Reaction
+~ with Moonsign: Ascendant Gleam the Elemental Mastery from this effect is further increased by 60/75/90/105/120; the Moonsign depends on the party, so it is not counted
+
+@ blackmarrow-lantern
+~ no effect on the wielder's stats: Bloom DMG +48%/60%/72%/84%/96% and Lunar-Bloom DMG +12%/15%/18%/21%/24% are reaction DMG, not counted; Moonsign: Ascendant Gleam adds Lunar-Bloom DMG
+
+@ prospector-s-shovel
+~ no effect on the wielder's stats: Electro-Charged DMG +48%/60%/72%/84%/96% and Lunar-Charged DMG +12%/15%/18%/21%/24% are reaction DMG, not counted; Moonsign: Ascendant Gleam adds Lunar-Charged DMG
+
+@ master-key
++ em 60/75/90/105/120 met 12s after causing an Elemental Reaction
+~ with Moonsign: Ascendant Gleam the Elemental Mastery from this effect is further increased by 60/75/90/105/120; the Moonsign depends on the party, so it is not counted
+
+@ moonweaver-s-dawn
++ dmg 20/25/30/35/40 met Elemental Burst DMG
++ dmg 28/35/42/49/56 met Elemental Burst DMG, additionally, when the Energy Capacity does not exceed 40 (16%/20%/24%/28%/32% at 60)
+
+@ serenity-s-call
++ hp_pct 16/20/24/28/32 met 12s after causing an Elemental Reaction
+~ with Moonsign: Ascendant Gleam the Max HP from this effect is further increased by 16%/20%/24%/28%/32%; the Moonsign depends on the party, so it is not counted
+
+@ flame-forged-insight
++ em 60/75/90/105/120 met 15s after Electro-Charged, Lunar-Charged, Bloom, Lunar-Bloom, Crystallize or Lunar-Crystallize is triggered (once every 15s)
+~ not counted: Elemental Energy
+
+@ fractured-halo
++ atk_pct 24/30/36/42/48 met 20s after an Elemental Skill or Elemental Burst is used
+~ not counted: Electrifying Edict, all nearby party members deal 40%/50%/60%/70%/80% more Lunar-Charged DMG
+
+@ azurelight
++ atk_pct 24/30/36/42/48 met within 12s after an Elemental Skill is used
++ atk_pct 24/30/36/42/48 met further, within those 12s, while the wielder has 0 Energy
++ cd 40/50/60/70/80 met within those 12s, while the wielder has 0 Energy
+
+@ sequence-of-solitude
+~ no stat: deals AoE DMG of 40%/50%/60%/70%/80% of Max HP when an attack hits (once every 15s), not counted
+
+@ symphonist-of-scents
++ atk_pct 12/15/18/21/24 always
++ atk_pct 12/15/18/21/24 met additionally, while the wielder is off-field
++ atk_pct 32/40/48/56/64 met Sweet Echoes, 3s after initiating healing (also for the characters healed)
+
+@ vivid-notions
++ atk_pct 28/35/42/49/56 always
++ cd 28/35/42/49/56 met Plunging Attack CRIT DMG, Dawn's First Hue, 15s after using a Plunging Attack
++ cd 40/50/60/70/80 met Plunging Attack CRIT DMG, Twilight's Splendor, 15s after using an Elemental Skill or Burst
+
+@ tamayuratei-no-ohanashi
++ atk_pct 20/25/30/35/40 met 10s after using an Elemental Skill
+~ not counted: Movement SPD +10%
+
+@ sunny-morning-sleep-in
++ em 120/150/180/210/240 met 6s after triggering Swirl or Stellar Swirl
++ em 96/120/144/168/192 met 9s after the Elemental Skill hits an opponent
++ em 32/40/48/56/64 met 30s after the Elemental Burst hits an opponent
+
+@ starcaller-s-watch
++ em 100/125/150/175/200 always
++ dmg 28/35/42/49/56 met Mirror of Night for the active character, within 15s after the wielder creates a Shield (once every 14s)
+
+@ a-thousand-blazing-suns
++ cd 20/25/30/35/40 met Scorching Brilliance, 6s after using an Elemental Skill or Burst (once every 10s)
++ atk_pct 28/35/42/49/56 met Scorching Brilliance, 6s after using an Elemental Skill or Burst (once every 10s)
+~ in the Nightsoul's Blessing state Scorching Brilliance is increased by 75%, not counted
+
+@ astral-vulture-s-crimson-plumage
++ atk_pct 24/30/36/42/48 met 12s after triggering a Swirl or Stellar Swirl reaction
++ dmg 48/60/72/84/96 met Charged Attack DMG, when 2 or more party members are of a different Elemental Type than the wielder (20%/25%/30%/35%/40% for 1)
++ dmg 24/30/36/42/48 met Elemental Burst DMG, when 2 or more party members are of a different Elemental Type than the wielder (10%/12.5%/15%/17.5%/20% for 1)
+
+@ flower-wreathed-feathers
++ dmg 6/7.5/9/10.5/12*6 met Charged Attack DMG of Aimed Shots, at 6 stacks (one every 0.5s)
+
+@ waveriding-whirl
++ hp_pct 20/25/30/35/40 met 10s after using an Elemental Skill (once every 15s)
++ hp_pct 24/30/36/42/48 met further, at the cap for Hydro characters in the party (12%/15%/18%/21%/24% each, 2 Hydro characters), 10s after an Elemental Skill
+
+@ calamity-of-eshu
++ dmg 20/25/30/35/40 met Normal and Charged Attack DMG, while protected by a Shield
++ cr 8/10/12/14/16 met Normal and Charged Attack CRIT Rate, while protected by a Shield
+
+@ mountain-bracing-bolt
++ dmg 12/15/18/21/24 met Elemental Skill DMG
++ dmg 12/15/18/21/24 met Elemental Skill DMG, 8s after another nearby party member uses an Elemental Skill
+
+@ fruitful-hook
++ cr 16/20/24/28/32 met Plunging Attack CRIT Rate
++ dmg 16/20/24/28/32 met Normal, Charged and Plunging Attack DMG, 10s after a Plunging Attack hits an opponent
+
+@ peak-patrol-song
++ def_pct 8/10/12/14/16*2 met at 2 stacks of Ode to Flowers, 6s after Normal or Plunging Attacks hit
++ dmg 10/12.5/15/17.5/20*2 met All Elemental DMG Bonus at 2 stacks of Ode to Flowers, 6s after Normal or Plunging Attacks hit
++ dmg 25.6/32/38.4/44.8/51.2 met All Elemental DMG Bonus for nearby party members including the wielder, 15s after Ode to Flowers reaches 2 stacks, at the cap (8%/10%/12%/14%/16% per 1,000 DEF)
+
+@ sturdy-bone
+~ no stat: Normal Attack DMG +16%/20%/24%/28%/32% of ATK is flat damage after Sprint, not counted
+
+@ chain-breaker
++ atk_pct 4.8/6/7.2/8.4/9.6*3 met 3 party members from Natlan or of a different Elemental Type than the wielder
++ em 24/30/36/42/48 met 3 or more party members from Natlan or of a different Elemental Type than the wielder
+
+@ ring-of-yaxche
++ dmg 16/20/24/28/32 met Normal Attack DMG at the cap of Jade-Forged Crown, 10s after using an Elemental Skill (0.6%/0.7%/0.8%/0.9%/1% per 1,000 Max HP)

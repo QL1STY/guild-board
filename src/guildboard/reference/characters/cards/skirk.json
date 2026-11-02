@@ -1,0 +1,18 @@
+{
+  "key": "skirk", "name": "Skirk", "element": "Cryo", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "physical",
+  "goals": {"atk": 2100, "cr": 80, "cd": 200},
+  "mains": {"sands": ["atk_pct"], "goblet": ["dmg", "atk_pct"], "circlet": ["cd", "cr", "atk_pct"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "er": "none", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["finale-of-the-deep-galleries"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["blizzard-strayer"], "pieces": "4"}],
+  "weapons": ["azurelight", "haran-geppaku-futsu", "mistsplitter-reforged", "primordial-jade-cutter", "finale-of-the-deep", "calamity-of-eshu"],
+  "partners": ["Hydro", "Cryo"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Cryo main DPS. Her damage is her Normal Attacks in Serpent's Subtlety, which her Skill (Havoc: Warp) switches on, so the damage talent is the Skill; both sources put the Skill first and the Burst second. The table is physical: her hits (1-hit 132.8% in Havoc: Warp) follow the Normal Attack curve, 1.0813 from level 1 to level 2, even though they deal Cryo DMG. Every line scales with ATK. The sources agree on 4pc Finale of the Deep Galleries as her signature set and best (KQM also names Marechaussee Hunter, best with Furina, and Blizzard Strayer, which Game8 gives as the alternate), an ATK% Sands, a Cryo DMG Goblet (KQM: or ATK%) and a CRIT Circlet, and on Azurelight first with Haran Geppaku Futsu, Mistsplitter Reforged and Primordial Jade Cutter behind it. Goals are Game8's: ATK 2,100 or above, CRIT Rate 70-80% (upper end), CRIT DMG 200% or above. No source gives an ER goal.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/skirk-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/333140", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

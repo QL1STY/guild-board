@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stars.json: a character's key -> the chart's size and the six stars' [x, y] points, C1 to C6, in the chart's pixels",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "required": ["size", "points"],
+    "additionalProperties": false,
+    "properties": {
+      "size": {"type": "array", "items": {"type": "number", "minimum": 1}, "minItems": 2, "maxItems": 2},
+      "points": {
+        "type": "array",
+        "items": {"type": "array", "items": {"type": "number", "minimum": 0}, "minItems": 2, "maxItems": 2},
+        "minItems": 6,
+        "maxItems": 6
+      }
+    }
+  }
+}

@@ -1,0 +1,169 @@
+/*
+ * The overlay's page (plan 2A-4; stage 2A spec 14), which Guild Board's own see-through window shows over the game's
+ * display. The page is transparent. Its widgets are dark panels in the rail's colour with parchment text (spec 12.6;
+ * tokens.css, .on-dark), and so are its bar, Edit and the sheets, whose page tokens .ov sets dark again. Nothing here
+ * animates continuously (spec 14.1).
+ */
+
+/* The page behind the widgets is the game: the document draws nothing, and nothing in it scrolls. */
+html.ov-doc,
+html.ov-doc body {
+  overflow: hidden;
+  background: transparent;
+}
+
+/*
+ * The page's tokens over the game, as Edit, the sheets and the buttons use them, at the dark panel's values: text
+ * reaches 4.5:1 on the panel's #2B3142 and on the tint, marks 3:1 (contrast.test.ts). The panel's colour is the bar's
+ * and the sheets', opaque, which they need over a bright scene, as the widgets' own gaps do (--w-gap).
+ */
+.ov {
+  --surface: #2B3142;
+  --tint: #353B4F;
+  --border: rgba(211, 188, 142, .42);
+  --hairline: rgba(241, 234, 219, .13);
+  --grid: rgba(241, 234, 219, .13);
+  --ink: #F1EADB;
+  --ink2: #D9D2C3;
+  --muted: #A9B0C0;
+  --outline: rgba(241, 234, 219, .45);
+  --gold-ink: #E2C98F;
+  --button: #E2C98F;
+  --button-text: #2B3142;
+  position: fixed;
+  inset: 0;
+  /* Clipped, not scrolled: a widget's place on the display stays where the game shows under it. */
+  overflow: clip;
+  color: var(--ink);
+}
+/* Closed, nothing of the overlay takes a click: each goes through to the game. */
+.ov:not(.open) { pointer-events: none; }
+/* Open, a dim layer over the display, the rail's colour at 45%, under the widgets and the bar. */
+.ov-dim {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--rail) 45%, transparent);
+}
+/*
+ * The grid reaches the display's edges (Task 14, as the player asked): it starts 16 pixels in from the top left edge,
+ * and has as many columns as the width holds within 16 pixels of each side, 19 on 3,440 pixels, and as many rows as
+ * the height holds below its top (useArrangement's last row): no widget goes past the display's edges.
+ */
+.ov-area {
+  position: absolute;
+  inset: 16px 16px 0;
+}
+.ov .board-grid { margin-top: 0; }
+
+/*
+ * The top centre: the open overlay's bar, and the lines over the game under it, however tall the bar is. It lies over
+ * the widgets, a dragged one included (board.css lifts it to 3), and under the sheets. Only the bar takes clicks.
+ */
+.ov-top {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  z-index: 4;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  pointer-events: none;
+}
+/* The open overlay's bar: its title, how it closes and its buttons, and in Edit the line of help. */
+.ov-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  /* Narrow, so that it covers little of the widgets at the top of the display: the line of help wraps in it. */
+  max-width: 560px;
+  padding: 10px 14px 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, .6);
+  pointer-events: auto;
+}
+.ov-title { font-size: 18px; font-weight: 800; }
+.ov-title::before {
+  content: '✦';
+  content: '✦' / '';
+  margin-right: 8px;
+  color: var(--gold);
+  font-size: 14px;
+  vertical-align: 2px;
+}
+.ov-hint { font-size: 12.5px; color: var(--ink2); }
+.ov-buttons { display: flex; gap: 8px; margin-left: auto; }
+.ov-help { flex-basis: 100%; font-size: 12.5px; color: var(--ink2); }
+/* A refused change or Done says why, on a line of its own; there is no line while nothing is refused. */
+.ov-bar .ach-refused { flex-basis: 100%; min-height: 0; margin: 0; }
+.ov-bar .ach-refused:empty { display: none; }
+
+/*
+ * Add a widget and a widget's Settings: in the middle of the display, over the grid, which they leave where it is (on
+ * the Board they lie above it). The widgets keep their places under the game's own. A sheet lies over the lines, and
+ * stays clear of the bar, Edit's help and a refusal included.
+ */
+.ov .board-sheet {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 5;
+  translate: -50% -50%;
+  width: min(960px, calc(100% - 32px));
+  max-height: max(calc(100% - 320px), 50%); /* half the display at least, at a large size on a short display */
+  margin: 0;
+  overflow-y: auto;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, .6);
+}
+
+/* In Edit: a lifted widget's shadow is dark, not of its light ink, and the size tag's text is the panel's colour. */
+.ov .gb-panel.w.lifted {
+  box-shadow:
+    0 18px 34px -12px rgba(0, 0, 0, .6),
+    0 2px 6px rgba(0, 0, 0, .3);
+}
+.ov .size-tag { color: var(--surface); }
+/* A pinned widget's pin, pressed in Edit, as a solid button is, hovered too (frame.css gives a hovered tool a tint). */
+.ov .w-tool[aria-pressed='true'],
+.ov .w-head .w-tool[aria-pressed='true']:hover {
+  border-color: var(--w-btn);
+  background: var(--w-btn);
+  color: var(--w-btn-text);
+}
+/* Its sign in the button's ink, not the heading's gold (widgets.css, .w-head .sign), which the plate would hide. */
+.ov .w-tool[aria-pressed='true'] .sign { color: inherit; }
+/* The pin sign after a pinned widget's name (the sign itself is drawn as the heading's signs are, widgets.css). */
+.w-pinned { display: inline-flex; flex: none; }
+
+/*
+ * The lines over the game (OverlayLines.tsx), in the top centre's column under the bar, newest last: each a dark plate
+ * with parchment text that fades in once, at once with reduced motion (motion.css). They take no clicks.
+ */
+.ov-lines {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+/* Closed, there is no bar: the lines keep its place free, its one row of 50 pixels and the column's gap. */
+.ov:not(.open) .ov-lines { margin-top: 64px; }
+.ov-line {
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 10px 28px -12px rgba(0, 0, 0, .6);
+  animation: fade-in var(--t-enter) var(--ease-out);
+}

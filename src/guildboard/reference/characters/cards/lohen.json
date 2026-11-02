@@ -1,0 +1,18 @@
+{
+  "key": "lohen", "name": "Lohen", "element": "Cryo", "weapon_type": "Polearm", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "physical",
+  "goals": {"atk": 2000, "cr": 60, "cd": 175, "er": 130},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg", "atk_pct"], "circlet": ["cd", "cr"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"}, {"sets": ["shimenawa-s-reminiscence"], "pieces": "4"}, {"sets": ["blizzard-strayer"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}],
+  "weapons": ["disaster-and-remorse", "primordial-jade-winged-spear", "staff-of-homa", "crimson-moon-s-semblance"],
+  "partners": ["Pyro", "Hydro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Cryo main DPS. His Skill, Unforeseen Strike, replaces his Normal Attacks with ATK-scaling hits that deal Cryo DMG, so the damage talent is the Skill. The table is physical: hit 1 goes from 81.0% to 87.6% at levels 1 to 2, a ratio of 1.0815, which is the physical curve (the elemental curve would give 1.075), even though the hits are Cryo. Both sources put the Skill first and the Burst second. They agree on 4pc A Day Carved From Rising Winds as best, ATK% Sands, a Cryo DMG or ATK% Goblet and a CRIT Circlet; Shimenawa's Reminiscence and Blizzard Strayer are the runners-up in both, Marechaussee Hunter is KQM's (with Furina). Both put Disaster and Remorse first; Primordial Jade Winged-Spear is on both lists, Staff of Homa is Game8's and Crimson Moon's Semblance KQM's. Goals are Game8's: ATK 2,000 or above, CRIT Rate 50-60% before the set's CRIT Rate bonus, CRIT DMG 175% or above, ER 100-130% (upper end; KQM gives 100-115% when the Burst is used every other rotation, up to 190-230% solo Cryo with the Burst every rotation). Game8's EM of 50-200 is not set.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/lohen-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/580697", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

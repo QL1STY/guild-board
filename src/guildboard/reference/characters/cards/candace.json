@@ -1,0 +1,19 @@
+{
+  "key": "candace", "name": "Candace", "element": "Hydro", "weapon_type": "Polearm", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "protector"], "keeps_alive": true, "scaling": "hp",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 200},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct", "dmg"], "circlet": ["hp_pct", "cr", "cd"]},
+  "weights": {"er": "wants", "hp_pct": "wants", "cr": "some", "cd": "some", "em": "some", "hp": "some", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}],
+  "weapons": ["favonius-lance", "the-catch", "staff-of-homa"],
+  "partners": ["Pyro", "Electro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Hydro shielder and buffer whose Burst and Skill DMG are Max HP multipliers, so HP is her scaling stat. Her Burst shield and her infusion (a Normal Attack DMG bonus of 0.5% per 1,000 Max HP) are the reason to play her. The sources describe two builds: Game8 an off-field sub-DPS with Emblem of Severed Fate and the buffer with Noblesse Oblige, KQM an HP% build and an EM build for Bloom teams. The card follows the buffer and keeps Emblem second; Favonius Lance and The Catch are on both weapon lists. Neither source gives stat goals. ER 200% is the upper end of KQM's Double Hydro range with two Skills per Burst (180-200%); one Skill needs 220-250%.",
+  "confidence": "low", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/candace-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/386384", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2815", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

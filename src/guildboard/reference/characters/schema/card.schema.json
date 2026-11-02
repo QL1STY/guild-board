@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A researched card (cards/<key>.json): the fields of the Characters plan's Card, with the sources and the day checked",
+  "type": "object",
+  "required": [
+    "key", "name", "element", "weapon_type", "rarity", "pronouns", "roles", "keeps_alive", "scaling", "damage_talent",
+    "talent_priority", "talent_table", "goals", "mains", "weights", "sets", "weapons", "partners", "partner_roles",
+    "teams", "notes", "confidence", "early", "sources", "checked"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "key": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "name": {"type": "string", "minLength": 1},
+    "element": {"enum": ["Pyro", "Hydro", "Anemo", "Electro", "Dendro", "Cryo", "Geo"]},
+    "weapon_type": {"enum": ["Sword", "Claymore", "Polearm", "Bow", "Catalyst"]},
+    "rarity": {"type": "integer", "minimum": 4, "maximum": 5},
+    "pronouns": {"type": "array", "items": {"type": "string"}, "minItems": 3, "maxItems": 3},
+    "roles": {"type": "array", "items": {"enum": ["damage", "support", "healer", "protector"]}},
+    "keeps_alive": {"type": "boolean"},
+    "scaling": {"enum": ["atk", "hp", "def", "em"]},
+    "damage_talent": {"enum": ["normal", "skill", "burst"]},
+    "talent_priority": {"type": "array", "items": {"enum": ["normal", "skill", "burst"]}, "minItems": 3, "maxItems": 3},
+    "talent_table": {"enum": ["elemental", "physical"]},
+    "goals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hp": {"type": "number"}, "atk": {"type": "number"}, "def": {"type": "number"}, "hp_pct": {"type": "number"},
+        "atk_pct": {"type": "number"}, "def_pct": {"type": "number"}, "em": {"type": "number"}, "er": {"type": "number"},
+        "cr": {"type": "number"}, "cd": {"type": "number"}, "dmg": {"type": "number"}, "heal": {"type": "number"}
+      }
+    },
+    "mains": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sands": {"type": "array", "items": {"type": "string"}},
+        "goblet": {"type": "array", "items": {"type": "string"}},
+        "circlet": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hp": {"enum": ["wants", "some", "none"]}, "atk": {"enum": ["wants", "some", "none"]},
+        "def": {"enum": ["wants", "some", "none"]}, "hp_pct": {"enum": ["wants", "some", "none"]},
+        "atk_pct": {"enum": ["wants", "some", "none"]}, "def_pct": {"enum": ["wants", "some", "none"]},
+        "em": {"enum": ["wants", "some", "none"]}, "er": {"enum": ["wants", "some", "none"]},
+        "cr": {"enum": ["wants", "some", "none"]}, "cd": {"enum": ["wants", "some", "none"]},
+        "dmg": {"enum": ["wants", "some", "none"]}, "heal": {"enum": ["wants", "some", "none"]}
+      }
+    },
+    "sets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sets", "pieces"],
+        "additionalProperties": false,
+        "properties": {
+          "sets": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 2},
+          "pieces": {"enum": ["4", "2+2"]}
+        }
+      }
+    },
+    "weapons": {"type": "array", "items": {"type": "string"}},
+    "partners": {"type": "array", "items": {"enum": ["Pyro", "Hydro", "Anemo", "Electro", "Dendro", "Cryo", "Geo"]}},
+    "partner_roles": {"type": "array", "items": {"enum": ["damage", "support", "healer", "protector"]}},
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "members"],
+        "additionalProperties": false,
+        "properties": {"name": {"type": "string"}, "members": {"type": "array", "items": {"type": "string"}}}
+      }
+    },
+    "notes": {"type": "string"},
+    "confidence": {"enum": ["high", "medium", "low", "early"]},
+    "early": {"type": "boolean"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "checked"],
+        "properties": {"url": {"type": "string"}, "checked": {"type": "string"}}
+      }
+    },
+    "checked": {"type": "string"}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "key": "chevreuse", "name": "Chevreuse", "element": "Pyro", "weapon_type": "Polearm", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "healer"], "keeps_alive": true, "scaling": "hp",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"hp": 40000, "er": 180},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "heal"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "cr": "some", "atk_pct": "none", "atk": "none", "em": "none", "def_pct": "none", "def": "none", "cd": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["song-of-days-past"], "pieces": "4"}],
+  "weapons": ["black-tassel", "favonius-lance", "symphonist-of-scents"],
+  "partners": ["Electro", "Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Pyro healer and buffer for Pyro and Electro teams (Overloaded). Her passive gives Pyro and Electro teammates up to 40% ATK from her Max HP, which is why HP is her scaling stat and 40,000 HP the goal (KQM's, and the top of Game8's 35,000-40,000). The sources agree on the Skill first, 4pc Noblesse Oblige and Song of Days Past, HP% Goblet and ER or HP% Sands. The Skill DMG lines marked 'check' are ATK multipliers; her healing is Max HP. ER 180% sits where KQM's Burst-every-rotation range (175-205%) and Game8's (160-200%) overlap. Both rank Black Tassel or Favonius Lance on the weapon list; KQM puts Symphonist of Scents first. Both also give a Pyro damage build, which the card leaves out.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/chevreuse-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/426201", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/4577", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

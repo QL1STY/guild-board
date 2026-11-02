@@ -1,0 +1,20 @@
+{
+  "key": "dori", "name": "Dori", "element": "Electro", "weapon_type": "Claymore", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "healer"], "keeps_alive": true, "scaling": "hp",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {},
+  "mains": {"sands": ["er", "hp_pct", "em"], "goblet": ["hp_pct", "em"], "circlet": ["heal", "hp_pct", "em"]},
+  "weights": {"er": "wants", "hp_pct": "wants", "em": "some", "cr": "some", "atk_pct": "some", "hp": "some", "atk": "none", "def_pct": "none", "def": "none", "cd": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["deepwood-memories"], "pieces": "4"}, {"sets": ["instructor"], "pieces": "4"}],
+  "weapons": ["favonius-greatsword", "sacrificial-greatsword", "forest-regalia"],
+  "partners": ["Dendro", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "An Electro healer and reaction trigger whose Burst heals from her Max HP. The sources disagree on her build: Game8 gives four support builds (Noblesse Oblige buffer, Emblem and Tenacity for burst uptime, a pure healer, and a C6 DPS) with ER or HP% Sands and an HP% Goblet, while KQM gives Aggravate and Hyperbloom builds with EM or ER Sands and calls the pure healer not recommended. The card joins them (ER first on the Sands, HP% and EM after). A third source, genshin.gg's Dori page (checked 2026-10-29), agrees on the support role, ER, HP% or EM Sands, an HP% or EM Goblet, a Healing Bonus, HP% or EM Circlet, and 4pc Noblesse Oblige, Deepwood Memories and Instructor, with Favonius Greatsword, Sacrificial Greatsword and Forest Regalia; so the Circlet puts Healing Bonus first and the sets and weapons are the ones at least two sources name (KQM lists the same sets as flexible choices). Both main sources put the Burst first and Favonius Greatsword first. Neither source gives stat goals, and KQM's ER table splits by C6 and by team without a clear usual team, so goals are left empty for the role's defaults. The kit's Connector DMG line is an ATK multiplier.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://genshin.gg/characters/dori/", "checked": "2026-10-29"},
+    {"url": "https://keqingmains.com/q/dori-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/380569", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2269", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

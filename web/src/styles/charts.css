@@ -1,0 +1,162 @@
+/* The frame every chart sits in, its table, and the marks of each chart. Carried over from the approved mockup. */
+.ch { padding: 12px 14px 14px; }
+.ch-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.ch h2 { font-size: 15px; font-weight: 800; }
+.ch .cs { margin-bottom: 10px; font-size: 12px; color: var(--muted); }
+.lg { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-bottom: 8px; font-size: 12px; color: var(--ink2); }
+.lg i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 50%; vertical-align: -1px; }
+.lg i.a { background: var(--series-light); }
+.lg i.b { background: var(--series); }
+
+.tb { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tb caption { padding: 6px 0 4px; text-align: left; font-weight: 700; }
+.tb th { padding: 0 0 5px; text-align: left; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.tb td,
+.tb tbody th { padding: 6px 0; border-top: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+/* A row's header, its first cell (th scope="row"), is drawn as the row's other cells are. */
+.tb tbody th { text-align: start; font-size: inherit; font-weight: inherit; text-transform: none; letter-spacing: normal; color: inherit; }
+.tb td.r,
+.tb th.r { text-align: right; }
+.tb td + td,
+.tb th + td,
+.tb th + th { padding-left: 12px; }
+.tb-scroll { max-height: 264px; overflow: auto; }
+
+/* Exploration gained: one row per region, a dot for the start and a dot for now. */
+.db-row { display: grid; grid-template-columns: 124px minmax(0, 1fr) 44px; align-items: center; gap: 10px; height: 30px; font-size: 13px; }
+.db-row .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.db-row .v { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.db-track { position: relative; height: 30px; border-right: 1px solid var(--grid); background: repeating-linear-gradient(to right, var(--grid) 0 1px, transparent 1px 25%); }
+.db-line { position: absolute; top: 14px; height: 2px; background: var(--series-light); }
+.db-dot { position: absolute; top: 10px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; box-shadow: 0 0 0 2px var(--surface); }
+.db-dot.a { background: var(--series-light); }
+.db-dot.b { background: var(--series); }
+/*
+ * The opening: the "now" dot slides out from where the region began, along the line, which grows with it (the same time
+ * and easing, so that the dot is at its end). A change of period moves the dots and the line to their new places.
+ * `--from` is the start's place, set by the markup.
+ */
+@keyframes slide-out { from { left: var(--from); } }
+.db-line { animation: grow-w var(--t-enter) var(--ease-out) backwards; transition: left var(--t-enter) var(--ease-out), width var(--t-enter) var(--ease-out); }
+.db-dot { transition: left var(--t-enter) var(--ease-out); }
+.db-dot.b { animation: slide-out var(--t-enter) var(--ease-out) backwards; }
+.db-axis { display: grid; grid-template-columns: 124px minmax(0, 1fr) 44px; gap: 10px; margin-top: 3px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.db-axis div { display: flex; justify-content: space-between; margin: 0 -10px; }
+
+/* Chests opened: columns on a count axis. The room above the plot is for the number on the highest column. */
+.col { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px; margin-top: 16px; }
+.col-y { position: relative; min-width: 22px; height: 130px; font-size: 11px; line-height: 1; color: var(--muted); font-variant-numeric: tabular-nums; }
+.col-y span { position: absolute; right: 0; transform: translateY(50%); }
+.col-plot { position: relative; height: 130px; border-bottom: 1px solid var(--axis); }
+.col-line { position: absolute; left: 0; right: 0; height: 1px; background: var(--grid); }
+/* A change of period changes the axis: its ticks and lines move with the columns, which move to their new heights. */
+.col-y span,
+.col-line { transition: bottom var(--t-enter) var(--ease-out); }
+.col-bars { position: absolute; inset: 0; display: flex; padding: 0 3px; }
+.col-item { flex: 1; min-width: 0; display: flex; align-items: flex-end; justify-content: center; }
+.col-item:hover,
+.col-item:focus-visible { background: rgba(59, 66, 85, .06); }
+/* A column grows from its baseline when it appears, and moves to its new height when its value or the axis changes. */
+.col-item i { position: relative; display: block; width: clamp(2px, 60%, 24px); border-radius: 4px 4px 0 0; background: var(--series); animation: grow-h var(--t-enter) var(--ease-out) backwards; transition: height var(--t-enter) var(--ease-out); }
+.col-item i.gap,
+.lg i.gap { background: repeating-linear-gradient(135deg, var(--series) 0 3px, var(--series-light) 3px 6px); }
+/* A day of the old diary total, before the game's own history and the diary's detail (the ledger plan, Task 7): an
+   estimate, striped the other way and in the tans, so it never reads as a day after a gap. */
+.col-item i.est,
+.lg i.est { background: repeating-linear-gradient(45deg, var(--deemph) 0 3px, var(--track) 3px 6px); }
+.lg i.est { border-radius: 2px; }
+/* A day by source: its parts stacked from the bottom, the top one rounded; the bar itself draws nothing. */
+.col-item i.stk { display: flex; flex-direction: column-reverse; background: none; }
+.col-item i.stk > span { display: block; flex: none; background: var(--c); }
+.col-item i.stk > span:last-of-type { border-radius: 4px 4px 0 0; }
+.lg i.grp { border-radius: 2px; background: var(--c); }
+/* A stacked day's tip lists its sources, a line each. */
+.col-item.stk-tip[data-tip]:hover::after,
+.col-item.stk-tip[data-tip]:focus-visible::after { white-space: pre; text-align: left; }
+.col-note { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
+.col-item i.nd { width: 5px; height: 5px; margin-bottom: 2px; border-radius: 50%; background: var(--deemph); animation: none; transition: none; }
+.col-item i b { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); padding-bottom: 2px; font-size: 11.5px; font-style: normal; font-weight: 700; color: var(--ink); }
+.col-x { grid-column: 2; display: flex; margin-top: 4px; padding: 0 3px; font-size: 11px; color: var(--muted); }
+.col-x span { flex: 1; min-width: 0; display: flex; justify-content: center; white-space: nowrap; }
+.col-lg { margin: 8px 0 0; }
+.lg i.nd { width: 5px; height: 5px; background: var(--deemph); }
+.lg i.gap { border-radius: 2px; }
+
+/* Playtime calendar: weeks as columns, five levels. */
+.hm { display: grid; grid-template-columns: 28px auto; gap: 6px; width: max-content; }
+.hm-m { grid-column: 2; display: grid; gap: 3px; font-size: 11px; color: var(--muted); }
+.hm-d { display: grid; grid-template-rows: repeat(7, 17px); gap: 3px; font-size: 11px; line-height: 17px; color: var(--muted); }
+.hm-g { display: grid; grid-template-rows: repeat(7, 17px); grid-auto-flow: column; grid-auto-columns: 17px; gap: 3px; }
+.hm-g i,
+.hm-lg i { border-radius: 3px; background: var(--r0); }
+.hm-g i.l1,
+.hm-lg i.l1 { background: var(--r1); }
+.hm-g i.l2,
+.hm-lg i.l2 { background: var(--r2); }
+.hm-g i.l3,
+.hm-lg i.l3 { background: var(--r3); }
+.hm-g i.l4,
+.hm-lg i.l4 { background: var(--r4); }
+.hm-g i.lx { background: transparent; }
+/*
+ * The cells appear a column (a week) at a time, the oldest first, each column one --stagger after the one before: the
+ * sibling index of a cell, less one, in sevens. The days that have not come are not drawn and do not appear.
+ */
+.hm-g i:not(.lx) { animation: fade-in var(--t-open) var(--ease-out) backwards; animation-delay: calc(round(down, (sibling-index() - 1) / 7, 1) * var(--stagger)); }
+.hm-lg { display: flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 11.5px; color: var(--ink2); }
+.hm-lg i { display: inline-block; width: 13px; height: 13px; }
+
+/*
+ * When you play: the week by the hour, a column for each hour and a row for each weekday, in the calendar's ramp. The
+ * cells are 14 pixels and shrink to 8 in a narrow card, and the labels over them follow the same columns.
+ */
+.wy { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 4px 6px; }
+.wy-h { grid-column: 2; display: grid; grid-template-columns: repeat(24, minmax(8px, 14px)); gap: 3px; font-size: 11px; line-height: 1.2; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wy-h span { white-space: nowrap; }
+.wy-d { display: grid; grid-template-rows: repeat(7, 14px); gap: 3px; font-size: 11px; line-height: 14px; color: var(--muted); }
+.wy-g { display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; grid-auto-columns: minmax(8px, 14px); gap: 3px; }
+.wy-g i,
+.wy-lg i { border-radius: 3px; background: var(--r0); }
+/*
+ * The cells appear an hour (a column) at a time from midnight, in pairs of columns, so that the wave has 12 steps at
+ * most, each one --stagger after the one before; and a change of period moves a cell to its new level of the gold.
+ */
+.wy-g i { animation: fade-in var(--t-open) var(--ease-out) backwards; animation-delay: calc(round(down, (sibling-index() - 1) / 14, 1) * var(--stagger)); transition: background-color var(--t-state) var(--ease-out); }
+.wy-g i.l1,
+.wy-lg i.l1 { background: var(--r1); }
+.wy-g i.l2,
+.wy-lg i.l2 { background: var(--r2); }
+.wy-g i.l3,
+.wy-lg i.l3 { background: var(--r3); }
+.wy-g i.l4,
+.wy-lg i.l4 { background: var(--r4); }
+/* A weekday that was not tracked is an outline, which is not the first step of the ramp: nothing is known of it. */
+.wy-g i.nt,
+.wy-lg i.nt { background: transparent; box-shadow: inset 0 0 0 1px var(--axis); }
+.wy-lg { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 10px; font-size: 11.5px; color: var(--ink2); }
+.wy-lg span { display: inline-flex; align-items: center; gap: 5px; }
+.wy-lg i { flex: none; width: 13px; height: 13px; }
+/* Its table has a column for each hour: the columns sit closer. */
+.wy-card .tb td + td,
+.wy-card .tb th + td,
+.wy-card .tb th + th { padding-left: 8px; }
+
+/* Primogems: a column per month with its number on top, and this month's sources as bars. */
+.pm { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; }
+.pm-cols { display: flex; height: 120px; padding-top: 18px; border-bottom: 1px solid var(--axis); }
+.pm-col { flex: 1; min-width: 42px; display: flex; align-items: flex-end; justify-content: center; }
+/* The columns and the bars grow from their baseline when they appear, and move to their new lengths. */
+.pm-col i { position: relative; display: block; width: 22px; border-radius: 4px 4px 0 0; background: var(--series); animation: grow-h var(--t-enter) var(--ease-out) backwards; transition: height var(--t-enter) var(--ease-out); }
+.pm-col i.now { background: var(--accent); }
+.pm-col i b { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); padding-bottom: 2px; font-size: 11.5px; font-style: normal; font-weight: 700; white-space: nowrap; color: var(--ink); }
+.pm-x { display: flex; margin-top: 4px; font-size: 11.5px; color: var(--muted); }
+.pm-x span { flex: 1; min-width: 42px; text-align: center; white-space: nowrap; }
+/* The game's history names its sources at length ("Blessing of the Welkin Moon"): their column takes up to 176 px. */
+.hb { display: grid; grid-template-columns: minmax(96px, 176px) minmax(0, 1fr); align-items: center; gap: 8px; height: 22px; font-size: 12.5px; }
+.hb > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hb .b { display: flex; align-items: center; gap: 6px; }
+.hb .b i { display: block; width: calc((100% - 56px) * var(--w)); min-width: 2px; height: 10px; border-radius: 0 4px 4px 0; background: var(--accent); animation: grow-w var(--t-enter) var(--ease-out) backwards; transition: width var(--t-enter) var(--ease-out); }
+.hb .b b { font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 1400px) {
+  .pm { grid-template-columns: minmax(0, 1fr); }
+}

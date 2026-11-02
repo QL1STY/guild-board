@@ -1,0 +1,18 @@
+{
+  "key": "nefer", "name": "Nefer", "element": "Dendro", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"em": 500, "cr": 50, "cd": 220, "er": 105},
+  "mains": {"sands": ["em"], "goblet": ["em"], "circlet": ["cd", "cr", "em"]},
+  "weights": {"em": "wants", "cr": "wants", "cd": "wants", "er": "some", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}, {"sets": ["gilded-dreams"], "pieces": "4"}],
+  "weapons": ["reliquary-of-truth", "nightweaver-s-looking-glass", "tome-of-the-eternal-flow", "dawning-frost", "blackmarrow-lantern"],
+  "partners": ["Hydro", "Dendro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Dendro Lunar-Bloom main DPS. Her Skill, Senet Strategy, and her Burst both deal ATK plus twice her EM, and her Lunar-Bloom reaction scales with her EM, so EM is the scaling stat and the Skill carries the damage (both sources: Skill, then Burst, then Normal Attack). Both sources agree on 4pc Night of the Sky's Unveiling as best by a wide margin (KQM gives Gilded Dreams as a weaker stand-in), EM Sands and Goblet, a CRIT Circlet and Reliquary of Truth first, with Nightweaver's Looking Glass, Tome of the Eternal Flow, Dawning Frost and Blackmarrow Lantern on both lists. KQM's Circlet is 'CRIT > EM', Game8's CRIT DMG or CRIT Rate; EM stays as the last choice. Goals are Game8's: EM 500 or above, CRIT Rate 40-50% before the set's CRIT Rate bonus (upper end 50), CRIT DMG 220% or above. ER is KQM's 105% for solo Dendro (100% in double or triple Dendro); Game8 gives none. Partners are a judgment from the Lunar-Bloom reaction.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/nefer-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/538448", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

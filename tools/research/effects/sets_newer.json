@@ -1,0 +1,14 @@
+{
+  "sources": [
+    "https://allthings.how/genshin-impact-7-0-artifact-sets-scarlet-proof-and-heart-of-the-furnace-explained/ : 'Version 7.0 adds two new five-star artifact sets ... Scarlet Proof and Heart of the Furnace'; the post quotes Genshin Impact's own announcement of 2026-08-06 for Version 7.0 'Everwinter Without Mercy'; checked 2026-10-29",
+    "https://allthings.how/celestial-gift-artifact-set-in-genshin-impact-bonuses-best-characters-and-stats/ : Celestial Gift 'arriving in Genshin Impact's Version 6.6 update', from a new domain in 6.6 (updated 2026-05-20); checked 2026-10-29",
+    "The wiki's set entries in out/raw: the newest set entries (ids 11222 and 11223) have pictures uploaded on 2026-08-03, before 7.0's release on 2026-08-12; no set entry is newer, and a web search on 2026-10-29 found no artifact set announced for 7.1 or 7.2 (https://www.icy-veins.com/genshin-impact/news/genshin-impact-everything-we-know-about-the-new-7-0-artifacts/ lists 7.0's two as the latest)"
+  ],
+  "default": false,
+  "sets": {
+    "heart-of-the-furnace": {"after_7_1": false, "version": "7.0", "source": "allthings.how, 2026-08-07 update, checked 2026-10-29"},
+    "scarlet-proof": {"after_7_1": false, "version": "7.0", "source": "allthings.how, 2026-08-07 update, checked 2026-10-29"},
+    "celestial-gift": {"after_7_1": false, "version": "6.6", "source": "allthings.how, 2026-05-20 update, checked 2026-10-29"},
+    "disenchantment-in-deep-shadow": {"after_7_1": false, "version": "6.6", "source": "inferred, not stated by a source: the same wiki upload date (2026-05-15) and the same domain (Flower Feast) as Celestial Gift"}
+  }
+}

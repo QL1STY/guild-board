@@ -1,0 +1,18 @@
+{
+  "key": "odette", "name": "Odette", "element": "Cryo", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 3000, "cr": 60, "cd": 180, "er": 145},
+  "mains": {"sands": ["atk_pct"], "goblet": ["atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["heart-of-the-furnace"], "pieces": "4"}, {"sets": ["disenchantment-in-deep-shadow"], "pieces": "4"}, {"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"}, {"sets": ["blizzard-strayer"], "pieces": "4"}],
+  "weapons": ["whitelake-frostfeather", "freedom-sworn", "finale-of-the-deep", "aquila-favonia", "exaiphanes-blade"],
+  "partners": ["Cryo", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Cryo Stellar-Conduct sub-DPS and support that scales with ATK on the elemental curve. Her Skill is the talent that matters (KQM: Skill far above everything; Game8: Skill, Burst, Normal Attack), so the damage talent is the Skill. The sources agree on 4pc Heart of the Furnace as best with Disenchantment in Deep Shadow as the alternative (KQM: damage-oriented for Stellar-Conduct teams), ATK% on the Sands and Goblet, a CRIT Circlet (Game8: CRIT Rate before CRIT DMG) and Whitelake Frostfeather first. The third and fourth sets are KQM's placeholders. Goals are Game8's: ATK 2,000-3,000 (upper end), CRIT Rate 50-60%, CRIT DMG 180% or above, ER 125-145%; KQM's ER ranges from 100% to 220% by team and Cryo count. Game8's EM of 150-200 is not set.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/odette-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/606893", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

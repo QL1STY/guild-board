@@ -1,0 +1,53 @@
+"""The files a visitor to the public repository reads first: they exist, say what they must, and name nothing private."""
+import re
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parents[1]
+NOTES = "super" + "powers"  # the private notes' folder; no public file may name it
+FILES = ["README.md", "SECURITY.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "LICENSE", ".github/ISSUE_TEMPLATE/bug.md",
+         ".github/ISSUE_TEMPLATE/idea.md"]
+FAN_MADE = "Unofficial and fan-made. Not affiliated with or endorsed by HoYoverse or COGNOSPHERE."
+
+
+def _text(name: str) -> str:
+    return (ROOT / name).read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("name", FILES)
+def test_a_public_file_names_no_private_notes_no_support_link_and_no_address_of_the_developers(name):
+    text = _text(name).lower()
+    assert NOTES not in text
+    for word in ("donat", "sponsor", "ko-fi", "patreon", "paypal", "@gmail", "friend of mine"):
+        assert word not in text, word
+
+
+def test_the_licence_is_mit_for_the_handle():
+    text = _text("LICENSE")
+    assert text.startswith("MIT License\n\nCopyright (c) 2026 QL1STY\n")
+    assert "Permission is hereby granted, free of charge" in text
+
+
+def test_the_readme_says_fan_made_links_the_download_and_leaves_the_screenshots_as_a_todo():
+    text = _text("README.md")
+    assert text.count(FAN_MADE) == 2  # at the top and at the end
+    assert "](https://github.com/QL1STY/guild-board-releases/releases/latest)" in text
+    assert re.search(r"^<!-- TODO: screenshots", text, re.MULTILINE)
+    for name in ("LICENSE", "PRIVACY.md", "THIRD-PARTY-NOTICES.txt", "CONTRIBUTING.md", "docs/ARCHITECTURE.md"):
+        assert f"]({name})" in text, name
+        assert (ROOT / name).is_file(), name
+
+
+def test_the_rest_name_the_private_reporting_the_covenant_and_the_hands_off_test():
+    assert "private vulnerability reporting" in _text("SECURITY.md")
+    assert "src/guildboard/selfupdate.py" in _text("SECURITY.md") and "tests/test_handsoff.py" in _text("SECURITY.md")
+    assert "https://www.contributor-covenant.org/version/2/1/code_of_conduct/" in _text("CODE_OF_CONDUCT.md")
+    contributing = _text("CONTRIBUTING.md")
+    assert "uv run pytest" in contributing and "tests/test_handsoff.py" in contributing and "plain, factual English" in contributing
+
+
+@pytest.mark.parametrize("name", ["bug", "idea"])
+def test_an_issue_template_has_its_header(name):
+    text = _text(f".github/ISSUE_TEMPLATE/{name}.md")
+    assert text.startswith("---\nname: ") and re.search(r"^about: .+$", text, re.MULTILINE)

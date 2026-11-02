@@ -1,0 +1,135 @@
+# Builds the installer in the open: from a tag v<version> of this repository, on a GitHub runner, so that the installer
+# is linked to its commit. The workflow holds no secret and cannot publish a release. The release key stays on the
+# maintainer's PC: after this succeeds, tools/sign-release.ps1 downloads the installer, checks its SHA-256 and its
+# attestation, signs it with the key and publishes it (CONTRIBUTING.md, "Releases").
+#
+# Each action is pinned to the full SHA of a commit, with its version in a comment: a tag can be moved, and what these run
+# makes what players install.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - name: Check out
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Check that the tag is the version in pyproject.toml
+        # Only a run on a tag has a version to check; a manual run on a branch makes an installer for a trial.
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          $project = (Select-String -LiteralPath pyproject.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
+          $module = (Select-String -LiteralPath src/guildboard/__init__.py -Pattern '__version__ = "(.+)"').Matches[0].Groups[1].Value
+          if ($env:TAG -cne "v$project") {
+            Write-Output "::error::The tag is $env:TAG, but the version in pyproject.toml is $project. Set the version, commit it and tag that commit."
+            exit 1
+          }
+          if ($module -cne $project) {
+            Write-Output "::error::The version in src/guildboard/__init__.py is $module, but the one in pyproject.toml is $project. Make them the same."
+            exit 1
+          }
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c7f87aa956e4c323abf06d5dec078e358f6b4d04 # v6.0.0
+
+      - name: Install Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install Inno Setup if the image lacks it
+        # The places build-installer.ps1 looks in (Find-Iscc).
+        shell: pwsh
+        run: |
+          $places = @(
+            (Join-Path $env:LOCALAPPDATA 'Programs\Inno Setup 6\ISCC.exe'),
+            (Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'),
+            (Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe')
+          )
+          if (-not ($places | Where-Object { Test-Path -LiteralPath $_ })) {
+            choco install innosetup --no-progress -y
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      - name: Install the Python packages, as uv.lock names them
+        # uv takes the Python that requires-python in pyproject.toml asks for.
+        run: uv sync --frozen
+
+      - name: Install the packages of the interface
+        run: npm ci --prefix web
+
+      - name: Run the Python tests
+        # They start Guild Board off-screen (tests/test_handsoff.py), so they run here as on the maintainer's PC.
+        run: uv run --frozen python -m pytest -q -p no:cacheprovider
+
+      - name: Run the interface's tests
+        working-directory: web
+        run: npx vitest run
+
+      - name: Build the installer
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File build-installer.ps1
+
+      - name: Write the installer's SHA-256
+        shell: pwsh
+        run: |
+          $setup = @(Get-ChildItem -LiteralPath dist-installer -Filter 'Guild Board Setup *.exe')
+          if ($setup.Count -ne 1) {
+            Write-Output "::error::dist-installer holds $($setup.Count) installers, and one was expected."
+            exit 1
+          }
+          $hash = (Get-FileHash -LiteralPath $setup[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          [IO.File]::WriteAllText("$($setup[0].FullName).sha256", "$hash  $($setup[0].Name)`n", (New-Object Text.UTF8Encoding $false))
+          Write-Output "$hash  $($setup[0].Name)"
+
+      - name: Keep the installer and its SHA-256
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: guild-board-installer
+          path: |
+            dist-installer/Guild Board Setup *.exe
+            dist-installer/Guild Board Setup *.exe.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  attest:
+    # The proof that this installer was built here from this commit. It runs apart from the build, so that the packages
+    # the build installs never run where the right to attest is held. A private repository may not have attestations
+    # (they can need a paid plan), so it is skipped there, and tools/sign-release.ps1 is run with -NoAttestation.
+    if: github.event.repository.private == false
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Fetch the installer
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: guild-board-installer
+          path: setup
+
+      - name: Attest the installer
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
+        with:
+          subject-path: setup/*.exe

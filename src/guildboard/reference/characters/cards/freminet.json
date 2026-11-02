@@ -1,0 +1,37 @@
+{
+  "key": "freminet",
+  "name": "Freminet",
+  "element": "Cryo",
+  "weapon_type": "Claymore",
+  "rarity": 4,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "normal", "burst"],
+  "talent_table": "elemental",
+  "goals": {"er": 130, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg", "phys", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "dmg": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["blizzard-strayer"], "pieces": "4"},
+    {"sets": ["pale-flame"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["golden-troupe"], "pieces": "4"},
+    {"sets": ["long-night-s-oath"], "pieces": "4"}
+  ],
+  "weapons": ["tidal-shadow", "serpent-spine", "song-of-broken-pines", "beacon-of-the-reed-sea", "a-thousand-blazing-suns", "wolf-s-gravestone", "fruitful-hook"],
+  "partners": ["Cryo", "Pyro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "The sources split by playstyle and the card follows the Skill build, which both rank first (KQM Skill > Normal Attack >>> Burst, Game8 Skill > Normal Attack > Burst). KQM gives a different best set for each variant: 4pc Blizzard Strayer (Cryo), 4pc Pale Flame (Physical), 4pc Marechaussee Hunter, 4pc Long Night's Oath for the plunge build. Game8's three builds are Pale Flame (Physical goblet), Blizzard Strayer (Cryo goblet) and a hybrid, so the goblet list holds Cryo, Physical and ATK%. Table: his Skill's Shattering Pressure hits use the elemental curve (1.8x at level 10) although the damage is Physical, while his Normal Attack uses the physical curve (1.98x). The Skill is his damage talent, so the table is elemental; the Physical DMG Bonus then counts for nothing in the estimate, which understates a Physical goblet. Neither source gives CRIT or ATK goals, so only ER (KQM: 110-150 with one Cryo teammate at C0, 120-130 with two; 130 used) and the goblet value are set. Partners: Cryo teammates for Superconduct/Freeze and Pyro (Melt, C6 Bennett plunge), from KQM's ER and set notes.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/freminet-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/417207", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3964", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

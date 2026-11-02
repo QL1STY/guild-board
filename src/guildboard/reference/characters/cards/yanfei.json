@@ -1,0 +1,37 @@
+{
+  "key": "yanfei",
+  "name": "Yanfei",
+  "element": "Pyro",
+  "weapon_type": "Catalyst",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "elemental",
+  "goals": {"er": 130},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "em": "some", "er": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["crimson-witch-of-flames"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["wanderer-s-troupe"], "pieces": "4"},
+    {"sets": ["shimenawa-s-reminiscence"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["lost-prayer-to-the-sacred-winds", "kagura-s-verity", "cashflow-supervision", "skyward-atlas", "flowing-purity", "ballad-of-the-boundless-blue", "tome-of-the-eternal-flow", "a-thousand-floating-dreams", "the-widsith", "sacrificial-jade"],
+  "partners": ["Hydro", "Pyro", "Dendro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources: Normal Attack > Burst > Skill, an ATK% Sands (KQM: EM or ATK%), a Pyro DMG Goblet, a CRIT Circlet, 4pc Crimson Witch of Flames first for Vaporize and Lost Prayer to the Sacred Winds first. Other sets: Game8's Charged Attack build uses Shimenawa's Reminiscence; KQM adds Marechaussee Hunter (best with Furina), Wanderer's Troupe, Gilded Dreams and Lavawalker. Both also give a C4 shield support (ER Sands, HP% Goblet and Circlet, 4pc Noblesse Oblige, Prototype Amber first) and KQM an EM reaction build (Gilded Dreams); those are not the main plan and are left out of the lists, except Gilded Dreams. Her damage is her Charged Attack, a Normal Attack talent whose 1-hit line is on the elemental curve (58.3% to 105.0%, ratio 1.80). Neither source gives CRIT or ATK goals. ER is KQM's 120-130 for a Burst every other rotation (upper end); her Burst needs more than 250 ER if cast every rotation. Partners are inferred (Hydro for Vaporize, Pyro, Dendro for Burgeon); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/yanfei-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/328765", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/24", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

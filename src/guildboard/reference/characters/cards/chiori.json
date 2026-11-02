@@ -1,0 +1,19 @@
+{
+  "key": "chiori", "name": "Chiori", "element": "Geo", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "def",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"def": 2400, "cr": 80, "cd": 160, "er": 190},
+  "mains": {"sands": ["def_pct", "atk_pct"], "goblet": ["dmg", "def_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "def_pct": "wants", "atk_pct": "some", "atk": "some", "er": "some", "def": "some", "em": "none", "hp_pct": "none", "hp": "none"},
+  "sets": [{"sets": ["golden-troupe"], "pieces": "4"}, {"sets": ["husk-of-opulent-dreams"], "pieces": "4"}, {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}],
+  "weapons": ["uraku-misugiri", "peak-patrol-song", "primordial-jade-cutter"],
+  "partners": ["Geo", "Hydro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Geo sub-DPS whose Skill carries the damage (Tamoto 82% ATK + 103% DEF at level 1; her Skill's Hiyoku 256% ATK + 320% DEF), so DEF is the scaling stat. Both sources agree on the Skill first, the weapon top three (Uraku Misugiri, Peak Patrol Song, Primordial Jade Cutter) and a DEF% Sands, with a crit Circlet. They name the same two sets in different orders (KQM 4pc Golden Troupe for her usual off-field play; Game8 4pc Husk first); the card follows KQM. Goals: DEF 2,000-2,400, CR 70-80% and CD 160% or above are Game8's (upper ends). KQM's ER table runs from 110% to 290% by team; 190% is the top of its Navia, two-Skills row, a usual team. No DMG goal is set, since the Goblet may be DEF% or Geo DMG%.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/chiori-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/382793", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/4946", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

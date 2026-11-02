@@ -1,0 +1,19 @@
+{
+  "key": "chongyun", "name": "Chongyun", "element": "Cryo", "weapon_type": "Claymore", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 150, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "er", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["noblesse-oblige", "blizzard-strayer"], "pieces": "2+2"}],
+  "weapons": ["wolf-s-gravestone", "beacon-of-the-reed-sea", "serpent-spine"],
+  "partners": ["Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Cryo burst sub-DPS and buffer (Melt or Freeze). KQM puts the Burst before the Skill; Game8's two builds are a sub-DPS with Emblem of Severed Fate and a burst support with Noblesse Oblige, so the card lists both sets, the buff set first as KQM does, and KQM's 2+2 Noblesse Oblige and Blizzard Strayer as an option. Wolf's Gravestone leads both weapon lists; Beacon of the Reed Sea and Serpent Spine are on both. Neither source gives stat goals; ER 150% is the low end of KQM's solo-Cryo range (150-175%), the usual Forward Melt team having one Cryo character (Double Cryo is 125-135%).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/chongyun-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297532", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/45", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

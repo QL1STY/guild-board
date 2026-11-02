@@ -1,0 +1,1802 @@
+{
+ "sets": {
+  "heart-of-the-furnace": {
+   "name": "Heart of the Furnace",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12
+     ],
+     "when": "met",
+     "condition": "12s after the wearer triggers a Stellar Glimmer reaction or deals Stellar Glimmer reaction DMG"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/d7bf6cb7fe1de3f1938373c3ba8f1a5f_8303749076826311938.png",
+    "plume": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/366d788f0d94c94a8c735d9306789381_819356584480849524.png",
+    "sands": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/6873e88d366126d8d394923a44797fb3_3351446397282260132.png",
+    "goblet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/84ba5cd84016c12eafad99c7f14192c0_126861292695265381.png",
+    "circlet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/e7fc2ec7ed140d268c1c7959da1b86e1_6272741195969414047.png"
+   },
+   "entry": "11223",
+   "notes": "Version 7.0 (allthings.how, 2026-08-07 update, checked 2026-10-29), so not newer than 7.1. not counted: Stellar Glimmer reaction DMG +50% for all nearby party members"
+  },
+  "scarlet-proof": {
+   "name": "Scarlet Proof",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      16
+     ],
+     "when": "met",
+     "condition": "for 10s after the wearer triggers a Stellar Swirl reaction"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/cc2f877154130fb0d5d28b5fdcdce606_5952674370688612300.png",
+    "plume": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/e6b2a75e5f734ab7ac6736a576f8969e_6168832284081545973.png",
+    "sands": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/56b6e287769e50a96c62b4f403b242e5_2116191387326095566.png",
+    "goblet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/9e4fe1f669a5e9eb6ed34f2e11c9254d_3376435841621887173.png",
+    "circlet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/a15fd091d52a63adc31630340f6d802c_6622203993431971774.png"
+   },
+   "entry": "11222",
+   "notes": "Version 7.0 (allthings.how, 2026-08-07 update, checked 2026-10-29), so not newer than 7.1. not counted: Stellar Swirl reaction DMG +40%"
+  },
+  "disenchantment-in-deep-shadow": {
+   "name": "Disenchantment in Deep Shadow",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      16
+     ],
+     "when": "met",
+     "condition": "against opponents affected by Superconduct"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/186ed0ccb206788d4832b848bdb91624_1196226685770777941.png",
+    "plume": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/2e311abfb4fa96194a5420137b7262bf_8775615034839082974.png",
+    "sands": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/95a4e544a3ee250e6b7551f4857196cc_872029035811212154.png",
+    "goblet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/279668837734bed41e3963e8207ab4b1_2347963908422382260.png",
+    "circlet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/df16bd2dcd5f5f0582a3f8423de89884_246042224874063702.png"
+   },
+   "entry": "10760",
+   "notes": "Version 6.6 (inferred, not stated by a source: the same wiki upload date (2026-05-15) and the same domain (Flower Feast) as Celestial Gift), so not newer than 7.1. not counted: Superconduct reaction DMG +80%"
+  },
+  "celestial-gift": {
+   "name": "Celestial Gift",
+   "two": [
+    {
+     "stat": "er",
+     "values": [
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "Light's Guidance, 20s after an Elemental Skill, if the wearer has completed Witch's Homework: Elemental DMG Bonus of the wearer's Element for all nearby party members"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/5ff646e4e9ff8f839490360edda862a2_2352330875956559301.png",
+    "plume": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/ab4ca8789b216de5357f3686bcea2ef2_2359084499295082871.png",
+    "sands": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/3dca399ac764602bd9ed4203e5897f54_8932222630076743991.png",
+    "goblet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/b0a4185de908e04f9aa2c7abc7fa4941_4373162066960384781.png",
+    "circlet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/068c3628cf202e98800d865db61044fa_8294755309243183413.png"
+   },
+   "entry": "10759",
+   "notes": "Version 6.6 (allthings.how, 2026-05-20 update, checked 2026-10-29), so not newer than 7.1. with the Hexerei: Secret Rite effect in the party Light's Guidance becomes Mortal Hymn, a 40% Elemental DMG Bonus for the Elements of the wearer and the active character, which depends on the party, not counted"
+  },
+  "a-day-carved-from-rising-winds": {
+   "name": "A Day Carved From Rising Winds",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      25
+     ],
+     "when": "met",
+     "condition": "Blessing of Pastoral Winds, 6s after a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "additionally, if the wearer has completed Witch's Homework (Resolve of Pastoral Winds)"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/12/7c4a7aca9f8325c6663239bbfa452ded_4271064323680356779.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/1a94746531a931ca6745c9fa4f011aed_5846296446123627778.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/8683a419d705e1fa6afe561017471bb7_3061162349719059973.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/1aae7ed000fa89733c1e87117664f999_2436576184041337834.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/0a7dc60bbf7ab92f1ca0e5b9f9243d1c_5407106439765251156.png"
+   },
+   "entry": "9152",
+   "notes": ""
+  },
+  "aubade-of-morningstar-and-moon": {
+   "name": "Aubade of Morningstar and Moon",
+   "two": [
+    {
+     "stat": "em",
+     "values": [
+      80
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/12/ef58ecfcb8906792c3a9b07c92586934_3343384077195352394.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/64b42ee6b041482f631a62b2f209d0dd_6330169144717155788.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/a5234f105846c8169e8eed65a1d96043_7456084356363360675.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/c7d1810c3806c2b48610e279dece177f_5216665289854896824.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/17/237301566/38f65c1a90f86c32fd7aae63e71a28f3_3601012444390265455.png"
+   },
+   "entry": "9151",
+   "notes": "no stat in the 4-piece: Lunar Reaction DMG +20% while off the field, and 40% more at Moonsign Ascendant Gleam, not counted"
+  },
+  "silken-moon-s-serenade": {
+   "name": "Silken Moon's Serenade",
+   "two": [
+    {
+     "stat": "er",
+     "values": [
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "em",
+     "values": [
+      60
+     ],
+     "when": "met",
+     "condition": "Gleaming Moon: Devotion, 8s after dealing Elemental DMG, when the party's Moonsign is Nascent Gleam (all party members)"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/b8350998129a66e67c1a7691153da68d_6559589601591776539.png",
+    "plume": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/ee26872f032ed3afb25a542cbd3c93a2_8273369387328992297.png",
+    "sands": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/a07cddd983ad4528ef4e92c399fa4117_1942671869509903838.png",
+    "goblet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/520482a32f80b5538d6d2e6dc8cc194a_3357590716156202832.png",
+    "circlet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/cf017c10098946f6d3d19a6b2c49bd53_7064122714444153592.png"
+   },
+   "entry": "8521",
+   "notes": "at Moonsign Ascendant Gleam the Elemental Mastery is 120, which depends on the party, so only the Nascent Gleam value is counted; not counted: Lunar Reaction DMG +10% per different Gleaming Moon effect"
+  },
+  "night-of-the-sky-s-unveiling": {
+   "name": "Night of the Sky's Unveiling",
+   "two": [
+    {
+     "stat": "em",
+     "values": [
+      80
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Gleaming Moon: Intent, 4s after nearby party members trigger Lunar Reactions while the wearer is on the field, when the party's Moonsign is Nascent Gleam"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/25c4512875bad223765a5a32c82b09a4_7122872897984003318.png",
+    "plume": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/f474fffae44c4e7a91864113cf5b1f8e_6731765289436648875.png",
+    "sands": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/54a344dc5aca025fbb6cc60a80f7790d_1576492692040107165.png",
+    "goblet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/04dfdf0deae5f0fc58529dc89ee94d6f_3380820828725566086.png",
+    "circlet": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/7ce20dbf2ffc87b6b942c0f42d0b43d4_6363911804608985715.png"
+   },
+   "entry": "8520",
+   "notes": "at Moonsign Ascendant Gleam the CRIT Rate is 30%, which depends on the party, so only the Nascent Gleam value is counted; not counted: Lunar Reaction DMG +10% per different Gleaming Moon effect"
+  },
+  "finale-of-the-deep-galleries": {
+   "name": "Finale of the Deep Galleries",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Cryo DMG Bonus, for a Cryo character"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      60
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG while the wearer has 0 Elemental Energy (stops for 6s after Elemental Burst DMG)"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      60
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG while the wearer has 0 Elemental Energy (stops for 6s after Normal Attack DMG)"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/17/bf39402f87db1168263c7c0898c8ab0c_4434336707917443666.png",
+    "plume": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/17/c498b33d2359b12603471fd65bd22261_7001131486318823058.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/24/151578876/2a6efc1386ae931f69a7283451487697_7688610052366754683.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/24/151578876/968c157b2ae92b17e2e12f346ed306d3_5547965292070070624.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/59540be78775f63b6de642740d4d841e_3284162231945702248.png"
+   },
+   "entry": "7572",
+   "notes": ""
+  },
+  "long-night-s-oath": {
+   "name": "Long Night's Oath",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      25
+     ],
+     "when": "met",
+     "condition": "Plunging Attack DMG"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      75
+     ],
+     "when": "met",
+     "condition": "Plunging Attack DMG at 5 stacks of Radiance Everlasting, 6s each"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/17/3cf2511dfb1f91696a0ee986e5f1fb22_3371878648281977517.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/24/151578876/16b85e568d3142cb76a402c1f2a2ba3b_3621711691245795358.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/24/151578876/a31853ec22fd57e5d86d57410b9f29ab_1022728541542695608.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/24/151578876/a3e5d377be8f8a8104334ae67f6c9ad4_1713707065697136193.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/24/151578876/05fda276bef09554c8f211f522d0af40_872800029897903125.png"
+   },
+   "entry": "7571",
+   "notes": ""
+  },
+  "obsidian-codex": {
+   "name": "Obsidian Codex",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "DMG dealt, while the wearer is in Nightsoul's Blessing and on the field"
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      40
+     ],
+     "when": "met",
+     "condition": "6s after the wearer consumes 1 Nightsoul point while on the field (once every second)"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/25/35428890/cd11df3be5420d2c53c2da0d3298eb92_763344799368209312.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/25/35428890/7d671f861ea037febc1e4d2a15cbfb73_2799443548031535640.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/30/151578876/7f54914c919ac28a4d45fa1649bf02e2_2082143357011194596.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/30/151578876/c8beccbbaad367c54a75b4967ad97b0e_8462159106445226064.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/30/151578876/f1c9b10136958bf2133db02dfa6b688f_4830557215588846295.png"
+   },
+   "entry": "6554",
+   "notes": ""
+  },
+  "scroll-of-the-hero-of-cinder-city": {
+   "name": "Scroll of the Hero of Cinder City",
+   "two": [],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      12
+     ],
+     "when": "met",
+     "condition": "Elemental DMG Bonus for the reaction-proximate Elemental Types, for all nearby party members, 15s after the wearer triggers a reaction related to their Element"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      28
+     ],
+     "when": "met",
+     "condition": "an additional Elemental DMG Bonus for the reaction-proximate Elemental Types, 20s, if the wearer is in Nightsoul's Blessing when triggering"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/25/35428890/6ad5095f324c2da829ecaa5e2ed13af9_8914409440111681461.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/25/35428890/4d6b0bc9d58b7422f9a526a07db0121e_1347790255582554788.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/30/151578876/8dd572d52a191ab5eb1be208f13ae321_3382948699947295986.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/30/151578876/a2ae1599bf777b2faaa24dc4e629cf4c_4307469013967320946.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/30/151578876/6055f18fb691b61cef38b7e67460b60d_5406521367220571294.png"
+   },
+   "entry": "6553",
+   "notes": "not counted: 6 Energy when a nearby party member triggers a Nightsoul Burst (2-piece)"
+  },
+  "unfinished-reverie": {
+   "name": "Unfinished Reverie",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      50
+     ],
+     "when": "met",
+     "condition": "DMG dealt, 3s after leaving combat, or while a Burning opponent is nearby (it falls 10% a second in combat without one)"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/356c6b0e1be129282f759d8844872c7d_8835103084516203071.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/2715fda27d0c7648a18d86e63c0acde6_4549122519303067745.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/925dc4dabaecad2b23d09b55aab1ddfa_2737730088816477355.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/961efd0280cfadc4952d4c6712779ae0_3166557469640304531.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/be0eae1774ad7d59a3eeeb5c6620ff04_7588822060618811897.png"
+   },
+   "entry": "5579",
+   "notes": ""
+  },
+  "fragment-of-harmonic-whimsy": {
+   "name": "Fragment of Harmonic Whimsy",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      54
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 6s after the value of a Bond of Life changes"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/7557f4558ab243d82e8b6b9994fc97ee_4487332453175531251.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/7df24b7057d7243b568a5a1eafa8ca1a_3349815864433769008.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/e68d2442bdc24bbbb13e6a22e4b38693_6684692387418005095.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/8a60b825d5c4ea6a98ca21ae0d1ccc72_4431786682700728736.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/6821618a8429049eb3ccee4e07d2711f_7073238227708789618.png"
+   },
+   "entry": "5578",
+   "notes": ""
+  },
+  "song-of-days-past": {
+   "name": "Song of Days Past",
+   "two": [
+    {
+     "stat": "heal",
+     "values": [
+      15
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/7789fb5e684cf95a7011657d0fa8a971_4916799814445482045.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/cbc1ed71c7c29bdf0c32a1c4eee4ff70_2620842943363853359.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/6e9a0be1b44bfdc612da88a1c187148d_7840940012412864121.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/cb19bd226823287c1019b7734aa59dfd_5278050931884263716.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/111d739805a42b2d74bf4bb677939b70_3371402679894727905.png"
+   },
+   "entry": "4717",
+   "notes": "no stat in the 4-piece: the active character's DMG is increased by 8% of the healing recorded by the Yearning effect (up to 15,000), not counted"
+  },
+  "nighttime-whispers-in-the-echoing-woods": {
+   "name": "Nighttime Whispers in the Echoing Woods",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "Geo DMG Bonus, 10s after using an Elemental Skill"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      30
+     ],
+     "when": "met",
+     "condition": "additionally, while under a shield from the Crystallize reaction or near Moondrifts from Lunar-Crystallize reactions (the effect is increased by 150%)"
+    }
+   ],
+   "icons": {
+    "flower": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/d9d39d9f046d5d23c3d497574be55a82_5403734726175910170.png",
+    "plume": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/b14fd20a3b0aadd16b52e7ea72596745_441773961410047737.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/81147a28166df7fec906ce279a2a5c7f_8426536138347114920.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/f319dfcbe0c561fc66f06def271298ed_5133126160834291570.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/55b397257c1f688f6ab611cf1b6567e1_2947834354241488794.png"
+   },
+   "entry": "4716",
+   "notes": ""
+  },
+  "golden-troupe": {
+   "name": "Golden Troupe",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      25
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      25
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG, further, while not on the field (cleared 2s after taking the field)"
+    }
+   ],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/06/35428890/4fda3f028a5acd6e23e99e70f21118cc_5229469833478915194.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/06/35428890/ef3e819bd1cede5e20c5d443d19f9dd4_3643049364213742083.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/a8668d27d97594684bb7ff73aad22cdd_5892388250254200804.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/10c41dd09f04615c3ff216fda90bff72_116742202602541255.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/6d62d7a59b21810f30a7e74f21998494_590383121169474119.png"
+   },
+   "entry": "3991",
+   "notes": ""
+  },
+  "marechaussee-hunter": {
+   "name": "Marechaussee Hunter",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG"
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      36
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 5s after current HP changes"
+    }
+   ],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/539b03bed1057707abd643147e18abde_8249644511854926994.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/06/35428890/71bd7fb0be258a8997a75511ec222a17_6380380925043676537.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/11299d1dfa8e57cf0047d2145ba4078d_6568803007966876813.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/77b5fbe7f1897a203e19bdabb8b884f4_8097343465759792015.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/26650d6cbdc6b6a48ca5094dfe4582ab_8049180331773563471.png"
+   },
+   "entry": "3990",
+   "notes": ""
+  },
+  "vourukasha-s-glow": {
+   "name": "Vourukasha's Glow",
+   "two": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      10
+     ],
+     "when": "met",
+     "condition": "Elemental Skill and Elemental Burst DMG"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      40
+     ],
+     "when": "met",
+     "condition": "Elemental Skill and Elemental Burst DMG, further, at 5 stacks, 5s after the wearer takes DMG (each stack increases the 10% bonus by 80%, so 8%)"
+    }
+   ],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/04/10/35428890/bc9329baf36935b2fb094f783a7695f2_7474535067193858925.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/04/10/35428890/70bb0ce74b0823c06d4228861df7aebe_5370503358955512635.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/ba10e34aa87726117ebad3dee1a40e4c_8584573290292038262.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/65916b37803325834f0f5f8dac66ad9a_6113201315889957762.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/fce888d514d4c5115035d43514d7065d_671358220269187676.png"
+   },
+   "entry": "3694",
+   "notes": ""
+  },
+  "nymph-s-dream": {
+   "name": "Nymph's Dream",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Hydro DMG Bonus, for a Hydro character"
+    }
+   ],
+   "four": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      25
+     ],
+     "when": "met",
+     "condition": "at 3 or more stacks of Mirrored Nymph, 8s each (7% at 1, 16% at 2)"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Hydro DMG Bonus at 3 or more stacks of Mirrored Nymph, 8s each (4% at 1, 9% at 2), for a Hydro character"
+    }
+   ],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/04/10/35428890/1bde348ad550ef356ff197b93caed6c8_4807982142633085431.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/04/10/35428890/78ca65a64de4a2f6f25d7a537928c620_8772324483987616800.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/42d75466608199483d74bf1704d4d50f_5140288281397939917.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/dbbea8a478949256621433ea777a438d_4395550340854681645.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/8dec1cd42cd80eda05b913fade0f5422_2606324493411420637.png"
+   },
+   "entry": "3693",
+   "notes": ""
+  },
+  "desert-pavilion-chronicle": {
+   "name": "Desert Pavilion Chronicle",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Anemo DMG Bonus, for an Anemo character"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      40
+     ],
+     "when": "met",
+     "condition": "Normal, Charged and Plunging Attack DMG, 15s after Charged Attacks hit"
+    }
+   ],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/b86d9fd7cf57937a021c9c68c9b185ed_5545735814779163159.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/6fdd4f75d233d1690e845a2db65ba433_9102938830269168654.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/88ca09ebc7ed0069e8e8de5516bea8c7_2945071514772610576.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/0c319d4054751adc08be47eee0ebad53_481661491293293767.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/999a78b73235c08ca4a0664a23e7079f_4766555235191331611.png"
+   },
+   "entry": "3322",
+   "notes": "not counted: Normal Attack SPD +10%"
+  },
+  "flower-of-paradise-lost": {
+   "name": "Flower of Paradise Lost",
+   "two": [
+    {
+     "stat": "em",
+     "values": [
+      80
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/50ce09dfa5a91a33aa9cedfb15bcf2d1_3721149201626085815.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/30b5885215b1c09b6033b5cafe437d2c_2909096586032947967.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/baf7c8bd6eba7afe0c71c9bf8cc6f96b_487022835078112625.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/f4e5dde048f278e01371e56637a7bd1f_6656472953604112002.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/d0dac0543a776782f0496bf908870291_2419000362864869695.png"
+   },
+   "entry": "3321",
+   "notes": "no stat in the 4-piece: Bloom, Hyperbloom and Burgeon reaction DMG +40%, and 25% more per stack up to 4, not counted"
+  },
+  "gilded-dreams": {
+   "name": "Gilded Dreams",
+   "two": [
+    {
+     "stat": "em",
+     "values": [
+      80
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "em",
+     "values": [
+      150
+     ],
+     "when": "met",
+     "condition": "within 8s of an Elemental Reaction, from 3 party members of a different Elemental Type"
+    }
+   ],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/ae8a2c6f24df66e1bd7cc2dbd83d330d_9176911893609858619.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/b195ea9ea3c908859ea4e09e409305a2_7989292675371443357.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/8842156fb124596d6a0d7aa56f8483e0_5470864437485294807.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/3668bbfcc8d7242aa295b7e073e71d9f_7073112547863600765.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/892e17a4a5d0b9438bf3581d88bf209e_3455825961111195436.png"
+   },
+   "entry": "2673",
+   "notes": "for party members of the same Elemental Type ATK is increased by 14% each (up to 3), so only the different-type case is counted"
+  },
+  "deepwood-memories": {
+   "name": "Deepwood Memories",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Dendro DMG Bonus, for a Dendro character"
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/f526e111c9c7dcbaed0d7fd8c8d58ef2_1582614701349912537.png",
+    "plume": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/9339ebbf175d61844f0b4fafddf7c601_1824368975462472801.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/05d12e842479ba0a1427baba124c4929_2281672052167498514.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/80ddb6398975e6b891e383a30079b873_1574237354652198201.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/11abc6739dff1cf50b95b394a3462162_997061626784825254.png"
+   },
+   "entry": "2672",
+   "notes": "no stat in the 4-piece: targets' Dendro RES -30% for 8s, not counted"
+  },
+  "retracing-bolide": {
+   "name": "Retracing Bolide",
+   "two": [],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      40
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG while protected by a shield"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Retracing Bolide/flower_of_life_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Retracing Bolide/plume_of_death_icon.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/9954072a1d420032b7f9dd3c92959acb_8631649422916134662.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/3eec7a89b989aee4cbd9b96253145a5f_8668003902498558239.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/94ab300f88114e951c370184ecc7c171_1803960374337994922.png"
+   },
+   "entry": "2099",
+   "notes": "not counted: Shield Strength +35% (2-piece)"
+  },
+  "shimenawa-s-reminiscence": {
+   "name": "Shimenawa's Reminiscence",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      50
+     ],
+     "when": "met",
+     "condition": "Normal, Charged and Plunging Attack DMG, 10s after an Elemental Skill is cast with 15 or more Energy (the wearer loses 15 Energy)"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Shimenawa's Reminiscence/flower_of_life_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Shimenawa's Reminiscence/plume_of_death_icon.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/f5678b7102154e4ab2a62220f655189e_8858637375486890404.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/5c37eaa86b33545f7fc33229c41651f3_3918649554999791949.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/31/151578876/f54d9386aa289880ed087f4f86efe0de_5459603102352623482.png"
+   },
+   "entry": "2098",
+   "notes": ""
+  },
+  "vermillion-hereafter": {
+   "name": "Vermillion Hereafter",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      8
+     ],
+     "when": "met",
+     "condition": "Nascent Light, 16s after using an Elemental Burst"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      40
+     ],
+     "when": "met",
+     "condition": "Nascent Light, further, when HP decreases, up to 4 times"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Vermillion Hereafter/flower_of_life_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Vermillion Hereafter/plume_of_death_icon.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/01/151578876/f01a18333834d6d2f0fc6b16e5c66315_202703666826259154.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/01/151578876/2f1950fd9c5358084e73576118addd0c_5672916408829551409.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/01/151578876/ddb025344caee881c363687b84e35d22_5974462003918551856.png"
+   },
+   "entry": "2097",
+   "notes": ""
+  },
+  "gambler": {
+   "name": "Gambler",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gambler/flower_of_life_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gambler/plume_of_death_icon.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/25/151578876/aa64c912fb5351623d8cb2ca56611d90_4989696205611662381.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/25/151578876/c5f30f1b0fc798035021750f9361b071_5859135888115900773.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/25/151578876/705b4f8ea4b76e15da6f5d6a7a61bcc2_5897298058113117754.png"
+   },
+   "entry": "2096",
+   "notes": "no stat in the 4-piece: a 100% chance to remove Elemental Skill CD on defeating an opponent, not counted"
+  },
+  "gladiator-s-finale": {
+   "name": "Gladiator's Finale",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      35
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG, if the wearer uses a Sword, Claymore or Polearm"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gladiator's Finale/flower_of_life_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gladiator's Finale/plume_of_death_icon.png",
+    "sands": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/25/151578876/b9cd8419f668caa0edd932e18bcef0df_24432145891227730.png",
+    "goblet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/25/151578876/3d820f458f208c8077a8554c597f522e_8815444177227496351.png",
+    "circlet": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/04/25/151578876/469a5102b913568f014cffd3d618cf23_5979934664994549652.png"
+   },
+   "entry": "2095",
+   "notes": ""
+  },
+  "maiden-beloved": {
+   "name": "Maiden Beloved",
+   "two": [
+    {
+     "stat": "heal",
+     "values": [
+      15
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Maiden Beloved/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Maiden Beloved/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Maiden Beloved/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Maiden Beloved/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Maiden Beloved/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2094",
+   "notes": "no stat of the wearer in the 4-piece: healing received by all party members +20% for 10s, not counted"
+  },
+  "resolution-of-sojourner": {
+   "name": "Resolution of Sojourner",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      30
+     ],
+     "when": "met",
+     "condition": "Charged Attack CRIT Rate"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Resolution of Sojourner/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Resolution of Sojourner/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Resolution of Sojourner/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Resolution of Sojourner/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Resolution of Sojourner/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2093",
+   "notes": ""
+  },
+  "pale-flame": {
+   "name": "Pale Flame",
+   "two": [
+    {
+     "stat": "phys",
+     "values": [
+      25
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "met",
+     "condition": "at 2 stacks, 7s after an Elemental Skill hits (once every 0.3s)"
+    },
+    {
+     "stat": "phys",
+     "values": [
+      25
+     ],
+     "when": "met",
+     "condition": "Physical DMG Bonus, further: the 2-piece effect is increased by 100% at 2 stacks"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Pale Flame/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Pale Flame/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Pale Flame/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Pale Flame/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Pale Flame/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2092",
+   "notes": ""
+  },
+  "viridescent-venerer": {
+   "name": "Viridescent Venerer",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Anemo DMG Bonus, for an Anemo character"
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Viridescent Venerer/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Viridescent Venerer/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Viridescent Venerer/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Viridescent Venerer/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Viridescent Venerer/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2091",
+   "notes": "no stat in the 4-piece: Swirl reaction DMG +60% and Stellar Swirl reaction DMG +20%, and an Elemental RES decrease of 40% on opponents, not counted"
+  },
+  "emblem-of-severed-fate": {
+   "name": "Emblem of Severed Fate",
+   "two": [
+    {
+     "stat": "er",
+     "values": [
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      75
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG at the cap (25% of Energy Recharge, up to 75%)"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Emblem of Severed Fate/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Emblem of Severed Fate/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Emblem of Severed Fate/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Emblem of Severed Fate/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Emblem of Severed Fate/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2090",
+   "notes": ""
+  },
+  "prayers-for-wisdom": {
+   "name": "Prayers for Wisdom",
+   "two": [],
+   "four": [],
+   "icons": {
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers for Wisdom/circlet_of_logos_icon.png"
+   },
+   "entry": "2089",
+   "notes": "only a 1-piece effect, which is not a stat: affected by Electro for 40% less time"
+  },
+  "prayers-for-illumination": {
+   "name": "Prayers for Illumination",
+   "two": [],
+   "four": [],
+   "icons": {
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers for Illumination/circlet_of_logos_icon.png"
+   },
+   "entry": "2088",
+   "notes": "only a 1-piece effect, which is not a stat: affected by Pyro for 40% less time"
+  },
+  "prayers-for-destiny": {
+   "name": "Prayers for Destiny",
+   "two": [],
+   "four": [],
+   "icons": {
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers for Destiny/circlet_of_logos_icon.png"
+   },
+   "entry": "2087",
+   "notes": "only a 1-piece effect, which is not a stat: affected by Hydro for 40% less time"
+  },
+  "prayers-to-springtime": {
+   "name": "Prayers to Springtime",
+   "two": [],
+   "four": [],
+   "icons": {
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers to Springtime/circlet_of_logos_icon.png"
+   },
+   "entry": "2086",
+   "notes": "only a 1-piece effect, which is not a stat: affected by Cryo for 40% less time"
+  },
+  "crimson-witch-of-flames": {
+   "name": "Crimson Witch of Flames",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Pyro DMG Bonus, for a Pyro character"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      22.5
+     ],
+     "when": "met",
+     "condition": "Pyro DMG Bonus, further, at 3 stacks, 10s after using an Elemental Skill (each stack adds 50% of the 2-piece bonus), for a Pyro character"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Crimson Witch of Flames/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Crimson Witch of Flames/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Crimson Witch of Flames/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Crimson Witch of Flames/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Crimson Witch of Flames/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2085",
+   "notes": "not counted: Overloaded and Burning DMG +40%, Vaporize and Melt DMG +15%"
+  },
+  "traveling-doctor": {
+   "name": "Traveling Doctor",
+   "two": [],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Traveling Doctor/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Traveling Doctor/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Traveling Doctor/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Traveling Doctor/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Traveling Doctor/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2084",
+   "notes": "Passive not counted"
+  },
+  "lavawalker": {
+   "name": "Lavawalker",
+   "two": [],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      35
+     ],
+     "when": "met",
+     "condition": "against opponents affected by Pyro"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lavawalker/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lavawalker/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lavawalker/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lavawalker/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lavawalker/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2083",
+   "notes": "not counted: Pyro RES +40% (2-piece)"
+  },
+  "ocean-hued-clam": {
+   "name": "Ocean-Hued Clam",
+   "two": [
+    {
+     "stat": "heal",
+     "values": [
+      15
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Ocean-Hued Clam/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Ocean-Hued Clam/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Ocean-Hued Clam/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Ocean-Hued Clam/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Ocean-Hued Clam/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2082",
+   "notes": "no stat in the 4-piece: a Sea-Dyed Foam that explodes for 90% of the healing accumulated, not counted"
+  },
+  "wanderer-s-troupe": {
+   "name": "Wanderer's Troupe",
+   "two": [
+    {
+     "stat": "em",
+     "values": [
+      80
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      35
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG, if the wearer uses a Catalyst or a Bow"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2081",
+   "notes": ""
+  },
+  "the-exile": {
+   "name": "The Exile",
+   "two": [
+    {
+     "stat": "er",
+     "values": [
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2080",
+   "notes": "no stat of the wearer in the 4-piece: regenerates 2 Energy for the other party members every 2s for 6s, not counted"
+  },
+  "heart-of-depth": {
+   "name": "Heart of Depth",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Hydro DMG Bonus, for a Hydro character"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      30
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG, 15s after using an Elemental Skill"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Heart of Depth/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Heart of Depth/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Heart of Depth/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Heart of Depth/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Heart of Depth/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2079",
+   "notes": ""
+  },
+  "martial-artist": {
+   "name": "Martial Artist",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      25
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG, 8s after using an Elemental Skill"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Martial Artist/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Martial Artist/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Martial Artist/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Martial Artist/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Martial Artist/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2078",
+   "notes": ""
+  },
+  "bloodstained-chivalry": {
+   "name": "Bloodstained Chivalry",
+   "two": [
+    {
+     "stat": "phys",
+     "values": [
+      25
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      50
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG, 10s after defeating an opponent"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Bloodstained Chivalry/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Bloodstained Chivalry/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Bloodstained Chivalry/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Bloodstained Chivalry/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Bloodstained Chivalry/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2077",
+   "notes": "not counted: Charged Attack stamina cost reduced to 0"
+  },
+  "echoes-of-an-offering": {
+   "name": "Echoes of an Offering",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Echoes of an Offering/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Echoes of an Offering/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Echoes of an Offering/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Echoes of an Offering/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Echoes of an Offering/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2076",
+   "notes": "no % stat in the 4-piece: Valley Rite adds Normal Attack DMG of 70% of ATK as flat DMG with a 36% chance, not counted"
+  },
+  "noblesse-oblige": {
+   "name": "Noblesse Oblige",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG"
+    }
+   ],
+   "four": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "for all party members including the wearer, 12s after using an Elemental Burst"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Noblesse Oblige/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Noblesse Oblige/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Noblesse Oblige/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Noblesse Oblige/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Noblesse Oblige/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2075",
+   "notes": ""
+  },
+  "instructor": {
+   "name": "Instructor",
+   "two": [
+    {
+     "stat": "em",
+     "values": [
+      80
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "em",
+     "values": [
+      120
+     ],
+     "when": "met",
+     "condition": "for all party members including the wearer, 8s after an Elemental Reaction is triggered"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Instructor/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Instructor/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Instructor/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Instructor/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Instructor/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2074",
+   "notes": ""
+  },
+  "berserker": {
+   "name": "Berserker",
+   "two": [
+    {
+     "stat": "cr",
+     "values": [
+      12
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      24
+     ],
+     "when": "met",
+     "condition": "additionally, when HP is below 70%"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2073",
+   "notes": ""
+  },
+  "archaic-petra": {
+   "name": "Archaic Petra",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Geo DMG Bonus, for a Geo character"
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      35
+     ],
+     "when": "met",
+     "condition": "DMG Bonus for the Element of the Crystallize shard or Lunar-Crystallize reaction, for all party members, 10s (only one Element at a time)"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Archaic Petra/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Archaic Petra/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Archaic Petra/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Archaic Petra/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Archaic Petra/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2072",
+   "notes": ""
+  },
+  "lucky-dog": {
+   "name": "Lucky Dog",
+   "two": [],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lucky Dog/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lucky Dog/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lucky Dog/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lucky Dog/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lucky Dog/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2071",
+   "notes": "Passive not counted"
+  },
+  "thundersoother": {
+   "name": "Thundersoother",
+   "two": [],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      35
+     ],
+     "when": "met",
+     "condition": "against opponents affected by Electro"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundersoother/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundersoother/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundersoother/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundersoother/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundersoother/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2070",
+   "notes": "not counted: Electro RES +40% (2-piece)"
+  },
+  "defender-s-will": {
+   "name": "Defender's Will",
+   "two": [
+    {
+     "stat": "def_pct",
+     "values": [
+      30
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Defender's Will/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Defender's Will/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Defender's Will/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Defender's Will/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Defender's Will/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2069",
+   "notes": "no stat in the 4-piece: Elemental RES +30% for each different Element in the party, not counted"
+  },
+  "scholar": {
+   "name": "Scholar",
+   "two": [
+    {
+     "stat": "er",
+     "values": [
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Scholar/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Scholar/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Scholar/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Scholar/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Scholar/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2068",
+   "notes": "no stat of the wearer in the 4-piece: Energy for party members with a Bow or Catalyst, not counted"
+  },
+  "thundering-fury": {
+   "name": "Thundering Fury",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Electro DMG Bonus, for an Electro character"
+    }
+   ],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundering Fury/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundering Fury/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundering Fury/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundering Fury/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundering Fury/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2067",
+   "notes": "no stat in the 4-piece: Overloaded, Electro-Charged, Superconduct, Hyperbloom, Aggravate and Lunar-Charged DMG bonuses and Elemental Skill CD decrease, not counted"
+  },
+  "tiny-miracle": {
+   "name": "Tiny Miracle",
+   "two": [],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tiny Miracle/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tiny Miracle/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tiny Miracle/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tiny Miracle/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tiny Miracle/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2066",
+   "notes": "no stat: All Elemental RES +20% (2-piece) and +30% to the Element of incoming DMG (4-piece), not counted"
+  },
+  "husk-of-opulent-dreams": {
+   "name": "Husk of Opulent Dreams",
+   "two": [
+    {
+     "stat": "def_pct",
+     "values": [
+      30
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "def_pct",
+     "values": [
+      24
+     ],
+     "when": "met",
+     "condition": "at 4 stacks of Curiosity"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      24
+     ],
+     "when": "met",
+     "condition": "Geo DMG Bonus at 4 stacks of Curiosity, for a Geo character"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Husk of Opulent Dreams/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Husk of Opulent Dreams/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Husk of Opulent Dreams/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Husk of Opulent Dreams/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Husk of Opulent Dreams/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2065",
+   "notes": ""
+  },
+  "tenacity-of-the-millelith": {
+   "name": "Tenacity of the Millelith",
+   "two": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "for all nearby party members including the wearer, 3s after an Elemental Skill hits an opponent"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tenacity of the Millelith/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tenacity of the Millelith/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tenacity of the Millelith/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tenacity of the Millelith/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tenacity of the Millelith/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2064",
+   "notes": "not counted: Shield Strength +30% for nearby party members"
+  },
+  "brave-heart": {
+   "name": "Brave Heart",
+   "two": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "four": [
+    {
+     "stat": "dmg",
+     "values": [
+      30
+     ],
+     "when": "met",
+     "condition": "against opponents with more than 50% HP"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Brave Heart/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Brave Heart/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Brave Heart/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Brave Heart/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Brave Heart/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2063",
+   "notes": ""
+  },
+  "blizzard-strayer": {
+   "name": "Blizzard Strayer",
+   "two": [
+    {
+     "stat": "dmg",
+     "values": [
+      15
+     ],
+     "when": "met",
+     "condition": "Cryo DMG Bonus, for a Cryo character"
+    }
+   ],
+   "four": [
+    {
+     "stat": "cr",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "against opponents affected by Cryo"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      20
+     ],
+     "when": "met",
+     "condition": "an additional bonus against Frozen opponents"
+    }
+   ],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Blizzard Strayer/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Blizzard Strayer/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Blizzard Strayer/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Blizzard Strayer/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Blizzard Strayer/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2062",
+   "notes": ""
+  },
+  "adventurer": {
+   "name": "Adventurer",
+   "two": [],
+   "four": [],
+   "icons": {
+    "flower": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Adventurer/flower_of_life_icon.png",
+    "sands": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Adventurer/sands_of_eon_icon.png",
+    "plume": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Adventurer/plume_of_death_icon.png",
+    "circlet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Adventurer/circlet_of_logos_icon.png",
+    "goblet": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Adventurer/goblet_of_eonothem_icon.png"
+   },
+   "entry": "2061",
+   "notes": "Passive not counted"
+  }
+ },
+ "checked": "2026-10-29",
+ "sources": [
+  "https://sg-wiki-api.hoyolab.com/hoyowiki/genshin/wapi/entry_page?entry_page_id=<id> (each set's entry: the pieces; the numbers of its 2-piece and 4-piece bonuses were read into `two` and `four`, and their text is read from the wiki at runtime), checked 2026-10-29",
+  "https://allthings.how/genshin-impact-7-0-artifact-sets-scarlet-proof-and-heart-of-the-furnace-explained/ : 'Version 7.0 adds two new five-star artifact sets ... Scarlet Proof and Heart of the Furnace'; the post quotes Genshin Impact's own announcement of 2026-08-06 for Version 7.0 'Everwinter Without Mercy'; checked 2026-10-29",
+  "https://allthings.how/celestial-gift-artifact-set-in-genshin-impact-bonuses-best-characters-and-stats/ : Celestial Gift 'arriving in Genshin Impact's Version 6.6 update', from a new domain in 6.6 (updated 2026-05-20); checked 2026-10-29",
+  "The wiki's set entries in out/raw: the newest set entries (ids 11222 and 11223) have pictures uploaded on 2026-08-03, before 7.0's release on 2026-08-12; no set entry is newer, and a web search on 2026-10-29 found no artifact set announced for 7.1 or 7.2 (https://www.icy-veins.com/genshin-impact/news/genshin-impact-everything-we-know-about-the-new-7-0-artifacts/ lists 7.0's two as the latest)"
+ ]
+}

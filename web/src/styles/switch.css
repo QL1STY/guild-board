@@ -1,0 +1,61 @@
+/* The switch (Switch.tsx), first made for the Pulls page's Savings ledger: a pill with a knob, a gold edge and the gold
+   track while it is on. With a picture, the picture is muted while it is off. Settings draws it as the knob alone. */
+.pl-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 14px 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink2);
+  font: inherit;
+  transition: background-color var(--t-state) var(--ease-out), border-color var(--t-state) var(--ease-out);
+}
+.pl-switch .pic {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  color: var(--ink2);
+  filter: saturate(.55) opacity(.7);
+  transition: filter var(--t-state) var(--ease-out);
+}
+.pl-knob {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--track);
+  transition: background-color var(--t-state) var(--ease-out);
+}
+.pl-knob::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ledger-light);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 30%, transparent);
+  transition: transform var(--t-state) var(--ease-out);
+}
+.pl-switch:hover {
+  border-color: var(--gold);
+}
+.pl-switch[aria-pressed='true'] {
+  border-color: var(--gold);
+  background: var(--ledger-light);
+  color: var(--ink);
+}
+.pl-switch[aria-pressed='true'] .pic {
+  color: var(--fill);
+  filter: none;
+}
+.pl-switch[aria-pressed='true'] .pl-knob {
+  background: var(--fill);
+}
+.pl-switch[aria-pressed='true'] .pl-knob::after {
+  transform: translateX(12px);
+}

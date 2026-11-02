@@ -1,0 +1,19 @@
+{
+  "key": "sayu", "name": "Sayu", "element": "Anemo", "weapon_type": "Claymore", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 200},
+  "mains": {"sands": ["er", "atk_pct", "em"], "goblet": ["atk_pct", "em"], "circlet": ["heal", "atk_pct", "em"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "em": "some", "atk": "some", "cr": "none", "cd": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["viridescent-venerer"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["deepwood-memories"], "pieces": "4"}, {"sets": ["ocean-hued-clam"], "pieces": "4"}],
+  "weapons": ["favonius-greatsword", "wolf-s-gravestone", "skyward-pride", "makhaira-aquamarine", "katsuragikiri-nagamasa", "mailed-flower"],
+  "partners": ["Pyro", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Anemo healer. Her Burst (Mujina Flurry) heals 92.2% ATK + 577 at level 1, and KQM says her healing scales with ATK (with EM only from C6) while her Swirl damage scales with EM, so the scaling stat is ATK. The sources split by build: KQM gives off-field Burst support (Burst first) and on-field driver (Skill first); Game8 gives four builds (Swirl driver, CRIT sub-DPS, healer support before and at C6) with the Skill first. The card follows the off-field Burst support, so the damage talent is the Burst. All agree 4pc Viridescent Venerer is best. Mains: KQM's off-field build gives ER, ATK% or EM on the Sands, ATK% or EM on the Goblet and Healing Bonus, ATK% or EM on the Circlet; Game8's healer build gives ER or ATK% on the Sands and ATK% elsewhere. The weapons differ: KQM's first is Skyward Pride, Game8's Makhaira Aquamarine or Wolf's Gravestone by build. A third source (genshin.gg, 2026-10-30) gives Wolf's Gravestone, Favonius Greatsword and Katsuragikiri Nagamasa, 4pc Viridescent Venerer then Noblesse Oblige, an ER or EM Sands, an ATK% or EM Goblet and a Healing Bonus or EM Circlet. Favonius Greatsword is on all three lists, so it is first; Wolf's Gravestone (two of three) is second, and Noblesse Oblige moves up to second set. Neither source gives stat goals; the only goal is ER, KQM's >200% for off-field with the Burst every rotation (150-170% every other rotation; 160-180% as an on-field driver).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/sayu-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/333496", "checked": "2026-10-29"},
+    {"url": "https://genshin.gg/characters/sayu/", "checked": "2026-10-30"}
+  ],
+  "checked": "2026-10-30"
+}

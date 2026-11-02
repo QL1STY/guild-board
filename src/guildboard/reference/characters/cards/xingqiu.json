@@ -1,0 +1,34 @@
+{
+  "key": "xingqiu",
+  "name": "Xingqiu",
+  "element": "Hydro",
+  "weapon_type": "Sword",
+  "rarity": 4,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 1800, "cr": 70, "cd": 150, "er": 180},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"}
+  ],
+  "weapons": ["sacrificial-sword", "primordial-jade-cutter", "mistsplitter-reforged", "amenoma-kageuchi", "skyward-blade", "wolf-fang", "favonius-sword", "fleuve-cendre-ferryman", "festering-desire", "finale-of-the-deep", "kagotsurube-isshin"],
+  "partners": ["Pyro", "Electro", "Cryo"],
+  "partner_roles": ["damage", "support"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Emblem of Severed Fate first (KQM: by far best in slot), an ER or ATK% Sands, a Hydro DMG Goblet, a CRIT Circlet and Burst first. KQM adds 4pc Marechaussee Hunter for when he is on-field. Weapons differ in the lead: Game8's best is Sacrificial Sword, KQM lists Primordial Jade Cutter first with Sacrificial Sword among the ER options; both are kept. Talent order: KQM off-field Burst > Skill (on-field Skill = Burst > Normal), Game8 Burst > Skill > Normal. His damage is the Burst's Sword Rain (54.3% to 97.7%, elemental curve). Goals are Game8's: ATK 1,800 or more, ER 180 or more, CR 60-70, CD 120-150 (upper ends used). KQM's ER depends on the weapon (Sacrificial Sword R3+ 150-180 before C6, Favonius Sword 190-220, other weapons 220-260), so 180 suits the Sacrificial build Game8 recommends. Partners are inferred (Pyro for Vaporize, Electro for Electro-Charged, Cryo for Frozen); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/xingqiu-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297531", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/39", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

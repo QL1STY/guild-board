@@ -1,0 +1,34 @@
+{
+  "key": "kamisato-ayaka",
+  "name": "Kamisato Ayaka",
+  "element": "Cryo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["burst", "normal", "skill"],
+  "talent_table": "physical",
+  "goals": {"er": 140, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct"], "goblet": ["dmg"], "circlet": ["cd", "cr"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "dmg": "wants", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["blizzard-strayer"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"}
+  ],
+  "weapons": ["mistsplitter-reforged", "amenoma-kageuchi", "haran-geppaku-futsu", "the-black-sword", "wolf-fang", "azurelight", "absolution", "finale-of-the-deep"],
+  "partners": ["Cryo", "Hydro", "Anemo"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources: 4pc Blizzard Strayer, ATK% sands, Cryo DMG goblet, CRIT circlet, Mistsplitter Reforged first, Burst > Normal Attack > Skill (KQM also allows Burst > Skill > Normal Attack). Her Cryo-infused Normal and Charged Attacks carry most of the damage and use the physical curve (1.98x at level 10), so the damage talent is the Normal Attack with the physical table, although the leveling order puts the Burst first. KQM adds 4pc Marechaussee Hunter. KQM's ER: 130-150 for double Cryo, 130-140 for triple Cryo (a Favonius proc lowers it by about 10); 140 is used. Neither source gives ATK or CRIT goals. Partners: Cryo, Hydro and Anemo for Freeze, from the kit and KQM's ER rows.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/ayaka-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/315215", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/32", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,35 @@
+{
+  "key": "traveler-geo",
+  "name": "Traveler (Geo)",
+  "element": "Geo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["they", "them", "their"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["nighttime-whispers-in-the-echoing-woods"], "pieces": "4"},
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["golden-troupe"], "pieces": "4"}
+  ],
+  "weapons": ["primordial-jade-cutter", "mistsplitter-reforged", "festering-desire", "fleuve-cendre-ferryman", "amenoma-kageuchi", "uraku-misugiri", "wolf-fang"],
+  "partners": ["Geo", "Pyro", "Hydro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM has no Geo Traveler guide; the card rests on Game8 (Geo Burst Sub-DPS) and genshin-builds.com (Geo DPS build, checked 2026-10-30). They agree on 4pc Nighttime Whispers in the Echoing Woods first, an ATK% Sands (Game8 allows ER), a Geo DMG Goblet and a CRIT Circlet, with Primordial Jade Cutter and Mistsplitter Reforged among the top weapons. They differ on the second set (Game8: Emblem of Severed Fate; genshin-builds: Golden Troupe) and on talent order: Game8 is Burst > Skill > Normal Attack, genshin-builds Skill > Burst > Normal Attack (a quick-swap DPS). The card uses Game8's order: the Burst's shockwaves (148% to 266% each, elemental curve) are the damage. No source gives numeric goals. genshin-builds' Geo page reads partly as generic text, so its weight is small. Partners are inferred (Geo for resonance, Pyro and Hydro for Crystallize).",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297538", "checked": "2026-10-29"},
+    {"url": "https://genshin-builds.com/en/character/traveler_geo", "checked": "2026-10-30"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/17", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

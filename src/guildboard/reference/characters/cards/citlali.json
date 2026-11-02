@@ -1,0 +1,19 @@
+{
+  "key": "citlali", "name": "Citlali", "element": "Cryo", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "protector"], "keeps_alive": true, "scaling": "em",
+  "damage_talent": "burst", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"em": 800, "er": 170},
+  "mains": {"sands": ["em", "er"], "goblet": ["em", "dmg"], "circlet": ["em", "cr", "cd"]},
+  "weights": {"em": "wants", "er": "wants", "cr": "some", "cd": "some", "atk_pct": "some", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["tenacity-of-the-millelith"], "pieces": "4"}],
+  "weapons": ["starcaller-s-watch", "a-thousand-floating-dreams", "wandering-evenstar"],
+  "partners": ["Hydro", "Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Cryo shielder whose shield (576% EM + 1,386 at level 1) and her Itzpapa damage scale with EM, so EM is her scaling stat; the Burst's Ice Storm takes 1,200% of her EM, so it carries her damage, but both sources put the Skill first (the shield and Itzpapa). The 'check' lines for Obsidian Tzitzimitl and Frostfall Storm DMG are ATK multipliers with the EM bonus from her passive on top. The sources agree on 4pc Scroll of the Hero of Cinder City, EM on every piece (KQM and Game8's hybrid build allow Cryo DMG or crit on the Goblet and Circlet), Starcaller's Watch first and the goals of ER 170% or above and EM 800 or above (Game8; within KQM's solo or double Cryo range of 170-195% at C0-C3). The second and third sets are KQM's; the second and third weapons are on both lists.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/citlali-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/461989", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7300", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

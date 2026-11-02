@@ -1,0 +1,19 @@
+{
+  "key": "alhaitham", "name": "Alhaitham", "element": "Dendro", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
+  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"], "talent_table": "elemental",
+  "goals": {"er": 120},
+  "mains": {"sands": ["em", "atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"em": "wants", "er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["gilded-dreams"], "pieces": "4"}, {"sets": ["deepwood-memories"], "pieces": "4"}, {"sets": ["golden-troupe"], "pieces": "4"}],
+  "weapons": ["light-of-foliar-incision", "primordial-jade-cutter", "mistsplitter-reforged"],
+  "partners": ["Hydro", "Electro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Dendro main DPS. His Skill's Projection Attacks (194% ATK + 155% EM at level 1) carry the damage and his passive adds 0.1% DMG per EM, so EM is his scaling stat. KQM and Game8 agree on the Skill first, 4pc Gilded Dreams (4pc Deepwood Memories when no teammate can hold it), the EM Sands, Dendro DMG Goblet and a crit Circlet. Neither source gives stat goals beyond ER, so the card leaves the other goals empty for the role's defaults and takes ER from KQM's Nahida-team range (120-130%). KQM's best weapon is Light of Foliar Incision, then Primordial Jade Cutter; Game8 also lists Uraku Misugiri.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/alhaitham-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/383712", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3336", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

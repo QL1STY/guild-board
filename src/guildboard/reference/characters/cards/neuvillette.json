@@ -1,0 +1,18 @@
+{
+  "key": "neuvillette", "name": "Neuvillette", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "hp",
+  "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"], "talent_table": "elemental",
+  "goals": {"er": 130},
+  "mains": {"sands": ["hp_pct"], "goblet": ["dmg", "hp_pct"], "circlet": ["cr", "cd", "hp_pct"]},
+  "weights": {"hp_pct": "wants", "cr": "wants", "cd": "wants", "er": "some", "hp": "some", "atk_pct": "none", "atk": "none", "em": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["heart-of-depth"], "pieces": "4"}, {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}],
+  "weapons": ["tome-of-the-eternal-flow", "sacrificial-jade", "prototype-amber", "ash-graven-drinking-horn", "surf-s-up"],
+  "partners": ["Hydro", "Electro"], "partner_roles": ["support", "healer"], "teams": [],
+  "notes": "A Hydro Charged Attack main DPS that scales with Max HP: Equitable Judgment, the Charged Attack, takes a percentage of his Max HP, and so do his Skill and Burst (the 'check' line Spiritbreath Thorn DMG is the Skill's extra hit). Both sources put the Normal Attack first and the Skill second. They agree on 4pc Marechaussee Hunter as best with Heart of Depth next, an HP% Sands, a Hydro DMG or HP% Goblet, a CRIT or HP% Circlet, and Tome of the Eternal Flow first, with Sacrificial Jade and Prototype Amber on both lists. The third set is KQM's. Game8 gives no stat goals, so the only goal is ER, from KQM: 100-135% depending on the team and weapon (100-130% with Furina; 130 used). The sources agree on set, mains and weapon, but only one gives a goal, so the confidence is medium.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/neuvillette-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/393054", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,129 @@
+{
+  "key": "kaeya",
+  "name": "Kaeya",
+  "element": "Cryo",
+  "weapon_type": "Sword",
+  "rarity": 4,
+  "pronouns": [
+    "he",
+    "him",
+    "his"
+  ],
+  "roles": [
+    "support",
+    "damage"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": [
+    "burst",
+    "normal",
+    "skill"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+    "dmg": 46.6
+  },
+  "mains": {
+    "sands": [
+      "atk_pct",
+      "er"
+    ],
+    "goblet": [
+      "dmg"
+    ],
+    "circlet": [
+      "cr",
+      "cd"
+    ]
+  },
+  "weights": {
+    "er": "wants",
+    "cr": "wants",
+    "cd": "wants",
+    "atk_pct": "wants",
+    "dmg": "wants",
+    "atk": "some",
+    "em": "some",
+    "hp_pct": "none",
+    "hp": "none",
+    "def_pct": "none",
+    "def": "none"
+  },
+  "sets": [
+    {
+      "sets": [
+        "blizzard-strayer"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "emblem-of-severed-fate"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "noblesse-oblige"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "marechaussee-hunter"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "gilded-dreams"
+      ],
+      "pieces": "4"
+    }
+  ],
+  "weapons": [
+    "mistsplitter-reforged",
+    "skyward-blade",
+    "favonius-sword",
+    "freedom-sworn",
+    "primordial-jade-cutter",
+    "azurelight",
+    "absolution",
+    "fleuve-cendre-ferryman"
+  ],
+  "partners": [
+    "Pyro",
+    "Hydro",
+    "Electro",
+    "Anemo"
+  ],
+  "partner_roles": [
+    "damage",
+    "healer"
+  ],
+  "teams": [],
+  "notes": "Both sources: 4pc Blizzard Strayer, a Cryo DMG goblet, CRIT circlet, Mistsplitter Reforged first. They differ on the talent order and the role: KQM puts the Burst first as a Cryo applicator (Burst > Skill >> Normal Attack, with a table of ER by team size), while Game8 lists Normal Attack > Burst > Skill for its main-DPS builds and a Physical Support build with Skyward Blade. The card keeps the Burst first, as KQM does. KQM's ER table (115-285 by team and constellation) has columns that did not parse, so no ER goal is set. Neither source gives other numeric goals; only the Cryo goblet value is set. Re-checked against a third source (genshin-builds.com, October 29, 2026): Freeze/mono Cryo and Reverse Melt builds, 4pc Blizzard Strayer first then Emblem of Severed Fate and Noblesse Oblige, ATK% sands, Cryo DMG goblet, CRIT DMG circlet, Mistsplitter Reforged first, substats ER > CRIT DMG > ATK% > CRIT Rate, and talents Burst > Normal Attack > Skill. With Game8 putting Normal Attack ahead of Skill as well, the order is changed from KQM's Burst > Skill >> Normal Attack to Burst > Normal Attack > Skill (two of three sources). It gives no numeric goals.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {
+      "url": "https://keqingmains.com/q/kaeya-quickguide/",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://game8.co/games/Genshin-Impact/archives/297516",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://wiki.hoyolab.com/pc/genshin/entry/9",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://genshin-builds.com/en/character/kaeya",
+      "checked": "2026-10-29"
+    }
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,258 @@
+/* The Settings page (the ledger, gallery and settings design, section 8): one column of grouped panels, 760 pixels at
+   most and in the middle of the page, as the rest of Guild Board keeps its pages from stretching across a wide window.
+   Every option is one row: its name in bold, one plain sentence under it, and the control on the right. */
+.set {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+.set-group { padding: 6px 20px; }
+.set-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 0 6px;
+  font-size: 16px;
+  font-weight: 800;
+}
+/* The group's sign: a small round mark on the tint with a gold edge. */
+.set-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--fill);
+}
+.set-icon .sign { width: 16px; height: 16px; }
+
+.set-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 0;
+  border-top: 1px solid var(--hairline);
+}
+.set-tx { flex: 1; min-width: 0; }
+.set-tx b { display: block; font-size: 14.5px; font-weight: 700; }
+.set-tx span, .set-tx i { display: block; color: var(--muted); font-size: 13px; font-style: normal; }
+.set-ctl { display: flex; flex: none; align-items: center; gap: 10px; }
+/* The page's buttons are of one size, at 13.5 pixels, as the mockup's. */
+.set .gb-btn { padding: 6px 16px; font-size: 13.5px; }
+.set .gb-btn.quiet { border-width: 1.5px; padding: 5px 15px; }
+
+/* The account: the picture in a gold ring, the nickname, and the line under it. */
+.set-acct { display: flex; align-items: center; gap: 14px; padding: 14px 0; }
+.set-ava { flex: none; width: 46px; height: 46px; }
+.set-ava .pic {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--fill);
+  overflow: hidden;
+}
+.set-ava .pic img { object-fit: cover; }
+.set-ava .pic .sign { width: 58%; height: 58%; }
+.set-acct .set-nick { font-size: 16px; }
+
+/* A switch in a row is the knob alone, a little larger than the Pulls page's, as in the mockup. */
+.set-switch.pl-switch { padding: 0; border: 0; background: none; border-radius: 999px; }
+.set-switch .pl-knob { width: 40px; height: 22px; box-shadow: inset 0 0 0 1px var(--border); }
+.set-switch .pl-knob::after { width: 16px; height: 16px; top: 3px; left: 3px; }
+.set-switch[aria-pressed='true'] .pl-knob { box-shadow: inset 0 0 0 1px var(--gold); }
+.set-switch[aria-pressed='true'] .pl-knob::after { transform: translateX(18px); }
+.set-switch:hover .pl-knob { box-shadow: inset 0 0 0 1px var(--gold); }
+.set-switch:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.set-select,
+.set-keys,
+.set-path input {
+  height: 30px;
+  padding: 0 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13.5px;
+}
+.set-select { padding-right: 6px; }
+
+/* A link that opens or does something: the page's ink, underlined in gold. */
+.set-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13.5px;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.set-link:hover { text-decoration-color: var(--fill); }
+.set-centred { margin: 0; padding: 4px 0 10px; text-align: center; }
+.set-links { display: flex; justify-content: center; gap: 10px; margin: 0; padding: 0 0 10px; color: var(--muted); }
+
+/* What a row opens under it, and its notes: an inset on the tint. */
+.set-more {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--tint);
+  font-size: 13.5px;
+}
+.set-more > p + * { margin-top: 8px; }
+/* The room the copy takes, under the Sync row. Its height is kept whether or not the core has read it, and with the sentence that
+   sync will stop, so that the page below does not move when they arrive. */
+.set-space { display: flex; flex-direction: column; gap: 6px; min-height: 80px; margin: -2px 0 12px; }
+.set-space-line { font-size: 13.5px; font-weight: 600; line-height: 1.4; }
+.set-space-items, .set-space-note { color: var(--muted); font-size: 13px; line-height: 1.4; }
+.set-aside { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+.set-acct + .set-aside { margin: -6px 0 12px 60px; }
+.set-row + .set-aside { margin: -6px 0 12px; }
+/* What a backup file holds, centred under the links to export and restore one, as they are. */
+.set-links + .set-aside { margin: -4px 0 12px; text-align: center; }
+.set-notice { margin: 0 0 10px; font-size: 13px; color: var(--ink2); }
+.set-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+/* An answer and what it replaces: the buttons are of one size, so that they line up one under the other. */
+.set-choice { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
+.set .set-choice .gb-btn { flex: none; width: 200px; }
+.set-choice span { color: var(--muted); font-size: 13px; }
+
+/* The overlay's settings, one under another, each a label and its control. */
+.set-part + .set-part { margin-top: 12px; }
+.set-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; }
+.set-field { display: flex; align-items: center; gap: 8px; }
+/* Room for the longest hotkey, Ctrl+Alt+Shift+Win+F12. */
+.set-keys { width: 170px; }
+.set-choices { margin: 0; padding: 0; border: 0; min-width: 0; }
+.set-choices legend { margin-bottom: 6px; padding: 0; }
+.set-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.set-check input { width: 16px; height: 16px; margin: 0; accent-color: var(--button); }
+.set-check + .set-check { margin-top: 8px; }
+.set-range { display: flex; align-items: center; gap: 8px; }
+.set-range input { width: 160px; margin: 0; accent-color: var(--button); }
+/* The value beside the slider keeps one width from 50% to 100%. */
+.set-range span { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
+.set .gb-seg { font-size: 13px; }
+/* A choice of a few words whose buttons are all as wide as the widest (the picture quality). */
+.set-equal .gb-seg { display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
+.set-equal .gb-seg button { text-align: center; }
+
+/* The gallery's folder, pasted. */
+.set-path { margin-top: 8px; }
+.set-path input { flex: 1; min-width: 0; }
+
+/* The price list, under "Edit prices": a pack, its official price and the player's own. */
+.set-prices { width: 100%; margin-top: 8px; border-collapse: collapse; font-size: 13.5px; }
+.set-prices th, .set-prices td { padding: 5px 0; text-align: left; font-weight: 400; }
+.set-prices thead th { color: var(--muted); font-size: 13px; }
+.set-prices tbody tr + tr > * { border-top: 1px solid var(--hairline); }
+.set-prices td { width: 110px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink2); }
+.set-prices thead th:not(:first-child) { text-align: right; }
+.set-price {
+  width: 96px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: right;
+}
+.set-price:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+/* The sync log, under its link. */
+.set-log { margin-top: 10px; }
+.set-log-table { max-height: 420px; overflow: auto; }
+.set-log table { font-size: 13px; }
+.set-log thead th { font-size: 13px; text-transform: none; letter-spacing: normal; }
+
+.set-backups { margin: 0 0 10px; padding: 0; list-style: none; }
+.set-backups li + li { margin-top: 6px; border-top: 1px solid var(--border); padding-top: 6px; }
+
+/* A row that holds a panel of its own (the achievement list, the import): the name, then the panel's own line in the
+   place of the sentence, with its buttons on the right. */
+.set-held { display: block; }
+.set-held > b { display: block; font-size: 14.5px; font-weight: 700; }
+.set-held > [data-testid] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 18px;
+  align-items: center;
+}
+.set-held > [data-testid] > * { grid-column: 1 / -1; }
+.set-held > [data-testid] > p:first-child,
+.set-held > [data-testid] > .ach-path + p { grid-column: 1; margin: 0; color: var(--muted); font-size: 13px; }
+.set-held > [data-testid] > .ach-path { grid-column: 1; margin: 0; font-size: 13px; }
+.set-held > [data-testid] > .ach-buttons { grid-column: 2; grid-row: 1 / span 2; margin: 0; justify-content: flex-end; }
+/* The panels' result and refusal lines are always there, so that a screen reader hears each new sentence; empty, they
+   take no room. */
+.set-held .ach-result:empty,
+.set-held .ach-problem:empty { margin: 0; }
+.set-held .ach-found .ach-found-head,
+.set-held .ach-found .ach-found-cat,
+.set-held .ach-found .ach-more,
+.set-held .ach-conflicts,
+.set-held .ach-found li { font-size: 13px; }
+
+/* The footer, and the dialog it opens. */
+.set-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0 2px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.set-foot .set-link { font-size: 13px; }
+.set-dialog {
+  width: min(640px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 10px 40px color-mix(in srgb, var(--ink) 30%, transparent);
+}
+.set-dialog::backdrop { background: color-mix(in srgb, var(--rail) 45%, transparent); }
+.set-dialog-body { padding: 20px 24px; font-size: 14px; }
+.set-dialog h2 { margin: 0 0 10px; font-size: 18px; font-weight: 800; }
+.set-dialog h3 { margin: 14px 0 6px; font-size: 14.5px; font-weight: 800; }
+.set-dialog p { margin: 0; color: var(--ink2); }
+.set-dialog p + p { margin-top: 6px; }
+.set-rules { margin: 0; padding-left: 18px; }
+.set-rules li + li { margin-top: 4px; }
+
+/* About: the line that says what Guild Board is not, and the licences dialog's text. */
+.set-aside.set-fan { margin: 2px 0 12px; }
+.set-dialog p.set-aside { margin: 6px 0 0; color: var(--muted); }
+.set-notices {
+  max-height: min(55vh, 520px);
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  overflow: auto;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--tint);
+  color: var(--ink2);
+  font: 12px/1.45 ui-monospace, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

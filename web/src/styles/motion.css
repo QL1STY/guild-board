@@ -1,0 +1,54 @@
+/*
+ * Motion (look pass spec 5 and 6.3). Motion answers a change, plays once and stops. A keyframe that gives only its first
+ * frame ends on the element's own style, so the animation leaves the element as it is drawn. Durations, delays and
+ * easings are the tokens of tokens.css.
+ */
+
+/* A bar grows from its start, a column from its baseline. A column drawn in SVG grows by its scale, from its foot. */
+@keyframes grow-w { from { width: 0; } }
+@keyframes grow-h { from { height: 0; } }
+@keyframes grow-y { from { transform: scaleY(0); } }
+
+/* A ring fills and a line draws. For a stroke whose own dash array is its end state, such as `65 100` on pathLength 100. */
+@keyframes sweep { from { stroke-dasharray: 0 1000; } }
+
+/* A tick lands with a small overshoot: play it with --ease-stamp. */
+@keyframes stamp { from { transform: scale(0); } }
+
+/* A gold sheen passes over an element once, from left to right. */
+@keyframes glint { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+@keyframes fade-in { from { opacity: 0; } }
+
+/*
+ * A glint: a number a sync changed, a card that was ticked, a widget that was added. useGlint gives a value this class
+ * for the length of the glint. The sheen is the element's background image for that time, so it is for an element
+ * without one of its own. Its parts are important so that a later `background:` of the element does not remove them;
+ * the animated position is not, as an animation must win over it.
+ */
+.glint {
+  background-image: linear-gradient(100deg, transparent 43%, color-mix(in srgb, var(--w-fill) 40%, transparent) 50%, transparent 57%) !important;
+  background-repeat: no-repeat !important;
+  background-size: 300% 100% !important;
+  animation: glint var(--t-glint) var(--ease-move);
+}
+
+/* Text for screen readers only: it takes no room and cannot be seen, and is not hidden from assistive technology. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* Windows' "Animation effects" setting, passed on by the window. The scripted motions check it themselves. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
+  /* A delay would hold an element at its first frame until the delay ended. */
+  *, *::before, *::after { animation-delay: 0s !important; transition-delay: 0s !important; }
+}

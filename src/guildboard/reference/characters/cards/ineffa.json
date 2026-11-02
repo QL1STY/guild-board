@@ -1,0 +1,37 @@
+{
+  "key": "ineffa",
+  "name": "Ineffa",
+  "element": "Electro",
+  "weapon_type": "Polearm",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support", "damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 65, "cd": 150, "er": 125, "em": 300},
+  "mains": {"sands": ["atk_pct", "em", "er"], "goblet": ["atk_pct", "em"], "circlet": ["cr", "cd"]},
+  "weights": {"atk_pct": "wants", "cr": "wants", "cd": "wants", "er": "wants", "em": "some", "atk": "some", "dmg": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["aubade-of-morningstar-and-moon"], "pieces": "4"},
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"},
+    {"sets": ["thundering-fury"], "pieces": "4"}
+  ],
+  "weapons": ["fractured-halo", "staff-of-the-scarlet-sands", "bloodsoaked-ruins", "staff-of-homa", "lumidouce-elegy", "symphonist-of-scents", "calamity-queller", "prospector-s-shovel", "deathmatch"],
+  "partners": ["Electro", "Hydro"],
+  "partner_roles": ["damage", "support"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on the Lunar build: ATK% sands and goblet, CRIT circlet, Fractured Halo first, Aubade of Morningstar and Moon and Silken Moon's Serenade as the best sets. KQM adds EM or ER on the sands/goblet (ER only when her Burst is used every rotation) and a shield-support build (Tenacity, Noblesse Oblige, Deepwood, Scroll), which the card leaves out. Goals are Game8's: ATK 2,000, CRIT Rate 60-70 (65), CRIT DMG 150, EM 300+, ER 110-140 with a second Electro character (125 used; KQM's baseline for double Electro is 100% with Favonius procs, 140-160 for a Burst every rotation). Her kit's damage is a mix of Skill (Birgitta Discharge) and Burst, with the order Skill > Burst > Normal Attack in Game8 and KQM's 'level > Skill > Burst'. Partners are the Lunar-Charged pair, Electro with Hydro.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/ineffa-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/531360", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7852", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

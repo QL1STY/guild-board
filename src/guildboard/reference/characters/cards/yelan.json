@@ -1,0 +1,35 @@
+{
+  "key": "yelan",
+  "name": "Yelan",
+  "element": "Hydro",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "hp",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"hp": 30000},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["dmg", "hp_pct"], "circlet": ["cr", "cd", "hp_pct"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "cr": "wants", "cd": "some", "hp": "some", "dmg": "some", "atk_pct": "none", "atk": "none", "em": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["nymph-s-dream"], "pieces": "4"}
+  ],
+  "weapons": ["aqua-simulacra", "elegy-for-the-end", "favonius-warbow", "slingshot", "the-stringless", "fading-twilight", "mouun-s-moon", "sacrificial-bow", "recurve-bow"],
+  "partners": ["Pyro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Emblem of Severed Fate first (KQM: hands-down best), an HP% or ER Sands, a Hydro DMG or HP% Goblet, a CRIT or HP% Circlet, Burst > Skill, and Aqua Simulacra first, with Elegy for the End, Favonius Warbow and Slingshot next. KQM adds 4pc Marechaussee Hunter (on-field with Furina) and 4pc Nymph's Dream. Her damage lines are Max HP-based (Burst 7.31% to 13.15% Max HP, Skill 22.6% to 40.7% Max HP; both elemental curve), so the scaling stat is HP and the damage talent the Burst. The kit's five 'check' lines are her Normal Attacks (1-hit 40.7% to 80.4%, ratio 1.98, physical curve), which are ATK-based and not her damage. Her only goal is KQM's: HP until 30,000 (the stat priority says HP% until that, then CRIT). Neither source gives CRIT, ER or ATK numbers, so none is set (ER in particular is left to the role's default). Partners are inferred (Pyro, Electro and Cryo for Vaporize, Electro-Charged and Frozen); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/yelan-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/372781", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2252", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

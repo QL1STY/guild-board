@@ -1,0 +1,19 @@
+{
+  "key": "charlotte", "name": "Charlotte", "element": "Cryo", "weapon_type": "Catalyst", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 200},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["atk_pct", "dmg"], "circlet": ["heal", "atk_pct", "cr"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "cr": "some", "cd": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["ocean-hued-clam"], "pieces": "4"}, {"sets": ["gladiator-s-finale"], "pieces": "4"}],
+  "weapons": ["favonius-codex", "prototype-amber", "skyward-atlas"],
+  "partners": ["Hydro", "Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Cryo healer who scales with ATK: her Burst heals 256.6% ATK + 1,608 at level 1, and her Hold Skill is her best damage. Both sources agree on the Burst first, Noblesse Oblige and an ER or ATK% Sands; Game8 also gives a Cryo sub-DPS build (Golden Troupe or Blizzard Strayer, Kagura's Verity), which the card leaves out. The Circlet is Healing Bonus (KQM and Game8's support build). Neither source gives stat goals. ER 200% is KQM's Double Cryo figure with weapons other than a refinement 5 Prototype Amber (about 160% with it; solo Cryo needs about 230%). Favonius Codex is Game8's first weapon and is on KQM's list; Prototype Amber is KQM's first.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/charlotte-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/412428", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/4377", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

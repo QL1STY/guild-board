@@ -1,0 +1,2239 @@
+/* The widgets' own looks (widgets/*.tsx), shared by the Board and, from plan 2A-4, the overlay. */
+
+/*
+ * The widget frame (look pass spec 8.1; the mockup's .w): the card with its inner hairline, a heading plate with the
+ * type's sign, its name and a short meta, and a body that fits itself to the size. The frame draws with the widget roles
+ * of tokens.css and no colour of its own, so that the overlay's dark panel can set them again (spec 6.2).
+ *
+ * The frame is a size container (the widget's size is its cells, fixed by the grid), and what a type shows at its size
+ * is written as container queries on the frame's parts. A body that is taller than its widget scrolls without a
+ * scrollbar, its bottom edge fading out (.w-scroll, below, which every box that scrolls in a widget takes), and its
+ * keyboard focus shows on the frame (the ring of a scroller, below); a view that fits has no scrolling and no fade.
+ */
+.w {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--w-border);
+  border-radius: 12px;
+  background: var(--w-bg);
+  box-shadow: none;
+  color: var(--w-ink);
+  container-type: size;
+  overflow: hidden;
+}
+/* The frame wins over .gb-panel (frame.css), whichever of the two stylesheets loads last. */
+.gb-panel.w {
+  border-color: var(--w-border);
+  background: var(--w-bg);
+  box-shadow: none;
+  color: var(--w-ink);
+}
+.w::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--w-line);
+  border-radius: 9px;
+  pointer-events: none;
+}
+.w-head {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  margin: 5px 5px 0;
+  padding: 0 8px 0 7px;
+  border-radius: 7px 7px 3px 3px;
+  background: var(--w-plate);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--w-ink2);
+}
+.w-head .sign {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  color: var(--w-icon);
+}
+/* The name is a heading (h3) that looks like the plate's text. */
+.w-name {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.w-meta {
+  margin-left: auto;
+  padding-left: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+/*
+ * A box that scrolls in a widget, the body and any list in it that can outgrow it, scrolls without a scrollbar and fades
+ * out at its bottom edge where something is cut off. Its bottom padding is the strip that fades: with nothing cut off
+ * there the strip holds nothing (only the mask's alpha counts, so it names no colour), a list's last row comes clear of
+ * it, and a scroll to a control that is out of sight stops above it. --fade is the strip's height, which the body sets.
+ * Every such box takes this class and adds only its own paddings and margins, as longhands, so as to leave this bottom
+ * padding be; what a view keeps clear of the strip, such as a focus ring, it keeps clear of by its own margin.
+ */
+.w-scroll {
+  padding-bottom: var(--fade);
+  overflow: hidden auto;
+  scroll-padding-bottom: calc(var(--fade) + 4px);
+  scrollbar-width: none;
+  mask-image: linear-gradient(to bottom, currentColor calc(100% - var(--fade)), transparent);
+}
+/* A view's root takes the body with flex: 1 and min-height: 0, and lays itself out. */
+.w-body {
+  --fade: 10px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-inline: 11px;
+  padding-top: 7px;
+}
+/*
+ * The keyboard focus of a scroller. A scroll container that scrolls and holds nothing focusable takes keyboard focus
+ * (Chromium 130 and later), or a view gives it tabindex 0 as the app's other scrollers have: the body when a view is
+ * taller than its size, and a list inside it that scrolls. The app's ring is an outline 2 px outside the element's own
+ * box, where the body's clip, the fade's mask and the frame's clip hide it. So the frame shows the focus: the same ring,
+ * round the frame, in the widget roles' colour. Any focused element that is not a native control does it, so a list that
+ * a view makes scroll needs no rule of its own; a control keeps its own ring, and so does a column of Playtime's, an
+ * item of a row the keyboard moves along, whose ring is drawn inside it.
+ */
+.w:has(:focus-visible:not(:is(a[href], button, input, select, textarea, summary, [contenteditable], .pw-col))) {
+  outline: 2px solid var(--w-focus);
+  outline-offset: 2px;
+}
+/* A type this version does not know. */
+.w-unknown {
+  margin: auto 0;
+  font-size: 13px;
+  color: var(--w-muted);
+}
+/* One cell tall: a lower heading and a tighter body. */
+@container (max-height: 100px) {
+  .w-head {
+    height: 21px;
+    font-size: 12px;
+  }
+  .w-body {
+    --fade: 7px;
+    padding-top: 5px;
+  }
+}
+/* One cell wide: the sign and the meta stay; the widget is still named by its type (aria-label). */
+@container (max-width: 180px) {
+  .w-name {
+    display: none;
+  }
+}
+
+/* The sentences a view says while it reads, or when it has nothing to show, and a refusal on the widget's own line. */
+.wid-line { font-size: 12.5px; color: var(--w-ink2); font-variant-numeric: tabular-nums; }
+.wid-problem { min-height: 0; margin-top: 4px; font-size: 12.5px; font-weight: 700; color: var(--w-ink); }
+.wid-problem:empty { display: none; }
+
+/* A widget's settings (the form in Edit): a box to tick, the timers chosen, the timer chosen (one of a list), a region. */
+.wid-check { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+.wid-check input { width: 15px; height: 15px; margin: 0; accent-color: var(--w-btn); cursor: pointer; }
+.wid-choices { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 16px; margin-top: 10px; }
+.wid-choose {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 4px 16px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.wid-choose legend { margin-bottom: 6px; padding: 0; font-size: 13px; font-weight: 700; }
+.wid-choice { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+.wid-choice input { width: 15px; height: 15px; margin: 0; accent-color: var(--w-btn); cursor: pointer; }
+.wid-field { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+.wid-field select {
+  padding: 2px 6px;
+  border: 1px solid var(--w-border);
+  border-radius: 6px;
+  background: var(--w-bg);
+  color: var(--w-ink);
+  font: inherit;
+  font-weight: 400;
+}
+
+/*
+ * Part B: the widgets rebuilt on the frame (look pass spec 9). A view has one root that takes the body (flex: 1;
+ * min-height: 0) and lays itself out, and its visual centre carries data-centre: a tight element, inside the body's room,
+ * which the sizes test looks for at the smallest and the largest size. What a size shows is chosen here, with container
+ * queries on the frame (container-type: size on .w): one cell is 96 pixels tall and two are 204, so the queries sit at 100
+ * and 180; a width of two cells is 348 and of three 528. Only the widget roles are drawn with, never a colour.
+ */
+
+/*
+ * A button in a widget's body, whichever widget: the Cleared of a timer, the presets, Start and Dismiss of a quick timer,
+ * the stopwatch's. 24 pixels tall, solid for the widget's own action and quiet for the others. The two have the same
+ * border, so that they are one size, as the buttons in one row must be.
+ */
+.w-body .gb-btn {
+  height: 24px;
+  padding: 0 12px;
+  border: 1px solid var(--w-btn);
+  background: var(--w-btn);
+  color: var(--w-btn-text);
+  font-size: 12px;
+}
+.w-body .gb-btn.quiet {
+  border-color: var(--w-quiet);
+  background: transparent;
+  color: var(--w-ink2);
+  font-weight: 600;
+}
+
+/* A strong figure: proportional digits, as a static number is set; the ones that tick set tabular figures themselves. */
+.w .fig {
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+.w .fig small {
+  margin-left: 2px;
+  font-size: .55em;
+  font-weight: 700;
+  color: var(--w-muted);
+  letter-spacing: 0;
+}
+
+/*
+ * Resin (spec 9.6). The ring is the centre, as large as the frame allows: 46 pixels are the heading, its margin and the
+ * body's paddings. At one cell tall the picture stands alone in the ring, with "77/200" and when it is full beside it;
+ * at a width of two cells how long to full is beside that; at two cells tall the ring is large, with the number and
+ * "of 200" inside it, and beside it "Full in", the time left in large figures and the clock time.
+ */
+.resin {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.resin-ring {
+  flex: none;
+  width: min(calc(100cqh - 46px), 46cqw);
+  aspect-ratio: 1;
+}
+.resin .ring-in {
+  gap: 2cqi;
+}
+.resin .ring-pic {
+  width: 66cqi;
+  height: 66cqi;
+  color: var(--w-icon);
+}
+.resin .ring-pic .sign {
+  width: 60%;
+  height: 60%;
+}
+.resin .ring-in .fig {
+  display: none;
+  font-size: max(14px, 18cqi);
+}
+.resin .ring-in .of {
+  display: none;
+  font-size: max(11px, 9cqi);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--w-muted);
+}
+.resin-text {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.resin-now,
+.resin-left {
+  min-width: 0;
+  display: grid;
+  justify-items: start;
+  gap: 3px;
+}
+.resin-now .fig {
+  font-size: 25px;
+}
+.resin .when,
+.resin .lead,
+.resin .at {
+  font-size: 12.5px;
+  color: var(--w-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.resin .big {
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.resin-left {
+  display: none;
+}
+.resin-left .at {
+  display: none;
+}
+@container (min-width: 300px) {
+  .resin-left {
+    display: grid;
+  }
+  /* The Full seal is then beside, in how long to full's place, and not under the figure as well. */
+  .resin .when.sealed {
+    display: none;
+  }
+}
+@container (min-width: 420px) {
+  .resin {
+    justify-content: center;
+    gap: 28px;
+  }
+}
+@container (min-height: 180px) {
+  .resin .ring-in {
+    gap: 1cqi;
+  }
+  .resin .ring-pic {
+    width: 30cqi;
+    height: 30cqi;
+  }
+  .resin .ring-in .fig,
+  .resin .ring-in .of {
+    display: block;
+  }
+  .resin-now {
+    display: none;
+  }
+  .resin-left {
+    display: grid;
+    gap: 4px;
+  }
+  .resin-left .at {
+    display: block;
+  }
+}
+/* One cell wide and two tall: the ring above, smaller, and the times centred under it. */
+@container (max-width: 200px) and (min-height: 180px) {
+  .resin {
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+  .resin-ring {
+    width: min(calc(100cqw - 22px), calc(100cqh - 122px));
+  }
+  .resin-left {
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+/*
+ * Resets (spec 9.9): the day and the week as bars across their periods, each with its name and the time left. One cell
+ * tall the three share the rows of one grid, so that the bars line up; with a width of three cells the clock time of the
+ * reset comes beside the time left, and at two cells tall each reset is a block of its own: name and time left, the bar,
+ * and the clock time under it.
+ */
+.resets {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  align-content: center;
+}
+.reset-bars {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 9px;
+}
+.reset {
+  display: contents;
+}
+.reset-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.reset-left,
+.reset-at {
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.reset-left {
+  text-align: right;
+}
+.reset-at {
+  display: none;
+}
+@container (min-width: 420px) and (max-height: 179px) {
+  .reset-bars {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+  }
+  .reset-at {
+    display: block;
+    color: var(--w-muted);
+  }
+}
+@container (min-height: 180px) {
+  .reset-bars {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .reset {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 10px;
+    row-gap: 5px;
+  }
+  .reset-name {
+    grid-area: 1 / 1;
+  }
+  .reset-left {
+    grid-area: 1 / 2;
+  }
+  .reset .bar {
+    grid-area: 2 / 1 / 3 / 3;
+    height: 8px;
+    border-radius: 4px;
+  }
+  .reset-at {
+    display: block;
+    grid-area: 3 / 1 / 4 / 3;
+    font-size: 12px;
+    color: var(--w-muted);
+  }
+}
+
+/*
+ * Achievement progress (spec 9.5): the count of ticks, a bar with its percentage at its end, and with room the
+ * primogems to earn and what is left: beside the count from a width of three cells, under the bar at two cells tall.
+ */
+.prog {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'top info' 'meter meter';
+  align-content: center;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 6px;
+}
+.prog-top {
+  grid-area: top;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+.prog-top .fig {
+  font-size: 22px;
+}
+.prog-top small {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--w-ink2);
+}
+.prog-meter {
+  grid-area: meter;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prog-meter .bar {
+  flex: 1;
+  min-width: 0;
+  height: 8px;
+  border-radius: 4px;
+}
+.prog-percent {
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.prog-info {
+  grid-area: info;
+  display: none;
+  align-items: center;
+  gap: 14px;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  white-space: nowrap;
+}
+.prog-earn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--w-ink);
+}
+.prog-gem {
+  width: 16px;
+  height: 16px;
+  color: var(--w-icon);
+}
+@container (min-width: 420px) {
+  .prog-info {
+    display: flex;
+  }
+}
+@container (min-height: 180px) {
+  .prog {
+    grid-template-areas: 'top top' 'meter meter' 'info info';
+    row-gap: 10px;
+  }
+  .prog-info {
+    display: flex;
+  }
+}
+
+/*
+ * Pinned achievements (spec 9.3): each pinned achievement at its current stage, in a list that is the visual centre. A
+ * row has the stage's box with its numeral under it and, beside them, the name and the stage pips, the stage's text (two
+ * lines at most), its count as a bar with the number between the − and + that change it or its parts as chips that tick,
+ * the line that says the count or the parts reached the stage, and its reward with the primogem's picture. The smallest
+ * size shows the name, pips, box and count; the text and the reward come with height. Once every stage is ticked the row
+ * says Done and the day in place of the count. A list taller than the body scrolls inside it, with no scrollbar and its
+ * bottom edge fading out as the body's does (its own bottom padding is the strip that fades, so that the last row comes
+ * clear of it). The rows hold controls, whose rings lie 4 pixels outside them, where a scroller clips them: the list is
+ * padded for them and takes the room back with negative margins, so that the rows stand where the body's paddings put
+ * them. Only the widget roles are drawn with.
+ */
+.pn {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.pn-list {
+  min-height: 0;
+  margin: -4px -5px 0;
+  padding-top: 4px;
+  padding-inline: 5px;
+  list-style: none;
+  /* A control scrolled into view stops clear of both edges, so that its ring is not cut off. */
+  scroll-padding-top: 4px;
+}
+.pn-row {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  column-gap: 10px;
+  padding: 7px 0;
+}
+.pn-row + .pn-row {
+  border-top: 1px solid var(--w-line);
+}
+.pn-row:first-child {
+  padding-top: 0;
+}
+.pn-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+/* The box ticks the stage the row stands at: a native checkbox drawn here, with its tick over it. */
+.pn-tick {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+}
+.pn-tick input {
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 1.5px solid var(--w-outline);
+  border-radius: 6px;
+  background: var(--w-bg);
+  cursor: pointer;
+}
+.pn-tick input:checked {
+  border-color: var(--w-done);
+  background: var(--w-done);
+}
+/* A stage that its count or its parts reached: the box stays empty, outlined in the progress gold. */
+.pn-tick.reached input:not(:checked) {
+  border-width: 2px;
+  border-color: var(--w-fill);
+}
+.pn-tick .sign {
+  position: relative;
+  width: 15px;
+  height: 15px;
+  color: var(--w-gap);
+  stroke-width: 2.4;
+  opacity: 0;
+  pointer-events: none;
+}
+.pn-tick input:checked + .sign {
+  opacity: 1;
+}
+/* On a small plate, so that "II" reads as the stage's number and not as a pause mark. */
+.pn-numeral {
+  min-width: 22px;
+  padding: 2px 3px;
+  border-radius: 5px;
+  background: var(--w-plate);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  color: var(--w-ink2);
+}
+.pn-main {
+  min-width: 0;
+}
+.pn-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 22px;
+}
+.pn-title {
+  min-width: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.pn-top .pips {
+  flex: none;
+  gap: 6px;
+}
+.pn-top .pips i {
+  width: 9px;
+  height: 9px;
+}
+/* The stage's text and its reward come with two cells' more height. */
+.pn-desc,
+.pn-reward {
+  display: none;
+}
+.pn-desc {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.3;
+}
+.pn-reward {
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--w-muted);
+}
+.pn-gem {
+  width: 15px;
+  height: 15px;
+  color: var(--w-icon);
+}
+/* The count: a bar, and the number between the buttons that change it. Wrapped, the buttons come under the bar. */
+.pn-prog,
+.pn-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 5px;
+}
+.pn-prog .bar {
+  flex: 1 1 120px;
+  max-width: 240px;
+}
+.pn-chips {
+  gap: 4px 6px;
+}
+/*
+ * A part is a chip that ticks: a native checkbox over the chip, unseen, so that the whole chip takes the click, and the
+ * chip drawn after it (its face), which the box's state and its keyboard focus change.
+ */
+.pn-chip {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+.pn-chip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.pn-chip-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 10px 0 7px;
+  border: 1px solid var(--w-quiet);
+  border-radius: 999px;
+  color: var(--w-ink2);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.pn-chip-face .sign {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  stroke-width: 2.2;
+  color: var(--w-outline);
+}
+.pn-chip input:checked + .pn-chip-face {
+  border-color: color-mix(in srgb, var(--w-done) 55%, transparent);
+  background: color-mix(in srgb, var(--w-done) 13%, transparent);
+  color: var(--w-good);
+}
+.pn-chip input:checked + .pn-chip-face .sign {
+  color: var(--w-done);
+}
+.pn-chip input:focus-visible + .pn-chip-face {
+  outline: 2px solid var(--w-focus);
+  outline-offset: 2px;
+}
+.pn-reached {
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-left: 3px solid var(--w-done);
+  border-radius: 0 6px 6px 0;
+  background: var(--w-plate);
+  color: var(--w-good);
+  font-size: 12.5px;
+  line-height: 1.3;
+}
+.pn-done {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  font-variant-numeric: tabular-nums;
+}
+@container (min-height: 280px) {
+  .pn-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .pn-reward {
+    display: flex;
+  }
+}
+
+/*
+ * Commissions to look for (spec 9.4): the region's emblem in a gold ring beside its name, and under them the names as a
+ * calm list, one to a line, each with the commission's star on a hairline rule. The emblem and the name stay in view and
+ * the list scrolls under them when it is taller than the body, as the Timers' does; it holds nothing to stop at, so the
+ * browser makes it a stop of the keyboard and the frame shows the ring. Where the core names no emblem, as the demo does
+ * not, the ring holds the star. Only the widget roles are drawn with.
+ */
+.look {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.look-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+/*
+ * The region's emblem knocked out of a disc of its nation's colour (ui/emblem.ts sets --emblem), in a gold ring: white
+ * on parchment, dark on the overlay's panel.
+ */
+.look-emblem {
+  --size: 32px;
+  --emblem: var(--w-btn);
+  width: var(--size);
+  height: var(--size);
+  padding: 3px;
+  border: 2px solid var(--w-icon);
+  border-radius: 50%;
+  background: var(--emblem);
+  color: var(--w-gap);
+}
+.look-emblem .sign {
+  width: 70%;
+  height: 70%;
+}
+.look-region {
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.look-list {
+  min-height: 0;
+  margin: 0;
+  padding-top: 0;
+  padding-inline: 0;
+  list-style: none;
+}
+.look-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--w-line);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.look-list .sign {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--w-icon);
+}
+@container (min-height: 280px) {
+  .look-emblem {
+    --size: 42px;
+  }
+  .look-region {
+    font-size: 17px;
+  }
+  .look-list li {
+    padding: 7px 0;
+    font-size: 13.5px;
+  }
+}
+
+/*
+ * Clock (spec 9.13, and the dial the player asked for after the look pass's check): a gold dial with the time on a plate
+ * inside it, and the day and the server's time under it, centred. One cell tall, or much wider than tall, they stand
+ * beside the dial; at one cell wide the server's time is in the heading (Clock.tsx).
+ */
+.clock {
+  --dial: min(calc(100cqh - 96px), calc(100cqw - 28px), 240px);
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+.clock-dial {
+  position: relative;
+  flex: none;
+  width: var(--dial);
+  height: var(--dial);
+}
+.clock-face {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.cf-plate { fill: var(--w-plate); }
+.cf-ring { fill: none; stroke: var(--w-icon); stroke-width: 3; }
+.cf-ring.thin { stroke-width: 1.2; }
+.cf-orbit { fill: none; stroke: var(--w-track); stroke-width: 1.2; stroke-dasharray: 2 5; }
+.cf-tick { stroke: var(--w-icon); stroke-width: 2.4; stroke-linecap: round; }
+.cf-quarter,
+.cf-star,
+.cf-pin { fill: var(--w-icon); }
+.cf-hour,
+.cf-minute,
+.cf-second { stroke-linecap: round; }
+.cf-hour { stroke: var(--w-ink); stroke-width: 6; }
+.cf-minute { stroke: var(--w-ink); stroke-width: 3.5; }
+.cf-second { stroke: var(--w-fill); stroke-width: 1.5; }
+.cf-pin-dot { fill: var(--w-gap); }
+.clock-dial .fig {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  translate: -50% -50%;
+  margin: 0;
+  padding: .04em .32em;
+  border: 1px solid var(--w-line);
+  border-radius: 6px;
+  background: var(--w-gap);
+  font-size: max(11px, calc(var(--dial) * .14));
+  font-weight: 800;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.clock .side {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+}
+.clock .side b {
+  color: var(--w-ink);
+}
+@container (max-height: 100px) or (min-aspect-ratio: 2 / 1) {
+  .clock {
+    --dial: calc(100cqh - 52px);
+    flex-direction: row;
+    gap: 10px;
+    text-align: left;
+  }
+}
+@container (max-width: 180px) {
+  .clock .srv {
+    display: none;
+  }
+}
+@container (min-width: 420px) and (min-height: 180px) {
+  .clock .side {
+    font-size: 14px;
+  }
+}
+
+/*
+ * Expeditions (spec 9.7): the characters' faces in a row, each in a ring with its label under it. A face is as large as
+ * the frame allows, up to 80 pixels, and a share of the width that leaves room for five and their gaps; 62 pixels are
+ * the heading, the label under the face and the body's paddings. One cell tall there is no room under a face, so the faces
+ * stand in the middle of the body at most 52 pixels across and the labels are left to screen readers, while the heading
+ * names the next return (NotesWidgets.tsx). The ring is gold with a green tick when the expedition is back and muted
+ * while it is out; a slot not sent is a dashed circle. Only the widget roles are drawn with.
+ */
+.exp {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  align-content: center;
+}
+.ex {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+.ex li {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  text-align: center;
+}
+.ex .face {
+  position: relative;
+  display: block;
+  width: min(calc(100cqh - 62px), 80px, 17cqw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--w-track) 70%, var(--w-bg));
+  box-shadow: 0 0 0 2px var(--w-outline);
+}
+.ex li.back .face {
+  box-shadow: 0 0 0 2px var(--w-fill);
+}
+.ex li.empty .face {
+  background: none;
+  box-shadow: none;
+  border: 1.5px dashed var(--w-outline);
+}
+/* A character's side icon, cropped to the face: a little larger than its box and lower. */
+.ex .face-pic {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.ex .face-pic img {
+  object-fit: cover;
+  transform: scale(1.12) translateY(2%);
+}
+.ex .face-pic .sign {
+  width: 50%;
+  height: 50%;
+  color: var(--w-muted);
+}
+.ex .face-tick {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--w-done);
+  color: var(--w-gap);
+  box-shadow: 0 0 0 2px var(--w-gap);
+  /* The ticks land one after another, once, when the widget appears (--n is the slot's place). */
+  animation: stamp var(--t-state) var(--ease-stamp) backwards;
+  animation-delay: calc(min(var(--n, 0), 12) * var(--stagger) + 250ms);
+}
+.ex .face-tick .sign {
+  width: 64%;
+  height: 64%;
+  stroke-width: 2.6;
+}
+.ex .t {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--w-ink2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ex .t b {
+  display: block;
+  font-size: 13px;
+  color: var(--w-ink);
+}
+.ex li.back .t {
+  font-weight: 800;
+  color: var(--w-good);
+}
+/* Back is the label's element too, the one that glints (NotesWidgets.tsx), and keeps the line's size and colour. */
+.ex li.back .t b {
+  font-size: inherit;
+  color: inherit;
+}
+.ex li.empty .t {
+  color: var(--w-muted);
+}
+/* Two cells wide a face and its label have 66 pixels, and "in 19 h 58 min" at 12 pixels takes them all: it is set smaller. */
+@container (max-width: 400px) {
+  .ex .t {
+    font-size: 11px;
+  }
+  .ex .t b {
+    font-size: 12px;
+  }
+}
+@container (max-height: 100px) {
+  .ex .face {
+    width: min(calc(100cqh - 40px), 52px, 17cqw);
+  }
+  /* Out of sight and not out of the page: a screen reader still has what stands under each face. */
+  .ex .t {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+/*
+ * Daily notes (spec 9.8): four rows, each a sign or the game's picture, a label, a visual (pips or a bar) and a value.
+ * From three cells tall the labels are in full, the visual has a line of its own and, beside it, the period of a count
+ * and the times (.sub, .long); up to two cells tall the rows are compact, the visual beside the value and the labels
+ * short (.short). The rows stand in the middle of the body, with room for four of either kind at two cells tall.
+ */
+.daily {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  align-content: center;
+}
+.dn {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.dn li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 9px;
+  row-gap: 4px;
+}
+.dn .ic {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--w-icon);
+}
+.dn .ic .sign {
+  width: 19px;
+  height: 19px;
+}
+.dn .dn-pic {
+  width: 22px;
+  height: 22px;
+}
+.dn .lab {
+  grid-area: 1 / 2;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dn .val {
+  grid-area: 1 / 3;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+.dn .val b {
+  color: var(--w-ink);
+}
+.dn .val.unread {
+  color: var(--w-muted);
+}
+.dn .vis {
+  grid-area: 2 / 2 / 3 / 4;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dn .vis .bar {
+  flex: 1;
+  min-width: 0;
+}
+.dn .sub {
+  font-size: 12px;
+  color: var(--w-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dn .sub.good {
+  font-weight: 700;
+  color: var(--w-good);
+}
+.dn .short {
+  display: none;
+}
+@container (max-height: 230px) {
+  .dn {
+    gap: 14px;
+  }
+  .dn li {
+    grid-template-columns: 22px minmax(0, 1fr) auto auto;
+  }
+  .dn .vis {
+    grid-area: 1 / 3;
+  }
+  .dn .val {
+    grid-area: 1 / 4;
+  }
+  .dn .vis .bar {
+    flex: none;
+    width: 64px;
+  }
+  .dn .sub,
+  .dn .long {
+    display: none;
+  }
+  .dn .short {
+    display: inline;
+  }
+}
+
+/*
+ * Timers (spec 9.1): the ready timers, then the running ones, in groups headed by a small diamond and a gold hairline, and a
+ * row for each: the picture in the ring of its time passed, the name with the state under it, and Cleared, solid only where
+ * the timer is ready. The list is the centre and takes the body's room. Taller than that it scrolls inside it, with no
+ * scrollbar and its bottom edge fading out as the body's does (its own bottom padding is the strip that fades, so that the
+ * last row comes clear of it), and it is not a stop of the keyboard, as its rows hold the buttons. A button's ring of focus
+ * lies 4 pixels outside it, where a scroller clips it, so the list keeps 4 pixels free at its right. Only the widget roles
+ * are drawn with.
+ */
+.tms {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.tm-list {
+  min-height: 0;
+  margin: 0;
+  padding-top: 0;
+  padding-right: 4px;
+  padding-left: 0;
+  list-style: none;
+}
+.tm-group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 1px 0 2px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--w-muted);
+}
+.tm-group h4 {
+  margin: 0;
+  font: inherit;
+}
+.tm-row + .tm-group {
+  margin-top: 7px;
+}
+/* The ornament that heads a group (spec 5): a small diamond, and a gold hairline from it that fades out. */
+.tm-group::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  background: var(--w-icon);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+.tm-group::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, color-mix(in srgb, var(--w-icon) 60%, transparent) 0 55%, transparent);
+}
+.tm-row {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 10px;
+  padding: 4px 0;
+}
+.tm-row + .tm-row {
+  border-top: 1px solid var(--w-line);
+}
+.tm-row .dial {
+  --size: 38px;
+  grid-row: 1 / span 2;
+}
+.tm-name,
+.tm-state {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tm-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+.tm-state {
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.tm-state b {
+  color: var(--w-ink);
+}
+.tm-state .seal {
+  height: 18px;
+  margin-right: 4px;
+  font-size: 11.5px;
+}
+.tm-row .gb-btn {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
+
+/*
+ * One timer (spec 9.2): the timer's picture in a large dial, which is the centre, and beside it the time left in large
+ * figures, then Cleared at the end. The dial is as large as the frame allows, in the room of the heading and the body's
+ * paddings (46 pixels, 40 at one cell tall) and no more than 44% of the width. One cell tall there is no room for "Back
+ * in" or the clock time (the heading has it, OneTimerView). From two cells tall the text is beside the dial with the
+ * achievement and its count under it, and Cleared is under the text. A ready timer has the Ready seal and since when in
+ * place of "Back in", the time left and the clock time.
+ */
+.one {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 12px;
+}
+.one-dial {
+  display: grid;
+}
+.one .dial {
+  --size: min(calc(100cqh - 40px), 44cqw);
+}
+.one-tx {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+.one-lead {
+  font-size: 12.5px;
+  color: var(--w-muted);
+}
+.one-big {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.one-when {
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.one-ach {
+  display: none;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--w-ink2);
+}
+.one-ach b {
+  color: var(--w-ink);
+  font-variant-numeric: tabular-nums;
+}
+/*
+ * A count between the step buttons that change it (CountSteps): the Achievements page's buttons (achievements.css,
+ * .ach-step: round, 26 pixels, one size) in the widgets' colours. In One timer it is the count where Cleared does not
+ * change it, and in Pinned achievements the count of an achievement.
+ */
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.steps b {
+  white-space: nowrap;
+}
+.steps .ach-step {
+  flex: none;
+  border-color: var(--w-quiet);
+  background: transparent;
+  color: var(--w-ink);
+  font-size: 15px;
+}
+.one-steps {
+  margin-top: 2px;
+}
+.one .gb-btn {
+  grid-column: 3;
+}
+@container (max-height: 100px) {
+  .one-label,
+  .one-at {
+    display: none;
+  }
+}
+@container (min-height: 180px) {
+  .one {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    row-gap: 8px;
+  }
+  .one .dial {
+    --size: min(calc(100cqh - 46px), 44cqw);
+  }
+  .one-dial {
+    grid-row: 1 / span 2;
+  }
+  .one-tx {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+  }
+  .one-big {
+    font-size: 24px;
+  }
+  .one-ach {
+    display: block;
+  }
+  .one .gb-btn {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    justify-self: start;
+  }
+}
+/* Three cells across and three tall: the dial is 230 pixels across, and the text grows with it. */
+@container (min-width: 500px) and (min-height: 280px) {
+  .one-big {
+    font-size: 32px;
+  }
+  .one-lead,
+  .one-when {
+    font-size: 14px;
+  }
+  .one-ach {
+    margin-top: 10px;
+    font-size: 13.5px;
+  }
+  .one-steps {
+    margin-top: 4px;
+  }
+}
+
+/*
+ * Playtime (spec 9.10): a seal that says whether the game runs, and the length of the session in strong figures: the visual
+ * centre. With a width of three cells, or two cells tall, the last seven game days come as columns, beside the seal or
+ * under it. They are one series on a baseline in the progress gold, today's a deeper step of it toward the ink, with
+ * "Today" in bold under it, and a day with no play the track's; none is wider than 24 pixels and each has its day under
+ * it. Both golds reach 3:1 against the card (contrast.test.ts). The minutes of a day are in the heading while its column
+ * is pointed at or has the keyboard's focus (PlaytimeView). A column's focus ring is drawn inside it, clear of the body's
+ * fade. Only the widget roles are drawn with.
+ */
+.play {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.play-now {
+  flex: none;
+  display: grid;
+  justify-items: start;
+  gap: 5px;
+}
+.play-session {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.play-session .fig {
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.play-what {
+  font-size: 12.5px;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.play-week {
+  display: none;
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.pw-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 6px;
+}
+.pw-col:hover,
+.pw-col:focus-visible {
+  background: var(--w-plate);
+}
+.pw-col:focus-visible {
+  outline-offset: -2px;
+}
+.pw-plot {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.pw-bar {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  width: min(100%, 24px);
+  min-height: 2px;
+  margin-inline: auto;
+  border-radius: 4px 4px 0 0;
+  background: var(--w-fill);
+  animation: grow-h var(--t-enter) var(--ease-out) backwards;
+}
+.pw-col.today .pw-bar {
+  background: color-mix(in srgb, var(--w-fill) 55%, var(--w-ink));
+}
+.pw-col.none .pw-bar {
+  background: var(--w-track);
+}
+.pw-day {
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--w-muted);
+}
+.pw-col.today .pw-day {
+  font-weight: 800;
+  color: var(--w-ink);
+}
+/* Three cells across: the columns are beside the seal. */
+@container (min-width: 500px) {
+  .play-week {
+    display: grid;
+  }
+}
+/* Two cells across and two tall: the columns are under the seal. */
+@container (max-width: 499px) and (min-height: 180px) {
+  .play {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .play-week {
+    display: grid;
+  }
+}
+@container (min-height: 180px) {
+  .play-session .fig {
+    font-size: 34px;
+  }
+}
+
+/*
+ * Quick timer (spec 9.11): the presets as one row of buttons of one size, the visual centre. The time of the player's
+ * own is behind "Your own time" below three cells across and three tall, where its three fields open in place under the
+ * button; from there they are always shown and the button goes. A quick timer once started fills the widget instead
+ * (.qt-run, QuickTimer.tsx): one at a time, as the player asked after the look pass's check.
+ */
+.qt {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.qt-presets {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 64px));
+  gap: 6px;
+}
+.qt-presets .gb-btn {
+  padding: 0 4px;
+}
+.qt-own-toggle {
+  flex: none;
+  align-self: flex-start;
+}
+.w-body .qt-own-toggle.gb-btn[aria-expanded='true'] {
+  border-color: var(--w-btn);
+  background: var(--w-btn);
+  color: var(--w-btn-text);
+}
+.qt-own {
+  display: none;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 13px;
+}
+.qt-own.open {
+  display: flex;
+}
+.qt-part {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.qt-num {
+  width: 54px;
+  padding: 2px 6px;
+  border: 1px solid var(--w-border);
+  border-radius: 6px;
+  background: var(--w-bg);
+  color: var(--w-ink);
+  font: inherit;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* A quick timer that runs, or is ready, fills the widget: its dial as large as the room allows, the time left inside it. */
+.qt-run {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+.qt-run .dial {
+  --size: min(calc(100cqh - 112px), calc(100cqw - 28px), 240px);
+}
+.qt-run .dial-art {
+  color: var(--w-ink);
+}
+.qt-in {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+.qt-big {
+  font-size: max(16px, calc(var(--size) * .2));
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.qt-of {
+  font-size: max(11px, calc(var(--size) * .075));
+  color: var(--w-ink2);
+}
+.qt-side {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+/* Wider than tall, the dial stands beside the clock time and the button, and can be larger. */
+@container (min-aspect-ratio: 3 / 2) {
+  .qt-run {
+    flex-direction: row;
+    gap: 16px;
+  }
+  .qt-run .dial {
+    --size: min(calc(100cqh - 56px), 240px);
+  }
+  .qt-side {
+    justify-items: start;
+  }
+}
+.qt-at {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+}
+.qt-more {
+  margin: 0;
+  font-size: 12px;
+  color: var(--w-muted);
+}
+@container (min-width: 500px) and (min-height: 280px) {
+  .qt-own {
+    display: flex;
+  }
+  .qt-own-toggle {
+    display: none;
+  }
+}
+
+/*
+ * Stopwatch (spec 9.12): the time in strong tabular figures under a Running or Stopped seal, the visual centre, with the
+ * buttons beside it, all of one size. From two cells tall the laps are rows under them, the newest first, each with a bar
+ * of its own length (the time since the lap before) against the longest, that length as text, and "fastest" for the
+ * fastest lap; from three cells across each row also says the time the lap was taken at. The bars of the rows are one
+ * length, so each row keeps a place for "fastest". The laps scroll inside the body when they are taller than the room left.
+ */
+.watch {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.watch-top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.watch-now {
+  display: grid;
+  justify-items: start;
+  gap: 5px;
+}
+.watch-now .fig {
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.watch-buttons {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 64px;
+  gap: 6px;
+}
+.watch-laps {
+  display: none;
+  min-height: 0;
+  margin: 0;
+  padding-top: 0;
+  padding-inline: 0;
+  list-style: none;
+}
+.lap {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 50px 50px;
+  align-items: center;
+  column-gap: 10px;
+  padding: 4px 0;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+.lap + .lap {
+  border-top: 1px solid var(--w-line);
+}
+.lap-n {
+  color: var(--w-ink2);
+  white-space: nowrap;
+}
+.lap-t {
+  font-weight: 700;
+  text-align: right;
+}
+.lap-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-good);
+}
+.lap-at {
+  display: none;
+  color: var(--w-muted);
+  text-align: right;
+}
+@container (min-height: 180px) {
+  .watch-laps {
+    display: block;
+  }
+  .watch-now .fig {
+    font-size: 36px;
+  }
+}
+@container (min-width: 500px) {
+  .lap {
+    grid-template-columns: 46px minmax(0, 1fr) 50px 50px 56px;
+  }
+  .lap-at {
+    display: block;
+  }
+}
+@container (min-width: 500px) and (min-height: 280px) {
+  .watch-now .fig {
+    font-size: 44px;
+  }
+}
+
+/*
+ * Notes (spec 9.14): the field fills the body, on lightly ruled paper: a hairline under every line of text, drawn as the
+ * field's background, which scrolls with the text. The paper is the plate's colour and the hairlines the row rules'.
+ * The field's focus ring lies 2 pixels outside its box, where the body's bottom padding is the fade (.w-scroll), so the
+ * field stops 4 pixels short of the fade and the ring is drawn whole.
+ */
+.notes {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4px;
+}
+.notes-field {
+  --line-height: 20px;
+  flex: 1;
+  min-height: 0;
+  display: block;
+  width: 100%;
+  padding: 8px 9px;
+  border: 1px solid var(--w-border);
+  border-radius: 6px;
+  /*
+   * The hairlines first, in the content box and scrolling with it; under them the paper, over the whole padding box. The
+   * field's own colour is none: the paper is translucent on the overlay's dark panel, and a textarea is white by itself.
+   */
+  background-color: transparent;
+  background-image:
+    linear-gradient(to bottom, transparent calc(var(--line-height) - 1px), var(--w-line) calc(var(--line-height) - 1px)),
+    linear-gradient(var(--w-plate), var(--w-plate));
+  background-size: 100% var(--line-height), auto;
+  background-origin: content-box, padding-box;
+  background-clip: content-box, padding-box;
+  background-attachment: local, scroll;
+  color: var(--w-ink);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: var(--line-height);
+  resize: none;
+}
+
+/*
+ * The Pulls widgets (the Pulls plan, Task 12; the sketch pulls-widgets.html). Wishing now: the banner's art fills the
+ * body, its sign on the plate where there is none, and its name and line lie on a strip along the bottom that fades the
+ * art into the card's colour.
+ */
+.wn {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--w-plate);
+}
+.wn-art {
+  position: absolute;
+  inset: 0;
+  color: var(--w-icon);
+}
+.wn-art img {
+  object-fit: cover;
+}
+.wn-art .sign {
+  width: min(30cqh, 22cqw);
+  height: min(30cqh, 22cqw);
+  translate: 0 -14%;
+}
+.wn-over {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 18px 9px 7px;
+  overflow: hidden;
+  background: linear-gradient(transparent, var(--w-bg) 55%);
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wn-over b {
+  font-size: 14px;
+  color: var(--w-ink);
+}
+
+/* Pity: one wish's ring with its words beside it, or all four rings, each with its wish's name under it. */
+.py {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.py-ring {
+  flex: none;
+  width: min(calc(100cqh - 46px), 46cqw);
+}
+.py-num {
+  font-size: max(14px, 27cqi);
+  font-weight: 800;
+  line-height: 1;
+}
+.py-words {
+  min-width: 0;
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+}
+/* Beside a ring the seal's words may take two lines. */
+.py .seal {
+  height: auto;
+  min-height: 20px;
+  padding-block: 2px;
+  white-space: normal;
+}
+.py-line {
+  font-size: 12.5px;
+  color: var(--w-muted);
+}
+.py-all {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: center;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.py-one {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+/* Two by two: each ring half the body's height, less its name. */
+.py-all .ring {
+  width: min(calc((100cqh - 46px) / 2 - 20px), 22cqw);
+}
+.py-label {
+  font-size: 11.5px;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+/* From four cells wide, the four in a row. */
+@container (min-width: 700px) {
+  .py-all {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .py-all .ring {
+    width: min(calc(100cqh - 66px), 20cqw);
+  }
+}
+
+/* Savings: the pulls large in the widget's centre, on a soft gold glow, with the pulls by the next version's end on a
+   plate under them. */
+.sv {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 9px;
+  border-radius: 10px;
+  background: radial-gradient(closest-side, var(--w-five-wash), transparent 90%);
+  text-align: center;
+}
+.sv-big {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+.sv-gem {
+  width: 28px;
+  height: 28px;
+  color: var(--w-fill);
+}
+.sv-by {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--w-plate);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-ink2);
+}
+@container (min-height: 300px) {
+  .sv-big {
+    font-size: 40px;
+  }
+  .sv-gem {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Wishlist: a face, the name and whether the pulls reach it, each on its own plate, the list in the widget's centre (at
+   its top once it scrolls). */
+.wl {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  align-content: safe center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding-top: 2px;
+  padding-left: 0;
+  padding-right: 0;
+  list-style: none;
+}
+.wl li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 4px 14px 4px 4px;
+  border-radius: 10px;
+  background: var(--w-plate);
+}
+.wl-text {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wl-when {
+  color: var(--w-muted);
+}
+
+/*
+ * A face of the Wishlist and of Last pulls: the wiki's icon in its rarity's frame, gold for a 5★ and purple for a 4★,
+ * plain for a 3★; the sign of a character or a weapon where there is no icon.
+ */
+.wl-face,
+.lp-face {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  border: 2px solid var(--w-border);
+  border-radius: 6px 6px 11px 6px;
+  background: var(--w-plate);
+  color: var(--w-icon);
+}
+.wl-face.r5,
+.lp-face.r5 {
+  border-color: var(--w-fill);
+}
+.wl-face.r4,
+.lp-face.r4 {
+  border-color: var(--w-four);
+}
+.wl-face img,
+.lp-pic img {
+  object-fit: cover;
+}
+.wl-face .sign,
+.lp-pic .sign {
+  width: 62%;
+  height: 62%;
+}
+.wl-face {
+  width: 36px;
+  height: 36px;
+}
+
+/* Last pulls: the newest twelve as faces in the widget's centre, and the newest 5★ on a plate under them. */
+.lp {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  align-items: center;
+  gap: 10px;
+}
+.lp-faces {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lp-pic {
+  width: 100%;
+  height: 100%;
+}
+.lp-five {
+  max-width: 100%;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--w-plate);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@container (min-height: 300px) {
+  .lp-face {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Luck: the average 5★ pity large in the widget's centre, its label under it, and the 50/50s as a small bar, won then
+   lost, with their record. */
+.lk {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 3px;
+  text-align: center;
+}
+.lk-big {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+}
+.lk-what {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--w-muted);
+}
+.lk-bar {
+  display: flex;
+  gap: 2px;
+  width: min(150px, 80%);
+  height: 7px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.lk-won {
+  background: var(--w-fill);
+}
+.lk-lost {
+  background: var(--w-track);
+}
+.lk-fifty {
+  margin-top: 3px;
+  font-size: 13px;
+  color: var(--w-muted);
+}
+.lk-fifty b {
+  font-weight: 800;
+  color: var(--w-ink);
+}
+/* Wider, the figures take the room. */
+@container (min-width: 300px) {
+  .lk-big {
+    font-size: 48px;
+  }
+  .lk-what {
+    font-size: 13px;
+  }
+  .lk-fifty {
+    font-size: 14px;
+  }
+}
+
+/* Today (the Characters plan): today's resin as a bar, then the steps, each with a tick box (the Pinned achievements' own, .pn-tick),
+   a face where there is room, its task and its cost. Only the widget roles are drawn with. */
+.td {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.td-resin {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.td-bar {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--w-track);
+}
+.td-bar i {
+  display: block;
+  min-width: 2px;
+  background: var(--w-fill);
+}
+.td-bar i.done {
+  background: var(--w-done);
+}
+.td-bar i.left {
+  background: transparent;
+}
+.td-resin-text {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--w-ink2);
+  white-space: nowrap;
+}
+.td-list {
+  flex: 1;
+  min-height: 0;
+  margin: -4px -5px 0;
+  padding-top: 4px;
+  padding-inline: 5px;
+  list-style: none;
+  scroll-padding-top: 4px;
+}
+.td-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+.td-row + .td-row {
+  border-top: 1px solid var(--w-line);
+}
+.td-row:first-child {
+  padding-top: 0;
+}
+.td-row.done .td-text b {
+  text-decoration: line-through;
+  color: var(--w-muted);
+}
+.td-faces {
+  display: flex;
+  flex: none;
+}
+.td-face {
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+  border: 2px solid var(--w-fill);
+  border-radius: 50%;
+  background: var(--w-plate);
+  color: var(--w-ink2);
+}
+.td-face + .td-face {
+  margin-left: -10px;
+}
+.td-face .sign {
+  padding: 18%;
+}
+.td-text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  line-height: 1.2;
+}
+.td-text b {
+  overflow: hidden;
+  font-size: 13.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.td-text span {
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--w-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.td-cost {
+  flex: none;
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.td-cost.free {
+  color: var(--w-good);
+}

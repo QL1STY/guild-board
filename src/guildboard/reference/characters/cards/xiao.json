@@ -1,0 +1,36 @@
+{
+  "key": "xiao",
+  "name": "Xiao",
+  "element": "Anemo",
+  "weapon_type": "Polearm",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "elemental",
+  "goals": {"er": 130},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["vermillion-hereafter"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["long-night-s-oath"], "pieces": "4"},
+    {"sets": ["desert-pavilion-chronicle"], "pieces": "4"}
+  ],
+  "weapons": ["primordial-jade-winged-spear", "staff-of-homa", "calamity-queller", "fractured-halo", "deathmatch", "lithic-spear", "blackcliff-pole", "missive-windspear", "favonius-lance"],
+  "partners": ["Anemo", "Hydro", "Electro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources: Normal Attack > Burst > Skill, an ATK% Sands (Game8 also ER), an Anemo DMG Goblet (KQM also ATK%), a CRIT Circlet and Primordial Jade Winged Spear first, with Staff of Homa next. Sets differ: KQM gives 4pc Vermillion Hereafter, Marechaussee Hunter (on par) and Desert Pavilion Chronicle; Game8 gives Long Night's Oath and Vermillion Hereafter for its plunge build and Marechaussee Hunter for another. All four are kept, Vermillion Hereafter and Marechaussee Hunter first because both sources name them. His damage is Normal, Charged and Plunging Attacks during the Burst; his 1-hit line is on a curve of its own (1.79x at level 10), closest to the elemental table. KQM's 'Primordial Jade' weapon entry was not mapped by the draft; it is Primordial Jade Winged Spear. Neither source gives numeric stat goals. ER is KQM's range by teammate (100-140 with Sucrose or Xianyun, 110-135 with Jean, higher with no Faruzan); 130 is used for a common Faruzan-less team. Partners are inferred; the sources give no team list.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/xiao-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297527", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/51", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,18 @@
+{
+  "key": "prune", "name": "Prune", "element": "Anemo", "weapon_type": "Catalyst", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 205},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["atk_pct"], "circlet": ["atk_pct"]},
+  "weights": {"atk_pct": "wants", "er": "wants", "atk": "some", "cr": "none", "cd": "none", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["viridescent-venerer"], "pieces": "4"}, {"sets": ["celestial-gift"], "pieces": "4"}, {"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}],
+  "weapons": ["skyward-atlas", "oathsworn-eye", "flowing-purity", "hakushin-ring", "thrilling-tales-of-dragon-slayers", "favonius-codex"],
+  "partners": ["Anemo", "Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Anemo sub-DPS and support; her Skill and Burst scale with ATK on the elemental curve. Both sources put the Burst first and the Skill second (KQM also puts character level far above the Burst), so the damage talent is the Burst. They agree on 4pc Viridescent Venerer as best (KQM then Celestial Gift, Scroll and Noblesse Oblige; Game8 then A Day Carved From Rising Winds and Noblesse Oblige), ATK% or ER on the Sands, ATK% on the Goblet and Circlet. The weapons differ: Game8's best is Skyward Atlas, KQM's Oathsworn Eye; both are listed with the catalysts both name. Neither source gives stat goals; the only goal is ER, KQM's 185-205% for double Anemo at C0 (150-170% at C1-C5, 140-160% at C6; solo Anemo 245-285%).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/prune-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/590328", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

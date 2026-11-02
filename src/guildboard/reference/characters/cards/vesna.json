@@ -1,0 +1,34 @@
+{
+  "key": "vesna",
+  "name": "Vesna",
+  "element": "Anemo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 3000, "cr": 60, "cd": 180, "er": 135, "em": 180},
+  "mains": {"sands": ["atk_pct"], "goblet": ["atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["scarlet-proof"], "pieces": "4"},
+    {"sets": ["viridescent-venerer"], "pieces": "4"}
+  ],
+  "weapons": ["beyond-the-chrysalis", "whitelake-frostfeather", "azurelight", "emberwell", "heretic-s-molten-blade", "absolution", "new-bough"],
+  "partners": ["Cryo", "Anemo", "Electro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "KQM has no guide for Vesna (a Stellar-Swirl DPS from the newest version), so the card rests on Game8 (Best Stellar-Swirl DPS Build) and genshin-builds.com (checked 2026-10-30), which agree on every point: 4pc Scarlet Proof first and Viridescent Venerer second, ATK% Sands and Goblet, a CRIT Circlet, Skill > Burst > Normal Attack, Beyond the Chrysalis first and the same next four swords, and the goals ATK 2,000-3,000, CR 50-60, CD 180 or above, ER 100-135 (Burst skipped every other rotation) and EM 120-180. Game8 and genshin-builds read alike, so this is close to one voice; confidence is medium for that reason. Goals use the upper ends. The damage is the Skill's Windborne Sword lines and the Burst's Spirit Blade (both on the elemental curve, 1.80 at level 10). Absolution and New Bough are genshin-builds' extra swords. Partners are inferred from Stellar-Swirl (Cryo and Anemo unit counts in her passive, Electro for the trigger).",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://game8.co/games/Genshin-Impact/archives/606901", "checked": "2026-10-29"},
+    {"url": "https://genshin-builds.com/en/character/vesna", "checked": "2026-10-30"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/11661", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

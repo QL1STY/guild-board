@@ -1,0 +1,408 @@
+/* The frame. Carried over from the approved mockup; the badge, banner, spinner and tooltip are new. */
+.gb {
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+  min-width: 1040px;
+  min-height: 100vh;
+}
+
+.gb.bare { grid-template-columns: 1fr; }
+.gb-rail {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 0 12px;
+  background: var(--rail);
+  color: var(--rail-text);
+  /* Above the page, so that the profile panel, which hangs out over it, is not covered by its positioned parts. */
+  z-index: 6;
+}
+.gb-brand { padding: 0 16px 12px; font-weight: 800; font-size: 17px; letter-spacing: .02em; color: var(--gold); }
+.gb-nav {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 16px 8px 13px;
+  border-left: 3px solid transparent;
+  color: var(--rail-muted);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+}
+a.gb-nav:hover { color: var(--rail-text); }
+.gb-nav.on { color: var(--rail-text); background: rgba(211, 188, 142, .16); border-left-color: var(--gold); font-weight: 700; }
+/* Each page's sign (look pass spec 14.1) draws in the item's colour: the rail's muted one, brighter on hover, and gold on the
+   current page. */
+.gb-nav .sign { flex: none; width: 18px; height: 18px; }
+.gb-nav.on .sign { color: var(--gold); }
+.gb-foot { margin-top: auto; padding: 10px 16px 0; font-size: 11.5px; color: var(--rail-muted); border-top: 1px solid rgba(255, 255, 255, .12); }
+
+/* The top bar, the banners, the tray hint and every page share one maximum width on the 2,560-pixel dashboard (spec
+   12.1): 1,912 pixels, the Achievements page's 300 + 12 + 1,600, inside the padding. Left-aligned. In a window 1,440
+   pixels wide the main area has 1,250, so the cap binds only on wider screens. */
+.gb-main { min-width: 0; max-width: 1952px; padding: 16px 20px 20px; }
+/* The Board shows more widgets side by side in a wider window, never wider ones (spec 13.2): it takes the whole width,
+   and only its own content does. The top bar, the banners and the tray hint keep the frame's 1,912 pixels. */
+.gb-main.wide { max-width: none; }
+.gb-main.wide > :not(.board) { max-width: 1912px; }
+/* A page change (look pass spec 14.2): the page's content fades in once, over 160 ms, and then its own opening motion
+   plays. The top bar and the banners are not part of it, and the rail is outside it: they stay still. */
+.gb-main > :not(.gb-top, .gb-banner, .gb-hint, .note-host) { animation: fade-in 160ms var(--ease-out); }
+/* A page whose rows and tables are made for the 1,250 pixels of a window 1,440 pixels wide keeps 1,440 at most, as
+   Settings does (settings.css): Backlog and Stats. */
+.gb-page { max-width: 1440px; }
+.gb-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 32px; margin-bottom: 12px; }
+.gb-title { font-size: 24px; font-weight: 800; }
+.gb-title::before { content: '✦'; margin-right: 8px; color: #B8923F; font-size: 16px; vertical-align: 3px; }
+.gb-grow { flex: 1; }
+.gb-badge {
+  padding: 1px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--ink2);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+/* On the page's own background, where only --ink reaches 4.5:1 for small text (contrast.test.ts). */
+.gb-status { font-size: 12.5px; color: var(--ink); }
+.gb-status b { color: var(--ink); font-weight: 700; }
+
+.gb-btn {
+  padding: 5px 15px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--button);
+  color: var(--button-text);
+  font-weight: 700;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+/* A button that sends nothing for now looks the same whether it is disabled or aria-disabled. aria-disabled keeps the
+   focus, where the focus may be on the button: a disabled one drops it to the page. */
+.gb-btn:disabled,
+.gb-btn[aria-disabled='true'] { opacity: .6; cursor: default; }
+.gb-btn.quiet { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+.gb-link { padding: 0; border: 0; background: none; color: var(--ink2); font-size: 12px; text-decoration: underline; }
+
+/*
+ * A button answers the pointer (look pass spec 14.2): its colour changes on hover, over --t-hover, and a press shrinks it
+ * to 97%, over --t-press. Cards do not lift or scale on hover. The change of colour is a darkening, a filter, which
+ * serves a solid button on parchment and on the overlay's dark panel alike; a button with no fill of its own also takes
+ * a faint plate of its text's colour. A button that cannot be used for now (disabled, or aria-disabled) keeps its look.
+ */
+:is(.gb-btn, .gb-seg button, .ach-toggle, .ach-step, .w-tool, .gb-sbtn) {
+  transition:
+    background-color var(--t-hover), border-color var(--t-hover), color var(--t-hover), filter var(--t-hover),
+    transform var(--t-press) var(--ease-out);
+}
+:is(.gb-btn, .gb-seg button, .ach-toggle, .ach-step, .w-tool, .gb-sbtn):not(:disabled, [aria-disabled='true']):hover {
+  filter: brightness(.9);
+}
+:is(.gb-btn.quiet, .gb-seg button:not(.on), .ach-toggle:not([aria-pressed='true'], [aria-expanded='true']), .ach-step, .w-tool):not(:disabled, [aria-disabled='true']):hover {
+  background-color: color-mix(in srgb, currentColor 8%, transparent);
+}
+:is(.gb-btn, .ach-toggle, .ach-step, .w-tool, .gb-sbtn):not(:disabled, [aria-disabled='true']):active {
+  transform: scale(.97);
+}
+.gb-hint { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; font-size: 12.5px; color: var(--ink2); }
+
+.gb-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--hairline);
+}
+.gb-h { margin: 0 0 6px; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+/* The one divider ornament (look pass spec 5): a gold hairline from a small diamond. A section heading on a page takes the
+   class and keeps its own size and weight; the diamond comes before its words and the hairline after them, fading out. */
+.gb-section-h { display: flex; align-items: center; gap: 12px; }
+.gb-section-h::before { content: ''; flex: none; width: 7px; height: 7px; transform: rotate(45deg); background: var(--w-icon); }
+.gb-section-h::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--gold) 0 60%, transparent); }
+.gb-seg { display: inline-flex; overflow: hidden; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 12.5px; }
+.gb-seg button { padding: 4px 13px; border: 0; background: none; color: var(--ink2); }
+.gb-seg button.on { background: var(--button); color: var(--button-text); font-weight: 700; }
+/* The ring inside the option: the pill clips what lies outside it (overflow: hidden). */
+.gb-seg button:focus-visible { outline-offset: -2px; }
+.gb-empty { padding: 18px 16px; color: var(--ink2); }
+.gb-note { margin-top: 7px; font-size: 11.5px; color: var(--muted); }
+.gb-note a { color: var(--ink2); }
+
+.gb-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  background: var(--tint);
+  font-size: 13.5px;
+}
+.gb-banner.info { border-left-color: var(--button); }
+.gb-banner-text { flex: 1; }
+
+/* Shown only while a sync runs. */
+.gb-spin {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: -1px;
+  border: 2px solid rgba(241, 234, 219, .4);
+  border-top-color: var(--button-text);
+  border-radius: 50%;
+  animation: gb-spin .8s linear infinite;
+}
+@keyframes gb-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .gb-spin { animation: none; } }
+
+/* Exact values on hover and on keyboard focus: any element with a data-tip attribute. */
+[data-tip] { position: relative; }
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  z-index: 5;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--rail-text);
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  white-space: nowrap;
+  pointer-events: none;
+}
+[data-tip].tip-start:hover::after,
+[data-tip].tip-start:focus-visible::after { left: 0; transform: none; }
+[data-tip].tip-end:hover::after,
+[data-tip].tip-end:focus-visible::after { left: auto; right: 0; transform: none; }
+
+/*
+ * The profile card in the rail, the plate in the top right and their drop-downs (top bar and undo design, sections 3 to
+ * 5), from the accepted mockup's arrangement B. Nothing here moves while a number counts: the figures use digits of one
+ * width, the sync part has one width in every state, and the Resin part keeps room for its longest "full in".
+ */
+
+/* The card: the picture in a gold ring with the rank on a tab at its foot, the name, and the UID with the server. */
+.gb-who-card { position: relative; margin: 2px 10px 10px; }
+.gb-who {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 8px;
+  border: 1px solid color-mix(in srgb, var(--gold) 22%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--rail-text) 6%, transparent);
+  color: inherit;
+  text-align: center;
+  transition: background-color var(--t-hover);
+}
+.gb-who:hover { background: color-mix(in srgb, var(--rail-text) 10%, transparent); }
+.gb-who:focus-visible { outline-color: var(--rail-text); }
+.gb-who .gb-who-name {
+  max-width: 100%;
+  margin-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--rail-text);
+}
+.gb-who small { color: var(--rail-muted); font-size: 11.5px; line-height: 1.25; }
+/* One line, measured; a line that does not fit takes a line for the UID and one for the server (ProfileCard.tsx). */
+.gb-who .gb-who-line { max-width: 100%; overflow: hidden; white-space: nowrap; }
+.gb-who .gb-who-line.split { display: grid; overflow: visible; }
+.gb-ava { position: relative; flex: none; width: 40px; height: 40px; }
+.gb-ava .pic {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, var(--r0), var(--track));
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--r1);
+  color: var(--ink2);
+  overflow: hidden;
+}
+.gb-ava .pic img { object-fit: cover; }
+.gb-ava .pic .sign { width: 58%; height: 58%; }
+.gb-ava .gb-ar {
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  transform: translateX(-50%);
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 14px;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1.5px var(--surface);
+}
+.gb-who .gb-ava { width: 56px; height: 56px; margin-bottom: 4px; }
+.gb-who .gb-ava .pic { box-shadow: 0 0 0 2px var(--rail), 0 0 0 4px var(--r1); }
+.gb-who .gb-ava .gb-ar { bottom: -6px; font-size: 10.5px; box-shadow: 0 0 0 1.5px var(--rail); }
+
+/* The plate: parchment like the Pulls ledger, its parts divided by thin rules. It and its panel move under the title as
+   one piece when the top bar wraps. */
+.gb-plate-wrap { position: relative; z-index: 4; margin-left: auto; }
+.gb-plate {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 56px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ledger-light) 0%, var(--surface) 70%);
+  box-shadow:
+    inset 0 0 0 3px var(--ledger-light),
+    inset 0 0 0 4px var(--hairline),
+    0 8px 18px -14px color-mix(in srgb, var(--ink) 60%, transparent);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  /* The least width of the sync part: it fits the everyday states, "Not synced yet", "Not connected", "daily limit
+     reached", "reading HoYoLAB" and "next try at 02:45", beside the button, with a few pixels to spare (measured at the
+     stylesheet's fonts, the longest 95 pixels of text). A warning's text and button are wider and the part grows to them. */
+  --sync-w: 176px;
+}
+.gb-plate-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+.gb-plate-cell + .gb-plate-cell::before { content: ''; position: absolute; left: 0; top: 13px; bottom: 13px; width: 1px; background: var(--border); }
+a.gb-plate-cell, .gb-plate-sync { transition: background-color var(--t-hover); }
+a.gb-plate-cell:hover, .gb-plate-sync:has(.gb-sync-text:hover) { background: color-mix(in srgb, var(--fill) 7%, transparent); }
+.gb-plate-cell:focus-visible, .gb-sync-text:focus-visible { outline-offset: -3px; }
+.gb-two { display: grid; line-height: 1.12; }
+.gb-two b { font-size: 18px; font-weight: 800; white-space: nowrap; }
+.gb-two b small { font-size: 12.5px; font-weight: 500; color: var(--muted); }
+.gb-two > small { font-size: 12px; color: var(--muted); white-space: nowrap; }
+/* The picture of the game, or its sign where the cache has none; Resin's sign is drawn in Resin's blue, the gem's in gold. */
+.gb-plate-ico { width: 24px; height: 24px; }
+.gb-resin-ico { color: var(--resin); }
+.gb-primo-ico { color: var(--fill); }
+/* "full in 23 h 59 min" is the longest the line gets in a day (a full Resin takes under 27 hours): the part keeps room for
+   it, so that a minute turning into two digits does not move the plate. */
+.gb-plate-resin .gb-two { min-width: 7.6em; }
+
+/* The sync part: one width in the everyday states, whatever their words, and wider only for a warning that needs the room.
+   The button keeps the plate's right edge and the text keeps to the button, so the room the shorter states leave is on the
+   far side of the text, by the divider, never at the plate's edge. */
+.gb-plate-sync { flex: none; justify-content: flex-end; gap: 11px; min-width: var(--sync-w, 176px); padding: 0 14px 0 12px; }
+.gb-sync-text { min-width: 0; padding: 0; border: 0; background: none; color: inherit; text-align: right; }
+.gb-sync-text .gb-state { font-size: 14px; font-weight: 800; white-space: nowrap; }
+.gb-dot { display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; vertical-align: 1px; background: var(--done); }
+.gb-dot.busy { background: var(--fill); animation: gb-pulse 1.2s ease-in-out infinite; }
+.gb-dot.grey { background: var(--outline); }
+@keyframes gb-pulse { 50% { opacity: .35; } }
+
+/* The round Sync button; the gold ring round it is the wait before the next manual sync, full when the wait starts. */
+.gb-sbtn {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--button);
+  color: var(--button-text);
+}
+.gb-sbtn[aria-disabled='true'] { background: color-mix(in srgb, var(--button) 55%, var(--surface)); cursor: default; }
+.gb-sbtn .sign { width: 20px; height: 20px; }
+.gb-sbtn.spin .sign { animation: gb-spin 1.1s linear infinite; }
+.gb-sbtn .gb-sbtn-ring { position: absolute; inset: -5px; width: 48px; height: 48px; transform: rotate(-90deg); pointer-events: none; }
+.gb-sbtn .gb-sbtn-ring circle { fill: none; stroke-width: 2.5; }
+.gb-sbtn-ring .gb-sbtn-track { stroke: var(--track); }
+/* No transition: the wait changes once a second, by under a pixel of the ring, and a transition begun every second would
+   never end, which the pages' tests of "nothing loops" (and a reader who asks for less motion) rule out. */
+.gb-sbtn-ring .gb-sbtn-arc { stroke: var(--fill); stroke-linecap: round; }
+
+/* The amber states: the part turns pale amber with a warmer outline inside the plate's frame, and the action takes the
+   button's place. It is as wide as the sync part at least, margins included, and grows to its text and action: the plate
+   moves only when a warning appears or clears, never while a number counts. */
+.gb-plate-sync.gb-need {
+  min-width: calc(var(--sync-w, 176px) - 10px);
+  margin: 5px;
+  padding: 0 5px 0 10px;
+  gap: 6px;
+  border-radius: 10px;
+  background: var(--warn-soft);
+  box-shadow: inset 0 0 0 1px var(--warn-line);
+}
+.gb-plate-sync.gb-need::before { display: none; }
+.gb-warn-ico { flex: none; color: var(--fill); }
+.gb-act { padding: 6px 12px; font-size: 13px; }
+
+/* The drop-downs: the plate's parchment, under the plate on the right and beside the card in the rail. */
+.gb-pop {
+  position: absolute;
+  z-index: 5;
+  width: 290px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ledger-light), var(--surface));
+  box-shadow:
+    inset 0 0 0 3px var(--ledger-light),
+    inset 0 0 0 4px var(--hairline),
+    0 18px 34px -18px color-mix(in srgb, var(--ink) 60%, transparent);
+  color: var(--ink);
+  animation: gb-drop var(--t-state) var(--ease-out);
+}
+@keyframes gb-drop { from { opacity: 0; transform: translateY(-6px); } }
+.gb-pop-plate { top: calc(100% + 10px); right: 0; }
+.gb-pop-rail { top: 0; left: calc(100% + 10px); }
+.gb-pop h2 { font-size: 18px; font-weight: 800; }
+.gb-pop-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.gb-pop-head small { color: var(--muted); }
+.gb-pop-detail { margin: 6px 0 4px; font-size: 14px; line-height: 1.4; color: var(--ink2); }
+.gb-pop-rows { margin: 8px 0 0; }
+.gb-pop-row { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px solid var(--hairline); font-size: 14px; }
+.gb-pop-row:first-child { border-top: 0; }
+.gb-pop-row dt { color: var(--muted); }
+.gb-pop-row dd { margin: 0; font-weight: 700; text-align: right; }
+.gb-pop-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+/* The profile panel's two buttons, Your profile and Account settings, are one size. */
+.gb-pop-rail .gb-pop-acts .gb-btn { flex: 1 1 0; text-align: center; }
+
+/* The profile panel's gift codes tile and links (the gift codes design, section 1). */
+.gb-pop-sec { margin-top: 12px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--gold-ink); }
+.gb-pop-codes {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; padding: 9px 12px;
+  background: var(--tint); border: 1px solid var(--border); border-radius: 10px;
+}
+.gb-pop-codes b { display: block; font-size: 20px; font-weight: 800; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.gb-pop-codes small { display: block; font-size: 12px; color: var(--muted); }
+.gb-pop-links { margin: 6px 0 0; padding: 0; list-style: none; }
+.gb-pop-links li + li { border-top: 1px solid var(--hairline); }
+.gb-pop-links button {
+  display: flex; justify-content: space-between; width: 100%; padding: 6px 0; border: 0; background: none;
+  color: var(--ink); font: inherit; font-size: 13.5px; text-align: left;
+}
+.gb-pop-links button:hover { text-decoration: underline; }
+.gb-pop-links i { font-style: normal; color: var(--gold-ink); }

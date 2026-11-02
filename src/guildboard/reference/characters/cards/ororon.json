@@ -1,0 +1,19 @@
+{
+  "key": "ororon", "name": "Ororon", "element": "Electro", "weapon_type": "Bow", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 60, "cd": 150, "er": 130},
+  "mains": {"sands": ["atk_pct", "er", "em"], "goblet": ["dmg", "atk_pct", "em"], "circlet": ["cr", "cd", "em"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["instructor"], "pieces": "4"}],
+  "weapons": ["elegy-for-the-end", "aqua-simulacra", "the-first-great-magic", "amos-bow", "the-stringless", "chain-breaker"],
+  "partners": ["Electro", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Electro sub-DPS that scales with ATK. The sources differ on the talent order: KQM puts character level first, then the Burst, then the Skill; Game8 puts the Skill first. The card follows KQM and takes the Burst (Dark Voices Echo's Ritual DMG, 174.4% ATK at level 1) as the damage talent, with the Skill second; this is a judgment, since Night's Sling (197.6%) is also a strong hit. They agree on 4pc Scroll of the Hero of Cinder City as best, ATK% or ER on the Sands, an Electro DMG Goblet and a CRIT Circlet; Game8's Hyperbloom build puts EM on every slot, which the card keeps as the last option. Elegy for the End is first in both, with Amos' Bow, Aqua Simulacra and The Stringless on both lists. A third source (genshin.gg, 2026-10-30) agrees on the sets (Scroll, Noblesse Oblige, Emblem of Severed Fate), an ATK% or ER Sands, an Electro DMG Goblet and a CRIT Circlet; its weapons are Polar Star, The First Great Magic, Thundering Pulse and Aqua Simulacra, so The First Great Magic is added. Goals are Game8's: ATK 2,000 or above, CRIT Rate 60% or above, CRIT DMG 150% or above, ER 110-130% with double Electro (130 used; 160% or more solo Electro, and KQM gives 130-145% with Neuvillette).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/ororon-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/461993", "checked": "2026-10-29"},
+    {"url": "https://genshin.gg/characters/ororon/", "checked": "2026-10-30"}
+  ],
+  "checked": "2026-10-30"
+}

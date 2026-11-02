@@ -1,0 +1,813 @@
+/*
+ * The Pulls page (the Pulls design; the accepted mockup pulls-chosen.html): the night strip with the banners, the four
+ * pity cards, the savings beside the planner, then the history. It keeps .gb-page's 1,440 pixels and has no zoom of its
+ * own. Nothing moves continuously (spec 3): the rings fill once (marks.css) and the rows come in once, one after
+ * another; under prefers-reduced-motion both are drawn at once (motion.css).
+ */
+.pl-page {
+  display: grid;
+  gap: 12px;
+}
+
+/* A history of another game account than the HoYoLAB login's: a note above the strip. */
+.pl-uid {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--button);
+  border-radius: 10px;
+  background: var(--tint);
+  font-size: 13.5px;
+}
+
+/* ---------- The night strip: the mockup's sky, still, drawn with the dark roles (.on-dark) ---------- */
+.pl-sky {
+  padding: 12px 14px 14px;
+  border-radius: 12px;
+  background: radial-gradient(ellipse at 30% 0%, #3D4A78 0%, #1D2440 55%, #121628 100%);
+  color: var(--w-ink);
+}
+/* Not in capitals, as the mockup's is: the time left's "d" and "h" would read as letters of their own. */
+.pl-sky-title {
+  margin-bottom: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.pl-sky-empty {
+  color: var(--w-ink2);
+  font-size: 13.5px;
+}
+/* One banner a column, as many as there are. */
+.pl-banners {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pl-banner {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 8;
+  border: 1px solid var(--w-border);
+  border-radius: 8px;
+  background: var(--w-gap);
+}
+/* The art fills the card; where there is none, its sign stands in the middle of the plate, clear of the words. */
+.pl-art {
+  position: absolute;
+  inset: 0;
+  color: var(--w-icon);
+}
+.pl-art img {
+  object-fit: cover;
+}
+.pl-art .sign {
+  width: 26%;
+  height: 26%;
+  translate: 0 -16%;
+}
+.pl-over {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 18px 10px 8px;
+  background: linear-gradient(transparent, var(--w-shade));
+}
+.pl-over b {
+  display: block;
+  font-size: 14.5px;
+}
+.pl-over span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+}
+
+/* ---------- The pity cards: four in a row, each a ring with its words under it ---------- */
+.pl-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.pl-pity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 12px 14px 14px;
+  text-align: center;
+}
+.pl-pity .gb-h {
+  align-self: stretch;
+  margin: 0;
+}
+.pl-ring {
+  width: 104px;
+  margin: 6px 0 5px;
+}
+/* The inside of the ring is measured in the ring's own width (marks.css). */
+.pl-num {
+  font-size: 30cqi;
+  font-weight: 800;
+  line-height: 1;
+}
+.pl-num.least {
+  max-width: 64cqi;
+  font-size: 15cqi;
+  line-height: 1.1;
+}
+.pl-of {
+  font-size: 12cqi;
+  color: var(--muted);
+}
+.pl-soft {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.pl-pity .seal {
+  margin-top: 4px;
+}
+.pl-path {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--ink2);
+}
+/* Set… keeps the bottom of its card, whatever the card above it says, and some room under the words. */
+.pl-pity .pl-set {
+  margin-top: auto;
+}
+.pl-pity > :nth-last-child(2) {
+  margin-bottom: 8px;
+}
+
+/*
+ * ---------- Savings beside the planner ----------
+ * The two end level (the second pass, spec 3.4). The ledger is the taller and sets the row's height; the planner's own
+ * size is left out of it (contain: size), so that it takes the ledger's height, whatever it holds: its wishlist
+ * scrolls when it holds more, and the form under it keeps the card's foot.
+ */
+.pl-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+.pl-planner,
+.pl-history {
+  padding: 12px 16px 14px;
+}
+.pl-planner {
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  contain: size;
+}
+
+/*
+ * ---------- Savings, the ledger (the second pass; the accepted mockup savings-chosen.html) ----------
+ * Parchment made premium: a card lit from its top, a thin inner frame, a small gold ornament in each top corner and a
+ * gold double rule between its parts. Its type is the mockup's, drawn at 16 pixels, with the balance in 54.
+ */
+.pl-ledger {
+  position: relative;
+  padding: 18px 22px;
+  background: linear-gradient(180deg, var(--ledger-light) 0%, var(--surface) 60%);
+  box-shadow: inset 0 0 0 4px var(--ledger-light), inset 0 0 0 5px var(--hairline);
+  font-size: 16px;
+}
+.pl-corner {
+  position: absolute;
+  top: 9px;
+  width: 34px;
+  height: 34px;
+  opacity: .8;
+  pointer-events: none;
+}
+.pl-corner.tl {
+  left: 9px;
+}
+.pl-corner.tr {
+  right: 9px;
+  transform: scaleX(-1);
+}
+.pl-corner path {
+  fill: none;
+}
+.pl-corner .c1 {
+  stroke: var(--r1);
+  stroke-width: 1.2;
+}
+.pl-corner .c2 {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.pl-corner circle {
+  fill: var(--r1);
+}
+/* The head keeps clear of the ornaments. */
+.pl-lhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 30px;
+}
+.pl-ledger .gb-h {
+  margin: 0;
+  font-size: 12.5px;
+  letter-spacing: .09em;
+  color: var(--ink2);
+}
+.pl-quiet {
+  color: var(--muted);
+}
+/* The balance: the game's primogem, the pulls now, and what they are made of. */
+.pl-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0 2px;
+}
+.pl-hero .pl-primo {
+  width: 40px;
+  height: 40px;
+  color: var(--fill);
+}
+.pl-hero b {
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+.pl-unit {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink2);
+}
+.pl-sub {
+  margin-bottom: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+/* With no balance set, the form stands in the balance's place. */
+.pl-open {
+  margin: 10px 0;
+  text-align: center;
+}
+.pl-open .pl-line {
+  color: var(--muted);
+}
+.pl-open .pl-form {
+  justify-content: center;
+}
+/* The two switches: a pill each, the picture muted while it is off, a gold edge and the full colour while it is on. */
+.pl-owned {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 0 6px;
+}
+/* The switch itself, .pl-switch, is in switch.css (Switch.tsx), which Settings uses too. */
+.pl-centred {
+  text-align: center;
+}
+/* The gold double rule: two thin lines about 6 pixels apart. */
+.pl-rule {
+  height: 6px;
+  margin: 10px 0 12px;
+  border-block: 1px solid var(--r1);
+  opacity: .7;
+}
+/* The next version: its title and its primogems, "everything it offers" quietly under them, then a row for each source. */
+.pl-version {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.pl-version strong {
+  font-size: 17px;
+}
+.pl-tab {
+  font-variant-numeric: tabular-nums;
+}
+.pl-offers {
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.pl-sources {
+  display: grid;
+  row-gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-variant-numeric: tabular-nums;
+}
+.pl-source {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 16px;
+}
+.pl-source-name {
+  color: var(--ink2);
+}
+.pl-source-val {
+  text-align: right;
+}
+/* A switch that is off keeps its row, greyed with the amount struck through: what it would add. */
+.pl-source.off .pl-source-name,
+.pl-source.off .pl-source-val {
+  color: var(--deemph);
+}
+.pl-source.off .pl-source-val {
+  text-decoration: line-through;
+  text-decoration-color: var(--axis);
+}
+.pl-source .pl-mini {
+  margin-left: 10px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pl-source-form {
+  margin: 2px 0 6px;
+}
+.pl-source-form .pl-form {
+  margin-top: 0;
+}
+/* The total, in the gold ink; what the unfinished achievements would add is said under it, outside it. */
+.pl-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 18px;
+}
+.pl-total b {
+  font-size: 24px;
+  color: var(--gold-ink);
+}
+.pl-outside {
+  margin-top: 1px;
+  font-size: 14px;
+  text-align: right;
+}
+/* The forecast to a day and Set the balance, under the ledger's own lines. */
+.pl-foot {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hairline);
+}
+.pl-forecast {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 14px;
+}
+.pl-note {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.pl-ledger .pl-set {
+  margin: 10px 8px 0 0;
+}
+
+/*
+ * The planner's banners and the wishlist: a face, then the name and its day, then the chance under them. The card has the
+ * height of the ledger, and the room it has over its rows is shared by them all, an equal share for each row (flex: 1 1 0,
+ * so that a row never gets less than its words need), the share of each list set by its number of rows (the markup's
+ * flex-grow): no band of nothing lies between the banners and the wishlist. A row keeps its words in the middle of its
+ * share, a hairline between the rows.
+ */
+.pl-list {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.pl-list > li {
+  flex: 1 1 0;
+}
+.pl-list > li + li {
+  border-top: 1px solid var(--hairline);
+}
+.pl-plan,
+.pl-wish {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-content: center;
+  align-items: center;
+  column-gap: 9px;
+  padding-block: 5px;
+}
+.pl-plan .pl-face {
+  grid-row: span 2;
+}
+.pl-chance {
+  grid-column: 2 / -1;
+  font-size: 13px;
+  color: var(--ink2);
+}
+.pl-chance.good {
+  color: var(--good);
+  font-weight: 700;
+}
+.pl-muted {
+  color: var(--muted);
+}
+/* The banners keep their words' height at least; the wishlist, which holds the form, may give room up to its entries'. */
+.pl-plans {
+  flex-shrink: 0;
+}
+.pl-wishlist {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  flex-basis: auto;
+  min-height: 0;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid var(--hairline);
+}
+/*
+ * The widgets' scroll (widgets.css, .w-scroll), which a scroll anywhere takes: no scrollbar and a fade at the foot where
+ * entries are cut off. --fade is the strip that fades, which a widget's body sets. The room at the right is for the focus
+ * ring of the last column's Remove, which the scroll would cut.
+ */
+.pl-wishes {
+  --fade: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding-right: 4px;
+}
+/* The entries fill the room the scroll has, and stand taller than it where they are more. */
+.pl-wishes .pl-list {
+  min-height: 100%;
+  margin-top: 0;
+}
+/* The words that stand for no entries take the room, in its middle. */
+.pl-hint {
+  display: grid;
+  align-content: center;
+  min-height: 100%;
+}
+.pl-wishfoot {
+  flex: none;
+}
+
+/* A face: the wiki's icon in a round frame, or the sign of a character or a weapon. */
+.pl-face {
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--w-icon);
+}
+.pl-face img {
+  object-fit: cover;
+}
+.pl-face .sign {
+  width: 62%;
+  height: 62%;
+}
+
+/* ---------- The forms: on the tint, the fields over their words ---------- */
+.pl-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 10px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--tint);
+  font-size: 13px;
+  text-align: left;
+}
+.pl-pity .pl-form {
+  align-self: stretch;
+}
+.pl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-weight: 700;
+}
+.pl-form input,
+.pl-form select,
+.pl-day {
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+}
+.pl-form input[type='number'] {
+  width: 92px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.pl-form input[type='text'] {
+  width: 180px;
+  max-width: 100%;
+}
+.pl-buttons {
+  display: flex;
+  gap: 6px;
+}
+/* What the core refused, and why: on a line of its own, taking no room while there is none. */
+.pl-refused {
+  flex-basis: 100%;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.pl-refused:not(:empty) {
+  margin-top: 4px;
+}
+
+/*
+ * ---------- The history's first row: the luck tiles and the wishes each month (the second pass, spec 3.3 and 3.4) ----------
+ * The three tiles stand stacked in the left third and the graph takes the right two thirds; the grid makes them one
+ * height, the taller one's, and the tiles share their column's height between them.
+ */
+.pl-glance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.pl-tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pl-tile,
+.pl-months {
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.pl-tile {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 14px;
+}
+.pl-tile-k {
+  font-size: 12.5px;
+  color: var(--ink2);
+}
+.pl-tile-v {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.pl-tile-v small {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.pl-tile-n {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted);
+}
+/* The 50/50s: won in the progress gold, lost in the axis tan, with the surface's gap between them. */
+.pl-split {
+  display: flex;
+  gap: 2px;
+  height: 6px;
+  margin-top: 6px;
+}
+.pl-split i {
+  display: block;
+  min-width: 0;
+  border-radius: 3px;
+}
+.pl-split .won {
+  background: var(--fill);
+}
+.pl-split .lost {
+  background: var(--axis);
+}
+.pl-months {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px 12px;
+}
+.pl-months-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.pl-months .gb-h {
+  margin: 0;
+}
+.pl-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  margin: 6px 0 2px;
+  font-size: 12px;
+  color: var(--ink2);
+}
+/* A legend's mark and a tooltip's key: the wish's colour, beside its name in ink. */
+.pl-sw {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+.pl-sw.character,
+.pl-seg.character {
+  fill: var(--wish-character);
+  background: var(--wish-character);
+}
+.pl-sw.weapon,
+.pl-seg.weapon {
+  fill: var(--wish-weapon);
+  background: var(--wish-weapon);
+}
+.pl-sw.standard,
+.pl-seg.standard {
+  fill: var(--wish-standard);
+  background: var(--wish-standard);
+}
+.pl-sw.chronicled,
+.pl-seg.chronicled {
+  fill: var(--wish-chronicled);
+  background: var(--wish-chronicled);
+}
+/* The plot is as tall as the box leaves it, and never under 190 pixels: it is drawn at the size it measures. */
+.pl-months-body {
+  position: relative;
+  flex: 1;
+  min-height: 190px;
+}
+.pl-plot,
+.pl-months-table {
+  position: absolute;
+  inset: 0;
+}
+.pl-svg {
+  display: block;
+}
+.pl-grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.pl-base {
+  stroke: var(--axis);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.pl-tick {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.pl-year {
+  font-size: 10px;
+}
+/* The busiest month's total: its number in ink, over its column. */
+.pl-peak {
+  fill: var(--ink);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+/* A column grows from its baseline when the graph appears, a month after the one before it (motion.css). */
+.pl-col {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: grow-y var(--t-enter) var(--ease-out) backwards;
+  animation-delay: calc(var(--n, 0) * var(--stagger));
+}
+/*
+ * A segment under the pointer lifts; one the keyboard has reached has a ring round it, as a control has: 2 pixels of ink
+ * outside its edge (the stroke is drawn under the fill, so half of the 4 shows), which no colour of the four hides.
+ */
+.pl-seg.on {
+  filter: brightness(1.12);
+}
+.pl-seg.ring {
+  stroke: var(--ink);
+  stroke-width: 4;
+  paint-order: stroke;
+}
+/* What answers the pointer and the keyboard lies over the drawing: one box for each segment, as wide as its month. */
+.pl-hits {
+  position: absolute;
+  inset: 0;
+}
+.pl-hit {
+  position: absolute;
+}
+/* Its ring is the segment's own, drawn on the column. */
+.pl-hit:focus-visible {
+  outline: none;
+}
+.pl-tip {
+  position: absolute;
+  z-index: 5;
+  display: grid;
+  gap: 1px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--rail-text);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.pl-tip-title {
+  font-weight: 700;
+}
+.pl-tip b {
+  font-weight: 700;
+}
+.pl-tip .pl-sw {
+  width: 10px;
+  height: 3px;
+  vertical-align: middle;
+}
+/*
+ * The table takes the room the graph had, and its months share it: its rows stand as tall as the room allows, their words
+ * in the middle, so that no band of nothing lies under them. The heading keeps its own height. More months than the room
+ * holds scroll.
+ */
+.pl-months-table {
+  overflow: auto;
+}
+.pl-months-table .tb {
+  height: 100%;
+}
+.pl-months-table .tb thead th {
+  height: 1px;
+}
+.pl-months-table .tb tbody :is(th, td) {
+  vertical-align: middle;
+}
+
+/* ---------- The history: 5★ rows in a gold wash and 4★ in a purple one, as the mockup draws them ---------- */
+.pl-rows {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.pl-rows th,
+.pl-rows td {
+  padding: 4px 8px;
+  border-top: 1px solid var(--hairline);
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+}
+.pl-rows tr {
+  animation: fade-in var(--t-open) var(--ease-out) backwards;
+  animation-delay: calc(min(sibling-index(), 12) * var(--stagger));
+}
+.pl-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.pl-rows .pl-face {
+  width: 26px;
+  height: 26px;
+}
+.pl-r5 {
+  background: linear-gradient(90deg, var(--w-five-wash), transparent 70%);
+}
+.pl-r5 th {
+  font-weight: 800;
+}
+.pl-r4 {
+  background: linear-gradient(90deg, var(--w-four-wash), transparent 70%);
+}
+.pl-rows .good {
+  color: var(--good);
+}
+.pl-rows .pl-day-cell {
+  width: 1%;
+  color: var(--muted);
+  text-align: right;
+}
+.pl-more {
+  margin-top: 10px;
+}

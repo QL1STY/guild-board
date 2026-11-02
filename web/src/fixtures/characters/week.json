@@ -1,0 +1,647 @@
+{
+  "focus": [
+    {
+      "key": "sandrone",
+      "position": 1,
+      "name": "Sandrone",
+      "icon": "/api/art/sandrone",
+      "goal": "Normal Attack 10, and a Cryo DMG Bonus goblet",
+      "ready_text": "Talents today; the goblet is luck",
+      "pronouns": {
+        "she": "she",
+        "her": "her",
+        "hers": "her"
+      }
+    },
+    {
+      "key": "odette",
+      "position": 2,
+      "name": "Odette",
+      "icon": "/api/art/odette",
+      "goal": "Elemental Skill and Burst 9",
+      "ready_text": "Ready Thu 29 Oct",
+      "pronouns": {
+        "she": "she",
+        "her": "her",
+        "hers": "her"
+      }
+    },
+    {
+      "key": "alyosha",
+      "position": 3,
+      "name": "Alyosha",
+      "icon": "/api/art/alyosha",
+      "goal": "Level 80",
+      "ready_text": "Ready Tue 27 Oct",
+      "pronouns": {
+        "she": "she",
+        "her": "her",
+        "hers": "her"
+      }
+    },
+    {
+      "key": "jahoda",
+      "position": 4,
+      "name": "Jahoda",
+      "icon": "/api/art/jahoda",
+      "goal": "Elemental Skill 8",
+      "ready_text": "Ready Wed 28 Oct",
+      "pronouns": {
+        "she": "she",
+        "her": "her",
+        "hers": "her"
+      }
+    }
+  ],
+  "characters": [
+    {
+      "key": "sandrone",
+      "name": "Sandrone",
+      "icon": "/api/art/sandrone",
+      "owned": true,
+      "focus": 1
+    },
+    {
+      "key": "odette",
+      "name": "Odette",
+      "icon": "/api/art/odette",
+      "owned": true,
+      "focus": 2
+    },
+    {
+      "key": "alyosha",
+      "name": "Alyosha",
+      "icon": "/api/art/alyosha",
+      "owned": true,
+      "focus": 3
+    },
+    {
+      "key": "jahoda",
+      "name": "Jahoda",
+      "icon": "/api/art/jahoda",
+      "owned": true,
+      "focus": 4
+    },
+    {
+      "key": "flins",
+      "name": "Flins",
+      "icon": "/api/art/flins",
+      "owned": true,
+      "focus": null
+    },
+    {
+      "key": "vesna",
+      "name": "Vesna",
+      "icon": "/api/art/vesna",
+      "owned": true,
+      "focus": null
+    }
+  ],
+  "days": [
+    {
+      "day": "2026-10-25",
+      "label": "Sunday 25 October",
+      "today": true,
+      "start": 200,
+      "spent": 200,
+      "alert": {
+        "text": "Weekly bosses reset tomorrow at 04:00: do them today.",
+        "loud": true
+      },
+      "spare": null,
+      "tasks": [
+        {
+          "key": "sun-25-oct:weekly:the-doctor:0",
+          "kind": "weekly",
+          "who": [
+            "sandrone"
+          ],
+          "title": "The Doctor, weekly boss",
+          "why": "1 Madman's Restraint for Sandrone",
+          "material": {
+            "name": "Madman's Restraint",
+            "icon": "/api/art/madman-s-restraint"
+          },
+          "resin": 30,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "sun-25-oct:books:overturned-roost:1",
+          "kind": "books",
+          "who": [
+            "sandrone"
+          ],
+          "title": "Overturned Roost, 6 runs",
+          "why": "about 7 Philosophies of Vagrancy, for her Normal Attack 10",
+          "material": {
+            "name": "Philosophies of Vagrancy",
+            "icon": "/api/art/philosophies-of-vagrancy"
+          },
+          "resin": 120,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "sun-25-oct:weekly:il-dottore:2",
+          "kind": "weekly",
+          "who": [
+            "odette"
+          ],
+          "title": "Il Dottore, weekly boss",
+          "why": "1 Twisted Withered Branch for Odette",
+          "material": {
+            "name": "Twisted Withered Branch",
+            "icon": "/api/art/twisted-withered-branch"
+          },
+          "resin": 30,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "sun-25-oct:books:relics-of-the-frozen-grace:3",
+          "kind": "books",
+          "who": [
+            "odette"
+          ],
+          "title": "Relics of the Frozen Grace, 1 run",
+          "why": "about 1 Philosophies of Charity, for her Elemental Skill and Burst 9",
+          "material": {
+            "name": "Philosophies of Charity",
+            "icon": "/api/art/philosophies-of-charity"
+          },
+          "resin": 20,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "sun-25-oct:gather:fellfrost-peak:4",
+          "kind": "flowers",
+          "who": [
+            "alyosha"
+          ],
+          "title": "Pick 14 Flockingweed in Fellfrost Peak",
+          "why": "14 Flockingweed, for her level 80",
+          "material": {
+            "name": "Flockingweed",
+            "icon": "/api/art/flockingweed"
+          },
+          "resin": 0,
+          "free": true,
+          "done": false
+        },
+        {
+          "key": "sun-25-oct:level:x:5",
+          "kind": "level",
+          "who": [
+            "sandrone"
+          ],
+          "title": "Raise her Normal Attack to 10",
+          "why": "everything her goal needs is in",
+          "material": null,
+          "resin": 0,
+          "free": true,
+          "done": false
+        }
+      ]
+    },
+    {
+      "day": "2026-10-26",
+      "label": "Monday 26 October",
+      "today": false,
+      "start": 180,
+      "spent": 180,
+      "alert": {
+        "text": "Weekly bosses are back: three at 30 resin this week.",
+        "loud": false
+      },
+      "spare": null,
+      "tasks": [
+        {
+          "key": "mon-26-oct:books:relics-of-the-frozen-grace:0",
+          "kind": "books",
+          "who": [
+            "odette"
+          ],
+          "title": "Relics of the Frozen Grace, 9 runs",
+          "why": "about 11 Philosophies of Charity, for her Elemental Skill and Burst 9",
+          "material": {
+            "name": "Philosophies of Charity",
+            "icon": "/api/art/philosophies-of-charity"
+          },
+          "resin": 180,
+          "free": false,
+          "done": false
+        }
+      ]
+    },
+    {
+      "day": "2026-10-27",
+      "label": "Tuesday 27 October",
+      "today": false,
+      "start": 180,
+      "spent": 170,
+      "alert": null,
+      "spare": null,
+      "tasks": [
+        {
+          "key": "tue-27-oct:weekly:the-game-before-the-gate:0",
+          "kind": "weekly",
+          "who": [
+            "jahoda"
+          ],
+          "title": "The Game Before the Gate, weekly boss",
+          "why": "1 Ascended Sample: Knight for Jahoda",
+          "material": {
+            "name": "Ascended Sample: Knight",
+            "icon": "/api/art/ascended-sample-knight"
+          },
+          "resin": 30,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "tue-27-oct:boss:chimeric-winged-lions:1",
+          "kind": "boss",
+          "who": [
+            "alyosha"
+          ],
+          "title": "Chimeric Winged Lions, 3 runs",
+          "why": "about 7 Severed Tail of the Sky-Roamer, for her level 80",
+          "material": {
+            "name": "Severed Tail of the Sky-Roamer",
+            "icon": "/api/art/severed-tail-of-the-sky-roamer"
+          },
+          "resin": 120,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "tue-27-oct:artifact:an-artifact-domain:2",
+          "kind": "artifacts",
+          "who": [
+            "sandrone"
+          ],
+          "title": "An artifact domain, 1 run",
+          "why": "a chance at her Cryo DMG Bonus goblet",
+          "material": {
+            "name": "Cryo DMG Bonus goblet",
+            "icon": "/api/art/cryo-dmg-bonus-goblet"
+          },
+          "resin": 20,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "tue-27-oct:gather:fellfrost-peak:3",
+          "kind": "flowers",
+          "who": [
+            "alyosha"
+          ],
+          "title": "Pick 9 Flockingweed in Fellfrost Peak",
+          "why": "9 Flockingweed, for her level 80",
+          "material": {
+            "name": "Flockingweed",
+            "icon": "/api/art/flockingweed"
+          },
+          "resin": 0,
+          "free": true,
+          "done": false
+        },
+        {
+          "key": "tue-27-oct:level:x:4",
+          "kind": "level",
+          "who": [
+            "alyosha"
+          ],
+          "title": "Raise her to level 80",
+          "why": "everything her goal needs is in",
+          "material": null,
+          "resin": 0,
+          "free": true,
+          "done": false
+        }
+      ]
+    },
+    {
+      "day": "2026-10-28",
+      "label": "Wednesday 28 October",
+      "today": false,
+      "start": 190,
+      "spent": 180,
+      "alert": null,
+      "spare": null,
+      "tasks": [
+        {
+          "key": "wed-28-oct:books:overturned-roost:0",
+          "kind": "books",
+          "who": [
+            "jahoda"
+          ],
+          "title": "Overturned Roost, 9 runs",
+          "why": "about 10 Philosophies of Vagrancy, for her Elemental Skill 8",
+          "material": {
+            "name": "Philosophies of Vagrancy",
+            "icon": "/api/art/philosophies-of-vagrancy"
+          },
+          "resin": 180,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "wed-28-oct:level:x:1",
+          "kind": "level",
+          "who": [
+            "jahoda"
+          ],
+          "title": "Raise her Skill to 8",
+          "why": "everything her goal needs is in",
+          "material": null,
+          "resin": 0,
+          "free": true,
+          "done": false
+        }
+      ]
+    },
+    {
+      "day": "2026-10-29",
+      "label": "Thursday 29 October",
+      "today": false,
+      "start": 190,
+      "spent": 180,
+      "alert": null,
+      "spare": null,
+      "tasks": [
+        {
+          "key": "thu-29-oct:books:relics-of-the-frozen-grace:0",
+          "kind": "books",
+          "who": [
+            "odette"
+          ],
+          "title": "Relics of the Frozen Grace, 2 runs",
+          "why": "about 2 Philosophies of Charity, for her Elemental Skill and Burst 9",
+          "material": {
+            "name": "Philosophies of Charity",
+            "icon": "/api/art/philosophies-of-charity"
+          },
+          "resin": 40,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "thu-29-oct:artifact:an-artifact-domain:1",
+          "kind": "artifacts",
+          "who": [
+            "sandrone"
+          ],
+          "title": "An artifact domain, 7 runs",
+          "why": "a chance at her Cryo DMG Bonus goblet",
+          "material": {
+            "name": "Cryo DMG Bonus goblet",
+            "icon": "/api/art/cryo-dmg-bonus-goblet"
+          },
+          "resin": 140,
+          "free": false,
+          "done": false
+        },
+        {
+          "key": "thu-29-oct:level:x:2",
+          "kind": "level",
+          "who": [
+            "odette"
+          ],
+          "title": "Raise her Skill and Burst to 9",
+          "why": "everything her goal needs is in",
+          "material": null,
+          "resin": 0,
+          "free": true,
+          "done": false
+        }
+      ]
+    },
+    {
+      "day": "2026-10-30",
+      "label": "Friday 30 October",
+      "today": false,
+      "start": 190,
+      "spent": 180,
+      "alert": null,
+      "spare": null,
+      "tasks": [
+        {
+          "key": "fri-30-oct:artifact:an-artifact-domain:0",
+          "kind": "artifacts",
+          "who": [
+            "sandrone"
+          ],
+          "title": "An artifact domain, 9 runs",
+          "why": "a chance at her Cryo DMG Bonus goblet",
+          "material": {
+            "name": "Cryo DMG Bonus goblet",
+            "icon": "/api/art/cryo-dmg-bonus-goblet"
+          },
+          "resin": 180,
+          "free": false,
+          "done": false
+        }
+      ]
+    },
+    {
+      "day": "2026-10-31",
+      "label": "Saturday 31 October",
+      "today": false,
+      "start": 190,
+      "spent": 180,
+      "alert": null,
+      "spare": null,
+      "tasks": [
+        {
+          "key": "sat-31-oct:artifact:an-artifact-domain:0",
+          "kind": "artifacts",
+          "who": [
+            "sandrone"
+          ],
+          "title": "An artifact domain, 9 runs",
+          "why": "a chance at her Cryo DMG Bonus goblet",
+          "material": {
+            "name": "Cryo DMG Bonus goblet",
+            "icon": "/api/art/cryo-dmg-bonus-goblet"
+          },
+          "resin": 180,
+          "free": false,
+          "done": false
+        }
+      ]
+    }
+  ],
+  "ready": [
+    {
+      "key": "sandrone",
+      "until": 0,
+      "luck": {
+        "half": 17,
+        "label": "goblet: half a chance by Wed 11 Nov"
+      },
+      "text": "Talents today; the goblet is luck"
+    },
+    {
+      "key": "odette",
+      "until": 4,
+      "luck": null,
+      "text": "Ready Thu 29 Oct"
+    },
+    {
+      "key": "alyosha",
+      "until": 2,
+      "luck": null,
+      "text": "Ready Tue 27 Oct"
+    },
+    {
+      "key": "jahoda",
+      "until": 3,
+      "luck": null,
+      "text": "Ready Wed 28 Oct"
+    }
+  ],
+  "resin_by": [
+    {
+      "key": "sandrone",
+      "resin": 670
+    },
+    {
+      "key": "odette",
+      "resin": 270
+    },
+    {
+      "key": "alyosha",
+      "resin": 120
+    },
+    {
+      "key": "jahoda",
+      "resin": 210
+    }
+  ],
+  "resin_week": 1270,
+  "resin_week_max": 1280,
+  "how": [
+    "Weekly bosses come first: one run serves everyone who needs that boss, and the first three cost 30 resin.",
+    "Then the books open today, in the order of your focus, then world bosses, then artifacts with what resin is left.",
+    "Flowers and the like cost no resin, and are picked every other day.",
+    "A character is ready the day everything their goal needs is in. Artifacts are luck, so they never finish on their own."
+  ],
+  "today": {
+    "day": "2026-10-25",
+    "label": "Sunday 25 October",
+    "today": true,
+    "start": 200,
+    "spent": 200,
+    "alert": {
+      "text": "Weekly bosses reset tomorrow at 04:00: do them today.",
+      "loud": true
+    },
+    "spare": null,
+    "tasks": [
+      {
+        "key": "sun-25-oct:weekly:the-doctor:0",
+        "kind": "weekly",
+        "who": [
+          "sandrone"
+        ],
+        "title": "The Doctor, weekly boss",
+        "why": "1 Madman's Restraint for Sandrone",
+        "material": {
+          "name": "Madman's Restraint",
+          "icon": "/api/art/madman-s-restraint"
+        },
+        "resin": 30,
+        "free": false,
+        "done": false
+      },
+      {
+        "key": "sun-25-oct:books:overturned-roost:1",
+        "kind": "books",
+        "who": [
+          "sandrone"
+        ],
+        "title": "Overturned Roost, 6 runs",
+        "why": "about 7 Philosophies of Vagrancy, for her Normal Attack 10",
+        "material": {
+          "name": "Philosophies of Vagrancy",
+          "icon": "/api/art/philosophies-of-vagrancy"
+        },
+        "resin": 120,
+        "free": false,
+        "done": false
+      },
+      {
+        "key": "sun-25-oct:weekly:il-dottore:2",
+        "kind": "weekly",
+        "who": [
+          "odette"
+        ],
+        "title": "Il Dottore, weekly boss",
+        "why": "1 Twisted Withered Branch for Odette",
+        "material": {
+          "name": "Twisted Withered Branch",
+          "icon": "/api/art/twisted-withered-branch"
+        },
+        "resin": 30,
+        "free": false,
+        "done": false
+      },
+      {
+        "key": "sun-25-oct:books:relics-of-the-frozen-grace:3",
+        "kind": "books",
+        "who": [
+          "odette"
+        ],
+        "title": "Relics of the Frozen Grace, 1 run",
+        "why": "about 1 Philosophies of Charity, for her Elemental Skill and Burst 9",
+        "material": {
+          "name": "Philosophies of Charity",
+          "icon": "/api/art/philosophies-of-charity"
+        },
+        "resin": 20,
+        "free": false,
+        "done": false
+      },
+      {
+        "key": "sun-25-oct:gather:fellfrost-peak:4",
+        "kind": "flowers",
+        "who": [
+          "alyosha"
+        ],
+        "title": "Pick 14 Flockingweed in Fellfrost Peak",
+        "why": "14 Flockingweed, for her level 80",
+        "material": {
+          "name": "Flockingweed",
+          "icon": "/api/art/flockingweed"
+        },
+        "resin": 0,
+        "free": true,
+        "done": false
+      },
+      {
+        "key": "sun-25-oct:level:x:5",
+        "kind": "level",
+        "who": [
+          "sandrone"
+        ],
+        "title": "Raise her Normal Attack to 10",
+        "why": "everything her goal needs is in",
+        "material": null,
+        "resin": 0,
+        "free": true,
+        "done": false
+      }
+    ]
+  },
+  "sync": {
+    "can_refresh": true,
+    "wait_minutes": null,
+    "reading": false,
+    "read_at": "2026-10-25T07:00:00+00:00",
+    "calculator": "on",
+    "message": null
+  }
+}

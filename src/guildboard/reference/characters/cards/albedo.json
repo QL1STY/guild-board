@@ -1,0 +1,19 @@
+{
+  "key": "albedo", "name": "Albedo", "element": "Geo", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "def",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"def": 3000, "cr": 70, "cd": 140, "er": 130},
+  "mains": {"sands": ["def_pct"], "goblet": ["def_pct", "dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"def_pct": "wants", "cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "some", "atk": "some", "def": "some", "em": "none", "hp_pct": "none", "hp": "none"},
+  "sets": [{"sets": ["husk-of-opulent-dreams"], "pieces": "4"}, {"sets": ["golden-troupe"], "pieces": "4"}],
+  "weapons": ["uraku-misugiri", "peak-patrol-song", "cinnabar-spindle"],
+  "partners": ["Geo", "Hydro"], "partner_roles": ["damage", "support"], "teams": [],
+  "notes": "A Geo sub-DPS whose Transient Blossoms scale with DEF (134% DEF at level 1). The Skill's own hit and the Burst scale with ATK, so the wiki's 'check' line for Skill DMG is settled as ATK; DEF is the scaling stat because the Blossoms carry most of the damage and both sources want DEF%. Both sources agree on 4pc Husk of Opulent Dreams or 4pc Golden Troupe and on DEF% Sands. Game8 also allows a DEF% Circlet, which the card leaves out as KQM does not. No DMG goal is set because the Goblet may be DEF% or Geo DMG%. Cinnabar Spindle is his signature and KQM's best 4-star, but Uraku Misugiri is both sources' top pick. Goals are Game8's (DEF 2000-3000, CR 60-70%, CD 140%+); ER is KQM's 2+ Geo units range (about 120-140%).",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/albedo-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/312182", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/47", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

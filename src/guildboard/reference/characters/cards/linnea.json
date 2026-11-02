@@ -1,0 +1,37 @@
+{
+  "key": "linnea",
+  "name": "Linnea",
+  "element": "Geo",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "def",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"def": 2000, "cr": 65, "cd": 150, "er": 140, "em": 150},
+  "mains": {"sands": ["def_pct"], "goblet": ["def_pct"], "circlet": ["cr", "cd", "def_pct"]},
+  "weights": {"def_pct": "wants", "er": "wants", "cr": "wants", "cd": "wants", "em": "some", "def": "some", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["husk-of-opulent-dreams"], "pieces": "4"},
+    {"sets": ["aubade-of-morningstar-and-moon"], "pieces": "4"},
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"}
+  ],
+  "weapons": ["golden-frostbound-oath", "aqua-simulacra", "polar-star", "elegy-for-the-end", "slingshot", "snare-hook", "favonius-warbow", "the-stringless"],
+  "partners": ["Geo", "Hydro"],
+  "partner_roles": ["damage", "support"],
+  "teams": [],
+  "notes": "Both sources: DEF% sands and goblet, CRIT circlet (KQM: CRIT >= DEF%), Golden Frostbound Oath first, Skill > Burst > Normal Attack (KQM: Skill > character level > Burst). KQM leads with Husk of Opulent Dreams, then Aubade of Morningstar and Moon and Silken Moon's Serenade; Game8 names Aubade and Husk both best, so Husk stays first. Goals are Game8's: DEF 2,000+, CRIT Rate 60-70 (65), CRIT DMG 150+, EM 100-200 (150), ER 110-140 with another Geo character and 130-170 solo. 140 is used; KQM's ER is 170-185 for a Burst every rotation and 100 when Burst is cast only when available, so the two sources differ and the confidence is medium. Partners are Geo and Hydro (Lunar-Crystallize), from the kit and Game8's build title.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/linnea-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/551088", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/10412", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

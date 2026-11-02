@@ -1,0 +1,19 @@
+{
+  "key": "aino", "name": "Aino", "element": "Hydro", "weapon_type": "Claymore", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false, "scaling": "em",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"em": 800, "er": 130, "cr": 70, "cd": 120},
+  "mains": {"sands": ["em", "er"], "goblet": ["em", "dmg"], "circlet": ["cr", "cd", "em"]},
+  "weights": {"em": "wants", "er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["silken-moon-s-serenade"], "pieces": "4"}, {"sets": ["instructor"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}],
+  "weapons": ["flame-forged-insight", "favonius-greatsword", "makhaira-aquamarine"],
+  "partners": ["Dendro", "Electro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "An off-field Hydro support. Her Burst DMG gains 50% of her EM, so EM is her scaling stat. Both sources agree on 4pc Silken Moon's Serenade and on EM main stats; KQM allows an ER Sands and an EM or Hydro DMG Goblet, Game8 wants EM on both, so the card lists EM first. Game8 puts Flame-Forged Insight first and KQM Favonius Greatsword, so the card takes Game8's weapon first and keeps the other as the second. Goals are Game8's upper ends; the ER goal is its 'double Hydro' range (110-130%), as Aino usually plays beside another Hydro character, and KQM's baseline without a weapon is 190-250%.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/aino-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/537903", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/8397", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

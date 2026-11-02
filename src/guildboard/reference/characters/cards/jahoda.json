@@ -1,0 +1,37 @@
+{
+  "key": "jahoda",
+  "name": "Jahoda",
+  "element": "Anemo",
+  "weapon_type": "Bow",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["healer", "support"],
+  "keeps_alive": true,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 1800, "er": 190, "em": 200},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["atk_pct"], "circlet": ["atk_pct", "heal", "cr"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "atk": "some", "cr": "some", "em": "some", "heal": "some", "cd": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["viridescent-venerer"], "pieces": "4"},
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["deepwood-memories"], "pieces": "4"}
+  ],
+  "weapons": ["elegy-for-the-end", "favonius-warbow", "aqua-simulacra", "snare-hook", "sacrificial-bow", "alley-hunter", "end-of-the-line", "rainbow-serpent-s-rain-bow"],
+  "partners": ["Anemo", "Electro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources: 4pc Viridescent Venerer (Silken Moon's Serenade for Lunar teams), ER or ATK% sands, ATK% goblet, Elegy for the End first, Burst > Skill > Normal Attack. They differ on the circlet: KQM CRIT Rate (for Favonius) or Healing Bonus > ATK%, Game8 ATK%, Healing Bonus or CRIT Rate; all three are listed. Goals are Game8's (ATK 1,800+, EM 200+, ER 180-200; 190 used); KQM's ER depends on the team (double Anemo 145-180 at C0, double Electro 190-205, other 200-255).",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/jahoda-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/538446", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/9018", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,18 @@
+{
+  "key": "raiden-shogun", "name": "Raiden Shogun", "element": "Electro", "weapon_type": "Polearm", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 220},
+  "mains": {"sands": ["er", "atk_pct", "em"], "goblet": ["dmg", "atk_pct", "em"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["gilded-dreams"], "pieces": "4"}, {"sets": ["tenacity-of-the-millelith"], "pieces": "4"}],
+  "weapons": ["engulfing-lightning", "the-catch", "staff-of-homa", "wavebreaker-s-fin", "staff-of-the-scarlet-sands", "dragon-s-bane"],
+  "partners": ["Pyro", "Hydro"], "partner_roles": ["support", "healer"], "teams": [],
+  "notes": "An Electro Burst DPS (and, in Hyperbloom, an EM sub-DPS) that scales with ATK. Musou no Hitotachi (401% ATK at level 1, more with Resolve stacks) is her damage, so the damage talent is the Burst; both sources put the Burst first and the Skill second (Game8 reverses them only for the sub-DPS build). The sources agree on 4pc Emblem of Severed Fate for the on-field build (KQM: undisputed best), an ER or ATK% Sands, an ATK% or Electro DMG Goblet and a CRIT Circlet, with Engulfing Lightning first and Staff of Homa or The Catch behind it; and for Hyperbloom on EM on every slot, Flower of Paradise Lost and Gilded Dreams, with Dragon's Bane first. The card follows the on-field build, since it is the one her goals and weapon list serve; EM is kept as the last option on the Sands and Goblet. Game8 gives no stat goals; the ER goal is KQM's 200-220% for solo Electro (130-190% with another Electro unit), upper end. Atk, CRIT Rate and CRIT DMG goals are left to the role's default.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/raiden-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/337161", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

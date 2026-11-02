@@ -1,0 +1,314 @@
+/*
+ * The Friends pages (the online plan, Tasks B6 to B8; the online design, section 9), from the accepted mockup
+ * (2026-10-28-online-friends-mockup). The page is flat parchment: the app's tokens only and no gradient. The dark look of a
+ * character's pages is not here. Classes are `frd-` for the list and the parts they share, `prf-` for the profile pages and
+ * `cmp-` for Compare.
+ */
+
+.frd-page { display: grid; gap: 16px; }
+.frd-cols { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.frd-card { padding: 16px 18px; }
+.frd-pt { font-size: 15px; font-weight: 800; }
+.frd-ps { margin-top: 2px; color: var(--muted); font-size: 12.5px; }
+
+/* Buttons of a row are one size: the same width, and the same height whether they have an edge or not. */
+.frd-btn { min-width: 112px; border: 1px solid transparent; text-align: center; }
+.frd-btn.quiet { border-color: var(--border); }
+
+/* A face in a gold ring, the rank on a tab at its foot (the profile card of the rail, here on a card). */
+.frd-ava { position: relative; flex: none; width: 40px; height: 40px; }
+.frd-ava.small { width: 32px; height: 32px; }
+.frd-ava.big { width: 64px; height: 64px; }
+.frd-pic {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr); /* a picture that isn't square stays in the ring, centred, and doesn't stretch it */
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--r0);
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--r1);
+  color: var(--ink2);
+  overflow: hidden;
+}
+.frd-pic img { object-fit: cover; }
+.frd-pic .sign { width: 58%; height: 58%; }
+.frd-req .frd-pic { box-shadow: 0 0 0 2px var(--tint), 0 0 0 3.5px var(--r1); }
+.frd-ar {
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  transform: translateX(-50%);
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 14px;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1.5px var(--surface);
+}
+.frd-dot { position: absolute; right: -2px; top: -2px; width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 2px var(--surface); }
+.frd-ava.big .frd-dot { width: 14px; height: 14px; }
+.frd-dot.game { background: var(--done); }
+.frd-dot.open { background: var(--series); }
+.frd-dot.off { background: var(--deemph); }
+
+/* What a friend is doing: a dot of the status and the words. */
+.frd-st { display: flex; align-items: center; gap: 7px; min-width: 0; font-size: 13px; white-space: nowrap; }
+.frd-st::before { content: ''; flex: none; width: 9px; height: 9px; border-radius: 50%; }
+.frd-st.game { color: var(--good); font-weight: 700; }
+.frd-st.game::before { background: var(--done); }
+.frd-st.open { color: var(--ink); font-weight: 700; }
+.frd-st.open::before { background: var(--series); }
+.frd-st.off { color: var(--muted); }
+.frd-st.off::before { background: var(--deemph); }
+.frd-st.none::before { display: none; }
+.frd-w { color: var(--muted); font-weight: 400; }
+
+/* A stat beside a name: a small pill with the game's picture or the app's sign, the figure and a label. */
+.frd-chips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.frd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px 0 6px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--ledger-light);
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.frd-ico { width: 18px; height: 18px; flex: none; color: var(--gold-ink); }
+.frd-chip b { color: var(--ink); font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.frd-none { color: var(--muted); font-size: 13px; }
+
+/* The friends. A row opens the friend's profile wherever it is pressed: the name's link stretches over it, and Compare is
+   above the link. */
+.frd-flist { margin: 6px 0 0; padding: 0; list-style: none; }
+.frd-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px minmax(110px, 150px) minmax(150px, 180px) minmax(150px, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin: 0 -6px;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 10px;
+  transition: background-color var(--t-hover);
+}
+.frd-row:last-child { border-bottom: 0; }
+.frd-row:hover,
+.frd-row:has(.frd-name:focus-visible) { background: var(--tint); }
+.frd-row:hover .frd-chip,
+.frd-row:has(.frd-name:focus-visible) .frd-chip { background: var(--surface); }
+.frd-row:has(.frd-name:focus-visible) { outline: 2px solid var(--focus); outline-offset: -2px; }
+.frd-name { display: flex; align-items: baseline; min-width: 0; color: var(--ink); font-size: 15px; font-weight: 800; text-decoration: none; }
+.frd-name:focus-visible { outline: none; }
+.frd-name::after { content: ''; position: absolute; inset: 0; border-radius: 10px; }
+.frd-nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.frd-tg { flex: none; margin-left: 4px; color: var(--muted); font-size: 12.5px; font-weight: 500; }
+.frd-compare { position: relative; z-index: 1; }
+.frd-empty { margin-top: 14px; color: var(--ink2); }
+
+/* Requests and invites come first, in a tint strip each (mockup 1). */
+.frd-reqs { display: grid; gap: 8px; margin-top: 12px; }
+.frd-req { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--hairline); border-radius: 10px; background: var(--tint); }
+.frd-req-tx { flex: 1; min-width: 0; font-size: 13.5px; }
+.frd-req-tx b { font-weight: 800; }
+.frd-req-acts { display: flex; flex: none; gap: 8px; }
+.frd-stale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--warn-line);
+  border-radius: 10px;
+  background: var(--warn-soft);
+  color: var(--ink);
+  font-size: 13px;
+}
+.frd-stale .gb-link { flex: none; }
+.prf-cols > .frd-stale,
+.cmp-page > .frd-stale { margin-top: 0; }
+.frd-refused { margin: 8px 0 0; color: var(--refused); font-size: 13px; font-weight: 700; }
+.frd-note { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0; }
+.frd-note .gb-link { flex: none; }
+.frd-said { margin: 6px 0 0; color: var(--ink2); font-size: 12.5px; }
+
+/* Add a friend. */
+.frd-line { display: flex; align-items: center; gap: 8px; }
+.frd-first { margin-top: 12px; }
+/* A long name is cut, and the number stays: it is what makes the tag a tag. */
+.frd-mytag { display: flex; flex: 1; min-width: 0; white-space: nowrap; font-size: 20px; font-weight: 800; letter-spacing: .01em; }
+.frd-mynm { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.frd-mytg { flex: none; color: var(--gold-ink); }
+.frd-hr { margin: 14px 0; border: 0; border-top: 1px solid var(--hairline); }
+.frd-lab { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
+.frd-hint { margin-top: 6px; color: var(--muted); font-size: 12px; }
+.frd-field {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--ledger-light);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13.5px;
+}
+.frd-field::placeholder { color: var(--muted); }
+.frd-field:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.frd-add .frd-btn { min-width: 112px; }
+.frd-link { font-size: 12.5px; }
+.frd-linkfield { display: block; width: 100%; margin-top: 8px; }
+
+/* Signed out, or the sign-in waits: what is needed, and the way to Settings. */
+.frd-gate { display: flex; align-items: center; gap: 16px; max-width: 760px; padding: 18px 20px; }
+.frd-gate p { flex: 1; color: var(--ink2); font-size: 15px; }
+
+/* Your profile and a friend's (mockup 2): the head, the tiles with their switch and pin, the preview of the chips beside the
+   name, and Finding you. A friend's profile is the same left side, with no switch, no pin and no grey tile. */
+.prf-page { display: grid; gap: 16px; }
+.prf-cols { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.prf-cols.solo { grid-template-columns: minmax(0, 1104px); }
+.prf-head { display: flex; align-items: center; gap: 18px; }
+.prf-who { flex: 1; min-width: 0; }
+.prf-nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 22px; font-weight: 800; }
+.prf-nm span { margin-left: 6px; color: var(--gold-ink); font-size: 17px; }
+.prf-meta { color: var(--muted); font-size: 13px; }
+.prf-meta.game { color: var(--good); font-weight: 700; }
+.prf-meta.open { color: var(--ink); font-weight: 700; }
+.prf-h { margin-top: 18px; }
+.prf-always { margin-top: 4px; color: var(--ink2); font-size: 12.5px; }
+.prf-none { margin-top: 12px; color: var(--ink2); }
+.prf-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.prf-tile { display: grid; gap: 2px; align-content: start; min-width: 0; padding: 10px 12px 12px; border: 1px solid var(--gold); border-radius: 10px; background: var(--ledger-light); }
+.prf-tile.pinned { box-shadow: inset 0 0 0 1px var(--gold); }
+.prf-tile.off { border-color: var(--border); background: var(--surface); }
+.prf-tt { display: flex; align-items: center; gap: 8px; min-height: 24px; color: var(--ink2); font-size: 12.5px; font-weight: 700; }
+.prf-v { overflow-wrap: anywhere; font-size: 24px; font-weight: 800; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.prf-v small { color: var(--muted); font-size: 13px; font-weight: 600; }
+.prf-d { color: var(--muted); font-size: 12px; }
+.prf-tile.off .prf-v { color: var(--outline); }
+.prf-pin { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 1px solid transparent; border-radius: 50%; background: none; color: var(--deemph); transition: background-color var(--t-hover), color var(--t-hover); }
+.prf-pin .sign { width: 16px; height: 16px; }
+.prf-pin:hover { color: var(--gold-ink); }
+.prf-pin.on { border-color: var(--gold); background: var(--tint); color: var(--gold-ink); }
+.prf-pinsum { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 12.5px; }
+.prf-pinsum .frd-chip { height: 26px; }
+
+/* The switch is the knob alone, on the tile and beside Find me by UID (as Settings draws it). */
+.prf-tt .prf-switch.pl-switch,
+.prf-it .prf-switch.pl-switch { padding: 0; border: 0; border-radius: 999px; background: none; }
+.prf-switch .pl-knob { box-shadow: inset 0 0 0 1px var(--border); }
+.prf-switch[aria-pressed='true'] .pl-knob { box-shadow: inset 0 0 0 1px var(--gold); }
+.prf-switch:hover .pl-knob { box-shadow: inset 0 0 0 1px var(--gold); }
+
+/* Finding you: a name with a line under it, and what can be done to the right. */
+.prf-set .prf-it { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--hairline); }
+.prf-set .frd-pt + .prf-it { margin-top: 4px; }
+.prf-it b { font-size: 13.5px; }
+.prf-it small { display: block; overflow-wrap: anywhere; color: var(--muted); font-size: 12px; }
+.prf-set > :last-child { border-bottom: 0; padding-bottom: 2px; }
+.prf-edit { display: grid; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--hairline); }
+.prf-edit .frd-field { flex: none; width: 100%; }
+.prf-edit-acts { display: flex; gap: 8px; }
+.prf-foot { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--hairline); }
+.prf-ask { display: grid; gap: 10px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--tint); font-size: 13.5px; }
+
+/* Compare (mockup 3): the two of you at the head with the score between, a panel for each group with a row for each stat and
+   one bar split in proportion, and two charts of grouped columns. */
+.cmp-page { display: grid; gap: 16px; }
+.cmp-vs { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 20px; align-items: center; }
+.cmp-side { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.cmp-side.r { justify-content: flex-end; text-align: right; }
+.cmp-nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 18px; font-weight: 800; }
+.cmp-meta { color: var(--muted); font-size: 12.5px; }
+.cmp-meta.game { color: var(--good); font-weight: 700; }
+.cmp-meta.open { color: var(--ink); font-weight: 700; }
+.cmp-score { text-align: center; }
+.cmp-score b { display: block; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.cmp-mine { color: var(--gold-ink); }
+.cmp-theirs { color: var(--series); }
+.cmp-score small { color: var(--muted); font-size: 12px; }
+/* Two side by side, each the height of the taller, and one under the other where two don't fit a row. */
+.cmp-groups,
+.cmp-charts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(524px, 100%), 1fr)); gap: 16px; }
+
+.cmp-row { display: grid; grid-template-columns: minmax(150px, 1fr) 64px minmax(64px, 128px) 64px 96px; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--hairline); }
+.cmp-row:last-child { border-bottom: 0; padding-bottom: 2px; }
+.cmp-row.head { padding: 8px 0 4px; border-bottom: 0; color: var(--muted); font-size: 12px; }
+.cmp-k { font-size: 13.5px; }
+.cmp-a,
+.cmp-b { color: var(--muted); font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.cmp-a { text-align: right; }
+.cmp-b { text-align: left; }
+/* A figure from another PC can be any size: it stays in its cell, and the whole of it is the cell's tooltip. */
+.cmp-row:not(.head) .cmp-a,
+.cmp-row:not(.head) .cmp-b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The hidden heads take no place in the grid, so these two say which column they stand over. */
+.cmp-row.head .cmp-a { grid-column: 2; font-size: 12px; }
+.cmp-row.head .cmp-b { grid-column: 4; font-size: 12px; white-space: nowrap; } /* a long name runs on over the empty last column */
+.cmp-a.lead,
+.cmp-b.lead { color: var(--ink); font-weight: 800; }
+.cmp-who { overflow: hidden; text-align: right; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; font-weight: 700; }
+.cmp-who.mine { color: var(--gold-ink); }
+/* The friend's blue, a little darker for small text. */
+.cmp-who.theirs { color: color-mix(in srgb, var(--series) 78%, var(--ink)); }
+.cmp-who.tie { color: var(--muted); font-weight: 500; }
+.cmp-wn { display: inline-block; max-width: 8ch; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+.cmp-split { position: relative; display: flex; gap: 2px; height: 8px; }
+.cmp-split i { display: block; height: 100%; }
+.cmp-split .m { border-radius: 99px 0 0 99px; background: var(--fill); }
+.cmp-split .f { border-radius: 0 99px 99px 0; background: var(--series); }
+.cmp-split::after { content: ''; position: absolute; top: -3px; bottom: -3px; left: 50%; width: 1px; background: var(--ink2); opacity: .45; }
+
+.cmp-legend { display: flex; gap: 14px; margin: 8px 0 30px; color: var(--ink2); font-size: 12px; }
+.cmp-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 3px; vertical-align: -1px; }
+.cmp-legend .m::before { background: var(--fill); }
+.cmp-legend .f::before { background: var(--series); }
+.cmp-plot { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px; }
+.cmp-y { position: relative; min-width: 28px; height: 180px; color: var(--muted); font-size: 11px; line-height: 1; font-variant-numeric: tabular-nums; }
+.cmp-y span { position: absolute; right: 0; transform: translateY(50%); }
+.cmp-area { position: relative; height: 180px; border-bottom: 1px solid var(--axis); }
+.cmp-line { position: absolute; left: 0; right: 0; height: 1px; background: var(--grid); }
+.cmp-cols { position: absolute; inset: 0; display: flex; gap: 18px; padding: 0 10px; }
+.cmp-col { position: relative; display: flex; flex: 1; align-items: flex-end; gap: 3px; min-width: 0; border-radius: 4px; }
+.cmp-col:hover,
+.cmp-col:focus { background: color-mix(in srgb, var(--fill) 7%, transparent); }
+.cmp-col i { display: block; flex: 1; min-width: 0; border-radius: 3px 3px 0 0; animation: grow-h var(--t-enter) var(--ease-out) backwards; transition: height var(--t-enter) var(--ease-out); }
+.cmp-col .m { background: var(--fill); }
+.cmp-col .f { background: var(--series); }
+.cmp-x { display: flex; grid-column: 2; gap: 18px; padding: 0 10px; color: var(--muted); font-size: 11px; }
+.cmp-x span { flex: 1; min-width: 0; text-align: center; white-space: nowrap; }
+.cmp-tip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; z-index: 3; transform: translateX(-50%); padding: 6px 9px; border-radius: 6px; background: var(--ink); color: var(--rail-text); font-size: 12px; line-height: 1.4; white-space: nowrap; pointer-events: none; }
+.cmp-col:hover .cmp-tip,
+.cmp-col:focus .cmp-tip { display: block; }
+.cmp-tip b { display: block; }
+.cmp-tip span { display: flex; justify-content: space-between; gap: 14px; }
+.cmp-tip em { font-style: normal; }
+/* A tooltip near an edge opens towards the middle, so that it stays inside the card. */
+.cmp-col.start .cmp-tip { left: 0; transform: none; }
+.cmp-col.end .cmp-tip { right: 0; left: auto; transform: none; }
+.cmp-note,
+.cmp-none { color: var(--ink); font-size: 12.5px; }
+.cmp-note a,
+.cmp-none a { color: var(--ink2); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 2px; }
+
+/* A window narrower than the usual one: the tiles keep room for a pin and a switch, and then the right panel goes under the
+   list. The window has no smallest size, and a friend's screen may be smaller than the player's. */
+@media (max-width: 1320px) {
+  .prf-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1240px) {
+  .frd-cols,
+  .prf-cols:not(.solo) { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,0 +1,18 @@
+{
+  "key": "nilou", "name": "Nilou", "element": "Hydro", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "hp",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"hp": 60000, "er": 120},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["hp_pct"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "em": "some", "cr": "none", "cd": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["vourukasha-s-glow"], "pieces": "4"}, {"sets": ["tenacity-of-the-millelith"], "pieces": "4"}, {"sets": ["silken-moon-s-serenade"], "pieces": "4"}, {"sets": ["flower-of-paradise-lost"], "pieces": "4"}],
+  "weapons": ["key-of-khaj-nisut", "the-dockhand-s-assistant", "serenity-s-call", "xiphos-moonlight", "freedom-sworn", "favonius-sword"],
+  "partners": ["Dendro", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Hydro Bloom enabler that scales with Max HP: her Skill and Burst are percentages of Max HP, and her passive raises Bountiful Core damage for every 1,000 HP above 30,000. The sources differ on the talent: KQM puts the Skill ahead of the Burst, with character level far above both; Game8 puts the Burst first. The card keeps the Skill (the Dance of Haftkarsvar's Sword Dance and Whirling Steps are the lines she is built around) and notes the difference. They agree on HP% on every slot (Game8 also allows ER on the Sands) and on Key of Khaj-Nisut first, with Freedom-Sworn, Favonius Sword, Xiphos' Moonlight, The Dockhand's Assistant and Serenity's Call on lists. The sets differ: Game8 gives Vourukasha's Glow and Tenacity of the Millelith, with Silken Moon's Serenade as an alternative; KQM gives Silken Moon's Serenade for Lunar-Bloom, Flower of Paradise Lost, Instructor and Deepwood Memories. The HP goal is Game8's 60,000 or more. The ER goal is KQM's 100-120% for a team with Yelan, Xingqiu or Candace (150-160% only with Barbara); Game8 says 170% or above, which was judged too high for her usual team.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/nilou-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/383715", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

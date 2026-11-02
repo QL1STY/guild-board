@@ -1,0 +1,51 @@
+/*
+ * A picture of the game's over its drawn sign (ui/Picture.tsx, ui/Sign.tsx). The picture and the sign share one box, the
+ * sign the size of the box, and the sign shows only when the picture does not: the image then has the hidden attribute,
+ * which Picture sets when the image fails to load or has no address. The demo downloads no picture, so there the sign
+ * shows.
+ *
+ * The box has no size of its own: the place that uses it gives its class a width and a height (and display: inline-grid
+ * where it sits in a line of text). The rules in :where() have no weight, so any rule of a place wins whatever the order
+ * of the stylesheets.
+ */
+:where(.pic) {
+  display: grid;
+  flex: none;
+}
+:where(.pic > .sign) {
+  width: 100%;
+  height: 100%;
+}
+.pic {
+  place-items: center;
+}
+.pic > * {
+  grid-area: 1 / 1;
+}
+/* The place's rounding (a ring's, a face's) is the picture's too. */
+.pic img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: contain;
+}
+/* A rule that sets display on the image would win over the hidden attribute's, so this one wins back. */
+.pic img[hidden] {
+  display: none;
+}
+.pic img:not([hidden]) + .sign {
+  visibility: hidden;
+}
+
+/*
+ * The Characters signs (ui/Sign.tsx): a faint fill on the body of a weapon, a petal, a crown (`f`) and a solid dot or
+ * spark (`fs`), both in the colour of the text around the sign, so that a sign still holds no colour of its own.
+ */
+.sign .f {
+  fill: currentColor;
+  fill-opacity: .2;
+}
+.sign .fs {
+  fill: currentColor;
+  stroke: none;
+}

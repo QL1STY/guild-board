@@ -1,0 +1,120 @@
+/*
+ * Endgame readiness (the design's section 6.5; mockup endgame.html): parchment, three mode cards with a ring, two columns of
+ * sheets that end level (the left column's two sheets share its height, and the Theater's sheet spreads its sections across
+ * its own), and the actions to clear everything. Pages keep .gb-page's 1,440 pixels, with no zoom of their own.
+ */
+.eg-page {
+  display: grid; gap: 16px;
+  --cr-paper: var(--ledger-light); --cr-gold-soft: #F1E3C2; --eg-good-soft: #DDEBD3; --eg-bad: #8A2E21; --eg-bad-soft: #F3D9D5; --eg-warn-ink: #7A5418;
+}
+.eg-grow { flex: 1; }
+.eg-note { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
+.eg-refusal { margin: 6px 0 0; color: var(--eg-warn-ink); font-size: 13.5px; font-weight: 700; }
+
+/* ---------- Top ---------- */
+.eg-top { display: grid; gap: 8px; padding: 16px 18px; }
+.eg-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; min-height: 30px; }
+.eg-head h2 { font-size: 22px; font-weight: 800; }
+.eg-top .eg-note { max-width: 110ch; color: var(--ink2); font-size: 14.5px; }
+
+/* ---------- The three modes ---------- */
+.eg-modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.eg-mode { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; padding: 18px 20px; }
+.eg-mode .k { font-size: 13px; color: var(--muted); font-weight: 700; }
+.eg-mode .v { font-size: 22px; font-weight: 800; line-height: 1.1; }
+.eg-mode .s { margin-top: 2px; font-size: 13.5px; color: var(--ink2); }
+
+/* ---------- Two columns that end level ---------- */
+.eg-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+.eg-left { display: grid; grid-auto-rows: 1fr; gap: 16px; }
+.eg-sheet { display: grid; gap: 14px; align-content: space-between; padding: 18px 20px; }
+.eg-sheet h2 { font-size: 22px; font-weight: 800; }
+.eg-sheet h3 { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--gold-ink); }
+.eg-list { display: grid; gap: 10px; }
+/* In the left column the list takes what the sheet has over, each row growing alike, so no blank is left between a heading and its rows. */
+.eg-left .eg-sheet { grid-template-rows: auto 1fr; }
+.eg-left .eg-list { grid-auto-rows: 1fr; }
+.eg-list.tight { gap: 8px; }
+
+/* ---------- A face, and a team ---------- */
+.eg-face { display: inline-flex; }
+.eg-ava { --size: 44px; border-color: var(--border); }
+.eg-ava.off { filter: grayscale(1); opacity: .45; }
+.eg-ava.dps { border-color: var(--fill); box-shadow: 0 0 0 2px var(--cr-gold-soft); }
+.eg-team {
+  display: grid; grid-template-columns: 96px 1fr 120px; gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid var(--hairline);
+  border-radius: 14px; background: var(--cr-paper);
+}
+.eg-lab b { display: block; font-size: 15px; }
+.eg-lab span { font-size: 12.5px; color: var(--muted); }
+.eg-faces { display: flex; gap: 6px; }
+.eg-fig { display: grid; justify-items: center; gap: 2px; width: 58px; text-align: center; }
+.eg-fig span { font-size: 11.5px; color: var(--muted); line-height: 1.1; }
+.eg-fig em { font-style: normal; font-size: 11px; font-weight: 800; color: var(--ink2); }
+.eg-tr { text-align: right; }
+.eg-tr b { display: block; font-size: 26px; line-height: 1; }
+.eg-tr span { font-size: 12.5px; color: var(--muted); }
+.eg-bar { height: 8px; margin-top: 6px; border-radius: 4px; background: var(--tint); overflow: hidden; }
+.eg-bar i { display: block; height: 100%; border-radius: 4px; background: var(--fill); }
+.eg-why { grid-column: 1 / -1; padding-top: 8px; border-top: 1px dashed var(--hairline); font-size: 13.5px; color: var(--ink2); }
+
+/* ---------- Stygian Onslaught ---------- */
+.eg-boss {
+  display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 10px 14px; border: 1px solid var(--hairline); border-radius: 14px;
+  background: var(--cr-paper);
+}
+.eg-boss .n { font-size: 15px; font-weight: 800; }
+.eg-boss .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.eg-tag { padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.eg-tag.adv { background: var(--eg-good-soft); color: var(--good); }
+.eg-tag.dis { background: var(--eg-bad-soft); color: var(--eg-bad); }
+.eg-mini { display: flex; align-items: center; gap: 4px; }
+.eg-mini b { margin-left: 8px; font-size: 20px; }
+
+/* ---------- Imaginarium Theater ---------- */
+.eg-elsel { display: flex; flex-wrap: wrap; gap: 6px; }
+.eg-elsel button {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px 0 8px; border: 1px solid var(--border); border-radius: 999px; background: var(--cr-paper);
+  font-size: 13px; font-weight: 800; color: var(--ink2); cursor: pointer;
+  transition: border-color var(--t-state), background-color var(--t-state);
+}
+.eg-elsel button:hover { border-color: var(--r1); }
+.eg-elsel button i { width: 12px; height: 12px; border-radius: 50%; background: var(--el-ink); }
+.eg-elsel button[aria-pressed='true'] { border-color: var(--fill); background: var(--cr-gold-soft); color: var(--ink); }
+.eg-elsel button.month::after { content: 'this month'; margin-left: 2px; font-size: 11px; font-weight: 800; color: var(--eg-warn-ink); }
+.eg-back {
+  justify-self: start; height: 30px; padding: 0 14px; border: 1px solid var(--fill); border-radius: 999px; background: var(--cr-gold-soft); color: var(--eg-warn-ink);
+  font-size: 13px; font-weight: 800; cursor: pointer;
+}
+.eg-back:hover { border-color: var(--gold-ink); }
+.eg-cast { display: grid; gap: 10px; }
+.eg-crow {
+  display: grid; grid-template-columns: 110px 1fr 70px; gap: 12px; align-items: center; padding: 8px 12px; border: 1px solid var(--hairline); border-radius: 12px;
+  background: var(--cr-paper);
+}
+.eg-crow .who { display: flex; flex-wrap: wrap; gap: 6px; }
+.eg-crow .cnt { text-align: right; font-size: 22px; font-weight: 800; }
+.eg-crow .cnt small { display: block; font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.eg-crow.thin { border-color: var(--r1); background: var(--cr-gold-soft); }
+.eg-close { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+.eg-cl { display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: center; padding: 8px 10px; border: 1px dashed var(--border); border-radius: 12px; background: var(--cr-paper); }
+.eg-cl b { display: block; font-size: 14px; }
+.eg-cl span { display: block; font-size: 12.5px; color: var(--muted); }
+
+/* ---------- To clear everything ---------- */
+.eg-acts { display: grid; gap: 10px; counter-reset: c; }
+.eg-act {
+  counter-increment: c; display: grid; grid-template-columns: 34px 52px 1fr auto; gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid var(--hairline);
+  border-radius: 14px; background: var(--cr-paper);
+}
+.eg-act::before {
+  content: counter(c); display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; font-weight: 800; background: var(--cr-gold-soft); color: var(--eg-warn-ink);
+}
+.eg-act .eg-ava { border-color: var(--fill); }
+.eg-act .t { font-size: 18px; font-weight: 800; line-height: 1.2; }
+.eg-act .d { margin-top: 3px; font-size: 14px; color: var(--ink2); }
+.eg-go {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 170px; height: 38px; padding: 0 14px; border: 1px solid var(--fill); border-radius: 10px; background: var(--cr-gold-soft);
+  color: var(--eg-warn-ink); font-size: 14px; font-weight: 800; text-decoration: none; white-space: nowrap; cursor: pointer;
+}
+.eg-go:hover { border-color: var(--gold-ink); }

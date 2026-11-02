@@ -1,0 +1,19 @@
+{
+  "key": "escoffier", "name": "Escoffier", "element": "Cryo", "weapon_type": "Polearm", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "healer"], "keeps_alive": true, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 70, "cd": 120, "er": 160},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["golden-troupe"], "pieces": "4"}, {"sets": ["blizzard-strayer"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}],
+  "weapons": ["symphonist-of-scents", "staff-of-homa", "favonius-lance"],
+  "partners": ["Hydro", "Cryo"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Cryo freeze sub-DPS who heals with her Burst (172% ATK + 1,078 at level 1) and after it. Both sources put the Skill before the Burst and agree on 4pc Golden Troupe, ATK% or ER Sands, a Cryo DMG or ATK% Goblet, a crit Circlet and Symphonist of Scents and Staff of Homa first. Goals are Game8's (ATK 2,000 or above, CR 60-70%, CD 120% or above, ER 160-180% or above, lower with more Cryo units); ER 160% is its low end and falls in KQM's Double Cryo range at C0 (130-165%). No DMG goal is set, since the Goblet may be ATK%. Blizzard Strayer is KQM's second set, Noblesse Oblige Game8's; Favonius Lance is on both lists.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/escoffier-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/385307", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7624", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

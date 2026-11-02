@@ -1,0 +1,126 @@
+/* The Backlog page. Carried over from the approved mockup; columns may shrink, and a region's long name wraps. */
+/*
+ * The Backlog reads a third larger than the other pages, at every width (scaling pass spec, section 2): its counters, its
+ * toolbar, its region cards and its side column, and what it says before it has data, are drawn 1.33 times the sizes the
+ * rules below give them. A CSS zoom does it, so they grow together and lay out at their larger size. The page keeps its
+ * width: .gb-page holds 1,440 pixels at most (frame.css), and its parts, zoomed, fill it. A glide measures on the screen
+ * and moves a card in its own, zoomed, pixels (ui/motion.tsx, glideFrom).
+ */
+.bk-page > *,
+.bk-larger { zoom: 1.33; }
+
+/* The counters: five to a row, sharing it; in a narrow window, fewer (below about 1,240 pixels). */
+.gb-counters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 10px; margin-bottom: 12px; }
+/* A counter: its sign in a round plate, and beside it the label in sentence case and the number with its change. Never
+   wider than 280 pixels, so that one alone, as before the overview is read, does not span the row. (A cap on the columns
+   instead would leave room for only three of them in the usual window.) */
+.gb-counter { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 10px; max-width: 280px; padding: 9px 12px; }
+.bk-sign { grid-row: 1 / span 2; display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%; background: var(--tint); color: var(--w-icon); }
+.bk-sign .sign { width: 20px; height: 20px; }
+.gb-counter .k,
+.gb-counter .vd { grid-column: 2; min-width: 0; }
+.gb-counter .k { font-size: 12.5px; color: var(--ink2); }
+.gb-counter .vd { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 7px; }
+.gb-counter .v { font-size: 21px; font-weight: 800; line-height: 1.15; }
+.gb-counter .d { font-size: 12px; font-weight: 700; color: var(--good); white-space: nowrap; }
+.gb-counter .d.flat { color: var(--ink2); }
+
+.gb-body { display: grid; grid-template-columns: minmax(0, 1fr) 262px; gap: 12px; }
+/* Where the row is too short for both (below about 1,180 pixels), the sort's switch goes under the heading. */
+.gb-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px; }
+/* "Unfinished regions", a section heading (frame.css, .gb-section-h) in the side column's headings' size, its hairline
+   running up to the sort's switch. It is never narrower than its words. */
+.gb-toolbar h2 { flex: 1 0 auto; font-size: 14px; font-weight: 800; color: var(--ink); }
+/* The region cards: three to a row in the usual window and wider, where the page's 1,440 pixels hold no more; in a
+   narrower window two (below about 1,500 pixels), and one (below about 1,180). */
+.gb-regions { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 10px; }
+.gb-region { padding: 10px 12px 12px; }
+/*
+ * A card's head: the ring, and beside it the words, which start 7.4 pixels down, where a name and the line under it
+ * centred on the 52-pixel ring would start. So the names of a row line up, whatever the lines under them: an areas line,
+ * or a name on two lines, which pushes the bars a line lower.
+ */
+.gb-rh { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+.gb-rt { min-width: 0; padding-top: 7.4px; }
+/*
+ * The ring is the share explored, set by the markup as --p, 0 to 100. It is a registered number so that it can be
+ * animated: it fills from 0 once, as its card first appears (the card has the class `in` until its animations end,
+ * RegionCard.tsx), and moves to a new share when the model gives one. The region's emblem sits in its middle, on the
+ * card's own colour.
+ */
+@property --p { syntax: '<number>'; inherits: false; initial-value: 0; }
+@keyframes ring-fill { from { --p: 0; } }
+.gb-ring {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: conic-gradient(var(--fill) calc(var(--p) * 1%), var(--track) 0);
+  transition: --p var(--t-enter) var(--ease-out);
+}
+.gb-region.in .gb-ring { animation: ring-fill var(--t-enter) var(--ease-out) backwards; }
+.gb-ring::before { content: ''; grid-area: 1 / 1; width: 42px; height: 42px; border-radius: 50%; background: var(--surface); }
+/* A Picture (ui/Picture.tsx): the emblem over its sign, the compass, which shows where there is no emblem. */
+/* The region's white emblem on a disc of its nation's colour (ui/emblem.ts sets --emblem); its sign is drawn in white too. */
+.gb-emb { grid-area: 1 / 1; z-index: 1; width: 34px; height: 34px; padding: 3px; border-radius: 50%; background: var(--emblem, var(--w-btn)); color: var(--surface); }
+.gb-emb .sign { width: 62%; height: 62%; }
+/* The name, whole, on a second line where it needs one, and the share explored beside its first line. */
+.gb-rn { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.gb-region h3 { min-width: 0; font-size: 16px; font-weight: 800; overflow-wrap: anywhere; }
+.gb-rp { flex: none; font-size: 14px; font-weight: 800; color: var(--ink2); }
+.gb-region .sub,
+.gb-region .gb-areas { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gb-region .sub,
+.gb-region .gb-areas { font-size: 11.5px; color: var(--muted); }
+.gb-region .more { display: block; margin-top: 7px; font-size: 11.5px; color: var(--muted); text-decoration: none; }
+.gb-region .more:hover { text-decoration: underline; }
+.gb-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; row-gap: 3px; margin-top: 6px; font-size: 12.5px; }
+.gb-bar .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gb-bar .pct { font-weight: 700; font-variant-numeric: tabular-nums; }
+.gb-bar .t { grid-column: 1 / -1; height: 5px; overflow: hidden; border-radius: 3px; background: var(--track); }
+/* The bars grow once, as their card first appears, and move to a new length when the model gives one. */
+.gb-bar .t i { display: block; height: 100%; border-radius: 3px; background: var(--fill); transition: width var(--t-enter) var(--ease-out); }
+.gb-region.in .gb-bar .t i { animation: grow-w var(--t-enter) var(--ease-out) backwards; }
+.gb-bar .t i.ok { background: var(--done); }
+/* The complete regions' heading, as the strip of chips had it: a row across the grid, before their cards. */
+.gb-regions > .bk-h { grid-column: 1 / -1; margin: 4px 0 0; }
+/* A complete region's card, after the unfinished ones: its ring is full, in the green of what is done, and its areas, where
+   it has any, are summed up in one line under its offering (.gb-areas, which looks as the offering's line does). */
+.gb-region.done .gb-ring { --fill: var(--done); }
+.gb-region.done .gb-rh { margin-bottom: 0; }
+/* A finished map: its sentence, and the complete regions' cards under it. */
+.gb-empty + .gb-regions { margin-top: 10px; }
+
+.gb-sidecol { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.gb-side { padding: 10px 12px; }
+/* A heading of the Backlog: in sentence case, with its sign in the gold of the signs. */
+.bk-h { display: flex; align-items: center; gap: 7px; margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--ink); }
+.bk-h .sign { flex: none; width: 17px; height: 17px; color: var(--w-icon); }
+.gb-list { margin: 0; padding: 0; list-style: none; }
+.gb-next { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12.5px; }
+.gb-next:first-child { border-top: 0; }
+.gb-next span { min-width: 0; overflow-wrap: anywhere; }
+.gb-next small { display: block; font-size: 11.5px; color: var(--muted); }
+.gb-next b { font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* Closest to done: the entry, and under it a thin bar of the share explored beside what is left. */
+.gb-next.near { display: block; }
+.gb-cl { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+/* Thin: 3 pixels here are 4 on the screen, as before the page was zoomed. */
+.gb-cl .bar { flex: 1; height: 3px; }
+.gb-cl b { flex: none; }
+/*
+ * A chapter's status is a seal (ui/marks.tsx), which is green where something is ready. Here it is a gold plate where
+ * the chapter is in progress, with the text in ink so that it can be read on the plate, and outlined where it is not
+ * started.
+ */
+.bk-seal { flex: none; }
+.bk-seal.gold .seal { background: color-mix(in srgb, var(--w-fill) 22%, transparent); color: var(--w-ink); }
+.bk-seal.gold .seal::before { color: var(--w-fill); }
+.bk-seal.outline .seal { background: transparent; box-shadow: inset 0 0 0 1px var(--w-outline); color: var(--w-ink2); }
+.bk-seal.outline .seal::before { color: var(--w-outline); }
+.gb-meter { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; row-gap: 3px; margin-top: 7px; font-size: 12.5px; }
+.gb-meter b { font-variant-numeric: tabular-nums; }
+.gb-meter .t { grid-column: 1 / -1; height: 6px; overflow: hidden; border-radius: 3px; background: var(--series-track); }
+.gb-meter .t i { display: block; height: 100%; background: var(--series); animation: grow-w var(--t-enter) var(--ease-out) backwards; transition: width var(--t-enter) var(--ease-out); }

@@ -1,0 +1,19 @@
+{
+  "key": "alyosha", "name": "Alyosha", "element": "Electro", "weapon_type": "Polearm", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["support", "healer"], "keeps_alive": true, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 180, "atk": 3000, "cr": 60},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["atk_pct"], "circlet": ["atk_pct", "heal", "cr"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "atk": "some", "cr": "some", "cd": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["heart-of-the-furnace"], "pieces": "4"}],
+  "weapons": ["symphonist-of-scents", "engulfing-lightning", "favonius-lance"],
+  "partners": ["Electro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "An Electro support whose Tugarin heals at 120% of his ATK and whose passive adds 0.35% Skill and Burst DMG per 1% ER (up to 70%). The sources agree on the same two sets (4pc Noblesse Oblige and 4pc Heart of the Furnace) but rank them the other way round: the card follows Game8, since KQM names Heart of the Furnace only when no one else can hold it. They differ on the talent order (Game8 Burst first, KQM Skill then Burst); the card follows Game8, as the Burst brings Tugarin and the field. KQM allows a Healing Bonus Circlet; Game8 does not. Goals are Game8's (ER 180-230%, ATK 2,000-3,000, CR 50-60%); ER is its lower end because KQM puts a team with one Electro partner at 145-180%.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/alyosha-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/606884", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/11163", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

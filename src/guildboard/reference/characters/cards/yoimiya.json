@@ -1,0 +1,38 @@
+{
+  "key": "yoimiya",
+  "name": "Yoimiya",
+  "element": "Pyro",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "skill", "burst"],
+  "talent_table": "elemental",
+  "goals": {},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "em": "some", "er": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["shimenawa-s-reminiscence"], "pieces": "4"},
+    {"sets": ["echoes-of-an-offering"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"},
+    {"sets": ["crimson-witch-of-flames"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["thundering-pulse", "polar-star", "aqua-simulacra", "rust", "slingshot"],
+  "partners": ["Hydro", "Pyro", "Anemo"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources: 4pc Shimenawa's Reminiscence first (KQM: most consistent), ATK% Sands (KQM allows EM for reaction teams), a Pyro DMG Goblet, a CRIT Circlet, Thundering Pulse first and Normal Attack first. Other sets: Crimson Witch of Flames (Game8's Pyro Reactions build and KQM), Echoes of an Offering, Marechaussee Hunter (only with Furina), Night of the Sky's Unveiling and Gilded Dreams (all KQM). Talent order differs after the Normal Attack: KQM is Skill > Burst (the Skill's level raises the Blazing Arrow multiplier on her Normal Attacks, 137.9% to 161.7%), Game8 is Burst > Skill; the card uses KQM's. Her damage is Normal Attacks on the elemental curve (1-hit 35.6% to 63.6% each, ratio 1.79). Neither source gives numeric goals or ER, so none is set.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/yoimiya-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/333497", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/15", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,33 @@
+{
+  "key": "traveler-anemo",
+  "name": "Traveler (Anemo)",
+  "element": "Anemo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["they", "them", "their"],
+  "roles": ["support", "damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {},
+  "mains": {"sands": ["er", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "em": "wants", "cr": "some", "cd": "some", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["viridescent-venerer"], "pieces": "4"}
+  ],
+  "weapons": ["primordial-jade-cutter", "freedom-sworn", "skyward-blade", "sacrificial-sword", "iron-sting", "festering-desire"],
+  "partners": ["Pyro", "Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM has no Anemo Traveler guide (its quick-guide address for this character answers 404), so this card rests on Game8 (Anemo Sub DPS build) and genshin-builds.com (checked 2026-10-30), which agree on 4pc Viridescent Venerer, Skill > Burst > Normal Attack, an Anemo DMG Goblet and a CRIT or EM Circlet. They differ on the Sands (Game8: Energy Recharge; genshin-builds: EM, ATK% or ER; ER and EM are both kept), and on the first weapon (Game8: Primordial Jade Cutter; genshin-builds: Freedom-Sworn, which is a second pick here). Palm Vortex (Skill) is the damage line (Initial Storm DMG 176% to 317%, elemental curve). Neither source gives numeric goals, so none is set; the app fills them from the role. Partners are the elements Viridescent Venerer shreds. Sources are thin, so confidence is medium, not high.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297537", "checked": "2026-10-29"},
+    {"url": "https://genshin-builds.com/en/character/traveler_anemo", "checked": "2026-10-30"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/19", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

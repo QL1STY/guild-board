@@ -1,0 +1,35 @@
+{
+  "key": "tartaglia",
+  "name": "Tartaglia",
+  "element": "Hydro",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "physical",
+  "goals": {"atk": 2100, "cr": 80, "cd": 180, "er": 130},
+  "mains": {"sands": ["atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["nymph-s-dream"], "pieces": "4"},
+    {"sets": ["heart-of-depth"], "pieces": "4"},
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}
+  ],
+  "weapons": ["polar-star", "aqua-simulacra", "hunter-s-path", "skyward-harp", "thundering-pulse", "the-first-great-magic", "amos-bow"],
+  "partners": ["Pyro", "Anemo", "Electro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Nymph's Dream (KQM: about 3% better than the others without prestacking), ATK% Sands, Hydro DMG Goblet and a CRIT Circlet; Heart of Depth is the second set in both (Game8's third, Night of the Sky's Unveiling, is Game8's alone). Weapons: Game8 puts Polar Star first; KQM lists five 5-star CRIT bows with no order (Aqua Simulacra first for burst-focused builds, Polar Star for prestacking), so Polar Star leads and the others follow. Talent order differs: KQM is Normal Attack > Burst > Skill (Bow Focus; Melee Focus is Skill first), Game8 is Skill > Burst > Normal. The card uses KQM's Bow Focus order because the damage is in the Normal and Charged Attacks. The damage line is a Normal Attack (Aimed Shot 43.9% to 86.7%, ratio 1.975), so the table is physical, though the damage is Hydro; the fully charged shot is on the elemental curve. Goals are Game8's: ATK 1,800-2,100, CR 70-80, CD 180 or above, ER 110-130 (upper ends). KQM gives no goals or ER. Partners are inferred (Pyro and Anemo for Vaporize with Kazuha, Electro for Electro-Charged); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/tartaglia-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/305862", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/42", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

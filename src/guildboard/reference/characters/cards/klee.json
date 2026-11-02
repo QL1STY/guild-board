@@ -1,0 +1,37 @@
+{
+  "key": "klee",
+  "name": "Klee",
+  "element": "Pyro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "skill", "burst"],
+  "talent_table": "elemental",
+  "goals": {"er": 130, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "dmg": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"},
+    {"sets": ["crimson-witch-of-flames"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"},
+    {"sets": ["unfinished-reverie"], "pieces": "4"}
+  ],
+  "weapons": ["lost-prayer-to-the-sacred-winds", "reliquary-of-truth", "tome-of-the-eternal-flow", "the-widsith", "cashflow-supervision", "dodoco-tales", "vivid-notions", "sacrificial-fragments"],
+  "partners": ["Pyro", "Cryo", "Hydro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources: ATK% sands, Pyro DMG goblet, CRIT circlet, Normal Attack first (Charged Attacks). Game8's Hexerei build names 4pc A Day Carved from Rising Winds and Lost Prayer to the Sacred Winds (her signature) as best; KQM lists A Day Carved first as well, then Crimson Witch, Marechaussee Hunter, Night of the Sky's Unveiling, Unfinished Reverie and Gilded Dreams, and a different weapon order (Reliquary of Truth, The Widsith, Cashflow Supervision, Tome of the Eternal Flow); Lost Prayer leads because Game8 names it best and KQM includes it. KQM's goblet allows ATK% beside Pyro DMG. The catalyst Normal and Charged Attacks use the elemental curve (1.8x at level 10). Neither source gives CRIT or ATK goals. ER 130: KQM lists Klee with one Pyro teammate at 125-140 and with two at 115-130, solo Pyro at 140-160.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/klee-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297521", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/12", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

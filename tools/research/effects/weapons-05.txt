@@ -1,0 +1,109 @@
+@ blackcliff-slasher
++ atk_pct 12/15/18/21/24*3 met at 3 stacks, 30s after defeating opponents
+
+@ blackcliff-warbow
++ atk_pct 12/15/18/21/24*3 met at 3 stacks, 30s after defeating opponents
+
+@ blackcliff-pole
++ atk_pct 12/15/18/21/24*3 met at 3 stacks, 30s after defeating opponents
+
+@ the-black-sword
++ dmg 20/25/30/35/40 met Normal and Charged Attack DMG
+~ not counted: HP regenerated on a CRIT Hit
+
+@ thundering-pulse
++ atk_pct 20/25/30/35/40 always
++ dmg 40/50/60/70/80 met Normal Attack DMG at stack level 3 of the Thunder Emblem (12%/15%/18%/21%/24% at 1, 24%/30%/36%/42%/48% at 2; stacks come from Normal Attack hits, Elemental Skill casts, and Energy under 100%)
+= the wiki text has a typo ("24%48%/80%", a missing slash) in the fifth refinement's triple, so the stack-3 column does not read as 40/50/60/70/80; the stack-3 values 40, 50, 60, 70 and the 80 at the end of that triple are all in the text
+
+@ aquila-favonia
++ atk_pct 20/25/30/35/40 always
+~ not counted: HP regenerated and AoE DMG when taking DMG
+
+@ windblume-ode
++ atk_pct 16/20/24/28/32 met 6s after using an Elemental Skill
+
+@ mistsplitter-reforged
++ dmg 12/15/18/21/24 always
++ dmg 28/35/42/49/56 met Elemental DMG Bonus for the wielder's Element at stack level 3 of the Mistsplitter's Emblem (8%/10%/12%/14%/16% at 1, 16%/20%/24%/28%/32% at 2; stacks come from Normal Attack Elemental DMG, Elemental Burst casts, and Energy under 100%)
+
+@ snow-tombed-starsilver
+~ no stat: an Everfrost Icicle deals AoE DMG of 80%/95%/110%/125%/140% of ATK (200%/240%/280%/320%/360% to Cryo-affected opponents), not counted
+
+@ rainslasher
++ dmg 20/24/28/32/36 met against opponents affected by Hydro or Electro
+
+@ sword-of-descension
++ atk 66/66/66/66/66 met the Traveler only
+~ the passive's text says it is effective only on the PlayStation Network platform, and gives one value for every refinement; not counted: a 50% chance of 200% ATK AoE DMG on a Normal or Charged Attack hit
+
+@ amos-bow
++ dmg 12/15/18/21/24 met Normal and Charged Attack DMG
++ dmg 8/10/12/14/16*5 met Normal and Charged Attack DMG, a further bonus for every 0.1s the arrow is in the air, up to 5 times
+
+@ iron-sting
++ dmg 6/7.5/9/10.5/12*2 met all DMG at 2 stacks, 6s after dealing Elemental DMG
+
+@ compound-bow
++ atk_pct 4/5/6/7/8*4 met at 4 stacks, 6s after Normal or Charged Attack hits
+~ not counted: Normal Attack SPD +1.2%/1.5%/1.8%/2.1%/2.4% per stack
+
+@ the-bell
++ dmg 12/15/18/21/24 met while protected by the shield the weapon generates on taking DMG (once every 45s)
+
+@ cinnabar-spindle
+~ no % stat: Elemental Skill DMG +40%/50%/60%/70%/80% of DEF, as flat DMG, not counted
+
+@ redhorn-stonethresher
++ def_pct 28/35/42/49/56 always
+~ not counted: Normal and Charged Attack DMG +40%/50%/60%/70%/80% of DEF, as flat DMG
+
+@ vortex-vanquisher
++ atk_pct 4/5/6/7/8*5 met at 5 stacks, 8s after scoring hits on opponents
+~ not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield
+
+@ prototype-amber
+~ no stat: regenerates Energy and HP over 6s after an Elemental Burst, not counted
+
+@ prototype-crescent
++ atk_pct 36/45/54/63/72 met 10s after a Charged Attack hits a weak point
+~ not counted: Movement SPD +10%
+
+@ prototype-starglitter
++ dmg 8/10/12/14/16*2 met Normal and Charged Attack DMG at 2 stacks, 12s after using an Elemental Skill
+
+@ prototype-rancour
++ atk_pct 4/5/6/7/8*4 met at 4 stacks, 6s after Normal or Charged Attacks hit
++ def_pct 4/5/6/7/8*4 met at 4 stacks, 6s after Normal or Charged Attacks hit
+
+@ prototype-archaic
+~ no stat: a 50% chance of an extra 240%/300%/360%/420%/480% ATK AoE DMG on a Normal or Charged Attack hit, not counted
+
+@ oathsworn-eye
++ er 24/30/36/42/48 met 10s after using an Elemental Skill
+
+@ favonius-lance
+~ no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted
+
+@ favonius-codex
+~ no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted
+
+@ favonius-warbow
+~ no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted
+
+@ favonius-greatsword
+~ no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted
+
+@ favonius-sword
+~ no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted
+
+@ luxurious-sea-lord
++ dmg 12/15/18/21/24 met Elemental Burst DMG
+~ not counted: a tuna onrush of 100%/125%/150%/175%/200% ATK AoE DMG
+
+@ serpent-spine
++ dmg 6/7/8/9/10*5 met at 5 stacks, one every 4s on the field (the wielder also takes 3%/2.7%/2.4%/2.2%/2% more DMG per stack)
+
+@ engulfing-lightning
++ atk_pct 80/90/100/110/120 met at the cap of 28%/35%/42%/49%/56% of Energy Recharge over the base 100%
++ er 30/35/40/45/50 met 12s after using an Elemental Burst

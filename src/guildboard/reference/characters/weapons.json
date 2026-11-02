@@ -1,0 +1,6529 @@
+{
+ "weapons": {
+  "breezeborne-refrain": {
+   "name": "Breezeborne Refrain",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "er",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/08697d01729fc9e1be80b7ca81f237a2_4427393545344341155.png",
+   "entry": "11733",
+   "notes": "not counted: Stellar Glimmer reaction DMG boost for nearby party members (24%/30%/36%/42%/48%, from 3 stacks of Hymn of the Pure)"
+  },
+  "winter-s-heavy-heart": {
+   "name": "Winter's Heavy Heart",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cd",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      96,
+      120,
+      144,
+      168,
+      192
+     ],
+     "when": "met",
+     "condition": "four Cryo characters in the party (the most Silver-Tinged Blood Pact counts)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/1eae2b97883d47eec8fbe983f320a655_112506127095971459.png",
+   "entry": "11732",
+   "notes": "an Electro character in the party gives ATK +4.8%/6%/7.2%/8.4%/9.6% instead of Elemental Mastery, and up to 4 Cryo or Electro characters count in all, so only the Cryo case is counted; Radiance: Stellar Glimmer changes the effect to 20/25/30/35/40 EM per Cryo or Electro character plus Stellar Glimmer reaction DMG, not counted"
+  },
+  "silver-light": {
+   "name": "Silver Light",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      104,
+      130,
+      156,
+      182,
+      208
+     ],
+     "when": "met",
+     "condition": "2 stacks, 12s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/071c61a5a43e16216ae89151f742e4d5_2328042413803540054.png",
+   "entry": "11731",
+   "notes": ""
+  },
+  "new-bough": {
+   "name": "New Bough",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cd",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "at 3 stacks of Verdant: hit an opponent within 12s after using the Elemental Skill, lasts 6s"
+    },
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "at 3 stacks of Verdant: hit an opponent within 12s after using the Elemental Skill, lasts 6s"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/44d909e22212bfaca8c72fa7e4bfd270_6674339642244055501.png",
+   "entry": "11730",
+   "notes": "Radiance: Stellar Glimmer changes Verdant to ATK +6%/7.5%/9%/10.5%/12% and Stellar Glimmer reaction DMG +8%/10%/12%/14%/16%, not counted"
+  },
+  "hymn-of-the-maelstrom": {
+   "name": "Hymn of the Maelstrom",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "hp_pct",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "heal",
+     "values": [
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "hp_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "at 3 stacks of Vatsamonga's Vatic Vintage, after healing, lasts 10s"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/7fe45578aa17cddc9b00e172778ffce4_8194401657371794806.png",
+   "entry": "11729",
+   "notes": "not counted: the active party member's ATK +0.4%/0.5%/0.6%/0.7%/0.8% per 1,000 Max HP over 40,000 (max 8%/10%/12%/14%/16%), and the 75% increase after a Frozen or Stellar Swirl reaction"
+  },
+  "beyond-the-chrysalis": {
+   "name": "Beyond the Chrysalis",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cd",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "cd",
+     "values": [
+      56,
+      72,
+      88,
+      104,
+      120
+     ],
+     "when": "met",
+     "condition": "Winds of Devotion, the first of three effects in sequence after using an Elemental Skill or Burst, 10s"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/d4130862f0c732275fc66443636a9a73_2063364645139940052.png",
+   "entry": "11728",
+   "notes": "not counted: Winds of Defiance (Stellar Swirl reaction DMG +36%/45%/54%/63%/72%) and Winds of Plenty (Elemental Energy)"
+  },
+  "jade-vista": {
+   "name": "Jade Vista",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "3 party members of a different element than the wielder"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/19c80f587430adbfce599f56ef3324dd_4937523743376541205.png",
+   "entry": "11221",
+   "notes": "for a party member of the same element the wielder gets Elemental Mastery +64/80/96/112/128 instead; the two effects share up to 3 stacks in all, with Elemental Mastery applied first, so only the different-element case is counted"
+  },
+  "covenant-of-frost-and-snow": {
+   "name": "Covenant of Frost and Snow",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "def_pct",
+   "sub_90": 51.7,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      120,
+      150,
+      180,
+      210,
+      240
+     ],
+     "when": "met",
+     "condition": "12s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/71e03a3f1868a9caa8e7adac310ca6a7_6530544918250739118.png",
+   "entry": "11220",
+   "notes": ""
+  },
+  "clash-of-kings": {
+   "name": "Clash of Kings",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Laws of the Board, 6s after using an Elemental Skill (once every 12s, extended up to 6s by a Charged Attack)"
+    },
+    {
+     "stat": "em",
+     "values": [
+      100,
+      125,
+      150,
+      175,
+      200
+     ],
+     "when": "met",
+     "condition": "Laws of the Board, 6s after using an Elemental Skill (once every 12s, extended up to 6s by a Charged Attack)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/028d4226ab8c38cbe2e0fcdd3ce128e4_172320011752876507.png",
+   "entry": "11219",
+   "notes": ""
+  },
+  "echoes-of-the-heart": {
+   "name": "Echoes of the Heart",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "12s after triggering an Elemental Reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/4f8d41d48cafdb7a77568b7fae43c436_5465649971679004871.png",
+   "entry": "11218",
+   "notes": "not counted: Stellar Glimmer reaction DMG +16%/20%/24%/28%/32%"
+  },
+  "frostbreath": {
+   "name": "Frostbreath",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "15s after triggering a Cryo or Hydro-related Elemental Reaction (once every 16s)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/6a0eb9b0455f71517ba22556b21814f1_4657577436996434077.png",
+   "entry": "11217",
+   "notes": "not counted: Elemental Energy for other party members"
+  },
+  "song-of-the-vigil": {
+   "name": "Song of the Vigil",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "em",
+   "sub_90": 110,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "12s after triggering a Stellar Glimmer reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/993e369730552558f3a6d11269647d3f_162896007110569426.png",
+   "entry": "11216",
+   "notes": "not counted: Elemental Energy regenerated on Elemental Reactions"
+  },
+  "forged-by-the-golden-melody": {
+   "name": "Forged by the Golden Melody",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      18,
+      22.5,
+      27,
+      31.5,
+      36
+     ],
+     "when": "met",
+     "condition": "in the ATK phase of Harmonic Movement (the phases change every 10s: ATK, then Elemental Mastery, then Stellar Glimmer reaction DMG)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/5238a7b7a630ef9f9d2d789f6a2aa6da_1650019963952327060.png",
+   "entry": "11215",
+   "notes": "the phases exclude each other, so only the stronger one, ATK, is an effect; the Elemental Mastery phase gives +120/150/180/210/240 Elemental Mastery; not counted: the Stellar Glimmer reaction DMG phase (28%/35%/42%/49%/56%); a Stellar Glimmer reaction adds a second 12s instance of the active phase"
+  },
+  "blade-of-atonement": {
+   "name": "Blade of Atonement",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      64,
+      80,
+      96,
+      112,
+      128
+     ],
+     "when": "met",
+     "condition": "12s after triggering an Elemental Reaction"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "12s after triggering a Stellar Glimmer reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/47b7c05e0d29ef0b8845e3b249fdd800_7183760739047053137.png",
+   "entry": "11214",
+   "notes": ""
+  },
+  "heretic-s-molten-blade": {
+   "name": "Heretic's Molten Blade",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "Gleam of First Light after using an Elemental Skill, at the greatest distance travelled (its range is 18%/22.5%/27%/31.5%/36% to 36%/45%/54%/63%/72%), 14s"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/0c0d6535c7c54aa95d58b5394a023cd2_844859417849776738.png",
+   "entry": "11213",
+   "notes": ""
+  },
+  "emberwell": {
+   "name": "Emberwell",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "12s after triggering an Elemental Reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/9ae260ef2d2f79ddc6e3963513e4cc46_2657429378983343835.png",
+   "entry": "11212",
+   "notes": "not counted: Stellar Glimmer reaction DMG +16%/20%/24%/28%/32%"
+  },
+  "exaiphanes-blade": {
+   "name": "Exaiphanes Blade",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      32,
+      40
+     ],
+     "when": "met",
+     "condition": "8s after attacking and hitting an opponent (once every 5s); the Traveler only"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/96a75037a498b9fcf07ff550696d517f_2887877366037905855.png",
+   "entry": "11211",
+   "notes": "the Traveler's CRIT DMG +0%/6%/6%/6%/6% per Element resonated with is not counted, because how many Elements resonate depends on the party; Elemental Energy not counted"
+  },
+  "whitelake-frostfeather": {
+   "name": "Whitelake Frostfeather",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "at 3 stacks of Lake-Hued Lament, after hitting with the Elemental Skill, 8s"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/5e3d91936ed4facfebc5f4f8c2ba4cde_1995425813023287621.png",
+   "entry": "11210",
+   "notes": "not counted: at 3 stacks, Stellar Glimmer reaction CRIT DMG +50%/65%/80%/95%/110% and Elemental Energy"
+  },
+  "a-teaspoon-of-transcendence": {
+   "name": "A Teaspoon of Transcendence",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cd",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/06/25/a2c59d52525cd3b23ba5dfc0e2ca0e40_8273039777765971978.png",
+   "entry": "10949",
+   "notes": "the Stellar effect is not counted: after a Charged Attack hits, Stellar-Conduct and Stellar Swirl reaction DMG +16%/20%/24%/28%/32% for 5s, max 3 stacks"
+  },
+  "disaster-and-remorse": {
+   "name": "Disaster and Remorse",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Unforgivable: Normal and Charged Attack DMG, 3s after using an Elemental Skill (once every 18s)"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Irreparable: Elemental Skill and Elemental Burst DMG, 3s after using an Elemental Skill (once every 18s)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/173531aa00de724260fb5c8ce21ce625_742789739843295350.png",
+   "entry": "10758",
+   "notes": "with Hexerei: Secret Rite in the party both boosts are increased by 75%, not counted; each effect's 3s is extended by 1s per hit of the other attack types"
+  },
+  "angelos-heptades": {
+   "name": "Angelos' Heptades",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 741,
+   "sub": "atk_pct",
+   "sub_90": 16.5,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      26,
+      34,
+      42,
+      50,
+      58
+     ],
+     "when": "met",
+     "condition": "Pathfinder's Light for the active character, 20s after creating a Shield, at its cap (10%/13%/16%/19%/22% per 1,000 ATK, up to 26%/34%/42%/50%/58%)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/35faadca59d9ed40b7c448a1e628bcdc_4873659369821393193.png",
+   "entry": "10757",
+   "notes": "not counted: Elemental Energy on creating a Shield; with Hexerei, an off-field Hexerei character gains 50% of the DMG increase"
+  },
+  "golden-frostbound-oath": {
+   "name": "Golden Frostbound Oath",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "def_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Geo DMG, 6s after the Elemental Skill or a Lunar-Crystallize attack hits (Frost Fae's Favor)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/04/03/56dfea855cb96781fc3fa4409463e523_641344848709162695.png",
+   "entry": "10547",
+   "notes": "not counted: Lunar-Crystallize Reaction DMG +40%/50%/60%/70%/80%, and the Geo DMG and Lunar-Crystallize bonus of 20%/25%/30%/35%/40% for other party members"
+  },
+  "gest-of-the-mighty-wolf": {
+   "name": "Gest of the Mighty Wolf",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      30.0,
+      38.0,
+      46.0,
+      54.0,
+      62.0
+     ],
+     "when": "met",
+     "condition": "at 4 stacks of Four Winds' Hymn, 4s"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/02/09/69a9c4711061f96f155bbe236d1ac188_2915183031167827788.png",
+   "entry": "9456",
+   "notes": "not counted: ATK SPD +10%; with the Hexerei: Secret Rite effect in the party each stack also gives CRIT DMG +7.5%/9.5%/11.5%/13.5%/15.5% (up to 4 stacks), which depends on the party"
+  },
+  "nocturne-s-curtain-call": {
+   "name": "Nocturne's Curtain Call",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      10,
+      12,
+      14,
+      16,
+      18
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "hp_pct",
+     "values": [
+      14,
+      16,
+      18,
+      20,
+      22
+     ],
+     "when": "met",
+     "condition": "12s after triggering a Lunar reaction or inflicting Lunar Reaction DMG (Bountiful Sea's Sacred Wine)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/07/670440ccb460f5f58e014c68ad569d78_7754520756837248808.png",
+   "entry": "9250",
+   "notes": "not counted: CRIT DMG of Lunar Reaction DMG +60%/80%/100%/120%/140% and Energy recovery"
+  },
+  "lightbearing-moonshard": {
+   "name": "Lightbearing Moonshard",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "def_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/07/5df9a7e1f45c7967eb263a37362c76d9_5509634125074303398.png",
+   "entry": "9249",
+   "notes": "not counted: Lunar-Crystallize reaction DMG +64%/80%/96%/112%/128% for 5s after an Elemental Skill"
+  },
+  "the-daybreak-chronicles": {
+   "name": "The Daybreak Chronicles",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cd",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "Normal Attack, Elemental Skill and Elemental Burst DMG at the maximum of Stirring Dawn Breeze (3s after leaving combat; it falls in combat and is restored by hits)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/25/888f15859930696bb17aeb61f35fa340_139096456278287885.png",
+   "entry": "9047",
+   "notes": "with Hexerei: Secret Rite effects in the party each hit restores 20%/25%/30%/35%/40% instead, not counted"
+  },
+  "rainbow-serpent-s-rain-bow": {
+   "name": "Rainbow Serpent's Rain Bow",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "8s after the wielder's attacks hit an opponent while the wielder is off-field"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/25/d9cb6d60dadf1e2238bcad97ba61afca_2753787926355500061.png",
+   "entry": "9046",
+   "notes": ""
+  },
+  "athame-artis": {
+   "name": "Athame Artis",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "cd",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Elemental Burst CRIT DMG"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Blade of the Daylight Hours, after an Elemental Burst hits an opponent"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/25/69991219a3eab8162a67513d013e6ef0_6929917729223804184.png",
+   "entry": "9045",
+   "notes": "not counted: nearby active party members' ATK +16%/20%/24%/28%/32% for 3s; with Hexerei: Secret Rite effects Blade of the Daylight Hours is increased by a further 75%"
+  },
+  "reliquary-of-truth": {
+   "name": "Reliquary of Truth",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "em",
+     "values": [
+      80,
+      100,
+      120,
+      140,
+      160
+     ],
+     "when": "met",
+     "condition": "Secret of Lies, 12s after using an Elemental Skill"
+    },
+    {
+     "stat": "cd",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "Moon of Truth, 4s after dealing Lunar-Bloom DMG"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/20/a81d9e6d6b35935cfa6027c1d74d70c8_5519387986125030469.png",
+   "entry": "8991",
+   "notes": "when Secret of Lies and Moon of Truth are both active, both results are increased by 50%, not counted"
+  },
+  "dawning-frost": {
+   "name": "Dawning Frost",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cd",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      72,
+      90,
+      108,
+      126,
+      144
+     ],
+     "when": "met",
+     "condition": "10s after a Charged Attack hits an opponent"
+    },
+    {
+     "stat": "em",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "10s after an Elemental Skill hits an opponent"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/20/f71e542de2ae1c6c9a936eceb667f733_3168622620827067279.png",
+   "entry": "8990",
+   "notes": ""
+  },
+  "sacrificer-s-staff": {
+   "name": "Sacrificer's Staff",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 620,
+   "sub": "cr",
+   "sub_90": 9.2,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 6s after an Elemental Skill hits an opponent"
+    },
+    {
+     "stat": "er",
+     "values": [
+      18,
+      22.5,
+      27,
+      31.5,
+      36
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 6s after an Elemental Skill hits an opponent"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/20/42b605f34cfce0b70d437d0673c847fd_3003547681809154152.png",
+   "entry": "8989",
+   "notes": ""
+  },
+  "bloodsoaked-ruins": {
+   "name": "Bloodsoaked Ruins",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "cd",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Requiem of Ruin, 6s after triggering a Lunar-Charged reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/f842bb3bf454987301dd1bedd3be0c06_372682473601768051.png",
+   "entry": "8838",
+   "notes": "not counted: Lunar-Charged DMG +36%/48%/60%/72%/84% for 3.5s after an Elemental Burst, and Elemental Energy"
+  },
+  "etherlight-spindlelute": {
+   "name": "Etherlight Spindlelute",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      100,
+      125,
+      150,
+      175,
+      200
+     ],
+     "when": "met",
+     "condition": "20s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/139e8ec2c68957b44a0f217b3859bb82_2114353354330070345.png",
+   "entry": "8837",
+   "notes": ""
+  },
+  "nightweaver-s-looking-glass": {
+   "name": "Nightweaver's Looking Glass",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "em",
+   "sub_90": 265,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "Prayer of the Far North, 4.5s after the Elemental Skill deals Hydro or Dendro DMG"
+    },
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "New Moon Verse, 10s after a nearby party member triggers a Lunar-Bloom reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/d28b849e0abef976114ea7ecef92960e_4616051474368823347.png",
+   "entry": "8836",
+   "notes": "not counted: party Bloom, Hyperbloom, Burgeon and Lunar-Bloom DMG when both effects are in effect"
+  },
+  "snare-hook": {
+   "name": "Snare Hook",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "12s after causing an Elemental Reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/794f286cd49e6beb026d4729d6a0e491_2738340196396279380.png",
+   "entry": "8835",
+   "notes": "with Moonsign: Ascendant Gleam the Elemental Mastery from this effect is further increased by 60/75/90/105/120; the Moonsign depends on the party, so it is not counted"
+  },
+  "blackmarrow-lantern": {
+   "name": "Blackmarrow Lantern",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "em",
+   "sub_90": 221,
+   "effects": [],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/fca1d073841a27aa921fb0cdadcc1814_4456705496709264629.png",
+   "entry": "8517",
+   "notes": "no effect on the wielder's stats: Bloom DMG +48%/60%/72%/84%/96% and Lunar-Bloom DMG +12%/15%/18%/21%/24% are reaction DMG, not counted; Moonsign: Ascendant Gleam adds Lunar-Bloom DMG"
+  },
+  "prospector-s-shovel": {
+   "name": "Prospector's Shovel",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/02b62205aa9b8bbf8db3f7dfd81c2722_4251757494889514703.png",
+   "entry": "8514",
+   "notes": "no effect on the wielder's stats: Electro-Charged DMG +48%/60%/72%/84%/96% and Lunar-Charged DMG +12%/15%/18%/21%/24% are reaction DMG, not counted; Moonsign: Ascendant Gleam adds Lunar-Charged DMG"
+  },
+  "master-key": {
+   "name": "Master Key",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "12s after causing an Elemental Reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/9fca47d88e241f45ae1568ca386c9e6f_3876291412959841816.png",
+   "entry": "8513",
+   "notes": "with Moonsign: Ascendant Gleam the Elemental Mastery from this effect is further increased by 60/75/90/105/120; the Moonsign depends on the party, so it is not counted"
+  },
+  "moonweaver-s-dawn": {
+   "name": "Moonweaver's Dawn",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG, additionally, when the Energy Capacity does not exceed 40 (16%/20%/24%/28%/32% at 60)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/02686441b09dcc1d5029ff21a6d04ef8_297003927757836842.png",
+   "entry": "8512",
+   "notes": ""
+  },
+  "serenity-s-call": {
+   "name": "Serenity's Call",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "12s after causing an Elemental Reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/88826bbf50b08b5f95c56c3dba17a002_3387604816719715343.png",
+   "entry": "8511",
+   "notes": "with Moonsign: Ascendant Gleam the Max HP from this effect is further increased by 16%/20%/24%/28%/32%; the Moonsign depends on the party, so it is not counted"
+  },
+  "flame-forged-insight": {
+   "name": "Flame-Forged Insight",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "15s after Electro-Charged, Lunar-Charged, Bloom, Lunar-Bloom, Crystallize or Lunar-Crystallize is triggered (once every 15s)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/07/21/62b7410999e0777b83bd4be9334226bc_1124279062957674054.png",
+   "entry": "8300",
+   "notes": "not counted: Elemental Energy"
+  },
+  "fractured-halo": {
+   "name": "Fractured Halo",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cd",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "20s after an Elemental Skill or Elemental Burst is used"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/07/21/6f0271a3d35033b8ec7260faa56b8cc1_2090404062568539078.png",
+   "entry": "8299",
+   "notes": "not counted: Electrifying Edict, all nearby party members deal 40%/50%/60%/70%/80% more Lunar-Charged DMG"
+  },
+  "azurelight": {
+   "name": "Azurelight",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "within 12s after an Elemental Skill is used"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "further, within those 12s, while the wielder has 0 Energy"
+    },
+    {
+     "stat": "cd",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "within those 12s, while the wielder has 0 Energy"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/12/0809293ee527b40073c4c9636eff6dd0_2992571952915882222.png",
+   "entry": "7785",
+   "notes": ""
+  },
+  "sequence-of-solitude": {
+   "name": "Sequence of Solitude",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "hp_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/24/351cd2de062f0cd7e0bef038fb63f6ae_5924354425808403276.png",
+   "entry": "7641",
+   "notes": "no stat: deals AoE DMG of 40%/50%/60%/70%/80% of Max HP when an attack hits (once every 15s), not counted"
+  },
+  "symphonist-of-scents": {
+   "name": "Symphonist of Scents",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cd",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "additionally, while the wielder is off-field"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      32,
+      40,
+      48,
+      56,
+      64
+     ],
+     "when": "met",
+     "condition": "Sweet Echoes, 3s after initiating healing (also for the characters healed)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/24/f1928d012621b1f03577efc4f619894a_6810995251642628479.png",
+   "entry": "7640",
+   "notes": ""
+  },
+  "vivid-notions": {
+   "name": "Vivid Notions",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cd",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "cd",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Plunging Attack CRIT DMG, Dawn's First Hue, 15s after using a Plunging Attack"
+    },
+    {
+     "stat": "cd",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Plunging Attack CRIT DMG, Twilight's Splendor, 15s after using an Elemental Skill or Burst"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/17/4eed5f1f892cf722e4f8df1778a0a1f1_3249018324800310475.png",
+   "entry": "7588",
+   "notes": ""
+  },
+  "tamayuratei-no-ohanashi": {
+   "name": "Tamayuratei no Ohanashi",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "10s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/07/a539c3f246fc39105fca045cb374aee8_7144935190009323615.png",
+   "entry": "7435",
+   "notes": "not counted: Movement SPD +10%"
+  },
+  "sunny-morning-sleep-in": {
+   "name": "Sunny Morning Sleep-In",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "em",
+   "sub_90": 265,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      120,
+      150,
+      180,
+      210,
+      240
+     ],
+     "when": "met",
+     "condition": "6s after triggering Swirl or Stellar Swirl"
+    },
+    {
+     "stat": "em",
+     "values": [
+      96,
+      120,
+      144,
+      168,
+      192
+     ],
+     "when": "met",
+     "condition": "9s after the Elemental Skill hits an opponent"
+    },
+    {
+     "stat": "em",
+     "values": [
+      32,
+      40,
+      48,
+      56,
+      64
+     ],
+     "when": "met",
+     "condition": "30s after the Elemental Burst hits an opponent"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/07/de8bcaf9142a27cc3aefe8a77f5b4c4c_6111963220065472522.png",
+   "entry": "7434",
+   "notes": ""
+  },
+  "starcaller-s-watch": {
+   "name": "Starcaller's Watch",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "em",
+   "sub_90": 265,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      100,
+      125,
+      150,
+      175,
+      200
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Mirror of Night for the active character, within 15s after the wielder creates a Shield (once every 14s)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/26/de225a286996965268c32027a6c484d9_2367767765928118667.png",
+   "entry": "7366",
+   "notes": ""
+  },
+  "a-thousand-blazing-suns": {
+   "name": "A Thousand Blazing Suns",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 741,
+   "sub": "cr",
+   "sub_90": 11,
+   "effects": [
+    {
+     "stat": "cd",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Scorching Brilliance, 6s after using an Elemental Skill or Burst (once every 10s)"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Scorching Brilliance, 6s after using an Elemental Skill or Burst (once every 10s)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/26/da1910fbe0e825e1e3704c126720ab24_2121228058184091562.png",
+   "entry": "7365",
+   "notes": "in the Nightsoul's Blessing state Scorching Brilliance is increased by 75%, not counted"
+  },
+  "astral-vulture-s-crimson-plumage": {
+   "name": "Astral Vulture's Crimson Plumage",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cd",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "12s after triggering a Swirl or Stellar Swirl reaction"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG, when 2 or more party members are of a different Elemental Type than the wielder (20%/25%/30%/35%/40% for 1)"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG, when 2 or more party members are of a different Elemental Type than the wielder (10%/12.5%/15%/17.5%/20% for 1)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/d3bb0f9d936379661d409644e4269ff1_2888646900955247330.png",
+   "entry": "7116",
+   "notes": ""
+  },
+  "flower-wreathed-feathers": {
+   "name": "Flower-Wreathed Feathers",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      36,
+      45.0,
+      54,
+      63.0,
+      72
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG of Aimed Shots, at 6 stacks (one every 0.5s)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/0d166f885502452188022563f5fc8797_876127194185049091.png",
+   "entry": "7115",
+   "notes": ""
+  },
+  "waveriding-whirl": {
+   "name": "Waveriding Whirl",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "10s after using an Elemental Skill (once every 15s)"
+    },
+    {
+     "stat": "hp_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "further, at the cap for Hydro characters in the party (12%/15%/18%/21%/24% each, 2 Hydro characters), 10s after an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/7d6082c11138d4e71e7cb7ce6276e8bb_8319120219748886665.png",
+   "entry": "7114",
+   "notes": ""
+  },
+  "calamity-of-eshu": {
+   "name": "Calamity of Eshu",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG, while protected by a Shield"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack CRIT Rate, while protected by a Shield"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/034a74a58833bc506791e2d2c8e00539_8351835749900866009.png",
+   "entry": "7113",
+   "notes": ""
+  },
+  "mountain-bracing-bolt": {
+   "name": "Mountain-Bracing Bolt",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG, 8s after another nearby party member uses an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/201424fa6a98ffb190ae82c8ad7d0cc3_6084387639848528037.png",
+   "entry": "7031",
+   "notes": ""
+  },
+  "fruitful-hook": {
+   "name": "Fruitful Hook",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Plunging Attack CRIT Rate"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Normal, Charged and Plunging Attack DMG, 10s after a Plunging Attack hits an opponent"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/25c75653d47f882870e96d9119a17e9a_6960324287026452673.png",
+   "entry": "7030",
+   "notes": ""
+  },
+  "peak-patrol-song": {
+   "name": "Peak Patrol Song",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "def_pct",
+   "sub_90": 82.7,
+   "effects": [
+    {
+     "stat": "def_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "at 2 stacks of Ode to Flowers, 6s after Normal or Plunging Attacks hit"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25.0,
+      30,
+      35.0,
+      40
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus at 2 stacks of Ode to Flowers, 6s after Normal or Plunging Attacks hit"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      25.6,
+      32,
+      38.4,
+      44.8,
+      51.2
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus for nearby party members including the wielder, 15s after Ode to Flowers reaches 2 stacks, at the cap (8%/10%/12%/14%/16% per 1,000 DEF)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/862200e1c8e0ee60c2396d8f4fbe7fb8_4291183729855777874.png",
+   "entry": "7029",
+   "notes": ""
+  },
+  "sturdy-bone": {
+   "name": "Sturdy Bone",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/9fbe8cf3da1d476d4c5a228017656cd1_114889972255186755.png",
+   "entry": "7028",
+   "notes": "no stat: Normal Attack DMG +16%/20%/24%/28%/32% of ATK is flat damage after Sprint, not counted"
+  },
+  "chain-breaker": {
+   "name": "Chain Breaker",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      14.399999999999999,
+      18,
+      21.6,
+      25.200000000000003,
+      28.799999999999997
+     ],
+     "when": "met",
+     "condition": "3 party members from Natlan or of a different Elemental Type than the wielder"
+    },
+    {
+     "stat": "em",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "3 or more party members from Natlan or of a different Elemental Type than the wielder"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/8a6b418598f555deba7da922385254a2_8112788546506820868.png",
+   "entry": "6552",
+   "notes": ""
+  },
+  "ring-of-yaxche": {
+   "name": "Ring of Yaxche",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "hp_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG at the cap of Jade-Forged Crown, 10s after using an Elemental Skill (0.6%/0.7%/0.8%/0.9%/1% per 1,000 Max HP)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/9ab70898644274ce31f91faea8216bd8_5924884446177979679.png",
+   "entry": "6551",
+   "notes": ""
+  },
+  "ash-graven-drinking-horn": {
+   "name": "Ash-Graven Drinking Horn",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "hp_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/28866045cbb3e5227244b4aa09ef0db3_8394892053233317551.png",
+   "entry": "6550",
+   "notes": "no stat: deals AoE DMG of 40%/50%/60%/70%/80% of Max HP when an attack hits (once every 15s), not counted"
+  },
+  "footprint-of-the-rainbow": {
+   "name": "Footprint of the Rainbow",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "def_pct",
+   "sub_90": 51.7,
+   "effects": [
+    {
+     "stat": "def_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "15s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/9d5294dc8b165585f51ec126543a5208_1314604610170565721.png",
+   "entry": "6549",
+   "notes": ""
+  },
+  "earth-shaker": {
+   "name": "Earth Shaker",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG, 8s after a party member triggers a Pyro-related reaction"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/dc6bf4c87afe67014579743618e97371_6360663376854922140.png",
+   "entry": "6548",
+   "notes": ""
+  },
+  "flute-of-ezpitzal": {
+   "name": "Flute of Ezpitzal",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "def_pct",
+   "sub_90": 69,
+   "effects": [
+    {
+     "stat": "def_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "15s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/bdd740ad879d22a1fc4e3770cc9c73bd_5479414831341401728.png",
+   "entry": "6547",
+   "notes": ""
+  },
+  "surf-s-up": {
+   "name": "Surf's Up",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG at 4 stacks of Scorching Summer, for 14s after using an Elemental Skill (once every 15s)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/6ce2e0da75fbdc19fc4b6f9e7bae9049_5151463723015160354.png",
+   "entry": "6546",
+   "notes": ""
+  },
+  "fang-of-the-mountain-king": {
+   "name": "Fang of the Mountain King",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 741,
+   "sub": "cr",
+   "sub_90": 11,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      60,
+      75.0,
+      90,
+      105.0,
+      120
+     ],
+     "when": "met",
+     "condition": "Elemental Skill and Burst DMG at 6 stacks of Canopy's Favor, 6s each"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/1fd3c498faccab68bfa5d961477a8c29_2936359463997877474.png",
+   "entry": "6545",
+   "notes": ""
+  },
+  "lumidouce-elegy": {
+   "name": "Lumidouce Elegy",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      15,
+      19,
+      23,
+      27,
+      31
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      36,
+      46,
+      56,
+      66,
+      76
+     ],
+     "when": "met",
+     "condition": "at 2 stacks, 8s after triggering Burning or dealing Dendro DMG to Burning opponents"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/07/31/3dff07a4b024917cb63c933d2078ccc8_8401589850337226556.png",
+   "entry": "5847",
+   "notes": "not counted: Elemental Energy"
+  },
+  "cloudforged": {
+   "name": "Cloudforged",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      80,
+      100,
+      120,
+      140,
+      160
+     ],
+     "when": "met",
+     "condition": "at 2 stacks, 18s after Elemental Energy decreases"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/30/3faeebdf8797b7fe42c82cf92b0ffdef_5718559054494307925.png",
+   "entry": "5713",
+   "notes": ""
+  },
+  "absolution": {
+   "name": "Absolution",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cd",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "cd",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 6s after the value of a Bond of Life increases"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/30/d5da78d8dd0ac8814b699d6195145776_7211910286782963050.png",
+   "entry": "5674",
+   "notes": ""
+  },
+  "silvershower-heartstrings": {
+   "name": "Silvershower Heartstrings",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "hp_pct",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "at 3 Remedy stacks (12%/15%/18%/21%/24% at 1, 24%/30%/36%/42%/48% at 2)"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Elemental Burst CRIT Rate, while 3 Remedy stacks are active (cancelled 4s after falling under 3)"
+    }
+   ],
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/06/25/bbfcbecb44910640904415c4c8f7a71d_6233228634431101260.png",
+   "entry": "5673",
+   "notes": ""
+  },
+  "crimson-moon-s-semblance": {
+   "name": "Crimson Moon’s Semblance",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      16,
+      20,
+      24,
+      28
+     ],
+     "when": "met",
+     "condition": "while the wielder has a Bond of Life (a Charged Attack that hits grants one, once every 14s)"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      24,
+      32,
+      40,
+      48,
+      56
+     ],
+     "when": "met",
+     "condition": "additionally, while the Bond of Life is 30% of Max HP or more"
+    }
+   ],
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/ce91a453b9a942c9ab20df0f62caa033_4944089408609115680.png",
+   "entry": "5577",
+   "notes": ""
+  },
+  "dialogues-of-the-desert-sages": {
+   "name": "Dialogues of the Desert Sages",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "hp_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/15/35428890/cac436c29ec9fc31413bc56cd0448f70_4636647816463834058.png",
+   "entry": "5151",
+   "notes": "no stat: restores 8/10/12/14/16 Energy on healing, not counted"
+  },
+  "uraku-misugiri": {
+   "name": "Uraku Misugiri",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    },
+    {
+     "stat": "def_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/97083537849c199bc3fa7fed8a49d010_4537988792766091765.png",
+   "entry": "5150",
+   "notes": "after a nearby active character deals Geo DMG, the Normal Attack and Elemental Skill bonuses increase by 100% for 15s, which depends on the party, not counted"
+  },
+  "crane-s-echoing-call": {
+   "name": "Crane's Echoing Call",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 741,
+   "sub": "atk_pct",
+   "sub_90": 16.5,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      28,
+      41,
+      54,
+      67,
+      80
+     ],
+     "when": "met",
+     "condition": "Plunging Attack DMG, 20s after the wielder hits an opponent with a Plunging Attack (all nearby party members get it)"
+    }
+   ],
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/7d49f94bfb8725b8c04332b11eb7df60_2329485834347949734.png",
+   "entry": "4941",
+   "notes": "not counted: Energy restored to the wielder"
+  },
+  "ultimate-overlord-s-mega-magic-sword": {
+   "name": "Ultimate Overlord's Mega Magic Sword",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "up to this much more, by the number of Melusines the player has helped in Merusea Village"
+    }
+   ],
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/23/35428890/9eb77ebc428cc08b695d166c70d72012_6536152954173802112.png",
+   "entry": "4720",
+   "notes": ""
+  },
+  "verdict": {
+   "name": "Verdict",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      36,
+      45.0,
+      54,
+      63.0,
+      72
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG with 2 Seals (15s each; they disappear 0.2s after the Elemental Skill deals DMG)"
+    }
+   ],
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/4f35f9bf1bceead8fa216873ce321847_580447322497057561.png",
+   "entry": "4719",
+   "notes": ""
+  },
+  "sword-of-narzissenkreuz": {
+   "name": "Sword of Narzissenkreuz",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/12/35428890/01d3f8317c86ea98d617ad61213b7c9a_4271295687560653806.png",
+   "entry": "4592",
+   "notes": "no stat: Pneuma or Ousia energy blast dealing 160%/200%/240%/280%/320% of ATK as DMG when the wielder has no Arkhe, not counted"
+  },
+  "splendor-of-tranquil-waters": {
+   "name": "Splendor of Tranquil Waters",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG at 3 stacks, 6s after the wielder's current HP changes"
+    },
+    {
+     "stat": "hp_pct",
+     "values": [
+      28,
+      35.0,
+      42,
+      49.0,
+      56
+     ],
+     "when": "met",
+     "condition": "at 2 stacks, 6s after other party members' current HP changes"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/06/35428890/9807aa25f336daae391a6f6d4995af3d_3267574340947980453.png",
+   "entry": "4570",
+   "notes": ""
+  },
+  "cashflow-supervision": {
+   "name": "Cashflow Supervision",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG at 3 stacks, 4s after current HP changes"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      42,
+      52.5,
+      63,
+      73.5,
+      84
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG at 3 stacks, 4s after current HP changes"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/16/35428890/6d8248633da24c16368b6570bf578874_2176869761748941225.png",
+   "entry": "4340",
+   "notes": "not counted: ATK SPD +8%/10%/12%/14%/16% at 3 stacks"
+  },
+  "tome-of-the-eternal-flow": {
+   "name": "Tome of the Eternal Flow",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      42,
+      54,
+      66,
+      78,
+      90
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG at 3 stacks, 4s after current HP changes"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/26/35428890/5828ed7b48c39e5d15aaf6f2495ddabc_4077399461570238363.png",
+   "entry": "4339",
+   "notes": "not counted: Energy restored at 3 stacks"
+  },
+  "ballad-of-the-boundless-blue": {
+   "name": "Ballad of the Boundless Blue",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG at 3 stacks, 6s after Normal or Charged Attacks hit"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      18,
+      22.5,
+      27,
+      31.5,
+      36
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG at 3 stacks, 6s after Normal or Charged Attacks hit"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/22/35428890/079c8ff2c28a14f02c40af831e9b5179_5407660022702405104.png",
+   "entry": "4338",
+   "notes": ""
+  },
+  "range-gauge": {
+   "name": "Range Gauge",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      9,
+      12,
+      15,
+      18,
+      21
+     ],
+     "when": "met",
+     "condition": "Struggle, from 3 Unity's Symbols consumed on an Elemental Skill or Burst, 10s"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      21,
+      25.5,
+      30,
+      34.5,
+      39
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus from Struggle, 3 Unity's Symbols consumed, 10s"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/16/35428890/4e67e6c313220ea1ca84a48d42d78806_8702041612949933944.png",
+   "entry": "4337",
+   "notes": ""
+  },
+  "prospector-s-drill": {
+   "name": "Prospector's Drill",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      9,
+      12,
+      15,
+      18,
+      21
+     ],
+     "when": "met",
+     "condition": "Struggle, from 3 Unity's Symbols consumed on an Elemental Skill or Burst, 10s"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      21,
+      25.5,
+      30,
+      34.5,
+      39
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus from Struggle, 3 Unity's Symbols consumed, 10s"
+    }
+   ],
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/10/25/237301566/223e901abffe25963b70c50557d33c9b_639693929740213834.png",
+   "entry": "4336",
+   "notes": ""
+  },
+  "portable-power-saw": {
+   "name": "Portable Power Saw",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "hp_pct",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      120,
+      150,
+      180,
+      210,
+      240
+     ],
+     "when": "met",
+     "condition": "Roused, from 3 Stoic's Symbols consumed on an Elemental Skill or Burst, 10s"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/27/35428890/ac81c1e26d35d3742320975fffe21ee8_1604254334456103094.png",
+   "entry": "4335",
+   "notes": "not counted: Energy restored 2s later"
+  },
+  "the-dockhand-s-assistant": {
+   "name": "The Dockhand's Assistant",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "hp_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      120,
+      150,
+      180,
+      210,
+      240
+     ],
+     "when": "met",
+     "condition": "Roused, from 3 Stoic's Symbols consumed on an Elemental Skill or Burst, 10s"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/27/35428890/eac5d6d4056f7b28c876e64866825e46_112069212882380326.png",
+   "entry": "4334",
+   "notes": "not counted: Energy restored 2s later"
+  },
+  "sacrificial-jade": {
+   "name": "Sacrificial Jade",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "cr",
+   "sub_90": 36.8,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      32,
+      40,
+      48,
+      56,
+      64
+     ],
+     "when": "met",
+     "condition": "after being off the field for more than 5s (cancelled 10s after coming on the field)"
+    },
+    {
+     "stat": "em",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "after being off the field for more than 5s (cancelled 10s after coming on the field)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/58d2970c1997ad52dfbb43017dac3ce8_2068604060208544498.png",
+   "entry": "4003",
+   "notes": ""
+  },
+  "scion-of-the-blazing-sun": {
+   "name": "Scion of the Blazing Sun",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "cr",
+   "sub_90": 18.4,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG against opponents with Heartsearer, 10s after a Sunfire Arrow (once every 10s)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/b10e2c320e65f991f0e829879761af72_8400582650316877404.png",
+   "entry": "4002",
+   "notes": "not counted: the Sunfire Arrow's own DMG of 60%/75%/90%/105%/120% of ATK"
+  },
+  "ballad-of-the-fjords": {
+   "name": "Ballad of the Fjords",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      120,
+      150,
+      180,
+      210,
+      240
+     ],
+     "when": "met",
+     "condition": "at least 3 different Elemental Types in the party"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/bd385748dfaefad1cddca86948a4846c_4272011011757162904.png",
+   "entry": "4001",
+   "notes": ""
+  },
+  "talking-stick": {
+   "name": "Talking Stick",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "cr",
+   "sub_90": 18.4,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "15s after being affected by Pyro (once every 12s)"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus, 15s after being affected by Hydro, Cryo, Electro or Dendro (once every 12s)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/6e0130263c2de43a0bd7863edce22df3_1490535884850747976.png",
+   "entry": "4000",
+   "notes": ""
+  },
+  "wolf-fang": {
+   "name": "Wolf-Fang",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Elemental Skill and Burst DMG"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      8,
+      10.0,
+      12,
+      14.0,
+      16
+     ],
+     "when": "met",
+     "condition": "Elemental Skill CRIT Rate at 4 stacks, 10s after an Elemental Skill hits"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      8,
+      10.0,
+      12,
+      14.0,
+      16
+     ],
+     "when": "met",
+     "condition": "Elemental Burst CRIT Rate at 4 stacks, 10s after an Elemental Burst hits"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/e1d10d55b8b96e0695000018664e17ef_8234591885133749148.png",
+   "entry": "3999",
+   "notes": ""
+  },
+  "fleuve-cendre-ferryman": {
+   "name": "Fleuve Cendre Ferryman",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "when": "met",
+     "condition": "Elemental Skill CRIT Rate"
+    },
+    {
+     "stat": "er",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "5s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/920ca2fe25ca2db1796848099b59b2d8_9037857887405548950.png",
+   "entry": "3989",
+   "notes": ""
+  },
+  "flowing-purity": {
+   "name": "Flowing Purity",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus, 15s after using an Elemental Skill (once every 10s)"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus at the cap, 15s after a Bond of Life is cleared (2%/2.5%/3%/3.5%/4% per 1,000 HP cleared)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/0130ca8183d3daa2eddbb9200a1d776f_1451142999894885216.png",
+   "entry": "3988",
+   "notes": ""
+  },
+  "song-of-stillness": {
+   "name": "Song of Stillness",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "8s after the wielder is healed"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/2cec558b676eefaafe23b64d42f2067e_6453748403910603164.png",
+   "entry": "3987",
+   "notes": ""
+  },
+  "rightful-reward": {
+   "name": "Rightful Reward",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "hp_pct",
+   "sub_90": 27.6,
+   "effects": [],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/9bb154ad1759bf2d9015b060cad1ca9c_7004886929221204489.png",
+   "entry": "3986",
+   "notes": "no stat: restores 8/10/12/14/16 Energy when the wielder is healed, not counted"
+  },
+  "tidal-shadow": {
+   "name": "Tidal Shadow",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "8s after the wielder is healed"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/17a33544c58e2a45ad5f1a4a5a68906a_3812897365671640245.png",
+   "entry": "3985",
+   "notes": ""
+  },
+  "finale-of-the-deep": {
+   "name": "Finale of the Deep",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "15s after using an Elemental Skill (once every 10s)"
+    },
+    {
+     "stat": "atk",
+     "values": [
+      150,
+      187.5,
+      225,
+      262.5,
+      300
+     ],
+     "when": "met",
+     "condition": "at the cap, 15s after a Bond of Life is cleared (2.4%/3%/3.6%/4.2%/4.8% of the amount cleared)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/3139f087dee78d3856ab63fd6845ae61_7690792916067580940.png",
+   "entry": "3984",
+   "notes": ""
+  },
+  "the-first-great-magic": {
+   "name": "The First Great Magic",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cd",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "3 or more Gimmick stacks, one for each party member of the wielder's Elemental Type, the wielder included (16%/20%/24%/28%/32% at 1, 32%/40%/48%/56%/64% at 2)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/150d6ae6dec75c2af1e4c37a084bf80f_93661134642122637.png",
+   "entry": "3983",
+   "notes": "not counted: Movement SPD from Theatrics stacks"
+  },
+  "ibis-piercer": {
+   "name": "Ibis Piercer",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      80,
+      100,
+      120,
+      140,
+      160
+     ],
+     "when": "met",
+     "condition": "at 2 stacks, 6s after Charged Attacks hit opponents"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/26/194600931/3c33fbd1aeadf27dc00617c3f4d31c55_8985435652169839567.png",
+   "entry": "3902",
+   "notes": ""
+  },
+  "jadefall-s-splendor": {
+   "name": "Jadefall's Splendor",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "hp_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      20,
+      28,
+      36,
+      44
+     ],
+     "when": "met",
+     "condition": "Elemental DMG Bonus of the wielder's own Element, for 3s after using an Elemental Burst or creating a Shield, at the cap (0.3%/0.5%/0.7%/0.9%/1.1% per 1,000 Max HP)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/0a88b9e311e28c9ae89138a10c48601a_3822390923121875698.png",
+   "entry": "3692",
+   "notes": "not counted: Energy restored every 2.5s"
+  },
+  "beacon-of-the-reed-sea": {
+   "name": "Beacon of the Reed Sea",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "8s after the Elemental Skill hits an opponent"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "8s after the wielder takes DMG"
+    },
+    {
+     "stat": "hp_pct",
+     "values": [
+      32,
+      40,
+      48,
+      56,
+      64
+     ],
+     "when": "met",
+     "condition": "when not protected by a Shield"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/28/35428890/374cad27eb39f01436d6f52446804e6b_7142308678889222851.png",
+   "entry": "3615",
+   "notes": ""
+  },
+  "mailed-flower": {
+   "name": "Mailed Flower",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "em",
+   "sub_90": 110,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "within 8s after the Elemental Skill hits an opponent or an Elemental Reaction is triggered"
+    },
+    {
+     "stat": "em",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "within 8s after the Elemental Skill hits an opponent or an Elemental Reaction is triggered"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/28/35428890/bca5e3d255c646e42449a06b79b5d019_8759736612810872622.png",
+   "entry": "3614",
+   "notes": ""
+  },
+  "light-of-foliar-incision": {
+   "name": "Light of Foliar Incision",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/18/35428890/bf4ef5696afdf695a26fab9510228060_1761507291577300383.png",
+   "entry": "3461",
+   "notes": "not counted: Foliar Incision, Normal Attack and Elemental Skill DMG +120%/150%/180%/210%/240% of Elemental Mastery as flat DMG (28 instances or 12s), which is not a % bonus"
+  },
+  "tulaytullah-s-remembrance": {
+   "name": "Tulaytullah's Remembrance",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cd",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG at the maximum of the effect, after an Elemental Skill (4.8%/6%/7.2%/8.4%/9.6% each second plus 9.6%/12%/14.4%/16.8%/19.2% per hit), 14s"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/8de363bf716e4538ba86014fbea827ef_1659819870214382408.png",
+   "entry": "3320",
+   "notes": "not counted: Normal Attack SPD +10%/12.5%/15%/17.5%/20%"
+  },
+  "toukabou-shigure": {
+   "name": "Toukabou Shigure",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "against the opponent affected by Cursed Parasol"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/15/194600931/e611885dcef509e0ced1b3aec547ebf0_8005422016701349311.png",
+   "entry": "3319",
+   "notes": ""
+  },
+  "a-thousand-floating-dreams": {
+   "name": "A Thousand Floating Dreams",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "em",
+   "sub_90": 265,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      30,
+      42,
+      54,
+      66,
+      78
+     ],
+     "when": "met",
+     "condition": "Elemental DMG Bonus of the wielder's Element, from 3 party members of a different Elemental Type"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/31/35428890/afd146c520b3a0bd72489a3426d8f283_7854516109466365358.png",
+   "entry": "2966",
+   "notes": "each party member of the same Elemental Type gives Elemental Mastery +32/40/48/56/64 instead, so only the different-type case is counted"
+  },
+  "wandering-evenstar": {
+   "name": "Wandering Evenstar",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/12/35428890/350f5bf6ae4210be623556772c4c3836_6719838927234871355.png",
+   "entry": "2910",
+   "notes": "no flat stat: the wielder gains 24%/30%/36%/42%/48% of their Elemental Mastery as bonus ATK for 12s, every 10s, so it depends on the wielder's Elemental Mastery and is not counted"
+  },
+  "xiphos-moonlight": {
+   "name": "Xiphos' Moonlight",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/12/35428890/06be2dc5c5b80671ddf01cc9dc01bb49_6360458851061396642.png",
+   "entry": "2909",
+   "notes": "no flat stat: the wielder gains 0.036%/0.045%/0.054%/0.063%/0.072% Energy Recharge per point of Elemental Mastery for 12s, every 10s, so it depends on the wielder's Elemental Mastery and is not counted"
+  },
+  "key-of-khaj-nisut": {
+   "name": "Key of Khaj-Nisut",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "hp_pct",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/10/35428890/e45d52017a7ccb1ada459212615381d8_9190142076232384205.png",
+   "entry": "2908",
+   "notes": "not counted, because they depend on Max HP: Elemental Mastery +0.12%/0.15%/0.18%/0.21%/0.24% of Max HP per Grand Hymn stack (3 stacks, 20s), and 0.2%/0.25%/0.3%/0.35%/0.4% of Max HP for nearby party members at 3 stacks"
+  },
+  "staff-of-the-scarlet-sands": {
+   "name": "Staff of the Scarlet Sands",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cr",
+   "sub_90": 44.1,
+   "effects": [],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/194600931/fc9a85ad2a47dc0386d55ac4e8596440_7909203100593110405.png",
+   "entry": "2849",
+   "notes": "no flat stat: the wielder gains 52%/65%/78%/91%/104% of their Elemental Mastery as bonus ATK, and 28%/35%/42%/49%/56% more per stack of Dream of the Scarlet Sands (3 stacks, 10s), so it depends on the wielder's Elemental Mastery and is not counted"
+  },
+  "makhaira-aquamarine": {
+   "name": "Makhaira Aquamarine",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/194600931/e945b4d60271cc0560627c16f4a0a7dd_2629837070953493651.png",
+   "entry": "2848",
+   "notes": "no flat stat: the wielder gains 24%/30%/36%/42%/48% of their Elemental Mastery as bonus ATK for 12s, every 10s, so it depends on the wielder's Elemental Mastery and is not counted"
+  },
+  "missive-windspear": {
+   "name": "Missive Windspear",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "within 10s after an Elemental Reaction is triggered"
+    },
+    {
+     "stat": "em",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "within 10s after an Elemental Reaction is triggered"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/30/94376896/98f3fb9e0886b25bfd094828cc391978_4027924857629812923.png",
+   "entry": "2847",
+   "notes": ""
+  },
+  "forest-regalia": {
+   "name": "Forest Regalia",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "12s after picking up a Leaf of Consciousness, created after Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom or Burgeon (once every 20s)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/236f42a62e034034870c2c4e44015572_5474035930475118540.png",
+   "entry": "2671",
+   "notes": ""
+  },
+  "king-s-squire": {
+   "name": "King's Squire",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "atk_pct",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      80,
+      100,
+      120,
+      140
+     ],
+     "when": "met",
+     "condition": "Teachings of the Forest, 12s after using an Elemental Skill or Burst (removed when switching characters)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/e3b554a4032b5b738d056ab7a44e9e37_7655698488024418107.png",
+   "entry": "2670",
+   "notes": "not counted: DMG of 100%/120%/140%/160%/180% of ATK when the effect ends"
+  },
+  "fruit-of-fulfillment": {
+   "name": "Fruit of Fulfillment",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      120,
+      135,
+      150,
+      165,
+      180
+     ],
+     "when": "met",
+     "condition": "at 5 stacks of Wax and Wane, after Elemental Reactions"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      -25,
+      -25,
+      -25,
+      -25,
+      -25
+     ],
+     "when": "met",
+     "condition": "at 5 stacks of Wax and Wane, which each lose 5% ATK"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/0e1cecaeba7b12c8c9adcb2f11eccd5e_416583125189394990.png",
+   "entry": "2669",
+   "notes": ""
+  },
+  "moonpiercer": {
+   "name": "Moonpiercer",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "em",
+   "sub_90": 110,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "12s after picking up a Leaf of Revival, created after Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom or Burgeon (once every 20s)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/2ab37345c6972292fda8b3095c15f971_8878508254336755657.png",
+   "entry": "2668",
+   "notes": ""
+  },
+  "sapwood-blade": {
+   "name": "Sapwood Blade",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "12s after picking up a Leaf of Consciousness, created after Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom or Burgeon (once every 20s)"
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/b7dc579e8ad60147a049d14fc277629c_8193231495693842461.png",
+   "entry": "2667",
+   "notes": ""
+  },
+  "end-of-the-line": {
+   "name": "End of the Line",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/80d2c21b70f486d9d9cb90e491e5b9da_4078404468332601679.png",
+   "entry": "2666",
+   "notes": "no stat: Flowrider deals 80%/100%/120%/140%/160% of ATK as AoE DMG, not counted"
+  },
+  "hunter-s-path": {
+   "name": "Hunter's Path",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cr",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/110a33dca005873d039a32c6c931d405_5358077549703882796.png",
+   "entry": "2665",
+   "notes": "not counted: Tireless Hunt, Charged Attack DMG +160%/200%/240%/280%/320% of Elemental Mastery as flat DMG (12 Charged Attacks or 10s)"
+  },
+  "kagotsurube-isshin": {
+   "name": "Kagotsurube Isshin",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      15,
+      15,
+      15,
+      15,
+      15
+     ],
+     "when": "met",
+     "condition": "8s after a Normal, Charged or Plunging Attack hits an opponent (once every 8s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/笼钓瓶一心.png",
+   "entry": "2264",
+   "notes": "the passive's text gives one value for every refinement; not counted: Hewing Gale's AoE DMG of 180% of ATK"
+  },
+  "fading-twilight": {
+   "name": "Fading Twilight",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      14,
+      17.5,
+      21,
+      24.5,
+      28
+     ],
+     "when": "met",
+     "condition": "in the Dawnblaze state, the last of three states (Evengleam, Afterglow, Dawnblaze) that change when attacks hit, once every 7s (6%/7.5%/9%/10.5%/12% and 10%/12.5%/15%/17.5%/20% in the other two)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/落霞.png",
+   "entry": "2255",
+   "notes": ""
+  },
+  "aqua-simulacra": {
+   "name": "Aqua Simulacra",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "when there are opponents nearby"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/若水.png",
+   "entry": "2254",
+   "notes": ""
+  },
+  "dragonspine-spear": {
+   "name": "Dragonspine Spear",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "phys",
+   "sub_90": 69,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/龙脊长枪.png",
+   "entry": "2060",
+   "notes": "no stat: an Everfrost Icicle deals AoE DMG of 80%/95%/110%/125%/140% of ATK (200%/240%/280%/320%/360% to Cryo-affected opponents), not counted"
+  },
+  "black-tassel": {
+   "name": "Black Tassel",
+   "type": "Polearm",
+   "rarity": 3,
+   "base_atk_90": 354,
+   "sub": "hp_pct",
+   "sub_90": 46.9,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑缨枪.png",
+   "entry": "2059",
+   "notes": "Passive not counted"
+  },
+  "blackcliff-longsword": {
+   "name": "Blackcliff Longsword",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "cd",
+   "sub_90": 36.8,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 30s after defeating opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩长剑.png",
+   "entry": "2058",
+   "notes": ""
+  },
+  "blackcliff-agate": {
+   "name": "Blackcliff Agate",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cd",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 30s after defeating opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩绯玉.png",
+   "entry": "2057",
+   "notes": ""
+  },
+  "blackcliff-slasher": {
+   "name": "Blackcliff Slasher",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cd",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 30s after defeating opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩斩刀.png",
+   "entry": "2056",
+   "notes": ""
+  },
+  "blackcliff-warbow": {
+   "name": "Blackcliff Warbow",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "cd",
+   "sub_90": 36.8,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 30s after defeating opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩战弓.png",
+   "entry": "2055",
+   "notes": ""
+  },
+  "blackcliff-pole": {
+   "name": "Blackcliff Pole",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cd",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "at 3 stacks, 30s after defeating opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩刺枪.png",
+   "entry": "2054",
+   "notes": ""
+  },
+  "the-black-sword": {
+   "name": "The Black Sword",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑剑.png",
+   "entry": "2053",
+   "notes": "not counted: HP regenerated on a CRIT Hit"
+  },
+  "harbinger-of-dawn": {
+   "name": "Harbinger of Dawn",
+   "type": "Sword",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "cd",
+   "sub_90": 46.9,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黎明神剑.png",
+   "entry": "2052",
+   "notes": "Passive not counted"
+  },
+  "raven-bow": {
+   "name": "Raven Bow",
+   "type": "Bow",
+   "rarity": 3,
+   "base_atk_90": 448,
+   "sub": "em",
+   "sub_90": 94,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/鸦羽弓.png",
+   "entry": "2051",
+   "notes": "Passive not counted"
+  },
+  "magic-guide": {
+   "name": "Magic Guide",
+   "type": "Catalyst",
+   "rarity": 3,
+   "base_atk_90": 354,
+   "sub": "em",
+   "sub_90": 187,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/魔导绪论.png",
+   "entry": "2050",
+   "notes": "Passive not counted"
+  },
+  "thundering-pulse": {
+   "name": "Thundering Pulse",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cd",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG at stack level 3 of the Thunder Emblem (12%/15%/18%/21%/24% at 1, 24%/30%/36%/42%/48% at 2; stacks come from Normal Attack hits, Elemental Skill casts, and Energy under 100%)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/飞雷之弦振.png",
+   "entry": "2049",
+   "notes": ""
+  },
+  "skyrider-sword": {
+   "name": "Skyrider Sword",
+   "type": "Sword",
+   "rarity": 3,
+   "base_atk_90": 354,
+   "sub": "er",
+   "sub_90": 52.1,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/飞天御剑.png",
+   "entry": "2048",
+   "notes": "Passive not counted"
+  },
+  "skyrider-greatsword": {
+   "name": "Skyrider Greatsword",
+   "type": "Claymore",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "phys",
+   "sub_90": 43.9,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/飞天大御剑.png",
+   "entry": "2047",
+   "notes": "Passive not counted"
+  },
+  "aquila-favonia": {
+   "name": "Aquila Favonia",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "phys",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/风鹰剑.png",
+   "entry": "2046",
+   "notes": "not counted: HP regenerated and AoE DMG when taking DMG"
+  },
+  "windblume-ode": {
+   "name": "Windblume Ode",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "6s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/风花之颂.png",
+   "entry": "2045",
+   "notes": ""
+  },
+  "mistsplitter-reforged": {
+   "name": "Mistsplitter Reforged",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cd",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "met",
+     "condition": "Elemental DMG Bonus for the wielder's Element at stack level 3 of the Mistsplitter's Emblem (8%/10%/12%/14%/16% at 1, 16%/20%/24%/28%/32% at 2; stacks come from Normal Attack Elemental DMG, Elemental Burst casts, and Energy under 100%)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/雾切之回光.png",
+   "entry": "2044",
+   "notes": ""
+  },
+  "snow-tombed-starsilver": {
+   "name": "Snow-Tombed Starsilver",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "phys",
+   "sub_90": 34.5,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/雪葬的星银.png",
+   "entry": "2043",
+   "notes": "no stat: an Everfrost Icicle deals AoE DMG of 80%/95%/110%/125%/140% of ATK (200%/240%/280%/320%/360% to Cryo-affected opponents), not counted"
+  },
+  "rainslasher": {
+   "name": "Rainslasher",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      24,
+      28,
+      32,
+      36
+     ],
+     "when": "met",
+     "condition": "against opponents affected by Hydro or Electro"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/雨裁.png",
+   "entry": "2042",
+   "notes": ""
+  },
+  "sword-of-descension": {
+   "name": "Sword of Descension",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 440,
+   "sub": "atk_pct",
+   "sub_90": 35.2,
+   "effects": [
+    {
+     "stat": "atk",
+     "values": [
+      66,
+      66,
+      66,
+      66,
+      66
+     ],
+     "when": "met",
+     "condition": "the Traveler only"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/降临之剑.png",
+   "entry": "2041",
+   "notes": "the passive's text says it is effective only on the PlayStation Network platform, and gives one value for every refinement; not counted: a 50% chance of 200% ATK AoE DMG on a Normal or Charged Attack hit"
+  },
+  "amos-bow": {
+   "name": "Amos' Bow",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "atk_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG, a further bonus for every 0.1s the arrow is in the air, up to 5 times"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/阿莫斯之弓.png",
+   "entry": "2040",
+   "notes": ""
+  },
+  "silver-sword": {
+   "name": "Silver Sword",
+   "type": "Sword",
+   "rarity": 2,
+   "base_atk_90": 243,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/银剑.png",
+   "entry": "2039",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "iron-sting": {
+   "name": "Iron Sting",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15.0,
+      18,
+      21.0,
+      24
+     ],
+     "when": "met",
+     "condition": "all DMG at 2 stacks, 6s after dealing Elemental DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/铁蜂刺.png",
+   "entry": "2038",
+   "notes": ""
+  },
+  "ferrous-shadow": {
+   "name": "Ferrous Shadow",
+   "type": "Claymore",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "hp_pct",
+   "sub_90": 35.2,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/铁影阔剑.png",
+   "entry": "2037",
+   "notes": "Passive not counted"
+  },
+  "iron-point": {
+   "name": "Iron Point",
+   "type": "Polearm",
+   "rarity": 2,
+   "base_atk_90": 243,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/铁尖枪.png",
+   "entry": "2036",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "halberd": {
+   "name": "Halberd",
+   "type": "Polearm",
+   "rarity": 3,
+   "base_atk_90": 448,
+   "sub": "atk_pct",
+   "sub_90": 23.5,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/钺矛.png",
+   "entry": "2035",
+   "notes": "Passive not counted"
+  },
+  "compound-bow": {
+   "name": "Compound Bow",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "phys",
+   "sub_90": 69,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "at 4 stacks, 6s after Normal or Charged Attack hits"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/钢轮弓.png",
+   "entry": "2034",
+   "notes": "not counted: Normal Attack SPD +1.2%/1.5%/1.8%/2.1%/2.4% per stack"
+  },
+  "the-bell": {
+   "name": "The Bell",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "hp_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "while protected by the shield the weapon generates on taking DMG (once every 45s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/钟剑.png",
+   "entry": "2033",
+   "notes": ""
+  },
+  "cinnabar-spindle": {
+   "name": "Cinnabar Spindle",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "def_pct",
+   "sub_90": 69,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/辰砂之纺锤.png",
+   "entry": "2032",
+   "notes": "no % stat: Elemental Skill DMG +40%/50%/60%/70%/80% of DEF, as flat DMG, not counted"
+  },
+  "redhorn-stonethresher": {
+   "name": "Redhorn Stonethresher",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cd",
+   "sub_90": 88.2,
+   "effects": [
+    {
+     "stat": "def_pct",
+     "values": [
+      28,
+      35,
+      42,
+      49,
+      56
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/赤角石溃杵.png",
+   "entry": "2031",
+   "notes": "not counted: Normal and Charged Attack DMG +40%/50%/60%/70%/80% of DEF, as flat DMG"
+  },
+  "vortex-vanquisher": {
+   "name": "Vortex Vanquisher",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "atk_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, 8s after scoring hits on opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/贯虹之槊.png",
+   "entry": "2030",
+   "notes": "not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield"
+  },
+  "prototype-amber": {
+   "name": "Prototype Amber",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "hp_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作金珀.png",
+   "entry": "2029",
+   "notes": "no stat: regenerates Energy and HP over 6s after an Elemental Burst, not counted"
+  },
+  "prototype-crescent": {
+   "name": "Prototype Crescent",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "10s after a Charged Attack hits a weak point"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作澹月.png",
+   "entry": "2028",
+   "notes": "not counted: Movement SPD +10%"
+  },
+  "prototype-starglitter": {
+   "name": "Prototype Starglitter",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG at 2 stacks, 12s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作星镰.png",
+   "entry": "2027",
+   "notes": ""
+  },
+  "prototype-rancour": {
+   "name": "Prototype Rancour",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "phys",
+   "sub_90": 34.5,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "at 4 stacks, 6s after Normal or Charged Attacks hit"
+    },
+    {
+     "stat": "def_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "at 4 stacks, 6s after Normal or Charged Attacks hit"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作斩岩.png",
+   "entry": "2026",
+   "notes": ""
+  },
+  "prototype-archaic": {
+   "name": "Prototype Archaic",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作古华.png",
+   "entry": "2025",
+   "notes": "no stat: a 50% chance of an extra 240%/300%/360%/420%/480% ATK AoE DMG on a Normal or Charged Attack hit, not counted"
+  },
+  "oathsworn-eye": {
+   "name": "Oathsworn Eye",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "er",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "10s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/证誓之明瞳.png",
+   "entry": "2024",
+   "notes": ""
+  },
+  "waster-greatsword": {
+   "name": "Waster Greatsword",
+   "type": "Claymore",
+   "rarity": 1,
+   "base_atk_90": 185,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/训练大剑.png",
+   "entry": "2023",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "thrilling-tales-of-dragon-slayers": {
+   "name": "Thrilling Tales of Dragon Slayers",
+   "type": "Catalyst",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "hp_pct",
+   "sub_90": 35.2,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/讨龙英杰谭.png",
+   "entry": "2022",
+   "notes": "Passive not counted"
+  },
+  "favonius-lance": {
+   "name": "Favonius Lance",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风长枪.png",
+   "entry": "2021",
+   "notes": "no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted"
+  },
+  "favonius-codex": {
+   "name": "Favonius Codex",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风秘典.png",
+   "entry": "2020",
+   "notes": "no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted"
+  },
+  "favonius-warbow": {
+   "name": "Favonius Warbow",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风猎弓.png",
+   "entry": "2019",
+   "notes": "no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted"
+  },
+  "favonius-greatsword": {
+   "name": "Favonius Greatsword",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风大剑.png",
+   "entry": "2018",
+   "notes": "no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted"
+  },
+  "favonius-sword": {
+   "name": "Favonius Sword",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风剑.png",
+   "entry": "2017",
+   "notes": "no stat: a CRIT Hit may generate Elemental Particles that regenerate 6 Energy, not counted"
+  },
+  "luxurious-sea-lord": {
+   "name": "Luxurious Sea-Lord",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "atk_pct",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/衔珠海皇.png",
+   "entry": "2016",
+   "notes": "not counted: a tuna onrush of 100%/125%/150%/175%/200% ATK AoE DMG"
+  },
+  "serpent-spine": {
+   "name": "Serpent Spine",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      30,
+      35,
+      40,
+      45,
+      50
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, one every 4s on the field (the wielder also takes 3%/2.7%/2.4%/2.2%/2% more DMG per stack)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/螭骨剑.png",
+   "entry": "2015",
+   "notes": ""
+  },
+  "engulfing-lightning": {
+   "name": "Engulfing Lightning",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "er",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      80,
+      90,
+      100,
+      110,
+      120
+     ],
+     "when": "met",
+     "condition": "at the cap of 28%/35%/42%/49%/56% of Energy Recharge over the base 100%"
+    },
+    {
+     "stat": "er",
+     "values": [
+      30,
+      35,
+      40,
+      45,
+      50
+     ],
+     "when": "met",
+     "condition": "12s after using an Elemental Burst"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/薙草之稻光.png",
+   "entry": "2014",
+   "notes": ""
+  },
+  "the-viridescent-hunt": {
+   "name": "The Viridescent Hunt",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/苍翠猎弓.png",
+   "entry": "2013",
+   "notes": "no stat: a Cyclone deals 40%/50%/60%/70%/80% of ATK as DMG every 0.5s for 4s, not counted"
+  },
+  "freedom-sworn": {
+   "name": "Freedom-Sworn",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "em",
+   "sub_90": 198,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      10,
+      12.5,
+      15,
+      17.5,
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Normal, Charged and Plunging Attack DMG, 12s after 2 Sigils of Rebellion are spent (Millennial Movement: Song of Resistance, all nearby party members; then none for 20s)"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "12s after 2 Sigils of Rebellion are spent (Millennial Movement: Song of Resistance, all nearby party members; then none for 20s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/苍古自由之誓.png",
+   "entry": "2012",
+   "notes": "buffs of the same type from the \"Millennial Movement\" weapons do not stack"
+  },
+  "festering-desire": {
+   "name": "Festering Desire",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      6,
+      7.5,
+      9,
+      10.5,
+      12
+     ],
+     "when": "met",
+     "condition": "Elemental Skill CRIT Rate"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/腐殖之剑.png",
+   "entry": "2011",
+   "notes": ""
+  },
+  "emerald-orb": {
+   "name": "Emerald Orb",
+   "type": "Catalyst",
+   "rarity": 3,
+   "base_atk_90": 448,
+   "sub": "em",
+   "sub_90": 94,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/翡玉法球.png",
+   "entry": "2010",
+   "notes": "Passive not counted"
+  },
+  "the-stringless": {
+   "name": "The Stringless",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "em",
+   "sub_90": 165,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      24,
+      30,
+      36,
+      42,
+      48
+     ],
+     "when": "met",
+     "condition": "Elemental Skill and Elemental Burst DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/绝弦.png",
+   "entry": "2009",
+   "notes": ""
+  },
+  "elegy-for-the-end": {
+   "name": "Elegy for the End",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "er",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "em",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "em",
+     "values": [
+      100,
+      125,
+      150,
+      175,
+      200
+     ],
+     "when": "met",
+     "condition": "12s after 4 Sigils of Remembrance are spent (Millennial Movement: Farewell Song, all nearby party members; then none for 20s)"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "12s after 4 Sigils of Remembrance are spent (Millennial Movement: Farewell Song, all nearby party members; then none for 20s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/终末嗟叹之诗.png",
+   "entry": "2008",
+   "notes": "buffs of the same type from the \"Millennial Movement\" weapons do not stack"
+  },
+  "the-flute": {
+   "name": "The Flute",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/笛剑.png",
+   "entry": "2007",
+   "notes": "no stat: 5 Harmonics deal 100%/125%/150%/175%/200% ATK DMG, not counted"
+  },
+  "sacrificial-fragments": {
+   "name": "Sacrificial Fragments",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "em",
+   "sub_90": 221,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼残章.png",
+   "entry": "2006",
+   "notes": "no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted"
+  },
+  "sacrificial-bow": {
+   "name": "Sacrificial Bow",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼弓.png",
+   "entry": "2005",
+   "notes": "no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted"
+  },
+  "sacrificial-greatsword": {
+   "name": "Sacrificial Greatsword",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼大剑.png",
+   "entry": "2004",
+   "notes": "no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted"
+  },
+  "sacrificial-sword": {
+   "name": "Sacrificial Sword",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "er",
+   "sub_90": 61.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼剑.png",
+   "entry": "2003",
+   "notes": "no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted"
+  },
+  "sharpshooter-s-oath": {
+   "name": "Sharpshooter's Oath",
+   "type": "Bow",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "cd",
+   "sub_90": 46.9,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/神射手之誓.png",
+   "entry": "2002",
+   "notes": "Passive not counted"
+  },
+  "kagura-s-verity": {
+   "name": "Kagura's Verity",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cd",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      36,
+      45,
+      54,
+      63,
+      72
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG at 3 stacks of Kagura Dance, 16s after using an Elemental Skill"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "All Elemental DMG Bonus at 3 stacks of Kagura Dance"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/神乐之真意.png",
+   "entry": "2001",
+   "notes": ""
+  },
+  "primordial-jade-cutter": {
+   "name": "Primordial Jade Cutter",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 542,
+   "sub": "cr",
+   "sub_90": 44.1,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/磐岩结绿.png",
+   "entry": "2000",
+   "notes": "not counted, because it depends on Max HP: an ATK bonus of 1.2%/1.5%/1.8%/2.1%/2.4% of Max HP"
+  },
+  "hamayumi": {
+   "name": "Hamayumi",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "atk_pct",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/破魔之弓.png",
+   "entry": "1999",
+   "notes": "both are increased by 100% when the wielder's Energy reaches 100%, which is not counted"
+  },
+  "white-iron-greatsword": {
+   "name": "White Iron Greatsword",
+   "type": "Claymore",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "def_pct",
+   "sub_90": 43.9,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白铁大剑.png",
+   "entry": "1998",
+   "notes": "Passive not counted"
+  },
+  "hakushin-ring": {
+   "name": "Hakushin Ring",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      10,
+      12.5,
+      15,
+      17.5,
+      20
+     ],
+     "when": "met",
+     "condition": "Elemental DMG Bonus for nearby party members of an Elemental Type involved in the reaction, 6s after the wielder triggers an Electro reaction"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白辰之环.png",
+   "entry": "1997",
+   "notes": ""
+  },
+  "white-tassel": {
+   "name": "White Tassel",
+   "type": "Polearm",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "cr",
+   "sub_90": 23.4,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白缨枪.png",
+   "entry": "1996",
+   "notes": "Passive not counted"
+  },
+  "whiteblind": {
+   "name": "Whiteblind",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "def_pct",
+   "sub_90": 51.7,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      24,
+      30.0,
+      36,
+      42.0,
+      48
+     ],
+     "when": "met",
+     "condition": "at 4 stacks, 6s after Normal or Charged Attacks hit"
+    },
+    {
+     "stat": "def_pct",
+     "values": [
+      24,
+      30.0,
+      36,
+      42.0,
+      48
+     ],
+     "when": "met",
+     "condition": "at 4 stacks, 6s after Normal or Charged Attacks hit"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白影剑.png",
+   "entry": "1995",
+   "notes": ""
+  },
+  "twin-nephrite": {
+   "name": "Twin Nephrite",
+   "type": "Catalyst",
+   "rarity": 3,
+   "base_atk_90": 448,
+   "sub": "cr",
+   "sub_90": 15.6,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/甲级宝珏.png",
+   "entry": "1994",
+   "notes": "Passive not counted"
+  },
+  "hunter-s-bow": {
+   "name": "Hunter's Bow",
+   "type": "Bow",
+   "rarity": 1,
+   "base_atk_90": 185,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/猎弓.png",
+   "entry": "1993",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "wolf-s-gravestone": {
+   "name": "Wolf's Gravestone",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "atk_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "all party members' ATK, 12s after a hit on an opponent with less than 30% HP (once every 30s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/狼的末路.png",
+   "entry": "1992",
+   "notes": ""
+  },
+  "the-widsith": {
+   "name": "The Widsith",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cd",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      60,
+      75,
+      90,
+      105,
+      120
+     ],
+     "when": "met",
+     "condition": "Recitative, one of three random theme songs for 10s when the wielder takes the field (once every 30s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/流浪乐章.png",
+   "entry": "1991",
+   "notes": "the three songs exclude each other (one at random for 10s), so only the strongest, Recitative's ATK, is an effect; Aria gives All Elemental DMG Bonus +48%/60%/72%/84%/96%, and Interlude gives Elemental Mastery +240/300/360/420/480"
+  },
+  "crescent-pike": {
+   "name": "Crescent Pike",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "phys",
+   "sub_90": 34.5,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/流月针.png",
+   "entry": "1990",
+   "notes": "no % stat: Normal and Charged Attacks deal extra DMG of 20%/25%/30%/35%/40% of ATK for 5s after picking up an Orb or Particle, not counted"
+  },
+  "haran-geppaku-futsu": {
+   "name": "Haran Geppaku Futsu",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG at 2 stacks of Wavespike consumed by an Elemental Skill (Rippling Upheaval), 8s"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/波乱月白经津.png",
+   "entry": "1989",
+   "notes": ""
+  },
+  "bloodtainted-greatsword": {
+   "name": "Bloodtainted Greatsword",
+   "type": "Claymore",
+   "rarity": 3,
+   "base_atk_90": 354,
+   "sub": "em",
+   "sub_90": 187,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/沐浴龙血的剑.png",
+   "entry": "1988",
+   "notes": "Passive not counted"
+  },
+  "katsuragikiri-nagamasa": {
+   "name": "Katsuragikiri Nagamasa",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      6,
+      7.5,
+      9,
+      10.5,
+      12
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/桂木斩长正.png",
+   "entry": "1987",
+   "notes": "not counted: Energy lost and regenerated after an Elemental Skill hits"
+  },
+  "song-of-broken-pines": {
+   "name": "Song of Broken Pines",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 741,
+   "sub": "phys",
+   "sub_90": 20.7,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "12s after 4 Sigils of Whispers are spent (Millennial Movement: Banner-Hymn, all nearby party members; then none for 20s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/松籁响起之时.png",
+   "entry": "1986",
+   "notes": "not counted: Normal ATK SPD +12%/15%/18%/21%/24%; buffs of the same type from the \"Millennial Movement\" weapons do not stack"
+  },
+  "mouun-s-moon": {
+   "name": "Mouun's Moon",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG at the cap (0.12%/0.15%/0.18%/0.21%/0.24% for each point of the party's combined maximum Energy capacity)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/曚云之月.png",
+   "entry": "1985",
+   "notes": ""
+  },
+  "dark-iron-sword": {
+   "name": "Dark Iron Sword",
+   "type": "Sword",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "em",
+   "sub_90": 141,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗铁剑.png",
+   "entry": "1984",
+   "notes": "Passive not counted"
+  },
+  "the-alley-flash": {
+   "name": "The Alley Flash",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 620,
+   "sub": "em",
+   "sub_90": 55,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "all DMG, disabled for 5s after taking DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗巷闪光.png",
+   "entry": "1983",
+   "notes": ""
+  },
+  "wine-and-song": {
+   "name": "Wine and Song",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "er",
+   "sub_90": 30.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "5s after using Sprint or Alternate Sprint"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗巷的酒与诗.png",
+   "entry": "1982",
+   "notes": "not counted: Sprint stamina consumption"
+  },
+  "alley-hunter": {
+   "name": "Alley Hunter",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "at the cap, built up by 2%/2.5%/3%/3.5%/4% a second while in the party but off the field (it falls once the wielder has been on the field more than 4s)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗巷猎手.png",
+   "entry": "1981",
+   "notes": ""
+  },
+  "eye-of-perception": {
+   "name": "Eye of Perception",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "atk_pct",
+   "sub_90": 55.1,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/昭心.png",
+   "entry": "1980",
+   "notes": "no stat: a Bolt of Perception deals 240%/270%/300%/330%/360% ATK DMG, not counted"
+  },
+  "dull-blade": {
+   "name": "Dull Blade",
+   "type": "Sword",
+   "rarity": 1,
+   "base_atk_90": 185,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/无锋剑.png",
+   "entry": "1979",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "the-unforged": {
+   "name": "The Unforged",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "atk_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, 8s after scoring hits on opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/无工之剑.png",
+   "entry": "1978",
+   "notes": "not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield"
+  },
+  "traveler-s-handy-sword": {
+   "name": "Traveler's Handy Sword",
+   "type": "Sword",
+   "rarity": 3,
+   "base_atk_90": 448,
+   "sub": "def_pct",
+   "sub_90": 29.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/旅行剑.png",
+   "entry": "1977",
+   "notes": "Passive not counted"
+  },
+  "beginner-s-protector": {
+   "name": "Beginner's Protector",
+   "type": "Polearm",
+   "rarity": 1,
+   "base_atk_90": 185,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/新手长枪.png",
+   "entry": "1976",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "wavebreaker-s-fin": {
+   "name": "Wavebreaker's Fin",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 620,
+   "sub": "atk_pct",
+   "sub_90": 13.8,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG at the cap (0.12%/0.15%/0.18%/0.21%/0.24% for each point of the party's combined maximum Energy capacity)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/断浪长鳍.png",
+   "entry": "1975",
+   "notes": ""
+  },
+  "summit-shaper": {
+   "name": "Summit Shaper",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "atk_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, 8s after scoring hits on opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/斫峰之刃.png",
+   "entry": "1974",
+   "notes": "not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield"
+  },
+  "predator": {
+   "name": "Predator",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      20,
+      20,
+      20,
+      20
+     ],
+     "when": "met",
+     "condition": "Normal and Charged Attack DMG at 2 stacks, 6s after dealing Cryo DMG"
+    },
+    {
+     "stat": "atk",
+     "values": [
+      66,
+      66,
+      66,
+      66,
+      66
+     ],
+     "when": "met",
+     "condition": "Aloy only"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/掠食者.png",
+   "entry": "1973",
+   "notes": "the passive's text says it is effective only on the PlayStation Network platform, and gives one value for every refinement"
+  },
+  "staff-of-homa": {
+   "name": "Staff of Homa",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cd",
+   "sub_90": 66.2,
+   "effects": [
+    {
+     "stat": "hp_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/护摩之杖.png",
+   "entry": "1972",
+   "notes": "not counted, because it depends on Max HP: an ATK bonus of 0.8%/1%/1.2%/1.4%/1.6% of Max HP, and 1%/1.2%/1.4%/1.6%/1.8% more below 50% HP"
+  },
+  "akuoumaru": {
+   "name": "Akuoumaru",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG at the cap (0.12%/0.15%/0.18%/0.21%/0.24% for each point of the party's combined maximum Energy capacity)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/恶王丸.png",
+   "entry": "1971",
+   "notes": ""
+  },
+  "calamity-queller": {
+   "name": "Calamity Queller",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 741,
+   "sub": "atk_pct",
+   "sub_90": 16.5,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      19.200000000000003,
+      24,
+      28.799999999999997,
+      33.599999999999994,
+      38.400000000000006
+     ],
+     "when": "met",
+     "condition": "at 6 stacks of Consummation, one per second for 20s after using an Elemental Skill"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/息灾.png",
+   "entry": "1970",
+   "notes": "Consummation's ATK increase is doubled while the wielder is off the field, not counted"
+  },
+  "frostbearer": {
+   "name": "Frostbearer",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/忍冬之果.png",
+   "entry": "1969",
+   "notes": "no stat: an Everfrost Icicle deals AoE DMG of 80%/95%/110%/125%/140% of ATK (200%/240%/280%/320%/360% to Cryo-affected opponents), not counted"
+  },
+  "slingshot": {
+   "name": "Slingshot",
+   "type": "Bow",
+   "rarity": 3,
+   "base_atk_90": 354,
+   "sub": "cr",
+   "sub_90": 31.2,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/弹弓.png",
+   "entry": "1968",
+   "notes": "Passive not counted"
+  },
+  "rust": {
+   "name": "Rust",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/弓藏.png",
+   "entry": "1967",
+   "notes": "Charged Attack DMG is decreased by 10%, not counted"
+  },
+  "otherworldly-story": {
+   "name": "Otherworldly Story",
+   "type": "Catalyst",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "er",
+   "sub_90": 39,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/异世界行记.png",
+   "entry": "1966",
+   "notes": "Passive not counted"
+  },
+  "mitternachts-waltz": {
+   "name": "Mitternachts Waltz",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "phys",
+   "sub_90": 51.7,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG, 5s after a Normal Attack hits"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG, 5s after an Elemental Skill hits"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/幽夜华尔兹.png",
+   "entry": "1965",
+   "notes": ""
+  },
+  "memory-of-dust": {
+   "name": "Memory of Dust",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "atk_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, 8s after scoring hits on opponents"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/尘世之锁.png",
+   "entry": "1964",
+   "notes": "not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield"
+  },
+  "royal-bow": {
+   "name": "Royal Bow",
+   "type": "Bow",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室长弓.png",
+   "entry": "1963",
+   "notes": ""
+  },
+  "royal-longsword": {
+   "name": "Royal Longsword",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室长剑.png",
+   "entry": "1962",
+   "notes": ""
+  },
+  "royal-grimoire": {
+   "name": "Royal Grimoire",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室秘法录.png",
+   "entry": "1961",
+   "notes": ""
+  },
+  "royal-spear": {
+   "name": "Royal Spear",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室猎枪.png",
+   "entry": "1960",
+   "notes": ""
+  },
+  "royal-greatsword": {
+   "name": "Royal Greatsword",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      40,
+      50,
+      60,
+      70,
+      80
+     ],
+     "when": "met",
+     "condition": "at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室大剑.png",
+   "entry": "1959",
+   "notes": ""
+  },
+  "apprentice-s-notes": {
+   "name": "Apprentice's Notes",
+   "type": "Catalyst",
+   "rarity": 1,
+   "base_atk_90": 185,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/学徒笔记.png",
+   "entry": "1958",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "skyward-spine": {
+   "name": "Skyward Spine",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "er",
+   "sub_90": 36.8,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之脊.png",
+   "entry": "1957",
+   "notes": "not counted: Normal ATK SPD +12%; a vacuum blade dealing 40%/55%/70%/85%/100% of ATK as AoE DMG"
+  },
+  "skyward-harp": {
+   "name": "Skyward Harp",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "cd",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之翼.png",
+   "entry": "1956",
+   "notes": "not counted: a small AoE attack dealing 125% Physical ATK DMG"
+  },
+  "skyward-atlas": {
+   "name": "Skyward Atlas",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "atk_pct",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之卷.png",
+   "entry": "1955",
+   "notes": "not counted: clouds that attack for 160%/200%/240%/280%/320% ATK DMG"
+  },
+  "skyward-blade": {
+   "name": "Skyward Blade",
+   "type": "Sword",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "er",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "cr",
+     "values": [
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之刃.png",
+   "entry": "1954",
+   "notes": "not counted: Skypiercing Might's Movement SPD +10%, ATK SPD +10% and extra Normal and Charged hit DMG of 20%/25%/30%/35%/40% of ATK"
+  },
+  "skyward-pride": {
+   "name": "Skyward Pride",
+   "type": "Claymore",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "er",
+   "sub_90": 36.8,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之傲.png",
+   "entry": "1953",
+   "notes": "not counted: a vacuum blade dealing 80%/100%/120%/140%/160% of ATK as DMG"
+  },
+  "amenoma-kageuchi": {
+   "name": "Amenoma Kageuchi",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "atk_pct",
+   "sub_90": 55.1,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天目影打刀.png",
+   "entry": "1952",
+   "notes": "no stat: regenerates 6/7.5/9/10.5/12 Energy per Succession Seed after an Elemental Burst, not counted"
+  },
+  "lost-prayer-to-the-sacred-winds": {
+   "name": "Lost Prayer to the Sacred Winds",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      32,
+      40,
+      48,
+      56,
+      64
+     ],
+     "when": "met",
+     "condition": "Elemental DMG Bonus at 4 stacks, one every 4s in battle"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/四风原典.png",
+   "entry": "1951",
+   "notes": "not counted: Movement SPD +10%"
+  },
+  "dodoco-tales": {
+   "name": "Dodoco Tales",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "atk_pct",
+   "sub_90": 55.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Charged Attack DMG, 6s after Normal Attacks hit"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "when": "met",
+     "condition": "6s after Charged Attacks hit"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/嘟嘟可故事集.png",
+   "entry": "1950",
+   "notes": ""
+  },
+  "kitain-cross-spear": {
+   "name": "Kitain Cross Spear",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "em",
+   "sub_90": 110,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      6,
+      7.5,
+      9,
+      10.5,
+      12
+     ],
+     "when": "met",
+     "condition": "Elemental Skill DMG"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/喜多院十文字.png",
+   "entry": "1949",
+   "notes": "not counted: Energy lost and regenerated after an Elemental Skill hits"
+  },
+  "primordial-jade-winged-spear": {
+   "name": "Primordial Jade Winged-Spear",
+   "type": "Polearm",
+   "rarity": 5,
+   "base_atk_90": 674,
+   "sub": "cr",
+   "sub_90": 22.1,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      22.400000000000002,
+      27.3,
+      32.199999999999996,
+      37.1,
+      42
+     ],
+     "when": "met",
+     "condition": "at 7 stacks, 6s after hits"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "all DMG while at 7 stacks"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/和璞鸢.png",
+   "entry": "1948",
+   "notes": ""
+  },
+  "fillet-blade": {
+   "name": "Fillet Blade",
+   "type": "Sword",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "atk_pct",
+   "sub_90": 35.2,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/吃虎鱼刀.png",
+   "entry": "1947",
+   "notes": "Passive not counted"
+  },
+  "pocket-grimoire": {
+   "name": "Pocket Grimoire",
+   "type": "Catalyst",
+   "rarity": 2,
+   "base_atk_90": 243,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/口袋魔导书.png",
+   "entry": "1946",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "recurve-bow": {
+   "name": "Recurve Bow",
+   "type": "Bow",
+   "rarity": 3,
+   "base_atk_90": 354,
+   "sub": "hp_pct",
+   "sub_90": 46.9,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/反曲弓.png",
+   "entry": "1945",
+   "notes": "Passive not counted"
+  },
+  "seasoned-hunter-s-bow": {
+   "name": "Seasoned Hunter's Bow",
+   "type": "Bow",
+   "rarity": 2,
+   "base_atk_90": 243,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/历练的猎弓.png",
+   "entry": "1944",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "lithic-spear": {
+   "name": "Lithic Spear",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "atk_pct",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      28,
+      32,
+      36,
+      40,
+      44
+     ],
+     "when": "met",
+     "condition": "4 party members from Liyue"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      12,
+      16,
+      20,
+      24,
+      28
+     ],
+     "when": "met",
+     "condition": "4 party members from Liyue"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/千岩长枪.png",
+   "entry": "1943",
+   "notes": ""
+  },
+  "lithic-blade": {
+   "name": "Lithic Blade",
+   "type": "Claymore",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      28,
+      32,
+      36,
+      40,
+      44
+     ],
+     "when": "met",
+     "condition": "4 party members from Liyue"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      12,
+      16,
+      20,
+      24,
+      28
+     ],
+     "when": "met",
+     "condition": "4 party members from Liyue"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/千岩古剑.png",
+   "entry": "1942",
+   "notes": ""
+  },
+  "lion-s-roar": {
+   "name": "Lion's Roar",
+   "type": "Sword",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "atk_pct",
+   "sub_90": 41.3,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      24,
+      28,
+      32,
+      36
+     ],
+     "when": "met",
+     "condition": "against opponents affected by Pyro or Electro"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/匣里龙吟.png",
+   "entry": "1941",
+   "notes": ""
+  },
+  "dragon-s-bane": {
+   "name": "Dragon's Bane",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "em",
+   "sub_90": 221,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      24,
+      28,
+      32,
+      36
+     ],
+     "when": "met",
+     "condition": "against opponents affected by Hydro or Pyro"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/匣里灭辰.png",
+   "entry": "1940",
+   "notes": ""
+  },
+  "solar-pearl": {
+   "name": "Solar Pearl",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "cr",
+   "sub_90": 27.6,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Elemental Skill and Elemental Burst DMG, 6s after Normal Attacks hit"
+    },
+    {
+     "stat": "dmg",
+     "values": [
+      20,
+      25,
+      30,
+      35,
+      40
+     ],
+     "when": "met",
+     "condition": "Normal Attack DMG, 6s after Elemental Skill or Burst hits"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/匣里日月.png",
+   "entry": "1939",
+   "notes": ""
+  },
+  "cool-steel": {
+   "name": "Cool Steel",
+   "type": "Sword",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "atk_pct",
+   "sub_90": 35.2,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/冷刃.png",
+   "entry": "1938",
+   "notes": "Passive not counted"
+  },
+  "deathmatch": {
+   "name": "Deathmatch",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 454,
+   "sub": "cr",
+   "sub_90": 36.8,
+   "effects": [
+    {
+     "stat": "atk_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "at least 2 opponents nearby"
+    },
+    {
+     "stat": "def_pct",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "at least 2 opponents nearby"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/决斗之枪.png",
+   "entry": "1937",
+   "notes": "with fewer than 2 opponents nearby ATK is increased by 24%/30%/36%/42%/48% instead of ATK and DEF; only the case of 2 or more is counted"
+  },
+  "polar-star": {
+   "name": "Polar Star",
+   "type": "Bow",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "cr",
+   "sub_90": 33.1,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      12,
+      15,
+      18,
+      21,
+      24
+     ],
+     "when": "met",
+     "condition": "Elemental Skill and Elemental Burst DMG"
+    },
+    {
+     "stat": "atk_pct",
+     "values": [
+      48,
+      60,
+      72,
+      84,
+      96
+     ],
+     "when": "met",
+     "condition": "at 4 stacks of Ashen Nightstar, 12s each (10%/12.5%/15%/17.5%/20% at 1, 20%/25%/30%/35%/40% at 2, 30%/37.5%/45%/52.5%/60% at 3)"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/冬极白星.png",
+   "entry": "1936",
+   "notes": ""
+  },
+  "messenger": {
+   "name": "Messenger",
+   "type": "Bow",
+   "rarity": 3,
+   "base_atk_90": 448,
+   "sub": "cd",
+   "sub_90": 31.2,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/信使.png",
+   "entry": "1935",
+   "notes": "Passive not counted"
+  },
+  "old-merc-s-pal": {
+   "name": "Old Merc's Pal",
+   "type": "Claymore",
+   "rarity": 2,
+   "base_atk_90": 243,
+   "sub": null,
+   "sub_90": 0,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/佣兵重剑.png",
+   "entry": "1934",
+   "notes": "stats are at level 70, the highest this weapon has; Passive not counted"
+  },
+  "debate-club": {
+   "name": "Debate Club",
+   "type": "Claymore",
+   "rarity": 3,
+   "base_atk_90": 401,
+   "sub": "atk_pct",
+   "sub_90": 35.2,
+   "effects": [],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/以理服人.png",
+   "entry": "1933",
+   "notes": "Passive not counted"
+  },
+  "everlasting-moonglow": {
+   "name": "Everlasting Moonglow",
+   "type": "Catalyst",
+   "rarity": 5,
+   "base_atk_90": 608,
+   "sub": "hp_pct",
+   "sub_90": 49.6,
+   "effects": [
+    {
+     "stat": "heal",
+     "values": [
+      10,
+      12.5,
+      15,
+      17.5,
+      20
+     ],
+     "when": "always",
+     "condition": ""
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/不灭月华.png",
+   "entry": "1932",
+   "notes": "not counted: Normal Attack DMG +1%/1.5%/2%/2.5%/3% of Max HP as flat DMG; Energy restored by Normal Attacks"
+  },
+  "mappa-mare": {
+   "name": "Mappa Mare",
+   "type": "Catalyst",
+   "rarity": 4,
+   "base_atk_90": 565,
+   "sub": "em",
+   "sub_90": 110,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Elemental DMG Bonus at 2 stacks, 10s after triggering an Elemental Reaction"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/万国诸海图谱.png",
+   "entry": "1931",
+   "notes": ""
+  },
+  "the-catch": {
+   "name": "\"The Catch\"",
+   "type": "Polearm",
+   "rarity": 4,
+   "base_atk_90": 510,
+   "sub": "er",
+   "sub_90": 45.9,
+   "effects": [
+    {
+     "stat": "dmg",
+     "values": [
+      16,
+      20,
+      24,
+      28,
+      32
+     ],
+     "when": "met",
+     "condition": "Elemental Burst DMG"
+    },
+    {
+     "stat": "cr",
+     "values": [
+      6,
+      7.5,
+      9,
+      10.5,
+      12
+     ],
+     "when": "met",
+     "condition": "Elemental Burst CRIT Rate"
+    }
+   ],
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/「渔获」.png",
+   "entry": "1930",
+   "notes": ""
+  }
+ },
+ "checked": "2026-10-29",
+ "sources": [
+  "https://sg-wiki-api.hoyolab.com/hoyowiki/genshin/wapi/entry_page?entry_page_id=<id> (each weapon's entry: base ATK and substat; its passive's numbers were read into `effects`, and its text is read from the wiki at runtime), checked 2026-10-29"
+ ]
+}

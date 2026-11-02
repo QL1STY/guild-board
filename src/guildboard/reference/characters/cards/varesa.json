@@ -1,0 +1,36 @@
+{
+  "key": "varesa",
+  "name": "Varesa",
+  "element": "Electro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "physical",
+  "goals": {"atk": 3000, "cr": 60, "cd": 180, "er": 145},
+  "mains": {"sands": ["atk_pct"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["long-night-s-oath"], "pieces": "4"},
+    {"sets": ["obsidian-codex"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["desert-pavilion-chronicle"], "pieces": "4"}
+  ],
+  "weapons": ["vivid-notions", "kagura-s-verity", "reliquary-of-truth", "lost-prayer-to-the-sacred-winds", "crane-s-echoing-call", "the-widsith", "flowing-purity", "clash-of-kings"],
+  "partners": ["Electro", "Hydro", "Pyro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Long Night's Oath first and Obsidian Codex second, ATK% Sands, an Electro DMG Goblet (KQM: then ATK%), a CRIT Circlet, Normal Attack > Burst > Skill (her plunging attacks are the damage), and Vivid Notions first (KQM lists it with Reliquary of Truth, Kagura's Verity and Crane's Echoing Call; Game8's alternatives overlap). Marechaussee Hunter (only reliable with Furina) and Desert Pavilion Chronicle are KQM's. The damage line is her plunging attack, which is on the physical curve (74.6% to 147.4%, ratio 1.976), so the table is physical although the Flying Kick (345.1% to 621.2%) and her Normal Attacks are on the elemental curve. Goals are Game8's: ATK 2,000-3,000 (upper end), CR 50-60 (60), CD 180 or above, ER 120-145 with another Electro unit (190-200 solo); KQM agrees with ER 120-145 for double Electro and 195-200 solo. Partners are inferred (Electro for the Nightsoul and Electro-Charged teams, Hydro for Furina, Pyro); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/varesa-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/500244", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7488", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

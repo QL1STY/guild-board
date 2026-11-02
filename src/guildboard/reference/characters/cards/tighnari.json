@@ -1,0 +1,35 @@
+{
+  "key": "tighnari",
+  "name": "Tighnari",
+  "element": "Dendro",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "elemental",
+  "goals": {"er": 140},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "em": "wants", "er": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["wanderer-s-troupe"], "pieces": "4"},
+    {"sets": ["deepwood-memories"], "pieces": "4"}
+  ],
+  "weapons": ["hunter-s-path", "aqua-simulacra", "polar-star", "the-first-great-magic", "skyward-harp", "elegy-for-the-end", "thundering-pulse", "astral-vulture-s-crimson-plumage", "scion-of-the-blazing-sun"],
+  "partners": ["Dendro", "Electro", "Anemo"],
+  "partner_roles": ["support"],
+  "teams": [],
+  "notes": "Both sources: Normal Attack > Burst > Skill, an ATK% or EM Sands, a Dendro DMG Goblet, a CRIT Circlet and Hunter's Path first. Sets differ: Game8 gives Gilded Dreams for the general Main DPS build and Wanderer's Troupe for the Charged Attack build; KQM lists 4pc Deepwood Memories first (best held by a support), then Wanderer's Troupe and Gilded Dreams as near equals. All three are kept, Gilded Dreams first because Game8 names it and KQM calls it comparable. His damage is the Charged (Wreath Arrow, 87.2% to 157.0%, ratio 1.80) and Aimed Shot damage, on the elemental curve. Goals: neither source gives ATK or CRIT numbers. ER is KQM's range by rotation (100-110 with two Skills per Burst, 130-140 with one Skill and a Dendro teammate, 150-160 with no Dendro teammate); 140 is used for the usual Spread team with one Dendro teammate. Partners are inferred (Dendro and Electro for Spread and Aggravate, Anemo for Viridescent Venerer); the sources give no team list.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/tighnari-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/382082", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2265", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

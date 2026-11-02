@@ -1,0 +1,204 @@
+/*
+ * The marks (look pass spec 5; ui/marks.tsx): pips, bars, seals, rings and dials. They draw with the widget roles of
+ * tokens.css and no colour of their own, so that the overlay's dark panel can set the roles again (spec 6.2), and each
+ * plays its motion once, when it appears, with the keyframes of motion.css and the motion tokens: under
+ * prefers-reduced-motion the durations are 0 and the marks are drawn at once. Nothing here loops.
+ */
+
+/* ---------- Pips: one diamond each, filled in the progress gold, outlined when empty, dotted when not known ---------- */
+.pips {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.pips i {
+  display: block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--w-outline);
+  border-radius: 2px;
+  /* The individual property, so that the stamp (a transform) lands on a diamond that is already turned. */
+  rotate: 45deg;
+}
+.pips i.on {
+  border-color: var(--w-fill);
+  background: var(--w-fill);
+  animation: stamp var(--t-state) var(--ease-stamp) backwards;
+  animation-delay: calc(min(sibling-index(), 12) * var(--stagger) + 250ms);
+}
+.pips.unknown i {
+  border-style: dotted;
+}
+
+/* ---------- Bar: the fill on a track that is a lighter step of the same gold ---------- */
+.bar {
+  position: relative;
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--w-track);
+}
+.bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--w-fill);
+  animation: grow-w var(--t-enter) var(--ease-out) backwards;
+}
+/* A gap in the surface's colour, as the ring's: between the parts of a bar, such as the days of a week. */
+.bar-notch {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--w-gap);
+}
+
+/* ---------- Seal: the star and one word, in the ready green on its tint ---------- */
+.seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 8px 0 6px;
+  border-radius: 6px;
+  /* Chromium 139 and later; rounded corners where the window does not know it. */
+  corner-shape: scoop;
+  background: color-mix(in srgb, var(--w-done) 18%, transparent);
+  color: var(--w-good);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+/* A state that is off: the plate and the muted ink (4.79:1 on the plate), not the ready green. */
+.seal.quiet {
+  background: var(--w-plate);
+  color: var(--w-muted);
+}
+/* The star is decoration: the second declaration gives it an empty text alternative where that is known. */
+.seal::before {
+  content: '✦';
+  content: '✦' / '';
+  font-size: 11px;
+}
+
+/* ---------- Ring of segments: Resin's, a circle of 200 in ten parts, its gaps the surface's colour ---------- */
+.ring {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  /* The inside is sized in cqi, a share of the ring's own width. */
+  container-type: inline-size;
+}
+.ring > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The circles start at the top. */
+  transform: rotate(-90deg);
+}
+.ring > svg circle {
+  fill: none;
+  stroke-width: 9;
+}
+.r-track {
+  stroke: var(--w-track);
+}
+.r-fill {
+  stroke: var(--w-fill);
+  animation: sweep var(--t-enter) var(--ease-out) backwards;
+}
+/* A little wider than the ring, so that no sliver of the ring shows at a gap's edge. */
+.ring > svg .r-gaps {
+  stroke: var(--w-gap);
+  stroke-width: 11;
+}
+/* A point marked across the ring, wider than it, such as where soft pity starts on a pity card's. */
+.ring > svg .r-mark {
+  stroke: var(--w-gold-ink);
+  stroke-width: 13;
+}
+.ring-in {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+}
+
+/* ---------- Dial: a picture or a sign inside the ring of its time passed ---------- */
+.dial {
+  /* The ring's thickness follows the dial's size: a share of it, never thinner than 3 or thicker than 9 pixels. */
+  --line: clamp(3px, 5.5%, 9px);
+  position: relative;
+  flex: none;
+  display: block;
+  width: var(--size, 36px);
+  aspect-ratio: 1;
+}
+.dial > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.dial > svg circle {
+  fill: none;
+  stroke-width: var(--line);
+  /* Inside the box, whatever the size: the circle's radius is half the box less half the line. */
+  r: calc(50% - var(--line) / 2);
+}
+.d-track {
+  stroke: var(--w-track);
+}
+.d-fill {
+  stroke: var(--w-fill);
+  stroke-linecap: round;
+  animation: sweep var(--t-enter) var(--ease-out) backwards;
+}
+.dial.ready .d-fill {
+  stroke: var(--w-done);
+}
+.dial-art {
+  position: absolute;
+  inset: 15%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--w-plate);
+  color: var(--w-icon);
+}
+/* A Picture inside the art fills it, and its sign is a little under its size, as the signs of the rows are. */
+.dial-art > .pic {
+  width: 100%;
+  height: 100%;
+}
+.dial-art img {
+  object-fit: cover;
+}
+.dial-art .sign {
+  width: 58%;
+  height: 58%;
+}
+.dial-tick {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  display: grid;
+  place-items: center;
+  width: clamp(15px, 21%, 30px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--w-done);
+  color: var(--w-gap);
+  box-shadow: 0 0 0 2px var(--w-gap);
+}
+.dial-tick .sign {
+  width: 64%;
+  height: 64%;
+  stroke-width: 2.6;
+}

@@ -1,0 +1,37 @@
+{
+  "key": "yun-jin",
+  "name": "Yun Jin",
+  "element": "Geo",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "def",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 200},
+  "mains": {"sands": ["def_pct", "er"], "goblet": ["def_pct"], "circlet": ["def_pct", "cr"]},
+  "weights": {"def_pct": "wants", "er": "wants", "cr": "some", "def": "some", "atk_pct": "none", "atk": "none", "cd": "none", "em": "none", "hp_pct": "none", "hp": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["husk-of-opulent-dreams"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["archaic-petra"], "pieces": "4"},
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}
+  ],
+  "weapons": ["favonius-lance", "engulfing-lightning", "footprint-of-the-rainbow", "rightful-reward", "the-catch", "prototype-starglitter", "kitain-cross-spear"],
+  "partners": ["Geo", "Pyro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Re-checked against genshin-builds.com (2026-10-30). KQM, Game8 and genshin-builds agree on 4pc Husk of Opulent Dreams first, a DEF% or ER Sands, a DEF% Goblet, a DEF% or CRIT Rate (for Favonius Lance) Circlet and the same weapon pool. Weapons differ in the lead: KQM Footprint of the Rainbow, Game8 Engulfing Lightning, genshin-builds Favonius Lance (also the most used there); Favonius Lance leads here and the others follow, with Kitain Cross Spear added from genshin-builds. Noblesse Oblige, Archaic Petra and Scroll of the Hero of Cinder City are team-specific sets (KQM; Noblesse and Scroll also on genshin-builds). Talent order: KQM is character level, then Burst; genshin-builds is Burst > Skill > Normal Attack; Game8's line was garbled by the draft script (it repeats the Burst and the Skill). The card uses Burst > Skill > Normal Attack. Her Burst (Cliffbreaker's Banner) adds a share of her DEF (32% to 58% at levels 1 and 10) to the team's Normal Attacks, so DEF is the scaling stat. The kit's 'check' line is the Burst's own hit (Skill DMG 244% to 439%, elemental curve, ATK-based), small beside the DEF bonus. ER is KQM's table: without Favonius, 180-225 with other Geo units, 240-270 solo, 160-200 with Xilonen; with Favonius 155-185 with other Geo units; 200 is used for a team with another Geo unit and no Favonius. Neither source gives numeric DEF or CRIT goals. Partners are inferred (Normal Attack carries such as Itto or Gorou, Pyro and Cryo).",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/yunjin-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/314345", "checked": "2026-10-29"},
+    {"url": "https://genshin-builds.com/en/character/yun_jin", "checked": "2026-10-30"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/4", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

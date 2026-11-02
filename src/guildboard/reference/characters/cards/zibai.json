@@ -1,0 +1,34 @@
+{
+  "key": "zibai",
+  "name": "Zibai",
+  "element": "Geo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "def",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"def": 2500, "cr": 50, "cd": 175, "em": 200, "er": 130},
+  "mains": {"sands": ["def_pct"], "goblet": ["def_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "def_pct": "wants", "em": "some", "er": "some", "def": "some", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"},
+    {"sets": ["husk-of-opulent-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["lightbearing-moonshard", "uraku-misugiri", "light-of-foliar-incision", "peak-patrol-song", "harbinger-of-dawn", "flute-of-ezpitzal", "cinnabar-spindle", "splendor-of-tranquil-waters", "absolution"],
+  "partners": ["Hydro", "Geo", "Anemo"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on everything that matters: 4pc Night of the Sky's Unveiling first (KQM: by far the best, for its EM and CRIT Rate), 4pc Husk of Opulent Dreams second (KQM also allows 2pc Husk and 2pc EM, left out since the schema wants named sets), DEF% on the Sands and Goblet, a CRIT Circlet, Skill > Burst > Normal Attack (KQM: Skill > character level = Burst) and Lightbearing Moonshard first, with Uraku Misugiri next. Her damage is DEF-based (Skill hits 127.0% and 177.7% DEF at level 1; elemental curve), so the scaling stat is DEF and the damage talent the Skill. Goals are Game8's: DEF 2,500 or more, CR 40-50 before the set's CRIT Rate bonus (50 used), CD 175 or above, EM 100-200 (upper end), ER 110-130 (upper end); KQM's ER is 100 if she Bursts when available, 105-145 if every rotation with a Favonius proc. Partners are inferred from Lunar-Crystallize (Hydro and Geo teammates in her passives); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/zibai-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/570263", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/9122", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

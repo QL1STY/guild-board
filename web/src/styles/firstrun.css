@@ -1,0 +1,21 @@
+/* The first-run page: one card on the parchment, without the rail. */
+.fr { display: grid; justify-items: center; min-height: 100vh; padding: 40px 20px; }
+.fr-card { width: min(720px, 100%); align-self: start; padding: 22px 28px 24px; font-size: 14.5px; }
+.fr-brand { font-size: 15px; font-weight: 800; color: #B8923F; }
+.fr-problem { margin: 12px 0 0; }
+.fr-step { margin-top: 14px; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.fr-card h1 { margin: 2px 0 10px; font-size: 26px; font-weight: 800; }
+.fr-card h2 { margin: 16px 0 4px; font-size: 15px; font-weight: 800; }
+.fr-card ul { margin: 0; padding-left: 20px; }
+.fr-card li + li { margin-top: 3px; }
+.fr-card p + p { margin-top: 8px; }
+.fr-card code { font-family: Consolas, 'Cascadia Mono', monospace; font-size: 13px; overflow-wrap: anywhere; }
+.fr-risk { margin-top: 6px; padding: 10px 14px; border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 10px; background: var(--tint); }
+.fr-check { display: flex; align-items: center; gap: 8px; margin-top: 16px; font-weight: 700; cursor: pointer; }
+.fr-check.light { font-weight: 400; }
+.fr-check input { width: 16px; height: 16px; margin: 0; accent-color: var(--button); }
+.fr-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
+.fr-actions .gb-btn { padding: 7px 18px; font-size: 13.5px; }
+.fr-notice { margin-top: 12px; color: var(--ink2); }
+.fr-wait { display: flex; align-items: center; gap: 8px; }
+.fr .gb-spin { border-color: rgba(59, 66, 85, .25); border-top-color: var(--ink); }

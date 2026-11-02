@@ -1,0 +1,18 @@
+{
+  "key": "sandrone", "name": "Sandrone", "element": "Cryo", "weapon_type": "Claymore", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "physical",
+  "goals": {"atk": 2000, "cr": 40, "cd": 180, "er": 145},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["atk_pct", "em"], "circlet": ["cd", "cr"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["disenchantment-in-deep-shadow"], "pieces": "4"}, {"sets": ["gilded-dreams"], "pieces": "4"}],
+  "weapons": ["a-teaspoon-of-transcendence", "a-thousand-blazing-suns", "redhorn-stonethresher", "verdict", "mailed-flower", "tidal-shadow"],
+  "partners": ["Cryo", "Electro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Cryo on-field Stellar-Conduct DPS that scales with ATK. Both sources put the Normal Attack first, then the Burst, then the Skill, so the damage talent is the Normal Attack; its hits are on the physical curve (76.3% at level 1, 1.081 at level 2). They agree on 4pc Disenchantment in Deep Shadow as best with Gilded Dreams as the back-up, and on A Teaspoon of Transcendence first and A Thousand Blazing Suns, Mailed Flower and Tidal Shadow after it. The mains differ a little: KQM gives ATK% on the Sands and Goblet and CRIT on the Circlet; Game8 allows EM on the Sands and Goblet and puts CRIT DMG at least level with CRIT Rate. Goals are Game8's: ATK 2,000 or more, CRIT Rate 30-40% before the set's CRIT Rate bonus and her ascension stat (40 used), CRIT DMG 180% or above, ER 125-145% (upper end; KQM: 130-165% with one other Cryo unit, 120-140% with two). Game8's EM of 150-200 is not set.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/sandrone-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/382107", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

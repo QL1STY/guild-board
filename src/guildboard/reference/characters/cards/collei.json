@@ -1,0 +1,19 @@
+{
+  "key": "collei", "name": "Collei", "element": "Dendro", "weapon_type": "Bow", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 200, "dmg": 46.6},
+  "mains": {"sands": ["er", "em", "atk_pct"], "goblet": ["dmg", "em"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "em": "some", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["deepwood-memories"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}],
+  "weapons": ["elegy-for-the-end", "favonius-warbow", "polar-star"],
+  "partners": ["Hydro", "Electro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Dendro sub-DPS whose Burst (Trump-Card Kitty) is the main hit; both sources put the Burst before the Skill and agree on 4pc Deepwood Memories first, an ER, EM or ATK% Sands, a Dendro DMG Goblet and a crit Circlet. Both give a second, support build (KQM: pure Bloom with EM everywhere; Game8: Burst support with Noblesse Oblige), which the card keeps only as its second set. Elegy for the End and Favonius Warbow are on both weapon lists; Polar Star is Game8's best, KQM does not list it. Neither source gives stat goals; ER 200% is KQM's figure for regular circumstances (180% in a double Dendro team, 160-170% with Favonius Warbow). DMG 46.6% is the Goblet's main stat.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/collei-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/382079", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2268", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

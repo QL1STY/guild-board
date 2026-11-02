@@ -1,0 +1,4688 @@
+{
+ "characters": [
+  {
+   "key": "vodyanitsa",
+   "name": "Vodyanitsa",
+   "entry": "11702",
+   "element": "Hydro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/21/e106be431d7c8ebbb9607b032fc66e3d_995961298610120887.png",
+   "version": "7.1",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "frostfairy-flower",
+    "name": "Frostfairy Flower"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/21/15c3ca2de927b89bc345bbb486752c82_78372799742755656.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/09/22/35428890/af1bb894636c088fb48a6f88a3273cb1_4970667545314043299.png"
+  },
+  {
+   "key": "vesna",
+   "name": "Vesna",
+   "entry": "11661",
+   "element": "Anemo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/20/5aa0d3ab5845c5926d388e3dd9077ab4_881544340488400495.png",
+   "version": "7.1",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "golden-fern",
+    "name": "Golden Fern"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/20/53542ff037d2365a2774496f8ccb38f9_5388799920280785031.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/09/22/35428890/58548c94ac20cf266059d85cf5d3dfe8_4511596063855934391.png"
+  },
+  {
+   "key": "traveler-cryo",
+   "name": "Traveler (Cryo)",
+   "entry": "11609",
+   "element": "Cryo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/11/f00d18b57acb4aa37bf2fc39bf67ddd0_8370258696553302554.gif",
+   "version": "7.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/11/d834fc60aec3a328934ba323ce1899ae_7840105773785919344.png",
+   "chart": null
+  },
+  {
+   "key": "alyosha",
+   "name": "Alyosha",
+   "entry": "11163",
+   "element": "Electro",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/07/b866d5fd9adbd2f66874e54208db1107_7133689933484329253.png",
+   "version": "7.0",
+   "ascension_stat": "Energy Recharge",
+   "specialty": {
+    "key": "flockingweed",
+    "name": "Flockingweed"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/07/9ecaaef292e143dcf4999a40bb62bf45_2775014638315892630.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/08/12/35428890/fa5c6f3066e7561c2506479e2f0c61df_3370883905005750900.png"
+  },
+  {
+   "key": "odette",
+   "name": "Odette",
+   "entry": "11162",
+   "element": "Cryo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/07/963982ad49601f7de6a5ab1a364989f7_3689152522029267720.png",
+   "version": "7.0",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "frostfairy-flower",
+    "name": "Frostfairy Flower"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/07/eadf682d655dfcdd4f23a5ed92fd8034_2202318391772496657.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/08/12/35428890/75ed94275b5789b2ae0752100bff6657_3653593177573551122.png"
+  },
+  {
+   "key": "sandrone",
+   "name": "Sandrone",
+   "entry": "10920",
+   "element": "Cryo",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/06/29/4ee285b198b7bb8dba2a0a63aa9ffc9f_7866102664638374858.png",
+   "version": "6.7",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "subdetection-unit",
+    "name": "Subdetection Unit"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/06/29/38a6541d13b7686cb62b138c843db485_1689134716955007600.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/08/14/35428890/02698eea43e94fa98c01742655ce50dc_1920258854898741334.png"
+  },
+  {
+   "key": "prune",
+   "name": "Prune",
+   "entry": "10624",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/19/51e83d3537b37acc3f422910fe5bef82_3083259311239382441.png",
+   "version": "6.6",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "winter-icelea",
+    "name": "Winter Icelea"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/19/efc4790433acad68314f89ccf71cb1b9_5757949573509960663.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/08/31/35428890/b718dedafe401441f8a55f6fc8738888_8365900470905943011.png"
+  },
+  {
+   "key": "lohen",
+   "name": "Lohen",
+   "entry": "10623",
+   "element": "Cryo",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/06/05/7fced903c930ab16fd333755c1aef7e9_9169127423158726160.png",
+   "version": "6.6",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "etherwing-moth",
+    "name": "Etherwing Moth"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/06/05/428e85b7f1a0144d775a72e5b65aa1a6_8933015988394387241.png",
+   "chart": null
+  },
+  {
+   "key": "nicole",
+   "name": "Nicole",
+   "entry": "10622",
+   "element": "Pyro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/18/5e875ee63bca70ebeda64e6fa409d31b_5921156294699298125.png",
+   "version": "6.6",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "pine-amber",
+    "name": "Pine Amber"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/18/2c171a95d1dc21d9ef08aa4b89927dc3_466285953426427978.png",
+   "chart": null
+  },
+  {
+   "key": "linnea",
+   "name": "Linnea",
+   "entry": "10412",
+   "element": "Geo",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/04/03/b73622caa3750012312c72437295ace3_6973976776946504804.png",
+   "version": "6.5",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "etherwing-moth",
+    "name": "Etherwing Moth"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/04/03/d9aa90d8283f6f1f47d2f8a59ca1b7cb_6843233182538136928.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/04/08/35428890/b1c8122a516d48002cc93656897beb7a_1975922321969811238.png"
+  },
+  {
+   "key": "varka",
+   "name": "Varka",
+   "entry": "9342",
+   "element": "Anemo",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/02/21/553feb81c3bbc5e3bc69a765e157c33f_8250978205515428490.png",
+   "version": "6.4",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "wolfhook",
+    "name": "Wolfhook"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/02/21/4b788f98f828852e3d2bbe27543eab7e_6496159845379428571.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/02/24/35428890/183b0d09b3ab02cfe53f1f5919d6e520_2661329368876381723.png"
+  },
+  {
+   "key": "illuga",
+   "name": "Illuga",
+   "entry": "9123",
+   "element": "Geo",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/29/d585407867aa47b4d925613cea9f00c2_5864597966579326880.png",
+   "version": "6.3",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "pine-amber",
+    "name": "Pine Amber"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/29/ecbfebb4da976c938b965fc05df5d232_772787388476270486.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/02/24/35428890/3691d61ac61ffaeb260eefbe264bad83_1837729131635903215.png"
+  },
+  {
+   "key": "zibai",
+   "name": "Zibai",
+   "entry": "9122",
+   "element": "Geo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/29/72161f01ff431c9f099710f92c811454_1654176825175164246.png",
+   "version": "6.3",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "glaze-lily",
+    "name": "Glaze Lily"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/29/79c662083a639604a842efce419e2ada_2281309650231144496.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/02/24/35428890/a4c11d7ce203e9b0452892de70aef5e0_7398538137425799973.png"
+  },
+  {
+   "key": "columbina",
+   "name": "Columbina",
+   "entry": "9121",
+   "element": "Hydro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/13/80fa97679c8d1828fdd96c6aa9638632_4327573591148809640.png",
+   "version": "6.3",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "winter-icelea",
+    "name": "Winter Icelea"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/13/259ea9a42d04bdbccf5dc9e0f09e4c1d_5820073355393012960.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/03/03/35428890/51bc2d527868f6c2cf848028de7d0333_3245095695040146094.png"
+  },
+  {
+   "key": "jahoda",
+   "name": "Jahoda",
+   "entry": "9018",
+   "element": "Anemo",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/12/01/19708bac6eba4779a70908bf0bee70b1_1653339605275422455.png",
+   "version": "6.2",
+   "ascension_stat": "Healing Bonus",
+   "specialty": {
+    "key": "portable-bearing",
+    "name": "Portable Bearing"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/12/01/1ef90ced50f5ef7736a28ed0e30c4ce1_6850194485189158647.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/12/08/35428890/519b7543786c47068d7ad8a206668987_3266504679899964944.png"
+  },
+  {
+   "key": "durin",
+   "name": "Durin",
+   "entry": "9017",
+   "element": "Pyro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/28/e3e2b8fcbff2f2f3cdcec6bbf04efa84_3327367670955368711.png",
+   "version": "6.2",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "frostlamp-flower",
+    "name": "Frostlamp Flower"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/28/d98cbea162ea542c83b33ca6ba6f9da0_5116451498197689135.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/12/08/35428890/8bc7f8d305374d3adda5bedb2cc2f7d6_8728744770799957077.png"
+  },
+  {
+   "key": "nefer",
+   "name": "Nefer",
+   "entry": "8894",
+   "element": "Dendro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/21/7557acebcb72b4d9912bcb0e6c92306a_3655566527985254987.png",
+   "version": "6.1",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "moonfall-silver",
+    "name": "Moonfall Silver"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/21/79a88934b1d04a698c1760fd9b76c60b_2727330890292955170.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/10/22/35428890/15cc1241a1a87718a238129dc012fe4a_1386801884860275858.png"
+  },
+  {
+   "key": "flins",
+   "name": "Flins",
+   "entry": "8398",
+   "element": "Electro",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/09/29/35428890/f6feccecc61d2bf772461f057dfb41cd_5944664216414192017.png",
+   "version": "6.0",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "frostlamp-flower",
+    "name": "Frostlamp Flower"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/26/047f903cc0cfa0ec8bb4bf6ea26e849c_3829668269435948845.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/09/29/35428890/a342bb7d405fc7ac9c7b0bf5bfb012c0_2853260171873623730.png"
+  },
+  {
+   "key": "aino",
+   "name": "Aino",
+   "entry": "8397",
+   "element": "Hydro",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/09/4e58c851d6c947865026faa168db83bd_3944254802105067377.png",
+   "version": "6.0",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "portable-bearing",
+    "name": "Portable Bearing"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/09/10/35428890/9570b06932893e8b91ea88d2d2ad9e44_940890125652974555.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/09/10/35428890/0eb4cead8c1fefe9ad1ccd387a913085_2345015216357591811.png"
+  },
+  {
+   "key": "lauma",
+   "name": "Lauma",
+   "entry": "8396",
+   "element": "Dendro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/08/b06e9ff48d57de4856f1a05b1199aae1_8565150401481594895.png",
+   "version": "6.0",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "moonfall-silver",
+    "name": "Moonfall Silver"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/08/99467ea9bd548db483da75fe990b95cb_5632972371693219286.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/09/10/35428890/64fcc9505bc762d40a4fc104777891d7_9115718345445782610.png"
+  },
+  {
+   "key": "ineffa",
+   "name": "Ineffa",
+   "entry": "7852",
+   "element": "Electro",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/07/28/7c221918444852e9a3c2ad609ccacea2_8687518447126752117.png",
+   "version": "5.8",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "glowing-hornshroom",
+    "name": "Glowing Hornshroom"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/07/28/3832623f9134b8895b7ed11db856b96c_7565203282963736106.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/29/35428890/54affc0ff036c3cc5a6136b5640d22b9_879646337415569740.png"
+  },
+  {
+   "key": "dahlia",
+   "name": "Dahlia",
+   "entry": "7707",
+   "element": "Hydro",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/16/255dedc5048565aec2c5af510c6f74a5_7726536808309970424.png",
+   "version": "5.7",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "calla-lily",
+    "name": "Calla Lily"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/16/1181220d4b4bedca89f811b8cc7e61ac_7355822259420623421.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/06/18/35428890/9b9e4f3b50ebd76d6937aea45c02007f_8376434274171964525.png"
+  },
+  {
+   "key": "skirk",
+   "name": "Skirk",
+   "entry": "7706",
+   "element": "Cryo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/16/48dba0c10560a3ef573f17d97408b5a0_2527001828446746987.png",
+   "version": "5.7",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "skysplit-gembloom",
+    "name": "Skysplit Gembloom"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/16/1cb7988952bbe7666e82cfba48f88faa_1681948255315436625.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/06/18/35428890/927a2aad80ba48800b1d16e304119ade_9011282948375710326.png"
+  },
+  {
+   "key": "ifa",
+   "name": "Ifa",
+   "entry": "7627",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/30/ce693d1e36aef5936b2d2db006605fc4_9036718103340803450.png",
+   "version": "5.6",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "saurian-claw-succulent",
+    "name": "Saurian Claw Succulent"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/30/55202fe458d12c0c2a3f4464d69660db_1494361710407814010.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/08/35428890/7c9ec6f1a1ef802ab43746d7d7d09e83_3352525336562390583.png"
+  },
+  {
+   "key": "escoffier",
+   "name": "Escoffier",
+   "entry": "7624",
+   "element": "Cryo",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/30/ddbc128157d69479f61747f0918f9e72_2470321636402108639.png",
+   "version": "5.6",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "beryl-conch",
+    "name": "Beryl Conch"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/30/2a832c067917d806a00da8f3bcf8f82d_8674237467634356840.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/08/35428890/d46801ccfd26845e2f5a5aff5f07e633_942783844835591344.png"
+  },
+  {
+   "key": "iansan",
+   "name": "Iansan",
+   "entry": "7502",
+   "element": "Electro",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/25/dd9a200a86b792fb1b73ef1ee7de0911_2097378734184941134.png",
+   "version": "5.5",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "dracolite",
+    "name": "Dracolite"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/27/237301566/9258ec459bacaf9564b385a95868347e_3039385471896507556.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/27/35428890/d6b9ff1bfbcae0e7a9100dd543a1ddbf_6854363821224078800.png"
+  },
+  {
+   "key": "varesa",
+   "name": "Varesa",
+   "entry": "7488",
+   "element": "Electro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/25/a54efe1bb7e82a589b9af44683a696ca_8635138146175164187.png",
+   "version": "5.5",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "skysplit-gembloom",
+    "name": "Skysplit Gembloom"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/25/2cbcf405e74375b789baa7c2c0c06bd1_3144259731948803994.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/03/27/35428890/7efe028c0cf5065e37d378a4df7d0657_3276373489709022823.png"
+  },
+  {
+   "key": "yumemizuki-mizuki",
+   "name": "Yumemizuki Mizuki",
+   "entry": "7420",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/08/11662c12fb353d88bd2b20a2726c9f1c_8013472600677983943.png",
+   "version": "5.4",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "sea-ganoderma",
+    "name": "Sea Ganoderma"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/08/5f834f2d2f59353d326b5e9b0cfa8a62_4851369671043769453.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/13/35428890/f58c95443400910378e7b5450431e8a6_153240816542503374.png"
+  },
+  {
+   "key": "traveler-pyro",
+   "name": "Traveler (Pyro)",
+   "entry": "7306",
+   "element": "Pyro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/12/30/151578876/75bb898fe1c3b4ed29a2931829ddb845_1306153511401609506.png",
+   "version": "5.3",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/12/30/151578876/733dfcc873d613939c633cd206a1f37f_4250719564513969087.png",
+   "chart": null
+  },
+  {
+   "key": "lan-yan",
+   "name": "Lan Yan",
+   "entry": "7301",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/01/17/02a299cec38b4ef4f21952c37a624258_5744396397316809821.png",
+   "version": "5.3",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "clearwater-jade",
+    "name": "Clearwater Jade"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/01/17/9ef5fbaa2a8cc87eeefba6699705b272_114518928269252871.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/13/35428890/24842130f30b1c65a9d4bef2e2f695ae_1896492271034075595.png"
+  },
+  {
+   "key": "citlali",
+   "name": "Citlali",
+   "entry": "7300",
+   "element": "Cryo",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/27/c4ab2530bb8bbe3c0e811684f97ec124_6688582217610741079.png",
+   "version": "5.3",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "quenepa-berry",
+    "name": "Quenepa Berry"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/27/81d2ce1829b4f4e8ffe441e4feba3f60_6813423871552297632.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/13/35428890/74c1bc1f0a64d69d613ba342afe9d0ae_1735752776136592838.png"
+  },
+  {
+   "key": "mavuika",
+   "name": "Mavuika",
+   "entry": "7299",
+   "element": "Pyro",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/30/2f098b1f15854fd9dafc54998795a59e_864981592196815761.png",
+   "version": "5.3",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "withering-purpurbloom",
+    "name": "Withering Purpurbloom"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/30/8c49e203b2126b3a821ea0231345ec98_3091022826680350135.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/13/35428890/743274291fad101830196f176c8fe488_9030779474642812019.png"
+  },
+  {
+   "key": "chasca",
+   "name": "Chasca",
+   "entry": "7080",
+   "element": "Anemo",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/18/abe1192cc7aad45f6b273478dd5fa88a_4799372826012752249.png",
+   "version": "5.2",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "withering-purpurbloom",
+    "name": "Withering Purpurbloom"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/18/d363eee714bf84d61fb4822b75bd6e04_2676492841800370007.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/13/35428890/7499f7a1836ada1b7ad18949e81d517c_7947531495602520199.png"
+  },
+  {
+   "key": "ororon",
+   "name": "Ororon",
+   "entry": "7079",
+   "element": "Electro",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/18/e4830690f8b6a1ebb02cfbc8ce955671_8091252479018770784.png",
+   "version": "5.2",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "glowing-hornshroom",
+    "name": "Glowing Hornshroom"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/18/2aaf5609d6e105b58883480603332c29_8444797283733535126.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/13/35428890/b55c92a9e27bfb6ee8ae8475591fa01c_4169377815524689846.png"
+  },
+  {
+   "key": "xilonen",
+   "name": "Xilonen",
+   "entry": "6924",
+   "element": "Geo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/25/b07074c2b9040516fd240b6b8d65c011_2487211347344319683.png",
+   "version": "5.1",
+   "ascension_stat": "DEF",
+   "specialty": {
+    "key": "brilliant-chrysanthemum",
+    "name": "Brilliant Chrysanthemum"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/25/d6b244ef6ec3df3bd36e51067d450f17_4308094211599377757.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/05/13/35428890/e7c0f056f50e38dcc9a31daad420f953_5179087761076460001.png"
+  },
+  {
+   "key": "mualani",
+   "name": "Mualani",
+   "entry": "6319",
+   "element": "Hydro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/26/f4c75caad42923eb91ee760aa2eb473a_7439123622315070718.png",
+   "version": "5.0",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "sprayfeather-gill",
+    "name": "Sprayfeather Gill"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/26/cabadce3bb2274a4a2ab60eca8640ae4_6040487253680456464.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/27/35428890/b683a9e111df899562ac62d119ed4923_6338416091044778630.png"
+  },
+  {
+   "key": "kachina",
+   "name": "Kachina",
+   "entry": "6318",
+   "element": "Geo",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/26925adb1092d29c8afdf46d92fad8bd_343637410022641529.png",
+   "version": "5.0",
+   "ascension_stat": "Geo DMG Bonus",
+   "specialty": {
+    "key": "quenepa-berry",
+    "name": "Quenepa Berry"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/43500f5479cb96a62b3fa530e6fdd784_7221959347668369250.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/27/35428890/4d2d5ba08b49881cf33d8a969268b618_5093089180126819726.png"
+  },
+  {
+   "key": "kinich",
+   "name": "Kinich",
+   "entry": "6317",
+   "element": "Dendro",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/12/0099e74b4d0c919f6feab4bade3ab748_5795733017114624391.png",
+   "version": "5.0",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "saurian-claw-succulent",
+    "name": "Saurian Claw Succulent"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/12/59b68bd99f0ded103af4c8c4098cca23_6304019452837594890.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/09/15/35428890/f00a23c772ea914b050b36e3da6bdda0_977740773621674167.png"
+  },
+  {
+   "key": "emilie",
+   "name": "Emilie",
+   "entry": "5714",
+   "element": "Dendro",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/07/31/87ad30965e0c1b45364fdccc51b3429d_6108610286145583716.png",
+   "version": "4.8",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "lakelight-lily",
+    "name": "Lakelight Lily"
+   },
+   "art": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/07/31/d0cc096be325f9734d86d63f5ac7d218_1021429620279373890.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/10/35428890/423a117e998d2b4d2786826d9b94d826_4492367241660264242.png"
+  },
+  {
+   "key": "sethos",
+   "name": "Sethos",
+   "entry": "5598",
+   "element": "Electro",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/cdb7abfcb86138e5b618946a5466d442_6414132746291261116.png",
+   "version": "4.7",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "trishiraite",
+    "name": "Trishiraite"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/c9b2a2c06fa3f9fee19bd52f66ef4802_5159217461336937267.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/0d60741ee8d2d4c0509debf91934492a_8022361939980674726.png"
+  },
+  {
+   "key": "sigewinne",
+   "name": "Sigewinne",
+   "entry": "5597",
+   "element": "Hydro",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/26/35428890/2d607aa4d729030ea04f79919257e311_1172370997840232141.png",
+   "version": "4.7",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "romaritime-flower",
+    "name": "Romaritime Flower"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/26/35428890/d8f2091db2fbdb564d066e9595e2bd83_2520211661400366574.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/26/35428890/4520b813795e603aaaef27a8e1c51d95_8388836983095762493.png"
+  },
+  {
+   "key": "clorinde",
+   "name": "Clorinde",
+   "entry": "5596",
+   "element": "Electro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/770a66030815971c697ab81bc5436329_1296341861352728851.png",
+   "version": "4.7",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "lumitoile",
+    "name": "Lumitoile"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/a850a2c6fcd9b1468760e556f2e6d706_5468527643318459529.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/d5b0233b316c81b37f033310363082c5_7487479487509374238.png"
+  },
+  {
+   "key": "arlecchino",
+   "name": "Arlecchino",
+   "entry": "5149",
+   "element": "Pyro",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/672e65470bfd14b664596c2a7f7eaaf8_7046130387894981792.png",
+   "version": "4.6",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "rainbow-rose",
+    "name": "Rainbow Rose"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/0114711414993487ddfcfd303567d6da_7100726212303508062.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/30/35428890/e1185a0732ad771a615ee644c3a49a37_6368278175498171098.png"
+  },
+  {
+   "key": "chiori",
+   "name": "Chiori",
+   "entry": "4946",
+   "element": "Geo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/11/35428890/5470f90694af13476e49be7b8346e2b1_5366587928381003654.png",
+   "version": "4.5",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "dendrobium",
+    "name": "Dendrobium"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/2760dd6c9638da46586032f7b4dc0ef8_8093090173114909987.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/14/35428890/c38e925a9b23ffa9c54c11e4623f6612_2462552509318922000.png"
+  },
+  {
+   "key": "gaming",
+   "name": "Gaming",
+   "entry": "4775",
+   "element": "Pyro",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/b041ad23a9d6245efac952a9379c5114_8939761424130236195.png",
+   "version": "4.4",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "starconch",
+    "name": "Starconch"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/b01111171d5a69e5222afd53f0bbe6aa_6231682939289670609.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/02/21/35428890/4b410ed312a6024684c1fd9591a72c7c_2828977602734937049.png"
+  },
+  {
+   "key": "xianyun",
+   "name": "Xianyun",
+   "entry": "4774",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/2c2be27f8876e9435ab8c8b933b8408c_7973851751945394462.png",
+   "version": "4.4",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "clearwater-jade",
+    "name": "Clearwater Jade"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/f64a1eee5f0160caf1a78eb8c0bcdef3_3311004150319290536.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/02/21/35428890/4cdc645acee4e22072c1ec1ab39b8d43_3876173451815657944.png"
+  },
+  {
+   "key": "chevreuse",
+   "name": "Chevreuse",
+   "entry": "4577",
+   "element": "Pyro",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/09/35428890/a846729f31f16a987a8696466ebabcc0_6857330048220230431.png",
+   "version": "4.3",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "lumidouce-bell",
+    "name": "Lumidouce Bell"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/09/35428890/5a564896b35114da6dbcd3699e1c2921_3227127070645568387.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/09/35428890/6590acadf9d3e4aad32003ac37e03198_6705645132687913324.png"
+  },
+  {
+   "key": "navia",
+   "name": "Navia",
+   "entry": "4576",
+   "element": "Geo",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/3fc7580c01a9e622692402889706c4db_8301615651200775487.png",
+   "version": "4.3",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "spring-of-the-first-dewdrop",
+    "name": "Spring of the First Dewdrop"
+   },
+   "art": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/594b06b9353eb1dc16da5b9ed61dda0d_6286113421621366322.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/19/35428890/6ce53f1e25a22720208170a211f72745_4556428466985398894.png"
+  },
+  {
+   "key": "charlotte",
+   "name": "Charlotte",
+   "entry": "4377",
+   "element": "Cryo",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/06/35428890/7bbbff3f35661a93b5091b1f17fae6c0_6927814687713967999.png",
+   "version": "4.2",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "beryl-conch",
+    "name": "Beryl Conch"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/06/35428890/45c552941667ceea4fabe74013738690_8046069689233441850.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/08/35428890/7798c641a8e5b33dbfaf0a417ad5c092_3754697538114804618.png"
+  },
+  {
+   "key": "furina",
+   "name": "Furina",
+   "entry": "4376",
+   "element": "Hydro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/06/35428890/263e5ea0784d182b393f67a7e24146a5_2961704185113948066.png",
+   "version": "4.2",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "lakelight-lily",
+    "name": "Lakelight Lily"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/07/35428890/21e181e0f362d130d01e212c5bb53b82_6147429149878785035.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/08/35428890/96f6027b5662beda90d0da6dc43d5447_6863656788696261704.png"
+  },
+  {
+   "key": "neuvillette",
+   "name": "Neuvillette",
+   "entry": "4023",
+   "element": "Hydro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/26/35428890/0513aa7f482dbb4778545d02f94956fe_7540616405773975535.png",
+   "version": "4.1",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "lumitoile",
+    "name": "Lumitoile"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/26/35428890/6ece63f5f6805280554d805e9ccaf9a8_4355197449098494351.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/27/35428890/cbec2a96aca08e448a92d45e2563f910_8932482024479326535.png"
+  },
+  {
+   "key": "wriothesley",
+   "name": "Wriothesley",
+   "entry": "4022",
+   "element": "Cryo",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/15/35428890/31a0eb2dec5d69ca8dd7616572136b8b_8886987124386670150.png",
+   "version": "4.1",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "subdetection-unit",
+    "name": "Subdetection Unit"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/15/35428890/3fdf34f1b64ddfbd70fe9cf306cbc92d_6866396354156163402.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/18/35428890/80ffbbd813c7090916a115c1eb54ddd8_4461585163561778140.png"
+  },
+  {
+   "key": "traveler-hydro",
+   "name": "Traveler (Hydro)",
+   "entry": "3997",
+   "element": "Hydro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/75bb898fe1c3b4ed29a2931829ddb845_5786491127494274034.png",
+   "version": "4.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/733dfcc873d613939c633cd206a1f37f_9014549796574084249.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/16/35428890/b52c223c26ffc36476ad3bb30f9f37cb_4064655254688398897.png"
+  },
+  {
+   "key": "freminet",
+   "name": "Freminet",
+   "entry": "3964",
+   "element": "Cryo",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/03/35428890/8e44111a378f4e5379b8e7444e8c2daa_4713775899437074849.png",
+   "version": "4.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "romaritime-flower",
+    "name": "Romaritime Flower"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/03/35428890/3bbf849df340372fb83ff1f4a9583d0a_3096173116747491357.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/07/35428890/93f96ee9d591212ee97912938b6c787f_8001971870934227938.png"
+  },
+  {
+   "key": "lyney",
+   "name": "Lyney",
+   "entry": "3963",
+   "element": "Pyro",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/e343d4442cc3b8e243f0d528bb715f75_1232011243947476013.png",
+   "version": "4.0",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "rainbow-rose",
+    "name": "Rainbow Rose"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/d2b9dcd2957d2b1a479ffbf9a2146960_7504772143961858773.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/16/35428890/fcf641ab5cd4f758d614ceeb8bdc3e52_8384260053017537186.png"
+  },
+  {
+   "key": "lynette",
+   "name": "Lynette",
+   "entry": "3962",
+   "element": "Anemo",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/436e6f2b9b9006bfe511a98093259daf_7192025380861185061.png",
+   "version": "4.0",
+   "ascension_stat": "Anemo DMG Bonus",
+   "specialty": {
+    "key": "lumidouce-bell",
+    "name": "Lumidouce Bell"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/dd6c06caae12cc7c52f08222eaf6c4f2_4697720447850763749.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/16/35428890/55ca9729cd305b6027a89bea34fca6a0_3464419900203212696.png"
+  },
+  {
+   "key": "kirara",
+   "name": "Kirara",
+   "entry": "3719",
+   "element": "Dendro",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/23/35428890/d1699810632f8c3bc8c1e8c8beb8250f_3141235252861584883.png",
+   "version": "3.7",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "amakumo-fruit",
+    "name": "Amakumo Fruit"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/23/35428890/05015541c4d22079c8415938c9cbbe51_8324908475708954287.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/26/194600931/633732cc6875ce3aedc3b8f299031b4a_4428742551214140539.png"
+  },
+  {
+   "key": "baizhu",
+   "name": "Baizhu",
+   "entry": "3609",
+   "element": "Dendro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/05599650d7f42e1c4adde373de6b297d_8001303176243726128.png",
+   "version": "3.6",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "violetgrass",
+    "name": "Violetgrass"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/0a29bc885777e12ff3db57de89034281_4422894164353401810.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/24/194600931/56e1cfa74adb64d53fa927b5c174e0f6_8560560066471430595.png"
+  },
+  {
+   "key": "kaveh",
+   "name": "Kaveh",
+   "entry": "3608",
+   "element": "Dendro",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/2270aba02b92034d7d76b4426be8f53b_7062168821433378650.png",
+   "version": "3.6",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "mourning-flower",
+    "name": "Mourning Flower"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/8706d0f6385f31a35b94a761d4a7a627_4173789576766010591.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/24/194600931/7e9f48ce6818860097066892d0fec362_5199581349148510802.png"
+  },
+  {
+   "key": "dehya",
+   "name": "Dehya",
+   "entry": "3463",
+   "element": "Pyro",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/24/35428890/65b22311e1e38ffa45a4928d4005ecee_7076295870986871517.png",
+   "version": "3.5",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "sand-grease-pupa",
+    "name": "Sand Grease Pupa"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/24/35428890/dbba9ee7329ca34cc3a5e0449cc4c4c0_5307338993754989270.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/25/35428890/d89aa6e7c7eb71a8244b1429929180c1_7545412201933817567.png"
+  },
+  {
+   "key": "mika",
+   "name": "Mika",
+   "entry": "3462",
+   "element": "Cryo",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/03/21/35428890/da13e3b1a2c6c0e5892b201cec735f9b_6392765476968311284.png",
+   "version": "3.5",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "wolfhook",
+    "name": "Wolfhook"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/03/21/35428890/c23402e9898c07b79495d181deca4c13_4007595448675700928.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/03/21/35428890/54aa9683bd74e4684e8d50662f77ca1b_8485574871828401574.png"
+  },
+  {
+   "key": "alhaitham",
+   "name": "Alhaitham",
+   "entry": "3336",
+   "element": "Dendro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/15/35428890/25249dd20b86c775fb35bdbbd805d9ec_8879881358376735994.png",
+   "version": "3.4",
+   "ascension_stat": "Dendro DMG Bonus",
+   "specialty": {
+    "key": "sand-grease-pupa",
+    "name": "Sand Grease Pupa"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/15/35428890/263c92ac7b067f2bbe5498291ff1827c_4756494313887478593.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/25/35428890/35a2437c1b80269f329989de728fee3a_6348115565756868615.png"
+  },
+  {
+   "key": "yaoyao",
+   "name": "Yaoyao",
+   "entry": "3335",
+   "element": "Dendro",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/15/35428890/5bc9df1fb67391e4c8080da3d855de53_8974356791001371659.png",
+   "version": "3.4",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "jueyun-chili",
+    "name": "Jueyun Chili"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/15/35428890/c178874ca89b6da072c6e7e7908d12f2_6834962983970326351.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/25/35428890/a8d74cc2d6db28f5384322d901f191f3_3454708876913241752.png"
+  },
+  {
+   "key": "wanderer",
+   "name": "Wanderer",
+   "entry": "2968",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/24d97a22be742fb732ea96f625d1faac_2495743636540582085.png",
+   "version": "3.3",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "rukkhashava-mushrooms",
+    "name": "Rukkhashava Mushrooms"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/07/94376896/fbd7f995125646282e998d3cb3eb4f84_4511778391726974453.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/09/94376896/cbadf099f5a8013b8aa955f513d840b8_7630692756967018631.png"
+  },
+  {
+   "key": "faruzan",
+   "name": "Faruzan",
+   "entry": "2967",
+   "element": "Anemo",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/38c12ab46678a4008f83a0e46c900ef5_528211919348170763.png",
+   "version": "3.3",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "henna-berry",
+    "name": "Henna Berry"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/68f891b9f68ab114977e00200efb9e59_213236856968562654.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/08/94376896/5ff4609121886e37ecf97e967f1246d1_6942173760264363309.png"
+  },
+  {
+   "key": "layla",
+   "name": "Layla",
+   "entry": "2859",
+   "element": "Cryo",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/15/35428890/48a495acadaf37f12d0a7f653d85bd83_7085430198590697354.png",
+   "version": "3.2",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "nilotpala-lotus",
+    "name": "Nilotpala Lotus"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/15/35428890/d78c64527941436b02a89131c5da9607_7936538629648728526.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/19/35428890/4fed6d5c7d259b910e119e31e31da8a0_7043612263360051158.png"
+  },
+  {
+   "key": "nahida",
+   "name": "Nahida",
+   "entry": "2850",
+   "element": "Dendro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/29/35428890/f29490bddc56b4a6773b6c5003bbb853_9091170755650648414.png",
+   "version": "3.2",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "kalpalata-lotus",
+    "name": "Kalpalata Lotus"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/29/35428890/6e1e5196da96bd65e549abe7fa861915_5209196603800560471.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/0a762b6360c96df8c1239989bc981856_1990172980650315770.png"
+  },
+  {
+   "key": "candace",
+   "name": "Candace",
+   "entry": "2815",
+   "element": "Hydro",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/77454259/2f43da4ece9eabfbde6ec2fcc81b3bff_6412967003441390014.png",
+   "version": "3.1",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "henna-berry",
+    "name": "Henna Berry"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/1023623/776ac3df01b790ef95a4c1b0384e828b_7571603769937192062.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/61007f250b95e69be4b2ef3a3d069624_8188239771103201778.png"
+  },
+  {
+   "key": "cyno",
+   "name": "Cyno",
+   "entry": "2813",
+   "element": "Electro",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/77454259/e09e2bda5e022611fad0dea1bb6518bb_6757667565719577204.png",
+   "version": "3.1",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "scarab",
+    "name": "Scarab"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/29/80830045/cb608014e47da4a071ab22cb11c76627_9100299931285772298.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/4022f92821ea40be8526c5304e497b3f_5644731720868034736.png"
+  },
+  {
+   "key": "nilou",
+   "name": "Nilou",
+   "entry": "2812",
+   "element": "Hydro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/10/35428890/586d726f9ebda3506c78beaaa41f13b6_5916447718992361520.png",
+   "version": "3.1",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "padisarah",
+    "name": "Padisarah"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/10/35428890/8bd1a35ff8d58654a3f9d727d081cdb9_103210855297465202.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/27351f4284935cc202704e3b9de757f0_9109981327750159264.png"
+  },
+  {
+   "key": "traveler-dendro",
+   "name": "Traveler (Dendro)",
+   "entry": "2674",
+   "element": "Dendro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/169177528/04f769b0b1671b5ffbbafefd7286b4b2_4670164833306961502.png",
+   "version": "3.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/169177528/07b09124711c2f0b81fd9d3c4171ac66_3527052386389759913.png",
+   "chart": null
+  },
+  {
+   "key": "dori",
+   "name": "Dori",
+   "entry": "2269",
+   "element": "Electro",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/08/35428890/6539bea71efd0f839db897cfc4094362_3469125131800075941.png",
+   "version": "3.0",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "kalpalata-lotus",
+    "name": "Kalpalata Lotus"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/08/35428890/b4829d47e969136c6687890def3c629a_5745202697056243104.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/1e7381cf7e3f125c7154028466b57c82_8865603483959618279.png"
+  },
+  {
+   "key": "collei",
+   "name": "Collei",
+   "entry": "2268",
+   "element": "Dendro",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/24/194600931/37a18b6b6865c59063003a9380f08225_7758071773430345954.png",
+   "version": "3.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "rukkhashava-mushrooms",
+    "name": "Rukkhashava Mushrooms"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/24/194600931/4044ca9dcb140f6729753d43024c8b54_2064856676936061547.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/76a565cf693ff978003ff41d4615b176_2332966223507100141.png"
+  },
+  {
+   "key": "tighnari",
+   "name": "Tighnari",
+   "entry": "2265",
+   "element": "Dendro",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/22/35428890/497dd6fac3d3c652a367c67428550747_306268558608889633.png",
+   "version": "3.0",
+   "ascension_stat": "Dendro DMG Bonus",
+   "specialty": {
+    "key": "nilotpala-lotus",
+    "name": "Nilotpala Lotus"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/22/35428890/58942db439a058f4611f27d8193f681b_7383079630596535124.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/a182443794b28b89c72a192e2da9c37b_7846307223022623981.png"
+  },
+  {
+   "key": "shikanoin-heizou",
+   "name": "Shikanoin Heizou",
+   "entry": "2263",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Shikanoin Heizou_icon.png",
+   "version": "2.8",
+   "ascension_stat": "Anemo DMG Bonus",
+   "specialty": {
+    "key": "onikabuto",
+    "name": "Onikabuto"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/鹿野院平藏/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/064c033c94c16d76ac902300f09c442e_2148563866243752649.png"
+  },
+  {
+   "key": "kuki-shinobu",
+   "name": "Kuki Shinobu",
+   "entry": "2256",
+   "element": "Electro",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Kuki Shinobu_icon.png",
+   "version": "2.7",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "naku-weed",
+    "name": "Naku Weed"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/久岐忍/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/9db472e7e103ecbba626e61aaf108fba_40138985187680235.png"
+  },
+  {
+   "key": "yelan",
+   "name": "Yelan",
+   "entry": "2252",
+   "element": "Hydro",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Yelan_icon.png",
+   "version": "2.7",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "starconch",
+    "name": "Starconch"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/夜兰/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/673029a040c000321f18f160141996c2_3980931850908138982.png"
+  },
+  {
+   "key": "xiao",
+   "name": "Xiao",
+   "entry": "51",
+   "element": "Anemo",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Xiao_icon.png",
+   "version": "1.3",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "qingxin",
+    "name": "Qingxin"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/魈/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/1c51c59ba1905fd0cfb156abcf0008aa_5315349021173194335.png"
+  },
+  {
+   "key": "xiangling",
+   "name": "Xiangling",
+   "entry": "50",
+   "element": "Pyro",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Xiangling_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "jueyun-chili",
+    "name": "Jueyun Chili"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/香菱/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/a183811496cf5d77f9b4b76a24b71aa2_7858831001475609235.png"
+  },
+  {
+   "key": "raiden-shogun",
+   "name": "Raiden Shogun",
+   "entry": "49",
+   "element": "Electro",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Raiden Shogun_icon.png",
+   "version": "2.1",
+   "ascension_stat": "Energy Recharge",
+   "specialty": {
+    "key": "amakumo-fruit",
+    "name": "Amakumo Fruit"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/雷电将军/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/791f92296bd0963942702e02383ba998_6312481016822441259.png"
+  },
+  {
+   "key": "razor",
+   "name": "Razor",
+   "entry": "48",
+   "element": "Electro",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Razor_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Physical DMG Bonus",
+   "specialty": {
+    "key": "wolfhook",
+    "name": "Wolfhook"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/雷泽/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/ebb74896f9a5f93758b7804086d875ba_451115077526241872.png"
+  },
+  {
+   "key": "albedo",
+   "name": "Albedo",
+   "entry": "47",
+   "element": "Geo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Albedo_icon.png",
+   "version": "1.2",
+   "ascension_stat": "Geo DMG Bonus",
+   "specialty": {
+    "key": "cecilia",
+    "name": "Cecilia"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/阿贝多/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/53456dd70d5fff6b72ba3f4b98484f9b_5727172751132131492.png"
+  },
+  {
+   "key": "zhongli",
+   "name": "Zhongli",
+   "entry": "46",
+   "element": "Geo",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Zhongli_icon.png",
+   "version": "1.1",
+   "ascension_stat": "Geo DMG Bonus",
+   "specialty": {
+    "key": "cor-lapis",
+    "name": "Cor Lapis"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/钟离/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/4308d9103bf2028cbee1568915f4504d_6889432075149997972.png"
+  },
+  {
+   "key": "chongyun",
+   "name": "Chongyun",
+   "entry": "45",
+   "element": "Cryo",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Chongyun_icon.png",
+   "version": "1.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "cor-lapis",
+    "name": "Cor Lapis"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/重云/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/3e2d1a8b1665f8a446a7478d65272cd9_8601068522576961539.png"
+  },
+  {
+   "key": "diona",
+   "name": "Diona",
+   "entry": "44",
+   "element": "Cryo",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Diona_icon.png",
+   "version": "1.1",
+   "ascension_stat": "Cryo DMG Bonus",
+   "specialty": {
+    "key": "calla-lily",
+    "name": "Calla Lily"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/迪奥娜/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/e730d1b28f1fb067e2c1bf43a11728bb_8604466356428362387.png"
+  },
+  {
+   "key": "diluc",
+   "name": "Diluc",
+   "entry": "43",
+   "element": "Pyro",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Diluc_icon.png",
+   "version": "1.0",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "small-lamp-grass",
+    "name": "Small Lamp Grass"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/迪卢克/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/ec5133cccf5ad7a6a00b995e123b7297_7081520691202668475.png"
+  },
+  {
+   "key": "tartaglia",
+   "name": "Tartaglia",
+   "entry": "42",
+   "element": "Hydro",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Tartaglia_icon.png",
+   "version": "1.1",
+   "ascension_stat": "Hydro DMG Bonus",
+   "specialty": {
+    "key": "starconch",
+    "name": "Starconch"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/达达利亚/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/a33e3f2188d137658f144f2cbbe9cf84_4130390811766391929.png"
+  },
+  {
+   "key": "xinyan",
+   "name": "Xinyan",
+   "entry": "41",
+   "element": "Pyro",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Xinyan_icon.png",
+   "version": "1.1",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "violetgrass",
+    "name": "Violetgrass"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/辛焱/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/9bd2df04918dff0a0b2a0a32fb5160a0_6316552154849724385.png"
+  },
+  {
+   "key": "noelle",
+   "name": "Noelle",
+   "entry": "40",
+   "element": "Geo",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Noelle_icon.png",
+   "version": "1.0",
+   "ascension_stat": "DEF",
+   "specialty": {
+    "key": "valberry",
+    "name": "Valberry"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/诺艾尔/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/c696a6f9c81aa6ee18205b90dd968354_3119221155080249449.png"
+  },
+  {
+   "key": "xingqiu",
+   "name": "Xingqiu",
+   "entry": "39",
+   "element": "Hydro",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Xingqiu_icon.png",
+   "version": "1.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "silk-flower",
+    "name": "Silk Flower"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/行秋/avatar.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/80edde7bc64b4eaca3e5848cb57d65e8_6943236622091542796.png"
+  },
+  {
+   "key": "fischl",
+   "name": "Fischl",
+   "entry": "38",
+   "element": "Electro",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Fischl_icon.png",
+   "version": "1.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "small-lamp-grass",
+    "name": "Small Lamp Grass"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/菲谢尔/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/ded8f94c2e163030c10733d18cfe2b25_522257468533572651.png"
+  },
+  {
+   "key": "mona",
+   "name": "Mona",
+   "entry": "37",
+   "element": "Hydro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Mona_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Energy Recharge",
+   "specialty": {
+    "key": "philanemo-mushroom",
+    "name": "Philanemo Mushroom"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/莫娜/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/1a14a393411da9da5518dd25a023c55b_3935041463588514934.png"
+  },
+  {
+   "key": "arataki-itto",
+   "name": "Arataki Itto",
+   "entry": "36",
+   "element": "Geo",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Arataki Itto_icon.png",
+   "version": "2.3",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "onikabuto",
+    "name": "Onikabuto"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/荒泷一斗/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/c7628eeb80865cbf9cd007d5d1cdc50e_5934626993260527957.png"
+  },
+  {
+   "key": "barbara",
+   "name": "Barbara",
+   "entry": "35",
+   "element": "Hydro",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Barbara_icon.png",
+   "version": "1.0",
+   "ascension_stat": "HP",
+   "specialty": {
+    "key": "philanemo-mushroom",
+    "name": "Philanemo Mushroom"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/芭芭拉/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/64900e7c5960febd32645d20d842f0ef_3119221155080249449.png"
+  },
+  {
+   "key": "hu-tao",
+   "name": "Hu Tao",
+   "entry": "34",
+   "element": "Pyro",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Hu Tao_icon.png",
+   "version": "1.3",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "silk-flower",
+    "name": "Silk Flower"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/胡桃/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/0f67d2643268992a878a73eaffe3add9_2290610484652355888.png"
+  },
+  {
+   "key": "rosaria",
+   "name": "Rosaria",
+   "entry": "33",
+   "element": "Cryo",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Rosaria_icon.png",
+   "version": "1.4",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "valberry",
+    "name": "Valberry"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/罗莎莉亚/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/105d7a50cb6b4ba26e032a1dce37c1ba_4720332984914977028.png"
+  },
+  {
+   "key": "kamisato-ayaka",
+   "name": "Kamisato Ayaka",
+   "entry": "32",
+   "element": "Cryo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Kamisato Ayaka_icon.png",
+   "version": "2.0",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "sakura-bloom",
+    "name": "Sakura Bloom"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/神里绫华/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/20/35428890/97f78e196a319b9c523e9dc153049589_6750238401657145568.png"
+  },
+  {
+   "key": "kamisato-ayato",
+   "name": "Kamisato Ayato",
+   "entry": "31",
+   "element": "Hydro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Kamisato Ayato_icon.png",
+   "version": "2.6",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "sakura-bloom",
+    "name": "Sakura Bloom"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/神里绫人/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/1be19e06d62f9d3e887297fa9d503749_2303844905062432032.png"
+  },
+  {
+   "key": "sucrose",
+   "name": "Sucrose",
+   "entry": "30",
+   "element": "Anemo",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Sucrose_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Anemo DMG Bonus",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/砂糖/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/02440090e2f87473be53ef91ab8f1462_767509963002256467.png"
+  },
+  {
+   "key": "shenhe",
+   "name": "Shenhe",
+   "entry": "29",
+   "element": "Cryo",
+   "weapon_type": "Polearm",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Shenhe_icon.png",
+   "version": "2.4",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "qingxin",
+    "name": "Qingxin"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/申鹤/avatar.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/c4a9ffda20c177ebbb6d765332aa6b18_5923647054259125716.png"
+  },
+  {
+   "key": "ganyu",
+   "name": "Ganyu",
+   "entry": "28",
+   "element": "Cryo",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/797ded201635d241d358c307e9e7417f_464481961971717418.png",
+   "version": "1.2",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "qingxin",
+    "name": "Qingxin"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/甘雨/avatar.png",
+   "chart": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/8acf2216658fb1e886877a088aeb956c_9118835961741308580.png"
+  },
+  {
+   "key": "jean",
+   "name": "Jean",
+   "entry": "27",
+   "element": "Anemo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Jean_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Healing Bonus",
+   "specialty": {
+    "key": "dandelion-seed",
+    "name": "Dandelion Seed"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/07/30/94376896/1c7aec60047574f90ae0702ee64eaeac_7815491501065764996.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/054839fcd7ee99d9c52f16524673079e_4332202879519224097.png"
+  },
+  {
+   "key": "bennett",
+   "name": "Bennett",
+   "entry": "26",
+   "element": "Pyro",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Bennett_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Energy Recharge",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/班尼特/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/0a4c5c29b24e64b08a24ca95faec62c7_6669442018915136433.png"
+  },
+  {
+   "key": "sangonomiya-kokomi",
+   "name": "Sangonomiya Kokomi",
+   "entry": "25",
+   "element": "Hydro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Sangonomiya Kokomi_icon.png",
+   "version": "2.1",
+   "ascension_stat": "Hydro DMG Bonus",
+   "specialty": {
+    "key": "sango-pearl",
+    "name": "Sango Pearl"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/珊瑚宫心海/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/a7e8b7002368e149894082152ee24bcf_4722951169308664246.png"
+  },
+  {
+   "key": "yanfei",
+   "name": "Yanfei",
+   "entry": "24",
+   "element": "Pyro",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Yanfei_icon.png",
+   "version": "1.5",
+   "ascension_stat": "Pyro DMG Bonus",
+   "specialty": {
+    "key": "noctilucous-jade",
+    "name": "Noctilucous Jade"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/烟绯/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/e51713bf6700fa38bc67519e2fb4a505_4983245536816977881.png"
+  },
+  {
+   "key": "venti",
+   "name": "Venti",
+   "entry": "23",
+   "element": "Anemo",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Venti_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Energy Recharge",
+   "specialty": {
+    "key": "cecilia",
+    "name": "Cecilia"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/温迪/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/595f9c53a78d8469a4438e3f150ffae2_6349604805006900611.png"
+  },
+  {
+   "key": "kaedehara-kazuha",
+   "name": "Kaedehara Kazuha",
+   "entry": "22",
+   "element": "Anemo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Kaedehara Kazuha_icon.png",
+   "version": "1.6",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "sea-ganoderma",
+    "name": "Sea Ganoderma"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/枫原万叶/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/42936b5162668db45a325018cccf951e_990300146157090282.png"
+  },
+  {
+   "key": "sayu",
+   "name": "Sayu",
+   "entry": "21",
+   "element": "Anemo",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Sayu_icon.png",
+   "version": "2.0",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "crystal-marrow",
+    "name": "Crystal Marrow"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/早柚/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/f019a17ce726ce31f57a316a3b12c4f0_6880539025037327527.png"
+  },
+  {
+   "key": "traveler-anemo",
+   "name": "Traveler (Anemo)",
+   "entry": "19",
+   "element": "Anemo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Traveler_icon.png",
+   "version": "1.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/旅行者(风)/avatar.png",
+   "chart": null
+  },
+  {
+   "key": "traveler-electro",
+   "name": "Traveler (Electro)",
+   "entry": "18",
+   "element": "Electro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Traveler_icon.png",
+   "version": "2.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/旅行者(雷)/avatar.png",
+   "chart": null
+  },
+  {
+   "key": "traveler-geo",
+   "name": "Traveler (Geo)",
+   "entry": "17",
+   "element": "Geo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Traveler_icon.png",
+   "version": "1.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "windwheel-aster",
+    "name": "Windwheel Aster"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/旅行者(岩)/avatar.png",
+   "chart": null
+  },
+  {
+   "key": "thoma",
+   "name": "Thoma",
+   "entry": "16",
+   "element": "Pyro",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Thoma_icon.png",
+   "version": "2.2",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "fluorescent-fungus",
+    "name": "Fluorescent Fungus"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/托马/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/4140b01f395c27ba7c706f93060aa882_2793306419977298230.png"
+  },
+  {
+   "key": "yoimiya",
+   "name": "Yoimiya",
+   "entry": "15",
+   "element": "Pyro",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Yoimiya_icon.png",
+   "version": "2.0",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "naku-weed",
+    "name": "Naku Weed"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/宵宫/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/a45389ec7fe49d768d6f606e6006e8f4_5754986325995851952.png"
+  },
+  {
+   "key": "amber",
+   "name": "Amber",
+   "entry": "14",
+   "element": "Pyro",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Amber_icon.png",
+   "version": "1.0",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "small-lamp-grass",
+    "name": "Small Lamp Grass"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/安柏/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/5c759e426ad0dbc2e9bf97b09331242e_7094693393639180842.png"
+  },
+  {
+   "key": "aloy",
+   "name": "Aloy",
+   "entry": "13",
+   "element": "Cryo",
+   "weapon_type": "Bow",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/19/80830045/1fb2086af3c7933af37eda1ff9084317_163049704110308134.png",
+   "version": "2.1",
+   "ascension_stat": "Cryo DMG Bonus",
+   "specialty": {
+    "key": "crystal-marrow",
+    "name": "Crystal Marrow"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/埃洛伊/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/0b16973baac490cc38d85d10273888da_4729556686624305212.png"
+  },
+  {
+   "key": "klee",
+   "name": "Klee",
+   "entry": "12",
+   "element": "Pyro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Klee_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Pyro DMG Bonus",
+   "specialty": {
+    "key": "philanemo-mushroom",
+    "name": "Philanemo Mushroom"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/可莉/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/07/13/35428890/97930f061aa9d4cb36f32c09949f7cf0_1507258009025297806.png"
+  },
+  {
+   "key": "beidou",
+   "name": "Beidou",
+   "entry": "11",
+   "element": "Electro",
+   "weapon_type": "Claymore",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Beidou_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Electro DMG Bonus",
+   "specialty": {
+    "key": "noctilucous-jade",
+    "name": "Noctilucous Jade"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/北斗/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/45cc8481acfa7c7f77d5d616f6e2ded6_2632122853522176357.png"
+  },
+  {
+   "key": "keqing",
+   "name": "Keqing",
+   "entry": "10",
+   "element": "Electro",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Keqing_icon.png",
+   "version": "1.0",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "cor-lapis",
+    "name": "Cor Lapis"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/刻晴/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/1f56b8944d4fda9241157a7b5f74716b_7079435561804015163.png"
+  },
+  {
+   "key": "kaeya",
+   "name": "Kaeya",
+   "entry": "9",
+   "element": "Cryo",
+   "weapon_type": "Sword",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Kaeya_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Energy Recharge",
+   "specialty": {
+    "key": "calla-lily",
+    "name": "Calla Lily"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/凯亚/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/07/13/35428890/ea378a027d2f1cbcededaa77831806de_7045597696791187384.png"
+  },
+  {
+   "key": "ningguang",
+   "name": "Ningguang",
+   "entry": "8",
+   "element": "Geo",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Ningguang_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Geo DMG Bonus",
+   "specialty": {
+    "key": "glaze-lily",
+    "name": "Glaze Lily"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/凝光/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/b84d2c31e3703a63eec3a41a6632d695_8265116712177154365.png"
+  },
+  {
+   "key": "yae-miko",
+   "name": "Yae Miko",
+   "entry": "7",
+   "element": "Electro",
+   "weapon_type": "Catalyst",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Yae Miko_icon.png",
+   "version": "2.5",
+   "ascension_stat": "CRIT Rate",
+   "specialty": {
+    "key": "sea-ganoderma",
+    "name": "Sea Ganoderma"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/八重神子/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/d0dfaf72ccbf0f1951129c8ce932f9ad_2178333156804376351.png"
+  },
+  {
+   "key": "eula",
+   "name": "Eula",
+   "entry": "6",
+   "element": "Cryo",
+   "weapon_type": "Claymore",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Eula_icon.png",
+   "version": "1.5",
+   "ascension_stat": "CRIT DMG",
+   "specialty": {
+    "key": "dandelion-seed",
+    "name": "Dandelion Seed"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/优菈/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/432f1a4b61b624004b49a97d477475af_1910917908341409225.png"
+  },
+  {
+   "key": "gorou",
+   "name": "Gorou",
+   "entry": "5",
+   "element": "Geo",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Gorou_icon.png",
+   "version": "2.3",
+   "ascension_stat": "Geo DMG Bonus",
+   "specialty": {
+    "key": "sango-pearl",
+    "name": "Sango Pearl"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/五郎/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/027d1c6ba4e3fefffa6ccb8538a9b214_5329426445036342849.png"
+  },
+  {
+   "key": "yun-jin",
+   "name": "Yun Jin",
+   "entry": "4",
+   "element": "Geo",
+   "weapon_type": "Polearm",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Yun Jin_icon.png",
+   "version": "2.4",
+   "ascension_stat": "Energy Recharge",
+   "specialty": {
+    "key": "glaze-lily",
+    "name": "Glaze Lily"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/云堇/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/861168ec523949c8bf23310d98c5ab11_4545151455571032845.png"
+  },
+  {
+   "key": "kujou-sara",
+   "name": "Kujou Sara",
+   "entry": "3",
+   "element": "Electro",
+   "weapon_type": "Bow",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Kujou Sara_icon.png",
+   "version": "2.1",
+   "ascension_stat": "ATK",
+   "specialty": {
+    "key": "dendrobium",
+    "name": "Dendrobium"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/九条裟罗/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/af94783aa0bed8c66f6e9aa30ab10253_1478627015760154981.png"
+  },
+  {
+   "key": "lisa",
+   "name": "Lisa",
+   "entry": "2",
+   "element": "Electro",
+   "weapon_type": "Catalyst",
+   "rarity": 4,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Lisa_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Elemental Mastery",
+   "specialty": {
+    "key": "valberry",
+    "name": "Valberry"
+   },
+   "art": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/15/77454259/64ff2675c8c6e9a14eafe7b6dc73aab4_772030036064092227.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/01/1023623/1bf35351440d1f488e18aeccf98e2bcc_8720378804905804101.png"
+  },
+  {
+   "key": "qiqi",
+   "name": "Qiqi",
+   "entry": "1",
+   "element": "Cryo",
+   "weapon_type": "Sword",
+   "rarity": 5,
+   "released": true,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/character/Qiqi_icon.png",
+   "version": "1.0",
+   "ascension_stat": "Healing Bonus",
+   "specialty": {
+    "key": "violetgrass",
+    "name": "Violetgrass"
+   },
+   "art": "https://bbs.hoyolab.com/hoyowiki/picture/character/七七/avatar.png",
+   "chart": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/12/35428890/80e0fe06213b7939352581b88aed52a0_6130656366370947066.png"
+  }
+ ],
+ "weapons": [
+  {
+   "key": "breezeborne-refrain",
+   "name": "Breezeborne Refrain",
+   "entry": "11733",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/08697d01729fc9e1be80b7ca81f237a2_4427393545344341155.png"
+  },
+  {
+   "key": "winter-s-heavy-heart",
+   "name": "Winter's Heavy Heart",
+   "entry": "11732",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/1eae2b97883d47eec8fbe983f320a655_112506127095971459.png"
+  },
+  {
+   "key": "silver-light",
+   "name": "Silver Light",
+   "entry": "11731",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/071c61a5a43e16216ae89151f742e4d5_2328042413803540054.png"
+  },
+  {
+   "key": "new-bough",
+   "name": "New Bough",
+   "entry": "11730",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/44d909e22212bfaca8c72fa7e4bfd270_6674339642244055501.png"
+  },
+  {
+   "key": "hymn-of-the-maelstrom",
+   "name": "Hymn of the Maelstrom",
+   "entry": "11729",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/7fe45578aa17cddc9b00e172778ffce4_8194401657371794806.png"
+  },
+  {
+   "key": "beyond-the-chrysalis",
+   "name": "Beyond the Chrysalis",
+   "entry": "11728",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/09/18/d4130862f0c732275fc66443636a9a73_2063364645139940052.png"
+  },
+  {
+   "key": "jade-vista",
+   "name": "Jade Vista",
+   "entry": "11221",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/19c80f587430adbfce599f56ef3324dd_4937523743376541205.png"
+  },
+  {
+   "key": "covenant-of-frost-and-snow",
+   "name": "Covenant of Frost and Snow",
+   "entry": "11220",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/71e03a3f1868a9caa8e7adac310ca6a7_6530544918250739118.png"
+  },
+  {
+   "key": "clash-of-kings",
+   "name": "Clash of Kings",
+   "entry": "11219",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/028d4226ab8c38cbe2e0fcdd3ce128e4_172320011752876507.png"
+  },
+  {
+   "key": "echoes-of-the-heart",
+   "name": "Echoes of the Heart",
+   "entry": "11218",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/4f8d41d48cafdb7a77568b7fae43c436_5465649971679004871.png"
+  },
+  {
+   "key": "frostbreath",
+   "name": "Frostbreath",
+   "entry": "11217",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/6a0eb9b0455f71517ba22556b21814f1_4657577436996434077.png"
+  },
+  {
+   "key": "song-of-the-vigil",
+   "name": "Song of the Vigil",
+   "entry": "11216",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/993e369730552558f3a6d11269647d3f_162896007110569426.png"
+  },
+  {
+   "key": "forged-by-the-golden-melody",
+   "name": "Forged by the Golden Melody",
+   "entry": "11215",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/5238a7b7a630ef9f9d2d789f6a2aa6da_1650019963952327060.png"
+  },
+  {
+   "key": "blade-of-atonement",
+   "name": "Blade of Atonement",
+   "entry": "11214",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/47b7c05e0d29ef0b8845e3b249fdd800_7183760739047053137.png"
+  },
+  {
+   "key": "heretic-s-molten-blade",
+   "name": "Heretic's Molten Blade",
+   "entry": "11213",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/0c0d6535c7c54aa95d58b5394a023cd2_844859417849776738.png"
+  },
+  {
+   "key": "emberwell",
+   "name": "Emberwell",
+   "entry": "11212",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/9ae260ef2d2f79ddc6e3963513e4cc46_2657429378983343835.png"
+  },
+  {
+   "key": "exaiphanes-blade",
+   "name": "Exaiphanes Blade",
+   "entry": "11211",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/96a75037a498b9fcf07ff550696d517f_2887877366037905855.png"
+  },
+  {
+   "key": "whitelake-frostfeather",
+   "name": "Whitelake Frostfeather",
+   "entry": "11210",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/5e3d91936ed4facfebc5f4f8c2ba4cde_1995425813023287621.png"
+  },
+  {
+   "key": "a-teaspoon-of-transcendence",
+   "name": "A Teaspoon of Transcendence",
+   "entry": "10949",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/06/25/a2c59d52525cd3b23ba5dfc0e2ca0e40_8273039777765971978.png"
+  },
+  {
+   "key": "disaster-and-remorse",
+   "name": "Disaster and Remorse",
+   "entry": "10758",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/173531aa00de724260fb5c8ce21ce625_742789739843295350.png"
+  },
+  {
+   "key": "angelos-heptades",
+   "name": "Angelos' Heptades",
+   "entry": "10757",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/35faadca59d9ed40b7c448a1e628bcdc_4873659369821393193.png"
+  },
+  {
+   "key": "golden-frostbound-oath",
+   "name": "Golden Frostbound Oath",
+   "entry": "10547",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/04/03/56dfea855cb96781fc3fa4409463e523_641344848709162695.png"
+  },
+  {
+   "key": "gest-of-the-mighty-wolf",
+   "name": "Gest of the Mighty Wolf",
+   "entry": "9456",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/02/09/69a9c4711061f96f155bbe236d1ac188_2915183031167827788.png"
+  },
+  {
+   "key": "nocturne-s-curtain-call",
+   "name": "Nocturne's Curtain Call",
+   "entry": "9250",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/07/670440ccb460f5f58e014c68ad569d78_7754520756837248808.png"
+  },
+  {
+   "key": "lightbearing-moonshard",
+   "name": "Lightbearing Moonshard",
+   "entry": "9249",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/07/5df9a7e1f45c7967eb263a37362c76d9_5509634125074303398.png"
+  },
+  {
+   "key": "the-daybreak-chronicles",
+   "name": "The Daybreak Chronicles",
+   "entry": "9047",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/25/888f15859930696bb17aeb61f35fa340_139096456278287885.png"
+  },
+  {
+   "key": "rainbow-serpent-s-rain-bow",
+   "name": "Rainbow Serpent's Rain Bow",
+   "entry": "9046",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/25/d9cb6d60dadf1e2238bcad97ba61afca_2753787926355500061.png"
+  },
+  {
+   "key": "athame-artis",
+   "name": "Athame Artis",
+   "entry": "9045",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/11/25/69991219a3eab8162a67513d013e6ef0_6929917729223804184.png"
+  },
+  {
+   "key": "reliquary-of-truth",
+   "name": "Reliquary of Truth",
+   "entry": "8991",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/20/a81d9e6d6b35935cfa6027c1d74d70c8_5519387986125030469.png"
+  },
+  {
+   "key": "dawning-frost",
+   "name": "Dawning Frost",
+   "entry": "8990",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/20/f71e542de2ae1c6c9a936eceb667f733_3168622620827067279.png"
+  },
+  {
+   "key": "sacrificer-s-staff",
+   "name": "Sacrificer's Staff",
+   "entry": "8989",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/20/42b605f34cfce0b70d437d0673c847fd_3003547681809154152.png"
+  },
+  {
+   "key": "bloodsoaked-ruins",
+   "name": "Bloodsoaked Ruins",
+   "entry": "8838",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/f842bb3bf454987301dd1bedd3be0c06_372682473601768051.png"
+  },
+  {
+   "key": "etherlight-spindlelute",
+   "name": "Etherlight Spindlelute",
+   "entry": "8837",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/139e8ec2c68957b44a0f217b3859bb82_2114353354330070345.png"
+  },
+  {
+   "key": "nightweaver-s-looking-glass",
+   "name": "Nightweaver's Looking Glass",
+   "entry": "8836",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/d28b849e0abef976114ea7ecef92960e_4616051474368823347.png"
+  },
+  {
+   "key": "snare-hook",
+   "name": "Snare Hook",
+   "entry": "8835",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/794f286cd49e6beb026d4729d6a0e491_2738340196396279380.png"
+  },
+  {
+   "key": "blackmarrow-lantern",
+   "name": "Blackmarrow Lantern",
+   "entry": "8517",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/fca1d073841a27aa921fb0cdadcc1814_4456705496709264629.png"
+  },
+  {
+   "key": "prospector-s-shovel",
+   "name": "Prospector's Shovel",
+   "entry": "8514",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/02b62205aa9b8bbf8db3f7dfd81c2722_4251757494889514703.png"
+  },
+  {
+   "key": "master-key",
+   "name": "Master Key",
+   "entry": "8513",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/9fca47d88e241f45ae1568ca386c9e6f_3876291412959841816.png"
+  },
+  {
+   "key": "moonweaver-s-dawn",
+   "name": "Moonweaver's Dawn",
+   "entry": "8512",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/02686441b09dcc1d5029ff21a6d04ef8_297003927757836842.png"
+  },
+  {
+   "key": "serenity-s-call",
+   "name": "Serenity's Call",
+   "entry": "8511",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/88826bbf50b08b5f95c56c3dba17a002_3387604816719715343.png"
+  },
+  {
+   "key": "flame-forged-insight",
+   "name": "Flame-Forged Insight",
+   "entry": "8300",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/07/21/62b7410999e0777b83bd4be9334226bc_1124279062957674054.png"
+  },
+  {
+   "key": "fractured-halo",
+   "name": "Fractured Halo",
+   "entry": "8299",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/07/21/6f0271a3d35033b8ec7260faa56b8cc1_2090404062568539078.png"
+  },
+  {
+   "key": "azurelight",
+   "name": "Azurelight",
+   "entry": "7785",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/12/0809293ee527b40073c4c9636eff6dd0_2992571952915882222.png"
+  },
+  {
+   "key": "sequence-of-solitude",
+   "name": "Sequence of Solitude",
+   "entry": "7641",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/24/351cd2de062f0cd7e0bef038fb63f6ae_5924354425808403276.png"
+  },
+  {
+   "key": "symphonist-of-scents",
+   "name": "Symphonist of Scents",
+   "entry": "7640",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/24/f1928d012621b1f03577efc4f619894a_6810995251642628479.png"
+  },
+  {
+   "key": "vivid-notions",
+   "name": "Vivid Notions",
+   "entry": "7588",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/17/4eed5f1f892cf722e4f8df1778a0a1f1_3249018324800310475.png"
+  },
+  {
+   "key": "tamayuratei-no-ohanashi",
+   "name": "Tamayuratei no Ohanashi",
+   "entry": "7435",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/07/a539c3f246fc39105fca045cb374aee8_7144935190009323615.png"
+  },
+  {
+   "key": "sunny-morning-sleep-in",
+   "name": "Sunny Morning Sleep-In",
+   "entry": "7434",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/07/de8bcaf9142a27cc3aefe8a77f5b4c4c_6111963220065472522.png"
+  },
+  {
+   "key": "starcaller-s-watch",
+   "name": "Starcaller's Watch",
+   "entry": "7366",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/26/de225a286996965268c32027a6c484d9_2367767765928118667.png"
+  },
+  {
+   "key": "a-thousand-blazing-suns",
+   "name": "A Thousand Blazing Suns",
+   "entry": "7365",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/26/da1910fbe0e825e1e3704c126720ab24_2121228058184091562.png"
+  },
+  {
+   "key": "astral-vulture-s-crimson-plumage",
+   "name": "Astral Vulture's Crimson Plumage",
+   "entry": "7116",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/d3bb0f9d936379661d409644e4269ff1_2888646900955247330.png"
+  },
+  {
+   "key": "flower-wreathed-feathers",
+   "name": "Flower-Wreathed Feathers",
+   "entry": "7115",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/0d166f885502452188022563f5fc8797_876127194185049091.png"
+  },
+  {
+   "key": "waveriding-whirl",
+   "name": "Waveriding Whirl",
+   "entry": "7114",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/7d6082c11138d4e71e7cb7ce6276e8bb_8319120219748886665.png"
+  },
+  {
+   "key": "calamity-of-eshu",
+   "name": "Calamity of Eshu",
+   "entry": "7113",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/14/034a74a58833bc506791e2d2c8e00539_8351835749900866009.png"
+  },
+  {
+   "key": "mountain-bracing-bolt",
+   "name": "Mountain-Bracing Bolt",
+   "entry": "7031",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/201424fa6a98ffb190ae82c8ad7d0cc3_6084387639848528037.png"
+  },
+  {
+   "key": "fruitful-hook",
+   "name": "Fruitful Hook",
+   "entry": "7030",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/25c75653d47f882870e96d9119a17e9a_6960324287026452673.png"
+  },
+  {
+   "key": "peak-patrol-song",
+   "name": "Peak Patrol Song",
+   "entry": "7029",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/862200e1c8e0ee60c2396d8f4fbe7fb8_4291183729855777874.png"
+  },
+  {
+   "key": "sturdy-bone",
+   "name": "Sturdy Bone",
+   "entry": "7028",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/27/9fbe8cf3da1d476d4c5a228017656cd1_114889972255186755.png"
+  },
+  {
+   "key": "chain-breaker",
+   "name": "Chain Breaker",
+   "entry": "6552",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/8a6b418598f555deba7da922385254a2_8112788546506820868.png"
+  },
+  {
+   "key": "ring-of-yaxche",
+   "name": "Ring of Yaxche",
+   "entry": "6551",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/9ab70898644274ce31f91faea8216bd8_5924884446177979679.png"
+  },
+  {
+   "key": "ash-graven-drinking-horn",
+   "name": "Ash-Graven Drinking Horn",
+   "entry": "6550",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/28866045cbb3e5227244b4aa09ef0db3_8394892053233317551.png"
+  },
+  {
+   "key": "footprint-of-the-rainbow",
+   "name": "Footprint of the Rainbow",
+   "entry": "6549",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/9d5294dc8b165585f51ec126543a5208_1314604610170565721.png"
+  },
+  {
+   "key": "earth-shaker",
+   "name": "Earth Shaker",
+   "entry": "6548",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/dc6bf4c87afe67014579743618e97371_6360663376854922140.png"
+  },
+  {
+   "key": "flute-of-ezpitzal",
+   "name": "Flute of Ezpitzal",
+   "entry": "6547",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/bdd740ad879d22a1fc4e3770cc9c73bd_5479414831341401728.png"
+  },
+  {
+   "key": "surf-s-up",
+   "name": "Surf's Up",
+   "entry": "6546",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/6ce2e0da75fbdc19fc4b6f9e7bae9049_5151463723015160354.png"
+  },
+  {
+   "key": "fang-of-the-mountain-king",
+   "name": "Fang of the Mountain King",
+   "entry": "6545",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/1fd3c498faccab68bfa5d961477a8c29_2936359463997877474.png"
+  },
+  {
+   "key": "lumidouce-elegy",
+   "name": "Lumidouce Elegy",
+   "entry": "5847",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/07/31/3dff07a4b024917cb63c933d2078ccc8_8401589850337226556.png"
+  },
+  {
+   "key": "cloudforged",
+   "name": "Cloudforged",
+   "entry": "5713",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/30/3faeebdf8797b7fe42c82cf92b0ffdef_5718559054494307925.png"
+  },
+  {
+   "key": "absolution",
+   "name": "Absolution",
+   "entry": "5674",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/30/d5da78d8dd0ac8814b699d6195145776_7211910286782963050.png"
+  },
+  {
+   "key": "silvershower-heartstrings",
+   "name": "Silvershower Heartstrings",
+   "entry": "5673",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/06/25/bbfcbecb44910640904415c4c8f7a71d_6233228634431101260.png"
+  },
+  {
+   "key": "crimson-moon-s-semblance",
+   "name": "Crimson Moon’s Semblance",
+   "entry": "5577",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/ce91a453b9a942c9ab20df0f62caa033_4944089408609115680.png"
+  },
+  {
+   "key": "dialogues-of-the-desert-sages",
+   "name": "Dialogues of the Desert Sages",
+   "entry": "5151",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/15/35428890/cac436c29ec9fc31413bc56cd0448f70_4636647816463834058.png"
+  },
+  {
+   "key": "uraku-misugiri",
+   "name": "Uraku Misugiri",
+   "entry": "5150",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/97083537849c199bc3fa7fed8a49d010_4537988792766091765.png"
+  },
+  {
+   "key": "crane-s-echoing-call",
+   "name": "Crane's Echoing Call",
+   "entry": "4941",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/7d49f94bfb8725b8c04332b11eb7df60_2329485834347949734.png"
+  },
+  {
+   "key": "ultimate-overlord-s-mega-magic-sword",
+   "name": "Ultimate Overlord's Mega Magic Sword",
+   "entry": "4720",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/23/35428890/9eb77ebc428cc08b695d166c70d72012_6536152954173802112.png"
+  },
+  {
+   "key": "verdict",
+   "name": "Verdict",
+   "entry": "4719",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/4f35f9bf1bceead8fa216873ce321847_580447322497057561.png"
+  },
+  {
+   "key": "sword-of-narzissenkreuz",
+   "name": "Sword of Narzissenkreuz",
+   "entry": "4592",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/12/35428890/01d3f8317c86ea98d617ad61213b7c9a_4271295687560653806.png"
+  },
+  {
+   "key": "splendor-of-tranquil-waters",
+   "name": "Splendor of Tranquil Waters",
+   "entry": "4570",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/06/35428890/9807aa25f336daae391a6f6d4995af3d_3267574340947980453.png"
+  },
+  {
+   "key": "cashflow-supervision",
+   "name": "Cashflow Supervision",
+   "entry": "4340",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/16/35428890/6d8248633da24c16368b6570bf578874_2176869761748941225.png"
+  },
+  {
+   "key": "tome-of-the-eternal-flow",
+   "name": "Tome of the Eternal Flow",
+   "entry": "4339",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/26/35428890/5828ed7b48c39e5d15aaf6f2495ddabc_4077399461570238363.png"
+  },
+  {
+   "key": "ballad-of-the-boundless-blue",
+   "name": "Ballad of the Boundless Blue",
+   "entry": "4338",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/22/35428890/079c8ff2c28a14f02c40af831e9b5179_5407660022702405104.png"
+  },
+  {
+   "key": "range-gauge",
+   "name": "Range Gauge",
+   "entry": "4337",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/16/35428890/4e67e6c313220ea1ca84a48d42d78806_8702041612949933944.png"
+  },
+  {
+   "key": "prospector-s-drill",
+   "name": "Prospector's Drill",
+   "entry": "4336",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/10/25/237301566/223e901abffe25963b70c50557d33c9b_639693929740213834.png"
+  },
+  {
+   "key": "portable-power-saw",
+   "name": "Portable Power Saw",
+   "entry": "4335",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/27/35428890/ac81c1e26d35d3742320975fffe21ee8_1604254334456103094.png"
+  },
+  {
+   "key": "the-dockhand-s-assistant",
+   "name": "The Dockhand's Assistant",
+   "entry": "4334",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/27/35428890/eac5d6d4056f7b28c876e64866825e46_112069212882380326.png"
+  },
+  {
+   "key": "sacrificial-jade",
+   "name": "Sacrificial Jade",
+   "entry": "4003",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/58d2970c1997ad52dfbb43017dac3ce8_2068604060208544498.png"
+  },
+  {
+   "key": "scion-of-the-blazing-sun",
+   "name": "Scion of the Blazing Sun",
+   "entry": "4002",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/b10e2c320e65f991f0e829879761af72_8400582650316877404.png"
+  },
+  {
+   "key": "ballad-of-the-fjords",
+   "name": "Ballad of the Fjords",
+   "entry": "4001",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/bd385748dfaefad1cddca86948a4846c_4272011011757162904.png"
+  },
+  {
+   "key": "talking-stick",
+   "name": "Talking Stick",
+   "entry": "4000",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/6e0130263c2de43a0bd7863edce22df3_1490535884850747976.png"
+  },
+  {
+   "key": "wolf-fang",
+   "name": "Wolf-Fang",
+   "entry": "3999",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/e1d10d55b8b96e0695000018664e17ef_8234591885133749148.png"
+  },
+  {
+   "key": "fleuve-cendre-ferryman",
+   "name": "Fleuve Cendre Ferryman",
+   "entry": "3989",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/920ca2fe25ca2db1796848099b59b2d8_9037857887405548950.png"
+  },
+  {
+   "key": "flowing-purity",
+   "name": "Flowing Purity",
+   "entry": "3988",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/0130ca8183d3daa2eddbb9200a1d776f_1451142999894885216.png"
+  },
+  {
+   "key": "song-of-stillness",
+   "name": "Song of Stillness",
+   "entry": "3987",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/2cec558b676eefaafe23b64d42f2067e_6453748403910603164.png"
+  },
+  {
+   "key": "rightful-reward",
+   "name": "Rightful Reward",
+   "entry": "3986",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/12/35428890/9bb154ad1759bf2d9015b060cad1ca9c_7004886929221204489.png"
+  },
+  {
+   "key": "tidal-shadow",
+   "name": "Tidal Shadow",
+   "entry": "3985",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/17a33544c58e2a45ad5f1a4a5a68906a_3812897365671640245.png"
+  },
+  {
+   "key": "finale-of-the-deep",
+   "name": "Finale of the Deep",
+   "entry": "3984",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/3139f087dee78d3856ab63fd6845ae61_7690792916067580940.png"
+  },
+  {
+   "key": "the-first-great-magic",
+   "name": "The First Great Magic",
+   "entry": "3983",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/150d6ae6dec75c2af1e4c37a084bf80f_93661134642122637.png"
+  },
+  {
+   "key": "ibis-piercer",
+   "name": "Ibis Piercer",
+   "entry": "3902",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/26/194600931/3c33fbd1aeadf27dc00617c3f4d31c55_8985435652169839567.png"
+  },
+  {
+   "key": "jadefall-s-splendor",
+   "name": "Jadefall's Splendor",
+   "entry": "3692",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/0a88b9e311e28c9ae89138a10c48601a_3822390923121875698.png"
+  },
+  {
+   "key": "beacon-of-the-reed-sea",
+   "name": "Beacon of the Reed Sea",
+   "entry": "3615",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/28/35428890/374cad27eb39f01436d6f52446804e6b_7142308678889222851.png"
+  },
+  {
+   "key": "mailed-flower",
+   "name": "Mailed Flower",
+   "entry": "3614",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/28/35428890/bca5e3d255c646e42449a06b79b5d019_8759736612810872622.png"
+  },
+  {
+   "key": "light-of-foliar-incision",
+   "name": "Light of Foliar Incision",
+   "entry": "3461",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/18/35428890/bf4ef5696afdf695a26fab9510228060_1761507291577300383.png"
+  },
+  {
+   "key": "tulaytullah-s-remembrance",
+   "name": "Tulaytullah's Remembrance",
+   "entry": "3320",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/8de363bf716e4538ba86014fbea827ef_1659819870214382408.png"
+  },
+  {
+   "key": "toukabou-shigure",
+   "name": "Toukabou Shigure",
+   "entry": "3319",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/15/194600931/e611885dcef509e0ced1b3aec547ebf0_8005422016701349311.png"
+  },
+  {
+   "key": "a-thousand-floating-dreams",
+   "name": "A Thousand Floating Dreams",
+   "entry": "2966",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/31/35428890/afd146c520b3a0bd72489a3426d8f283_7854516109466365358.png"
+  },
+  {
+   "key": "wandering-evenstar",
+   "name": "Wandering Evenstar",
+   "entry": "2910",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/12/35428890/350f5bf6ae4210be623556772c4c3836_6719838927234871355.png"
+  },
+  {
+   "key": "xiphos-moonlight",
+   "name": "Xiphos' Moonlight",
+   "entry": "2909",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/12/35428890/06be2dc5c5b80671ddf01cc9dc01bb49_6360458851061396642.png"
+  },
+  {
+   "key": "key-of-khaj-nisut",
+   "name": "Key of Khaj-Nisut",
+   "entry": "2908",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/10/35428890/e45d52017a7ccb1ada459212615381d8_9190142076232384205.png"
+  },
+  {
+   "key": "staff-of-the-scarlet-sands",
+   "name": "Staff of the Scarlet Sands",
+   "entry": "2849",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/194600931/fc9a85ad2a47dc0386d55ac4e8596440_7909203100593110405.png"
+  },
+  {
+   "key": "makhaira-aquamarine",
+   "name": "Makhaira Aquamarine",
+   "entry": "2848",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/194600931/e945b4d60271cc0560627c16f4a0a7dd_2629837070953493651.png"
+  },
+  {
+   "key": "missive-windspear",
+   "name": "Missive Windspear",
+   "entry": "2847",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/30/94376896/98f3fb9e0886b25bfd094828cc391978_4027924857629812923.png"
+  },
+  {
+   "key": "forest-regalia",
+   "name": "Forest Regalia",
+   "entry": "2671",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/236f42a62e034034870c2c4e44015572_5474035930475118540.png"
+  },
+  {
+   "key": "king-s-squire",
+   "name": "King's Squire",
+   "entry": "2670",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/e3b554a4032b5b738d056ab7a44e9e37_7655698488024418107.png"
+  },
+  {
+   "key": "fruit-of-fulfillment",
+   "name": "Fruit of Fulfillment",
+   "entry": "2669",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/0e1cecaeba7b12c8c9adcb2f11eccd5e_416583125189394990.png"
+  },
+  {
+   "key": "moonpiercer",
+   "name": "Moonpiercer",
+   "entry": "2668",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/2ab37345c6972292fda8b3095c15f971_8878508254336755657.png"
+  },
+  {
+   "key": "sapwood-blade",
+   "name": "Sapwood Blade",
+   "entry": "2667",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/26/194600931/b7dc579e8ad60147a049d14fc277629c_8193231495693842461.png"
+  },
+  {
+   "key": "end-of-the-line",
+   "name": "End of the Line",
+   "entry": "2666",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/80d2c21b70f486d9d9cb90e491e5b9da_4078404468332601679.png"
+  },
+  {
+   "key": "hunter-s-path",
+   "name": "Hunter's Path",
+   "entry": "2665",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/110a33dca005873d039a32c6c931d405_5358077549703882796.png"
+  },
+  {
+   "key": "kagotsurube-isshin",
+   "name": "Kagotsurube Isshin",
+   "entry": "2264",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/笼钓瓶一心.png"
+  },
+  {
+   "key": "fading-twilight",
+   "name": "Fading Twilight",
+   "entry": "2255",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/落霞.png"
+  },
+  {
+   "key": "aqua-simulacra",
+   "name": "Aqua Simulacra",
+   "entry": "2254",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/若水.png"
+  },
+  {
+   "key": "dragonspine-spear",
+   "name": "Dragonspine Spear",
+   "entry": "2060",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/龙脊长枪.png"
+  },
+  {
+   "key": "black-tassel",
+   "name": "Black Tassel",
+   "entry": "2059",
+   "type": "Polearm",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑缨枪.png"
+  },
+  {
+   "key": "blackcliff-longsword",
+   "name": "Blackcliff Longsword",
+   "entry": "2058",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩长剑.png"
+  },
+  {
+   "key": "blackcliff-agate",
+   "name": "Blackcliff Agate",
+   "entry": "2057",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩绯玉.png"
+  },
+  {
+   "key": "blackcliff-slasher",
+   "name": "Blackcliff Slasher",
+   "entry": "2056",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩斩刀.png"
+  },
+  {
+   "key": "blackcliff-warbow",
+   "name": "Blackcliff Warbow",
+   "entry": "2055",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩战弓.png"
+  },
+  {
+   "key": "blackcliff-pole",
+   "name": "Blackcliff Pole",
+   "entry": "2054",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑岩刺枪.png"
+  },
+  {
+   "key": "the-black-sword",
+   "name": "The Black Sword",
+   "entry": "2053",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑剑.png"
+  },
+  {
+   "key": "harbinger-of-dawn",
+   "name": "Harbinger of Dawn",
+   "entry": "2052",
+   "type": "Sword",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/黎明神剑.png"
+  },
+  {
+   "key": "raven-bow",
+   "name": "Raven Bow",
+   "entry": "2051",
+   "type": "Bow",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/鸦羽弓.png"
+  },
+  {
+   "key": "magic-guide",
+   "name": "Magic Guide",
+   "entry": "2050",
+   "type": "Catalyst",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/魔导绪论.png"
+  },
+  {
+   "key": "thundering-pulse",
+   "name": "Thundering Pulse",
+   "entry": "2049",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/飞雷之弦振.png"
+  },
+  {
+   "key": "skyrider-sword",
+   "name": "Skyrider Sword",
+   "entry": "2048",
+   "type": "Sword",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/飞天御剑.png"
+  },
+  {
+   "key": "skyrider-greatsword",
+   "name": "Skyrider Greatsword",
+   "entry": "2047",
+   "type": "Claymore",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/飞天大御剑.png"
+  },
+  {
+   "key": "aquila-favonia",
+   "name": "Aquila Favonia",
+   "entry": "2046",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/风鹰剑.png"
+  },
+  {
+   "key": "windblume-ode",
+   "name": "Windblume Ode",
+   "entry": "2045",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/风花之颂.png"
+  },
+  {
+   "key": "mistsplitter-reforged",
+   "name": "Mistsplitter Reforged",
+   "entry": "2044",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/雾切之回光.png"
+  },
+  {
+   "key": "snow-tombed-starsilver",
+   "name": "Snow-Tombed Starsilver",
+   "entry": "2043",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/雪葬的星银.png"
+  },
+  {
+   "key": "rainslasher",
+   "name": "Rainslasher",
+   "entry": "2042",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/雨裁.png"
+  },
+  {
+   "key": "sword-of-descension",
+   "name": "Sword of Descension",
+   "entry": "2041",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/降临之剑.png"
+  },
+  {
+   "key": "amos-bow",
+   "name": "Amos' Bow",
+   "entry": "2040",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/阿莫斯之弓.png"
+  },
+  {
+   "key": "silver-sword",
+   "name": "Silver Sword",
+   "entry": "2039",
+   "type": "Sword",
+   "rarity": 2,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/银剑.png"
+  },
+  {
+   "key": "iron-sting",
+   "name": "Iron Sting",
+   "entry": "2038",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/铁蜂刺.png"
+  },
+  {
+   "key": "ferrous-shadow",
+   "name": "Ferrous Shadow",
+   "entry": "2037",
+   "type": "Claymore",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/铁影阔剑.png"
+  },
+  {
+   "key": "iron-point",
+   "name": "Iron Point",
+   "entry": "2036",
+   "type": "Polearm",
+   "rarity": 2,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/铁尖枪.png"
+  },
+  {
+   "key": "halberd",
+   "name": "Halberd",
+   "entry": "2035",
+   "type": "Polearm",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/钺矛.png"
+  },
+  {
+   "key": "compound-bow",
+   "name": "Compound Bow",
+   "entry": "2034",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/钢轮弓.png"
+  },
+  {
+   "key": "the-bell",
+   "name": "The Bell",
+   "entry": "2033",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/钟剑.png"
+  },
+  {
+   "key": "cinnabar-spindle",
+   "name": "Cinnabar Spindle",
+   "entry": "2032",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/辰砂之纺锤.png"
+  },
+  {
+   "key": "redhorn-stonethresher",
+   "name": "Redhorn Stonethresher",
+   "entry": "2031",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/赤角石溃杵.png"
+  },
+  {
+   "key": "vortex-vanquisher",
+   "name": "Vortex Vanquisher",
+   "entry": "2030",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/贯虹之槊.png"
+  },
+  {
+   "key": "prototype-amber",
+   "name": "Prototype Amber",
+   "entry": "2029",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作金珀.png"
+  },
+  {
+   "key": "prototype-crescent",
+   "name": "Prototype Crescent",
+   "entry": "2028",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作澹月.png"
+  },
+  {
+   "key": "prototype-starglitter",
+   "name": "Prototype Starglitter",
+   "entry": "2027",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作星镰.png"
+  },
+  {
+   "key": "prototype-rancour",
+   "name": "Prototype Rancour",
+   "entry": "2026",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作斩岩.png"
+  },
+  {
+   "key": "prototype-archaic",
+   "name": "Prototype Archaic",
+   "entry": "2025",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/试作古华.png"
+  },
+  {
+   "key": "oathsworn-eye",
+   "name": "Oathsworn Eye",
+   "entry": "2024",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/证誓之明瞳.png"
+  },
+  {
+   "key": "waster-greatsword",
+   "name": "Waster Greatsword",
+   "entry": "2023",
+   "type": "Claymore",
+   "rarity": 1,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/训练大剑.png"
+  },
+  {
+   "key": "thrilling-tales-of-dragon-slayers",
+   "name": "Thrilling Tales of Dragon Slayers",
+   "entry": "2022",
+   "type": "Catalyst",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/讨龙英杰谭.png"
+  },
+  {
+   "key": "favonius-lance",
+   "name": "Favonius Lance",
+   "entry": "2021",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风长枪.png"
+  },
+  {
+   "key": "favonius-codex",
+   "name": "Favonius Codex",
+   "entry": "2020",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风秘典.png"
+  },
+  {
+   "key": "favonius-warbow",
+   "name": "Favonius Warbow",
+   "entry": "2019",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风猎弓.png"
+  },
+  {
+   "key": "favonius-greatsword",
+   "name": "Favonius Greatsword",
+   "entry": "2018",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风大剑.png"
+  },
+  {
+   "key": "favonius-sword",
+   "name": "Favonius Sword",
+   "entry": "2017",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/西风剑.png"
+  },
+  {
+   "key": "luxurious-sea-lord",
+   "name": "Luxurious Sea-Lord",
+   "entry": "2016",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/衔珠海皇.png"
+  },
+  {
+   "key": "serpent-spine",
+   "name": "Serpent Spine",
+   "entry": "2015",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/螭骨剑.png"
+  },
+  {
+   "key": "engulfing-lightning",
+   "name": "Engulfing Lightning",
+   "entry": "2014",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/薙草之稻光.png"
+  },
+  {
+   "key": "the-viridescent-hunt",
+   "name": "The Viridescent Hunt",
+   "entry": "2013",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/苍翠猎弓.png"
+  },
+  {
+   "key": "freedom-sworn",
+   "name": "Freedom-Sworn",
+   "entry": "2012",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/苍古自由之誓.png"
+  },
+  {
+   "key": "festering-desire",
+   "name": "Festering Desire",
+   "entry": "2011",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/腐殖之剑.png"
+  },
+  {
+   "key": "emerald-orb",
+   "name": "Emerald Orb",
+   "entry": "2010",
+   "type": "Catalyst",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/翡玉法球.png"
+  },
+  {
+   "key": "the-stringless",
+   "name": "The Stringless",
+   "entry": "2009",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/绝弦.png"
+  },
+  {
+   "key": "elegy-for-the-end",
+   "name": "Elegy for the End",
+   "entry": "2008",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/终末嗟叹之诗.png"
+  },
+  {
+   "key": "the-flute",
+   "name": "The Flute",
+   "entry": "2007",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/笛剑.png"
+  },
+  {
+   "key": "sacrificial-fragments",
+   "name": "Sacrificial Fragments",
+   "entry": "2006",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼残章.png"
+  },
+  {
+   "key": "sacrificial-bow",
+   "name": "Sacrificial Bow",
+   "entry": "2005",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼弓.png"
+  },
+  {
+   "key": "sacrificial-greatsword",
+   "name": "Sacrificial Greatsword",
+   "entry": "2004",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼大剑.png"
+  },
+  {
+   "key": "sacrificial-sword",
+   "name": "Sacrificial Sword",
+   "entry": "2003",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/祭礼剑.png"
+  },
+  {
+   "key": "sharpshooter-s-oath",
+   "name": "Sharpshooter's Oath",
+   "entry": "2002",
+   "type": "Bow",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/神射手之誓.png"
+  },
+  {
+   "key": "kagura-s-verity",
+   "name": "Kagura's Verity",
+   "entry": "2001",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/神乐之真意.png"
+  },
+  {
+   "key": "primordial-jade-cutter",
+   "name": "Primordial Jade Cutter",
+   "entry": "2000",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/磐岩结绿.png"
+  },
+  {
+   "key": "hamayumi",
+   "name": "Hamayumi",
+   "entry": "1999",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/破魔之弓.png"
+  },
+  {
+   "key": "white-iron-greatsword",
+   "name": "White Iron Greatsword",
+   "entry": "1998",
+   "type": "Claymore",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白铁大剑.png"
+  },
+  {
+   "key": "hakushin-ring",
+   "name": "Hakushin Ring",
+   "entry": "1997",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白辰之环.png"
+  },
+  {
+   "key": "white-tassel",
+   "name": "White Tassel",
+   "entry": "1996",
+   "type": "Polearm",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白缨枪.png"
+  },
+  {
+   "key": "whiteblind",
+   "name": "Whiteblind",
+   "entry": "1995",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/白影剑.png"
+  },
+  {
+   "key": "twin-nephrite",
+   "name": "Twin Nephrite",
+   "entry": "1994",
+   "type": "Catalyst",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/甲级宝珏.png"
+  },
+  {
+   "key": "hunter-s-bow",
+   "name": "Hunter's Bow",
+   "entry": "1993",
+   "type": "Bow",
+   "rarity": 1,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/猎弓.png"
+  },
+  {
+   "key": "wolf-s-gravestone",
+   "name": "Wolf's Gravestone",
+   "entry": "1992",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/狼的末路.png"
+  },
+  {
+   "key": "the-widsith",
+   "name": "The Widsith",
+   "entry": "1991",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/流浪乐章.png"
+  },
+  {
+   "key": "crescent-pike",
+   "name": "Crescent Pike",
+   "entry": "1990",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/流月针.png"
+  },
+  {
+   "key": "haran-geppaku-futsu",
+   "name": "Haran Geppaku Futsu",
+   "entry": "1989",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/波乱月白经津.png"
+  },
+  {
+   "key": "bloodtainted-greatsword",
+   "name": "Bloodtainted Greatsword",
+   "entry": "1988",
+   "type": "Claymore",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/沐浴龙血的剑.png"
+  },
+  {
+   "key": "katsuragikiri-nagamasa",
+   "name": "Katsuragikiri Nagamasa",
+   "entry": "1987",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/桂木斩长正.png"
+  },
+  {
+   "key": "song-of-broken-pines",
+   "name": "Song of Broken Pines",
+   "entry": "1986",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/松籁响起之时.png"
+  },
+  {
+   "key": "mouun-s-moon",
+   "name": "Mouun's Moon",
+   "entry": "1985",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/曚云之月.png"
+  },
+  {
+   "key": "dark-iron-sword",
+   "name": "Dark Iron Sword",
+   "entry": "1984",
+   "type": "Sword",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗铁剑.png"
+  },
+  {
+   "key": "the-alley-flash",
+   "name": "The Alley Flash",
+   "entry": "1983",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗巷闪光.png"
+  },
+  {
+   "key": "wine-and-song",
+   "name": "Wine and Song",
+   "entry": "1982",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗巷的酒与诗.png"
+  },
+  {
+   "key": "alley-hunter",
+   "name": "Alley Hunter",
+   "entry": "1981",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/暗巷猎手.png"
+  },
+  {
+   "key": "eye-of-perception",
+   "name": "Eye of Perception",
+   "entry": "1980",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/昭心.png"
+  },
+  {
+   "key": "dull-blade",
+   "name": "Dull Blade",
+   "entry": "1979",
+   "type": "Sword",
+   "rarity": 1,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/无锋剑.png"
+  },
+  {
+   "key": "the-unforged",
+   "name": "The Unforged",
+   "entry": "1978",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/无工之剑.png"
+  },
+  {
+   "key": "traveler-s-handy-sword",
+   "name": "Traveler's Handy Sword",
+   "entry": "1977",
+   "type": "Sword",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/旅行剑.png"
+  },
+  {
+   "key": "beginner-s-protector",
+   "name": "Beginner's Protector",
+   "entry": "1976",
+   "type": "Polearm",
+   "rarity": 1,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/新手长枪.png"
+  },
+  {
+   "key": "wavebreaker-s-fin",
+   "name": "Wavebreaker's Fin",
+   "entry": "1975",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/断浪长鳍.png"
+  },
+  {
+   "key": "summit-shaper",
+   "name": "Summit Shaper",
+   "entry": "1974",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/斫峰之刃.png"
+  },
+  {
+   "key": "predator",
+   "name": "Predator",
+   "entry": "1973",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/掠食者.png"
+  },
+  {
+   "key": "staff-of-homa",
+   "name": "Staff of Homa",
+   "entry": "1972",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/护摩之杖.png"
+  },
+  {
+   "key": "akuoumaru",
+   "name": "Akuoumaru",
+   "entry": "1971",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/恶王丸.png"
+  },
+  {
+   "key": "calamity-queller",
+   "name": "Calamity Queller",
+   "entry": "1970",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/息灾.png"
+  },
+  {
+   "key": "frostbearer",
+   "name": "Frostbearer",
+   "entry": "1969",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/忍冬之果.png"
+  },
+  {
+   "key": "slingshot",
+   "name": "Slingshot",
+   "entry": "1968",
+   "type": "Bow",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/弹弓.png"
+  },
+  {
+   "key": "rust",
+   "name": "Rust",
+   "entry": "1967",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/弓藏.png"
+  },
+  {
+   "key": "otherworldly-story",
+   "name": "Otherworldly Story",
+   "entry": "1966",
+   "type": "Catalyst",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/异世界行记.png"
+  },
+  {
+   "key": "mitternachts-waltz",
+   "name": "Mitternachts Waltz",
+   "entry": "1965",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/幽夜华尔兹.png"
+  },
+  {
+   "key": "memory-of-dust",
+   "name": "Memory of Dust",
+   "entry": "1964",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/尘世之锁.png"
+  },
+  {
+   "key": "royal-bow",
+   "name": "Royal Bow",
+   "entry": "1963",
+   "type": "Bow",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室长弓.png"
+  },
+  {
+   "key": "royal-longsword",
+   "name": "Royal Longsword",
+   "entry": "1962",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室长剑.png"
+  },
+  {
+   "key": "royal-grimoire",
+   "name": "Royal Grimoire",
+   "entry": "1961",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室秘法录.png"
+  },
+  {
+   "key": "royal-spear",
+   "name": "Royal Spear",
+   "entry": "1960",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室猎枪.png"
+  },
+  {
+   "key": "royal-greatsword",
+   "name": "Royal Greatsword",
+   "entry": "1959",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/宗室大剑.png"
+  },
+  {
+   "key": "apprentice-s-notes",
+   "name": "Apprentice's Notes",
+   "entry": "1958",
+   "type": "Catalyst",
+   "rarity": 1,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/学徒笔记.png"
+  },
+  {
+   "key": "skyward-spine",
+   "name": "Skyward Spine",
+   "entry": "1957",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之脊.png"
+  },
+  {
+   "key": "skyward-harp",
+   "name": "Skyward Harp",
+   "entry": "1956",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之翼.png"
+  },
+  {
+   "key": "skyward-atlas",
+   "name": "Skyward Atlas",
+   "entry": "1955",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之卷.png"
+  },
+  {
+   "key": "skyward-blade",
+   "name": "Skyward Blade",
+   "entry": "1954",
+   "type": "Sword",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之刃.png"
+  },
+  {
+   "key": "skyward-pride",
+   "name": "Skyward Pride",
+   "entry": "1953",
+   "type": "Claymore",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天空之傲.png"
+  },
+  {
+   "key": "amenoma-kageuchi",
+   "name": "Amenoma Kageuchi",
+   "entry": "1952",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/天目影打刀.png"
+  },
+  {
+   "key": "lost-prayer-to-the-sacred-winds",
+   "name": "Lost Prayer to the Sacred Winds",
+   "entry": "1951",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/四风原典.png"
+  },
+  {
+   "key": "dodoco-tales",
+   "name": "Dodoco Tales",
+   "entry": "1950",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/嘟嘟可故事集.png"
+  },
+  {
+   "key": "kitain-cross-spear",
+   "name": "Kitain Cross Spear",
+   "entry": "1949",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/喜多院十文字.png"
+  },
+  {
+   "key": "primordial-jade-winged-spear",
+   "name": "Primordial Jade Winged-Spear",
+   "entry": "1948",
+   "type": "Polearm",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/和璞鸢.png"
+  },
+  {
+   "key": "fillet-blade",
+   "name": "Fillet Blade",
+   "entry": "1947",
+   "type": "Sword",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/吃虎鱼刀.png"
+  },
+  {
+   "key": "pocket-grimoire",
+   "name": "Pocket Grimoire",
+   "entry": "1946",
+   "type": "Catalyst",
+   "rarity": 2,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/口袋魔导书.png"
+  },
+  {
+   "key": "recurve-bow",
+   "name": "Recurve Bow",
+   "entry": "1945",
+   "type": "Bow",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/反曲弓.png"
+  },
+  {
+   "key": "seasoned-hunter-s-bow",
+   "name": "Seasoned Hunter's Bow",
+   "entry": "1944",
+   "type": "Bow",
+   "rarity": 2,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/历练的猎弓.png"
+  },
+  {
+   "key": "lithic-spear",
+   "name": "Lithic Spear",
+   "entry": "1943",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/千岩长枪.png"
+  },
+  {
+   "key": "lithic-blade",
+   "name": "Lithic Blade",
+   "entry": "1942",
+   "type": "Claymore",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/千岩古剑.png"
+  },
+  {
+   "key": "lion-s-roar",
+   "name": "Lion's Roar",
+   "entry": "1941",
+   "type": "Sword",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/匣里龙吟.png"
+  },
+  {
+   "key": "dragon-s-bane",
+   "name": "Dragon's Bane",
+   "entry": "1940",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/匣里灭辰.png"
+  },
+  {
+   "key": "solar-pearl",
+   "name": "Solar Pearl",
+   "entry": "1939",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/匣里日月.png"
+  },
+  {
+   "key": "cool-steel",
+   "name": "Cool Steel",
+   "entry": "1938",
+   "type": "Sword",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/冷刃.png"
+  },
+  {
+   "key": "deathmatch",
+   "name": "Deathmatch",
+   "entry": "1937",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/决斗之枪.png"
+  },
+  {
+   "key": "polar-star",
+   "name": "Polar Star",
+   "entry": "1936",
+   "type": "Bow",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/冬极白星.png"
+  },
+  {
+   "key": "messenger",
+   "name": "Messenger",
+   "entry": "1935",
+   "type": "Bow",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/信使.png"
+  },
+  {
+   "key": "old-merc-s-pal",
+   "name": "Old Merc's Pal",
+   "entry": "1934",
+   "type": "Claymore",
+   "rarity": 2,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/佣兵重剑.png"
+  },
+  {
+   "key": "debate-club",
+   "name": "Debate Club",
+   "entry": "1933",
+   "type": "Claymore",
+   "rarity": 3,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/以理服人.png"
+  },
+  {
+   "key": "everlasting-moonglow",
+   "name": "Everlasting Moonglow",
+   "entry": "1932",
+   "type": "Catalyst",
+   "rarity": 5,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/不灭月华.png"
+  },
+  {
+   "key": "mappa-mare",
+   "name": "Mappa Mare",
+   "entry": "1931",
+   "type": "Catalyst",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/万国诸海图谱.png"
+  },
+  {
+   "key": "the-catch",
+   "name": "\"The Catch\"",
+   "entry": "1930",
+   "type": "Polearm",
+   "rarity": 4,
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/weapon/「渔获」.png"
+  }
+ ],
+ "sets": [
+  {
+   "key": "heart-of-the-furnace",
+   "name": "Heart of the Furnace",
+   "entry": "11223",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/d7bf6cb7fe1de3f1938373c3ba8f1a5f_8303749076826311938.png"
+  },
+  {
+   "key": "scarlet-proof",
+   "name": "Scarlet Proof",
+   "entry": "11222",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/08/03/cc2f877154130fb0d5d28b5fdcdce606_5952674370688612300.png"
+  },
+  {
+   "key": "disenchantment-in-deep-shadow",
+   "name": "Disenchantment in Deep Shadow",
+   "entry": "10760",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/186ed0ccb206788d4832b848bdb91624_1196226685770777941.png"
+  },
+  {
+   "key": "celestial-gift",
+   "name": "Celestial Gift",
+   "entry": "10759",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/5ff646e4e9ff8f839490360edda862a2_2352330875956559301.png"
+  },
+  {
+   "key": "a-day-carved-from-rising-winds",
+   "name": "A Day Carved From Rising Winds",
+   "entry": "9152",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/12/7c4a7aca9f8325c6663239bbfa452ded_4271064323680356779.png"
+  },
+  {
+   "key": "aubade-of-morningstar-and-moon",
+   "name": "Aubade of Morningstar and Moon",
+   "entry": "9151",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/01/12/ef58ecfcb8906792c3a9b07c92586934_3343384077195352394.png"
+  },
+  {
+   "key": "silken-moon-s-serenade",
+   "name": "Silken Moon's Serenade",
+   "entry": "8521",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/b8350998129a66e67c1a7691153da68d_6559589601591776539.png"
+  },
+  {
+   "key": "night-of-the-sky-s-unveiling",
+   "name": "Night of the Sky's Unveiling",
+   "entry": "8520",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/25c4512875bad223765a5a32c82b09a4_7122872897984003318.png"
+  },
+  {
+   "key": "finale-of-the-deep-galleries",
+   "name": "Finale of the Deep Galleries",
+   "entry": "7572",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/17/bf39402f87db1168263c7c0898c8ab0c_4434336707917443666.png"
+  },
+  {
+   "key": "long-night-s-oath",
+   "name": "Long Night's Oath",
+   "entry": "7571",
+   "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/17/3cf2511dfb1f91696a0ee986e5f1fb22_3371878648281977517.png"
+  },
+  {
+   "key": "obsidian-codex",
+   "name": "Obsidian Codex",
+   "entry": "6554",
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/25/35428890/cd11df3be5420d2c53c2da0d3298eb92_1095952715486440137.png"
+  },
+  {
+   "key": "scroll-of-the-hero-of-cinder-city",
+   "name": "Scroll of the Hero of Cinder City",
+   "entry": "6553",
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/08/25/35428890/6ad5095f324c2da829ecaa5e2ed13af9_552940265782217486.png"
+  },
+  {
+   "key": "unfinished-reverie",
+   "name": "Unfinished Reverie",
+   "entry": "5579",
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/356c6b0e1be129282f759d8844872c7d_544884929456263860.png"
+  },
+  {
+   "key": "fragment-of-harmonic-whimsy",
+   "name": "Fragment of Harmonic Whimsy",
+   "entry": "5578",
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/7557f4558ab243d82e8b6b9994fc97ee_3952883455179155002.png"
+  },
+  {
+   "key": "song-of-days-past",
+   "name": "Song of Days Past",
+   "entry": "4717",
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/7789fb5e684cf95a7011657d0fa8a971_4912719626191046540.png"
+  },
+  {
+   "key": "nighttime-whispers-in-the-echoing-woods",
+   "name": "Nighttime Whispers in the Echoing Woods",
+   "entry": "4716",
+   "icon": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/d9d39d9f046d5d23c3d497574be55a82_6651989566067939894.png"
+  },
+  {
+   "key": "golden-troupe",
+   "name": "Golden Troupe",
+   "entry": "3991",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/c32bab10651059ad3c0c8a0e5bbd2e03_1977006170352048486.png"
+  },
+  {
+   "key": "marechaussee-hunter",
+   "name": "Marechaussee Hunter",
+   "entry": "3990",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/539b03bed1057707abd643147e18abde_6521945376578667972.png"
+  },
+  {
+   "key": "vourukasha-s-glow",
+   "name": "Vourukasha's Glow",
+   "entry": "3694",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/04/10/35428890/bc9329baf36935b2fb094f783a7695f2_5409606138062221441.png"
+  },
+  {
+   "key": "nymph-s-dream",
+   "name": "Nymph's Dream",
+   "entry": "3693",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/04/10/35428890/1bde348ad550ef356ff197b93caed6c8_1659289996356186854.png"
+  },
+  {
+   "key": "desert-pavilion-chronicle",
+   "name": "Desert Pavilion Chronicle",
+   "entry": "3322",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/b86d9fd7cf57937a021c9c68c9b185ed_8273785812548801718.png"
+  },
+  {
+   "key": "flower-of-paradise-lost",
+   "name": "Flower of Paradise Lost",
+   "entry": "3321",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/50ce09dfa5a91a33aa9cedfb15bcf2d1_864016614991586234.png"
+  },
+  {
+   "key": "gilded-dreams",
+   "name": "Gilded Dreams",
+   "entry": "2673",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/ae8a2c6f24df66e1bd7cc2dbd83d330d_5836084318530605114.png"
+  },
+  {
+   "key": "deepwood-memories",
+   "name": "Deepwood Memories",
+   "entry": "2672",
+   "icon": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/194600931/f526e111c9c7dcbaed0d7fd8c8d58ef2_6545580301650182707.png"
+  },
+  {
+   "key": "retracing-bolide",
+   "name": "Retracing Bolide",
+   "entry": "2099",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Retracing Bolide/flower_of_life_icon.png"
+  },
+  {
+   "key": "shimenawa-s-reminiscence",
+   "name": "Shimenawa's Reminiscence",
+   "entry": "2098",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Shimenawa's Reminiscence/flower_of_life_icon.png"
+  },
+  {
+   "key": "vermillion-hereafter",
+   "name": "Vermillion Hereafter",
+   "entry": "2097",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Vermillion Hereafter/flower_of_life_icon.png"
+  },
+  {
+   "key": "gambler",
+   "name": "Gambler",
+   "entry": "2096",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gambler/flower_of_life_icon.png"
+  },
+  {
+   "key": "gladiator-s-finale",
+   "name": "Gladiator's Finale",
+   "entry": "2095",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Gladiator's Finale/flower_of_life_icon.png"
+  },
+  {
+   "key": "maiden-beloved",
+   "name": "Maiden Beloved",
+   "entry": "2094",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Maiden Beloved/flower_of_life_icon.png"
+  },
+  {
+   "key": "resolution-of-sojourner",
+   "name": "Resolution of Sojourner",
+   "entry": "2093",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Resolution of Sojourner/flower_of_life_icon.png"
+  },
+  {
+   "key": "pale-flame",
+   "name": "Pale Flame",
+   "entry": "2092",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Pale Flame/flower_of_life_icon.png"
+  },
+  {
+   "key": "viridescent-venerer",
+   "name": "Viridescent Venerer",
+   "entry": "2091",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Viridescent Venerer/flower_of_life_icon.png"
+  },
+  {
+   "key": "emblem-of-severed-fate",
+   "name": "Emblem of Severed Fate",
+   "entry": "2090",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Emblem of Severed Fate/flower_of_life_icon.png"
+  },
+  {
+   "key": "prayers-for-wisdom",
+   "name": "Prayers for Wisdom",
+   "entry": "2089",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers for Wisdom/circlet_of_logos_icon.png"
+  },
+  {
+   "key": "prayers-for-illumination",
+   "name": "Prayers for Illumination",
+   "entry": "2088",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers for Illumination/circlet_of_logos_icon.png"
+  },
+  {
+   "key": "prayers-for-destiny",
+   "name": "Prayers for Destiny",
+   "entry": "2087",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers for Destiny/circlet_of_logos_icon.png"
+  },
+  {
+   "key": "prayers-to-springtime",
+   "name": "Prayers to Springtime",
+   "entry": "2086",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Prayers to Springtime/circlet_of_logos_icon.png"
+  },
+  {
+   "key": "crimson-witch-of-flames",
+   "name": "Crimson Witch of Flames",
+   "entry": "2085",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Crimson Witch of Flames/flower_of_life_icon.png"
+  },
+  {
+   "key": "traveling-doctor",
+   "name": "Traveling Doctor",
+   "entry": "2084",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Traveling Doctor/flower_of_life_icon.png"
+  },
+  {
+   "key": "lavawalker",
+   "name": "Lavawalker",
+   "entry": "2083",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lavawalker/flower_of_life_icon.png"
+  },
+  {
+   "key": "ocean-hued-clam",
+   "name": "Ocean-Hued Clam",
+   "entry": "2082",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Ocean-Hued Clam/flower_of_life_icon.png"
+  },
+  {
+   "key": "wanderer-s-troupe",
+   "name": "Wanderer's Troupe",
+   "entry": "2081",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Wanderer's Troupe/flower_of_life_icon.png"
+  },
+  {
+   "key": "the-exile",
+   "name": "The Exile",
+   "entry": "2080",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/The Exile/flower_of_life_icon.png"
+  },
+  {
+   "key": "heart-of-depth",
+   "name": "Heart of Depth",
+   "entry": "2079",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Heart of Depth/flower_of_life_icon.png"
+  },
+  {
+   "key": "martial-artist",
+   "name": "Martial Artist",
+   "entry": "2078",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Martial Artist/flower_of_life_icon.png"
+  },
+  {
+   "key": "bloodstained-chivalry",
+   "name": "Bloodstained Chivalry",
+   "entry": "2077",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Bloodstained Chivalry/flower_of_life_icon.png"
+  },
+  {
+   "key": "echoes-of-an-offering",
+   "name": "Echoes of an Offering",
+   "entry": "2076",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Echoes of an Offering/flower_of_life_icon.png"
+  },
+  {
+   "key": "noblesse-oblige",
+   "name": "Noblesse Oblige",
+   "entry": "2075",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Noblesse Oblige/flower_of_life_icon.png"
+  },
+  {
+   "key": "instructor",
+   "name": "Instructor",
+   "entry": "2074",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Instructor/flower_of_life_icon.png"
+  },
+  {
+   "key": "berserker",
+   "name": "Berserker",
+   "entry": "2073",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Berserker/flower_of_life_icon.png"
+  },
+  {
+   "key": "archaic-petra",
+   "name": "Archaic Petra",
+   "entry": "2072",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Archaic Petra/flower_of_life_icon.png"
+  },
+  {
+   "key": "lucky-dog",
+   "name": "Lucky Dog",
+   "entry": "2071",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Lucky Dog/flower_of_life_icon.png"
+  },
+  {
+   "key": "thundersoother",
+   "name": "Thundersoother",
+   "entry": "2070",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundersoother/flower_of_life_icon.png"
+  },
+  {
+   "key": "defender-s-will",
+   "name": "Defender's Will",
+   "entry": "2069",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Defender's Will/flower_of_life_icon.png"
+  },
+  {
+   "key": "scholar",
+   "name": "Scholar",
+   "entry": "2068",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Scholar/flower_of_life_icon.png"
+  },
+  {
+   "key": "thundering-fury",
+   "name": "Thundering Fury",
+   "entry": "2067",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Thundering Fury/flower_of_life_icon.png"
+  },
+  {
+   "key": "tiny-miracle",
+   "name": "Tiny Miracle",
+   "entry": "2066",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tiny Miracle/flower_of_life_icon.png"
+  },
+  {
+   "key": "husk-of-opulent-dreams",
+   "name": "Husk of Opulent Dreams",
+   "entry": "2065",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Husk of Opulent Dreams/flower_of_life_icon.png"
+  },
+  {
+   "key": "tenacity-of-the-millelith",
+   "name": "Tenacity of the Millelith",
+   "entry": "2064",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Tenacity of the Millelith/flower_of_life_icon.png"
+  },
+  {
+   "key": "brave-heart",
+   "name": "Brave Heart",
+   "entry": "2063",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Brave Heart/flower_of_life_icon.png"
+  },
+  {
+   "key": "blizzard-strayer",
+   "name": "Blizzard Strayer",
+   "entry": "2062",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Blizzard Strayer/flower_of_life_icon.png"
+  },
+  {
+   "key": "adventurer",
+   "name": "Adventurer",
+   "entry": "2061",
+   "icon": "https://bbs.hoyolab.com/hoyowiki/picture/reliquary/Adventurer/flower_of_life_icon.png"
+  }
+ ]
+}

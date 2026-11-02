@@ -1,0 +1,18 @@
+{
+  "key": "qiqi", "name": "Qiqi", "element": "Cryo", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 2300, "er": 200},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["atk_pct"], "circlet": ["atk_pct", "heal", "cr"]},
+  "weights": {"atk_pct": "wants", "er": "wants", "atk": "some", "cr": "some", "cd": "none", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["tenacity-of-the-millelith"], "pieces": "4"}, {"sets": ["ocean-hued-clam"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}],
+  "weapons": ["favonius-sword", "freedom-sworn", "skyward-blade", "key-of-khaj-nisut", "sacrificial-sword", "summit-shaper"],
+  "partners": ["Cryo", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Cryo healer whose healing scales with ATK (Herald of Frost's continuous regeneration is 69.6% ATK + 451 at level 1; the Burst heals 90.0% ATK + 577), so ATK is the scaling stat. The sources differ on the talent: KQM puts the Skill ahead of the Burst, Game8 puts the Burst first. The card keeps the Skill, because its Herald of Frost is her steady heal and the card has to name one, and notes the difference. They agree on 4pc Tenacity of the Millelith as best (Game8 also names Ocean-Hued Clam; KQM adds Scroll of the Hero of Cinder City, Instructor, Noblesse Oblige and Song of Days Past by team), and on ATK% on the Sands and Goblet. The Circlet is ATK%, Healing Bonus or CRIT Rate with a Favonius weapon in both. The weapons differ: KQM's first is Favonius Sword, Game8's Skyward Blade; both are listed. Goals are Game8's: ATK 2,300 or more and ER 180-200% (upper end); KQM's ER depends on constellation and Sandrone (135-285%). Game8's CRIT Rate of 40-50% applies only with the Favonius Sword and is not set.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/qiqi-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297533", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

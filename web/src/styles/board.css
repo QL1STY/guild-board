@@ -1,0 +1,121 @@
+/* The Board (spec 12.4 and 13): a grid of fixed cells, 168 pixels wide and 96 tall with 12-pixel gaps, over the
+   window's whole width (frame.css, .gb-main.wide). A wider window shows more columns, never wider widgets. The page
+   sets the columns the window holds (grid-template-columns) and puts each widget at its place (look pass spec 10.2). */
+.board-grid {
+  display: grid;
+  grid-auto-rows: 96px;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+/* Edit (look pass spec 10.4): the line of help, and the notice of a window narrower than the arrangement (10.3). They
+   stand on the page's own background, where small text is in --ink (contrast.test.ts). */
+.board-edit { display: flex; flex-wrap: wrap; gap: 8px; }
+.board-help { max-width: 1440px; margin-top: 6px; color: var(--ink); }
+.board-narrow { max-width: 1440px; margin-top: 6px; font-size: 12.5px; color: var(--ink); }
+/* Every free cell is a faint rounded slot, as the game's inventory shows its empty ones; the widgets lie over them. */
+.board-cells { display: contents; }
+.board-cell {
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 60%, transparent);
+}
+/* A widget in Edit: its view takes no input (inert), the frame can be taken anywhere, and its inner line takes the
+   border's colour (the frame itself is widgets.css, .w). It is a focusable group, with a ring of its own. */
+.w.editing {
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: scale var(--t-state) var(--ease-out), box-shadow var(--t-state) var(--ease-out);
+}
+.w.editing::after { border-color: var(--w-border); }
+.w.editing:focus-visible { outline: 2px solid var(--w-focus); outline-offset: 2px; }
+/* Dragged (spec 10.5): it lifts, a shadow and a little larger, over the others, and follows the pointer (translate). */
+.gb-panel.w.lifted {
+  z-index: 3;
+  scale: 1.02;
+  box-shadow:
+    0 18px 34px -12px color-mix(in srgb, var(--w-ink) 45%, transparent),
+    0 2px 6px color-mix(in srgb, var(--w-ink) 15%, transparent);
+  cursor: grabbing;
+}
+/* Where it will land: 2 pixels of gold ink round a light gold tint. */
+.board-landing {
+  border: 2px solid var(--gold-ink);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--gold) 30%, transparent);
+}
+/* Resized (spec 10.6): the grips of the right edge, the bottom edge and the corner, drawn in gold ink, with hit areas of
+   10 pixels across each edge and 20 by 20 at the corner; and the size tag near the corner, while the pointer resizes. */
+.grip { position: absolute; z-index: 2; }
+.grip-e { top: 30px; right: 0; bottom: 20px; width: 10px; cursor: ew-resize; }
+.grip-s { right: 20px; bottom: 0; left: 0; height: 10px; cursor: ns-resize; }
+.grip-se { right: 0; bottom: 0; width: 20px; height: 20px; color: var(--gold-ink); cursor: nwse-resize; }
+.grip-e::after,
+.grip-s::after { content: ''; position: absolute; border-radius: 3px; background: var(--gold-ink); }
+.grip-e::after { top: calc(50% - 14px); right: 2px; width: 4px; height: 28px; }
+.grip-s::after { bottom: 2px; left: calc(50% - 14px); width: 28px; height: 4px; }
+.grip-se .sign { position: absolute; right: 1px; bottom: 1px; width: 16px; height: 16px; stroke-width: 2; }
+.w.sizing { outline: 2px solid var(--gold-ink); outline-offset: 2px; }
+.size-tag {
+  position: absolute;
+  right: 24px;
+  bottom: 6px;
+  z-index: 3;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--gold-ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* Its Settings and Remove, 24 by 24, at the right of its heading in place of the meta. */
+.w-tools { flex: none; display: flex; gap: 4px; margin-left: auto; }
+.w-tool {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--w-border);
+  border-radius: 50%;
+  background: var(--w-bg);
+  color: var(--w-ink2);
+  cursor: pointer;
+  transition: color var(--t-hover), border-color var(--t-hover);
+}
+.w-tool:hover { border-color: var(--w-outline); color: var(--w-ink); }
+.w-tool .sign { width: 13px; height: 13px; }
+/* One cell tall the heading is 21 pixels (widgets.css): the buttons are as tall as it, as they are in a taller widget's
+   heading of 24, so that they fit it and the body stays where it is. Their centres are 25 pixels apart, more than the 24
+   that a target smaller than 24 pixels needs around it. */
+@container (max-height: 100px) {
+  .w-tool { width: 21px; height: 21px; }
+  .w-tool .sign { width: 12px; height: 12px; }
+}
+
+/* Add a widget and a widget's Settings, above the grid; the text keeps 1,440 pixels at most (spec 12.1). */
+.board-sheet { max-width: 1440px; margin-top: 6px; padding: 10px 14px; font-size: 13px; }
+.board-sheet-buttons { display: flex; gap: 8px; margin-top: 10px; }
+.board-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 4px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.board-types li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 0;
+  border-top: 1px solid var(--grid);
+}
+.board-type .sign { width: 16px; height: 16px; margin-right: 7px; vertical-align: -3px; color: var(--gold-ink); }
+.board-about { color: var(--ink2); }
+.board-types .ach-toggle { flex: none; }

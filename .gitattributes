@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.png binary
+*.webp binary
+*.ico binary
+*.bin binary
+*.db binary
+src/guildboard/reference/achievements.json -text

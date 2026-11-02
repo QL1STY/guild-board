@@ -1,0 +1,38 @@
+{
+  "key": "yaoyao",
+  "name": "Yaoyao",
+  "element": "Dendro",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["healer", "support"],
+  "keeps_alive": true,
+  "scaling": "hp",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 200},
+  "mains": {"sands": ["er", "hp_pct"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "heal", "cr"]},
+  "weights": {"er": "wants", "hp_pct": "wants", "hp": "some", "em": "some", "cr": "some", "heal": "some", "cd": "none", "atk_pct": "none", "atk": "none", "dmg": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["deepwood-memories"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["maiden-beloved"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["the-exile"], "pieces": "4"}
+  ],
+  "weapons": ["dialogues-of-the-desert-sages", "favonius-lance", "black-tassel", "kitain-cross-spear", "rightful-reward", "moonpiercer", "dragon-s-bane"],
+  "partners": ["Dendro", "Hydro", "Electro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on the healer build: 4pc Deepwood Memories first (KQM: best if no one else in a Dendro team holds it) with 4pc Tenacity of the Millelith as the other, an ER or HP% Sands, an HP% Goblet, an HP%, Healing Bonus or (with Favonius) CRIT Rate Circlet, and Skill > Burst > Normal Attack. KQM adds Instructor, Maiden Beloved, Gilded Dreams (her personal damage) and The Exile; both also give an EM-based reaction build (EM on every piece) that is not the main plan. Weapons differ in the lead: KQM puts Dialogues of the Desert Sages first, Game8 puts Favonius Lance first for healers (Kitain Cross Spear for its Bloom build); all are kept. Her healing is Max HP-based, so the scaling stat is HP. The kit's 'check' line (White Jade Radish DMG, 29.9% to 53.9%) is ATK-based Dendro damage on the elemental curve (ratio 1.80), the damage that matters, so the damage talent is the Skill. ER is Game8's 200 for the healer builds (KQM: 190-210 Double Dendro from C2, 260-270 Solo Dendro under C2, 170-180 Triple Dendro from C2). No HP goal is given. Partners are inferred from the Dendro and Bloom teams both sources name.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/yaoyao-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/314174", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3335", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

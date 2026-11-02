@@ -1,0 +1,39 @@
+{
+  "name": "guildboard-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "e2e": "npm run build && playwright test",
+    "screens": "npm run build && playwright test -c playwright.screens.config.ts --grep-invert \"@1b|@look|@overlay|@scaling|@pulls|@topbar|@readme|@ledger|@characters|@friends|@memory|@stars\"",
+    "screens:1b": "npm run build && playwright test -c playwright.screens.config.ts --grep @1b",
+    "screens:look": "npm run build && playwright test -c playwright.screens.config.ts --grep @look",
+    "screens:overlay": "npm run build && playwright test -c playwright.screens.config.ts --grep @overlay",
+    "screens:scaling": "npm run build && playwright test -c playwright.screens.config.ts --grep @scaling",
+    "screens:pulls": "npm run build && playwright test -c playwright.screens.config.ts --grep @pulls",
+    "screens:topbar": "npm run build && playwright test -c playwright.screens.config.ts --grep @topbar",
+    "screens:ledger": "npm run build && playwright test -c playwright.screens.config.ts --grep @ledger",
+    "screens:characters": "npm run build && playwright test -c playwright.screens.config.ts --grep @characters",
+    "screens:friends": "npm run build && playwright test -c playwright.screens.config.ts --grep @friends",
+    "memory:characters": "npm run build && playwright test -c playwright.screens.config.ts --grep @memory",
+    "proof:stars": "npm run build && playwright test -c playwright.screens.config.ts --grep @stars",
+    "screens:readme":"npm run build && playwright test -c playwright.screens.config.ts --grep @readme"
+  },
+  "dependencies": {
+    "@fontsource/alegreya-sans": "5.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "typescript": "6.0.3",
+    "vite": "8.3.4",
+    "vitest": "5.0.4"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "key": "arataki-itto", "name": "Arataki Itto", "element": "Geo", "weapon_type": "Claymore", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "def",
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "physical",
+  "goals": {"er": 140, "dmg": 46.6},
+  "mains": {"sands": ["def_pct"], "goblet": ["dmg", "def_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "def_pct": "wants", "er": "wants", "atk_pct": "some", "atk": "some", "def": "some", "em": "none", "hp_pct": "none", "hp": "none"},
+  "sets": [{"sets": ["husk-of-opulent-dreams"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["retracing-bolide"], "pieces": "4"}],
+  "weapons": ["redhorn-stonethresher", "skyward-pride", "serpent-spine"],
+  "partners": ["Geo"], "partner_roles": ["support", "protector"], "teams": [],
+  "notes": "A Geo main DPS who deals his damage with Arataki Kesagiri (Normal Attacks after his Burst). The Kesagiri multipliers follow the Normal Attack curve (1.081 times at level 2), so the table is physical, though the damage is Geo; no Physical DMG goblet is wanted. His Burst turns DEF into ATK and his passive adds 35% of his DEF to Kesagiri, so DEF is the scaling stat, as both sources' DEF% Sands show. The Skill DMG line marked 'check' is ATK-based. The sources agree on 4pc Husk of Opulent Dreams, the main stats and the weapon order's top four (Redhorn Stonethresher, Serpent Spine, Skyward Pride, Whiteblind); the card keeps three. Neither source gives stat goals; ER 140% is KQM's range for a Double Geo team with Albedo or Chiori (135-145%).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/itto-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/345461", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/36", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

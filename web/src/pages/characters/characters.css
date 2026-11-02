@@ -1,0 +1,60 @@
+/*
+ * What the Characters pages share (the Characters plan, Task U1): a face on its ring, an element's chip, the readiness
+ * ring and the Refresh line. The element palettes are elements.css's.
+ */
+
+/* ---------- Avatar: a face on a ring in her colour ---------- */
+.cx-ava {
+  --size: 40px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #EFE6D2, #DCCDAA);
+  border: 2px solid var(--el-ink, var(--border));
+}
+.cx-ava.on-card {
+  background: radial-gradient(circle at 50% 35%, #2A3570, #121A45);
+  border-color: var(--el);
+  box-shadow: 0 0 22px var(--el-glow);
+}
+.cx-ava .sign { padding: 22%; color: var(--ink2); }
+.cx-ava.on-card .sign { color: var(--c-star2); }
+
+/* ---------- An element's chip: her colour's dot, and her element's name ---------- */
+.cx-chip { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+.cx-chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--el-ink); }
+.cx-chip.on-card i { background: var(--el); box-shadow: 0 0 10px var(--el-glow); }
+
+/* ---------- The readiness ring: the figure in its middle ---------- */
+.cx-ready { display: block; width: var(--size, 46px); flex: none; }
+.cx-ready-in { display: grid; justify-items: center; align-content: center; line-height: 1; color: var(--ink); }
+.cx-ready-in b { font-size: 34cqi; font-weight: 800; font-variant-numeric: lining-nums; }
+.cx-ready-in b small { font-size: 55%; color: var(--ink2); font-weight: 700; }
+.cx-ready-cap { margin-top: 3cqi; font-size: 8.5cqi; color: var(--ink2); max-width: 58cqi; text-align: center; line-height: 1.15; text-wrap: balance; }
+
+/* ---------- The Refresh line, in the top bar ---------- */
+.cx-sync { max-width: 520px; }
+
+/* ---------- The calculator's note, where held amounts are ---------- */
+.cx-note {
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--warn-line);
+  border-radius: 10px;
+  background: var(--warn-soft);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* A tip that follows the pointer, or sits at the focused row */
+.cx-tip {
+  position: fixed; z-index: 30; max-width: 300px; padding: 8px 12px; border: 1px solid rgba(241, 234, 219, .25); border-radius: 10px; background: rgba(7, 10, 31, .97);
+  color: var(--c-star); font-size: 14px; line-height: 1.35; pointer-events: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+/* The same plate on the parchment top bar: the page's surface, its ink and its gold hairline. */
+.cx-tip.light { border-color: var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; box-shadow: 0 6px 18px rgba(60, 40, 10, .22); }
+.cx-tip b { display: block; margin-bottom: 2px; font-family: var(--c-serif); font-size: 15px; }
+
+/* Refresh is as tall as All characters beside it, whose border it has too, but transparent. */
+.cx-refresh { border: 1px solid transparent; }

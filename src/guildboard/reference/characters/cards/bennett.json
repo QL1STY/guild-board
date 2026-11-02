@@ -1,0 +1,19 @@
+{
+  "key": "bennett", "name": "Bennett", "element": "Pyro", "weapon_type": "Sword", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["support", "healer"], "keeps_alive": true, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 200, "cr": 60, "cd": 150},
+  "mains": {"sands": ["er", "atk_pct", "hp_pct"], "goblet": ["dmg", "hp_pct"], "circlet": ["cr", "cd", "heal", "hp_pct"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "hp_pct": "some", "atk": "some", "em": "some", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}],
+  "weapons": ["mistsplitter-reforged", "aquila-favonia", "skyward-blade"],
+  "partners": ["Pyro", "Cryo"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Pyro buffer and healer whose Burst gives ATK and Pyro infusion. Both sources agree on the Burst first, 4pc Noblesse Oblige and Mistsplitter Reforged. KQM gives three builds (healing support with ER or HP% Sands, an invested support or DPS with Pyro DMG, and a Burgeon one); Game8 gives one with ER or ATK% Sands, so the card's main stats are the union, with ER first. Goals are Game8's (ER 200-250%, CR 50-60%, CD 150% or above), taking its lower ER end, which matches KQM's Double Pyro range (175-220%); solo Pyro needs 195-255%. His Burst's 'check' line is ATK-based. Aquila Favonia and Skyward Blade are Game8's alternatives.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/bennett-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297522", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/26", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

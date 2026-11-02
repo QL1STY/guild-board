@@ -1,0 +1,47 @@
+/*
+ * The seven element palettes of the profile mockup,
+ * as classes: a card, a ring or a chip that carries `el-cryo` draws in her colours. The dark card of a character's own pages
+ * (the profile and the planner) uses --card-bg, --card-glow, --el, --el2, --el-glow, --el-soft and --giant; the parchment
+ * pages (the roster, Your week, Endgame) use --el-ink, her colour deepened to reach 3:1 on a card (contrast.test.ts).
+ * Colour is never the only thing that tells two characters apart: a face and a name always come with it.
+ */
+:root {
+  /* The dark card's text and marks, from the mockups. Their pairs with each card's ground are held by contrast.test.ts. */
+  --c-star: #F1EADB;
+  --c-star2: #C9CFDD;
+  --c-dim: #8D94A8;
+  --c-gold: #E2C98F;
+  --c-good: #A9D49A;
+  --c-bad: #F2A08F;
+  /* The mockups' headings are set in Alegreya, which Guild Board does not ship: they take the Alegreya Sans it does. */
+  --c-serif: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
+}
+
+.el-cryo {
+  --card-bg: #070A1F; --card-glow: rgba(79, 168, 207, .30); --el: #8ED3E8; --el2: #4FA8CF;
+  --el-glow: rgba(142, 211, 232, .38); --el-soft: rgba(142, 211, 232, .42); --giant: rgba(142, 211, 232, .34); --el-ink: #2A7FA3;
+}
+.el-pyro {
+  --card-bg: #1A0806; --card-glow: rgba(214, 92, 58, .30); --el: #F4A27E; --el2: #D9663F;
+  --el-glow: rgba(244, 162, 126, .38); --el-soft: rgba(244, 162, 126, .42); --giant: rgba(244, 162, 126, .34); --el-ink: #C2502B;
+}
+.el-hydro {
+  --card-bg: #050C24; --card-glow: rgba(64, 128, 230, .32); --el: #7CB4F5; --el2: #3F7FD9;
+  --el-glow: rgba(124, 180, 245, .38); --el-soft: rgba(124, 180, 245, .42); --giant: rgba(124, 180, 245, .34); --el-ink: #3A74C9;
+}
+.el-anemo {
+  --card-bg: #041816; --card-glow: rgba(64, 196, 170, .28); --el: #8FE3CF; --el2: #3FB89C;
+  --el-glow: rgba(143, 227, 207, .38); --el-soft: rgba(143, 227, 207, .42); --giant: rgba(143, 227, 207, .34); --el-ink: #1F8F78;
+}
+.el-electro {
+  --card-bg: #110824; --card-glow: rgba(156, 98, 230, .32); --el: #C7A3F5; --el2: #8F5CD9;
+  --el-glow: rgba(199, 163, 245, .38); --el-soft: rgba(199, 163, 245, .42); --giant: rgba(199, 163, 245, .34); --el-ink: #7D4BC7;
+}
+.el-dendro {
+  --card-bg: #091806; --card-glow: rgba(132, 196, 64, .28); --el: #B5E07F; --el2: #7DB33F;
+  --el-glow: rgba(181, 224, 127, .38); --el-soft: rgba(181, 224, 127, .42); --giant: rgba(181, 224, 127, .34); --el-ink: #5A8A1C;
+}
+.el-geo {
+  --card-bg: #181106; --card-glow: rgba(222, 170, 70, .28); --el: #F0CD7A; --el2: #C9952F;
+  --el-glow: rgba(240, 205, 122, .38); --el-soft: rgba(240, 205, 122, .42); --giant: rgba(240, 205, 122, .34); --el-ink: #A27410;
+}

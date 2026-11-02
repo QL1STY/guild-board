@@ -1,0 +1,36 @@
+{
+  "key": "flins",
+  "name": "Flins",
+  "element": "Electro",
+  "weapon_type": "Polearm",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 2500, "cr": 50, "cd": 175, "er": 130, "em": 150},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["atk_pct", "em"], "circlet": ["cd", "cr"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "wants", "em": "some", "atk": "some", "dmg": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["thundering-fury"], "pieces": "4"}
+  ],
+  "weapons": ["bloodsoaked-ruins", "staff-of-the-scarlet-sands", "vortex-vanquisher", "skyward-spine", "engulfing-lightning", "deathmatch", "missive-windspear", "prospector-s-shovel"],
+  "partners": ["Electro", "Hydro"],
+  "partner_roles": ["support", "damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree: 4pc Night of the Sky's Unveiling, ATK% sands and goblet (his damage is Lunar-Charged, which Elemental DMG Bonus does not raise, so there is no DMG% goblet), CRIT circlet, Bloodsoaked Ruins first. Goals are Game8's: ATK 2,500+, CRIT DMG 175+, EM 100-200 (150 used), CRIT Rate 40-50 before the set's own Rate bonus (50 used). ER 130 is Game8's 130-140 for double Electro; KQM gives 110-135 by teammate. Talent order Burst > Skill > Normal Attack in both. Partners: Electro and Hydro for Lunar-Charged teams (inferred from the kit and KQM's teammates; no team list used).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/flins-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/538451", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/8398", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

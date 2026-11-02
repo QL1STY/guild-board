@@ -1,0 +1,36 @@
+{
+  "key": "fischl",
+  "name": "Fischl",
+  "element": "Electro",
+  "weapon_type": "Bow",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 60, "cd": 120, "er": 120, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "wants", "dmg": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["golden-troupe"], "pieces": "4"},
+    {"sets": ["thundering-fury", "golden-troupe"], "pieces": "2+2"},
+    {"sets": ["thundersoother"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["polar-star", "alley-hunter", "the-stringless", "elegy-for-the-end", "skyward-harp", "aqua-simulacra", "prototype-crescent", "fading-twilight"],
+  "partners": ["Pyro", "Hydro", "Dendro", "Cryo"],
+  "partner_roles": ["damage", "support"],
+  "teams": [],
+  "notes": "Both sources: 4pc Golden Troupe, Polar Star, Electro DMG goblet, CRIT circlet, Oz off-field. They differ on sands (KQM ATK% or EM for Aggravate, Game8 the same) and on the goblet (KQM adds Physical DMG for an on-field build); the off-field build (Electro goblet) is used. Talent order: KQM Skill > Burst for off-field and Skill = Normal Attack > Burst on-field; Game8's order did not parse (six entries), so KQM's off-field order is used. Goals ATK 2,000, CRIT Rate 60, CRIT DMG 120 are Game8's; ER 120 is the middle of both sources' double-Electro range (KQM 110-130 on-field, Game8 110-130). Partners are the elements of the reactions Oz triggers (Overloaded, Electro-Charged, Aggravate, Superconduct); no team list in the sources.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/fischl-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297524", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/38", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

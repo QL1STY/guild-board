@@ -1,0 +1,1001 @@
+{
+  "checked_against": "7.1",
+  "note": "Guild Board's own additions to the public achievement list. A list update never changes this file; sessions with the builder do.",
+  "sources": [
+    "The stage descriptions in Paimon.moe's en.json at commit b3e7cf35bed91c21d66bdeaaff6b630372cd07c1",
+    "For the commission knowledge: the Genshin Impact Wiki (genshin-impact.fandom.com) and the guides each entry names, read on 2026-10-20"
+  ],
+  "counters": {
+    "81620": {"unit": "Lunar Arcana held at once", "targets": [1, 12, 22]},
+    "80193": {"unit": "levels", "targets": [10]},
+    "82055": {"unit": "kills", "unit_one": "kill", "targets": [1, 20, 50]},
+    "84510": {"unit": "signs found", "targets": [5]},
+    "84512": {"unit": "times finished", "targets": [5]},
+    "84526": {"unit": "signs ruined", "targets": [4]},
+    "84560": {"unit": "questions answered", "targets": [6]}
+  },
+  "not_in_order": [],
+  "wiki": {},
+  "commissions_checked": "2026-10-20",
+  "commissions": {
+    "84054": {
+      "parts": [
+        "Miracle Medicine, part one: bring Anthony a Dendro-Processed Berry",
+        "Miracle Medicine, part two: bring Anthony Thick Hydro Slime Condensate",
+        "Miracle Medicine, part three: bring Anthony a Wind-Caressed Aster",
+        "Recuperating From a Severe Illness, windmill version: find Anna and talk to Cyrus (the wiki says this unlocks the next commission)",
+        "Adventurer Exam: Battle Tactics: defeat the hilichurl group with Anna",
+        "Adventurer Exam: The Art of Adventure: photograph and pick Calla Lily, Small Lamp Grass and Cecilia (the wiki lists the world quest Snapshots as required)",
+        "Adventurer Exam: Taking Flight: answer Anna's three questions correctly, then show her a glider run",
+        "Anna the Adventurer! (first appearance): escort the transport balloon with Anna"
+      ],
+      "order": true,
+      "how": "Do the six-part chain in order: Miracle Medicine (three times), Recuperating From a Severe Illness, Adventurer Exam: Battle Tactics, Adventurer Exam: The Art of Adventure, Adventurer Exam: Taking Flight, then Anna the Adventurer!, whose first completion awards the achievement. In Taking Flight all three of Anna's questions must be answered correctly: 'One person per glider'; 'To select appropriate take-off points and to assume the correct take-off posture'; 'Select an appropriate landing spot, and do not fold your wind glider in abruptly'.",
+      "first": "Miracle Medicine (three times) and Recuperating From a Severe Illness in its windmill version with Cyrus spoken to; the world quest Snapshots (Liyue, Adventure Rank 25) before Adventurer Exam: The Art of Adventure.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Anna%27s_Adventures",
+        "https://genshin-impact.fandom.com/wiki/Anna_the_Adventurer!",
+        "https://genshin-impact.fandom.com/wiki/Adventurer_Exam:_Taking_Flight",
+        "https://genshin-impact.fandom.com/wiki/Adventurer_Exam:_The_Art_of_Adventure",
+        "https://genshin-impact.fandom.com/wiki/Adventurer_Exam:_Battle_Tactics",
+        "https://genshin-impact.fandom.com/wiki/Recuperating_From_a_Severe_Illness",
+        "https://genshin-impact.fandom.com/wiki/Miracle_Medicine",
+        "https://genshin-impact.fandom.com/wiki/Snapshots",
+        "https://wotpack.ru/en/prikljuchenija-anny-v-genshin-impact-prohozhdenie-vseh-poruchenij-dlja-poluchenija-dostizhenij/",
+        "https://game8.co/games/Genshin-Impact/archives/482223",
+        "https://game8.co/games/Genshin-Impact/archives/482222"
+      ],
+      "note": "The windmill-and-Cyrus condition and the Snapshots requirement come from the wiki; Game8 backs Snapshots and the Taking Flight to Anna the Adventurer! step. A wrong answer in Taking Flight still pays out but repeats the exam."
+    },
+    "84501": {
+      "order": false,
+      "how": "In Language Exchange, switch to walking and approach the one awake hilichurl so the others stay asleep, talk to it, then talk to Ella Musk. The exchange with the hilichurl has to succeed.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/...Odomu%3F",
+        "https://genshin-impact.fandom.com/wiki/Language_Exchange",
+        "https://www.sportskeeda.com/esports/genshin-impact-how-complete-language-exchange-commission-quest",
+        "https://gamewith.net/genshin-impact/article/show/24660",
+        "https://game8.co/games/Genshin-Impact/archives/328754"
+      ],
+      "note": "Sportskeeda says the fight ending after waking the camp gives no achievement. The wiki also lists a second dialogue version where Ella offends the hilichurl and a fight follows; no source says whether that counts."
+    },
+    "84502": {
+      "parts": [
+        "Language Exchange",
+        "Poetry Exchange: read the three correct lines"
+      ],
+      "order": true,
+      "how": "In Poetry Exchange, read these three lines to the hilichurl, in any order: 'Celi dada, Mimi nunu', 'Muhe ye' and 'Ye dada!'. Any other line angers the hilichurl and starts a fight, which still pays the commission rewards but gives no achievement.",
+      "first": "Language Exchange must be completed first; Poetry Exchange then appears and ignores the region setting.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Yo_dala%3F",
+        "https://genshin-impact.fandom.com/wiki/Poetry_Exchange",
+        "https://genshin-impact.fandom.com/wiki/Language_Exchange",
+        "https://gamewith.net/genshin-impact/article/show/24641",
+        "https://game8.co/games/Genshin-Impact/archives/482220"
+      ],
+      "note": "The two wiki pages differ on timing: Poetry Exchange comes 1 or 4 days after Language Exchange is assigned, or on day 4 after its good ending."
+    },
+    "84503": {
+      "order": false,
+      "how": "In Reliable Helper do each of Tsarevich's three jobs flawlessly once: at the foot of the mountains, kill the enemies and report back within 1 minute; on the mountainside, break none of the cargo crates (storms and stray attacks count); on the mountaintop, kill the Blazing Axe Mitachurl first, then the Wooden Shieldwall Mitachurl, then the Anemo Samachurl. Tsarevich pays 5,000 Mora for a flawless job and 1,000 Mora otherwise.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Perfectionist",
+        "https://genshin-impact.fandom.com/wiki/Reliable_Helper",
+        "https://progameguides.com/genshin-impact/how-to-get-the-perfectionist-achievement-in-genshin-impact/"
+      ],
+      "note": "The 1-minute timer starts when the dialogue with Tsarevich closes and no timer is shown on screen."
+    },
+    "84504": {
+      "order": false,
+      "how": "In Tales of Winter, ask Viktor about each of the three topics once, across at least three completions: the Fatui (bring Mitachurl loot), Delusions (bring Treasure Hoarder loot) and the Tsaritsa (bring Ruin Guard loot). Repeat options are still offered, so keep track of which you have used.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Telling_It_How_It_Is",
+        "https://genshin-impact.fandom.com/wiki/Tales_of_Winter",
+        "https://gamewith.net/genshin-impact/article/show/24668",
+        "https://progameguides.com/genshin-impact/all-mondstadt-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "The wiki marks the unlock condition for Tales of Winter as unconfirmed (possibly the Archon Quest Song of the Dragon and Freedom)."
+    },
+    "84512": {
+      "order": false,
+      "how": "Complete the commission Whispers in the Wind five times. Each time, give Glory three Dandelion Seeds, scatter them from the top of the Anemo Archon statue, and talk to Glory again.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/For_the_Love_of_Godwin",
+        "https://genshin-impact.fandom.com/wiki/Whispers_in_the_Wind",
+        "https://progameguides.com/genshin-impact/all-mondstadt-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "The wiki records an old bug, since fixed, where seeds taken from the inventory did not count; progress lost to it was not restored."
+    },
+    "84515": {
+      "parts": [
+        "Pigeon, Duck, and Child: after giving Timmie the wheat, kill at least one duck at the lake, then talk to the angry Timmie",
+        "Sorry, Timmie! (guaranteed the next day): bring 3 Philanemo Mushrooms to Grace, then give the Special Mondstadt Hash Brown to Timmie"
+      ],
+      "order": true,
+      "how": "Take the commission Pigeon, Duck, and Child and, after giving Timmie the wheat, kill at least one duck at the lake instead of feeding them. The next day Sorry, Timmie! is guaranteed; finish it by bringing three Philanemo Mushrooms to Grace and giving the hash brown she makes to Timmie.",
+      "first": "Pigeon, Duck, and Child, with at least one duck killed; this adds Sorry, Timmie! the next day.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Taking_Responsibility_for_Your_Actions",
+        "https://genshin-impact.fandom.com/wiki/Sorry,_Timmie!",
+        "https://genshin-impact.fandom.com/wiki/Pigeon,_Duck,_and_Child",
+        "https://xboxplay.games/genshin-impact/genshin-impact-how-to-get-the-sorry-timmie-achievement-24435",
+        "https://game8.co/games/Genshin-Impact/archives/482228",
+        "https://progameguides.com/genshin-impact/all-mondstadt-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "ProGameGuides says to kill all the ducks; the wiki says one is enough. The wiki adds that the mushrooms cannot be handed over in Co-Op Mode."
+    },
+    "84516": {
+      "order": false,
+      "how": "In The Limitations of an Adventurer, destroy the training dummy in the monster camp instead of digging it up, then bring the Materials for Training Dummy it drops to Herman.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Making_Do",
+        "https://genshin-impact.fandom.com/wiki/The_Limitations_of_an_Adventurer",
+        "https://www.hoyolab.com/article/69061",
+        "https://progameguides.com/genshin-impact/all-mondstadt-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "Astra's data matches the wiki and the HoYoLAB post; its only prerequisite is receiving the commission."
+    },
+    "84518": {
+      "parts": [
+        "Pigeons Go AWOL (hilichurl version): defeat the hilichurls, pick up Draff's Letter, report to Draff",
+        "A Boy's Letter: take the letter to Grace, check on Timmie, bring him three Dandelions, then take his letter to Draff"
+      ],
+      "order": true,
+      "how": "Get the hilichurl version of Pigeons Go AWOL, defeat the camp and pick up Draff's Letter, then report to Draff. When A Boy's Letter appears later, take the letter to Grace, bring Timmie three Dandelions, and give Timmie's letter to Draff.",
+      "first": "Pigeons Go AWOL, hilichurl version, with Draff's Letter found at the camp; this adds A Boy's Letter to the commission pool.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/%22Dear_Daddy...%22",
+        "https://genshin-impact.fandom.com/wiki/A_Boy%27s_Letter",
+        "https://genshin-impact.fandom.com/wiki/Pigeons_Go_AWOL",
+        "https://www.touchtapplay.com/how-to-get-a-dear-daddy-achievement-in-genshin-impact/"
+      ],
+      "note": "The wiki says the letter may not spawn even in the hilichurl version and that A Boy's Letter is not guaranteed for the next day; a 2021 TouchTapPlay guide says to check the next day."
+    },
+    "84519": {
+      "parts": [
+        "Miracle Medicine, part one: bring Anthony a Dendro-Processed Berry",
+        "Miracle Medicine, part two: bring Anthony Thick Hydro Slime Condensate, which comes from a Large Hydro Slime",
+        "Miracle Medicine, part three: bring Anthony a Wind-Caressed Aster",
+        "Recuperating From a Severe Illness: find Anna (any of its three versions), then talk to Anthony"
+      ],
+      "order": true,
+      "how": "Complete Miracle Medicine three times (one part per appearance), then complete Recuperating From a Severe Illness by finding Anna and talking to Anthony. The last commission awards the achievement.",
+      "first": "Miracle Medicine, all three parts, must be completed first; Recuperating From a Severe Illness is added afterwards.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Marvelous_Medicine",
+        "https://genshin-impact.fandom.com/wiki/Recuperating_From_a_Severe_Illness",
+        "https://genshin-impact.fandom.com/wiki/Miracle_Medicine",
+        "https://progameguides.com/genshin-impact/how-to-get-and-complete-the-recuperating-from-a-severe-illness-daily-commission-in-genshin-impact/",
+        "https://progameguides.com/genshin-impact/all-mondstadt-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "One ProGameGuides list ties the achievement to Miracle Medicine; the wiki and ProGameGuides' own page on Recuperating From a Severe Illness tie it to that last commission."
+    },
+    "84520": {
+      "order": true,
+      "how": "A Surprise Gift offers one more option each time it appears: Marjorie, then Quinn, Sara and finally Vile. Choose Vile's option when it is offered; it ends with a fight against Treasure Hoarders and can be done only once.",
+      "first": "Vile's option is offered from the fourth time A Surprise Gift appears; Marjorie, Quinn and Sara are offered on the first three.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/In_the_Name_of_Favonius",
+        "https://genshin-impact.fandom.com/wiki/A_Surprise_Gift",
+        "https://wotpack.ru/en/bolshoj-sjurpriz-v-genshin-impact-kak-projti-i-poluchit-dostizhenie/",
+        "https://progameguides.com/genshin-impact/all-mondstadt-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "The wiki says the earlier options need not be chosen to unlock Vile's; one guide (wotpack) says Marjorie, Quinn and Sara must all be done first. Doing them in that order covers both."
+    },
+    "84527": {
+      "order": false,
+      "how": "In Food Delivery, take the order from Sara at Good Hunter and eat the delivery dish, found under Quest Items in the inventory, instead of handing it in. Paimon objects and the commission resets; take a fresh order from Sara to finish it normally.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Get_Your_Own_Emergency_Food!",
+        "https://genshin-impact.fandom.com/wiki/Food_Delivery",
+        "https://www.hoyolab.com/article/1369352",
+        "https://www.hoyolab.com/article/109305",
+        "https://progameguides.com/genshin-impact/all-mondstadt-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "No source says whether it works in all three delivery versions (Lively Orlean, Springvale, Dawn Winery)."
+    },
+    "84055": {
+      "parts": [
+        "Growing Pains (Little Lulu, Liyue Harbor)",
+        "Ahoy! A Pirate's Growth for Ye! (Little Meng, Liyue Harbor)",
+        "Troubles Traveling Through Tributaries (Yue Chuan, Yaoguang Shoal)",
+        "The Little Pirate Goes Out to Sea (Little Meng, Liyue Harbor)"
+      ],
+      "order": true,
+      "how": "Finish The Little Pirate Goes Out to Sea (Little Meng, Liyue Harbor): teach him to cook and give him a Jueyun Chili, Sweet Flower or Slime Condensate. The first completion gives the achievement; it is the last step of a four-commission chain done over separate days.",
+      "first": "Growing Pains, then Ahoy! A Pirate's Growth for Ye!, then Troubles Traveling Through Tributaries",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/The_Little_Pirate_Goes_Out_to_Sea",
+        "https://genshin-impact.fandom.com/wiki/Troubles_Traveling_Through_Tributaries",
+        "https://genshin-impact.fandom.com/wiki/Ahoy!_A_Pirate's_Growth_for_Ye!",
+        "https://genshin-impact.fandom.com/wiki/Ahoy!_A_Pirate's_Growth_for_Ye!?action=history",
+        "https://genshin-impact.fandom.com/wiki/Growing_Pains",
+        "https://genshin-impact.fandom.com/wiki/Prelude_to_the_Journey",
+        "https://genshin-impact.fandom.com/wiki/Little_Meng",
+        "https://genshinimpact.wiki.fextralife.com/Troubles+Traveling+Through+Tributaries",
+        "https://wiki.biligame.com/ys/%E6%88%90%E9%95%BF%E7%9A%84%E7%83%A6%E6%81%BC",
+        "https://wiki.biligame.com/ys/%E5%93%8E%E5%91%80%EF%BC%81%E6%B5%B7%E7%9B%97%E6%83%B3%E9%95%BF%E5%A4%A7%EF%BC%81",
+        "https://wiki.biligame.com/ys/%E9%9A%8F%E6%B0%B4%E8%80%8C%E6%9D%A5%E7%9A%84%E7%83%A6%E6%81%BC",
+        "https://wiki.biligame.com/ys/%E5%B0%8F%E6%B5%B7%E7%9B%97%EF%BC%8C%E8%A6%81%E5%87%BA%E6%B5%B7%EF%BC%81"
+      ],
+      "note": "What unlocks Ahoy! is not firm: the Chinese wiki and an English wiki editor name Growing Pains, the English infobox also lists Pirate Invasion, in Liyue Harbor!, Fextralife lists none; the rest of the chain is agreed."
+    },
+    "84505": {
+      "order": false,
+      "how": "In Geo Travel Diary (Musheng, Liyue Harbor) give Musheng a Liyue item from a different group each time: a plant or ingredient, an ore, a dish, or Glaze Lily. Each group tells a different story, and hearing all four gives the achievement.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Geo_Travel_Diary",
+        "https://genshin-impact.fandom.com/wiki/Geo_Archon_Anecdotes",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E5%B2%A9%E6%B8%B8%E8%AE%B0"
+      ],
+      "note": "Glaze Lily is the only item for the fourth story; the wiki lists the valid items for the other three groups."
+    },
+    "84506": {
+      "order": false,
+      "how": "In Cliffhanger (Tea Master Liu Su, Liyue Harbor) ask the listeners for the story parts, then give Liu Su Ring of Raining Blades (I) in one appearance and Ring of Raining Blades (II) in another. Only one part can be given per appearance; the others stay in your inventory for later.",
+      "first": "World quest Snapshots",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Cliffhanger",
+        "https://genshin-impact.fandom.com/wiki/Friends,_Travelers,_Lend_Me_Your_Ears...",
+        "https://genshin-impact.fandom.com/wiki/Snapshots",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E4%B8%94%E5%90%AC%E4%B8%8B%E5%9B%9E%E5%88%86%E8%A7%A3"
+      ],
+      "note": "The wiki states no required order for parts (I) and (II); the Snapshots prerequisite is named only by the Chinese wiki."
+    },
+    "84507": {
+      "order": false,
+      "how": "In Cliffhanger, give Liu Su The Wrath of Haishan (from Fan Er'ye, in front of Mingxing Jewelry) at the report-back dialogue. Only one story part can be given per appearance.",
+      "first": "World quest Snapshots",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Cliffhanger",
+        "https://genshin-impact.fandom.com/wiki/Once_Upon_a_Time...",
+        "https://genshin-impact.fandom.com/wiki/Snapshots",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E4%B8%94%E5%90%AC%E4%B8%8B%E5%9B%9E%E5%88%86%E8%A7%A3"
+      ],
+      "note": "The Snapshots prerequisite is named only by the Chinese wiki; since version 3.5 all three listeners appear at once."
+    },
+    "84508": {
+      "order": false,
+      "how": "Each time Pirate Invasion, in Liyue Harbor! comes up, talk to the three children; one of three versions then starts at random (Little Meng: clean the deck with Anemo or Hydro; Little Lulu: find 2 Lotus Heads; Little Fei: follow him to the captain, then find Lotus Heads). Finish all three versions; a version can repeat before then.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Pirate_Invasion,_in_Liyue_Harbor!",
+        "https://genshin-impact.fandom.com/wiki/Pirates!_Argh!",
+        "https://sportskeeda.com/esports/how-get-pirates-argh-achievement-genshin-impact-achievement-bug-finally-fixed",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E7%92%83%E6%9C%88%E6%B8%AF%EF%BC%8C%E6%9C%89%E6%B5%B7%E7%9B%97"
+      ],
+      "note": "The version is random and shown only after talking to the children; no source names a prerequisite (Astra's 'receive it in your commissions' is not one)."
+    },
+    "84509": {
+      "parts": [
+        "Fishing Jiangxue (starts at Dihua Marsh)",
+        "Yanxiao's Dilemma (starts at Wangshu Inn)"
+      ],
+      "order": false,
+      "how": "Finish both commissions, in either order. In Fishing Jiangxue (Dihua Marsh) defeat the enemies; in Yanxiao's Dilemma (Wangshu Inn) find 1 Jueyun Chili and 1 Lotus Head and take the dish to Jiangxue.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Fishing_Jiangxue",
+        "https://genshin-impact.fandom.com/wiki/Yanxiao's_Dilemma",
+        "https://genshin-impact.fandom.com/wiki/A_Nourishing_Friendship",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E7%8B%AC%E9%92%93%E6%B1%9F%E9%9B%AA",
+        "https://wiki.biligame.com/ys/%E5%8B%BF%E8%A8%80%E5%8B%BF%E7%AC%91"
+      ],
+      "note": "No order is stated: each commission grants the achievement if the other was already done."
+    },
+    "84510": {
+      "order": false,
+      "how": "In each Good Sign, two of five signs show up at random: leave them alone (Granny Shan's busy stall, the pigeons, the dogs, the cat and fish, the dead leaves) and report each one to Zhihua with its dialogue option. All five must be reported, so it takes several appearances.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Good_Sign",
+        "https://genshin-impact.fandom.com/wiki/Love_Is_All_Around",
+        "https://www.sportskeeda.com/esports/genshin-impact-how-complete-good-sign-quest-get-love-around-achievement",
+        "https://wotpack.ru/horoshij-znak-v-genshin-impact-dostizhenija-ljubov-povsjudu-i-otkryto-dlja-interpretacii",
+        "https://wiki.biligame.com/ys/%E5%A5%BD%E5%85%86%E5%A4%B4",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "Scaring pigeons off without killing them still counts as leaving them alone; the wiki says at least 5 appearances are needed to get both Good Sign achievements, guides differ on the count for this one alone."
+    },
+    "84513": {
+      "parts": [
+        "Stairway to Wangshu, first appearance: bring wooden planks from outside the inn to Huai'an",
+        "Stairway to Wangshu, second appearance: bring the wooden planks the porter dropped to Huai'an"
+      ],
+      "order": true,
+      "how": "Do Stairway to Wangshu (Huai'an, Wangshu Inn) twice, fetching wooden planks for him each time (the second time the planks a porter dropped). The second completion gives the achievement, and the commission then stops appearing.",
+      "first": "World quest A Provisional Arrangement (started by talking to Zhen Qiang below Wangshu Inn)",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Stairway_to_Wangshu",
+        "https://genshin-impact.fandom.com/wiki/A_Provisional_Arrangement",
+        "https://genshin-impact.fandom.com/wiki/Level_Up",
+        "https://genshinimpact.wiki.fextralife.com/Stairway+to+Wangshu",
+        "https://wiki.biligame.com/ys/%E6%9C%9B%E8%88%92%E9%A1%BB%E7%AD%91%E9%98%B6",
+        "https://wiki.biligame.com/ys/%E6%9A%82%E8%A1%8C%E4%B9%8B%E7%AD%96"
+      ]
+    },
+    "84514": {
+      "order": false,
+      "how": "In Diamond in the Rough..., choose a Mora amount, then look inside the stones with the camera (they can change after you choose), and open the stone with the full Cor Lapis jade as your first stone. If the first stone is not that one, the achievement waits for the next appearance of the commission.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Diamond_in_the_Rough...",
+        "https://genshin-impact.fandom.com/wiki/Beginner's_Luck",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E7%82%B9%E7%9F%B3%E6%88%90%E2%80%A6%E4%BB%80%E4%B9%88"
+      ],
+      "note": "A top jade is not guaranteed to be on offer in a given appearance; the Chinese wiki's dialogue says at least 200 Mora is needed to play."
+    },
+    "84522": {
+      "parts": [
+        "The Lost Relic, Box of Gadgets version (rescue Soraya)",
+        "A Little Raid (Soraya, Wangshu Inn)"
+      ],
+      "order": true,
+      "how": "In The Lost Relic (Guili Plains) you need the Box of Gadgets version, where you rescue Soraya; it unlocks A Little Raid (Soraya, Wangshu Inn), and finishing that gives the achievement. The Heavy Box and Dropped Package versions do not unlock it.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/The_Lost_Relic",
+        "https://genshin-impact.fandom.com/wiki/A_Little_Raid",
+        "https://genshin-impact.fandom.com/wiki/Scholarly_Pretensions",
+        "https://wiki.biligame.com/ys/%E3%80%8C%E9%81%97%E8%90%BD%E3%80%8D%E7%9A%84%E6%96%87%E7%89%A9",
+        "https://wiki.biligame.com/ys/%E3%80%8C%E5%A4%BA%E5%AE%9D%E3%80%8D%E5%B0%8F%E8%A1%8C%E5%8A%A8"
+      ],
+      "note": "Only the Chinese wiki adds that the rescue version is forced on the fifth day after the other two versions have been done 3 times in total (exact counting unclear)."
+    },
+    "84523": {
+      "parts": [
+        "One Ship, Two Ships, Three Ships...: give Linling a wrong number of ships",
+        "So-Called Work: finish it when it appears on a later day"
+      ],
+      "order": true,
+      "how": "In One Ship, Two Ships, Three Ships... (Linling, Liyue Harbor) give Linling a wrong ship count; the right count is what the three children's notes add up to. That unlocks So-Called Work, an emergency commission that can appear even when your commission region is not Liyue; finish it.",
+      "first": "One Ship, Two Ships, Three Ships... answered with a wrong ship count",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/So-Called_Work",
+        "https://genshin-impact.fandom.com/wiki/One_Ship,_Two_Ships,_Three_Ships...",
+        "https://genshin-impact.fandom.com/wiki/Poet_Vs._Paycheck",
+        "https://genshin-impact.fandom.com/wiki/So-Called_Work?action=history",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E6%89%80%E8%B0%93%E3%80%8C%E5%B7%A5%E4%BD%9C%E3%80%8D",
+        "https://wiki.biligame.com/ys/%E6%B8%AF%E5%8F%A3%E9%A9%B6%E8%BF%87%E5%87%A0%E8%89%98%E8%88%B9%EF%BC%8C%E4%BA%8C%E5%9B%9B%E5%85%AD%E4%B8%83%E5%85%AB"
+      ],
+      "note": "Timing is not fixed: the Chinese wiki says So-Called Work comes the next day, an English wiki editor reported nearly two months."
+    },
+    "84524": {
+      "parts": [
+        "This Novel Is Amazing!, completed three times in total",
+        "World quests The Chi of Yore, Book in the Woods and Will of Stone",
+        "For Old Time's Sake (Qingce Village)"
+      ],
+      "order": true,
+      "how": "Finish For Old Time's Sake in Qingce Village: talk to Granny Ruoxin, find Chang the Ninth, defeat the enemies around him, gather the 3 pages, give them to Chang and report back to Granny Ruoxin. It only appears once its prerequisites are done.",
+      "first": "This Novel Is Amazing! completed three times, and the world quests The Chi of Yore, Book in the Woods and Will of Stone",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/For_Old_Time's_Sake",
+        "https://genshin-impact.fandom.com/wiki/This_Novel_Is_Amazing!",
+        "https://genshin-impact.fandom.com/wiki/All's_Well_That_Ends_Well",
+        "https://genshin-impact.fandom.com/wiki/Will_of_Stone",
+        "https://genshin-impact.fandom.com/wiki/The_Chi_of_Yore",
+        "https://genshin-impact.fandom.com/wiki/Book_in_the_Woods",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E4%B9%85%E4%B9%85%E6%9C%9B%E6%95%85%E4%BA%BA"
+      ],
+      "note": "The prerequisite list is on the English wiki and the Chinese wiki only; how many times the player already did This Novel Is Amazing! is unknown."
+    },
+    "84525": {
+      "order": false,
+      "how": "In This Novel Is Amazing! (Chang the Ninth, Qingce Village) choose to take a quick peek at the book when Paimon offers, at the Feiyun Commerce Guild before handing it to Xu. In co-op, only the host gets the achievement.",
+      "first": "Xingqiu's story quest Fabulae Textile Chapter, Act I: Bookworm Swordsman",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/This_Novel_Is_Amazing!",
+        "https://genshin-impact.fandom.com/wiki/This_Novel_Is_Amazing!_(Achievement)",
+        "https://genshin-impact.fandom.com/wiki/Bookworm_Swordsman",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/",
+        "https://wiki.biligame.com/ys/%E8%BF%99%E6%9C%AC%E5%B0%8F%E8%AF%B4%E7%9C%9F%E5%8E%89%E5%AE%B3"
+      ],
+      "note": "Only the Chinese wiki names the Bookworm Swordsman story quest as a prerequisite; the English wiki also says this commission must be done 3 times to unlock For Old Time's Sake."
+    },
+    "84526": {
+      "order": false,
+      "how": "In Good Sign, ruin the signs instead of leaving them alone: attack the pigeons, scare the dogs away, harvest or kill the fish or the cat, and burn or blow away the dead leaves (after Paimon's remark about them), then report each one to Zhihua. Each appearance has two random signs, so it takes several appearances.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Good_Sign",
+        "https://genshin-impact.fandom.com/wiki/Open_to_Interpretation",
+        "https://www.sportskeeda.com/esports/genshin-impact-how-complete-good-sign-quest-get-love-around-achievement",
+        "https://wotpack.ru/horoshij-znak-v-genshin-impact-dostizhenija-ljubov-povsjudu-i-otkryto-dlja-interpretacii",
+        "https://wiki.biligame.com/ys/%E5%A5%BD%E5%85%86%E5%A4%B4",
+        "https://progameguides.com/genshin-impact/all-liyue-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "Sources word the cat and fish sign differently (dialogue: harvest or kill the fish or the cat; wiki notes: kill the fish and/or scare the cat); Granny Shan's sign cannot be ruined."
+    },
+    "84564": {
+      "region": "liyue",
+      "quests": [
+        "Where Is the Unseen Razor?"
+      ],
+      "parts": [
+        "Where Is the Unseen Razor?, Ruin Hunter version: defeat the Ruin Hunter in Guili Plains",
+        "Where Is the Unseen Razor?, follow-up version: defeat the enemies, find the Hilt-Like Object, give it to Lan"
+      ],
+      "order": true,
+      "how": "In the follow-up version of Where Is the Unseen Razor?, defeat the enemies Lan sends you to, search the camp for the Hilt-Like Object and give it to Lan. This version only appears after the Ruin Hunter version has been done.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Swordseeker",
+        "https://genshin-impact.fandom.com/wiki/Where_Is_the_Unseen_Razor%3F",
+        "https://wotpack.ru/en/gde-zhe-skrytyj-klinok-v-genshin-impact-kak-nachat-i-projti-poruchenie/",
+        "https://wiki.biligame.com/ys/%E8%AF%95%E9%97%AE%EF%BC%8C%E8%97%8F%E9%94%8B%E4%BD%95%E5%A4%84%EF%BC%9F"
+      ],
+      "note": "The wiki also lists a stonewall mitachurls version and a hilichurl archers version but names only the Ruin Hunter version as required; a later Chasm version is not needed."
+    },
+    "84565": {
+      "region": "liyue",
+      "quests": [
+        "The Sparrow Studies the Blade",
+        "The Day the Sword Departs"
+      ],
+      "parts": [
+        "The Sparrow Studies the Blade, 3 times",
+        "The Day the Sword Departs, first encounter: defeat the monsters with Sun Yu",
+        "The Day the Sword Departs, days of training, 4 times (two monster fights and two cross-country runs, per the Miyoushe guide)",
+        "The Day the Sword Departs, day 1 of departure: bring Sun Yu a box of soil",
+        "The Day the Sword Departs, day 2 of departure: take a photo of Sun Yu"
+      ],
+      "order": true,
+      "how": "Finish every stage of the Sun Yu series The Day the Sword Departs. The last stage asks you to take a photo of Sun Yu.",
+      "first": "Hiromi's Watch (an Inazuma world quest)",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/To_Walk_The_Horizon...%3F",
+        "https://genshin-impact.fandom.com/wiki/The_Day_the_Sword_Departs",
+        "https://genshin-impact.fandom.com/wiki/The_Sparrow_Studies_the_Blade",
+        "https://genshin-impact.fandom.com/wiki/Hiromi's_Watch",
+        "https://wiki.biligame.com/ys/%E5%89%91%E5%8E%BB%E4%B9%8B%E6%97%A5",
+        "https://wiki.biligame.com/ys/%E9%A3%9E%E9%9B%80%E6%89%B0%E5%89%91%E6%84%8F",
+        "https://news.17173.com/z/ys/content/08212025/104857575.shtml",
+        "https://www.taptap.cn/moment/356518998088614798"
+      ],
+      "note": "The English wiki gives no count for the training days; the Chinese wiki says 4 and a Miyoushe guide says 2 plus 2, while an early 3.3 TapTap guide said the Sparrow commission once and each training option once. Some guides call the series The Day of the Hidden Sword."
+    },
+    "84528": {
+      "parts": [
+        "Bantan Sango Case File (once)",
+        "Bantan Sango Case File: The Search, three times",
+        "Bantan Sango Case File: The Right Identity",
+        "Bantan Sango Case File: Misdirection, three times",
+        "Bantan Sango Case File: Case-Closing Time"
+      ],
+      "order": true,
+      "how": "In Case-Closing Time, talk to Sango, go to the spot she names, defeat all the Treasure Hoarders there with Ryuuji, then talk to Sango again. There are no choices to make; finishing the commission grants the achievement.",
+      "first": "Bantan Sango Case File: Misdirection, completed three times.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Hidden_in_Plain_Sight",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_The_Search",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_The_Right_Identity",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_Misdirection",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_Case-Closing_Time",
+        "https://wiki.biligame.com/ys/%E4%B8%87%E7%AB%AF%E7%8F%8A%E7%91%9A%E4%BA%8B%E4%BB%B6%E7%B0%BF%C2%B7%E6%90%9C%E7%B4%A2%E5%B7%A5%E4%BD%9C",
+        "https://wiki.biligame.com/ys/%E4%B8%87%E7%AB%AF%E7%8F%8A%E7%91%9A%E4%BA%8B%E4%BB%B6%E7%B0%BF%C2%B7%E8%BF%B7%E6%83%91%E8%A1%8C%E5%8A%A8",
+        "https://wiki.biligame.com/ys/%E4%B8%87%E7%AB%AF%E7%8F%8A%E7%91%9A%E4%BA%8B%E4%BB%B6%E7%B0%BF%C2%B7%E7%BB%93%E6%A1%88%E6%97%B6%E5%88%BB",
+        "https://game8.co/games/Genshin-Impact/archives/482134",
+        "https://game8.co/games/Genshin-Impact/archives/482120",
+        "https://game8.co/games/Genshin-Impact/archives/482119",
+        "https://game8.co/games/Genshin-Impact/archives/482121",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "The three-times counts for The Search and Misdirection come from the English wiki and BWIKI; Game8 and 3DM give the order but no counts."
+    },
+    "84529": {
+      "parts": [
+        "Bantan Sango Case File (once)",
+        "Bantan Sango Case File: The Search, three times",
+        "Bantan Sango Case File: The Right Identity",
+        "Bantan Sango Case File: Misdirection, three times",
+        "Bantan Sango Case File: Case-Closing Time",
+        "Bantan Sango Case File: Cleanup Work"
+      ],
+      "order": true,
+      "how": "In Cleanup Work, take Ryuuji's desserts to Amano and Andou and to Owada, follow Owada and hear him out, then talk to Ryuuji again. There are no choices to make; finishing the commission grants the achievement.",
+      "first": "Bantan Sango Case File: Case-Closing Time, completed first.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Is_There_But_One_Truth...%3F",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_Cleanup_Work",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_Case-Closing_Time",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_Misdirection",
+        "https://genshin-impact.fandom.com/wiki/Bantan_Sango_Case_File:_The_Search",
+        "https://wiki.biligame.com/ys/%E4%B8%87%E7%AB%AF%E7%8F%8A%E7%91%9A%E4%BA%8B%E4%BB%B6%E7%B0%BF%C2%B7%E6%94%B6%E5%B0%BE%E5%B7%A5%E4%BD%9C",
+        "https://wiki.biligame.com/ys/%E4%B8%87%E7%AB%AF%E7%8F%8A%E7%91%9A%E4%BA%8B%E4%BB%B6%E7%B0%BF%C2%B7%E7%BB%93%E6%A1%88%E6%97%B6%E5%88%BB",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://game8.co/games/Genshin-Impact/archives/482122"
+      ],
+      "note": "Chain order is confirmed by the English wiki, BWIKI and Game8; the three-times counts come from the English wiki and BWIKI only."
+    },
+    "84530": {
+      "parts": [
+        "The Taste of Home: give Tang Wen a Suspicious dish",
+        "Absolutely Unique Delicacy: give Tang Wen the Delicious dish you picked"
+      ],
+      "order": true,
+      "how": "In The Taste of Home, hand Tang Wen a Suspicious-quality dish. When Absolutely Unique Delicacy appears, ask Li Xiao and Qiuyue, pick one of Jueyun Guoba, Bamboo Shoot Soup or Grilled Tiger Fish, and give Tang Wen the Delicious version of the dish you picked.",
+      "first": "The Taste of Home, finished by giving Tang Wen a Suspicious dish.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Liyue_Ichiban",
+        "https://genshin-impact.fandom.com/wiki/Absolutely_Unique_Delicacy",
+        "https://genshin-impact.fandom.com/wiki/The_Taste_of_Home",
+        "https://wiki.biligame.com/ys/%E5%AE%B6%E4%B9%A1%E4%B9%8B%E5%91%B3",
+        "https://wiki.biligame.com/ys/%E7%BB%9D%E5%AF%B9%E7%8B%AC%E7%89%B9%E7%9A%84%E7%BE%8E%E9%A3%9F",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://traveler.gg/liyue-ichiban/",
+        "https://sportskeeda.com/esports/the-taste-home-genshin-impact-quest-guide-hidden-achievement",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "Game8 lists no prerequisite for Absolutely Unique Delicacy; the wiki, BWIKI, traveler.gg and Sportskeeda all tie it to a Suspicious dish in The Taste of Home. It can appear from the next day, with no fixed delay."
+    },
+    "84531": {
+      "order": false,
+      "how": "In Breakthrough Thinking, talk to Xudong, then to Chef Mao at Wanmin Restaurant, but do not give Chef Mao the Jueyun Chili and Fowl. Talk to Xiangling near the waypoint southwest of Qingce Village instead, then take her notes back to Xudong.",
+      "first": "The Gourmet Supremos: On the Road (world quest), completed first.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Boom_Shaka-Laka,_More_Boom-Shaka-Laka",
+        "https://genshin-impact.fandom.com/wiki/The_Gourmet_Supremos:_Breakthrough_Thinking",
+        "https://genshin-impact.fandom.com/wiki/The_Gourmet_Supremos",
+        "https://genshin-impact.fandom.com/wiki/The_Gourmet_Supremos:_On_the_Road",
+        "https://wiki.biligame.com/ys/%E5%85%A8%E8%83%BD%E7%BE%8E%E9%A3%9F%E9%98%9F%C2%B7%E7%AA%81%E7%A0%B4%E6%80%A7%E6%80%9D%E7%BB%B4",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://gamewith.net/genshin-impact/article/show/29656",
+        "https://game8.co/games/Genshin-Impact/archives/338990",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "The wiki says Xiangling stays reachable until you talk to Xudong again after getting Chef Mao's dish; GameWith and BWIKI say handing Chef Mao the ingredients closes the Xiangling route, so avoid it."
+    },
+    "84532": {
+      "order": false,
+      "how": "In Cook-Off in Chinju Forest, make Xudong finish his dish first in one appearance and Kamei Munehisa finish first in another. Backing Xudong means turning up the heat and bringing him 3 Fresh Snapdragons; backing Kamei Munehisa means turning down the heat and bringing him 2 Fresh Bird Eggs.",
+      "first": "The Gourmet Supremos: The Importance of Eating Well (world quest), completed first.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Meal_For_Two",
+        "https://genshin-impact.fandom.com/wiki/The_Gourmet_Supremos:_Cook-Off",
+        "https://gamewith.net/genshin-impact/article/show/29679",
+        "https://game8.co/games/Genshin-Impact/archives/345390",
+        "https://wiki.biligame.com/ys/%E5%85%A8%E8%83%BD%E7%BE%8E%E9%A3%9F%E9%98%9F%C2%B7%E7%83%B9%E9%A5%AA%E5%AF%B9%E5%86%B3",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "The English wiki counts whoever finishes first, even if you backed the other cook; GameWith, Game8 and BWIKI say to help each cook win once. BWIKI also says Cook-Off appears only after A Question of Diet is earned; the English wiki and Game8 do not say that. Astra's 'help the cook still missing' agrees with this."
+    },
+    "84533": {
+      "order": false,
+      "how": "Talk to Parvaneh near the Adventurers' Guild in Inazuma City and answer every question correctly: Bamboo Shoot Soup is Bamboo Shoots, Black-Back Perch Stew is Salt, Northern Apple Stew is Pepper, Tianshu Meat is Qingxin, and Tri-Flavored Skewer is Bird Eggs. She asks three of these five.",
+      "first": "The Gourmet Supremos: The Importance of Eating Well (world quest), completed first.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/A_Question_of_Diet",
+        "https://genshin-impact.fandom.com/wiki/The_Gourmet_Supremos:_Foodie_Quiz",
+        "https://gamewith.net/genshin-impact/article/show/30756",
+        "https://game8.co/games/Genshin-Impact/archives/482144",
+        "https://wiki.biligame.com/ys/%E5%85%A8%E8%83%BD%E7%BE%8E%E9%A3%9F%E9%98%9F%C2%B7%E7%BE%8E%E9%A3%9F%E5%B0%8F%E9%97%AE%E7%AD%94",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "The English wiki says three correct answers in one visit are enough (repeats allowed); BWIKI says all five questions must have been answered correctly at least once. Knowing all five answers covers both."
+    },
+    "84534": {
+      "order": false,
+      "how": "In Extreme Cookery, follow Kamei Munehisa in Chinju Forest, clear one camp, pick up the ingredient there and bring it to him at the other camp. Take the left camp in one appearance and the right camp in another.",
+      "first": "The Gourmet Supremos: The Importance of Eating Well (world quest), completed first.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Samurice",
+        "https://genshin-impact.fandom.com/wiki/The_Gourmet_Supremos:_Extreme_Cookery",
+        "https://game8.co/games/Genshin-Impact/archives/482143",
+        "https://wiki.biligame.com/ys/%E5%85%A8%E8%83%BD%E7%BE%8E%E9%A3%9F%E9%98%9F%C2%B7%E5%8E%A8%E9%81%93%E7%9A%84%E6%9E%81%E6%84%8F",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "BWIKI says Extreme Cookery appears only after A Question of Diet is earned; the English wiki and Game8 say The Importance of Eating Well is enough."
+    },
+    "84535": {
+      "parts": [
+        "Inazuma Sales Specialist: give Konda Densuke a fertilizer order that differs from Vahid's",
+        "Post-Sale Service: pull out all 10 Fresh Mushrooms and give them to Konda Densuke"
+      ],
+      "order": true,
+      "how": "In Inazuma Sales Specialist, tell Konda Densuke a fertilizer order that differs from the one Vahid gave you. In Post-Sale Service, pull out all 10 Fresh Mushrooms and give all 10 to Konda Densuke; the commission can be handed in after 5, but only 10 give the achievement.",
+      "first": "The world quest In Another Land (it opens Inazuma Sales Specialist), then a wrong fertilizer order in Inazuma Sales Specialist.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/%22Sorry_for_the_Trouble!%22",
+        "https://genshin-impact.fandom.com/wiki/Post-Sale_Service",
+        "https://genshin-impact.fandom.com/wiki/Inazuma_Sales_Specialist",
+        "https://genshin-impact.fandom.com/wiki/In_Another_Land",
+        "https://wiki.biligame.com/ys/%E7%A8%BB%E5%A6%BB%E9%94%80%E5%94%AE%E5%91%98",
+        "https://wiki.biligame.com/ys/%E5%94%AE%E5%90%8E%E6%9C%8D%E5%8A%A1",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://sportskeeda.com/esports/how-get-inazuma-sales-specialist-commission-achievement-genshin-impact",
+        "https://www.ginx.tv/en/how-to-complete-sorry-for-the-trouble-achievement-in-genshin-impact",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "The wiki says A Strange Story in Konda and The Farmer's Treasure may also be needed before Inazuma Sales Specialist appears; BWIKI names only In Another Land."
+    },
+    "84538": {
+      "parts": [
+        "Back Shigeru at least twice in a round of three Is This Novel Amazing? runs, then complete This Novel... Seems Familiar? (find three light novels at Yae Publishing House and show Shigeru Literature Club)",
+        "Back Junkichi at least twice in a round of three Is This Novel Amazing? runs, then complete This Novel Seems... Problematic? (ask Yuzu, Hasegawa and Rie, then report to Shigeru)"
+      ],
+      "order": false,
+      "how": "Complete both This Novel... Seems Familiar? and This Novel Seems... Problematic?, in either order. Familiar? appears after a round of three Is This Novel Amazing? runs in which you backed Shigeru ('Actually, Shigeru sounds more reasonable...') at least twice; Problematic? appears after a round in which you backed Junkichi ('Actually, Junkichi's idea isn't bad...') at least twice.",
+      "first": "Is This Novel Amazing? (no prerequisite), done in rounds of three.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Editorial_Opinion",
+        "https://genshin-impact.fandom.com/wiki/Is_This_Novel_Amazing%3F",
+        "https://genshin-impact.fandom.com/wiki/This_Novel..._Seems_Familiar%3F",
+        "https://genshin-impact.fandom.com/wiki/This_Novel_Seems..._Problematic%3F",
+        "https://wiki.biligame.com/ys/%E8%BF%99%E6%9C%AC%E5%B0%8F%E8%AF%B4%E2%80%A6%E5%8E%89%E5%AE%B3%E5%90%97%EF%BC%9F",
+        "https://wiki.biligame.com/ys/%E8%BF%99%E6%9C%AC%E5%B0%8F%E8%AF%B4%E2%80%A6%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%9F",
+        "https://wiki.biligame.com/ys/%E8%BF%99%E6%9C%AC%E5%B0%8F%E8%AF%B4%E2%80%A6%E5%A5%BD%E5%83%8F%E7%9C%8B%E8%BF%87%EF%BC%9F",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://gamewith.net/genshin-impact/article/show/29787",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "Is This Novel Amazing? stops appearing after a round until one follow-up is done; neither wiki states outright that the backed-side count restarts for the second round."
+    },
+    "84539": {
+      "parts": [
+        "An Art to Be Honed, first training",
+        "An Art to Be Honed, second training",
+        "An Art to Be Honed, third training",
+        "An Art to Be Honed, fourth training (opens Battle of Revenge)",
+        "Battle of Revenge (hidden world quest with Asakura; BWIKI places it west of the Tenshukaku in Inazuma City)",
+        "Ceaseless Training, once"
+      ],
+      "order": true,
+      "how": "Train with Asakura in An Art to Be Honed four times, finish the hidden world quest Battle of Revenge that opens after the fourth, then finish Ceaseless Training once. That makes five trainings; Battle of Revenge shows on neither the map nor the quest log.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/You_Should_Start_A_Doushin_Dojo",
+        "https://genshin-impact.fandom.com/wiki/An_Art_to_Be_Honed",
+        "https://genshin-impact.fandom.com/wiki/Ceaseless_Training",
+        "https://genshin-impact.fandom.com/wiki/Battle_of_Revenge",
+        "https://wiki.biligame.com/ys/%E5%BF%85%E9%A1%BB%E7%B2%BE%E8%BF%9B%E7%9A%84%E6%AD%A6%E8%89%BA",
+        "https://wiki.biligame.com/ys/%E6%B0%B8%E4%B8%8D%E5%81%9C%E6%AD%87%E7%9A%84%E4%BF%AE%E7%82%BC",
+        "https://wiki.biligame.com/ys/%E6%B4%97%E5%88%B7%E8%80%BB%E8%BE%B1%E7%9A%84%E4%B8%80%E6%88%98",
+        "https://wiki.biligame.com/ys/%E5%A4%A9%E5%9C%B0%E4%B8%87%E8%B1%A1",
+        "https://game8.co/games/Genshin-Impact/archives/482137",
+        "https://gurugamer.com/mobile-games/top-5-genshin-daily-commissions-with-hidden-achievements-19496/amp",
+        "https://ol.3dmgame.com/gl/164359.html"
+      ],
+      "note": "A 3DM guide says both opening dialogue lines of An Art to Be Honed must be picked once; neither wiki lists such a rule."
+    },
+    "84543": {
+      "order": false,
+      "how": "Complete Supreme Hookshot? three times, in any versions; after the next daily reset the world quest Cost-Effective Hook appears at Port Ormos, and completing it earns the achievement.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Aha!_What%27s_on_the_Hook%3F",
+        "https://genshin-impact.fandom.com/wiki/Supreme_Hookshot%3F",
+        "https://genshin-impact.fandom.com/wiki/Cost-Effective_Hook",
+        "https://progameguides.com/genshin-impact/genshin-impact-cost-effective-hook-world-quest-guide/",
+        "https://gamewith.net/genshin-impact/article/show/34892",
+        "https://www.sportskeeda.com/esports/how-unlock-cost-effective-hook-world-quest-genshin-impact"
+      ],
+      "note": "The wiki types this achievement as a Quest, not a Commission, and leaves it out of its list of Sumeru commission achievements. The list's three parts are the commission's versions; the wiki and ProGameGuides say three runs of any version count, so they need not be different."
+    },
+    "84544": {
+      "order": false,
+      "how": "The first version of the commission asks you to hand Hatim any one dish (Mora Meat, Butter Chicken or Pile 'Em Up); the next appearance is a follow-up drawn at random, and the Fortune version, where Hatim treats you at Lambad's Tavern, earns this achievement.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Kalimi%27s_Fungus",
+        "https://genshin-impact.fandom.com/wiki/Gold_Devouring_and_Mora_Gathering",
+        "https://www.hoyolab.com/article/17571409",
+        "https://www.sportskeeda.com/esports/3-hidden-commission-quests-look-genshin-impact-sumeru-update",
+        "https://attackofthefanboy.com/guides/all-sumeru-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "The list's three parts are only the dishes of the first version; the wiki says the dish and its quality do not change the follow-up, which is random (one guide only guesses that a delicious dish helps)."
+    },
+    "84545": {
+      "order": false,
+      "how": "The first version of the commission asks you to hand Hatim any one dish (Mora Meat, Butter Chicken or Pile 'Em Up); the next appearance is a follow-up drawn at random, and in the Bargain-Hunting version you hand Hatim an Apple Cider, which earns this achievement. Charles at Angel's Share in Mondstadt sells Apple Cider.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/When_Wealth_Comes_A-Knockin%27",
+        "https://genshin-impact.fandom.com/wiki/Gold_Devouring_and_Mora_Gathering",
+        "https://genshin-impact.fandom.com/wiki/Apple_Cider",
+        "https://www.hoyolab.com/article/17571409",
+        "https://www.sportskeeda.com/esports/3-hidden-commission-quests-look-genshin-impact-sumeru-update",
+        "https://attackofthefanboy.com/guides/all-sumeru-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "The list's three parts are only the dishes of the first version; the wiki says the dish does not change the follow-up, which is random. Both Hatim achievements come from the same commission."
+    },
+    "84546": {
+      "order": false,
+      "how": "Find the cat Sareh sends you for (Lale, Nargis or Rozan) near Port Ormos and answer it with the meow that matches the call on Sareh's Note, so it comes along. Each of the three cats has to be caught once.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Catch_Me-ow_if_You_Can!",
+        "https://genshin-impact.fandom.com/wiki/Meow..._Meow_meow%3F_Meow!_Meow.",
+        "https://www.hoyolab.com/article/17571409",
+        "https://attackofthefanboy.com/guides/all-sumeru-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "Each cat waits at one of five random spots and the cats cannot be found in Co-Op Mode (wiki); the HoYoLAB guide says the achievement counts when the cat is caught, even before the commission is handed in."
+    },
+    "84547": {
+      "region": "sumeru",
+      "quests": [
+        "Garcia's Paean: Key Items",
+        "Garcia's Paean: Substitutes",
+        "Garcia's Paean: By Bearings",
+        "Garcia's Paean: Easy Peasy",
+        "Garcia's Paean: the Echo of Someone"
+      ],
+      "parts": [
+        "Garcia's Paean: Key Items, at least 3 times",
+        "Garcia's Paean: Substitutes, at least 3 times",
+        "Garcia's Paean: By Bearings",
+        "Garcia's Paean: Easy Peasy, 4 times, answering 'remember to add more fuel' and then 'hammer it in the middle and work your way out to the edges'",
+        "Garcia's Paean: the Echo of Someone, 3 times"
+      ],
+      "order": true,
+      "how": "Finish Garcia's Paean: the Echo of Someone three times by giving Garcia insignias; the insignia type does not matter for the achievement. It only appears after the earlier Garcia's Paean commissions.",
+      "first": "Garcia's Paean (a world quest at Wangshu Inn in Liyue)",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Principia_Arithmetica",
+        "https://genshin-impact.fandom.com/wiki/Garcia's_Paean:_the_Echo_of_Someone",
+        "https://genshin-impact.fandom.com/wiki/Garcia's_Paean:_Easy_Peasy",
+        "https://genshin-impact.fandom.com/wiki/Garcia's_Paean:_By_Bearings",
+        "https://genshin-impact.fandom.com/wiki/Garcia's_Paean:_Key_Items",
+        "https://genshin-impact.fandom.com/wiki/Garcia's_Paean:_Substitutes",
+        "https://genshin-impact.fandom.com/wiki/Garcia's_Paean",
+        "https://www.sportskeeda.com/esports/genshin-impact-garcia-s-paean-easy-peasy-guide-correct-answers-unlock-next-commission",
+        "https://sportskeeda.com/esports/rarest-genshin-impact-achievements-watch-sumeru-daily-commissions",
+        "https://wiki.biligame.com/ys/%E5%8A%A0%E5%B0%94%E6%81%B0%E7%9A%84%E8%B5%9E%E6%AD%8C%C2%B7%E6%9F%90%E4%BA%BA%E7%9A%84%E5%9B%9E%E5%93%8D",
+        "https://wiki.biligame.com/ys/%E5%8A%A0%E5%B0%94%E6%81%B0%E7%9A%84%E8%B5%9E%E6%AD%8C%C2%B7%E4%B8%BE%E6%89%8B%E4%B9%8B%E5%8A%B3",
+        "https://wiki.biligame.com/ys/%E5%8A%A0%E5%B0%94%E6%81%B0%E7%9A%84%E8%B5%9E%E6%AD%8C%C2%B7%E8%BD%B4%E6%89%BF%E5%9C%A8%E4%B8%8A",
+        "https://wiki.biligame.com/ys/%E5%8A%A0%E5%B0%94%E6%81%B0%E7%9A%84%E8%B5%9E%E6%AD%8C%C2%B7%E5%85%B3%E9%94%AE%E7%89%A9%E5%93%81",
+        "https://wiki.biligame.com/ys/%E5%8A%A0%E5%B0%94%E6%81%B0%E7%9A%84%E8%B5%9E%E6%AD%8C%C2%B7%E6%9B%BF%E4%BB%A3%E7%89%A9"
+      ],
+      "note": "The Chinese wiki only says Easy Peasy needs 4 completions; Sportskeeda says to give different insignia types in Substitutes, while the wiki says it is unclear whether the type matters there."
+    },
+    "84548": {
+      "order": false,
+      "how": "Pick more than five Freshly-Picked Mushrooms (at least six) at the farm and hand the extra ones to Hanbei too, choosing 'I gathered some extra mushrooms'.",
+      "first": "complete the Inazuma world quest Tatara Tales: The Last Act",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/%22It%27s_My_Job.%22",
+        "https://genshin-impact.fandom.com/wiki/Attach%C3%A9_in_Another_Land",
+        "https://genshin-impact.fandom.com/wiki/Tatara_Tales:_The_Last_Act",
+        "https://progameguides.com/genshin-impact/how-to-get-the-its-my-job-sumeru-hidden-achievement-in-genshin-impact/",
+        "https://www.hoyolab.com/article/17571409",
+        "https://attackofthefanboy.com/guides/all-sumeru-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "Exactly five mushrooms finish the commission but give no achievement; the prerequisite quest is named by the wiki and ProGameGuides."
+    },
+    "84549": {
+      "order": false,
+      "how": "After giving each patient their medicine, do one extra favour before reporting to Zakariya: clear all the weeds in Gurgen's field and talk to him, give Azra 1 Sugar, or give Aftab 1 Delicious Steak (a Steak of delicious quality). Each of the three favours is needed once.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Relaxation_Therapy",
+        "https://genshin-impact.fandom.com/wiki/Doctor%27s_Orders",
+        "https://genshin-impact.fandom.com/wiki/Steak",
+        "https://www.sportskeeda.com/esports/genshin-impact-doctor-s-orders-commission-hidden-achievement-guide",
+        "https://www.hoyolab.com/article/17571409"
+      ]
+    },
+    "84550": {
+      "parts": [
+        "The Flowers That Won't Grow, 1 of 3",
+        "The Flowers That Won't Grow, 2 of 3",
+        "The Flowers That Won't Grow, 3 of 3",
+        "When Flowers Bloom: defeat the fleeing Whopperflower"
+      ],
+      "order": true,
+      "how": "Complete The Flowers That Won't Grow three times to unlock When Flowers Bloom; come back the next in-game morning (06:00 to 08:00), and if it is the Whopperflower version, follow the Whopperflower north-east across the river after the commission ends and defeat it.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Up_by_the_Roots",
+        "https://genshin-impact.fandom.com/wiki/When_Flowers_Bloom_(Commission)",
+        "https://genshin-impact.fandom.com/wiki/The_Flowers_That_Won%27t_Grow",
+        "https://progameguides.com/genshin-impact/where-to-find-the-whopperflower-in-the-genshin-impact-when-flowers-bloom-commission/",
+        "https://www.hoyolab.com/article/17571409",
+        "https://www.sportskeeda.com/esports/3-hidden-commission-quests-look-genshin-impact-sumeru-update"
+      ],
+      "note": "Which version of When Flowers Bloom comes is random; the wiki says the one that earns it shows a Mist Flower alone, and the Whopperflower despawns if you log out or teleport first."
+    },
+    "84553": {
+      "parts": [
+        "Defeating Enemies version",
+        "Setting Beacons Up version",
+        "Retrieving Beacons version"
+      ],
+      "order": false,
+      "how": "Complete each of the three versions of To Measure the World! once: defeat the enemies near Farghani's site, set up his three beacons, and retrieve them. The retrieval version only comes up after the beacons have been set.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/The_Sky_is_Vast;_The_Earth...",
+        "https://genshin-impact.fandom.com/wiki/To_Measure_the_World!",
+        "https://www.hoyolab.com/article/17571409",
+        "https://www.sportskeeda.com/esports/5-secret-achievements-get-sumeru-commissions-genshin-impact",
+        "https://attackofthefanboy.com/guides/all-sumeru-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "Retrieval after setting is stated by the HoYoLAB guide and fits the wiki's dialogue; no source says the enemy version must come first, so the parts are not marked as a strict order. One enemy variant of each enemy version is enough (wiki)."
+    },
+    "84557": {
+      "order": false,
+      "how": "In the Fungi, Rockslide and Tree Nest camps of Project Baby, also pick up the extra item and give it to Gulabgir after the snake food: the Strange Bead (in a pot by the tent), the Shabby Rack (break the second rock pile on the small hill) and the Strange Tiny Hats (a fourth nest near the top of the tree). All three items are needed.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Non-Obligatory_Request",
+        "https://genshin-impact.fandom.com/wiki/Project_Baby",
+        "https://www.hoyolab.com/article/17571409",
+        "https://www.sportskeeda.com/esports/rarest-genshin-impact-achievements-watch-sumeru-daily-commissions",
+        "https://attackofthefanboy.com/guides/all-sumeru-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "Gulabgir sends you to one of five camps at random; the Thorny Vine and Pot camps have no extra item."
+    },
+    "84558": {
+      "parts": [
+        "Problem Conversion",
+        "Problem Conversion: Theory Reliability (carry five planks)",
+        "Problem Conversion: Loading Capacity (Ship Success version)"
+      ],
+      "order": true,
+      "how": "In Problem Conversion: Theory Reliability carry five of Rafiq's shipbuilding planks, not just the three asked for. The Problem Conversion: Loading Capacity that follows is then the Ship Success version, and finishing it earns the achievement.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/The_Ship_Has_It",
+        "https://genshin-impact.fandom.com/wiki/Problem_Conversion",
+        "https://genshin-impact.fandom.com/wiki/Problem_Conversion:_Theory_Reliability",
+        "https://genshin-impact.fandom.com/wiki/Problem_Conversion:_Loading_Capacity",
+        "https://genshin-impact.fandom.com/wiki/Problem_Conversion:_The_Underpinning_Factor",
+        "https://progameguides.com/genshin-impact/how-to-unlock-the-ship-has-it-sumeru-hidden-achievement-in-genshin-impact/",
+        "https://www.hoyolab.com/article/17571409"
+      ],
+      "note": "With three or four planks the Ship Failure version comes instead. The HoYoLAB guide says five planks in Problem Conversion: The Underpinning Factor also work; the wiki and ProGameGuides name only Theory Reliability."
+    },
+    "84559": {
+      "order": false,
+      "how": "Give Jafar the ingredient he asks for each time: a sprig of Mint, a Potato or a piece of Raw Meat, which become Minty Bean Soup, Panipuri and Shawarma Wrap. All three versions have to be done once, and a version can repeat.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/What%27s_the_Matter%3F",
+        "https://genshin-impact.fandom.com/wiki/Eat_and_Learn",
+        "https://progameguides.com/genshin-impact/how-to-get-the-whats-the-matter-sumeru-hidden-achievement-in-genshin-impact/",
+        "https://www.hoyolab.com/article/17571409",
+        "https://www.sportskeeda.com/esports/5-secret-achievements-get-sumeru-commissions-genshin-impact"
+      ]
+    },
+    "84560": {
+      "order": false,
+      "how": "Answer six different questions correctly over several appearances of Akademiya Q&A, which asks three random ones each time: the Darshan with the most researchers is Amurta, the elemental Darshan is Spantamad, the tree under the Akademiya is the Divine Tree, the desert barriers are the Wall of Samiel, the pack beast is the Sumpter Beast and the mushroom monster is Fungi.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Scholarly_in_Sumeru",
+        "https://genshin-impact.fandom.com/wiki/Akademiya_Q%26A",
+        "https://www.hoyolab.com/article/17571409",
+        "https://attackofthefanboy.com/guides/all-sumeru-daily-commissions-related-to-achievements-in-genshin-impact/"
+      ],
+      "note": "At least two appearances are needed (HoYoLAB). The wiki also describes quitting the game mid-quiz to re-roll the questions; no second source confirms it, so it is not used."
+    },
+    "84561": {
+      "order": false,
+      "how": "In Run, Hilmi, Run!, lose the race: let Hilmi reach the finish before you (standing still until he gets there works), then talk to him.",
+      "first": "complete the Archon Quest Dreams, Emptiness, Deception (Chapter III, Act III)",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/One_Step_Too_Far",
+        "https://genshin-impact.fandom.com/wiki/Run,_Hilmi,_Run!",
+        "https://genshin-impact.fandom.com/wiki/Dreams,_Emptiness,_Deception",
+        "https://progameguides.com/genshin-impact/how-to-get-the-one-step-too-far-sumeru-hidden-achievement-in-genshin-impact/",
+        "https://www.sportskeeda.com/esports/5-secret-achievements-get-sumeru-commissions-genshin-impact",
+        "https://www.hoyolab.com/article/17571409"
+      ],
+      "note": "The named Archon Quest is from the wiki's commission page only; ProGameGuides says only that Sumeru commissions and the desert must be unlocked."
+    },
+    "84562": {
+      "order": false,
+      "how": "Take Zakariya's prescription to Maruf and pick the matching three answers: for a headache Mint, a high flame throughout, until the ingredients float; for a stomachache Henna Berry, a low flame throughout, until they turn mushy; if the patient can't see well Starshroom, a high flame and then a low flame, until the soup deepens in color. One correct set in any one version earns it.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Doctor%27s_Handwriting",
+        "https://genshin-impact.fandom.com/wiki/Good_Medicine_Is_Hard_to_Come_By",
+        "https://genshin-impact.fandom.com/wiki/Henna_Berry/Change_History",
+        "https://www.sportskeeda.com/esports/5-secret-achievements-get-sumeru-commissions-genshin-impact",
+        "https://progameguides.com/genshin-impact/genshin-impact-good-medicine-is-hard-to-come-by-sumeru-daily-commission-guide/",
+        "https://www.hoyolab.com/article/17571409"
+      ],
+      "note": "The list's three parts are the three patient cases and one is enough. Sportskeeda and ProGameGuides write Redcrest for the stomachache; that was the item's name in 3.1 and the wiki says it became Henna Berry in 3.2. Wrong answers can bring Good Medicine Is Difficult to Make the next day."
+    },
+    "84563": {
+      "region": "sumeru",
+      "quests": [
+        "Desert Bloom",
+        "Blooming Sands: Lasting Scent"
+      ],
+      "parts": [
+        "Desert Bloom, watering version",
+        "Desert Bloom, kitten version",
+        "Desert Bloom, Zaytun Peach version",
+        "Blooming Sands: Lasting Scent"
+      ],
+      "order": true,
+      "how": "Do all three versions of Desert Bloom once each (watering, kitten, Zaytun Peach), then finish Blooming Sands: Lasting Scent, where you give Nermin's perfume to Raef.",
+      "first": "Blooming Sands (a Sumeru world quest in Aaru Village)",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/A_Lingering_Fragrance",
+        "https://genshin-impact.fandom.com/wiki/Blooming_Sands:_Lasting_Scent",
+        "https://genshin-impact.fandom.com/wiki/Desert_Bloom",
+        "https://genshin-impact.fandom.com/wiki/Blooming_Sands",
+        "https://www.sportskeeda.com/esports/genshin-impact-desert-bloom-commission-hidden-achievement-guide",
+        "https://wiki.biligame.com/ys/%E5%A7%94%E6%89%98%E6%88%90%E5%B0%B1"
+      ],
+      "note": "The three Desert Bloom versions can come in any order; Lasting Scent only appears after all three. Sportskeeda calls Blooming Sands a daily commission, but both wikis call it a world quest."
+    },
+    "84575": {
+      "region": "natlan",
+      "quests": [
+        "How to Make Friends"
+      ],
+      "parts": [
+        "How to Make Friends, comforting choice, 1st time",
+        "How to Make Friends, comforting choice, 2nd time",
+        "How to Make Friends, comforting choice, 3rd time"
+      ],
+      "order": false,
+      "how": "Each time Tlamot asks, choose \"I'd suggest you focus on the comforting.\" rather than going after the Treasure Hoarders. Three comforting choices in total grant it.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Saurian's_Cradle",
+        "https://genshin-impact.fandom.com/wiki/How_to_Make_Friends",
+        "https://wiki.biligame.com/ys/%E5%A7%94%E6%89%98%E6%88%90%E5%B0%B1",
+        "https://sportskeeda.com/esports/genshin-impact-5-0-achievements-list"
+      ],
+      "note": "Both wikis count the comforting choices in total, not in a row."
+    },
+    "84578": {
+      "region": "natlan",
+      "quests": [
+        "Tending to a Tepetlisaurus",
+        "Tending to a Tepetlisaurus: In Need of a Trim"
+      ],
+      "parts": [
+        "Tending to a Tepetlisaurus (first commission, any choices)",
+        "Tending to a Tepetlisaurus: In Need of a Trim (pet or squeeze three times, no trimming)"
+      ],
+      "order": true,
+      "how": "In the second commission, Tending to a Tepetlisaurus: In Need of a Trim, never choose to trim Hora's claws. For the last three choices pick petting his tummy or squeezing his paw.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/%22Hora,_Come_Here%E2%80%94%22",
+        "https://genshin-impact.fandom.com/wiki/Tending_to_a_Tepetlisaurus:_In_Need_of_a_Trim",
+        "https://genshin-impact.fandom.com/wiki/Tending_to_a_Tepetlisaurus",
+        "https://www.sportskeeda.com/esports/genshin-impact-tending-tepetlisaurus-commission-hidden-achievement-guide",
+        "https://rutab.net/b/games/2024/09/19/genshin-impact-uhod-za-tepetlizavrom-nuzhna-strizhka-skrytoe-dostizhenie-hora-idi-syuda.html",
+        "https://wiki.biligame.com/ys/%E6%B4%97%E7%90%86%E5%B5%B4%E9%94%8B%C2%B7%E4%BF%AE%E9%94%8B",
+        "https://wiki.biligame.com/ys/%E5%A7%94%E6%89%98%E6%88%90%E5%B0%B1"
+      ],
+      "note": "The English wiki and the Chinese quest page ask only for the last three choices; Sportskeeda and a GameRant copy (rutab.net) also say the three cleaning choices before must go against Cazcal's order, while the Chinese list page says to follow his order (back, horn, whole body). A third part, In Search of a Recipe, may come in between and gives nothing."
+    },
+    "84579": {
+      "region": "natlan",
+      "quests": [
+        "Prophets of Pop"
+      ],
+      "parts": [
+        "Prophets of Pop, first version: talk to Milu Nui and pick either option",
+        "Prophets of Pop, second version: defeat the enemies without breaking any crates"
+      ],
+      "order": true,
+      "how": "In the version of Prophets of Pop where Milu Nui asks you to get his record back, defeat all the enemies without breaking any crates, so the record stays whole. The earlier version, where he asks what to do about his new song, has to come first.",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Music_Never_Dies!",
+        "https://genshin-impact.fandom.com/wiki/Prophets_of_Pop",
+        "https://www.sportskeeda.com/esports/genshin-impact-prophets-pop-commission-hidden-achievement-unlock-guide",
+        "https://wiki.biligame.com/ys/%E6%B5%81%E8%A1%8C%E9%9F%B3%E4%B9%90%EF%BC%8C%E8%B0%81%E5%85%88%E7%9F%A5%EF%BC%9F",
+        "https://wiki.biligame.com/ys/%E5%A7%94%E6%89%98%E6%88%90%E5%B0%B1",
+        "https://sportskeeda.com/esports/genshin-impact-5-0-achievements-list"
+      ],
+      "note": "The achievement page and Sportskeeda name only the second version; the wiki's commission page and the Chinese wiki say a later version (third, fourth) counts too. The wiki names the crate holding the record, the others say any crate."
+    },
+    "84582": {
+      "region": "natlan",
+      "quests": [
+        "Sharpshooter on Hand"
+      ],
+      "order": false,
+      "how": "In Sharpshooter on Hand, take the photo Zicheng asks for, then talk to him again to hear about an extra photo and take that one too, inside the same time window. The extra photo is Muhuru's Gemporium with its gems (Stage Tepetl), the Yumkasaurus mural by the waypoint (Courier's Longhouse), or the Xochicuicatl Records and Atlahua's Net signs (Djembe Studios).",
+      "sources": [
+        "https://genshin-impact.fandom.com/wiki/Inspiration_Walk",
+        "https://genshin-impact.fandom.com/wiki/Sharpshooter_on_Hand",
+        "https://gurugamer.com/mobile-games/how-to-get-sharpshooter-on-hand-commission-in-genshin-impact-24127/amp",
+        "https://wiki.biligame.com/ys/%E5%A6%99%E5%BD%B1%E5%9C%A8%E6%89%8B",
+        "https://wiki.biligame.com/ys/%E5%A7%94%E6%89%98%E6%88%90%E5%B0%B1",
+        "https://sportskeeda.com/esports/genshin-impact-5-0-achievements-list"
+      ],
+      "note": "Main photo windows are Stage Tepetl 11:00 to 13:00, Courier's Longhouse 17:00 to 18:00 and Djembe Studios 06:00 to 08:00; taking only one photo still ends the commission but gives no achievement."
+    }
+  },
+  "not_commissions": [84541, 84551, 84552, 84573, 84574, 84581]
+}

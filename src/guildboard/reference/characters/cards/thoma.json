@@ -1,0 +1,38 @@
+{
+  "key": "thoma",
+  "name": "Thoma",
+  "element": "Pyro",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["protector", "support"],
+  "keeps_alive": true,
+  "scaling": "hp",
+  "damage_talent": "burst",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 210},
+  "mains": {"sands": ["er", "hp_pct"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "cr"]},
+  "weights": {"er": "wants", "hp_pct": "wants", "hp": "some", "cr": "some", "em": "some", "atk_pct": "none", "atk": "none", "cd": "none", "dmg": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["flower-of-paradise-lost"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["favonius-lance", "kitain-cross-spear", "rightful-reward", "black-tassel", "dragon-s-bane", "engulfing-lightning", "dialogues-of-the-desert-sages"],
+  "partners": ["Pyro", "Dendro", "Hydro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "The card follows the shield build (Game8's first and KQM's second build): his Skill and Burst shields scale with Max HP, so the card scales on HP with HP% Goblet and Circlet, an ER or HP% Sands, and ER 210 (KQM's C0-C3 figure with Kitain R3 or Favonius Lance; 170-175 from C4). Sets differ: Game8 gives 4pc Emblem of Severed Fate and 4pc Tenacity of the Millelith, KQM 4pc Noblesse Oblige or a 2pc Emblem and 2pc HP% mix; all four are kept, Emblem first because it eases the ER need. Both sources also list a Burgeon sub-DPS build (EM Sands, Goblet and Circlet, Flower of Paradise Lost 4pc with Gilded Dreams as KQM's second, Kitain Cross Spear first); its sets and the EM weight are kept as alternatives, not the main plan. The kit's three 'check' lines (Skill DMG 146%, Burst 88% and Fiery Collapse 58%) are ATK-based Pyro damage on the elemental curve (ratios 1.81, 1.80, 1.79); Fiery Collapse is the only damage that matters, in Burgeon, so the damage talent is the Burst. Both sources level Skill before Burst (KQM: character level first, then Skill = Burst). No ATK or CRIT goal is given. Partners are inferred from the Burgeon and Vaporize roles. Re-checked against genshin-builds.com (2026-10-30): its first build is the Burgeon one (EM on every piece, Flower of Paradise Lost then Gilded Dreams, Kitain Cross Spear first, Skill > Burst), and its community data shows Emblem of Severed Fate (63%) and Tenacity of the Millelith (51%) as the sets players run, with Favonius Lance the most used weapon; both match this card's lists, so the shield-first reading stands, but the Burgeon build is a real second plan.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/thoma-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/337141", "checked": "2026-10-29"},
+    {"url": "https://genshin-builds.com/en/character/thoma", "checked": "2026-10-30"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/16", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

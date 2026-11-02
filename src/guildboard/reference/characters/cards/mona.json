@@ -1,0 +1,18 @@
+{
+  "key": "mona", "name": "Mona", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "normal", "skill"], "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 50, "cd": 100, "er": 300},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "some", "cd": "some", "atk_pct": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["celestial-gift"], "pieces": "4"}, {"sets": ["song-of-days-past"], "pieces": "4"}, {"sets": ["tenacity-of-the-millelith"], "pieces": "4"}],
+  "weapons": ["thrilling-tales-of-dragon-slayers", "favonius-codex", "prototype-amber", "hakushin-ring", "oathsworn-eye"],
+  "partners": ["Cryo", "Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Hydro support who buffs through her Burst (Stellaris Phantasm: Illusory Bubble 442% ATK at level 1 and the Omen's DMG bonus); her talents scale with ATK and her passive turns 20% of her ER into Hydro DMG Bonus. Both sources put the Burst first; KQM then Normal Attack only at C6, Game8 the Normal Attack before the Skill, so the card keeps Burst, Normal Attack, Skill. The sources differ on the set: KQM gives 4pc Celestial Gift as her default with another Hydro teammate (Noblesse Oblige and Tenacity of the Millelith as options), Game8 gives Noblesse Oblige with Song of Days Past as the alternative. Mains agree (ER or ATK% Sands, Hydro DMG or ATK% Goblet, CRIT Circlet). Both put Thrilling Tales of Dragon Slayers first. Goals are Game8's: ER 200-300% (upper end; KQM ranges from 120% to 350% by teammates and Burst use), CRIT Rate 50% or above, CRIT DMG 100% or above, ATK 2,000 or above. Partners are a judgment: KQM's team section was not read.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/mona-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297526", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,38 @@
+{
+  "key": "keqing",
+  "name": "Keqing",
+  "element": "Electro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "physical",
+  "goals": {"dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "dmg": "wants", "atk": "some", "em": "some", "er": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["thundering-fury"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["thundersoother"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"},
+    {"sets": ["gladiator-s-finale"], "pieces": "4"}
+  ],
+  "weapons": ["mistsplitter-reforged", "primordial-jade-cutter", "haran-geppaku-futsu", "uraku-misugiri", "freedom-sworn", "lion-s-roar", "the-black-sword"],
+  "partners": ["Pyro", "Hydro", "Dendro", "Cryo"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources: 4pc Thundering Fury, ATK% sands (EM for Aggravate), Electro DMG goblet, CRIT circlet, Mistsplitter Reforged first, Normal Attack > Burst > Skill. KQM lists a set per reaction (Thundering Fury for Overload and Electro-Charged, Gilded Dreams and Thundersoother for Aggravate, Marechaussee Hunter and Night of the Sky's Unveiling for Lunar-Charged); Game8 adds Gladiator's Finale for non-Aggravate. Her Normal Attack is Electro-infused on the physical curve (1.98x at level 10). KQM says she has effectively no ER requirement, and neither source gives numeric goals, so only the Electro goblet value is set.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/keqing-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297534", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/10", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

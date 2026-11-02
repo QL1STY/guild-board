@@ -1,0 +1,37 @@
+{
+  "key": "kaveh",
+  "name": "Kaveh",
+  "element": "Dendro",
+  "weapon_type": "Claymore",
+  "rarity": 4,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "em",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "normal", "skill"],
+  "talent_table": "elemental",
+  "goals": {"em": 600, "er": 180},
+  "mains": {"sands": ["em", "er"], "goblet": ["em", "dmg"], "circlet": ["em", "cr"]},
+  "weights": {"em": "wants", "er": "wants", "cr": "some", "cd": "some", "atk_pct": "some", "atk": "some", "dmg": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["deepwood-memories"], "pieces": "4"},
+    {"sets": ["flower-of-paradise-lost"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["ocean-hued-clam"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"}
+  ],
+  "weapons": ["mailed-flower", "makhaira-aquamarine", "favonius-greatsword", "rainslasher", "forest-regalia", "beacon-of-the-reed-sea", "sacrificial-greatsword"],
+  "partners": ["Dendro", "Hydro", "Electro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources want EM on every slot; the set differs by role. KQM's first is 4pc Deepwood Memories (with Ocean-Hued Clam, Instructor, Flower of Paradise Lost, Gilded Dreams); Game8 splits Bloom DPS (Flower of Paradise Lost, Mailed Flower), Bloom Driver (Deepwood Memories, Makhaira Aquamarine) and Spread (Gilded Dreams, Beacon of the Reed Sea). Deepwood leads because KQM and Game8's driver build both name it and it also shreds Dendro RES for the team. Weapons: KQM lists Favonius Greatsword first (it also gives Energy), Game8 Mailed Flower, which is his signature and leads here. Goals are Game8's: EM 600+ and ER 210+ solo Dendro, 160+ with a Dendro teammate; the card uses 180 (Game8's 'about 180' for every build; KQM's double Dendro with Nahida is 145-165, without 210-245). CRIT Rate 40-50 only applies with Favonius Greatsword.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/kaveh-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/386489", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3608", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

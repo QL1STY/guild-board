@@ -1,0 +1,18 @@
+{
+  "key": "lynette", "name": "Lynette", "element": "Anemo", "weapon_type": "Sword", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 1800, "cr": 60, "cd": 120, "er": 200},
+  "mains": {"sands": ["er", "atk_pct", "em"], "goblet": ["dmg", "atk_pct", "em"], "circlet": ["cr", "cd", "em"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "some", "atk_pct": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["viridescent-venerer"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}],
+  "weapons": ["favonius-sword", "sacrificial-sword", "freedom-sworn", "amenoma-kageuchi", "fleuve-cendre-ferryman"],
+  "partners": ["Dendro", "Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Anemo sub-DPS and ATK buffer (her passive gives all party members up to 20% ATK for four elements). Her Skill and Burst both scale with ATK; both sources put the Burst first, then the Skill, so the damage talent is the Burst (Bogglecat Box and Vivid Shots). The 'check' lines Enigma Thrust and Surging Blade are ATK multipliers. The sources agree on 4pc Viridescent Venerer as best and Emblem of Severed Fate second, and on Favonius Sword, Sacrificial Sword, Freedom-Sworn and Amenoma Kageuchi. They differ a little on mains: KQM gives ER or ATK% Sands, Anemo DMG or ATK% Goblet and a CRIT Circlet, with an EM variant for transformative teams; Game8 gives ATK% or EM Sands, Anemo DMG or EM Goblet and CRIT or EM Circlet. The card lists KQM's general build first and keeps EM as the variant. Goals are Game8's (ATK 1,800 or more, CRIT Rate 50-60%, CRIT DMG 120% or more, ER 160-200%, upper end); KQM's ER range is wide, from about 105-130% with two Skills and Faruzan C6 to 240% solo.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/lynette-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/345879", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

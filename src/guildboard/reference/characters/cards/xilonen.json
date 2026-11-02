@@ -1,0 +1,37 @@
+{
+  "key": "xilonen",
+  "name": "Xilonen",
+  "element": "Geo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support", "healer"],
+  "keeps_alive": true,
+  "scaling": "def",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"def": 3000, "er": 190},
+  "mains": {"sands": ["er", "def_pct"], "goblet": ["def_pct"], "circlet": ["def_pct", "heal", "cr"]},
+  "weights": {"er": "wants", "def_pct": "wants", "def": "some", "heal": "some", "cr": "some", "cd": "none", "atk_pct": "none", "atk": "none", "em": "none", "hp_pct": "none", "hp": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["archaic-petra"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["husk-of-opulent-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["peak-patrol-song", "freedom-sworn", "favonius-sword", "xiphos-moonlight", "skyrider-sword", "flute-of-ezpitzal"],
+  "partners": ["Geo", "Pyro", "Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on the support build: 4pc Scroll of the Hero of Cinder City (KQM: best by far), ER Sands (KQM also DEF%), DEF% Goblet, a DEF%, Healing Bonus or (KQM, with Favonius) CRIT Rate Circlet, Skill > Burst, and Peak Patrol Song first. Alternative sets: Archaic Petra (with a Geo unit), Instructor and Noblesse Oblige (KQM), Husk of Opulent Dreams (Game8's Geo DPS build, left as an option; that build runs DEF% Sands, Geo DMG Goblet and a CRIT Circlet). She scales on DEF: the Skill's Rush (179.2% to 322.6% DEF) and the Burst (281.3% DEF) are DEF-based on the elemental curve, so the damage talent is the Skill. The kit's four 'check' lines (Normal and Charged Attack, 51.8% and similar) are ATK-based base attacks on the physical curve, switching to DEF only in Blade Roller mode, and are not her damage talent. Goals: Game8 gives ER 190 or above and DEF 2,500-3,000 (upper end used); KQM's ER needs run from about 100 to 250 by team (170-190 for Solo Geo with one Skill). Partners are inferred from her elemental shred (any damage dealer).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/xilonen-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/461997", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/6924", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

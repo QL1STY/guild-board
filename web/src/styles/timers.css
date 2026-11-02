@@ -1,0 +1,179 @@
+/* The Timers category (spec 9.2): the intro with its two buttons, then the groups of cards in columns, as the
+   achievements' cards are. The column keeps 1,440 pixels at most on the 2,560-pixel dashboard (spec 12.1), and no card
+   stretches. The cards' buttons are the achievements' toggles (achievements.css). */
+.tim { display: flex; flex-direction: column; gap: 12px; max-width: 1440px; }
+
+.tim-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 10px 14px; }
+.tim-head p { flex: 1 1 360px; color: var(--ink2); font-size: 13.5px; }
+.tim-head-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.tim-sheet { padding: 12px 14px; }
+
+/* The groups, each under a section heading (frame.css, .gb-section-h) in sentence case, with its count. On the page's
+   own background, small text is in --ink. */
+.tim-list { display: flex; flex-direction: column; gap: 16px; }
+.tim-group-head { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--ink); }
+.tim-group-head .c { margin-left: 4px; font-weight: 600; font-variant-numeric: tabular-nums; }
+/* The cards of a group in columns, as the achievements' are (look pass spec 11.6): one height for every card, so that
+   the rows close up, and a card's panel across the row right under its card's row, the dense packing filling the row's
+   other places with the cards after it. */
+.tim-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  grid-auto-flow: row dense;
+  gap: 10px;
+}
+
+/* Four rows: the dial, the name and place, and the bell; the state; the achievement it serves or its rule; the buttons. */
+.tim-card {
+  height: 154px;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  grid-template-rows: 38px 22px 26px 28px;
+  grid-template-areas:
+    'dial who bell'
+    'dial state state'
+    'serves serves serves'
+    'acts acts acts';
+  column-gap: 12px;
+  row-gap: 6px;
+  padding: 9px 14px;
+}
+.tim-card.ready { border-color: var(--done); }
+/* The card whose panel is open has a gold border, as its panel has (achievements.css, .ach-panel). */
+.tim-card.open {
+  border-color: var(--gold-ink);
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px color-mix(in srgb, var(--gold-ink) 30%, transparent);
+}
+.tim-card > .dial { grid-area: dial; align-self: center; }
+/* The teapot fields' pictures are not square (223 by 213), so they are cropped, never squeezed (marks.css). */
+.tim-who { grid-area: who; min-width: 0; }
+.tim-name { overflow: hidden; font-size: 16px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.tim-place { overflow: hidden; color: var(--ink2); font-size: 12.5px; text-overflow: ellipsis; white-space: nowrap; }
+.tim-bell { grid-area: bell; align-self: start; }
+/* The time left first, strong, then when; or the Ready seal and since when. */
+.tim-state {
+  grid-area: state;
+  align-self: center;
+  overflow: hidden;
+  color: var(--ink2);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.tim-state b { color: var(--ink); font-size: 14px; font-weight: 800; }
+.tim-state .seal { vertical-align: 1px; }
+.tim-serves { grid-area: serves; display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 12.5px; }
+.tim-ach {
+  min-width: 0;
+  overflow: hidden;
+  padding: 1px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--ink2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tim-count { flex: none; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tim-rule { min-width: 0; overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
+/* The count between the buttons that change it (widgets/CountSteps.tsx, widgets.css .steps). */
+.steps.tim-steps { flex: none; gap: 6px; margin-left: auto; }
+.tim-steps b { font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.steps.tim-steps .ach-step { width: 24px; height: 24px; font-size: 14px; }
+.tim-card .tim-actions { grid-area: acts; margin: 0; }
+.tim-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
+/* The buttons of a row are one size: the toggles are the size of Cleared (frame.css, .gb-btn), their border making up
+   the rest, and a quiet Cleared, which has a border, is the same. */
+.tim-actions .ach-toggle,
+.tim-card .tim-bell,
+.tim-actions .gb-btn.quiet { padding: 4px 14px; font-size: 12.5px; }
+
+/* A timer's panel under its card's row (ui/RowPanel.tsx, achievements.css): the rule in full, the visits and the
+   count's typed number, then Cleared earlier, Set ready time, Edit and Remove, and the forms they open. */
+.tim-panel { font-size: 13px; }
+.tim-rule-full { color: var(--ink2); }
+.tim-facts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 8px; }
+.tim-facts .ach-counter { margin: 0; }
+
+/* Cleared earlier and Set ready time: a line of words with the hours and minutes in it. */
+.tim-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--tint);
+  font-size: 13px;
+}
+.tim-form-buttons { display: flex; gap: 6px; margin-left: 4px; }
+.tim-num {
+  width: 64px;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* + New timer and Edit: the name and place side by side where there is room, then when it comes back, then the
+   visits. */
+.tim-new { font-size: 13px; }
+.tim-panel .tim-new { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--tint); }
+.tim-fields { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.tim-field { display: flex; flex-direction: column; gap: 3px; font-weight: 700; }
+.tim-field input[type='text'] {
+  width: 260px;
+  max-width: 100%;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+}
+.tim-field .tim-num { font-weight: 400; }
+.tim-comes { margin: 10px 0 0; padding: 0; border: 0; }
+.tim-comes legend { margin-bottom: 4px; padding: 0; font-weight: 700; }
+.tim-choice { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; min-height: 28px; }
+.tim-choice select {
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.tim-check { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.tim-check input { width: 14px; height: 14px; margin: 0; accent-color: var(--button); cursor: pointer; }
+.tim-new > .tim-field { margin-top: 10px; }
+.tim-new .gb-note { margin-top: 3px; }
+
+/* Add a pre-set timer: the pre-sets not in use under their group, the fishing spots in columns by region. */
+.tim-offers { padding: 12px 14px; font-size: 13px; }
+.tim-offer-group + .tim-offer-group { margin-top: 12px; }
+.tim-offer-head { font-size: 13px; font-weight: 800; }
+.tim-regions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px 24px;
+  margin-top: 6px;
+}
+.tim-region-head { margin-bottom: 2px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.tim-offer-list { margin: 0; padding: 0; list-style: none; }
+.tim-offer-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 0;
+  border-top: 1px solid var(--grid);
+}
+.tim-offer-list li:first-child { border-top: 0; }
+.tim-offer-list .ach-toggle { flex: none; }

@@ -1,0 +1,877 @@
+{
+  "key": "sandrone",
+  "name": "Sandrone",
+  "title": "Mirrored Analysis",
+  "element": "Cryo",
+  "weapon_type": "Claymore",
+  "rarity": 5,
+  "pronouns": {
+    "she": "she",
+    "her": "her",
+    "hers": "her"
+  },
+  "owned": true,
+  "level": 90,
+  "constellation": 2,
+  "art": "/api/art/sandrone-art",
+  "chart": "/api/art/sandrone-chart",
+  "chart_size": [
+    900,
+    900
+  ],
+  "stars": [
+    [
+      288,
+      250
+    ],
+    [
+      450,
+      197
+    ],
+    [
+      597,
+      237
+    ],
+    [
+      594,
+      583
+    ],
+    [
+      450,
+      733
+    ],
+    [
+      292,
+      578
+    ]
+  ],
+  "pity": [
+    {
+      "at": "2026-07-02",
+      "pity": 71,
+      "result": "won",
+      "banner": "Character banner",
+      "after": null
+    },
+    {
+      "at": "2026-07-09",
+      "pity": 44,
+      "result": "guaranteed",
+      "banner": "Character banner",
+      "after": "Qiqi"
+    },
+    {
+      "at": "2026-07-14",
+      "pity": 62,
+      "result": "won",
+      "banner": "Character banner",
+      "after": null
+    }
+  ],
+  "stats": [
+    {
+      "key": "hp",
+      "label": "HP",
+      "text": "20,152",
+      "value": 20152.4,
+      "her": 13226,
+      "weapon": 0,
+      "artifacts": 6926.4,
+      "scale": 40000,
+      "goal": null,
+      "goal_text": null,
+      "met": null,
+      "how": "Her own 13,226, artifacts 6,926."
+    },
+    {
+      "key": "atk",
+      "label": "ATK",
+      "text": "2,964",
+      "value": 2964.1,
+      "her": 342,
+      "weapon": 958,
+      "artifacts": 1664.1,
+      "scale": 4000,
+      "goal": 2600,
+      "goal_text": "2,600",
+      "met": true,
+      "how": "Her own 342, weapon 958 (674 base, 284 from its passive), artifacts 1,664 with the set's 18%."
+    },
+    {
+      "key": "def",
+      "label": "DEF",
+      "text": "814",
+      "value": 814,
+      "her": 752,
+      "weapon": 0,
+      "artifacts": 62,
+      "scale": 2000,
+      "goal": null,
+      "goal_text": null,
+      "met": null,
+      "how": "Her own 752, artifacts 62."
+    },
+    {
+      "key": "em",
+      "label": "Elemental Mastery",
+      "text": "59",
+      "value": 59,
+      "her": 0,
+      "weapon": 0,
+      "artifacts": 59,
+      "scale": 500,
+      "goal": null,
+      "goal_text": null,
+      "met": null,
+      "how": "Artifacts 59."
+    },
+    {
+      "key": "cr",
+      "label": "Crit Rate",
+      "text": "79.4%",
+      "value": 79.4,
+      "her": 24.2,
+      "weapon": 0,
+      "artifacts": 55.2,
+      "scale": 100,
+      "goal": 75,
+      "goal_text": "75%",
+      "met": true,
+      "how": "Her own 24.2 (5 base, 19.2 from ascension), artifacts 55.2."
+    },
+    {
+      "key": "cd",
+      "label": "Crit DMG",
+      "text": "176.5%",
+      "value": 176.5,
+      "her": 50,
+      "weapon": 44.1,
+      "artifacts": 82.4,
+      "scale": 300,
+      "goal": 200,
+      "goal_text": "200%",
+      "met": false,
+      "how": "Her own 50, weapon 44.1, artifacts 82.4."
+    },
+    {
+      "key": "er",
+      "label": "Energy Recharge",
+      "text": "122.7%",
+      "value": 122.7,
+      "her": 100,
+      "weapon": 0,
+      "artifacts": 22.7,
+      "scale": 200,
+      "goal": 130,
+      "goal_text": "130%",
+      "met": false,
+      "how": "Her own 100, artifacts 22.7."
+    },
+    {
+      "key": "dmg",
+      "label": "Cryo DMG Bonus",
+      "text": "0%",
+      "value": 0,
+      "her": 0,
+      "weapon": 0,
+      "artifacts": 0,
+      "scale": 100,
+      "goal": 46.6,
+      "goal_text": "46.6%",
+      "met": false,
+      "how": "None: her Goblet is ATK, not Cryo DMG Bonus."
+    }
+  ],
+  "rolls": [
+    {
+      "key": "cd",
+      "label": "Crit DMG",
+      "rolls": 12,
+      "weight": "wants",
+      "where": "Flower 3, Plume 2, Sands 4, Circlet 3"
+    },
+    {
+      "key": "cr",
+      "label": "Crit Rate",
+      "rolls": 7,
+      "weight": "wants",
+      "where": "Flower 3, Plume 2, Sands 2"
+    },
+    {
+      "key": "atk_pct",
+      "label": "ATK %",
+      "rolls": 5,
+      "weight": "wants",
+      "where": "Flower 2, Circlet 3"
+    },
+    {
+      "key": "er",
+      "label": "Energy Recharge",
+      "rolls": 4,
+      "weight": "wants",
+      "where": "Flower 1, Plume 2, Circlet 1"
+    },
+    {
+      "key": "em",
+      "label": "Elemental Mastery",
+      "rolls": 3,
+      "weight": "some",
+      "where": "Sands 1, Goblet 2"
+    },
+    {
+      "key": "atk",
+      "label": "ATK",
+      "rolls": 2,
+      "weight": "some",
+      "where": "Goblet 2"
+    },
+    {
+      "key": "hp",
+      "label": "HP",
+      "rolls": 3,
+      "weight": "none",
+      "where": "Plume 2, Circlet 1"
+    },
+    {
+      "key": "hp_pct",
+      "label": "HP %",
+      "rolls": 2,
+      "weight": "none",
+      "where": "Goblet 2"
+    },
+    {
+      "key": "def",
+      "label": "DEF",
+      "rolls": 3,
+      "weight": "none",
+      "where": "Sands 1, Goblet 2"
+    }
+  ],
+  "rolls_by": {
+    "wants": 28,
+    "some": 5,
+    "none": 8
+  },
+  "weapon": {
+    "key": "a-teaspoon-of-transcendence",
+    "name": "A Teaspoon of Transcendence",
+    "icon": "/api/art/a-teaspoon-of-transcendence",
+    "rarity": 5,
+    "level": 90,
+    "refinement": 1,
+    "base_atk": 674,
+    "sub": {
+      "label": "Crit DMG",
+      "text": "44.1%"
+    },
+    "passive": {
+      "name": "White Fairy's Queening",
+      "text": "ATK +28%. Each Charged Attack hit gives her Transcendence for 5s: Stellar-Conduct and Stellar Swirl DMG +16%, stacking up to 3 times, once every 0.2s."
+    },
+    "verdict": "Keep it. Its bonuses match her kit: Charged Attack hits and Stellar reactions.",
+    "refinements": [
+      {
+        "label": "ATK",
+        "values": [
+          "28%",
+          "35%",
+          "42%",
+          "49%",
+          "56%"
+        ]
+      },
+      {
+        "label": "Stellar DMG, each stack",
+        "values": [
+          "16%",
+          "20%",
+          "24%",
+          "28%",
+          "32%"
+        ]
+      }
+    ]
+  },
+  "sets": [
+    {
+      "name": "Disenchantment in Deep Shadow",
+      "pieces": 5,
+      "two": "ATK +18%.",
+      "four": "Superconduct DMG +80%, and +16% Crit Rate against opponents affected by Superconduct."
+    }
+  ],
+  "pieces": [
+    {
+      "slot": "flower",
+      "name": "Iridescence That Ceased Amidst Glory",
+      "icon": "/api/art/sandrone-flower",
+      "level": 20,
+      "rarity": 5,
+      "main": {
+        "label": "HP",
+        "text": "4,780"
+      },
+      "subs": [
+        {
+          "key": "cd",
+          "label": "Crit DMG",
+          "text": "21.8%",
+          "rolls": 3,
+          "weight": "wants"
+        },
+        {
+          "key": "cr",
+          "label": "Crit Rate",
+          "text": "10.5%",
+          "rolls": 3,
+          "weight": "wants"
+        },
+        {
+          "key": "atk_pct",
+          "label": "ATK %",
+          "text": "9.9%",
+          "rolls": 2,
+          "weight": "wants"
+        },
+        {
+          "key": "er",
+          "label": "Energy Recharge",
+          "text": "5.2%",
+          "rolls": 1,
+          "weight": "wants"
+        }
+      ],
+      "verdict": "keep",
+      "why": "9 of 9 rolls in stats she wants.",
+      "crit_value": 42.8,
+      "rolls_wanted": 9,
+      "rolls_all": 9,
+      "set_name": "Disenchantment in Deep Shadow"
+    },
+    {
+      "slot": "plume",
+      "name": "Sharpness That Ceased Upon Wondrous Creation",
+      "icon": "/api/art/sandrone-plume",
+      "level": 16,
+      "rarity": 5,
+      "main": {
+        "label": "ATK",
+        "text": "258"
+      },
+      "subs": [
+        {
+          "key": "cd",
+          "label": "Crit DMG",
+          "text": "13.2%",
+          "rolls": 2,
+          "weight": "wants"
+        },
+        {
+          "key": "cr",
+          "label": "Crit Rate",
+          "text": "7.0%",
+          "rolls": 2,
+          "weight": "wants"
+        },
+        {
+          "key": "er",
+          "label": "Energy Recharge",
+          "text": "11.0%",
+          "rolls": 2,
+          "weight": "wants"
+        },
+        {
+          "key": "hp",
+          "label": "HP",
+          "text": "538",
+          "rolls": 2,
+          "weight": "none"
+        }
+      ],
+      "verdict": "level",
+      "why": "At +16, with 3 substats she wants.",
+      "crit_value": 27.2,
+      "rolls_wanted": 6,
+      "rolls_all": 8,
+      "set_name": "Disenchantment in Deep Shadow"
+    },
+    {
+      "slot": "sands",
+      "name": "Moment That Ceased Upon Waking From Grand Dreams",
+      "icon": "/api/art/sandrone-sands",
+      "level": 20,
+      "rarity": 5,
+      "main": {
+        "label": "ATK %",
+        "text": "46.6%"
+      },
+      "subs": [
+        {
+          "key": "cd",
+          "label": "Crit DMG",
+          "text": "28.0%",
+          "rolls": 4,
+          "weight": "wants"
+        },
+        {
+          "key": "cr",
+          "label": "Crit Rate",
+          "text": "6.6%",
+          "rolls": 2,
+          "weight": "wants"
+        },
+        {
+          "key": "em",
+          "label": "Elemental Mastery",
+          "text": "19",
+          "rolls": 1,
+          "weight": "some"
+        },
+        {
+          "key": "def",
+          "label": "DEF",
+          "text": "23",
+          "rolls": 1,
+          "weight": "none"
+        }
+      ],
+      "verdict": "keep",
+      "why": "6 of 8 rolls in stats she wants, four of them Crit DMG. A Sands this good is rare: keep it.",
+      "crit_value": 41.2,
+      "rolls_wanted": 6,
+      "rolls_all": 8,
+      "set_name": "Disenchantment in Deep Shadow"
+    },
+    {
+      "slot": "goblet",
+      "name": "Ovations That Ceased Upon Festivity",
+      "icon": "/api/art/sandrone-goblet",
+      "level": 20,
+      "rarity": 5,
+      "main": {
+        "label": "ATK %",
+        "text": "46.6%"
+      },
+      "subs": [
+        {
+          "key": "def",
+          "label": "DEF",
+          "text": "39",
+          "rolls": 2,
+          "weight": "none"
+        },
+        {
+          "key": "hp_pct",
+          "label": "HP %",
+          "text": "9.9%",
+          "rolls": 2,
+          "weight": "none"
+        },
+        {
+          "key": "em",
+          "label": "Elemental Mastery",
+          "text": "40",
+          "rolls": 2,
+          "weight": "some"
+        },
+        {
+          "key": "atk",
+          "label": "ATK",
+          "text": "33",
+          "rolls": 2,
+          "weight": "some"
+        }
+      ],
+      "verdict": "replace",
+      "why": "Its main stat is ATK %; her card asks for Cryo DMG Bonus.",
+      "crit_value": 0,
+      "rolls_wanted": 0,
+      "rolls_all": 8,
+      "set_name": "Disenchantment in Deep Shadow"
+    },
+    {
+      "slot": "circlet",
+      "name": "Pendulum That Ceased Amidst a Great Fall",
+      "icon": "/api/art/sandrone-circlet",
+      "level": 20,
+      "rarity": 5,
+      "main": {
+        "label": "Crit Rate",
+        "text": "31.1%"
+      },
+      "subs": [
+        {
+          "key": "cd",
+          "label": "Crit DMG",
+          "text": "19.4%",
+          "rolls": 3,
+          "weight": "wants"
+        },
+        {
+          "key": "atk_pct",
+          "label": "ATK %",
+          "text": "14.0%",
+          "rolls": 3,
+          "weight": "wants"
+        },
+        {
+          "key": "er",
+          "label": "Energy Recharge",
+          "text": "6.5%",
+          "rolls": 1,
+          "weight": "wants"
+        },
+        {
+          "key": "hp",
+          "label": "HP",
+          "text": "299",
+          "rolls": 1,
+          "weight": "none"
+        }
+      ],
+      "verdict": "keep",
+      "why": "7 of 8 rolls in stats she wants.",
+      "crit_value": 19.4,
+      "rolls_wanted": 7,
+      "rolls_all": 8,
+      "set_name": "Disenchantment in Deep Shadow"
+    }
+  ],
+  "constellations": [
+    {
+      "n": 1,
+      "name": "Morrow After the Golden Dusk",
+      "icon": "/api/art/sandrone-c1",
+      "text": "In Decoding mode, Fagio's Decoding Power rises 50% slower, and the whole party deals 30% more Stellar Glimmer DMG.",
+      "owned": true
+    },
+    {
+      "n": 2,
+      "name": "An Heiress Gazed Into the Looking-Glass",
+      "icon": "/api/art/sandrone-c2",
+      "text": "Her condensed beams deal 40% more Crit DMG, and 20% more for each beam fired in the same Decoding mode, up to 3 times.",
+      "owned": true
+    },
+    {
+      "n": 3,
+      "name": "Refuse the Wake of Dusk, the Moonlit Yoke",
+      "icon": "/api/art/sandrone-c3",
+      "text": "Her Normal Attack gains 3 levels, up to 15.",
+      "owned": false
+    },
+    {
+      "n": 4,
+      "name": "In Knowledge Lies the World's True Ground",
+      "icon": "/api/art/sandrone-c4",
+      "text": "Her Stellar-Conduct and Stellar Swirl DMG call an extra Prismatic Resonance Cannon: Cryo DMG at 125% or 187.5% of her ATK.",
+      "owned": false
+    },
+    {
+      "n": 5,
+      "name": "Of All Beside, She Takes No Part",
+      "icon": "/api/art/sandrone-c5",
+      "text": "Her Elemental Burst gains 3 levels, up to 15.",
+      "owned": false
+    },
+    {
+      "n": 6,
+      "name": "Narcissus Wakes, Her Eyes Upon the Dawn",
+      "icon": "/api/art/sandrone-c6",
+      "text": "Her third condensed beam in Decoding mode becomes a continuous cluster beam: up to 4 more hits at 100% of her ATK.",
+      "owned": false
+    }
+  ],
+  "talents": [
+    {
+      "kind": "normal",
+      "label": "Normal Attack",
+      "name": "Formule Phenomenale: Self-Evident Proposition",
+      "icon": "/api/art/sandrone-normal",
+      "level": 9,
+      "bonus": 0
+    },
+    {
+      "kind": "skill",
+      "label": "Elemental Skill",
+      "name": "Formule Phenomenale: Differential Analysis",
+      "icon": "/api/art/sandrone-skill",
+      "level": 10,
+      "bonus": 0
+    },
+    {
+      "kind": "burst",
+      "label": "Elemental Burst",
+      "name": "Formule Phenomenale: Q.E.D.",
+      "icon": "/api/art/sandrone-burst",
+      "level": 10,
+      "bonus": 0
+    }
+  ],
+  "next_level": {
+    "talent": "Normal Attack",
+    "materials": [
+      {
+        "key": "philosophies-of-vagrancy",
+        "name": "Philosophies of Vagrancy",
+        "icon": "/api/art/philosophies-of-vagrancy",
+        "held": 9,
+        "held_exact": true,
+        "needed": 16,
+        "state": "missing",
+        "source": "Overturned Roost, open Wednesday, Saturday and Sunday",
+        "typed": false
+      },
+      {
+        "key": "precision-drive-shaft",
+        "name": "Precision Drive Shaft",
+        "icon": "/api/art/precision-drive-shaft",
+        "held": 12,
+        "held_exact": true,
+        "needed": 12,
+        "state": "ready",
+        "source": "Drops in Nod-Krai",
+        "typed": false
+      },
+      {
+        "key": "madman-s-restraint",
+        "name": "Madman's Restraint",
+        "icon": "/api/art/madman-s-restraint",
+        "held": 1,
+        "held_exact": true,
+        "needed": 2,
+        "state": "missing",
+        "source": "The Doctor, a weekly boss",
+        "typed": false
+      },
+      {
+        "key": "crown-of-insight",
+        "name": "Crown of Insight",
+        "icon": "/api/art/crown-of-insight",
+        "held": 2,
+        "held_exact": true,
+        "needed": 1,
+        "state": "ready",
+        "source": "Events and the Battle Pass",
+        "typed": false
+      },
+      {
+        "key": "mora",
+        "name": "Mora",
+        "icon": "/api/art/mora",
+        "held": 2410000,
+        "held_exact": true,
+        "needed": 700000,
+        "state": "ready",
+        "source": "You have plenty",
+        "typed": false
+      }
+    ]
+  },
+  "about": [
+    {
+      "label": "Title",
+      "value": "Mirrored Analysis"
+    },
+    {
+      "label": "Affiliation",
+      "value": "Fatui"
+    },
+    {
+      "label": "Birthday",
+      "value": "13 January"
+    },
+    {
+      "label": "Came out in",
+      "value": "Luna VIII"
+    },
+    {
+      "label": "Constellation",
+      "value": "Narcissorolegium"
+    },
+    {
+      "label": "Special dish",
+      "value": "Tea Party Polyphony"
+    },
+    {
+      "label": "Vision",
+      "value": "Cryo"
+    },
+    {
+      "label": "Weapon",
+      "value": "Claymore"
+    }
+  ],
+  "readiness": {
+    "total": 89,
+    "parts": [
+      {
+        "key": "level",
+        "label": "Level",
+        "value": 1.0,
+        "text": "90 of 90"
+      },
+      {
+        "key": "talents",
+        "label": "Talents",
+        "value": 0.95,
+        "text": "9, 10, 10"
+      },
+      {
+        "key": "weapon",
+        "label": "Weapon",
+        "value": 1.0,
+        "text": "Hers, R1"
+      },
+      {
+        "key": "artifacts",
+        "label": "Artifacts",
+        "value": 0.76,
+        "text": "76%"
+      }
+    ]
+  },
+  "next_steps": [
+    {
+      "text": "Replace the Goblet with a Cryo DMG Bonus goblet that has Crit Rate or Crit DMG.",
+      "gain": "about +31% damage"
+    },
+    {
+      "text": "Raise her Normal Attack to 10: 7 more Philosophies of Vagrancy and 1 more Madman's Restraint.",
+      "gain": "about +6% damage"
+    },
+    {
+      "text": "Level the Plume from +16 to +20: one roll left, and 3 of its 4 substats help her.",
+      "gain": "about +3% damage"
+    }
+  ],
+  "card": {
+    "edited": [],
+    "confidence": "high",
+    "early": false,
+    "fields": {
+      "roles": [
+        "damage"
+      ],
+      "keeps_alive": false,
+      "scaling": "atk",
+      "damage_talent": "normal",
+      "talent_priority": [
+        "normal",
+        "skill",
+        "burst"
+      ],
+      "goals": {
+        "atk": 2600,
+        "cr": 75,
+        "cd": 200,
+        "er": 130,
+        "dmg": 46.6
+      },
+      "mains": {
+        "sands": [
+          "atk_pct"
+        ],
+        "goblet": [
+          "dmg"
+        ],
+        "circlet": [
+          "cr",
+          "cd"
+        ]
+      },
+      "weights": {
+        "cr": "wants",
+        "cd": "wants",
+        "atk_pct": "wants",
+        "er": "wants",
+        "em": "some",
+        "atk": "some",
+        "hp_pct": "none",
+        "hp": "none",
+        "def_pct": "none",
+        "def": "none"
+      },
+      "sets": [
+        {
+          "sets": [
+            "disenchantment-in-deep-shadow"
+          ],
+          "pieces": "4"
+        },
+        {
+          "sets": [
+            "disenchantment-in-deep-shadow",
+            "blizzard-strayer"
+          ],
+          "pieces": "2+2"
+        }
+      ],
+      "weapons": [
+        "a-teaspoon-of-transcendence",
+        "verdict",
+        "a-thousand-blazing-suns"
+      ],
+      "partners": [
+        "Electro",
+        "Anemo"
+      ],
+      "partner_roles": [
+        "support",
+        "healer"
+      ],
+      "pronouns": [
+        "she",
+        "her",
+        "her"
+      ]
+    },
+    "notes": "Sandrone is a Cryo damage dealer who scales on her Normal Attack, so her talent order starts there. Her goals come from two build guides that agree on Crit Rate 75% and Crit DMG 200%.",
+    "sources": [
+      "HoYoLAB wiki build guide",
+      "A community damage calculator"
+    ],
+    "checked": "2026-10-20",
+    "options": {
+      "weapons": [
+        {
+          "key": "a-teaspoon-of-transcendence",
+          "name": "A Teaspoon of Transcendence"
+        },
+        {
+          "key": "verdict",
+          "name": "Verdict"
+        },
+        {
+          "key": "a-thousand-blazing-suns",
+          "name": "A Thousand Blazing Suns"
+        },
+        {
+          "key": "gest-of-the-mighty-wolf",
+          "name": "Gest of the Mighty Wolf"
+        }
+      ],
+      "sets": [
+        {
+          "key": "disenchantment-in-deep-shadow",
+          "name": "Disenchantment in Deep Shadow"
+        },
+        {
+          "key": "scarlet-proof",
+          "name": "Scarlet Proof"
+        },
+        {
+          "key": "blizzard-strayer",
+          "name": "Blizzard Strayer"
+        }
+      ]
+    }
+  },
+  "sync": {
+    "can_refresh": true,
+    "wait_minutes": null,
+    "reading": false,
+    "read_at": "2026-10-25T07:00:00+00:00",
+    "calculator": "on",
+    "message": null
+  }
+}

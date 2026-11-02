@@ -1,0 +1,43 @@
+{
+  "columbina": {
+    "points": [[102, 520], [216, 730], [524, 796], [770, 614], [795, 328], [646, 108]],
+    "confidence": "high",
+    "note": "read by eye: the six moon-disc stars on the crescent chain, from the end nearest the top left; the script had taken the glow of two of them for four points. Each point is the middle of its disc, where the star's spikes cross, and is not snapped: the bright part of each disc is a phase of the moon, off to one side, up to 9 px from the middle"
+  },
+  "dori": {
+    "points": [[126, 447], [273, 496], [432, 596], [612, 496], [436, 426], [436, 251]],
+    "confidence": "medium",
+    "note": "checked by eye: the script took the star at (436, 426) after (273, 496), which leaves the top star at a dead end. The picture has a faint line from (273, 496) down to (432, 596), and with it one path runs through all six along the chart's lines"
+  },
+  "flins": {
+    "points": [[448, 98], [448, 263], [587, 346], [495, 672], [409, 675], [320, 344]],
+    "confidence": "medium",
+    "note": "checked by eye: the picture has a faint line from (587, 346) to (495, 672), and with it one path runs through all six along the chart's lines, down one side of the lantern and up the other; which side comes first is a rule, the one the script had"
+  },
+  "neuvillette": {
+    "points": [[308, 234], [531, 405], [340, 712], [217, 500], [655, 665], [743, 420]],
+    "snap": true,
+    "confidence": "high",
+    "note": "read by eye: the script had taken the pale jewel at (738, 658) for a star and missed the star at (217, 500)"
+  },
+  "yae-miko": {
+    "points": [[430, 317], [325, 516], [420, 778], [580, 682], [758, 366], [544, 122]],
+    "snap": true,
+    "confidence": "medium",
+    "note": "read by eye: a chain along the picture's lines from (430, 317); its two ends, (430, 317) and (544, 122), are about as near the top left, so C1 is a close call"
+  },
+  "kujou-sara": {
+    "points": [[209, 253], [435, 481], [435, 119], [659, 250], [699, 443], [164, 438]],
+    "snap": true,
+    "confidence": "low",
+    "note": "the lines make a star: one hub at (435, 481) and five spokes. The picture does not show the game's order; this one starts at the star nearest the top left, goes to the hub, then round the spokes"
+  },
+  "nilou": {
+    "confidence": "medium",
+    "note": "checked by eye on a picture with its contrast raised: the lines run C1 to C5 along the lotus and fork at C3, where the top star is joined; there is no line from C5 to the top star"
+  },
+  "thoma": {
+    "confidence": "medium",
+    "note": "checked by eye: a chain from the top, the inner star at (448, 502) joined faintly to the one at (196, 399)"
+  }
+}

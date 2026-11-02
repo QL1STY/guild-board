@@ -1,0 +1,36 @@
+{
+  "key": "xinyan",
+  "name": "Xinyan",
+  "element": "Pyro",
+  "weapon_type": "Claymore",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage", "protector"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "physical",
+  "goals": {},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["phys"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "dmg": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "some", "def": "none"},
+  "sets": [
+    {"sets": ["pale-flame"], "pieces": "4"},
+    {"sets": ["bloodstained-chivalry"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"}
+  ],
+  "weapons": ["redhorn-stonethresher", "skyward-pride", "serpent-spine", "snow-tombed-starsilver", "prototype-archaic", "wolf-s-gravestone", "the-unforged", "sacrificial-greatsword"],
+  "partners": ["Pyro", "Cryo", "Anemo"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "KQM has no Xinyan guide, so the card rests on Game8 (Physical Main DPS build) and genshin-builds.com (Physical DPS build, checked 2026-10-30), which agree on 4pc Pale Flame or Bloodstained Chivalry (2pc each is the other's alternative), an ATK% or ER Sands, a Physical DMG Goblet, a CRIT Circlet, Redhorn Stonethresher first and Normal Attack > Burst > Skill. Game8's Marechaussee Hunter build (Pyro or Physical Goblet) and its Shield Support build (DEF% or ER Sands, DEF% Goblet and Circlet, 4pc Tenacity of the Millelith, Sacrificial Greatsword first) are kept as sets and weapons only. Game8's talent-priority line was garbled by the draft script (it repeats the three talents); the first three entries are the order. The kit's 'check' line (Sweeping Fervor's Swing DMG, 170% to 305%) is an ATK-based Pyro hit on the elemental curve, with the shield on DEF; the damage talent is the Normal Attack (1-hit 76.5% to 151.3%, ratio 1.98, physical curve). Neither source gives numeric goals, so none is set. Both sources are one voice on the build, so confidence is medium.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://game8.co/games/Genshin-Impact/archives/305873", "checked": "2026-10-29"},
+    {"url": "https://genshin-builds.com/en/character/xinyan", "checked": "2026-10-30"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/41", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,167 @@
+{
+  "0.8.0": [
+    {
+      "kind": "new",
+      "title": "Daily check-in",
+      "text": "Add the Daily check-in widget to the Board and claim HoYoLAB's daily reward with one press. It is claimed only when you press Claim."
+    },
+    {
+      "kind": "new",
+      "title": "Stopped updates are told",
+      "text": "When your primogems stop updating, every page says so and tells you what to do, and a notification says it once."
+    },
+    {
+      "kind": "better",
+      "title": "Safer updates",
+      "text": "Guild Board now installs an update only when it carries the signature of the release key."
+    },
+    {
+      "kind": "better",
+      "title": "A smaller database",
+      "text": "Repeated readings are removed, so your history takes about a third less room. A backup is made first."
+    },
+    {
+      "kind": "fixed",
+      "title": "Dozens of fixes",
+      "text": "A full code check found and fixed problems in backups, restores, sync, friends, notes and the login window."
+    }
+  ],
+  "0.7.0": [
+    {
+      "kind": "new",
+      "title": "Sign in with Discord",
+      "text": "Settings has an Online section. It is your choice: without it Guild Board works as before, and nothing goes online until you sign in. Your HoYoLAB login never goes there."
+    },
+    {
+      "kind": "new",
+      "title": "Friends",
+      "text": "Add a friend by their tag or an invite link, and by their UID if they allow it. See who is playing, and each friend's profile and pinned stats. You choose what you share, stat by stat."
+    },
+    {
+      "kind": "new",
+      "title": "Compare",
+      "text": "See your stats beside a friend's, for the stats you both share."
+    },
+    {
+      "kind": "new",
+      "title": "Sync my data",
+      "text": "Your ticks, timers, layouts, typed balances, character plans and play time are copied to your account, so a second PC shows the same. You can turn it off in Settings."
+    }
+  ],
+  "0.6.0": [
+    {
+      "kind": "new",
+      "title": "The Characters pages",
+      "text": "Every character, owned or not, with a search. Each has a card like the game's own: stats and where they come from, weapon, artifacts, constellation, talents and story, with what to do next."
+    },
+    {
+      "kind": "new",
+      "title": "A planner for each character",
+      "text": "Set the talents, weapon, artifacts and main stats you want, and see the stats and an estimate of the damage with that plan."
+    },
+    {
+      "kind": "new",
+      "title": "Researched builds",
+      "text": "127 characters have a card of goals, weapons and sets, from KQM's and Game8's guides. You can change any of it."
+    },
+    {
+      "kind": "new",
+      "title": "Picture quality",
+      "text": "High by default. Medium and Low in Settings make the big pictures smaller and save memory."
+    },
+    {
+      "kind": "better",
+      "title": "Less memory",
+      "text": "The window now clears the pages you have left, so it stays level instead of growing the longer it is open."
+    }
+  ],
+  "0.5.0": [
+    {
+      "kind": "new",
+      "title": "The Ledger page",
+      "text": "What you spent on Genshin, your primogem, crystal, resin and artifact history, and your five-star artifacts. It updates itself with your HoYoLAB login, and so do your wishes, with nothing to open in the game."
+    },
+    {
+      "kind": "better",
+      "title": "Exact primogems per day",
+      "text": "Stats counts each day's primogems from the game's own history and the HoYoLAB diary, split by where they came from."
+    },
+    {
+      "kind": "new",
+      "title": "A screenshot gallery",
+      "text": "The photos you take in the game, by month, in a large view. It is off until you turn it on in Settings, Extras."
+    },
+    {
+      "kind": "better",
+      "title": "A simpler Settings page",
+      "text": "One column of groups, each option with one plain sentence, and the currency for your spending."
+    }
+  ],
+  "0.4.5": [
+    {
+      "kind": "fixed",
+      "title": "The map no longer asks for your server",
+      "text": "It is given the game account and server you logged in with, so the choice does not come up at every start."
+    }
+  ],
+  "0.4.4": [
+    {
+      "kind": "new",
+      "title": "Fishing spots of Nod-Krai and Snezhnaya",
+      "text": "All 13 spots of Nod-Krai and all 7 of Snezhnaya are pre-set timers you can add."
+    }
+  ],
+  "0.4.3": [
+    {
+      "kind": "better",
+      "title": "The map uses far less memory",
+      "text": "Map tabs you are not looking at are put to sleep and wake in two or three seconds where you left them."
+    },
+    {
+      "kind": "fixed",
+      "title": "No server choice at every start",
+      "text": "The map remembers that it already asked which server you play on."
+    }
+  ],
+  "0.4.2": [
+    {
+      "kind": "fixed",
+      "title": "Settings lists only the versions you have",
+      "text": "Notes written ahead of a release wait in Settings, About, until that version is installed, and the newest come first."
+    }
+  ],
+  "0.4.1": [
+    {
+      "kind": "new",
+      "title": "Remove a code from the history",
+      "text": "The × beside a code takes it off the list, for a code you used before or one that failed."
+    },
+    {
+      "kind": "better",
+      "title": "Gift codes in a new look",
+      "text": "One field for the code and its primogems, a big counter, a calmer history."
+    },
+    {
+      "kind": "better",
+      "title": "Log in before the first code",
+      "text": "The Codes page asks you to log in once, so the first code goes through."
+    },
+    {
+      "kind": "better",
+      "title": "Updates you can't miss",
+      "text": "A new version shows at the bottom of the page until you install it."
+    },
+    {
+      "kind": "fixed",
+      "title": "\"Log in again\" after a refused code",
+      "text": "When HoYoverse refuses the saved login, the page offers a new one."
+    }
+  ],
+  "0.4.0": [
+    "Gift codes: redeem a code inside Guild Board, see the codes you used and the primogems they gave.",
+    "Links to Akasha, Enka.Network and the Battle Chronicle in the profile panel.",
+    "Backups: export to a file and restore on any PC; a copy is made every day.",
+    "Astra's import is gone; Paimon.moe's stays.",
+    "This card, after every update."
+  ]
+}

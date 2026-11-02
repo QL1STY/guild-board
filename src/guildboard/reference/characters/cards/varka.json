@@ -1,0 +1,37 @@
+{
+  "key": "varka",
+  "name": "Varka",
+  "element": "Anemo",
+  "weapon_type": "Claymore",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 3000, "cr": 80, "cd": 200, "er": 130},
+  "mains": {"sands": ["atk_pct"], "goblet": ["dmg", "atk_pct"], "circlet": ["cd", "cr"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["shimenawa-s-reminiscence"], "pieces": "4"},
+    {"sets": ["viridescent-venerer"], "pieces": "4"},
+    {"sets": ["scarlet-proof"], "pieces": "4"}
+  ],
+  "weapons": ["gest-of-the-mighty-wolf", "a-thousand-blazing-suns", "beacon-of-the-reed-sea", "redhorn-stonethresher", "wolf-s-gravestone", "serpent-spine", "verdict"],
+  "partners": ["Hydro", "Pyro", "Electro", "Cryo"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc A Day Carved From Rising Winds first, ATK% Sands, a CRIT Circlet, Skill first, and Gest of the Mighty Wolf and A Thousand Blazing Suns at the top. The Goblet differs: KQM gives PHEC (Pyro, Hydro, Electro or Cryo) DMG or ATK% before Anemo DMG, because his passive turns the party's elements into extra damage; Game8 gives ATK% or an elemental DMG Bonus; both are kept as DMG and ATK%. Second sets differ: KQM names Marechaussee Hunter (with Furina), Shimenawa's Reminiscence generally and Scarlet Proof for Stellar-Swirl teams; Game8 names Viridescent Venerer and Crimson Witch of Flames. The first four are kept. Talent order: KQM Skill, then character level; Game8 Skill > Burst > Normal Attack. The Skill's Windbound Execution (278.4% to 501.1%) is the damage line (elemental curve). Goals are Game8's: ATK 2,500-3,000+ (upper end), CR 70-80, CD 200 or above, ER 100-130 (only when he Bursts every other rotation; 130 used). KQM gives no goals. Partners are inferred (his passive uses Pyro, Hydro, Electro and Cryo teammates); the sources give no team list.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/varka-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/314346", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/9342", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

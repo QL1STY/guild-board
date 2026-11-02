@@ -1,0 +1,37 @@
+{
+  "key": "traveler-pyro",
+  "name": "Traveler (Pyro)",
+  "element": "Pyro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["they", "them", "their"],
+  "roles": ["support", "damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 260},
+  "mains": {"sands": ["er", "atk_pct", "em"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "some", "cd": "some", "atk_pct": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["deepwood-memories"], "pieces": "4"}
+  ],
+  "weapons": ["favonius-sword", "mistsplitter-reforged", "sacrificial-sword", "festering-desire", "fleuve-cendre-ferryman", "xiphos-moonlight", "iron-sting", "toukabou-shigure", "freedom-sworn", "primordial-jade-cutter"],
+  "partners": ["Electro", "Dendro", "Hydro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources: 4pc Scroll of the Hero of Cinder City (KQM's general best-in-slot for its 40% shared bonus), an ER-first Sands (KQM: ER, ATK% or EM; Game8: ATK% or ER), a Pyro DMG or ATK% Goblet and a CRIT Circlet (KQM also allows EM). KQM adds Tenacity of the Millelith, Noblesse Oblige, Instructor and Deepwood Memories for teams where a teammate already holds the Scroll. Weapons differ in the lead: KQM puts Favonius Sword first for the off-field role, Game8 Mistsplitter Reforged for a Pyro sub-DPS; both are kept. Talent order differs: KQM is character level first, then Burst >= Skill >>> Normal Attack, Game8 is Skill > Burst > Normal Attack; the card uses KQM's, because the Burst's Plains Scorcher (427.2% to 769.0%, elemental curve) is the damage line. ER is KQM's off-field support table, 245-300 without a Favonius sword and 195-235 with one; 260 is used for the Scroll team with a Natlan unit (255-280). The on-field DPS need is far lower (115-175). No ATK or CRIT goal is given.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/pyro-traveler-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/470309", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7306", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

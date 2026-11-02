@@ -1,0 +1,19 @@
+{
+  "key": "emilie", "name": "Emilie", "element": "Dendro", "weapon_type": "Polearm", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"er": 120, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["unfinished-reverie"], "pieces": "4"}, {"sets": ["deepwood-memories"], "pieces": "4"}, {"sets": ["golden-troupe"], "pieces": "4"}],
+  "weapons": ["lumidouce-elegy", "calamity-queller", "staff-of-the-scarlet-sands"],
+  "partners": ["Pyro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Dendro sub-DPS for Burning teams, whose Skill's Lumidouce Case attacks carry the damage (both sources put the Skill first). Both agree on 4pc Unfinished Reverie, with 4pc Deepwood Memories as the alternative, ATK% Sands, a Dendro DMG Goblet, a crit Circlet, and Lumidouce Elegy and Calamity Queller as the first two weapons. Neither source gives stat goals. ER 120% is the top of KQM's range for the Burst every other rotation (100-120%); every rotation needs 180-255%. The third set is KQM's 2pc mix (Golden Troupe) and the third weapon is on both sources' lists. DMG 46.6% is the Goblet's main stat.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/emilie-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/422493", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/5714", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,37 @@
+{
+  "key": "gaming",
+  "name": "Gaming",
+  "element": "Pyro",
+  "weapon_type": "Claymore",
+  "rarity": 4,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 1800, "cr": 50, "cd": 160, "er": 160, "em": 100, "dmg": 46.6},
+  "mains": {"sands": ["em", "atk_pct", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "em": "some", "atk_pct": "some", "dmg": "wants", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["crimson-witch-of-flames"], "pieces": "4"},
+    {"sets": ["long-night-s-oath"], "pieces": "4"},
+    {"sets": ["vermillion-hereafter"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["gest-of-the-mighty-wolf", "serpent-spine", "fruitful-hook", "beacon-of-the-reed-sea", "forged-by-the-golden-melody", "mailed-flower", "rainslasher", "verdict"],
+  "partners": ["Cryo", "Hydro", "Dendro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources want a Pyro DMG goblet, CRIT circlet and EM or ATK% sands; the set depends on the reaction. KQM lists Crimson Witch, Long Night's Oath, Gilded Dreams, Marechaussee Hunter and Vermillion Hereafter; Game8's top build is Marechaussee Hunter, then Crimson Witch, then a Burgeon build (EM everywhere, Flower of Paradise Lost). Marechaussee is first because it is Game8's lead and KQM includes it; the Burgeon build is left out as a niche. Goals are Game8's: ATK 1,800+, CRIT DMG 160, ER 150-180 (160; KQM Bennett 170-180 at C0, 130-135 at C4+), EM 100 baseline; CRIT Rate 45-55 with Marechaussee (50), 70-80 with other sets. Damage talent: the Skill's plunge (elemental curve, 1.8x at level 10) and the Burst are both elemental; priority Skill > Burst > Normal Attack in both. Weapons differ in order only; the first is KQM's. Partners are Cryo (Melt), Hydro (Vaporize), Dendro (Burgeon) from KQM's reaction sets.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/gaming-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/437446", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/4775", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

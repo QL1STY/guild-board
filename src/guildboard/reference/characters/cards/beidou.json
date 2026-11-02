@@ -1,0 +1,19 @@
+{
+  "key": "beidou", "name": "Beidou", "element": "Electro", "weapon_type": "Claymore", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 140, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["thundersoother"], "pieces": "4"}],
+  "weapons": ["a-thousand-blazing-suns", "serpent-spine", "beacon-of-the-reed-sea"],
+  "partners": ["Hydro", "Pyro"], "partner_roles": ["support"], "teams": [],
+  "notes": "An Electro burst sub-DPS: both sources put the Burst first and agree on 4pc Emblem of Severed Fate, an ATK% or ER Sands, an Electro DMG Goblet and a crit Circlet. The kit's 'Base DMG' line marked 'check' is ATK-based (the Max HP in the text is her shield). Game8 puts A Thousand Blazing Suns first; KQM lists Serpent Spine first and Beacon of the Reed Sea third, so the card takes Game8's first and KQM's second. Neither source gives stat goals. ER 140% is KQM's range for a team with Yae Miko (130-140% with one Perfect Counter and one tap Skill); her ER need runs from 110% to 250% by team. DMG 46.6% is the Goblet's main stat.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/beidou-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297528", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/11", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

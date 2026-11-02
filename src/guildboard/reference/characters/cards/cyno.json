@@ -1,0 +1,19 @@
+{
+  "key": "cyno", "name": "Cyno", "element": "Electro", "weapon_type": "Polearm", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "physical",
+  "goals": {"atk": 1800, "em": 500, "er": 140, "cr": 70, "cd": 175, "dmg": 46.6},
+  "mains": {"sands": ["em", "atk_pct", "er"], "goblet": ["dmg", "em"], "circlet": ["cd", "cr", "em"]},
+  "weights": {"em": "wants", "er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["thundering-fury"], "pieces": "4"}, {"sets": ["gilded-dreams"], "pieces": "4"}, {"sets": ["disenchantment-in-deep-shadow"], "pieces": "4"}],
+  "weapons": ["staff-of-the-scarlet-sands", "primordial-jade-winged-spear", "ballad-of-the-fjords"],
+  "partners": ["Dendro", "Hydro"], "partner_roles": ["support"], "teams": [],
+  "notes": "An Electro main DPS who deals his damage with Normal Attacks in the Burst. Those lines (marked 'check' in the kit, since the text names EM) are ATK multipliers on the Normal Attack curve (1.082 times at level 2), so the table is physical; his passive adds 150% of his EM to each hit, so EM is the scaling stat, as both sources' EM Sands show. The sources differ on the set: KQM's best is 4pc Thundering Fury, Game8's 4pc Disenchantment in Deep Shadow, with Gilded Dreams and Thundering Fury as its alternates; the card takes the set both name (Thundering Fury) first, then Gilded Dreams and Game8's best. Staff of the Scarlet Sands leads both weapon lists. Goals are Game8's (ATK 1,800+, EM 300-500, ER 130-150%, CR 60-70%, CD 175%+), taking the top of the ranges for EM, CR and a mid ER (KQM: 120-140% beside another Electro character).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/cyno-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/315233", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2813", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,38 @@
+{
+  "key": "kinich",
+  "name": "Kinich",
+  "element": "Dendro",
+  "weapon_type": "Claymore",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 45, "cd": 200, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "dmg": "wants", "atk": "some", "er": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["obsidian-codex"], "pieces": "4"},
+    {"sets": ["unfinished-reverie"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["golden-troupe"], "pieces": "4"},
+    {"sets": ["deepwood-memories"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["fang-of-the-mountain-king", "beacon-of-the-reed-sea", "a-thousand-blazing-suns", "serpent-spine", "earth-shaker", "verdict", "redhorn-stonethresher"],
+  "partners": ["Pyro", "Hydro", "Electro"],
+  "partner_roles": ["support", "damage"],
+  "teams": [],
+  "notes": "Both sources: 4pc Obsidian Codex, ATK% sands (EM for Quicken), Dendro DMG goblet, CRIT circlet, Fang of the Mountain King first, Skill > Burst > Normal Attack. Goals are Game8's: ATK 2,000+, CRIT Rate 40-50 (45, before Obsidian Codex's bonus), CRIT DMG 200+. KQM's ER table shows two columns that did not parse (100-120 and 200-245 for solo Dendro), so no ER goal is set. Game8 also lists Unfinished Reverie for Burning or Burgeon, and Gilded Dreams for Quicken. His Scalespiker Cannon is on the elemental curve (1.8x at level 10), so the table is elemental. Partners: Pyro (Burning, Burgeon), Hydro (Bloom), Electro (Quicken).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/kinich-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/461991", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/6317", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,37 @@
+{
+  "key": "ganyu",
+  "name": "Ganyu",
+  "element": "Cryo",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "burst", "skill"],
+  "talent_table": "elemental",
+  "goals": {"er": 115, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "dmg": "wants", "er": "some", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["blizzard-strayer"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["wanderer-s-troupe"], "pieces": "4"},
+    {"sets": ["unfinished-reverie"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"}
+  ],
+  "weapons": ["the-first-great-magic", "aqua-simulacra", "amos-bow", "polar-star", "astral-vulture-s-crimson-plumage", "thundering-pulse", "prototype-crescent"],
+  "partners": ["Cryo", "Anemo", "Hydro", "Pyro"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources agree on 4pc Blizzard Strayer for Freeze, a Cryo DMG goblet and CRIT circlet, and on Normal Attack >= Burst > Skill; they add Marechaussee Hunter (melt/general) and Unfinished Reverie (Melt, Game8's best for Melt). Sands: ATK% for Freeze, EM for Melt (both). Damage talent: her Frostflake Arrow is charged-attack damage; the kit lines show it on the elemental curve (1.8x at level 10), not the physical one, and the kit's 'check' line (Skill's Ice Lotus) is ATK-based and minor. Neither source gives CRIT or ATK goals; ER 115 is the top of KQM's on-field 110-115 at C0 with a Freeze team (off-field she needs 150-160). Partners: Cryo, Anemo and Hydro for Freeze, Pyro for Melt.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/ganyu-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/312173", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/28", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

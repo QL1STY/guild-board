@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "flowers.json: each local specialty by key, where it grows and how many one pass of the usual route gives",
+  "type": "object",
+  "required": ["flowers", "checked", "sources"],
+  "additionalProperties": false,
+  "properties": {
+    "checked": {"type": ["string", "null"]},
+    "sources": {"type": "array"},
+    "flowers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "places", "per_pass"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "places": {"type": "string"},
+          "per_pass": {"type": "integer", "minimum": 1},
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

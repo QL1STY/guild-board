@@ -1,0 +1,125 @@
+{
+  "key": "kuki-shinobu",
+  "name": "Kuki Shinobu",
+  "element": "Electro",
+  "weapon_type": "Sword",
+  "rarity": 4,
+  "pronouns": [
+    "she",
+    "her",
+    "her"
+  ],
+  "roles": [
+    "healer",
+    "support"
+  ],
+  "keeps_alive": true,
+  "scaling": "em",
+  "damage_talent": "skill",
+  "talent_priority": [
+    "skill",
+    "burst",
+    "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+    "er": 140
+  },
+  "mains": {
+    "sands": [
+      "em",
+      "hp_pct",
+      "er"
+    ],
+    "goblet": [
+      "em",
+      "hp_pct"
+    ],
+    "circlet": [
+      "em",
+      "heal",
+      "hp_pct"
+    ]
+  },
+  "weights": {
+    "em": "wants",
+    "hp_pct": "wants",
+    "er": "wants",
+    "cr": "some",
+    "cd": "some",
+    "heal": "some",
+    "hp": "some",
+    "atk_pct": "none",
+    "atk": "none",
+    "def_pct": "none",
+    "def": "none",
+    "dmg": "none"
+  },
+  "sets": [
+    {
+      "sets": [
+        "flower-of-paradise-lost"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "gilded-dreams"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "thundering-fury"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "deepwood-memories"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "tenacity-of-the-millelith"
+      ],
+      "pieces": "4"
+    }
+  ],
+  "weapons": [
+    "freedom-sworn",
+    "xiphos-moonlight",
+    "iron-sting",
+    "toukabou-shigure",
+    "key-of-khaj-nisut",
+    "favonius-sword",
+    "the-dockhand-s-assistant"
+  ],
+  "partners": [
+    "Dendro",
+    "Hydro"
+  ],
+  "partner_roles": [
+    "damage"
+  ],
+  "teams": [],
+  "notes": "She has three builds in KQM (Hyperbloom, Quicken, pure healer) and two in Game8 (Hyperbloom, healer). The card follows the Hyperbloom build, which both put first: EM on all slots, 4pc Flower of Paradise Lost (KQM also Gilded Dreams, Thundering Fury and Deepwood Memories), Freedom-Sworn first. The healer build (HP%, Healing Bonus, 4pc Tenacity of the Millelith, Key of Khaj-Nisut) is kept in the lists. Her damage lines (the kit's 'check' lines show a plain percentage with no stat named) are small, and her Burst's damage is Max HP-based; her value is the EM-driven Hyperbloom, so the scaling stat is EM. ER 140 sits in KQM's 20s-rotation range at C0 (130-140) and below its 15s range (160-170); with Raiden it is 100. Neither source gives other goals.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {
+      "url": "https://keqingmains.com/q/shinobu-quickguide/",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://game8.co/games/Genshin-Impact/archives/346199",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://wiki.hoyolab.com/pc/genshin/entry/2256",
+      "checked": "2026-10-29"
+    }
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,4054 @@
+{
+ "builds": [
+  {
+   "id": 10000001,
+   "name": "Sandrone",
+   "element": "Cryo",
+   "rarity": 5,
+   "level": 90,
+   "ascension": 6,
+   "constellation": 2,
+   "icon": "",
+   "wiki_entry": "10920",
+   "weapon": {
+    "id": 100000010,
+    "name": "A Teaspoon of Transcendence",
+    "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/06/25/a2c59d52525cd3b23ba5dfc0e2ca0e40_8273039777765971978.png",
+    "type": 11,
+    "rarity": 5,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "674",
+    "sub_prop": 22,
+    "sub_value": "44.1%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Iridescence That Ceased Amidst Glory",
+     "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/186ed0ccb206788d4832b848bdb91624_1196226685770777941.png",
+     "set_id": 1,
+     "set_name": "Disenchantment in Deep Shadow",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 2,
+     "main_value": "4780",
+     "subs": [
+      {
+       "prop": 22,
+       "value": "21.8%",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "10.5%",
+       "times": 2
+      },
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "5.2%",
+       "times": 0
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Sharpness That Ceased Upon Wondrous Creation",
+     "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/2e311abfb4fa96194a5420137b7262bf_8775615034839082974.png",
+     "set_id": 1,
+     "set_name": "Disenchantment in Deep Shadow",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "258",
+     "subs": [
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "7.0%",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "11.0%",
+       "times": 1
+      },
+      {
+       "prop": 2,
+       "value": "538",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Moment That Ceased Upon Waking From Grand Dreams",
+     "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/95a4e544a3ee250e6b7551f4857196cc_872029035811212154.png",
+     "set_id": 1,
+     "set_name": "Disenchantment in Deep Shadow",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 6,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 22,
+       "value": "28.0%",
+       "times": 3
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 28,
+       "value": "19",
+       "times": 0
+      },
+      {
+       "prop": 8,
+       "value": "23",
+       "times": 0
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Ovations That Ceased Upon Festivity",
+     "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/279668837734bed41e3963e8207ab4b1_2347963908422382260.png",
+     "set_id": 1,
+     "set_name": "Disenchantment in Deep Shadow",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 6,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 8,
+       "value": "39",
+       "times": 1
+      },
+      {
+       "prop": 3,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 28,
+       "value": "40",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "33",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Pendulum That Ceased Amidst a Great Fall",
+     "icon": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2026/05/15/df16bd2dcd5f5f0582a3f8423de89884_246042224874063702.png",
+     "set_id": 1,
+     "set_name": "Disenchantment in Deep Shadow",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 20,
+     "main_value": "31.1%",
+     "subs": [
+      {
+       "prop": 22,
+       "value": "19.4%",
+       "times": 2
+      },
+      {
+       "prop": 6,
+       "value": "14.0%",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "6.5%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "299",
+       "times": 0
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000101,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000102,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 10
+    },
+    {
+     "id": 1000000103,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 10
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "1016.0",
+     "add": "1948.1",
+     "final": "2964.1"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "126.5",
+     "final": "176.5"
+    },
+    {
+     "prop": 20,
+     "base": "24.2",
+     "add": "55.2",
+     "final": "79.4"
+    },
+    {
+     "prop": 2002,
+     "base": "752.0",
+     "add": "62.0",
+     "final": "814.0"
+    },
+    {
+     "prop": 46,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "59.0",
+     "final": "59.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "22.7",
+     "final": "122.7"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "13226.0",
+     "add": "6926.4",
+     "final": "20152.4"
+    }
+   ]
+  },
+  {
+   "id": 10000002,
+   "name": "Odette",
+   "element": "Cryo",
+   "rarity": 5,
+   "level": 90,
+   "ascension": 6,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "11162",
+   "weapon": {
+    "id": 100000020,
+    "name": "Exaiphanes Blade",
+    "icon": "",
+    "type": 1,
+    "rarity": 5,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "608",
+    "sub_prop": 20,
+    "sub_value": "33.1%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Gladiator's Finale flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 8,
+       "value": "39.4",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Gladiator's Finale plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 8,
+       "value": "39.4",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000201,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 8
+    },
+    {
+     "id": 1000000202,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 8
+    },
+    {
+     "id": 1000000203,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 9
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "898.0",
+     "add": "833.3",
+     "final": "1731.3"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "0.0",
+     "final": "50.0"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "33.1",
+     "final": "38.1"
+    },
+    {
+     "prop": 2002,
+     "base": "770.0",
+     "add": "78.8",
+     "final": "848.8"
+    },
+    {
+     "prop": 46,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "82.5",
+     "final": "182.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12600.0",
+     "add": "20208.9",
+     "final": "32808.9"
+    }
+   ]
+  },
+  {
+   "id": 10000003,
+   "name": "Alyosha",
+   "element": "Electro",
+   "rarity": 5,
+   "level": 65,
+   "ascension": 4,
+   "constellation": 1,
+   "icon": "",
+   "wiki_entry": "11163",
+   "weapon": {
+    "id": 100000030,
+    "name": "Song of the Vigil",
+    "icon": "",
+    "type": 13,
+    "rarity": 4,
+    "level": 65,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "471",
+    "sub_prop": 28,
+    "sub_value": "91.7"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Noblesse Oblige flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Noblesse Oblige plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000301,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 6
+    },
+    {
+     "id": 1000000302,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 6
+    },
+    {
+     "id": 1000000303,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 6
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "736.0",
+     "add": "763.7",
+     "final": "1499.7"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "72.6",
+     "final": "122.6"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "49.5",
+     "final": "54.5"
+    },
+    {
+     "prop": 2002,
+     "base": "695.0",
+     "add": "0.0",
+     "final": "695.0"
+    },
+    {
+     "prop": 41,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "91.7",
+     "final": "91.7"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "0.0",
+     "final": "100.0"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "11600.0",
+     "add": "17312.3",
+     "final": "28912.3"
+    }
+   ]
+  },
+  {
+   "id": 10000004,
+   "name": "Jahoda",
+   "element": "Anemo",
+   "rarity": 5,
+   "level": 75,
+   "ascension": 5,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "9018",
+   "weapon": {
+    "id": 100000040,
+    "name": "Jade Vista",
+    "icon": "",
+    "type": 12,
+    "rarity": 4,
+    "level": 75,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "459",
+    "sub_prop": 20,
+    "sub_value": "24.8%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Noblesse Oblige flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 3,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 5,
+       "value": "33.1",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Noblesse Oblige plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 3,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 9,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 3,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000401,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 7
+    },
+    {
+     "id": 1000000402,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 7
+    },
+    {
+     "id": 1000000403,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 7
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "734.0",
+     "add": "414.0",
+     "final": "1148.0"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "72.6",
+     "final": "122.6"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "74.3",
+     "final": "79.3"
+    },
+    {
+     "prop": 2002,
+     "base": "725.0",
+     "add": "337.8",
+     "final": "1062.8"
+    },
+    {
+     "prop": 44,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "11.0",
+     "final": "111.0"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12000.0",
+     "add": "17623.2",
+     "final": "29623.2"
+    }
+   ]
+  },
+  {
+   "id": 10000005,
+   "name": "Nefer",
+   "element": "Dendro",
+   "rarity": 5,
+   "level": 90,
+   "ascension": 6,
+   "constellation": 1,
+   "icon": "",
+   "wiki_entry": "8894",
+   "weapon": {
+    "id": 100000050,
+    "name": "Hymn of the Maelstrom",
+    "icon": "",
+    "type": 10,
+    "rarity": 5,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "542",
+    "sub_prop": 3,
+    "sub_value": "66.2%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Deepwood Memories flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Deepwood Memories",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 8,
+       "value": "39.4",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Deepwood Memories plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Deepwood Memories",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 8,
+       "value": "39.4",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Deepwood Memories sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Deepwood Memories",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 6,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Deepwood Memories goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Deepwood Memories",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 43,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Deepwood Memories circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Deepwood Memories",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 20,
+     "main_value": "24.9%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000501,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000502,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000503,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 9
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "832.0",
+     "add": "923.9",
+     "final": "1755.9"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "0.0",
+     "final": "50.0"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "28.2",
+     "final": "33.2"
+    },
+    {
+     "prop": 2002,
+     "base": "770.0",
+     "add": "78.8",
+     "final": "848.8"
+    },
+    {
+     "prop": 43,
+     "base": "0.0",
+     "add": "37.3",
+     "final": "37.3"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "82.5",
+     "final": "182.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "4.0",
+     "final": "4.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12600.0",
+     "add": "14450.7",
+     "final": "27050.7"
+    }
+   ]
+  },
+  {
+   "id": 10000006,
+   "name": "Columbina",
+   "element": "Hydro",
+   "rarity": 5,
+   "level": 90,
+   "ascension": 6,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "9121",
+   "weapon": {
+    "id": 100000060,
+    "name": "Hymn of the Maelstrom",
+    "icon": "",
+    "type": 10,
+    "rarity": 5,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "542",
+    "sub_prop": 3,
+    "sub_value": "66.2%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Noblesse Oblige flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 2,
+     "main_value": "4780",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "14.9%",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "33.1",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Noblesse Oblige plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 5,
+     "main_value": "311",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "14.9%",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "11.0%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Noblesse Oblige sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 3,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "14.9%",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "33.1",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Noblesse Oblige goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 3,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "14.9%",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "33.1",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Noblesse Oblige circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 3,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "14.9%",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "33.1",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000601,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000602,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000603,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 9
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "832.0",
+     "add": "1063.2",
+     "final": "1895.2"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "66.0",
+     "final": "116.0"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "33.0",
+     "final": "38.0"
+    },
+    {
+     "prop": 2002,
+     "base": "770.0",
+     "add": "0.0",
+     "final": "770.0"
+    },
+    {
+     "prop": 42,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "11.0",
+     "final": "111.0"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "4.0",
+     "final": "4.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12600.0",
+     "add": "30736.0",
+     "final": "43336.0"
+    }
+   ]
+  },
+  {
+   "id": 10000007,
+   "name": "Lauma",
+   "element": "Dendro",
+   "rarity": 5,
+   "level": 90,
+   "ascension": 6,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "8396",
+   "weapon": {
+    "id": 100000070,
+    "name": "Hymn of the Maelstrom",
+    "icon": "",
+    "type": 10,
+    "rarity": 5,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "542",
+    "sub_prop": 3,
+    "sub_value": "66.2%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Noblesse Oblige flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "39.6",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Noblesse Oblige plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "39.6",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "39.6",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "39.6",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "39.6",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000701,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000702,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000703,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 9
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "832.0",
+     "add": "398.6",
+     "final": "1230.6"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "99.0",
+     "final": "149.0"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "49.5",
+     "final": "54.5"
+    },
+    {
+     "prop": 2002,
+     "base": "770.0",
+     "add": "0.0",
+     "final": "770.0"
+    },
+    {
+     "prop": 43,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "198.0",
+     "final": "198.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "27.5",
+     "final": "127.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "4.0",
+     "final": "4.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12600.0",
+     "add": "26264.6",
+     "final": "38864.6"
+    }
+   ]
+  },
+  {
+   "id": 10000008,
+   "name": "Ineffa",
+   "element": "Electro",
+   "rarity": 5,
+   "level": 90,
+   "ascension": 6,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "7852",
+   "weapon": {
+    "id": 100000080,
+    "name": "Disaster and Remorse",
+    "icon": "",
+    "type": 13,
+    "rarity": 5,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "674",
+    "sub_prop": 20,
+    "sub_value": "22.1%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Noblesse Oblige flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Noblesse Oblige plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000801,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000802,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 9
+    },
+    {
+     "id": 1000000803,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 9
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "964.0",
+     "add": "1097.9",
+     "final": "2061.9"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "0.0",
+     "final": "50.0"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "38.6",
+     "final": "43.6"
+    },
+    {
+     "prop": 2002,
+     "base": "770.0",
+     "add": "0.0",
+     "final": "770.0"
+    },
+    {
+     "prop": 41,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "82.5",
+     "final": "182.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12600.0",
+     "add": "18685.2",
+     "final": "31285.2"
+    }
+   ]
+  },
+  {
+   "id": 10000009,
+   "name": "Lan Yan",
+   "element": "Anemo",
+   "rarity": 5,
+   "level": 80,
+   "ascension": 5,
+   "constellation": 2,
+   "icon": "",
+   "wiki_entry": "7301",
+   "weapon": {
+    "id": 100000090,
+    "name": "Winter's Heavy Heart",
+    "icon": "",
+    "type": 10,
+    "rarity": 4,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "510",
+    "sub_prop": 22,
+    "sub_value": "55.1%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Gladiator's Finale flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Gladiator's Finale plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 6,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000000901,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 8
+    },
+    {
+     "id": 1000000902,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 8
+    },
+    {
+     "id": 1000000903,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 8
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "790.0",
+     "add": "1042.1",
+     "final": "1832.1"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "127.7",
+     "final": "177.7"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "49.5",
+     "final": "54.5"
+    },
+    {
+     "prop": 2002,
+     "base": "740.0",
+     "add": "0.0",
+     "final": "740.0"
+    },
+    {
+     "prop": 44,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "5.5",
+     "final": "105.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12200.0",
+     "add": "13433.1",
+     "final": "25633.1"
+    }
+   ]
+  },
+  {
+   "id": 10000010,
+   "name": "Iansan",
+   "element": "Electro",
+   "rarity": 5,
+   "level": 80,
+   "ascension": 5,
+   "constellation": 3,
+   "icon": "",
+   "wiki_entry": "7502",
+   "weapon": {
+    "id": 100000100,
+    "name": "Song of the Vigil",
+    "icon": "",
+    "type": 13,
+    "rarity": 4,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "565",
+    "sub_prop": 28,
+    "sub_value": "110"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Noblesse Oblige flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Noblesse Oblige plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 6,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000001001,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 7
+    },
+    {
+     "id": 1000001002,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 7
+    },
+    {
+     "id": 1000001003,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 7
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "845.0",
+     "add": "1083.5",
+     "final": "1928.5"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "72.6",
+     "final": "122.6"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "49.5",
+     "final": "54.5"
+    },
+    {
+     "prop": 2002,
+     "base": "740.0",
+     "add": "0.0",
+     "final": "740.0"
+    },
+    {
+     "prop": 41,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "110.0",
+     "final": "110.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "5.5",
+     "final": "105.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12200.0",
+     "add": "13433.1",
+     "final": "25633.1"
+    }
+   ]
+  },
+  {
+   "id": 10000011,
+   "name": "Aino",
+   "element": "Hydro",
+   "rarity": 5,
+   "level": 80,
+   "ascension": 5,
+   "constellation": 6,
+   "icon": "",
+   "wiki_entry": "8397",
+   "weapon": {
+    "id": 100000110,
+    "name": "Blade of Atonement",
+    "icon": "",
+    "type": 11,
+    "rarity": 4,
+    "level": 90,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "565",
+    "sub_prop": 6,
+    "sub_value": "27.6%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Gladiator's Finale flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "19.8",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 5,
+       "value": "33.1",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Gladiator's Finale plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "19.8",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "19.8",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "19.8",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 28,
+       "value": "19.8",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000001101,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 7
+    },
+    {
+     "id": 1000001102,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 7
+    },
+    {
+     "id": 1000001103,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 7
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "845.0",
+     "add": "667.2",
+     "final": "1512.2"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "99.0",
+     "final": "149.0"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "49.5",
+     "final": "54.5"
+    },
+    {
+     "prop": 2002,
+     "base": "740.0",
+     "add": "0.0",
+     "final": "740.0"
+    },
+    {
+     "prop": 42,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "99.0",
+     "final": "99.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "0.0",
+     "final": "100.0"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "12200.0",
+     "add": "19507.4",
+     "final": "31707.4"
+    }
+   ]
+  },
+  {
+   "id": 10000012,
+   "name": "Dahlia",
+   "element": "Hydro",
+   "rarity": 5,
+   "level": 70,
+   "ascension": 4,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "7707",
+   "weapon": {
+    "id": 100000120,
+    "name": "New Bough",
+    "icon": "",
+    "type": 1,
+    "rarity": 4,
+    "level": 70,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "442",
+    "sub_prop": 22,
+    "sub_value": "47.8%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Noblesse Oblige flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 3,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "19.8%",
+       "times": 2
+      },
+      {
+       "prop": 5,
+       "value": "33.1",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Noblesse Oblige plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Noblesse Oblige",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 3,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 23,
+       "value": "5.5%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 9,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 3,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 9,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 3,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 20,
+       "value": "9.9%",
+       "times": 2
+      },
+      {
+       "prop": 22,
+       "value": "13.2%",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000001201,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 5
+    },
+    {
+     "id": 1000001202,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 5
+    },
+    {
+     "id": 1000001203,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 5
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "712.0",
+     "add": "410.1",
+     "final": "1122.1"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "120.4",
+     "final": "170.4"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "49.5",
+     "final": "54.5"
+    },
+    {
+     "prop": 2002,
+     "base": "710.0",
+     "add": "661.7",
+     "final": "1371.7"
+    },
+    {
+     "prop": 42,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "5.5",
+     "final": "105.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "11800.0",
+     "add": "13632.6",
+     "final": "25432.6"
+    }
+   ]
+  },
+  {
+   "id": 10000013,
+   "name": "Durin",
+   "element": "Pyro",
+   "rarity": 5,
+   "level": 50,
+   "ascension": 2,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "9017",
+   "weapon": {
+    "id": 100000130,
+    "name": "Beyond the Chrysalis",
+    "icon": "",
+    "type": 1,
+    "rarity": 5,
+    "level": 50,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "494",
+    "sub_prop": 22,
+    "sub_value": "32.3%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Gladiator's Finale flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 2,
+     "main_value": "4780",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "11.0%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Gladiator's Finale plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 5,
+     "main_value": "311",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 3,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "11.0%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 3,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "11.0%",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 20,
+     "main_prop": 3,
+     "main_value": "46.6%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "6.6%",
+       "times": 1
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "11.0%",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000001301,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 4
+    },
+    {
+     "id": 1000001302,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 4
+    },
+    {
+     "id": 1000001303,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 4
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "744.0",
+     "add": "1011.6",
+     "final": "1755.6"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "32.3",
+     "final": "82.3"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "33.0",
+     "final": "38.0"
+    },
+    {
+     "prop": 2002,
+     "base": "650.0",
+     "add": "0.0",
+     "final": "650.0"
+    },
+    {
+     "prop": 40,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "60.5",
+     "final": "160.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "11000.0",
+     "add": "20665.9",
+     "final": "31665.9"
+    }
+   ]
+  },
+  {
+   "id": 10000014,
+   "name": "Vesna",
+   "element": "Anemo",
+   "rarity": 5,
+   "level": 40,
+   "ascension": 1,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "11661",
+   "weapon": {
+    "id": 100000140,
+    "name": "Exaiphanes Blade",
+    "icon": "",
+    "type": 1,
+    "rarity": 5,
+    "level": 40,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "405",
+    "sub_prop": 20,
+    "sub_value": "22.1%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Viridescent Venerer flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Viridescent Venerer",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 8,
+       "value": "39.4",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Viridescent Venerer plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Viridescent Venerer",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      },
+      {
+       "prop": 8,
+       "value": "39.4",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "5.0%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "507.9",
+       "times": 1
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000001401,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 4
+    },
+    {
+     "id": 1000001402,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 4
+    },
+    {
+     "id": 1000001403,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 4
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "645.0",
+     "add": "724.5",
+     "final": "1369.5"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "0.0",
+     "final": "50.0"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "22.1",
+     "final": "27.1"
+    },
+    {
+     "prop": 2002,
+     "base": "620.0",
+     "add": "78.8",
+     "final": "698.8"
+    },
+    {
+     "prop": 44,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "82.5",
+     "final": "182.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "10600.0",
+     "add": "17970.9",
+     "final": "28570.9"
+    }
+   ]
+  },
+  {
+   "id": 10000015,
+   "name": "Linnea",
+   "element": "Geo",
+   "rarity": 5,
+   "level": 30,
+   "ascension": 1,
+   "constellation": 0,
+   "icon": "",
+   "wiki_entry": "10412",
+   "weapon": {
+    "id": 100000150,
+    "name": "Golden Frostbound Oath",
+    "icon": "",
+    "type": 12,
+    "rarity": 5,
+    "level": 30,
+    "refinement": 1,
+    "ascension": 6,
+    "base_atk": "325",
+    "sub_prop": 22,
+    "sub_value": "52.9%"
+   },
+   "pieces": [
+    {
+     "pos": 1,
+     "name": "Gladiator's Finale flower",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 2,
+     "main_value": "3824",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 2,
+     "name": "Gladiator's Finale plume",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 5,
+     "main_value": "248.8",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      },
+      {
+       "prop": 2,
+       "value": "761.8",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 3,
+     "name": "Gladiator's Finale sands",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 4,
+     "name": "Gladiator's Finale goblet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    },
+    {
+     "pos": 5,
+     "name": "Gladiator's Finale circlet",
+     "icon": "",
+     "set_id": 1,
+     "set_name": "Gladiator's Finale",
+     "rarity": 5,
+     "level": 16,
+     "main_prop": 3,
+     "main_value": "37.3%",
+     "subs": [
+      {
+       "prop": 6,
+       "value": "9.9%",
+       "times": 1
+      },
+      {
+       "prop": 20,
+       "value": "3.3%",
+       "times": 0
+      },
+      {
+       "prop": 5,
+       "value": "49.6",
+       "times": 2
+      },
+      {
+       "prop": 23,
+       "value": "16.5%",
+       "times": 2
+      }
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "id": 1000001501,
+     "skill_type": 1,
+     "name": "normal",
+     "icon": "",
+     "level": 2
+    },
+    {
+     "id": 1000001502,
+     "skill_type": 2,
+     "name": "skill",
+     "icon": "",
+     "level": 2
+    },
+    {
+     "id": 1000001503,
+     "skill_type": 3,
+     "name": "burst",
+     "icon": "",
+     "level": 2
+    }
+   ],
+   "props": [
+    {
+     "prop": 2001,
+     "base": "555.0",
+     "add": "821.8",
+     "final": "1376.8"
+    },
+    {
+     "prop": 22,
+     "base": "50.0",
+     "add": "52.9",
+     "final": "102.9"
+    },
+    {
+     "prop": 20,
+     "base": "5.0",
+     "add": "16.5",
+     "final": "21.5"
+    },
+    {
+     "prop": 2002,
+     "base": "590.0",
+     "add": "94.4",
+     "final": "684.4"
+    },
+    {
+     "prop": 45,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 28,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 23,
+     "base": "100.0",
+     "add": "82.5",
+     "final": "182.5"
+    },
+    {
+     "prop": 26,
+     "base": "0.0",
+     "add": "0.0",
+     "final": "0.0"
+    },
+    {
+     "prop": 2000,
+     "base": "10200.0",
+     "add": "15999.6",
+     "final": "26199.6"
+    }
+   ]
+  }
+ ]
+}

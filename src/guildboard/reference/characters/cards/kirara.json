@@ -1,0 +1,37 @@
+{
+  "key": "kirara",
+  "name": "Kirara",
+  "element": "Dendro",
+  "weapon_type": "Sword",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["protector", "support"],
+  "keeps_alive": true,
+  "scaling": "hp",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"hp": 35000, "er": 160},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "cr"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "em": "some", "cr": "some", "cd": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["vourukasha-s-glow"], "pieces": "4"},
+    {"sets": ["deepwood-memories"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"}
+  ],
+  "weapons": ["key-of-khaj-nisut", "favonius-sword", "the-dockhand-s-assistant", "sacrificial-sword", "sapwood-blade", "freedom-sworn"],
+  "partners": ["Dendro", "Electro", "Hydro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources want HP% on sands, goblet and circlet for her shield, with ER, and Skill > Burst > Normal Attack. The sets differ: KQM gives 4pc Instructor, Tenacity of the Millelith, Deepwood Memories and Noblesse Oblige (buffs that match the team), Game8 gives Tenacity and Vourukasha's Glow for the shield build, Deepwood and Noblesse for a hybrid, and Tenacity, Vourukasha, Flower of Paradise Lost and Deepwood for a Bloom driver. Key of Khaj-Nisut is Game8's best in every build and KQM's second after Favonius Sword. Her kit's 'check' lines are ATK-based damage and her shield is Max HP-based; the card scales HP because every build raises HP%. Goals are Game8's: HP 35,000+ and ER 160+ (KQM solo Dendro about 160, with Electro resonance 120-140, double Dendro 100-120). No CRIT goals because she is a shielder.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/kirara-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/409556", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3719", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

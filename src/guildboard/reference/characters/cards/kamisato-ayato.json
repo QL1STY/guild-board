@@ -1,0 +1,37 @@
+{
+  "key": "kamisato-ayato",
+  "name": "Kamisato Ayato",
+  "element": "Hydro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "physical",
+  "goals": {"atk": 2000, "cr": 75, "cd": 160, "er": 130, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "dmg": "wants", "hp_pct": "some", "atk": "some", "em": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["heart-of-depth"], "pieces": "4"},
+    {"sets": ["echoes-of-an-offering"], "pieces": "4"},
+    {"sets": ["nymph-s-dream"], "pieces": "4"},
+    {"sets": ["gladiator-s-finale"], "pieces": "4"},
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"}
+  ],
+  "weapons": ["haran-geppaku-futsu", "primordial-jade-cutter", "mistsplitter-reforged", "uraku-misugiri", "the-black-sword", "light-of-foliar-incision", "absolution", "splendor-of-tranquil-waters"],
+  "partners": ["Electro", "Pyro", "Cryo"],
+  "partner_roles": ["support", "healer"],
+  "teams": [],
+  "notes": "Both sources: ATK% sands (ER as a second option), Hydro DMG goblet, CRIT circlet, Haran Geppaku Futsu first, Skill > Burst > Normal Attack. The best set depends on his playstyle: Game8 gives Echoes of an Offering (low-ping), Heart of Depth and Emblem of Severed Fate (sub-DPS); KQM lists Heart of Depth, Gladiator's Finale, Nymph's Dream and Echoes first. Goals are Game8's: ATK 2,000, CRIT Rate 70-80 (75), CRIT DMG 160, ER 100-130 (130 used; KQM solo Hydro 130-160, double Hydro 120-135). His damage is the Shunsuiken, which sits under his Skill and uses the physical curve (1.98x at level 10) while dealing Hydro DMG; the kit's 'check' lines for it scale with ATK (Namisen's bonus is the Max HP part, hence HP% as a minor weight).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/ayato-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/345514", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/31", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

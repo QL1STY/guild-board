@@ -1,0 +1,37 @@
+{
+  "key": "xiangling",
+  "name": "Xiangling",
+  "element": "Pyro",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage", "support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"cr": 60, "cd": 160, "er": 220},
+  "mains": {"sands": ["er", "em", "atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["crimson-witch-of-flames"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["flower-of-paradise-lost"], "pieces": "4"}
+  ],
+  "weapons": ["the-catch", "engulfing-lightning", "staff-of-the-scarlet-sands", "favonius-lance", "staff-of-homa", "kitain-cross-spear", "ballad-of-the-fjords", "dragon-s-bane", "wavebreaker-s-fin"],
+  "partners": ["Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage", "support"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Emblem of Severed Fate first and 4pc Crimson Witch of Flames second, an ER, EM or ATK% Sands, a Pyro DMG Goblet, a CRIT Circlet and Burst > Skill. Third sets: Gilded Dreams (KQM, for Quicken or Aggravate), Noblesse Oblige (Game8), Flower of Paradise Lost (KQM, Burgeon only). Weapons differ in the lead: KQM's general picks are Staff of the Scarlet Sands, The Catch and Favonius Lance; Game8's best is Engulfing Lightning; the list keeps all of these. Her damage is the Burst's Pyronado (112% to 202%, elemental curve). Goals: Game8 gives ER 180 or above, CR 50-60, CD 160 or above and EM 50-300 (too wide to use, so no EM goal). KQM's ER depends on the rotation and weapon (220-280 with most weapons, 200-260 with Favonius Lance, 185-235 with R5 Kitain Cross Spear in a 1 Xiangling Skill, 2 Bennett Skills rotation; 195-205 with Raiden), so 220 is used as the common floor, above Game8's 180. Partners are inferred from the teams KQM names (Hydro, Electro, Cryo).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/xiangling-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297530", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/50", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

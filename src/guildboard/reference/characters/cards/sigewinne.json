@@ -1,0 +1,18 @@
+{
+  "key": "sigewinne", "name": "Sigewinne", "element": "Hydro", "weapon_type": "Bow", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "hp",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"hp": 60000, "er": 150},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct", "dmg"], "circlet": ["hp_pct", "heal", "cr", "cd"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "cr": "some", "cd": "some", "atk_pct": "none", "atk": "none", "em": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["ocean-hued-clam"], "pieces": "4"}, {"sets": ["song-of-days-past"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["tenacity-of-the-millelith"], "pieces": "4"}],
+  "weapons": ["silvershower-heartstrings", "aqua-simulacra", "elegy-for-the-end", "recurve-bow", "sacrificial-bow", "favonius-warbow"],
+  "partners": ["Hydro", "Electro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Hydro healer that scales with Max HP: Rebound Hydrotherapy's Bubblebalm heals 2.80% Max HP + 269 at level 1, and her Skill and Burst damage are percentages of Max HP. Both sources put the Skill first and the Burst second (KQM puts character level before the Skill). They agree on 4pc Ocean-Hued Clam and Song of Days Past for the healer build, with 4pc Emblem of Severed Fate or Tenacity of the Millelith for the Burst hybrid, an HP% Sands (ER also allowed), an HP% Goblet (Hydro DMG for the hybrid) and an HP% Circlet (Healing Bonus or CRIT), and on Silvershower Heartstrings first with Aqua Simulacra, Elegy for the End and Recurve Bow behind it. Goals are Game8's: HP 60,000 or above and ER 130-150% (upper end, inside KQM's double Hydro range of 135-190%).",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/sigewinne-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/352956", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,19 @@
+{
+  "key": "durin", "name": "Durin", "element": "Pyro", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 70, "cd": 200, "er": 120},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["celestial-gift"], "pieces": "4"}],
+  "weapons": ["athame-artis", "freedom-sworn", "favonius-sword"],
+  "partners": ["Dendro", "Hydro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Pyro off-field sub-DPS whose Burst gives the Dragon attacks that carry the damage (both sources put the Burst first). They agree on 4pc A Day Carved from Rising Winds (KQM's best for personal damage), ATK% Sands, a Pyro DMG or ATK% Goblet, a crit Circlet and Athame Artis and Freedom-Sworn as the first two weapons. Goals are Game8's (ATK 2,000 or above, CR 60-70%, CD 200% or above); Game8 says little ER is needed if his Skill is Crowned, and KQM's table runs 100-150%, so ER 120% is the low end of KQM's no-Pyro-teammate range. The second and third sets (KQM's Noblesse Oblige and Celestial Gift) are support sets for teammates; the third weapon is KQM's Favonius Sword.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/durin-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/462478", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/9017", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

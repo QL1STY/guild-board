@@ -1,0 +1,371 @@
+{
+  "checked": "2026-10-29",
+  "sources": [
+    "https://sg-wiki-api.hoyolab.com/hoyowiki/genshin/wapi/entry_page?entry_page_id=<entry_id> (each specialty's 'Source' line, the 'Recommendation' phrases), checked 2026-10-29",
+    "https://sg-public-api-static.hoyolab.com/common/map_user/ys_obc/v1/map/label/tree?map_id=2&app_sn=ys_obc&lang=en-us (point_count and recommend_route_list of each Local Specialties label), checked 2026-10-29",
+    "https://sg-public-api-static.hoyolab.com/common/map_user/ys_obc/v1/map/point/list?map_id=2&app_sn=ys_obc&lang=en-us (every node, counted per label_id), checked 2026-10-29",
+    "route_items of the official map's recommended harvest route when it has one; otherwise every node of the specialty on the map. Counts cover the whole route or map, not the one place named in `places`."
+  ],
+  "flowers": {
+    "amakumo-fruit": {
+      "name": "Amakumo Fruit",
+      "places": "Seirai Island",
+      "per_pass": 89,
+      "notes": "per_pass is the recommended harvest route on the official map (95 nodes on the map, route 89 items over 89 nodes; confidence medium)"
+    },
+    "beryl-conch": {
+      "name": "Beryl Conch",
+      "places": "Salacia Plain",
+      "per_pass": 98,
+      "notes": "per_pass is the recommended harvest route on the official map (105 nodes on the map, route 98 items over 98 nodes; confidence medium)"
+    },
+    "brilliant-chrysanthemum": {
+      "name": "Brilliant Chrysanthemum",
+      "places": "Huitztli Hill; near the Stadium of the Sacred Flame",
+      "per_pass": 71,
+      "notes": "per_pass is the recommended harvest route on the official map (91 nodes on the map, route 71 items over 71 nodes; confidence medium)"
+    },
+    "calla-lily": {
+      "name": "Calla Lily",
+      "places": "Springvale",
+      "per_pass": 54,
+      "notes": "per_pass is the recommended harvest route on the official map (60 nodes on the map, route 54 items over 52 nodes; confidence medium)"
+    },
+    "cecilia": {
+      "name": "Cecilia",
+      "places": "Starsnatch Cliff",
+      "per_pass": 37,
+      "notes": "per_pass is the recommended harvest route on the official map (37 nodes on the map, route 37 items over 34 nodes; confidence medium)"
+    },
+    "clearwater-jade": {
+      "name": "Clearwater Jade",
+      "places": "Chenyu Vale: Southern Mountain",
+      "per_pass": 67,
+      "notes": "per_pass is the whole count of nodes on the official map (67 nodes on the map; confidence low); the map has no recommended route; per_pass is every node on the map"
+    },
+    "cor-lapis": {
+      "name": "Cor Lapis",
+      "places": "Mt. Hulao",
+      "per_pass": 98,
+      "notes": "per_pass is the recommended harvest route on the official map (169 nodes on the map, route 98 items over 98 nodes; confidence medium)"
+    },
+    "crystal-marrow": {
+      "name": "Crystal Marrow",
+      "places": "Yashiori Island",
+      "per_pass": 65,
+      "notes": "per_pass is the recommended harvest route on the official map (66 nodes on the map, route 65 items over 65 nodes; confidence medium)"
+    },
+    "dandelion-seed": {
+      "name": "Dandelion Seed",
+      "places": "Mondstadt gates",
+      "per_pass": 44,
+      "notes": "per_pass is the recommended harvest route on the official map (69 nodes on the map, route 44 items over 43 nodes; confidence medium)"
+    },
+    "dendrobium": {
+      "name": "Dendrobium",
+      "places": "Nazuchi Beach",
+      "per_pass": 55,
+      "notes": "per_pass is the recommended harvest route on the official map (55 nodes on the map, route 55 items over 54 nodes; confidence medium)"
+    },
+    "dracolite": {
+      "name": "Dracolite",
+      "places": "Atocpan",
+      "per_pass": 81,
+      "notes": "per_pass is the recommended harvest route on the official map (62 nodes on the map, route 81 items over 61 nodes; confidence low); the route's own count (81) and its node count (61) differ by more than 10%"
+    },
+    "etherwing-moth": {
+      "name": "Etherwing Moth",
+      "places": "Windrest Peak and Temple of Space; Millhaven and the Pillar Hall Central Zone",
+      "per_pass": 29,
+      "notes": "per_pass is the whole count of nodes on the official map (29 nodes on the map; confidence low); the map has no recommended route; per_pass is every node on the map"
+    },
+    "flockingweed": {
+      "name": "Flockingweed",
+      "places": "Fellfrost Peak",
+      "per_pass": 74,
+      "notes": "per_pass is the whole count of nodes on the official map (74 nodes on the map; confidence low); the map has no recommended route; per_pass is every node on the map"
+    },
+    "fluorescent-fungus": {
+      "name": "Fluorescent Fungus",
+      "places": "Tsurumi Island",
+      "per_pass": 71,
+      "notes": "per_pass is the recommended harvest route on the official map (71 nodes on the map, route 71 items over 68 nodes; confidence medium)"
+    },
+    "frostfairy-flower": {
+      "name": "Frostfairy Flower",
+      "places": "near Snezhnograd; White Birch Snowgrave",
+      "per_pass": 74,
+      "notes": "per_pass is the whole count of nodes on the official map (74 nodes on the map; confidence low); the map has no recommended route; per_pass is every node on the map"
+    },
+    "frostlamp-flower": {
+      "name": "Frostlamp Flower",
+      "places": "the Final Night Cemetery; near the Frostmoon Enclave",
+      "per_pass": 70,
+      "notes": "per_pass is the recommended harvest route on the official map (70 nodes on the map, route 70 items over 70 nodes; confidence medium)"
+    },
+    "glaze-lily": {
+      "name": "Glaze Lily",
+      "places": "Yujing Terrace, Liyue Harbor; Qingce Village",
+      "per_pass": 41,
+      "notes": "per_pass is the recommended harvest route on the official map (50 nodes on the map, route 41 items over 38 nodes; confidence medium)"
+    },
+    "glowing-hornshroom": {
+      "name": "Glowing Hornshroom",
+      "places": "Tezcatepetonco Range; near the \"Masters of the Night-Wind\"",
+      "per_pass": 70,
+      "notes": "per_pass is the recommended harvest route on the official map (72 nodes on the map, route 70 items over 70 nodes; confidence medium)"
+    },
+    "golden-fern": {
+      "name": "Golden Fern",
+      "places": "Flamefeather Valley; Rankova Zorya",
+      "per_pass": 80,
+      "notes": "per_pass is the whole count of nodes on the official map (80 nodes on the map; confidence low); the map has no recommended route; per_pass is every node on the map"
+    },
+    "henna-berry": {
+      "name": "Henna Berry",
+      "places": "the deserts of Sumeru",
+      "per_pass": 86,
+      "notes": "per_pass is the recommended harvest route on the official map (101 nodes on the map, route 86 items over 84 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "jueyun-chili": {
+      "name": "Jueyun Chili",
+      "places": "Qingce Village",
+      "per_pass": 46,
+      "notes": "per_pass is the recommended harvest route on the official map (53 nodes on the map, route 46 items over 46 nodes; confidence medium)"
+    },
+    "kalpalata-lotus": {
+      "name": "Kalpalata Lotus",
+      "places": "the mountains of Sumeru",
+      "per_pass": 64,
+      "notes": "per_pass is the recommended harvest route on the official map (66 nodes on the map, route 64 items over 64 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "lakelight-lily": {
+      "name": "Lakelight Lily",
+      "places": "Erinnyes Forest",
+      "per_pass": 77,
+      "notes": "per_pass is the recommended harvest route on the official map (79 nodes on the map, route 77 items over 77 nodes; confidence medium)"
+    },
+    "lumidouce-bell": {
+      "name": "Lumidouce Bell",
+      "places": "the north of the Court of Fontaine",
+      "per_pass": 31,
+      "notes": "per_pass is the recommended harvest route on the official map (30 nodes on the map, route 31 items over 29 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "lumitoile": {
+      "name": "Lumitoile",
+      "places": "Liffey Region",
+      "per_pass": 79,
+      "notes": "per_pass is the recommended harvest route on the official map (79 nodes on the map, route 79 items over 77 nodes; confidence medium)"
+    },
+    "moonfall-silver": {
+      "name": "Moonfall Silver",
+      "places": "Hiisi Island",
+      "per_pass": 70,
+      "notes": "per_pass is the recommended harvest route on the official map (71 nodes on the map, route 70 items over 70 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "mourning-flower": {
+      "name": "Mourning Flower",
+      "places": "the Asipattravana Swamp",
+      "per_pass": 80,
+      "notes": "per_pass is the recommended harvest route on the official map (81 nodes on the map, route 80 items over 79 nodes; confidence medium)"
+    },
+    "naku-weed": {
+      "name": "Naku Weed",
+      "places": "Tatarasuna",
+      "per_pass": 130,
+      "notes": "per_pass is the recommended harvest route on the official map (132 nodes on the map, route 130 items over 128 nodes; confidence medium)"
+    },
+    "nilotpala-lotus": {
+      "name": "Nilotpala Lotus",
+      "places": "water bodies in Sumeru",
+      "per_pass": 68,
+      "notes": "per_pass is the recommended harvest route on the official map (79 nodes on the map, route 68 items over 67 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "noctilucous-jade": {
+      "name": "Noctilucous Jade",
+      "places": "Mingyun Village",
+      "per_pass": 46,
+      "notes": "per_pass is the recommended harvest route on the official map (55 nodes on the map, route 46 items over 46 nodes; confidence medium)"
+    },
+    "onikabuto": {
+      "name": "Onikabuto",
+      "places": "Narukami Island; Tatarasuna",
+      "per_pass": 66,
+      "notes": "per_pass is the recommended harvest route on the official map (79 nodes on the map, route 66 items over 67 nodes; confidence medium)"
+    },
+    "padisarah": {
+      "name": "Padisarah",
+      "places": "near Sumeru City",
+      "per_pass": 68,
+      "notes": "per_pass is the recommended harvest route on the official map (68 nodes on the map, route 68 items over 68 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "philanemo-mushroom": {
+      "name": "Philanemo Mushroom",
+      "places": "under the eaves of houses",
+      "per_pass": 53,
+      "notes": "per_pass is the recommended harvest route on the official map (57 nodes on the map, route 53 items over 51 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "pine-amber": {
+      "name": "Pine Amber",
+      "places": "near the Favonius Keep",
+      "per_pass": 72,
+      "notes": "per_pass is the whole count of nodes on the official map (72 nodes on the map; confidence low); the map has no recommended route; per_pass is every node on the map"
+    },
+    "portable-bearing": {
+      "name": "Portable Bearing",
+      "places": "the Clink-Clank Krumkake Craftshop",
+      "per_pass": 70,
+      "notes": "per_pass is the recommended harvest route on the official map (72 nodes on the map, route 70 items over 70 nodes; confidence medium)"
+    },
+    "qingxin": {
+      "name": "Qingxin",
+      "places": "Jueyun Karst; Guyun Stone Forest",
+      "per_pass": 118,
+      "notes": "per_pass is the recommended harvest route on the official map (175 nodes on the map, route 118 items over 118 nodes; confidence medium)"
+    },
+    "quenepa-berry": {
+      "name": "Quenepa Berry",
+      "places": "Coatepec Mountain; below the \"Scions of the Canopy\"",
+      "per_pass": 34,
+      "notes": "per_pass is the recommended harvest route on the official map (56 nodes on the map, route 34 items over 32 nodes; confidence medium)"
+    },
+    "rainbow-rose": {
+      "name": "Rainbow Rose",
+      "places": "Beryl Region",
+      "per_pass": 81,
+      "notes": "per_pass is the recommended harvest route on the official map (81 nodes on the map, route 81 items over 81 nodes; confidence medium)"
+    },
+    "romaritime-flower": {
+      "name": "Romaritime Flower",
+      "places": "Salacia Plain",
+      "per_pass": 85,
+      "notes": "per_pass is the recommended harvest route on the official map (120 nodes on the map, route 85 items over 102 nodes; confidence low); the route's own count (85) and its node count (102) differ by more than 10%"
+    },
+    "rukkhashava-mushrooms": {
+      "name": "Rukkhashava Mushrooms",
+      "places": "the Ashavan Realm; Lokapala Jungle",
+      "per_pass": 74,
+      "notes": "per_pass is the recommended harvest route on the official map (77 nodes on the map, route 74 items over 74 nodes; confidence medium)"
+    },
+    "sakura-bloom": {
+      "name": "Sakura Bloom",
+      "places": "Narukami Island",
+      "per_pass": 74,
+      "notes": "per_pass is the recommended harvest route on the official map (75 nodes on the map, route 74 items over 71 nodes; confidence medium)"
+    },
+    "sand-grease-pupa": {
+      "name": "Sand Grease Pupa",
+      "places": "Wenut Tunnels",
+      "per_pass": 74,
+      "notes": "per_pass is the recommended harvest route on the official map (74 nodes on the map, route 74 items over 74 nodes; confidence medium)"
+    },
+    "sango-pearl": {
+      "name": "Sango Pearl",
+      "places": "Watatsumi Island",
+      "per_pass": 44,
+      "notes": "per_pass is the recommended harvest route on the official map (44 nodes on the map, route 44 items over 39 nodes; confidence low); the route's own count (44) and its node count (39) differ by more than 10%"
+    },
+    "saurian-claw-succulent": {
+      "name": "Saurian Claw Succulent",
+      "places": "the Sulfurous Veins",
+      "per_pass": 77,
+      "notes": "per_pass is the recommended harvest route on the official map (90 nodes on the map, route 77 items over 75 nodes; confidence medium)"
+    },
+    "scarab": {
+      "name": "Scarab",
+      "places": "the desert ruins of Sumeru",
+      "per_pass": 59,
+      "notes": "per_pass is the recommended harvest route on the official map (78 nodes on the map, route 59 items over 56 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "sea-ganoderma": {
+      "name": "Sea Ganoderma",
+      "places": "Inazuman seawater",
+      "per_pass": 118,
+      "notes": "per_pass is the recommended harvest route on the official map (161 nodes on the map, route 118 items over 118 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "silk-flower": {
+      "name": "Silk Flower",
+      "places": "Liyue Harbor",
+      "per_pass": 14,
+      "notes": "per_pass is the recommended harvest route on the official map (17 nodes on the map, route 14 items over 14 nodes; confidence medium)"
+    },
+    "skysplit-gembloom": {
+      "name": "Skysplit Gembloom",
+      "places": "Atocpan",
+      "per_pass": 49,
+      "notes": "per_pass is the recommended harvest route on the official map (49 nodes on the map, route 49 items over 49 nodes; confidence medium)"
+    },
+    "small-lamp-grass": {
+      "name": "Small Lamp Grass",
+      "places": "Wolvendom; the Whispering Woods",
+      "per_pass": 76,
+      "notes": "per_pass is the recommended harvest route on the official map (85 nodes on the map, route 76 items over 73 nodes; confidence medium)"
+    },
+    "sprayfeather-gill": {
+      "name": "Sprayfeather Gill",
+      "places": "Toyac Springs; near the \"People of the Springs\"",
+      "per_pass": 73,
+      "notes": "per_pass is the recommended harvest route on the official map (86 nodes on the map, route 73 items over 72 nodes; confidence medium)"
+    },
+    "spring-of-the-first-dewdrop": {
+      "name": "Spring of the First Dewdrop",
+      "places": "underwater in Morte Region",
+      "per_pass": 75,
+      "notes": "per_pass is the recommended harvest route on the official map (74 nodes on the map, route 75 items over 73 nodes; confidence medium)"
+    },
+    "starconch": {
+      "name": "Starconch",
+      "places": "the beaches of Liyue",
+      "per_pass": 73,
+      "notes": "per_pass is the recommended harvest route on the official map (80 nodes on the map, route 73 items over 73 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "subdetection-unit": {
+      "name": "Subdetection Unit",
+      "places": "Fontaine Research Institute of Kinetic Energy Engineering Region",
+      "per_pass": 72,
+      "notes": "per_pass is the recommended harvest route on the official map (72 nodes on the map, route 72 items over 68 nodes; confidence medium)"
+    },
+    "trishiraite": {
+      "name": "Trishiraite",
+      "places": "Temir Mountains",
+      "per_pass": 57,
+      "notes": "per_pass is the recommended harvest route on the official map (66 nodes on the map, route 57 items over 57 nodes; confidence medium)"
+    },
+    "valberry": {
+      "name": "Valberry",
+      "places": "Stormbearer Mountains",
+      "per_pass": 19,
+      "notes": "per_pass is the recommended harvest route on the official map (26 nodes on the map, route 19 items over 19 nodes; confidence medium)"
+    },
+    "violetgrass": {
+      "name": "Violetgrass",
+      "places": "near cliffs in Liyue",
+      "per_pass": 150,
+      "notes": "per_pass is the recommended harvest route on the official map (237 nodes on the map, route 150 items over 150 nodes; confidence medium); the wiki gives no Recommendation; places are its Source lines"
+    },
+    "windwheel-aster": {
+      "name": "Windwheel Aster",
+      "places": "Stormterror's Lair",
+      "per_pass": 73,
+      "notes": "per_pass is the recommended harvest route on the official map (82 nodes on the map, route 73 items over 73 nodes; confidence medium)"
+    },
+    "winter-icelea": {
+      "name": "Winter Icelea",
+      "places": "near Amsvartnir",
+      "per_pass": 69,
+      "notes": "per_pass is the recommended harvest route on the official map (69 nodes on the map, route 69 items over 69 nodes; confidence medium)"
+    },
+    "withering-purpurbloom": {
+      "name": "Withering Purpurbloom",
+      "places": "Ochkanatlan",
+      "per_pass": 80,
+      "notes": "per_pass is the recommended harvest route on the official map (80 nodes on the map, route 80 items over 79 nodes; confidence medium)"
+    },
+    "wolfhook": {
+      "name": "Wolfhook",
+      "places": "Wolvendom",
+      "per_pass": 33,
+      "notes": "per_pass is the recommended harvest route on the official map (35 nodes on the map, route 33 items over 33 nodes; confidence medium)"
+    }
+  }
+}

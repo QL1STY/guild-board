@@ -1,0 +1,111 @@
+/*
+ * The undo note (ui/note.tsx; top bar and undo design, section 6). Fixed at the bottom centre of the page area: the
+ * host lies over the area beside the rail and takes the width the page area takes (frame.css: 1,952 pixels at most, and
+ * the whole width on the Board), so that the note stands at the middle of the page's own box. The host takes no
+ * clicks; only the note does. It lies above the page and the Board's widgets and under the panels and sheets that are
+ * open, which come after it in the page.
+ */
+.note-host {
+  position: fixed;
+  z-index: 3;
+  left: var(--rail-w);
+  right: 0;
+  max-width: 1952px;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  pointer-events: none;
+}
+.gb-main.wide > .note-host { max-width: none; }
+.note {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 360px;
+  max-width: 560px;
+  padding: 10px 10px 10px 14px;
+  border-radius: 14px;
+  background: var(--rail);
+  color: var(--rail-text);
+  box-shadow: 0 16px 30px -14px color-mix(in srgb, var(--rail) 70%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--gold) 28%, transparent);
+  overflow: hidden;
+  font-size: 14.5px;
+  pointer-events: auto;
+}
+.note.in { animation: note-in var(--t-open) var(--ease-out); }
+.note.out { animation: note-out var(--t-open) var(--ease-out) forwards; }
+@keyframes note-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes note-out { to { opacity: 0; transform: translateY(10px); } }
+.note-mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--done) 25%, transparent);
+  color: var(--note-tick);
+}
+.note-mark .sign { width: 15px; height: 15px; }
+.note-text { flex: 1; line-height: 1.3; }
+.note-undo {
+  border: 0;
+  border-radius: 999px;
+  background: var(--note-pill);
+  color: var(--note-pill-text);
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 6px 15px;
+  white-space: nowrap;
+}
+.note-undo:hover { filter: brightness(.94); }
+.note kbd {
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--rail-muted);
+  border: 1px solid color-mix(in srgb, var(--rail-muted) 45%, transparent);
+  border-radius: 5px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+.note-x {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--rail-muted);
+  font-size: 18px;
+  line-height: 1;
+}
+.note-x:hover { background: color-mix(in srgb, var(--rail-text) 10%, transparent); color: var(--rail-text); }
+/* The focus ring on the dark note is the light of the dark panel's. */
+.note :focus-visible { outline: 2px solid var(--rail-text); outline-offset: 2px; }
+/* The time left: it empties over NoteHost's NOTE_MS (its duration is set there), and stops with the pointer or the focus. */
+.note-life {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--r1);
+  transform-origin: left;
+  border-radius: 0 0 0 14px;
+  animation: note-life linear forwards;
+}
+.note[data-held] .note-life { animation-play-state: paused; }
+@keyframes note-life { to { transform: scaleX(0); } }
+/* A refusal: brown, with a warm outline and a warning mark. It has no time. */
+.note[data-tone='refused'] {
+  background: var(--refused);
+  box-shadow: 0 16px 30px -14px color-mix(in srgb, var(--refused) 70%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--note-warn) 45%, transparent);
+}
+.note[data-tone='refused'] .note-mark { background: color-mix(in srgb, var(--note-warn) 25%, transparent); color: var(--note-warn); }
+/* With reduced motion the note does not slide (motion.css makes its durations 0) and the line is not drawn. */
+@media (prefers-reduced-motion: reduce) { .note-life { display: none; } }
+
+/* A refusal that keeps its line, in the Board's Edit (a refused Done) and the overlay's (ui/changes.tsx, Refusal). */
+.ach-refused { min-height: 18px; margin-top: 2px; font-size: 12.5px; font-weight: 700; color: var(--ink); }

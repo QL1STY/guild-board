@@ -1,0 +1,18 @@
+{
+  "key": "rosaria", "name": "Rosaria", "element": "Cryo", "weapon_type": "Polearm", "rarity": 4,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 160},
+  "mains": {"sands": ["atk_pct", "er", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "wants", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["gilded-dreams"], "pieces": "4"}, {"sets": ["blizzard-strayer"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}],
+  "weapons": ["staff-of-the-scarlet-sands", "staff-of-homa", "primordial-jade-winged-spear", "favonius-lance", "fractured-halo", "calamity-queller"],
+  "partners": ["Hydro", "Cryo"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Cryo sub-DPS and support that scales with ATK. The Burst (Rites of Termination, Ice Lance DoT) is her damage and the first talent in both sources (Burst, Skill, Normal Attack), so the damage talent is the Burst. The sources agree on each build: Reverse Melt wants 4pc Gilded Dreams, an EM or ATK% Sands and Staff of the Scarlet Sands; Freeze or all-purpose sub-DPS wants 4pc Blizzard Strayer or Emblem of Severed Fate, an ATK% or ER Sands and Staff of Homa (Game8) or Fractured Halo (KQM); the support build wants 4pc Noblesse Oblige and Primordial Jade Winged-Spear (Game8) or Favonius Lance (KQM). All of them use a Cryo DMG Goblet and a CRIT Circlet. The card lists the sets and weapons from the three builds in that order. Game8 gives no stat goals; the only goal is ER, KQM's 150-160% for Freeze with two Skills per Burst (no C4; 125-135% with C4), and 155-165% for Reverse Melt with three Skills. Her ER depends on the team, as KQM says.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/rosaria-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/314177", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

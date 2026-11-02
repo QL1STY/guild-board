@@ -1,0 +1,36 @@
+{
+  "key": "venti",
+  "name": "Venti",
+  "element": "Anemo",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["support", "damage"],
+  "keeps_alive": false,
+  "scaling": "em",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 160},
+  "mains": {"sands": ["em", "er", "atk_pct"], "goblet": ["em", "dmg", "atk_pct"], "circlet": ["em", "cr", "cd"]},
+  "weights": {"em": "wants", "er": "wants", "atk_pct": "some", "cr": "some", "cd": "some", "atk": "some", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["viridescent-venerer"], "pieces": "4"},
+    {"sets": ["a-day-carved-from-rising-winds"], "pieces": "4"},
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["echoes-of-an-offering"], "pieces": "4"}
+  ],
+  "weapons": ["elegy-for-the-end", "the-daybreak-chronicles", "astral-vulture-s-crimson-plumage", "aqua-simulacra", "polar-star", "thundering-pulse", "the-first-great-magic", "skyward-harp", "the-stringless"],
+  "partners": ["Pyro", "Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources give Venti more than one build; the card follows the support build (KQM's first, Game8's Elemental Mastery Swirl): 4pc Viridescent Venerer (KQM calls it uncontested best in slot), EM on every piece with ER or ATK% on the Sands, and Elegy for the End first. Scaling is EM because Swirl damage and the Viridescent Venerer buff run on it. Both sources also give a DPS build (ATK% Sands, Anemo DMG Goblet, CRIT Circlet; 4pc A Day Carved From Rising Winds with The Daybreak Chronicles first, Aqua Simulacra for Game8's Crit Burst build), and those sets and weapons are kept after the support ones. Talent order: KQM gives none; Game8 gives Burst > Skill > Normal Attack for the Sub-DPS and Normal Attack first only for its Hexerei Main DPS, so Burst first is used. Damage lines: Wind's Grand Ode DoT 37.6% to 67.7%, Skyward Sonnet 276% to 497%, both on the elemental curve. ER is KQM's range for 2 Skills in a short rotation solo Anemo (145-165); 160 is used (1 Skill needs 175-210, triple Anemo 110-160). No source gives EM or CRIT goals. Partners are the elements Viridescent Venerer shreds.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/venti-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297520", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/23", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

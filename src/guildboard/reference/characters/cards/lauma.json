@@ -1,0 +1,36 @@
+{
+  "key": "lauma",
+  "name": "Lauma",
+  "element": "Dendro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "em",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"em": 1000, "cr": 45, "cd": 100, "er": 170},
+  "mains": {"sands": ["em", "er"], "goblet": ["em"], "circlet": ["em", "cr", "cd"]},
+  "weights": {"em": "wants", "er": "wants", "cr": "some", "cd": "some", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["deepwood-memories"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}
+  ],
+  "weapons": ["nightweaver-s-looking-glass", "etherlight-spindlelute", "a-thousand-floating-dreams", "starcaller-s-watch", "sunny-morning-sleep-in", "blackmarrow-lantern", "sacrificial-fragments", "fruit-of-fulfillment"],
+  "partners": ["Dendro", "Hydro", "Electro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources: EM on sands, goblet and circlet (ER sands as an option), Nightweaver's Looking Glass first. The set differs in order: KQM leads with Silken Moon's Serenade, Game8 lists Deepwood Memories and Silken Moon's Serenade together as best; both stay, Silken Moon first. Goals are Game8's: EM 1,000, CRIT Rate 40-50 (45), CRIT DMG 100+, ER 160-200 (KQM: solo Dendro 170-210 at C0, double Dendro 140-175, with Nefer 210-225; 170 used). Priority: KQM Skill = Burst > character level, Game8 Skill > Burst > Normal Attack. Partners are Dendro and Hydro or Electro teammates (Bloom and Lunar-Bloom teams), from the kit and KQM's 'Nefer teams' rows.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/lauma-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/538066", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/8396", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

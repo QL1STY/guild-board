@@ -1,0 +1,37 @@
+{
+  "key": "traveler-hydro",
+  "name": "Traveler (Hydro)",
+  "element": "Hydro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["they", "them", "their"],
+  "roles": ["support", "damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 180},
+  "mains": {"sands": ["atk_pct", "hp_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "em": "some", "er": "some", "hp_pct": "some", "atk": "some", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["golden-troupe"], "pieces": "4"},
+    {"sets": ["nymph-s-dream"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["flower-of-paradise-lost"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"}
+  ],
+  "weapons": ["splendor-of-tranquil-waters", "primordial-jade-cutter", "uraku-misugiri", "wolf-fang", "favonius-sword", "finale-of-the-deep", "fleuve-cendre-ferryman", "xiphos-moonlight", "freedom-sworn"],
+  "partners": ["Pyro", "Electro", "Dendro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources: Skill > Burst (> Normal Attack), a Hydro DMG Goblet and a CRIT Circlet, and 4pc Golden Troupe near the top. Sets differ: KQM leads with Marechaussee Hunter for personal damage, Golden Troupe and Nymph's Dream next; Game8's best are Nymph's Dream and Golden Troupe. Golden Troupe and Nymph's Dream lead (named by both), Marechaussee Hunter follows. Sands differ: KQM ATK% or EM, Game8 ATK% or HP%; all three are kept. KQM and Game8 also give support builds (Instructor, Noblesse Oblige, Deepwood Memories; EM builds with Flower of Paradise Lost, Gilded Dreams) that are not the main plan; Instructor and Flower of Paradise Lost are kept as options. Weapons: KQM Splendor of Tranquil Waters first, Game8 Primordial Jade Cutter first; both lists are kept with those two leading. The kit's 'check' lines (Torrent Surge DMG 189.3%, Dewdrop and Spiritbreath Thorn 32.8%) are the Skill's ATK-based Hydro damage on the elemental curve (ratio 1.80), with a small Max HP bonus from Suffusion, so the scaling stat is ATK and the damage talent the Skill. ER 180 is Game8's all-purpose figure (200 for its Bloom build); KQM gives no figure because the need varies. No ATK or CRIT goal is given.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/hydro-traveler-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/416602", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3997", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,22 @@
+{
+  "calendar": {"version": "7.1", "started": "2026-09-23", "cadence_days": 42},
+  "sources": {
+    "commissions_per_day": 60,
+    "abyss_per_reset": 800,
+    "abyss_reset_day": 16,
+    "theater_per_reset": 1000,
+    "theater_reset_day": 1,
+    "stygian_per_version": 450,
+    "maintenance_per_version": 300,
+    "codes_per_version": 300,
+    "welkin_per_day": 90,
+    "gnostic_hymn": {"primogems": 680, "fates": 4}
+  },
+  "checked": "2026-10-24",
+  "references": [
+    "https://timesaver.gg/blog/genshin-7-1-free-primogems",
+    "https://www.gamsgo.com/blog/genshin-impact-6-6-pull-count",
+    "https://uu-top.com/en/blog/genshin-7-2-pull-count",
+    "https://www.u7buy.com/blog/genshin-impact-7-2-primogem-count/"
+  ]
+}

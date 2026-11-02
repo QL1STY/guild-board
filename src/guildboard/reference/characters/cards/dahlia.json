@@ -1,0 +1,19 @@
+{
+  "key": "dahlia", "name": "Dahlia", "element": "Hydro", "weapon_type": "Sword", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["support", "protector"], "keeps_alive": true, "scaling": "hp",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"hp": 40000, "er": 200},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "cr"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "cr": "some", "cd": "none", "em": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["noblesse-oblige"], "pieces": "4"}, {"sets": ["emblem-of-severed-fate"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}],
+  "weapons": ["favonius-sword", "freedom-sworn", "skyward-blade"],
+  "partners": ["Pyro", "Cryo"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Hydro shielder: his Burst's shield absorbs Max HP damage and his passive speeds up the active character by 0.5% ATK SPD per 1,000 Max HP, so HP is his scaling stat. The Burst's 'check' damage line is an ATK multiplier. Both sources agree on the Burst first, 4pc Noblesse Oblige, HP% or ER Sands, an HP% Goblet, and Favonius Sword first. Goals are Game8's (HP 40,000 or above, ER 200% or above), which fall in KQM's Double Hydro range with one Skill (170-230% at C0). The second and third sets are Game8's (Emblem of Severed Fate) and KQM's (Scroll of the Hero of Cinder City); Freedom-Sworn is KQM's second weapon and Skyward Blade Game8's.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/dahlia-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/516026", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7707", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

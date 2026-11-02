@@ -1,0 +1,37 @@
+{
+  "key": "furina",
+  "name": "Furina",
+  "element": "Hydro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support", "damage"],
+  "keeps_alive": false,
+  "scaling": "hp",
+  "damage_talent": "skill",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"hp": 37500, "cr": 70, "cd": 180, "er": 180},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct", "dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "cr": "wants", "cd": "wants", "dmg": "some", "hp": "some", "atk_pct": "none", "atk": "none", "em": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["golden-troupe"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"}
+  ],
+  "weapons": ["splendor-of-tranquil-waters", "key-of-khaj-nisut", "uraku-misugiri", "primordial-jade-cutter", "freedom-sworn", "festering-desire", "fleuve-cendre-ferryman", "favonius-sword"],
+  "partners": ["Hydro", "Pyro", "Electro"],
+  "partner_roles": ["damage", "healer"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Golden Troupe, HP% sands or ER, HP% or Hydro DMG goblet, CRIT circlet, Splendor of Tranquil Waters first. Her Burst buffs the team and her Skill's Salon members (Max HP-scaling, elemental curve) deal the damage, so the damage talent is the Skill while the leveling order is Burst first (both sources). Goals: HP 35,000-40,000 (37,500 used), CRIT Rate 60-80 (70), CRIT DMG 160-200 (180) and ER 180+ are Game8's; KQM's ER depends on teammates (180-210 with one teammate Skill, 130-150 with Neuvillette). The kit's Fanfare conversion ratio line (marked 'check') is a buff ratio, not a multiplier. She is a sub-DPS support, so no ATK goal. Partners are inferred (Hydro for Neuvillette double Hydro, Pyro and Electro for Vaporize and Hyperbloom teams); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/furina-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/417212", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/4376", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

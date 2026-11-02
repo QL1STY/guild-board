@@ -1,0 +1,112 @@
+/*
+ * The Gallery (the ledger design, section 7; mockup 4). Months newest first, each a grid of 16:9 tiles with rounded
+ * corners, the time at the bottom left and a gold star on favourites: five across in the usual window, more on a
+ * 2,560-pixel screen, where the page takes the frame's 1,912 pixels rather than .gb-page's 1,440 (a grid of pictures
+ * gains from the width; it is never one stretched row). A tile opens the large view: the picture with its arrows, and a
+ * side panel 250 pixels wide.
+ */
+.ga-page { display: flex; flex-direction: column; gap: 4px; }
+.ga-month-h { display: flex; align-items: baseline; gap: 8px; margin: 10px 0 8px; font-size: 15px; font-weight: 800; color: var(--ink); }
+.ga-month-h span { font-size: 13px; font-weight: 500; color: var(--ink); }
+.ga-month:first-child .ga-month-h { margin-top: 0; }
+.ga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+
+.ga-tile {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--tint);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--refused) 12%, transparent);
+  cursor: zoom-in;
+  transition: border-color var(--t-hover), box-shadow var(--t-hover);
+}
+.ga-tile:hover { border-color: var(--gold); box-shadow: 0 2px 8px color-mix(in srgb, var(--refused) 22%, transparent); }
+.ga-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* White over the picture, with a shadow that keeps it readable over a light sky. */
+.ga-time {
+  position: absolute;
+  left: 7px;
+  bottom: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .7), 0 0 6px rgba(0, 0, 0, .35);
+}
+.ga-star {
+  position: absolute;
+  right: 7px;
+  top: 4px;
+  font-size: 15px;
+  color: #FFD56B;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .55);
+}
+.ga-error { margin: 0 0 8px; font-size: 12.5px; color: var(--ink); }
+
+/* The large view: over the page area, as the list of changes is; the rail stays as it is. */
+.ga-layer { position: fixed; z-index: 8; inset: 0 0 0 var(--rail-w); display: flex; align-items: center; justify-content: center; padding: 28px; }
+.ga-dim { position: absolute; inset: 0; background: color-mix(in srgb, var(--refused) 70%, transparent); backdrop-filter: blur(2px); animation: ga-fade 200ms ease both; }
+.ga-light {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  width: min(100%, 1700px, calc((100vh - 56px) * 16 / 9 + 250px));
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--refused) 45%, transparent);
+  animation: ga-rise 260ms var(--ease-out) both;
+}
+@keyframes ga-fade { from { opacity: 0; } }
+@keyframes ga-rise { from { opacity: 0; transform: scale(.98); } }
+.ga-big { position: relative; aspect-ratio: 16 / 9; background: #1E2230; }
+.ga-big img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ga-nav {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0 0 3px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .4);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition: background-color var(--t-hover);
+}
+.ga-nav:not(:disabled):hover { background: rgba(0, 0, 0, .6); }
+.ga-nav:disabled { opacity: .25; cursor: default; }
+.ga-nav.prev { left: 12px; }
+.ga-nav.next { right: 12px; }
+.ga-side { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 16px; font-size: 13.5px; color: var(--ink); }
+.ga-side b { font-weight: 700; }
+.ga-k { font-size: 12px; color: var(--muted); }
+.ga-side .gb-btn { height: 32px; font-size: 13.5px; }
+.ga-side > div:nth-of-type(1) { padding-right: 30px; }
+.ga-fav.on { border-color: var(--gold); background: var(--warn-soft); color: var(--gold-ink); }
+.ga-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink2);
+  font-size: 13px;
+}
+.ga-close:hover { background: var(--tint); }
+.ga-said { margin: 0; font-size: 12.5px; color: var(--ink2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ga-dim, .ga-light { animation: none; }
+}

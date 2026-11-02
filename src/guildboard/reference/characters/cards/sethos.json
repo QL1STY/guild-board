@@ -1,0 +1,18 @@
+{
+  "key": "sethos", "name": "Sethos", "element": "Electro", "weapon_type": "Bow", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "elemental",
+  "goals": {"em": 300, "cr": 70, "cd": 150, "er": 160},
+  "mains": {"sands": ["em", "er"], "goblet": ["dmg", "em"], "circlet": ["cr", "cd"]},
+  "weights": {"em": "wants", "cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["wanderer-s-troupe"], "pieces": "4"}, {"sets": ["gilded-dreams"], "pieces": "4"}, {"sets": ["desert-pavilion-chronicle"], "pieces": "4"}],
+  "weapons": ["hunter-s-path", "the-first-great-magic", "aqua-simulacra", "amos-bow", "slingshot", "scion-of-the-blazing-sun"],
+  "partners": ["Dendro", "Electro"], "partner_roles": ["support", "healer"], "teams": [],
+  "notes": "A 4-star Electro Charged Attack main DPS. His Shadowpiercing Shot takes 140% ATK + 134.6% EM at level 1, and his Burst adds EM-based damage, so the scaling stat is EM and the damage talent is the Normal Attack (the Charged Attack). The Shadowpiercing Shot is on the elemental curve (140.0% to 150.5% at levels 1 to 2), although his plain hits are on the physical one. Both sources put the Normal Attack first; KQM puts character level first for his Normal Attack DPS build and then the Burst, Game8 the Burst then the Skill. They agree on 4pc Wanderer's Troupe as best with Gilded Dreams next, an EM Sands (KQM also gives ER), an Electro DMG Goblet and a CRIT Circlet, and Hunter's Path first. Goals are Game8's: CRIT Rate 60-70% (upper end), CRIT DMG 150% or above, EM 300 or above, ER 130% or more with double Electro and 150-160% solo (160 used); KQM gives 100-170% by Skill count and Burst use.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/sethos-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/451024", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

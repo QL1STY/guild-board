@@ -1,0 +1,153 @@
+# R5: artifact set effects, newest sets first as inventory.json lists them. The condition's first word is the piece count
+# (2 or 4) the effect belongs to. An element's own DMG Bonus (Cryo DMG Bonus +15%) is `dmg`, `met`, for a character of that
+# element, as the plan's `dmg` is the DMG Bonus of her element; Physical DMG Bonus is `phys` (the plan's
+# amendment of 2026-10-29), which the engine counts only for a physical character. Effects on other party members, reaction DMG, RES shred, Energy and Shield Strength are
+# not stats of the wearer, so the notes list them.
+
+@ heart-of-the-furnace
++ atk_pct 18 always 2
++ atk_pct 12 met 4 12s after the wearer triggers a Stellar Glimmer reaction or deals Stellar Glimmer reaction DMG
+~ not counted: Stellar Glimmer reaction DMG +50% for all nearby party members
+
+@ scarlet-proof
++ atk_pct 18 always 2
++ cr 16 met 4 for 10s after the wearer triggers a Stellar Swirl reaction
+~ not counted: Stellar Swirl reaction DMG +40%
+
+@ disenchantment-in-deep-shadow
++ atk_pct 18 always 2
++ cr 16 met 4 against opponents affected by Superconduct
+~ not counted: Superconduct reaction DMG +80%
+
+@ celestial-gift
++ er 20 always 2
++ dmg 20 met 4 Light's Guidance, 20s after an Elemental Skill, if the wearer has completed Witch's Homework: Elemental DMG Bonus of the wearer's Element for all nearby party members
+~ with the Hexerei: Secret Rite effect in the party Light's Guidance becomes Mortal Hymn, a 40% Elemental DMG Bonus for the Elements of the wearer and the active character, which depends on the party, not counted
+
+@ a-day-carved-from-rising-winds
++ atk_pct 18 always 2
++ atk_pct 25 met 4 Blessing of Pastoral Winds, 6s after a Normal Attack, Charged Attack, Elemental Skill or Elemental Burst hits an opponent
++ cr 20 met 4 additionally, if the wearer has completed Witch's Homework (Resolve of Pastoral Winds)
+
+@ aubade-of-morningstar-and-moon
++ em 80 always 2
+~ no stat in the 4-piece: Lunar Reaction DMG +20% while off the field, and 40% more at Moonsign Ascendant Gleam, not counted
+
+@ silken-moon-s-serenade
++ er 20 always 2
++ em 60 met 4 Gleaming Moon: Devotion, 8s after dealing Elemental DMG, when the party's Moonsign is Nascent Gleam (all party members)
+~ at Moonsign Ascendant Gleam the Elemental Mastery is 120, which depends on the party, so only the Nascent Gleam value is counted; not counted: Lunar Reaction DMG +10% per different Gleaming Moon effect
+
+@ night-of-the-sky-s-unveiling
++ em 80 always 2
++ cr 15 met 4 Gleaming Moon: Intent, 4s after nearby party members trigger Lunar Reactions while the wearer is on the field, when the party's Moonsign is Nascent Gleam
+~ at Moonsign Ascendant Gleam the CRIT Rate is 30%, which depends on the party, so only the Nascent Gleam value is counted; not counted: Lunar Reaction DMG +10% per different Gleaming Moon effect
+
+@ finale-of-the-deep-galleries
++ dmg 15 met 2 Cryo DMG Bonus, for a Cryo character
++ dmg 60 met 4 Normal Attack DMG while the wearer has 0 Elemental Energy (stops for 6s after Elemental Burst DMG)
++ dmg 60 met 4 Elemental Burst DMG while the wearer has 0 Elemental Energy (stops for 6s after Normal Attack DMG)
+
+@ long-night-s-oath
++ dmg 25 met 2 Plunging Attack DMG
++ dmg 15*5 met 4 Plunging Attack DMG at 5 stacks of Radiance Everlasting, 6s each
+
+@ obsidian-codex
++ dmg 15 met 2 DMG dealt, while the wearer is in Nightsoul's Blessing and on the field
++ cr 40 met 4 6s after the wearer consumes 1 Nightsoul point while on the field (once every second)
+
+@ scroll-of-the-hero-of-cinder-city
++ dmg 12 met 4 Elemental DMG Bonus for the reaction-proximate Elemental Types, for all nearby party members, 15s after the wearer triggers a reaction related to their Element
++ dmg 28 met 4 an additional Elemental DMG Bonus for the reaction-proximate Elemental Types, 20s, if the wearer is in Nightsoul's Blessing when triggering
+~ not counted: 6 Energy when a nearby party member triggers a Nightsoul Burst (2-piece)
+
+@ unfinished-reverie
++ atk_pct 18 always 2
++ dmg 50 met 4 DMG dealt, 3s after leaving combat, or while a Burning opponent is nearby (it falls 10% a second in combat without one)
+
+@ fragment-of-harmonic-whimsy
++ atk_pct 18 always 2
++ dmg 18*3 met 4 at 3 stacks, 6s after the value of a Bond of Life changes
+
+@ song-of-days-past
++ heal 15 always 2
+~ no stat in the 4-piece: the active character's DMG is increased by 8% of the healing recorded by the Yearning effect (up to 15,000), not counted
+
+@ nighttime-whispers-in-the-echoing-woods
++ atk_pct 18 always 2
++ dmg 20 met 4 Geo DMG Bonus, 10s after using an Elemental Skill
++ dmg 30 met 4 additionally, while under a shield from the Crystallize reaction or near Moondrifts from Lunar-Crystallize reactions (the effect is increased by 150%)
+= the text gives 150%, not 30; 30 is 150% of the effect's 20%
+
+@ golden-troupe
++ dmg 20 met 2 Elemental Skill DMG
++ dmg 25 met 4 Elemental Skill DMG
++ dmg 25 met 4 Elemental Skill DMG, further, while not on the field (cleared 2s after taking the field)
+
+@ marechaussee-hunter
++ dmg 15 met 2 Normal and Charged Attack DMG
++ cr 12*3 met 4 at 3 stacks, 5s after current HP changes
+
+@ vourukasha-s-glow
++ hp_pct 20 always 2
++ dmg 10 met 4 Elemental Skill and Elemental Burst DMG
++ dmg 40 met 4 Elemental Skill and Elemental Burst DMG, further, at 5 stacks, 5s after the wearer takes DMG (each stack increases the 10% bonus by 80%, so 8%)
+= the text gives 10% and 80% and 5 stacks, not 40; 40 is 10% x 80% x 5
+
+@ nymph-s-dream
++ dmg 15 met 2 Hydro DMG Bonus, for a Hydro character
++ atk_pct 25 met 4 at 3 or more stacks of Mirrored Nymph, 8s each (7% at 1, 16% at 2)
++ dmg 15 met 4 Hydro DMG Bonus at 3 or more stacks of Mirrored Nymph, 8s each (4% at 1, 9% at 2), for a Hydro character
+
+@ desert-pavilion-chronicle
++ dmg 15 met 2 Anemo DMG Bonus, for an Anemo character
++ dmg 40 met 4 Normal, Charged and Plunging Attack DMG, 15s after Charged Attacks hit
+~ not counted: Normal Attack SPD +10%
+
+@ flower-of-paradise-lost
++ em 80 always 2
+~ no stat in the 4-piece: Bloom, Hyperbloom and Burgeon reaction DMG +40%, and 25% more per stack up to 4, not counted
+
+@ gilded-dreams
++ em 80 always 2
++ em 50*3 met 4 within 8s of an Elemental Reaction, from 3 party members of a different Elemental Type
+~ for party members of the same Elemental Type ATK is increased by 14% each (up to 3), so only the different-type case is counted
+
+@ deepwood-memories
++ dmg 15 met 2 Dendro DMG Bonus, for a Dendro character
+~ no stat in the 4-piece: targets' Dendro RES -30% for 8s, not counted
+
+@ retracing-bolide
++ dmg 40 met 4 Normal and Charged Attack DMG while protected by a shield
+~ not counted: Shield Strength +35% (2-piece)
+
+@ shimenawa-s-reminiscence
++ atk_pct 18 always 2
++ dmg 50 met 4 Normal, Charged and Plunging Attack DMG, 10s after an Elemental Skill is cast with 15 or more Energy (the wearer loses 15 Energy)
+
+@ vermillion-hereafter
++ atk_pct 18 always 2
++ atk_pct 8 met 4 Nascent Light, 16s after using an Elemental Burst
++ atk_pct 10*4 met 4 Nascent Light, further, when HP decreases, up to 4 times
+
+@ gambler
++ dmg 20 met 2 Elemental Skill DMG
+~ no stat in the 4-piece: a 100% chance to remove Elemental Skill CD on defeating an opponent, not counted
+
+@ gladiator-s-finale
++ atk_pct 18 always 2
++ dmg 35 met 4 Normal Attack DMG, if the wearer uses a Sword, Claymore or Polearm
+
+@ maiden-beloved
++ heal 15 always 2
+~ no stat of the wearer in the 4-piece: healing received by all party members +20% for 10s, not counted
+
+@ resolution-of-sojourner
++ atk_pct 18 always 2
++ cr 30 met 4 Charged Attack CRIT Rate
+
+@ pale-flame
++ phys 25 always 2
++ atk_pct 9*2 met 4 at 2 stacks, 7s after an Elemental Skill hits (once every 0.3s)
++ phys 25 met 4 Physical DMG Bonus, further: the 2-piece effect is increased by 100% at 2 stacks
+= the 4-piece text gives only "increased by 100%"; 25 is the 2-piece's 25%, doubled

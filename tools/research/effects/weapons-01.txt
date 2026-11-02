@@ -1,0 +1,131 @@
+# R4: weapon effects, written from each passive's text (tools/research/weapons.py --draft prints the text).
+# Conventions: a stacking effect counts at its full stacks (*N); an effect that gives other party members a bonus, a
+# reaction DMG bonus, energy, ATK SPD, shield strength or healing done is not a stat of the wielder and is listed in the notes;
+# when the text offers one of several effects by team make-up, the most common one is counted and the rest named in the notes.
+# Newest weapons first, as inventory.json lists them.
+
+@ breezeborne-refrain
++ er 20/25/30/35/40 always
+~ not counted: Stellar Glimmer reaction DMG boost for nearby party members (24%/30%/36%/42%/48%, from 3 stacks of Hymn of the Pure)
+
+@ winter-s-heavy-heart
++ em 24/30/36/42/48*4 met four Cryo characters in the party (the most Silver-Tinged Blood Pact counts)
+~ an Electro character in the party gives ATK +4.8%/6%/7.2%/8.4%/9.6% instead of Elemental Mastery, and up to 4 Cryo or Electro characters count in all, so only the Cryo case is counted; Radiance: Stellar Glimmer changes the effect to 20/25/30/35/40 EM per Cryo or Electro character plus Stellar Glimmer reaction DMG, not counted
+
+@ silver-light
++ em 52/65/78/91/104*2 met 2 stacks, 12s after using an Elemental Skill
+
+@ new-bough
++ atk_pct 4/5/6/7/8*3 met at 3 stacks of Verdant: hit an opponent within 12s after using the Elemental Skill, lasts 6s
++ em 20/25/30/35/40*3 met at 3 stacks of Verdant: hit an opponent within 12s after using the Elemental Skill, lasts 6s
+~ Radiance: Stellar Glimmer changes Verdant to ATK +6%/7.5%/9%/10.5%/12% and Stellar Glimmer reaction DMG +8%/10%/12%/14%/16%, not counted
+
+@ hymn-of-the-maelstrom
++ heal 4/5/6/7/8 always
++ hp_pct 4/5/6/7/8*3 met at 3 stacks of Vatsamonga's Vatic Vintage, after healing, lasts 10s
+~ not counted: the active party member's ATK +0.4%/0.5%/0.6%/0.7%/0.8% per 1,000 Max HP over 40,000 (max 8%/10%/12%/14%/16%), and the 75% increase after a Frozen or Stellar Swirl reaction
+
+@ beyond-the-chrysalis
++ cd 56/72/88/104/120 met Winds of Devotion, the first of three effects in sequence after using an Elemental Skill or Burst, 10s
+~ not counted: Winds of Defiance (Stellar Swirl reaction DMG +36%/45%/54%/63%/72%) and Winds of Plenty (Elemental Energy)
+
+@ jade-vista
++ atk_pct 12/15/18/21/24*3 met 3 party members of a different element than the wielder
+~ for a party member of the same element the wielder gets Elemental Mastery +64/80/96/112/128 instead; the two effects share up to 3 stacks in all, with Elemental Mastery applied first, so only the different-element case is counted
+
+@ covenant-of-frost-and-snow
++ em 120/150/180/210/240 met 12s after using an Elemental Skill
+
+@ clash-of-kings
++ atk_pct 20/25/30/35/40 met Laws of the Board, 6s after using an Elemental Skill (once every 12s, extended up to 6s by a Charged Attack)
++ em 100/125/150/175/200 met Laws of the Board, 6s after using an Elemental Skill (once every 12s, extended up to 6s by a Charged Attack)
+
+@ echoes-of-the-heart
++ em 60/75/90/105/120 met 12s after triggering an Elemental Reaction
+~ not counted: Stellar Glimmer reaction DMG +16%/20%/24%/28%/32%
+
+@ frostbreath
++ atk_pct 20/25/30/35/40 met 15s after triggering a Cryo or Hydro-related Elemental Reaction (once every 16s)
+~ not counted: Elemental Energy for other party members
+
+@ song-of-the-vigil
++ atk_pct 20/25/30/35/40 met 12s after triggering a Stellar Glimmer reaction
+~ not counted: Elemental Energy regenerated on Elemental Reactions
+
+@ forged-by-the-golden-melody
++ atk_pct 18/22.5/27/31.5/36 met in the ATK phase of Harmonic Movement (the phases change every 10s: ATK, then Elemental Mastery, then Stellar Glimmer reaction DMG)
+~ the phases exclude each other, so only the stronger one, ATK, is an effect; the Elemental Mastery phase gives +120/150/180/210/240 Elemental Mastery
+~ not counted: the Stellar Glimmer reaction DMG phase (28%/35%/42%/49%/56%); a Stellar Glimmer reaction adds a second 12s instance of the active phase
+
+@ blade-of-atonement
++ em 64/80/96/112/128 met 12s after triggering an Elemental Reaction
++ atk_pct 16/20/24/28/32 met 12s after triggering a Stellar Glimmer reaction
+
+@ heretic-s-molten-blade
++ atk_pct 36/45/54/63/72 met Gleam of First Light after using an Elemental Skill, at the greatest distance travelled (its range is 18%/22.5%/27%/31.5%/36% to 36%/45%/54%/63%/72%), 14s
+
+@ emberwell
++ atk_pct 16/20/24/28/32 met 12s after triggering an Elemental Reaction
+~ not counted: Stellar Glimmer reaction DMG +16%/20%/24%/28%/32%
+
+@ exaiphanes-blade
++ atk_pct 16/20/24/32/40 met 8s after attacking and hitting an opponent (once every 5s); the Traveler only
+~ the Traveler's CRIT DMG +0%/6%/6%/6%/6% per Element resonated with is not counted, because how many Elements resonate depends on the party; Elemental Energy not counted
+
+@ whitelake-frostfeather
++ atk_pct 8/10/12/14/16*3 met at 3 stacks of Lake-Hued Lament, after hitting with the Elemental Skill, 8s
+~ not counted: at 3 stacks, Stellar Glimmer reaction CRIT DMG +50%/65%/80%/95%/110% and Elemental Energy
+
+@ a-teaspoon-of-transcendence
++ atk_pct 28/35/42/49/56 always
+~ the Stellar effect is not counted: after a Charged Attack hits, Stellar-Conduct and Stellar Swirl reaction DMG +16%/20%/24%/28%/32% for 5s, max 3 stacks
+
+@ disaster-and-remorse
++ dmg 40/50/60/70/80 met Unforgivable: Normal and Charged Attack DMG, 3s after using an Elemental Skill (once every 18s)
++ dmg 40/50/60/70/80 met Irreparable: Elemental Skill and Elemental Burst DMG, 3s after using an Elemental Skill (once every 18s)
+~ with Hexerei: Secret Rite in the party both boosts are increased by 75%, not counted; each effect's 3s is extended by 1s per hit of the other attack types
+
+@ angelos-heptades
++ atk_pct 12/15/18/21/24 always
++ dmg 26/34/42/50/58 met Pathfinder's Light for the active character, 20s after creating a Shield, at its cap (10%/13%/16%/19%/22% per 1,000 ATK, up to 26%/34%/42%/50%/58%)
+~ not counted: Elemental Energy on creating a Shield; with Hexerei, an off-field Hexerei character gains 50% of the DMG increase
+
+@ golden-frostbound-oath
++ def_pct 16/20/24/28/32 always
++ dmg 40/50/60/70/80 met Geo DMG, 6s after the Elemental Skill or a Lunar-Crystallize attack hits (Frost Fae's Favor)
+~ not counted: Lunar-Crystallize Reaction DMG +40%/50%/60%/70%/80%, and the Geo DMG and Lunar-Crystallize bonus of 20%/25%/30%/35%/40% for other party members
+
+@ gest-of-the-mighty-wolf
++ dmg 7.5/9.5/11.5/13.5/15.5*4 met at 4 stacks of Four Winds' Hymn, 4s
+~ not counted: ATK SPD +10%; with the Hexerei: Secret Rite effect in the party each stack also gives CRIT DMG +7.5%/9.5%/11.5%/13.5%/15.5% (up to 4 stacks), which depends on the party
+
+@ nocturne-s-curtain-call
++ hp_pct 10/12/14/16/18 always
++ hp_pct 14/16/18/20/22 met 12s after triggering a Lunar reaction or inflicting Lunar Reaction DMG (Bountiful Sea's Sacred Wine)
+~ not counted: CRIT DMG of Lunar Reaction DMG +60%/80%/100%/120%/140% and Energy recovery
+
+@ lightbearing-moonshard
++ def_pct 20/25/30/35/40 always
+~ not counted: Lunar-Crystallize reaction DMG +64%/80%/96%/112%/128% for 5s after an Elemental Skill
+
+@ the-daybreak-chronicles
++ dmg 60/75/90/105/120 met Normal Attack, Elemental Skill and Elemental Burst DMG at the maximum of Stirring Dawn Breeze (3s after leaving combat; it falls in combat and is restored by hits)
+~ with Hexerei: Secret Rite effects in the party each hit restores 20%/25%/30%/35%/40% instead, not counted
+
+@ rainbow-serpent-s-rain-bow
++ atk_pct 28/35/42/49/56 met 8s after the wielder's attacks hit an opponent while the wielder is off-field
+
+@ athame-artis
++ cd 16/20/24/28/32 met Elemental Burst CRIT DMG
++ atk_pct 20/25/30/35/40 met Blade of the Daylight Hours, after an Elemental Burst hits an opponent
+~ not counted: nearby active party members' ATK +16%/20%/24%/28%/32% for 3s; with Hexerei: Secret Rite effects Blade of the Daylight Hours is increased by a further 75%
+
+@ reliquary-of-truth
++ cr 8/10/12/14/16 always
++ em 80/100/120/140/160 met Secret of Lies, 12s after using an Elemental Skill
++ cd 24/30/36/42/48 met Moon of Truth, 4s after dealing Lunar-Bloom DMG
+~ when Secret of Lies and Moon of Truth are both active, both results are increased by 50%, not counted
+
+@ dawning-frost
++ em 72/90/108/126/144 met 10s after a Charged Attack hits an opponent
++ em 48/60/72/84/96 met 10s after an Elemental Skill hits an opponent

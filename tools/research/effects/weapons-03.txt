@@ -1,0 +1,125 @@
+@ ash-graven-drinking-horn
+~ no stat: deals AoE DMG of 40%/50%/60%/70%/80% of Max HP when an attack hits (once every 15s), not counted
+
+@ footprint-of-the-rainbow
++ def_pct 16/20/24/28/32 met 15s after using an Elemental Skill
+
+@ earth-shaker
++ dmg 16/20/24/28/32 met Elemental Skill DMG, 8s after a party member triggers a Pyro-related reaction
+
+@ flute-of-ezpitzal
++ def_pct 16/20/24/28/32 met 15s after using an Elemental Skill
+
+@ surf-s-up
++ hp_pct 20/25/30/35/40 always
++ dmg 12/15/18/21/24*4 met Normal Attack DMG at 4 stacks of Scorching Summer, for 14s after using an Elemental Skill (once every 15s)
+
+@ fang-of-the-mountain-king
++ dmg 10/12.5/15/17.5/20*6 met Elemental Skill and Burst DMG at 6 stacks of Canopy's Favor, 6s each
+
+@ lumidouce-elegy
++ atk_pct 15/19/23/27/31 always
++ dmg 18/23/28/33/38*2 met at 2 stacks, 8s after triggering Burning or dealing Dendro DMG to Burning opponents
+~ not counted: Elemental Energy
+
+@ cloudforged
++ em 40/50/60/70/80*2 met at 2 stacks, 18s after Elemental Energy decreases
+
+@ absolution
++ cd 20/25/30/35/40 always
++ dmg 16/20/24/28/32*3 met at 3 stacks, 6s after the value of a Bond of Life increases
+
+@ silvershower-heartstrings
++ hp_pct 40/50/60/70/80 met at 3 Remedy stacks (12%/15%/18%/21%/24% at 1, 24%/30%/36%/42%/48% at 2)
++ cr 28/35/42/49/56 met Elemental Burst CRIT Rate, while 3 Remedy stacks are active (cancelled 4s after falling under 3)
+
+@ crimson-moon-s-semblance
++ dmg 12/16/20/24/28 met while the wielder has a Bond of Life (a Charged Attack that hits grants one, once every 14s)
++ dmg 24/32/40/48/56 met additionally, while the Bond of Life is 30% of Max HP or more
+
+@ dialogues-of-the-desert-sages
+~ no stat: restores 8/10/12/14/16 Energy on healing, not counted
+
+@ uraku-misugiri
++ dmg 16/20/24/28/32 met Normal Attack DMG
++ dmg 24/30/36/42/48 met Elemental Skill DMG
++ def_pct 20/25/30/35/40 always
+~ after a nearby active character deals Geo DMG, the Normal Attack and Elemental Skill bonuses increase by 100% for 15s, which depends on the party, not counted
+
+@ crane-s-echoing-call
++ dmg 28/41/54/67/80 met Plunging Attack DMG, 20s after the wielder hits an opponent with a Plunging Attack (all nearby party members get it)
+~ not counted: Energy restored to the wielder
+
+@ ultimate-overlord-s-mega-magic-sword
++ atk_pct 12/15/18/21/24 always
++ atk_pct 12/15/18/21/24 met up to this much more, by the number of Melusines the player has helped in Merusea Village
+
+@ verdict
++ atk_pct 20/25/30/35/40 always
++ dmg 18/22.5/27/31.5/36*2 met Elemental Skill DMG with 2 Seals (15s each; they disappear 0.2s after the Elemental Skill deals DMG)
+
+@ sword-of-narzissenkreuz
+~ no stat: Pneuma or Ousia energy blast dealing 160%/200%/240%/280%/320% of ATK as DMG when the wielder has no Arkhe, not counted
+
+@ splendor-of-tranquil-waters
++ dmg 8/10/12/14/16*3 met Elemental Skill DMG at 3 stacks, 6s after the wielder's current HP changes
++ hp_pct 14/17.5/21/24.5/28*2 met at 2 stacks, 6s after other party members' current HP changes
+
+@ cashflow-supervision
++ atk_pct 16/20/24/28/32 always
++ dmg 16/20/24/28/32*3 met Normal Attack DMG at 3 stacks, 4s after current HP changes
++ dmg 14/17.5/21/24.5/28*3 met Charged Attack DMG at 3 stacks, 4s after current HP changes
+~ not counted: ATK SPD +8%/10%/12%/14%/16% at 3 stacks
+
+@ tome-of-the-eternal-flow
++ hp_pct 16/20/24/28/32 always
++ dmg 14/18/22/26/30*3 met Charged Attack DMG at 3 stacks, 4s after current HP changes
+~ not counted: Energy restored at 3 stacks
+
+@ ballad-of-the-boundless-blue
++ dmg 8/10/12/14/16*3 met Normal Attack DMG at 3 stacks, 6s after Normal or Charged Attacks hit
++ dmg 6/7.5/9/10.5/12*3 met Charged Attack DMG at 3 stacks, 6s after Normal or Charged Attacks hit
+
+@ range-gauge
++ atk_pct 3/4/5/6/7*3 met Struggle, from 3 Unity's Symbols consumed on an Elemental Skill or Burst, 10s
++ dmg 7/8.5/10/11.5/13*3 met All Elemental DMG Bonus from Struggle, 3 Unity's Symbols consumed, 10s
+
+@ prospector-s-drill
++ atk_pct 3/4/5/6/7*3 met Struggle, from 3 Unity's Symbols consumed on an Elemental Skill or Burst, 10s
++ dmg 7/8.5/10/11.5/13*3 met All Elemental DMG Bonus from Struggle, 3 Unity's Symbols consumed, 10s
+
+@ portable-power-saw
++ em 40/50/60/70/80*3 met Roused, from 3 Stoic's Symbols consumed on an Elemental Skill or Burst, 10s
+~ not counted: Energy restored 2s later
+
+@ the-dockhand-s-assistant
++ em 40/50/60/70/80*3 met Roused, from 3 Stoic's Symbols consumed on an Elemental Skill or Burst, 10s
+~ not counted: Energy restored 2s later
+
+@ sacrificial-jade
++ hp_pct 32/40/48/56/64 met after being off the field for more than 5s (cancelled 10s after coming on the field)
++ em 40/50/60/70/80 met after being off the field for more than 5s (cancelled 10s after coming on the field)
+
+@ scion-of-the-blazing-sun
++ dmg 28/35/42/49/56 met Charged Attack DMG against opponents with Heartsearer, 10s after a Sunfire Arrow (once every 10s)
+~ not counted: the Sunfire Arrow's own DMG of 60%/75%/90%/105%/120% of ATK
+
+@ ballad-of-the-fjords
++ em 120/150/180/210/240 met at least 3 different Elemental Types in the party
+
+@ talking-stick
++ atk_pct 16/20/24/28/32 met 15s after being affected by Pyro (once every 12s)
++ dmg 12/15/18/21/24 met All Elemental DMG Bonus, 15s after being affected by Hydro, Cryo, Electro or Dendro (once every 12s)
+
+@ wolf-fang
++ dmg 16/20/24/28/32 met Elemental Skill and Burst DMG
++ cr 2/2.5/3/3.5/4*4 met Elemental Skill CRIT Rate at 4 stacks, 10s after an Elemental Skill hits
++ cr 2/2.5/3/3.5/4*4 met Elemental Burst CRIT Rate at 4 stacks, 10s after an Elemental Burst hits
+
+@ fleuve-cendre-ferryman
++ cr 8/10/12/14/16 met Elemental Skill CRIT Rate
++ er 16/20/24/28/32 met 5s after using an Elemental Skill
+
+@ flowing-purity
++ dmg 8/10/12/14/16 met All Elemental DMG Bonus, 15s after using an Elemental Skill (once every 10s)
++ dmg 12/15/18/21/24 met All Elemental DMG Bonus at the cap, 15s after a Bond of Life is cleared (2%/2.5%/3%/3.5%/4% per 1,000 HP cleared)

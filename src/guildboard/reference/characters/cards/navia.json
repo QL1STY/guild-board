@@ -1,0 +1,18 @@
+{
+  "key": "navia", "name": "Navia", "element": "Geo", "weapon_type": "Claymore", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"], "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 80, "cd": 160, "er": 130},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["nighttime-whispers-in-the-echoing-woods"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["golden-troupe"], "pieces": "4"}],
+  "weapons": ["verdict", "a-thousand-blazing-suns", "serpent-spine", "beacon-of-the-reed-sea", "the-unforged", "wolf-s-gravestone"],
+  "partners": ["Hydro", "Geo"], "partner_roles": ["support", "healer"], "teams": [],
+  "notes": "A Geo main DPS. Her Skill, Ceremonial Crystalshot, fires the Rosula Shardshot (394.8% ATK at level 1) and turns her Normal, Charged and Plunging Attacks into Geo DMG, so the damage talent is the Skill with the elemental table; her Normal Attacks are physical hits converted to Geo and come second. Every line scales with ATK. Both sources put the Skill first (Game8's order repeats Skill, Normal Attack, Burst); KQM has the Normal Attack level with or above the Burst. The sources agree on 4pc Nighttime Whispers in the Echoing Woods as best (Game8 also lists Gladiator's Finale and Archaic Petra as equals), ATK% Sands (ER for a quick-swap build), a Geo DMG Goblet, a CRIT Circlet, and Verdict first. Marechaussee Hunter is for teams with Furina in both. Goals are Game8's: ATK 2,000 or above, CRIT Rate 70-80% (upper end), CRIT DMG 160% or above, ER 130% or above; KQM gives 100-180% by team and constellation.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/navia-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/417194", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,36 @@
+{
+  "key": "kujou-sara",
+  "name": "Kujou Sara",
+  "element": "Electro",
+  "weapon_type": "Bow",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 180},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "cr": "wants", "cd": "wants", "dmg": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["thundering-fury"], "pieces": "4"}
+  ],
+  "weapons": ["elegy-for-the-end", "skyward-harp", "favonius-warbow", "fading-twilight", "polar-star", "chain-breaker", "sacrificial-bow"],
+  "partners": ["Electro", "Anemo"],
+  "partner_roles": ["damage", "support"],
+  "teams": [],
+  "notes": "Both sources: 4pc Emblem of Severed Fate, ATK% or ER sands, Electro DMG goblet, CRIT circlet, Elegy for the End first, Skill > Burst > Normal Attack. KQM adds Noblesse Oblige, Tenacity of the Millelith and Thundering Fury. Her Skill's buff scales with its level, which is why the Skill leads the leveling order, but the largest hit is the Burst (Titanbreaker), so the Burst is the damage talent. KQM's ER is for a Burst every rotation: 140-160 with two other Electro characters, 180 with Raiden (used), 200 in Electro-Charged teams, 230 solo Electro. Neither source gives other numeric goals.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/sara-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/336727", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

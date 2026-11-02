@@ -1,0 +1,33 @@
+{
+  "key": "kaedehara-kazuha",
+  "name": "Kaedehara Kazuha",
+  "element": "Anemo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "em",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 150},
+  "mains": {"sands": ["em", "er"], "goblet": ["em"], "circlet": ["em"]},
+  "weights": {"em": "wants", "er": "wants", "atk_pct": "some", "cr": "some", "atk": "none", "cd": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["viridescent-venerer"], "pieces": "4"}
+  ],
+  "weapons": ["freedom-sworn", "xiphos-moonlight", "iron-sting", "favonius-sword", "sacrificial-sword", "toukabou-shigure"],
+  "partners": ["Pyro", "Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources' support build agree: 4pc Viridescent Venerer, EM on all three, ER sands as an option, Freedom-Sworn first, Burst first. KQM adds that his Skill level matters little (Character Level > Burst > Normal Attack = Skill). Game8 also lists a DPS build (ATK% or EM sands, Anemo DMG goblet, CRIT circlet, Mistsplitter Reforged) which is left out. KQM's ER depends on his weapon and on how many Skills the team casts: 1 hold Skill 220-280 (other swords), 2 Skills 160-200 (Freedom-Sworn or other swords), 125-150 with Favonius Sword; 150 is used as the middle for a team with two Skills. Neither source gives other goals. Partners: any swirl-able element.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/kazuha-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/332826", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/22", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

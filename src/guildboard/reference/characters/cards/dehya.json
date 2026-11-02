@@ -1,0 +1,20 @@
+{
+  "key": "dehya", "name": "Dehya", "element": "Pyro", "weapon_type": "Claymore", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "hp",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"er": 160},
+  "mains": {"sands": ["hp_pct", "em"], "goblet": ["hp_pct", "em"], "circlet": ["hp_pct", "em", "cr"]},
+  "weights": {"hp_pct": "wants", "em": "wants", "cr": "some", "er": "some", "hp": "some", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none", "cd": "none"},
+  "sets": [{"sets": ["tenacity-of-the-millelith"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["instructor"], "pieces": "4"}],
+  "weapons": ["favonius-greatsword", "makhaira-aquamarine", "sacrificial-greatsword"],
+  "partners": ["Hydro", "Dendro"], "partner_roles": ["support"], "teams": [],
+  "notes": "Both sources give three builds: an off-field support or sub-DPS (HP% and EM; KQM first, Game8 first too), an EM Burgeon build, and an on-field Pyro DPS with 4pc Marechaussee Hunter. The card follows the first. They differ on the talent order (KQM Burst first, Game8 Skill first): the card follows KQM, as her Burst is the larger hit. The kit lines marked 'check' are ATK multipliers (some add a small Max HP part). Game8 puts 4pc Scroll first, KQM 4pc Tenacity of the Millelith. A third source, genshin.gg's Dehya page (checked 2026-10-29), calls her a support with HP% on every piece, 4pc Tenacity of the Millelith first and 4pc Instructor third, and Favonius Greatsword and Makhaira Aquamarine on its weapon list; so the card puts Tenacity first, then Scroll, then Instructor, and keeps Favonius Greatsword and Makhaira Aquamarine, which all three name, first. Neither source gives stat goals. ER 160% is the low end of KQM's Furina Vaporize and Mono Pyro or Burning ranges (160-210% and 160-180%); with Chevreuse it is 150-175%. Confidence is medium: the three sources agree on the off-field HP% support build, but the other builds differ and no goals exist.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://genshin.gg/characters/dehya/", "checked": "2026-10-29"},
+    {"url": "https://keqingmains.com/q/dehya-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/383716", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3463", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

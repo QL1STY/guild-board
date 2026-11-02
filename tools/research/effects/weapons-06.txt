@@ -1,0 +1,127 @@
+@ the-viridescent-hunt
+~ no stat: a Cyclone deals 40%/50%/60%/70%/80% of ATK as DMG every 0.5s for 4s, not counted
+
+@ freedom-sworn
++ dmg 10/12.5/15/17.5/20 always
++ dmg 16/20/24/28/32 met Normal, Charged and Plunging Attack DMG, 12s after 2 Sigils of Rebellion are spent (Millennial Movement: Song of Resistance, all nearby party members; then none for 20s)
++ atk_pct 20/25/30/35/40 met 12s after 2 Sigils of Rebellion are spent (Millennial Movement: Song of Resistance, all nearby party members; then none for 20s)
+~ buffs of the same type from the "Millennial Movement" weapons do not stack
+
+@ festering-desire
++ dmg 16/20/24/28/32 met Elemental Skill DMG
++ cr 6/7.5/9/10.5/12 met Elemental Skill CRIT Rate
+
+@ the-stringless
++ dmg 24/30/36/42/48 met Elemental Skill and Elemental Burst DMG
+
+@ elegy-for-the-end
++ em 60/75/90/105/120 always
++ em 100/125/150/175/200 met 12s after 4 Sigils of Remembrance are spent (Millennial Movement: Farewell Song, all nearby party members; then none for 20s)
++ atk_pct 20/25/30/35/40 met 12s after 4 Sigils of Remembrance are spent (Millennial Movement: Farewell Song, all nearby party members; then none for 20s)
+~ buffs of the same type from the "Millennial Movement" weapons do not stack
+
+@ the-flute
+~ no stat: 5 Harmonics deal 100%/125%/150%/175%/200% ATK DMG, not counted
+
+@ sacrificial-fragments
+~ no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted
+
+@ sacrificial-bow
+~ no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted
+
+@ sacrificial-greatsword
+~ no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted
+
+@ sacrificial-sword
+~ no stat: a 40%/50%/60%/70%/80% chance to reset the Elemental Skill's cooldown, not counted
+
+@ kagura-s-verity
++ dmg 12/15/18/21/24*3 met Elemental Skill DMG at 3 stacks of Kagura Dance, 16s after using an Elemental Skill
++ dmg 12/15/18/21/24 met All Elemental DMG Bonus at 3 stacks of Kagura Dance
+
+@ primordial-jade-cutter
++ hp_pct 20/25/30/35/40 always
+~ not counted, because it depends on Max HP: an ATK bonus of 1.2%/1.5%/1.8%/2.1%/2.4% of Max HP
+
+@ hamayumi
++ dmg 16/20/24/28/32 met Normal Attack DMG
++ dmg 12/15/18/21/24 met Charged Attack DMG
+~ both are increased by 100% when the wielder's Energy reaches 100%, which is not counted
+
+@ hakushin-ring
++ dmg 10/12.5/15/17.5/20 met Elemental DMG Bonus for nearby party members of an Elemental Type involved in the reaction, 6s after the wielder triggers an Electro reaction
+
+@ whiteblind
++ atk_pct 6/7.5/9/10.5/12*4 met at 4 stacks, 6s after Normal or Charged Attacks hit
++ def_pct 6/7.5/9/10.5/12*4 met at 4 stacks, 6s after Normal or Charged Attacks hit
+
+@ wolf-s-gravestone
++ atk_pct 20/25/30/35/40 always
++ atk_pct 40/50/60/70/80 met all party members' ATK, 12s after a hit on an opponent with less than 30% HP (once every 30s)
+
+@ the-widsith
++ atk_pct 60/75/90/105/120 met Recitative, one of three random theme songs for 10s when the wielder takes the field (once every 30s)
+~ the three songs exclude each other (one at random for 10s), so only the strongest, Recitative's ATK, is an effect; Aria gives All Elemental DMG Bonus +48%/60%/72%/84%/96%, and Interlude gives Elemental Mastery +240/300/360/420/480
+
+@ crescent-pike
+~ no % stat: Normal and Charged Attacks deal extra DMG of 20%/25%/30%/35%/40% of ATK for 5s after picking up an Orb or Particle, not counted
+
+@ haran-geppaku-futsu
++ dmg 12/15/18/21/24 always
++ dmg 20/25/30/35/40*2 met Normal Attack DMG at 2 stacks of Wavespike consumed by an Elemental Skill (Rippling Upheaval), 8s
+
+@ katsuragikiri-nagamasa
++ dmg 6/7.5/9/10.5/12 met Elemental Skill DMG
+~ not counted: Energy lost and regenerated after an Elemental Skill hits
+
+@ song-of-broken-pines
++ atk_pct 16/20/24/28/32 always
++ atk_pct 20/25/30/35/40 met 12s after 4 Sigils of Whispers are spent (Millennial Movement: Banner-Hymn, all nearby party members; then none for 20s)
+~ not counted: Normal ATK SPD +12%/15%/18%/21%/24%; buffs of the same type from the "Millennial Movement" weapons do not stack
+
+@ mouun-s-moon
++ dmg 40/50/60/70/80 met Elemental Burst DMG at the cap (0.12%/0.15%/0.18%/0.21%/0.24% for each point of the party's combined maximum Energy capacity)
+
+@ the-alley-flash
++ dmg 12/15/18/21/24 met all DMG, disabled for 5s after taking DMG
+
+@ wine-and-song
++ atk_pct 20/25/30/35/40 met 5s after using Sprint or Alternate Sprint
+~ not counted: Sprint stamina consumption
+
+@ alley-hunter
++ dmg 20/25/30/35/40 met at the cap, built up by 2%/2.5%/3%/3.5%/4% a second while in the party but off the field (it falls once the wielder has been on the field more than 4s)
+
+@ eye-of-perception
+~ no stat: a Bolt of Perception deals 240%/270%/300%/330%/360% ATK DMG, not counted
+
+@ the-unforged
++ atk_pct 4/5/6/7/8*5 met at 5 stacks, 8s after scoring hits on opponents
+~ not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield
+
+@ wavebreaker-s-fin
++ dmg 40/50/60/70/80 met Elemental Burst DMG at the cap (0.12%/0.15%/0.18%/0.21%/0.24% for each point of the party's combined maximum Energy capacity)
+
+@ summit-shaper
++ atk_pct 4/5/6/7/8*5 met at 5 stacks, 8s after scoring hits on opponents
+~ not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield
+
+@ predator
++ dmg 10/10/10/10/10*2 met Normal and Charged Attack DMG at 2 stacks, 6s after dealing Cryo DMG
++ atk 66/66/66/66/66 met Aloy only
+~ the passive's text says it is effective only on the PlayStation Network platform, and gives one value for every refinement
+
+@ staff-of-homa
++ hp_pct 20/25/30/35/40 always
+~ not counted, because it depends on Max HP: an ATK bonus of 0.8%/1%/1.2%/1.4%/1.6% of Max HP, and 1%/1.2%/1.4%/1.6%/1.8% more below 50% HP
+
+@ akuoumaru
++ dmg 40/50/60/70/80 met Elemental Burst DMG at the cap (0.12%/0.15%/0.18%/0.21%/0.24% for each point of the party's combined maximum Energy capacity)
+
+@ calamity-queller
++ dmg 12/15/18/21/24 always
++ atk_pct 3.2/4/4.8/5.6/6.4*6 met at 6 stacks of Consummation, one per second for 20s after using an Elemental Skill
+~ Consummation's ATK increase is doubled while the wielder is off the field, not counted
+
+@ frostbearer
+~ no stat: an Everfrost Icicle deals AoE DMG of 80%/95%/110%/125%/140% of ATK (200%/240%/280%/320%/360% to Cryo-affected opponents), not counted

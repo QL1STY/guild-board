@@ -1,0 +1,33 @@
+# Brainstorming companion sessions and browser-test scratch files
+.superpowers/
+.playwright-mcp/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Web build
+node_modules/
+web/dist/
+
+# Local data never belongs in the repository
+*.db
+*.db-wal
+*.db-shm
+token.bin
+cloud.bin
+
+# The pictures `npm run screens*` take (web/screens/out.ts)
+/screenshots/
+
+web/test-results/
+web/playwright-report/
+
+# Installer build
+.venv-package/
+build/
+dist-installer/
+web/memory-results/

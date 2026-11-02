@@ -1,0 +1,18 @@
+{
+  "key": "mualani", "name": "Mualani", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "hp",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"hp": 30000, "cr": 50, "cd": 200},
+  "mains": {"sands": ["hp_pct", "em"], "goblet": ["dmg", "hp_pct"], "circlet": ["cd", "cr"]},
+  "weights": {"cr": "wants", "cd": "wants", "hp_pct": "wants", "em": "some", "hp": "some", "er": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["obsidian-codex"], "pieces": "4"}, {"sets": ["heart-of-depth"], "pieces": "4"}, {"sets": ["unfinished-reverie"], "pieces": "4"}],
+  "weapons": ["surf-s-up", "sacrificial-jade", "a-thousand-floating-dreams", "tome-of-the-eternal-flow", "ring-of-yaxche", "starcaller-s-watch"],
+  "partners": ["Pyro", "Dendro"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Hydro main DPS that scales with Max HP: Sharky's Bite (8.68% Max HP at level 1) is her Skill's damage, so the damage talent is the Skill and the scaling stat is HP. Both sources put the Skill first and the Burst second. They agree on 4pc Obsidian Codex (Game8 also names Heart of Depth best; KQM has it third and Unfinished Reverie second, for Burnvap), HP% or EM Sands, a Hydro DMG or HP% Goblet, a CRIT DMG Circlet and Surf's Up first. Goals are Game8's: HP 30,000 or above, CRIT Rate 40-50% (upper end), CRIT DMG 200% or above. KQM says not to trade offensive stats for ER on her, so no ER goal is set. The Circlet lists CRIT Rate after CRIT DMG as a judgment; both sources name only CRIT DMG (KQM: CRIT DMG > HP%).",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/mualani-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/461994", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

@@ -1,0 +1,19 @@
+{
+  "key": "baizhu", "name": "Baizhu", "element": "Dendro", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "hp",
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "goals": {"hp": 50000, "er": 160},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "heal"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "cr": "some", "em": "some", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none", "cd": "none"},
+  "sets": [{"sets": ["deepwood-memories"], "pieces": "4"}, {"sets": ["ocean-hued-clam"], "pieces": "4"}, {"sets": ["song-of-days-past"], "pieces": "4"}],
+  "weapons": ["jadefall-s-splendor", "prototype-amber", "favonius-codex"],
+  "partners": ["Hydro", "Electro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Dendro healer and shielder who scales with Max HP. His Burst's shield and his Skill are the core; his passive turns up to 50,000 HP into a reaction DMG bonus, so the HP goal is 50,000 (both sources). The Skill DMG and Spiritvein DMG lines marked 'check' are ATK multipliers, but he deals little damage. The sources agree on 4pc Deepwood Memories first, HP% Goblet and Circlet and Jadefall's Splendor or Prototype Amber. Game8 gives ER 170-180% and KQM 145-160% for a Dendro teammate with Jadefall's R1 and one Skill per Burst (110-230% by team), so the card takes KQM's upper end for the usual team and notes Game8's higher number. The Sands is ER or HP% in both. The third set is KQM's Ocean-Hued Clam; Game8's alternate is Song of Days Past.",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/baizhu-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/314348", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/3609", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

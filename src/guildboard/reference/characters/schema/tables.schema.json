@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tables.json: yields per run, main stat values and odds, substat weights and average rolls, talent scaling, reactions and EXP",
+  "type": "object",
+  "required": [
+    "yields", "mains_20", "main_odds", "sub_weights", "roll_avg", "scaling", "reactions", "exp", "weapon_exp", "checked",
+    "sources"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "yields": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
+    "mains_20": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
+    "main_odds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "sub_weights": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "roll_avg": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
+    "scaling": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "elemental": {"type": "array", "items": {"type": "number"}, "minItems": 15, "maxItems": 15},
+        "physical": {"type": "array", "items": {"type": "number"}, "minItems": 15, "maxItems": 15}
+      }
+    },
+    "reactions": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}},
+    "exp": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+    "weapon_exp": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "integer", "minimum": 0}}},
+    "checked": {"type": ["string", "null"]},
+    "sources": {"type": "array"},
+    "notes": {}
+  }
+}

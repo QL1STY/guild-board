@@ -1,0 +1,36 @@
+{
+  "key": "faruzan",
+  "name": "Faruzan",
+  "element": "Anemo",
+  "weapon_type": "Bow",
+  "rarity": 4,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 250},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["dmg", "er"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "atk_pct": "some", "cr": "some", "cd": "some", "dmg": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["viridescent-venerer"], "pieces": "4"},
+    {"sets": ["emblem-of-severed-fate", "the-exile"], "pieces": "2+2"}
+  ],
+  "weapons": ["breezeborne-refrain", "favonius-warbow", "elegy-for-the-end", "skyward-harp", "sacrificial-bow", "end-of-the-line", "fading-twilight"],
+  "partners": ["Pyro", "Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources want a lot of ER and an ATK buffer set; they differ in which set is first because each splits builds by constellation. KQM (updated for 4.6): 4pc Tenacity of the Millelith is her best only at C6, otherwise Noblesse Oblige or Viridescent Venerer. Game8 (October 13, 2026): Tenacity for the C6 build, Noblesse for a buffer, Viridescent for swirl. Tenacity is kept first because it is Game8's lead build and KQM's lead set. Breezeborne Refrain is first because Game8's three builds (newer than KQM) name it best or a close second; KQM does not list it. ER 250 is Game8's pre-C6 figure (250-300; its C6 build is about 200); KQM's double Anemo pre-C6 range is 220-300 depending on particle luck. Faruzan wants no CRIT of her own beyond Favonius procs, so no CRIT goals are set. Partners are the elements she swirls or buffs; the sources give no team list.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/faruzan-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/391897", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/2967", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

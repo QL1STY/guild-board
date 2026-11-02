@@ -1,0 +1,35 @@
+{
+  "key": "eula",
+  "name": "Eula",
+  "element": "Cryo",
+  "weapon_type": "Claymore",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "normal", "skill"],
+  "talent_table": "physical",
+  "goals": {"atk": 2100, "cr": 75, "cd": 175, "er": 140, "dmg": 58.3},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["phys"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "dmg": "wants", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["pale-flame"], "pieces": "4"},
+    {"sets": ["pale-flame", "bloodstained-chivalry"], "pieces": "2+2"},
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"}
+  ],
+  "weapons": ["song-of-broken-pines", "beacon-of-the-reed-sea", "wolf-s-gravestone", "the-unforged", "skyward-pride", "serpent-spine"],
+  "partners": ["Cryo", "Electro"],
+  "partner_roles": ["support", "protector"],
+  "teams": [],
+  "notes": "KQM and Game8 agree: 4pc Pale Flame, ATK% sands, Physical DMG goblet, CRIT circlet, Song of Broken Pines first. The damage is the Lightfall Sword of her Burst, which is Physical DMG on the physical curve (1.0814x at level 2, 1.98x at level 10), so the table is physical and the Physical DMG Bonus goblet counts. Her Skill (Icetide Vortex, the line the kit marked 'check') scales with ATK. Goals: ATK, CRIT Rate and CRIT DMG are Game8's; the 'dmg' goal is the Physical DMG Bonus of a +20 goblet, 58.3. ER 140 is KQM's Double Cryo range (140-160); with three Cryo it falls to 110-125. Partners (Cryo for Shenhe/Ayaka style teams, Electro for Superconduct, a shielder or buffer) are read from KQM's ER table names and her kit; neither source gives a team list here. The 2+2 Pale Flame + Bloodstained Chivalry pair is Game8's alternate and KQM's '2pc combinations' (+25% Physical DMG, +18% ATK).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/eula-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/328764", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/6", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

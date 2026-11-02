@@ -1,0 +1,18 @@
+{
+  "key": "nicole", "name": "Nicole", "element": "Pyro", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "protector"], "keeps_alive": true, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 3000, "er": 170},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["atk_pct"], "circlet": ["atk_pct"]},
+  "weights": {"atk_pct": "wants", "er": "wants", "atk": "some", "cr": "none", "cd": "none", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["celestial-gift"], "pieces": "4"}, {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"}, {"sets": ["noblesse-oblige"], "pieces": "4"}],
+  "weapons": ["angelos-heptades", "starcaller-s-watch", "thrilling-tales-of-dragon-slayers", "oathsworn-eye", "flowing-purity", "hakushin-ring"],
+  "partners": ["Pyro", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Pyro shielder and ATK buffer. Her Skill (Revelation: Uncreated Light) makes the shield (221.2% ATK + 1,386 at level 1) and her Grace of Kenosis ATK bonus, and the Burst's Arcane Projections copy a teammate's ATK, so everything scales with ATK and the Skill carries her value; both sources put the Skill first and the Burst second. The sources agree completely: 4pc Celestial Gift (Game8: best; KQM: default for essentially all her teams), with Scroll of the Hero of Cinder City and Noblesse Oblige as alternatives; ATK% Sands (or ER), ATK% Goblet and ATK% Circlet; Angelos Heptades first with Starcaller's Watch second. Goals are Game8's: ER about 170% with double Pyro (about 150% with triple Pyro), and ATK 3,000-4,000; the lower end is set because 4,000 is only reachable with her own buffs on top. CRIT Rate 40-50% applies only with a Favonius weapon and is not set.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/nicole-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/406932", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

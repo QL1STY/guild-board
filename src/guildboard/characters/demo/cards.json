@@ -1,0 +1,1090 @@
+{
+ "sandrone": {
+  "key": "sandrone",
+  "name": "Sandrone",
+  "element": "Cryo",
+  "weapon_type": "Claymore",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "damage"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 75.0,
+   "cd": 200.0,
+   "er": 130.0,
+   "dmg": 46.6,
+   "atk": 2600.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "cr": "wants",
+   "cd": "wants",
+   "atk_pct": "wants",
+   "er": "wants",
+   "em": "some",
+   "atk": "some",
+   "hp_pct": "none",
+   "hp": "none",
+   "def_pct": "none",
+   "def": "none"
+  },
+  "sets": [
+   {
+    "sets": [
+     "disenchantment-in-deep-shadow"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "a-teaspoon-of-transcendence"
+  ],
+  "partners": [
+   "Electro",
+   "Anemo"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "",
+  "confidence": "high",
+  "early": false
+ },
+ "odette": {
+  "key": "odette",
+  "name": "Odette",
+  "element": "Cryo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "damage"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 70.0,
+   "cd": 140.0,
+   "er": 110.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "some",
+   "cr": "wants",
+   "cd": "wants"
+  },
+  "sets": [
+   {
+    "sets": [
+     "blizzard-strayer"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "beyond-the-chrysalis"
+  ],
+  "partners": [
+   "Electro",
+   "Hydro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "alyosha": {
+  "key": "alyosha",
+  "name": "Alyosha",
+  "element": "Electro",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "support"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": [
+   "skill",
+   "burst",
+   "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "er": 160.0
+  },
+  "mains": {
+   "sands": [
+    "er",
+    "atk_pct"
+   ],
+   "goblet": [
+    "atk_pct"
+   ],
+   "circlet": [
+    "atk_pct",
+    "cr"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "wants",
+   "cr": "some",
+   "cd": "some"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "frostbreath"
+  ],
+  "partners": [
+   "Hydro",
+   "Cryo"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "jahoda": {
+  "key": "jahoda",
+  "name": "Jahoda",
+  "element": "Anemo",
+  "weapon_type": "Bow",
+  "rarity": 4,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "healer"
+  ],
+  "keeps_alive": true,
+  "scaling": "hp",
+  "damage_talent": "skill",
+  "talent_priority": [
+   "skill",
+   "burst",
+   "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "er": 140.0
+  },
+  "mains": {
+   "sands": [
+    "er",
+    "hp_pct"
+   ],
+   "goblet": [
+    "hp_pct"
+   ],
+   "circlet": [
+    "heal",
+    "hp_pct"
+   ]
+  },
+  "weights": {
+   "hp": "some",
+   "atk": "none",
+   "def": "none",
+   "hp_pct": "wants",
+   "atk_pct": "none",
+   "def_pct": "none",
+   "em": "none",
+   "er": "wants",
+   "cr": "some",
+   "cd": "some"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "breezeborne-refrain"
+  ],
+  "partners": [
+   "Pyro",
+   "Hydro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "nefer": {
+  "key": "nefer",
+  "name": "Nefer",
+  "element": "Dendro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "damage"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 70.0,
+   "cd": 140.0,
+   "er": 110.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "some",
+   "cr": "wants",
+   "cd": "wants"
+  },
+  "sets": [
+   {
+    "sets": [
+     "deepwood-memories"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "hymn-of-the-maelstrom"
+  ],
+  "partners": [
+   "Hydro",
+   "Dendro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "columbina": {
+  "key": "columbina",
+  "name": "Columbina",
+  "element": "Hydro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "support"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 70.0,
+   "cd": 140.0,
+   "er": 110.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "some",
+   "cr": "wants",
+   "cd": "wants"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "hymn-of-the-maelstrom"
+  ],
+  "partners": [
+   "Electro",
+   "Dendro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "lauma": {
+  "key": "lauma",
+  "name": "Lauma",
+  "element": "Dendro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "support"
+  ],
+  "keeps_alive": false,
+  "scaling": "em",
+  "damage_talent": "skill",
+  "talent_priority": [
+   "skill",
+   "burst",
+   "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "er": 160.0
+  },
+  "mains": {
+   "sands": [
+    "er",
+    "atk_pct"
+   ],
+   "goblet": [
+    "atk_pct"
+   ],
+   "circlet": [
+    "atk_pct",
+    "cr"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "none",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "none",
+   "def_pct": "none",
+   "em": "wants",
+   "er": "wants",
+   "cr": "some",
+   "cd": "some"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "hymn-of-the-maelstrom"
+  ],
+  "partners": [
+   "Hydro",
+   "Electro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "ineffa": {
+  "key": "ineffa",
+  "name": "Ineffa",
+  "element": "Electro",
+  "weapon_type": "Polearm",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "support"
+  ],
+  "keeps_alive": true,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 70.0,
+   "cd": 140.0,
+   "er": 110.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "some",
+   "cr": "wants",
+   "cd": "wants"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "disaster-and-remorse"
+  ],
+  "partners": [
+   "Hydro",
+   "Cryo"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "lan-yan": {
+  "key": "lan-yan",
+  "name": "Lan Yan",
+  "element": "Anemo",
+  "weapon_type": "Catalyst",
+  "rarity": 4,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "protector"
+  ],
+  "keeps_alive": true,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": [
+   "skill",
+   "burst",
+   "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "er": 160.0
+  },
+  "mains": {
+   "sands": [
+    "er",
+    "atk_pct"
+   ],
+   "goblet": [
+    "atk_pct"
+   ],
+   "circlet": [
+    "atk_pct",
+    "cr"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "wants",
+   "cr": "some",
+   "cd": "some"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "winter-s-heavy-heart"
+  ],
+  "partners": [
+   "Pyro",
+   "Hydro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "iansan": {
+  "key": "iansan",
+  "name": "Iansan",
+  "element": "Electro",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "support"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "skill",
+  "talent_priority": [
+   "skill",
+   "burst",
+   "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "er": 160.0
+  },
+  "mains": {
+   "sands": [
+    "er",
+    "atk_pct"
+   ],
+   "goblet": [
+    "atk_pct"
+   ],
+   "circlet": [
+    "atk_pct",
+    "cr"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "wants",
+   "cr": "some",
+   "cd": "some"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "frostbreath"
+  ],
+  "partners": [
+   "Hydro",
+   "Cryo"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "aino": {
+  "key": "aino",
+  "name": "Aino",
+  "element": "Hydro",
+  "weapon_type": "Claymore",
+  "rarity": 4,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "support"
+  ],
+  "keeps_alive": false,
+  "scaling": "em",
+  "damage_talent": "skill",
+  "talent_priority": [
+   "skill",
+   "burst",
+   "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "er": 160.0
+  },
+  "mains": {
+   "sands": [
+    "er",
+    "atk_pct"
+   ],
+   "goblet": [
+    "atk_pct"
+   ],
+   "circlet": [
+    "atk_pct",
+    "cr"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "none",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "none",
+   "def_pct": "none",
+   "em": "wants",
+   "er": "wants",
+   "cr": "some",
+   "cd": "some"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "forged-by-the-golden-melody"
+  ],
+  "partners": [
+   "Electro",
+   "Dendro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "dahlia": {
+  "key": "dahlia",
+  "name": "Dahlia",
+  "element": "Hydro",
+  "weapon_type": "Sword",
+  "rarity": 4,
+  "pronouns": [
+   "he",
+   "him",
+   "his"
+  ],
+  "roles": [
+   "protector"
+  ],
+  "keeps_alive": true,
+  "scaling": "hp",
+  "damage_talent": "skill",
+  "talent_priority": [
+   "skill",
+   "burst",
+   "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "er": 140.0
+  },
+  "mains": {
+   "sands": [
+    "er",
+    "hp_pct"
+   ],
+   "goblet": [
+    "hp_pct"
+   ],
+   "circlet": [
+    "hp_pct"
+   ]
+  },
+  "weights": {
+   "hp": "some",
+   "atk": "none",
+   "def": "none",
+   "hp_pct": "wants",
+   "atk_pct": "none",
+   "def_pct": "none",
+   "em": "none",
+   "er": "wants",
+   "cr": "some",
+   "cd": "some"
+  },
+  "sets": [
+   {
+    "sets": [
+     "noblesse-oblige"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "silver-light"
+  ],
+  "partners": [
+   "Electro",
+   "Dendro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "durin": {
+  "key": "durin",
+  "name": "Durin",
+  "element": "Pyro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": [
+   "he",
+   "him",
+   "his"
+  ],
+  "roles": [
+   "damage"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 70.0,
+   "cd": 140.0,
+   "er": 110.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "some",
+   "cr": "wants",
+   "cd": "wants"
+  },
+  "sets": [
+   {
+    "sets": [
+     "crimson-witch-of-flames"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "beyond-the-chrysalis"
+  ],
+  "partners": [
+   "Hydro",
+   "Cryo"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "vesna": {
+  "key": "vesna",
+  "name": "Vesna",
+  "element": "Anemo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "damage"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 70.0,
+   "cd": 140.0,
+   "er": 110.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "some",
+   "cr": "wants",
+   "cd": "wants"
+  },
+  "sets": [
+   {
+    "sets": [
+     "viridescent-venerer"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "beyond-the-chrysalis"
+  ],
+  "partners": [
+   "Pyro",
+   "Hydro"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ },
+ "linnea": {
+  "key": "linnea",
+  "name": "Linnea",
+  "element": "Geo",
+  "weapon_type": "Bow",
+  "rarity": 5,
+  "pronouns": [
+   "she",
+   "her",
+   "her"
+  ],
+  "roles": [
+   "damage"
+  ],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "normal",
+  "talent_priority": [
+   "normal",
+   "skill",
+   "burst"
+  ],
+  "talent_table": "elemental",
+  "goals": {
+   "cr": 70.0,
+   "cd": 140.0,
+   "er": 110.0
+  },
+  "mains": {
+   "sands": [
+    "atk_pct"
+   ],
+   "goblet": [
+    "dmg"
+   ],
+   "circlet": [
+    "cr",
+    "cd"
+   ]
+  },
+  "weights": {
+   "hp": "none",
+   "atk": "some",
+   "def": "none",
+   "hp_pct": "none",
+   "atk_pct": "wants",
+   "def_pct": "none",
+   "em": "none",
+   "er": "some",
+   "cr": "wants",
+   "cd": "wants"
+  },
+  "sets": [
+   {
+    "sets": [
+     "archaic-petra"
+    ],
+    "pieces": "4"
+   }
+  ],
+  "weapons": [
+   "golden-frostbound-oath"
+  ],
+  "partners": [
+   "Geo"
+  ],
+  "partner_roles": [],
+  "teams": [],
+  "notes": "A demo card.",
+  "confidence": "demo",
+  "early": false
+ }
+}

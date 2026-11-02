@@ -1,0 +1,36 @@
+{
+  "key": "hu-tao",
+  "name": "Hu Tao",
+  "element": "Pyro",
+  "weapon_type": "Polearm",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["damage"],
+  "keeps_alive": false,
+  "scaling": "hp",
+  "damage_talent": "normal",
+  "talent_priority": ["normal", "skill", "burst"],
+  "talent_table": "elemental",
+  "goals": {"dmg": 46.6},
+  "mains": {"sands": ["hp_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "em": "wants", "hp_pct": "wants", "atk_pct": "some", "atk": "some", "hp": "some", "dmg": "wants", "er": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["crimson-witch-of-flames"], "pieces": "4"},
+    {"sets": ["shimenawa-s-reminiscence"], "pieces": "4"},
+    {"sets": ["marechaussee-hunter"], "pieces": "4"},
+    {"sets": ["gilded-dreams"], "pieces": "4"}
+  ],
+  "weapons": ["staff-of-homa", "staff-of-the-scarlet-sands", "primordial-jade-winged-spear", "deathmatch", "dragon-s-bane", "ballad-of-the-fjords", "white-tassel"],
+  "partners": ["Hydro", "Geo"],
+  "partner_roles": ["support", "protector"],
+  "teams": [],
+  "notes": "Both sources: 4pc Crimson Witch of Flames, Pyro DMG goblet, CRIT circlet, Staff of Homa first. Sands differ: KQM EM or HP% (EM to about 100 first, then CRIT, then EM to 200-300, then HP%), Game8 HP% only; both are kept, HP% first. Game8 adds 4pc Shimenawa's Reminiscence and 4pc Marechaussee Hunter builds; KQM lists Shimenawa and Gilded Dreams. Scaling: her damage lines multiply ATK, but her ATK comes from a conversion of Max HP in Paramita Papilio, and both sources build HP%, so the card's scaling stat is HP. Her Normal Attack uses a curve of its own (1.78x at level 10), closest to the elemental table (1.8x), and is Pyro through the Burst/Skill state. KQM says she should not seek ER, so no ER goal. Neither source gives CRIT or HP goals. Partners: Hydro (Vaporize) and a Geo shielder, from her usual teams; the sources list none here.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/hu-tao-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/314347", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/34", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

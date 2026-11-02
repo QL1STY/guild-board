@@ -1,0 +1,35 @@
+{
+  "key": "yumemizuki-mizuki",
+  "name": "Yumemizuki Mizuki",
+  "element": "Anemo",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["support", "healer"],
+  "keeps_alive": true,
+  "scaling": "em",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 120},
+  "mains": {"sands": ["em"], "goblet": ["em"], "circlet": ["em", "cr"]},
+  "weights": {"em": "wants", "cr": "wants", "cd": "some", "er": "some", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "dmg": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["gilded-dreams"], "pieces": "4"},
+    {"sets": ["scarlet-proof"], "pieces": "4"},
+    {"sets": ["viridescent-venerer"], "pieces": "4"}
+  ],
+  "weapons": ["sunny-morning-sleep-in", "reliquary-of-truth", "starcaller-s-watch", "a-thousand-floating-dreams", "the-widsith", "etherlight-spindlelute", "sacrificial-fragments"],
+  "partners": ["Cryo", "Pyro", "Hydro", "Electro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on 4pc Gilded Dreams first and Scarlet Proof second for Stellar-Swirl, EM on the Sands and Goblet, Skill first, and Sunny Morning Sleep-In first, with Reliquary of Truth, A Thousand Floating Dreams and The Widsith next. Circlet: Game8 says EM; KQM says CRIT > EM (EM on every piece outside Stellar-Swirl, because plain Swirl cannot CRIT), so EM and CRIT Rate are both kept. KQM adds 4pc Viridescent Venerer for non-Stellar-Swirl teams. Talent order: KQM Skill > character level >> Burst, Game8 Skill > Burst > Normal Attack. The scaling stat is EM, not settled by the kit: its five 'check' lines (Skill DMG 57.7% and Continuous Attack 44.9% at level 1; Burst Skill DMG 94.1% and Munen Shockwave 70.6%) do not name a stat, but neither source builds ATK on her, and KQM calls her extra damage after a Swirl 'EM-scaling'; the lines are on the elemental curve (1.80 at level 10). Her healing is EM-based too, which is why she keeps allies alive. Neither source gives numeric stat goals. ER is KQM's range for a Burst every other rotation (100-130 in other teams, 100-120 with Sucrose or Faruzan; 120 used), and KQM says not to build ER actively.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/mizuki-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/492414", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7420", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

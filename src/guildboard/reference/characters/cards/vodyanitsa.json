@@ -1,0 +1,38 @@
+{
+  "key": "vodyanitsa",
+  "name": "Vodyanitsa",
+  "element": "Hydro",
+  "weapon_type": "Catalyst",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["healer", "support"],
+  "keeps_alive": true,
+  "scaling": "hp",
+  "damage_talent": "skill",
+  "talent_priority": ["skill", "burst", "normal"],
+  "talent_table": "elemental",
+  "goals": {"hp": 65000},
+  "mains": {"sands": ["hp_pct"], "goblet": ["hp_pct"], "circlet": ["hp_pct"]},
+  "weights": {"hp_pct": "wants", "hp": "some", "er": "some", "cr": "none", "cd": "none", "atk_pct": "none", "atk": "none", "em": "none", "dmg": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["tenacity-of-the-millelith"], "pieces": "4"},
+    {"sets": ["song-of-days-past"], "pieces": "4"},
+    {"sets": ["tenacity-of-the-millelith", "vourukasha-s-glow"], "pieces": "2+2"},
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["archaic-petra"], "pieces": "4"},
+    {"sets": ["ocean-hued-clam"], "pieces": "4"}
+  ],
+  "weapons": ["hymn-of-the-maelstrom", "thrilling-tales-of-dragon-slayers", "prototype-amber", "jadefall-s-splendor", "everlasting-moonglow", "sacrificial-jade", "ash-graven-drinking-horn", "waveriding-whirl"],
+  "partners": ["Hydro", "Pyro", "Electro"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree on HP% on Sands, Goblet and Circlet, 4pc Tenacity of the Millelith first, Hymn of the Maelstrom first, and Skill first. Game8's second set is Song of Days Past; KQM's are a 2pc Tenacity of the Millelith and 2pc Vourukasha's Glow mix, then Scroll of the Hero of Cinder City, Archaic Petra (with a Geo unit), Ocean-Hued Clam and Song of Days Past. Both are kept. Her damage and healing run on Max HP (Skill 3.27% to 5.89% Max HP, Burst 45.7% to 82.2% Max HP, both elemental curve); the Skill is the one she uses every rotation, so it is the damage talent. Game8's goal is HP 65,000 or more. No ER goal is set: KQM says she skips her Burst in most teams, and only builds ER (145-155 in a double Hydro team with Prototype Amber, 100-130 in triple Hydro) when she Bursts every rotation in Hydro-heavy teams. Partners are inferred (KQM: Hydro damage dealers, ATK-scaling teams); the sources give no team list.",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/vodyanitsa-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/606400", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/11702", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

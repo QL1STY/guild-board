@@ -1,0 +1,19 @@
+{
+  "key": "clorinde", "name": "Clorinde", "element": "Electro", "weapon_type": "Sword", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 80, "cd": 160, "dmg": 46.6, "er": 130},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["fragment-of-harmonic-whimsy"], "pieces": "4"}, {"sets": ["thundering-fury"], "pieces": "4"}, {"sets": ["gladiator-s-finale"], "pieces": "4"}],
+  "weapons": ["absolution", "haran-geppaku-futsu", "the-black-sword"],
+  "partners": ["Hydro", "Dendro"], "partner_roles": ["support"], "teams": [],
+  "notes": "An Electro main DPS. Both sources put the Skill first (Hunter's Vigil raises her Surging Blades, 43.2% ATK at level 1), so the damage talent is the Skill with the elemental table; her Normal Attacks are on the physical curve, but neither source levels them first. They agree on 4pc Fragment of Harmonic Whimsy, 4pc Thundering Fury second, ATK% Sands, Electro DMG Goblet, a crit Circlet and the weapons Absolution, Haran Geppaku Futsu and The Black Sword. Goals are Game8's: ATK 1,800-2,000 or above, CR 70-80%, CD 160% or above, ER 110-130% (upper ends); KQM gives ER 110-130% for a solo Electro build with the Burst every other rotation. The third set is KQM's.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/clorinde-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/417218", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/5596", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

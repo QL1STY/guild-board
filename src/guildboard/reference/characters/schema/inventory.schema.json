@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "inventory.json: every character, weapon and artifact set the wiki lists",
+  "type": "object",
+  "required": ["characters", "weapons", "sets"],
+  "additionalProperties": false,
+  "properties": {
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "name", "entry", "element", "weapon_type", "rarity", "released"],
+        "properties": {
+          "key": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+          "name": {"type": "string", "minLength": 1},
+          "entry": {"type": "string", "minLength": 1},
+          "element": {"enum": ["Pyro", "Hydro", "Anemo", "Electro", "Dendro", "Cryo", "Geo"]},
+          "weapon_type": {"enum": ["Sword", "Claymore", "Polearm", "Bow", "Catalyst"]},
+          "rarity": {"type": "integer", "minimum": 4, "maximum": 5},
+          "released": {"type": "boolean"},
+          "icon": {"type": ["string", "null"]},
+          "version": {"type": ["string", "null"]},
+          "ascension_stat": {"type": ["string", "null"]},
+          "specialty": {
+            "type": ["object", "null"],
+            "properties": {"key": {"type": "string"}, "name": {"type": "string"}}
+          },
+          "art": {"type": ["string", "null"]},
+          "chart": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "weapons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "name", "entry", "type", "rarity"],
+        "properties": {
+          "key": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+          "name": {"type": "string", "minLength": 1},
+          "entry": {"type": "string", "minLength": 1},
+          "type": {"enum": ["Sword", "Claymore", "Polearm", "Bow", "Catalyst"]},
+          "rarity": {"type": "integer", "minimum": 1, "maximum": 5},
+          "icon": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "sets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "name", "entry"],
+        "properties": {
+          "key": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+          "name": {"type": "string", "minLength": 1},
+          "entry": {"type": "string", "minLength": 1},
+          "icon": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

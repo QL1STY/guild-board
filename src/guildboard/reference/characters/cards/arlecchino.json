@@ -1,0 +1,19 @@
+{
+  "key": "arlecchino", "name": "Arlecchino", "element": "Pyro", "weapon_type": "Polearm", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "physical",
+  "goals": {"atk": 2000, "cr": 80, "cd": 160, "dmg": 46.6, "er": 140},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "er": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["fragment-of-harmonic-whimsy"], "pieces": "4"}, {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}, {"sets": ["gladiator-s-finale"], "pieces": "4"}],
+  "weapons": ["crimson-moon-s-semblance", "primordial-jade-winged-spear", "staff-of-homa"],
+  "partners": ["Hydro", "Dendro"], "partner_roles": ["support", "healer"], "teams": [],
+  "notes": "A Pyro Normal Attack carry. The Normal Attack lines marked 'check' in the kit are ATK multipliers (the Max HP in the text is her Bond of Life), and their curve is the Normal Attack one (1.082 times at level 2), so the table is physical. Both sources agree on 4pc Fragment of Harmonic Whimsy, an ATK% Sands, a Pyro DMG Goblet, a crit Circlet and Crimson Moon's Semblance first. They differ on the talent order after Normal Attack: KQM puts the Burst before the Skill, Game8 the other way round; the card follows KQM. Goals: ATK 2,000 or above, CR 70-80% and CD 160% or above are Game8's (upper ends); ER 140% is KQM's Double Pyro range (140-150%).",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/arlecchino-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/382103", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/5149", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

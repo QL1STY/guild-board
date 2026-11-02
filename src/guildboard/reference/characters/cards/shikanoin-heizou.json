@@ -1,0 +1,18 @@
+{
+  "key": "shikanoin-heizou", "name": "Shikanoin Heizou", "element": "Anemo", "weapon_type": "Catalyst", "rarity": 4,
+  "pronouns": ["he", "him", "his"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"], "talent_table": "elemental",
+  "goals": {"er": 130},
+  "mains": {"sands": ["atk_pct", "er", "em"], "goblet": ["dmg", "em"], "circlet": ["cr", "cd", "em"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["viridescent-venerer"], "pieces": "4"}, {"sets": ["lavawalker"], "pieces": "4"}, {"sets": ["thundersoother"], "pieces": "4"}],
+  "weapons": ["tulaytullah-s-remembrance", "skyward-atlas", "kagura-s-verity", "the-widsith", "lost-prayer-to-the-sacred-winds", "a-thousand-floating-dreams"],
+  "partners": ["Pyro", "Hydro"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A 4-star Anemo driver. Heartstopper Strike (227.5% ATK at level 1) carries his damage, so the damage talent is the Skill; both sources put it first, with the Normal Attack next (KQM: Skill, Normal Attack, Burst for the on-field driver; Skill, Burst, Normal Attack as a quickswap support). His scaling is ATK in the card, from his ATK-based CRIT build (Game8: Anemo CRIT DPS; KQM: the ADC build); his EM or Swirl build is the other option and is listed after it. Both sources agree on 4pc Viridescent Venerer as by far the best set; Lavawalker and Thundersoother are KQM's for personal damage. The mains differ: the CRIT builds use ATK% (or ER) on the Sands, an Anemo DMG Goblet and a CRIT Circlet; the EM builds use EM on every slot. The weapons differ: Game8's best for the CRIT build is Tulaytullah's Remembrance, KQM's list starts with Skyward Atlas; A Thousand Floating Dreams is Game8's best for the EM build. Neither source gives stat goals. The only goal is ER, KQM's 120-130% with two Skill uses at C0-C3 (200% or more with one Skill use; 100% at C4+).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/heizou-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/345516", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

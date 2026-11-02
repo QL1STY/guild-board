@@ -1,0 +1,135 @@
+{
+  "key": "gorou",
+  "name": "Gorou",
+  "element": "Geo",
+  "weapon_type": "Bow",
+  "rarity": 4,
+  "pronouns": [
+    "he",
+    "him",
+    "his"
+  ],
+  "roles": [
+    "support"
+  ],
+  "keeps_alive": false,
+  "scaling": "def",
+  "damage_talent": "skill",
+  "talent_priority": [
+    "skill",
+    "burst",
+    "normal"
+  ],
+  "talent_table": "elemental",
+  "goals": {},
+  "mains": {
+    "sands": [
+      "er",
+      "def_pct"
+    ],
+    "goblet": [
+      "dmg",
+      "def_pct"
+    ],
+    "circlet": [
+      "cr",
+      "def_pct",
+      "heal"
+    ]
+  },
+  "weights": {
+    "er": "wants",
+    "def_pct": "wants",
+    "cr": "some",
+    "def": "some",
+    "cd": "none",
+    "atk_pct": "none",
+    "atk": "none",
+    "em": "none",
+    "hp_pct": "none",
+    "hp": "none",
+    "dmg": "some",
+    "heal": "some"
+  },
+  "sets": [
+    {
+      "sets": [
+        "noblesse-oblige"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "the-exile"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "scroll-of-the-hero-of-cinder-city"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "husk-of-opulent-dreams"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "emblem-of-severed-fate"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "instructor"
+      ],
+      "pieces": "4"
+    },
+    {
+      "sets": [
+        "silken-moon-s-serenade"
+      ],
+      "pieces": "4"
+    }
+  ],
+  "weapons": [
+    "favonius-warbow",
+    "elegy-for-the-end",
+    "sacrificial-bow",
+    "snare-hook",
+    "end-of-the-line",
+    "rainbow-serpent-s-rain-bow"
+  ],
+  "partners": [
+    "Geo"
+  ],
+  "partner_roles": [
+    "damage"
+  ],
+  "teams": [],
+  "notes": "Re-checked against a third source (genshin-builds.com, October 29, 2026). It agrees with KQM, not Game8: ER sands, Geo DMG or DEF% goblet, CRIT Rate / DEF% / Healing Bonus circlet, Favonius Warbow first, substats ER > DEF% > CRIT Rate, Skill > Burst > Normal Attack, and its sets are The Exile, Noblesse Oblige, Scroll of the Hero of Cinder City, Emblem of Severed Fate, Instructor and Silken Moon's Serenade (community use: Husk of Opulent Dreams first). KQM: ER sands, any goblet, CRIT Rate circlet, sets chosen for team utility. Game8: DEF% everywhere, 4pc Husk of Opulent Dreams or Emblem of Severed Fate, Elegy for the End first. The sets are ordered by how many sources list them near the top (Noblesse Oblige and The Exile in both KQM and the third source, then Scroll, then Game8's Husk and Emblem). Goblet and circlet take the third source's Geo DMG and Healing Bonus. His own damage is negligible (the third source), so no personal goals; none of the three sources gives numeric ER or DEF goals, so goals are empty. Scaling is DEF because his Burst heals and his Skill banner's buffs scale with DEF; his Skill's multiplier line (marked 'check') is ATK-based and minor. Partners are Geo characters, whose Geo DMG and DEF buffs he feeds. Confidence is raised from low to medium because two of three sources now agree on the main stats and weapons; it stays below high because there are no numeric goals and the sets are not agreed.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {
+      "url": "https://keqingmains.com/q/gorou-quickguide/",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://game8.co/games/Genshin-Impact/archives/336726",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://wiki.hoyolab.com/pc/genshin/entry/5",
+      "checked": "2026-10-29"
+    },
+    {
+      "url": "https://genshin-builds.com/en/character/gorou",
+      "checked": "2026-10-29"
+    }
+  ],
+  "checked": "2026-10-29"
+}

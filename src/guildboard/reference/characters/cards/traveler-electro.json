@@ -1,0 +1,36 @@
+{
+  "key": "traveler-electro",
+  "name": "Traveler (Electro)",
+  "element": "Electro",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["they", "them", "their"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {},
+  "mains": {"sands": ["er", "atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "cr": "some", "cd": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "dmg": "some", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["emblem-of-severed-fate"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"}
+  ],
+  "weapons": ["skyward-blade", "favonius-sword", "sacrificial-sword", "festering-desire", "freedom-sworn"],
+  "partners": ["Pyro", "Hydro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM has no Electro Traveler guide; the card rests on Game8 (Support Builds) and genshin-builds.com (Energy Support build, checked 2026-10-30). Both build an energy battery: an ER or ATK% Sands (ER only in genshin-builds), an Electro DMG Goblet and a CRIT Circlet. They differ on the set (Game8: 4pc Emblem of Severed Fate; genshin-builds lists Noblesse Oblige first, Scroll of the Hero of Cinder City and Instructor, and Emblem third), on the first weapon (Game8: Skyward Blade; genshin-builds: Favonius Sword), and on talent order (Game8: Burst > Skill; genshin-builds: Skill > Burst > Normal Attack). The card uses Game8's order and sets and lists both sources' weapons. The Burst's Falling Thunder (Skill DMG 114.4% to 205.9%, elemental curve) is the damage line, though the role is energy for the team; the Skill's amulets give energy and +20% ER. No source gives numeric goals, so none is set (the app fills them from the role). Partners are the elements that gain from the energy.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://game8.co/games/Genshin-Impact/archives/336865", "checked": "2026-10-29"},
+    {"url": "https://genshin-builds.com/en/character/traveler_electro", "checked": "2026-10-30"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/18", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-30"
+}

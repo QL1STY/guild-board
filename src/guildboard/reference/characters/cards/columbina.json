@@ -1,0 +1,19 @@
+{
+  "key": "columbina", "name": "Columbina", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "hp",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"hp": 35000, "cr": 80, "cd": 200, "er": 180},
+  "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["cr", "cd", "hp_pct"]},
+  "weights": {"hp_pct": "wants", "er": "wants", "cr": "wants", "cd": "wants", "em": "some", "hp": "some", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["silken-moon-s-serenade"], "pieces": "4"}, {"sets": ["aubade-of-morningstar-and-moon"], "pieces": "4"}, {"sets": ["night-of-the-sky-s-unveiling"], "pieces": "4"}],
+  "weapons": ["nocturne-s-curtain-call", "sacrificial-jade", "prototype-amber"],
+  "partners": ["Dendro", "Electro", "Geo"], "partner_roles": ["damage"], "teams": [],
+  "notes": "A Hydro Lunar-reaction buffer and off-field damage dealer: her Skill and Burst DMG, and the Base DMG she adds to Lunar reactions, are Max HP multipliers, so HP is her scaling stat. Both sources agree on the Skill first, 4pc Silken Moon's Serenade and 4pc Aubade of Morningstar and Moon, HP% or ER Sands, an HP% Goblet, a crit Circlet and Nocturne's Curtain Call first. Goals are Game8's upper ends (HP 30,000-35,000, CR 60-80%, CD 160-200%, ER 180% or above, or 160% with an ER weapon); KQM's Double Hydro range is 115-195% by playstyle. The third set is both sources' on-field choice (Night of the Sky's Unveiling), the second and third weapons are on both lists.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/columbina-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/382106", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/9121", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

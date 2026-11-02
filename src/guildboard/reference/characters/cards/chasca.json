@@ -1,0 +1,19 @@
+{
+  "key": "chasca", "name": "Chasca", "element": "Anemo", "weapon_type": "Bow", "rarity": 5,
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "goals": {"atk": 2000, "cr": 50, "cd": 200, "er": 110},
+  "mains": {"sands": ["atk_pct"], "goblet": ["atk_pct", "dmg"], "circlet": ["cd", "cr"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "er": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["obsidian-codex"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["viridescent-venerer"], "pieces": "4"}],
+  "weapons": ["astral-vulture-s-crimson-plumage", "flower-wreathed-feathers", "aqua-simulacra"],
+  "partners": ["Pyro", "Hydro"], "partner_roles": ["support"], "teams": [],
+  "notes": "An Anemo main DPS whose Skill carries the damage (both sources put it first). The sources agree on 4pc Obsidian Codex, an ATK% Sands and Goblet and a crit Circlet; Game8's second build, an Anemo Swirl carry, uses 4pc Viridescent Venerer with EM. The card puts Marechaussee Hunter (KQM's second set) before it. Goals are Game8's: ATK 2,000 or above, CR 40-50% (the Codex adds crit rate) and CD 200% or above. ER 110% is the upper end of KQM's range for a solo Anemo build with the Burst every other rotation (100-110%, which KQM advises; the Burst every rotation needs 165-195%). The Goblet may be ATK% or a DMG Bonus, so no DMG goal is set. Her signature is Astral Vulture's Crimson Plumage, first for both sources; the next two are KQM's second and Game8's second.",
+  "confidence": "high", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/chasca-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/462001", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/7080", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

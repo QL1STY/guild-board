@@ -1,0 +1,70 @@
+/* The Codes page (the gift codes design, section 1, mockup A2): one centred column, a hero with the total, one joined
+   field and the livestream bar, then the history. */
+.cd-page { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 600px; margin: 8px auto 0; }
+.cd-hero { padding: 24px 24px 20px; text-align: center; }
+.cd-big b { display: block; font-size: 46px; font-weight: 800; line-height: 1; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.cd-star { margin-right: 6px; font-size: 28px; vertical-align: 8px; color: var(--fill); }
+.cd-big small { font-size: 14px; color: var(--muted); }
+.cd-field {
+  display: flex; height: 46px; margin-top: 18px; overflow: hidden;
+  border: 1.5px solid var(--border); border-radius: 999px; background: var(--surface);
+}
+.cd-field input { border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; }
+.cd-field:focus-within { border-color: var(--focus); }
+.cd-field .cd-code { flex: 1; min-width: 0; padding: 0 20px; font-family: 'Cascadia Mono', Consolas, monospace; font-size: 16px; letter-spacing: .06em; font-weight: 600; }
+.cd-field .cd-gems { width: 120px; padding: 0 14px; border-left: 1px solid var(--hairline); font-size: 15px; }
+.cd-gems::placeholder { color: var(--muted); }
+/* The hint reads as a sentence; only a typed code is set in the code face. */
+.cd-field .cd-code::placeholder { font-family: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif; letter-spacing: normal; font-weight: 400; font-size: 15px; color: var(--muted); }
+.cd-go {
+  border: 0; border-radius: 999px; background: var(--button); color: var(--button-text);
+  font: inherit; font-weight: 700; font-size: 15px; padding: 0 26px; cursor: pointer;
+}
+.cd-go:hover:not(:disabled) { filter: brightness(1.15); }
+.cd-go:disabled { opacity: .55; cursor: default; }
+.cd-field .cd-go { border-radius: 0; }
+.cd-login { margin-top: 10px; }
+.cd-note { margin: 10px 0 0; font-size: 13px; color: var(--ink); }
+.cd-run { margin: 10px 0 0; padding: 0; list-style: none; font-size: 13.5px; text-align: left; }
+.cd-run li { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; border-top: 1px solid var(--hairline); }
+.cd-run li:first-child { border-top: 0; }
+.cd-run code,
+.cd-hist code { font-family: 'Cascadia Mono', Consolas, monospace; font-weight: 600; letter-spacing: .06em; }
+.cd-live {
+  display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 5px 5px 5px 18px; text-align: left;
+  background: var(--warn-soft); border: 1px solid var(--warn-line); border-radius: 999px;
+}
+.cd-live b { flex: 1; font-size: 15px; }
+.cd-live .cd-go { height: 36px; font-size: 14px; padding: 0 18px; }
+.cd-list { padding: 4px 18px; }
+.cd-hist { margin: 0; padding: 0; list-style: none; font-size: 13.5px; }
+.cd-hist li { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 11px 0; border-top: 1px solid var(--hairline); }
+.cd-hist li:first-child { border-top: 0; }
+.cd-hist code { flex: 1; min-width: 0; }
+.cd-good { font-weight: 700; color: var(--good); }
+.cd-bad { font-weight: 700; color: var(--refused); }
+.cd-pr { min-width: 84px; text-align: right; font-weight: 700; color: var(--gold-ink); }
+.cd-pr input {
+  width: 64px; padding: 2px 6px; border: 1px solid transparent; border-radius: 6px; background: transparent;
+  color: var(--gold-ink); font: inherit; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums;
+}
+.cd-pr input:hover,
+.cd-pr input:focus { border-color: var(--border); background: var(--surface); }
+.cd-date { min-width: 52px; text-align: right; font-size: 13px; color: var(--muted); }
+.cd-x {
+  width: 24px; height: 24px; border: 0; border-radius: 50%; background: transparent; color: var(--muted);
+  font-size: 16px; line-height: 24px; cursor: pointer;
+}
+.cd-x:hover,
+.cd-x:focus-visible { background: var(--tint); color: var(--refused); }
+.cd-empty { margin: 10px 0; color: var(--muted); font-size: 13.5px; }
+/* The login before the first code (the update notice design, section 3): above the field, which stays shut until it is gone. */
+.cd-loginbox {
+  display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 12px 12px 12px 16px; text-align: left;
+  background: color-mix(in srgb, var(--button) 9%, var(--surface)); border: 1px solid color-mix(in srgb, var(--button) 25%, var(--surface)); border-radius: 14px;
+}
+.cd-loginbox > div { flex: 1; }
+.cd-loginbox b { display: block; }
+.cd-loginbox small { color: var(--ink2); }
+.cd-field[data-off] { opacity: .55; }
+.cd-field[data-off] .cd-go { opacity: 1; }

@@ -1,0 +1,528 @@
+/* The Achievements page: the categories down the left, the cards in columns beside them. The content keeps a maximum
+   width, and no card stretches (spec 12.1). */
+.ach { display: grid; grid-template-columns: 300px minmax(0, 1600px); gap: 12px; align-items: start; }
+
+/* Across both columns, and so never wider than they are (look pass spec 11.1): the ticks and what is left, a bar of the
+   ticks against all with its percentage, and the primogems to earn over Check for new achievements. */
+.ach-top {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(260px, 1fr) auto;
+  align-items: center;
+  gap: 10px 28px;
+  padding: 14px 18px;
+}
+.ach-ticks { min-width: 0; }
+.ach-counts { white-space: nowrap; }
+/* Strong figures: proportional digits, as a static number is set (look pass spec 5). */
+.ach-fig { font-size: 30px; font-weight: 800; line-height: 1.1; letter-spacing: -.01em; }
+.ach-of { font-size: 15px; font-weight: 500; color: var(--ink2); }
+.ach-left { margin-top: 4px; font-size: 12.5px; color: var(--ink2); }
+.ach-meter { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.ach-meter .bar { flex: 1; min-width: 0; height: 12px; border-radius: 6px; }
+/* The bar follows a tick to its new length. */
+.ach-meter .bar-fill,
+.ach-cat .bar-fill { transition: width var(--t-state) var(--ease-out); }
+.ach-percent { font-size: 15px; font-weight: 800; }
+.ach-top-end { display: grid; justify-items: end; gap: 8px; }
+.ach-earn { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.ach-earn-n { font-size: 18px; font-weight: 800; }
+.ach-earn .ach-of { font-size: 12.5px; }
+/* The primogem's picture, or in its place the gem sign, in the signs' gold (ui/Picture.tsx). */
+.ach-top-gem { width: 22px; height: 22px; color: var(--w-icon); }
+
+/* What the top line's check found, across both columns too. The
+   lines are spaced as in a Settings card, so that the panels look the same in both places. */
+.ach-sheet { grid-column: 1 / -1; padding: 10px 14px 12px; font-size: 13.5px; }
+.ach-sheet p + p { margin-top: 6px; }
+
+/* The list's and the import's panels, here and in Settings. Two lines in a row are 6 px apart there
+   (`.set-card p + p`) and in .ach-sheet; a line after another that is spaced otherwise has a selector of two classes,
+   to outweigh that. */
+.ach-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+/* The installed list's date, kept on one line: in Settings' narrow column it would break at a hyphen. */
+.ach-date { white-space: nowrap; }
+.ach-buttons + p { margin-top: 10px; }
+.ach-lead { font-weight: 700; }
+/* A line that names a path or a file: it breaks anywhere rather than run past the panel's edge, as Data's path does. */
+.ach-path { overflow-wrap: anywhere; }
+.ach-result:not(:empty) { margin-top: 10px; }
+.ach-problem { font-weight: 700; }
+.ach-problem:not(:empty) { margin-top: 8px; }
+/* Both lines stay in the panel while they are empty, so that a screen reader hears each new sentence. */
+.ach-result:empty,
+.ach-problem:empty { margin: 0; }
+.ach-found .ach-found-head { margin-top: 10px; font-size: 12.5px; font-weight: 800; }
+.ach-found .ach-found-cat { margin-top: 4px; font-size: 12px; color: var(--muted); }
+/* Up to 50 names, in columns where there is room, but close enough to read across. */
+.ach-names {
+  max-width: 760px;
+  columns: 3 200px;
+  column-gap: 28px;
+  margin: 3px 0 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+}
+.ach-names li { break-inside: avoid; }
+.ach-found .ach-more { margin-top: 4px; font-size: 12.5px; color: var(--ink2); }
+.ach-conflicts { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; }
+.ach-conflicts li + li { margin-top: 2px; }
+.ach-profile { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.ach-profile select {
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+/* Choose a file: the label is the button. The file input lies over it, unseen, and takes the focus and its ring. */
+.ach-file { position: relative; display: inline-block; overflow: hidden; cursor: pointer; }
+.ach-file input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+.ach-file:has(input:focus-visible) { outline: 2px solid var(--series); outline-offset: 2px; }
+
+/* The categories stay in view while the cards scroll, and scroll on their own when they are taller than the window. */
+.ach-cats {
+  position: sticky;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 8px;
+}
+/* A category: its name, and its count on the right. A game category's bar of its ticks runs under both (spec 11.2). */
+.ach-cat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 5px 10px;
+  width: 100%;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  font-size: 13.5px;
+  text-align: left;
+}
+.ach-cat:has(.bar) { padding-bottom: 8px; }
+.ach-cat:hover { background: var(--tint); }
+.ach-cat.on { background: var(--button); color: var(--button-text); font-weight: 700; }
+.ach-cat .n { font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ach-cat.on .n { color: var(--button-text); }
+.ach-cat .bar { grid-column: 1 / -1; height: 3px; }
+/* The bars grow one after another as the page opens (Achievements.tsx sets --k, at most 12). */
+.ach-cat .bar-fill { animation-delay: calc(var(--k, 0) * var(--stagger) + 120ms); }
+/* On the chosen category's dark plate the bar is gold on a pale track. */
+.ach-cat.on { --w-track: color-mix(in srgb, var(--button-text) 22%, transparent); --w-fill: var(--gold); }
+.ach-sep { width: 100%; margin: 5px 0; border: 0; border-top: 1px solid var(--hairline); }
+.ach-fold { align-self: flex-start; margin: 6px 10px; }
+
+.ach-main { min-width: 0; }
+/* The bar stays in view over the cards, so that the view switch and the search are at hand wherever the player has
+   scrolled to. It has the page's own background, so the cards pass under it unseen. */
+.ach-bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 12px 0 6px;
+  background: var(--page);
+}
+/* What the keyboard moves to is scrolled into view below the bar, not under it. The page keeps --ach-bar-height at the
+   bar's real height, which grows when its tools wrap (Achievements.tsx, followBarHeight). */
+html:has(.ach-bar) { scroll-padding-top: calc(var(--ach-bar-height, 56px) + 8px); }
+.ach-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ach-title { margin-right: auto; font-size: 16px; font-weight: 800; }
+.ach-search {
+  width: 260px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+
+/* The cards (look pass spec 11.3): one height for every card of a list, in columns of at least 440 pixels, two in a
+   window 1,440 pixels wide and three at 2,560, so that the rows close up and no card stretches. An open panel takes the
+   whole row right after its card, and the dense packing fills the row's other places with the cards after it. */
+.ach-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  grid-auto-flow: row dense;
+  gap: 10px;
+}
+/* Four rows: the box, the name, the pips and Look it up; the stage's text; its progress; its reward and buttons. */
+.ach-card {
+  position: relative;
+  height: 154px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  grid-template-rows: 26px 38px 24px 28px;
+  column-gap: 10px;
+  row-gap: 6px;
+  padding: 9px 12px 9px 13px;
+}
+.ach-card > .ach-box { grid-row: 1; align-self: center; }
+.ach-head { grid-column: 2; grid-row: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ach-name {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ach-head .pips { flex: none; gap: 6px; }
+.ach-head .pips i { width: 9px; height: 9px; }
+.ach-head .seal { flex: none; }
+.ach-head .gb-link { flex: none; margin-left: auto; }
+/* The text of the stage the card stands at: two lines, or three on a card without a third row. */
+.ach-text {
+  grid-column: 2;
+  grid-row: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 13.5px;
+  overflow-wrap: anywhere;
+}
+.ach-card.bare .ach-text { grid-row: 2 / span 2; -webkit-line-clamp: 3; }
+.ach-card.done .ach-name,
+.ach-card.done .ach-text { color: var(--ink2); }
+/* A stage's numeral, on a small plate, so that "II" reads as the stage's number and not as a pause mark. */
+.ach-numeral {
+  display: inline-block;
+  min-width: 22px;
+  margin-right: 7px;
+  padding: 0 4px;
+  border-radius: 5px;
+  background: var(--tint);
+  color: var(--ink2);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 17px;
+  letter-spacing: .04em;
+  text-align: center;
+  vertical-align: 1px;
+}
+/* The progress: a bar and the count between − and +, or the parts as chips, or the line that offers the tick. */
+.ach-prog { grid-column: 2; grid-row: 3; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ach-prog .bar { flex: 1; min-width: 40px; }
+/* The bar moves to a new count's length. */
+.ach-prog .bar-fill { transition: width var(--t-state) var(--ease-out); }
+.ach-prog .ach-reached {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 2px 8px;
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The count between the buttons that change it (widgets/CountSteps.tsx, widgets.css .steps). */
+.steps.ach-steps { flex: none; gap: 6px; }
+.ach-steps b { font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.steps.ach-steps .ach-step { width: 24px; height: 24px; font-size: 14px; }
+.ach-of-parts {
+  flex: none;
+  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* A part is a chip that ticks: a native checkbox over the chip, unseen, so that the whole chip takes the click, and the
+   chip drawn after it (its face), which the box's state and its keyboard focus change. Where the row is short of room,
+   the chips give way and their names are cut short; each is whole in its chip's tip. The Daily commissions' chips are
+   these too (commissions.css). */
+.ach-chip { position: relative; display: inline-flex; flex: 0 1 auto; min-width: 0; cursor: pointer; }
+.ach-chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.ach-chip-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  max-width: 100%;
+  height: 24px;
+  padding: 0 10px 0 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--ink2);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.ach-chip-face .sign { flex: none; width: 13px; height: 13px; color: var(--outline); stroke-width: 2.2; }
+.ach-chip-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ach-chip input:checked + .ach-chip-face {
+  border-color: color-mix(in srgb, var(--done) 55%, transparent);
+  background: color-mix(in srgb, var(--done) 13%, transparent);
+  color: var(--good);
+  font-weight: 700;
+}
+.ach-chip input:checked + .ach-chip-face .sign { color: var(--done); }
+.ach-chip input:focus-visible + .ach-chip-face { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* The reward, the version and the buttons, across the card. */
+.ach-foot { grid-column: 1 / -1; grid-row: 4; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.ach-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.ach-reward { flex: none; display: inline-flex; align-items: center; gap: 5px; color: var(--ink); font-weight: 700; }
+.ach-card .ach-reward { font-size: 13px; }
+/* The category's name gives way first, with an ellipsis, to the version after it. */
+.ach-where { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ach-where + .ach-ver { margin-left: -5px; }
+.ach-ver { flex: none; }
+/* A note on any stage: the quill, in the signs' gold. The note itself is in the panel. */
+.ach-quill { flex: none; display: inline-grid; color: var(--w-icon); }
+.ach-quill .sign { width: 16px; height: 16px; }
+.ach-acts { flex: none; display: flex; align-items: center; gap: 6px; }
+/* The buttons of a row are one size. */
+.ach-card .ach-toggle,
+.ach-row .ach-toggle { height: 24px; padding: 0 11px; }
+.ach-panel-btn .sign { width: 12px; height: 12px; margin-left: 3px; vertical-align: -2px; }
+.ach-toggle.ach-panel-btn[aria-expanded='true'] {
+  border-color: var(--gold-ink);
+  background: color-mix(in srgb, var(--gold) 22%, var(--surface));
+  color: var(--ink);
+}
+.ach-panel-btn[aria-expanded='true'] .sign { rotate: 180deg; }
+
+/* The box that ticks a stage, on a card and in a panel: a native checkbox drawn here, with its tick over it. */
+.ach-box { position: relative; display: grid; flex: none; place-items: center; width: 22px; height: 22px; }
+.ach-box input {
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 1.5px solid var(--outline);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.ach-box input:checked { border-color: var(--done); background: var(--done); }
+/* A stage that its count or its parts reached: the box stays empty, outlined in the progress gold. */
+.ach-box.reached input:not(:checked) { border-width: 2px; border-color: var(--fill); }
+.ach-box .sign {
+  position: relative;
+  width: 15px;
+  height: 15px;
+  color: var(--surface);
+  stroke-width: 2.4;
+  opacity: 0;
+  pointer-events: none;
+}
+.ach-box input:checked + .sign { opacity: 1; }
+/* The player's tick lands with a small overshoot, once (motion.css). */
+.ach-box.stamp input:checked + .sign { animation: stamp var(--t-state) var(--ease-stamp); }
+/* The reward's gem: the game's picture, or in its place the gem sign (ui/Picture.tsx). */
+.ach-card .ach-gem,
+.ach-panel .ach-gem { width: 16px; height: 16px; margin: 0; vertical-align: 0; }
+
+.ach-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 5px 8px 5px 10px;
+  border-radius: 8px;
+  background: var(--tint);
+}
+.ach-count { margin-right: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ach-step {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  font-weight: 800;
+  line-height: 1;
+}
+/* aria-disabled, which keeps the focus where disabled would drop it to the page (frame.css, .gb-btn). */
+.ach-step[aria-disabled='true'] { opacity: .45; cursor: default; }
+.ach-num {
+  width: 90px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The card whose panel is open has a gold border, as its panel has. */
+.ach-card.open {
+  border-color: var(--gold-ink);
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px color-mix(in srgb, var(--gold-ink) 30%, transparent);
+}
+/* An achievement in full, across the row right under its card (look pass spec 11.4). It grows to its height as it opens
+   and shrinks as it closes, and the rows below move with it; the page takes it away once it has shrunk
+   (AchievementCard.tsx). The space over the panel holds its notch, which the shrinking clips with the rest. */
+.ach-panel-wrap {
+  grid-column: 1 / -1;
+  display: flow-root;
+  overflow: clip;
+  interpolate-size: allow-keywords;
+  transition: height var(--t-open) var(--ease-move);
+}
+@starting-style {
+  .ach-panel-wrap { height: 0; }
+}
+.ach-panel-wrap.closing { height: 0; }
+.ach-panel {
+  position: relative;
+  margin-top: 10px;
+  scroll-margin-bottom: 12px; /* brought into view as it opens, it stops clear of the window's bottom edge */
+  padding: 12px 18px 10px;
+  border: 1px solid var(--gold-ink);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px color-mix(in srgb, var(--gold-ink) 30%, transparent);
+}
+/* The notch: a small corner over the panel's top edge, under the middle of its card (--notch), pointing to the card. */
+.ach-panel::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: var(--notch, 50%);
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-top: 1px solid var(--gold-ink);
+  border-left: 1px solid var(--gold-ink);
+  border-top-left-radius: 2px;
+  background: var(--surface);
+  rotate: 45deg;
+}
+/* The panel spans its row so that its notch can sit under any card, but what it holds keeps to a readable width: at
+   2,560 pixels a stage's day, reward and buttons stay near its text instead of at the far end of three columns. */
+.ach-panel > * { max-width: 1040px; }
+.ach-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+.ach-panel-name { font-size: 17px; font-weight: 800; }
+.ach-panel-sum { color: var(--muted); font-size: 13px; }
+.ach-panel-head .ach-counter { margin: 0 0 0 auto; }
+/* Every stage: its box, its numeral, its text and what goes with it, the day it was ticked, and its own controls. */
+.ach-stages { margin: 0; padding: 0; list-style: none; }
+.ach-row {
+  display: grid;
+  grid-template-columns: 22px 30px minmax(0, 1fr) auto auto;
+  align-items: start;
+  column-gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--hairline);
+}
+.ach-row:first-child { border-top: 0; }
+.ach-stages.single .ach-row { grid-template-columns: 22px minmax(0, 1fr) auto auto; }
+.ach-row > .ach-numeral { margin: 2px 0 0; }
+.ach-row-body { min-width: 0; }
+.ach-own { font-size: 13.5px; font-weight: 700; }
+.ach-desc { font-size: 13.5px; overflow-wrap: anywhere; }
+.ach-row.done .ach-desc { color: var(--ink2); }
+.ach-when { padding-top: 2px; color: var(--good); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.ach-row-acts { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 6px; }
+.ach-row-acts .ach-reward { margin-right: 4px; font-size: 12px; }
+.ach-row-acts .ach-ver { margin-right: 4px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.ach-day { color: var(--muted); font-size: 11.5px; }
+.ach-panel-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 2px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hairline);
+  color: var(--ink2);
+  font-size: 12.5px;
+}
+/* The reward's gem: the game's picture, or in its place the gem sign, in the signs' gold (ui/Picture.tsx). The Daily
+   commissions' cards show it too. */
+.ach-gem { display: inline-grid; width: 14px; height: 14px; margin-right: 4px; vertical-align: -2px; color: var(--w-icon); }
+.ach-toggle {
+  padding: 1px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: none;
+  color: var(--ink2);
+  font-size: 12px;
+}
+.ach-toggle[aria-pressed='true'],
+.ach-toggle[aria-expanded='true'] {
+  background: var(--button);
+  border-color: var(--button);
+  color: var(--button-text);
+  font-weight: 700;
+}
+.ach-toggle[aria-disabled='true'] { opacity: .45; cursor: default; }
+.ach-parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12.5px;
+}
+.ach-parts li { display: flex; align-items: baseline; gap: 6px; }
+.ach-check { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.ach-check input { width: 14px; height: 14px; margin: 0; accent-color: var(--done); cursor: pointer; }
+/* The line that offers the tick, and the player's note: both set off by their left border. */
+.ach-reached,
+.ach-note {
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  background: var(--tint);
+  font-size: 12.5px;
+}
+.ach-reached { border-left-color: var(--done); color: var(--good); }
+.ach-note { white-space: pre-wrap; overflow-wrap: anywhere; }
+.ach-editor { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 6px; }
+.ach-editor textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.ach-unlisted { padding: 10px 14px; }
+.ach-unlisted .gb-note { margin: 0 0 6px; }
+.ach-rows { margin: 0; padding: 0; list-style: none; }
+.ach-rows li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--grid);
+  font-size: 13px;
+}
+.ach-rows li:first-child { border-top: 0; }
+.ach-rows small { display: block; font-size: 11.5px; color: var(--muted); overflow-wrap: anywhere; }

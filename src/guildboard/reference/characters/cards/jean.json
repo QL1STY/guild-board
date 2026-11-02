@@ -1,0 +1,36 @@
+{
+  "key": "jean",
+  "name": "Jean",
+  "element": "Anemo",
+  "weapon_type": "Sword",
+  "rarity": 5,
+  "pronouns": ["she", "her", "her"],
+  "roles": ["healer", "support"],
+  "keeps_alive": true,
+  "scaling": "atk",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"er": 160},
+  "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd", "heal"]},
+  "weights": {"er": "wants", "atk_pct": "wants", "cr": "wants", "cd": "some", "dmg": "some", "heal": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [
+    {"sets": ["viridescent-venerer"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"},
+    {"sets": ["gladiator-s-finale"], "pieces": "4"},
+    {"sets": ["ocean-hued-clam"], "pieces": "4"}
+  ],
+  "weapons": ["primordial-jade-cutter", "freedom-sworn", "skyward-blade", "favonius-sword", "amenoma-kageuchi", "festering-desire", "mistsplitter-reforged"],
+  "partners": ["Pyro", "Hydro", "Electro", "Cryo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "Both sources agree on 4pc Viridescent Venerer (Noblesse Oblige for an ATK buffer), ATK% or ER sands, Anemo DMG goblet, Burst first. Game8 splits three builds (sub-DPS: Gladiator's Finale or Viridescent with Primordial Jade Cutter; healer: Viridescent with Freedom-Sworn; ATK buffer: Noblesse with Primordial Jade Cutter), KQM two (support, and an EM 'Sunfire' build which is left out). The circlet is CRIT Rate/CRIT DMG with Healing Bonus as the healer option. ER 160 is the top of KQM's 'double Anemo or with Raiden' range (140-160) and the bottom of its solo Anemo range (160-200). Neither source gives ATK or CRIT goals, so only ER is set; the confidence is medium for that reason. Partners: any swirl-able element, so Pyro, Hydro, Electro and Cryo.",
+  "confidence": "medium",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/jean-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297536", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/27", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

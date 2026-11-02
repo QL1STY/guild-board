@@ -1,0 +1,19 @@
+{
+  "key": "diluc", "name": "Diluc", "element": "Pyro", "weapon_type": "Claymore", "rarity": 5,
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
+  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"], "talent_table": "elemental",
+  "goals": {"er": 115, "dmg": 46.6},
+  "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
+  "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "em": "wants", "er": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},
+  "sets": [{"sets": ["crimson-witch-of-flames"], "pieces": "4"}, {"sets": ["marechaussee-hunter"], "pieces": "4"}, {"sets": ["gilded-dreams"], "pieces": "4"}],
+  "weapons": ["redhorn-stonethresher", "beacon-of-the-reed-sea", "wolf-s-gravestone"],
+  "partners": ["Hydro", "Cryo"], "partner_roles": ["support"], "teams": [],
+  "notes": "A Pyro main DPS for Vaporize or Melt, whose Skill hits (Searing Onslaught, 94-129% ATK at level 1) trigger most reactions. KQM ranks Normal Attack equal to the Skill and Game8 puts the Skill first (with a variant that puts Normal Attack first), so the Skill leads. Both sources agree on 4pc Crimson Witch of Flames, ATK% or EM Sands, a Pyro DMG Goblet, a crit Circlet, and the weapons Redhorn Stonethresher, Beacon of the Reed Sea, Wolf's Gravestone and Serpent Spine. KQM adds Lavawalker for Mono Pyro, Game8 Marechaussee Hunter as an alternate. Neither source gives stat goals. ER 115% is KQM's figure for a team with Bennett (100-115%) or a Double Pyro team (about 115%).",
+  "confidence": "medium", "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/diluc-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/297518", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/43", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

@@ -1,0 +1,112 @@
+@ song-of-stillness
++ dmg 16/20/24/28/32 met 8s after the wielder is healed
+
+@ rightful-reward
+~ no stat: restores 8/10/12/14/16 Energy when the wielder is healed, not counted
+
+@ tidal-shadow
++ atk_pct 24/30/36/42/48 met 8s after the wielder is healed
+
+@ finale-of-the-deep
++ atk_pct 12/15/18/21/24 met 15s after using an Elemental Skill (once every 10s)
++ atk 150/187.5/225/262.5/300 met at the cap, 15s after a Bond of Life is cleared (2.4%/3%/3.6%/4.2%/4.8% of the amount cleared)
+
+@ the-first-great-magic
++ dmg 16/20/24/28/32 met Charged Attack DMG
++ atk_pct 48/60/72/84/96 met 3 or more Gimmick stacks, one for each party member of the wielder's Elemental Type, the wielder included (16%/20%/24%/28%/32% at 1, 32%/40%/48%/56%/64% at 2)
+~ not counted: Movement SPD from Theatrics stacks
+
+@ ibis-piercer
++ em 40/50/60/70/80*2 met at 2 stacks, 6s after Charged Attacks hit opponents
+
+@ jadefall-s-splendor
++ dmg 12/20/28/36/44 met Elemental DMG Bonus of the wielder's own Element, for 3s after using an Elemental Burst or creating a Shield, at the cap (0.3%/0.5%/0.7%/0.9%/1.1% per 1,000 Max HP)
+~ not counted: Energy restored every 2.5s
+
+@ beacon-of-the-reed-sea
++ atk_pct 20/25/30/35/40 met 8s after the Elemental Skill hits an opponent
++ atk_pct 20/25/30/35/40 met 8s after the wielder takes DMG
++ hp_pct 32/40/48/56/64 met when not protected by a Shield
+
+@ mailed-flower
++ atk_pct 12/15/18/21/24 met within 8s after the Elemental Skill hits an opponent or an Elemental Reaction is triggered
++ em 48/60/72/84/96 met within 8s after the Elemental Skill hits an opponent or an Elemental Reaction is triggered
+
+@ light-of-foliar-incision
++ cr 4/5/6/7/8 always
+~ not counted: Foliar Incision, Normal Attack and Elemental Skill DMG +120%/150%/180%/210%/240% of Elemental Mastery as flat DMG (28 instances or 12s), which is not a % bonus
+
+@ tulaytullah-s-remembrance
++ dmg 48/60/72/84/96 met Normal Attack DMG at the maximum of the effect, after an Elemental Skill (4.8%/6%/7.2%/8.4%/9.6% each second plus 9.6%/12%/14.4%/16.8%/19.2% per hit), 14s
+~ not counted: Normal Attack SPD +10%/12.5%/15%/17.5%/20%
+
+@ toukabou-shigure
++ dmg 16/20/24/28/32 met against the opponent affected by Cursed Parasol
+
+@ a-thousand-floating-dreams
++ dmg 10/14/18/22/26*3 met Elemental DMG Bonus of the wielder's Element, from 3 party members of a different Elemental Type
+~ each party member of the same Elemental Type gives Elemental Mastery +32/40/48/56/64 instead, so only the different-type case is counted
+
+@ wandering-evenstar
+~ no flat stat: the wielder gains 24%/30%/36%/42%/48% of their Elemental Mastery as bonus ATK for 12s, every 10s, so it depends on the wielder's Elemental Mastery and is not counted
+
+@ xiphos-moonlight
+~ no flat stat: the wielder gains 0.036%/0.045%/0.054%/0.063%/0.072% Energy Recharge per point of Elemental Mastery for 12s, every 10s, so it depends on the wielder's Elemental Mastery and is not counted
+
+@ key-of-khaj-nisut
++ hp_pct 20/25/30/35/40 always
+~ not counted, because they depend on Max HP: Elemental Mastery +0.12%/0.15%/0.18%/0.21%/0.24% of Max HP per Grand Hymn stack (3 stacks, 20s), and 0.2%/0.25%/0.3%/0.35%/0.4% of Max HP for nearby party members at 3 stacks
+
+@ staff-of-the-scarlet-sands
+~ no flat stat: the wielder gains 52%/65%/78%/91%/104% of their Elemental Mastery as bonus ATK, and 28%/35%/42%/49%/56% more per stack of Dream of the Scarlet Sands (3 stacks, 10s), so it depends on the wielder's Elemental Mastery and is not counted
+
+@ makhaira-aquamarine
+~ no flat stat: the wielder gains 24%/30%/36%/42%/48% of their Elemental Mastery as bonus ATK for 12s, every 10s, so it depends on the wielder's Elemental Mastery and is not counted
+
+@ missive-windspear
++ atk_pct 12/15/18/21/24 met within 10s after an Elemental Reaction is triggered
++ em 48/60/72/84/96 met within 10s after an Elemental Reaction is triggered
+
+@ forest-regalia
++ em 60/75/90/105/120 met 12s after picking up a Leaf of Consciousness, created after Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom or Burgeon (once every 20s)
+
+@ king-s-squire
++ em 60/80/100/120/140 met Teachings of the Forest, 12s after using an Elemental Skill or Burst (removed when switching characters)
+~ not counted: DMG of 100%/120%/140%/160%/180% of ATK when the effect ends
+
+@ fruit-of-fulfillment
++ em 24/27/30/33/36*5 met at 5 stacks of Wax and Wane, after Elemental Reactions
++ atk_pct -5/-5/-5/-5/-5*5 met at 5 stacks of Wax and Wane, which each lose 5% ATK
+
+@ moonpiercer
++ atk_pct 16/20/24/28/32 met 12s after picking up a Leaf of Revival, created after Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom or Burgeon (once every 20s)
+
+@ sapwood-blade
++ em 60/75/90/105/120 met 12s after picking up a Leaf of Consciousness, created after Burning, Quicken, Aggravate, Spread, Bloom, Hyperbloom or Burgeon (once every 20s)
+
+@ end-of-the-line
+~ no stat: Flowrider deals 80%/100%/120%/140%/160% of ATK as AoE DMG, not counted
+
+@ hunter-s-path
++ dmg 12/15/18/21/24 always
+~ not counted: Tireless Hunt, Charged Attack DMG +160%/200%/240%/280%/320% of Elemental Mastery as flat DMG (12 Charged Attacks or 10s)
+
+@ kagotsurube-isshin
++ atk_pct 15/15/15/15/15 met 8s after a Normal, Charged or Plunging Attack hits an opponent (once every 8s)
+~ the passive's text gives one value for every refinement; not counted: Hewing Gale's AoE DMG of 180% of ATK
+
+@ fading-twilight
++ dmg 14/17.5/21/24.5/28 met in the Dawnblaze state, the last of three states (Evengleam, Afterglow, Dawnblaze) that change when attacks hit, once every 7s (6%/7.5%/9%/10.5%/12% and 10%/12.5%/15%/17.5%/20% in the other two)
+
+@ aqua-simulacra
++ hp_pct 16/20/24/28/32 always
++ dmg 20/25/30/35/40 met when there are opponents nearby
+
+@ dragonspine-spear
+~ no stat: an Everfrost Icicle deals AoE DMG of 80%/95%/110%/125%/140% of ATK (200%/240%/280%/320%/360% to Cryo-affected opponents), not counted
+
+@ blackcliff-longsword
++ atk_pct 12/15/18/21/24*3 met at 3 stacks, 30s after defeating opponents
+
+@ blackcliff-agate
++ atk_pct 12/15/18/21/24*3 met at 3 stacks, 30s after defeating opponents

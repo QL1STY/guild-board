@@ -1,0 +1,36 @@
+{
+  "key": "illuga",
+  "name": "Illuga",
+  "element": "Geo",
+  "weapon_type": "Polearm",
+  "rarity": 4,
+  "pronouns": ["he", "him", "his"],
+  "roles": ["support"],
+  "keeps_alive": false,
+  "scaling": "em",
+  "damage_talent": "burst",
+  "talent_priority": ["burst", "skill", "normal"],
+  "talent_table": "elemental",
+  "goals": {"em": 750, "er": 160},
+  "mains": {"sands": ["em", "er"], "goblet": ["em"], "circlet": ["em", "cr"]},
+  "weights": {"em": "wants", "er": "wants", "def_pct": "some", "cr": "some", "def": "some", "atk_pct": "none", "atk": "none", "cd": "none", "hp_pct": "none", "hp": "none", "dmg": "none"},
+  "sets": [
+    {"sets": ["silken-moon-s-serenade"], "pieces": "4"},
+    {"sets": ["instructor"], "pieces": "4"},
+    {"sets": ["scroll-of-the-hero-of-cinder-city"], "pieces": "4"},
+    {"sets": ["noblesse-oblige"], "pieces": "4"}
+  ],
+  "weapons": ["favonius-lance", "dragon-s-bane", "kitain-cross-spear", "staff-of-the-scarlet-sands", "frostbreath", "song-of-the-vigil"],
+  "partners": ["Geo"],
+  "partner_roles": ["damage"],
+  "teams": [],
+  "notes": "KQM and Game8 agree: 4pc Silken Moon's Serenade, EM on goblet and circlet, EM or ER sands, Burst first (both: Burst > Skill). Goals are Game8's: EM 750+ and ER 140-160 with Favonius Lance, 160-180 without (160 used); KQM's ER depends on the Geo teammate (Zibai, Navia, Itto, Noelle, Ningguang) from 125 to 210. CRIT Rate 40-50 is only wanted with Favonius Lance, so it is not a goal. Weapons differ in order: Game8's best is Favonius Lance, KQM lists Dragon's Bane first; Favonius Lance leads because it also fixes ER. His buffs and Lunar-Crystallize damage scale with EM (and DEF in his multipliers), so the scaling stat is EM. Partners are Geo characters (his Moonsign buff is for a Geo team).",
+  "confidence": "high",
+  "early": false,
+  "sources": [
+    {"url": "https://keqingmains.com/q/illuga-quickguide/", "checked": "2026-10-29"},
+    {"url": "https://game8.co/games/Genshin-Impact/archives/555902", "checked": "2026-10-29"},
+    {"url": "https://wiki.hoyolab.com/pc/genshin/entry/9123", "checked": "2026-10-29"}
+  ],
+  "checked": "2026-10-29"
+}

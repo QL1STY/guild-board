@@ -1,0 +1,109 @@
+/*
+ * The roster (the design's section 6.1): parchment, with the week mockup's roster chips and focus cards. Pages keep
+ * .gb-page's 1,440 pixels, with no zoom of their own.
+ */
+.cr-page { display: grid; gap: 14px; --cr-paper: var(--ledger-light); --cr-gold-soft: #F1E3C2; }
+/* Scaled down on a full screen (scale.ts), the page still takes the 1,440 pixels of the screen it had: counted in its own, larger, pixels. */
+.gb-page.cr-page { max-width: calc(1440px / var(--cs, 1)); }
+.cr-grow { flex: 1; }
+/* A page that comes back is there at once: its rings do not fill again and it does not fade in (the entrance plays on the first visit only). */
+.cr-page.still .r-fill { animation: none; }
+.gb-main > .cr-page.still { animation: none; } /* nor does the frame's short fade of a page */
+
+/* ---------- Top: the count, the tabs and the focus ---------- */
+.cr-top { display: grid; gap: 14px; padding: 16px 18px; }
+.cr-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; min-height: 30px; }
+.cr-head h2 { font-size: 22px; font-weight: 800; }
+.cr-count { color: var(--ink2); font-size: 14.5px; }
+.cr-refusal { color: var(--gold-ink); font-weight: 700; font-size: 13.5px; }
+.cr-tabs { display: inline-flex; align-self: center; overflow: hidden; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 13px; }
+.cr-tabs a { padding: 4px 16px; color: var(--ink2); text-decoration: none; }
+.cr-tabs a.on { background: var(--button); color: var(--button-text); font-weight: 700; }
+.cr-tabs a:focus-visible { outline-offset: -2px; }
+
+.cr-focus-wrap { display: grid; gap: 8px; }
+.cr-focus-hint { color: var(--ink2); font-size: 14px; }
+.cr-focus { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.cr-fc {
+  display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 12px 12px 12px 14px;
+  border: 1px solid var(--hairline); border-radius: 14px; background: var(--cr-paper);
+}
+.cr-fc .cx-ava { border-color: var(--fill); }
+.cr-fc-text { display: grid; gap: 1px; min-width: 0; }
+.cr-fc-text b { font-size: 17px; }
+.cr-fc-goal { font-size: 13px; color: var(--ink2); line-height: 1.3; }
+.cr-fc-when { margin-top: 3px; font-size: 13px; font-weight: 800; color: var(--gold-ink); }
+.cr-fc.empty { display: grid; place-items: center; grid-template-columns: 1fr; min-height: 82px; border-style: dashed; color: var(--muted); font-size: 14px; }
+.cr-fc-x {
+  display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); color: var(--ink2);
+}
+.cr-fc-x .sign { width: 14px; height: 14px; }
+.cr-fc-x:hover { border-color: var(--fill); color: var(--gold-ink); }
+
+/* ---------- Filters ---------- */
+.cr-filters { display: grid; gap: 10px; padding: 12px 18px; }
+.cr-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; min-height: 32px; }
+.cr-lab { min-width: 54px; color: var(--muted); font-size: 13.5px; }
+.cr-row .cr-grow + .cr-lab { min-width: 0; margin-left: 4px; }
+.cr-pill {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; box-sizing: border-box; padding: 0 12px 0 10px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--cr-paper); font-size: 13.5px; font-weight: 700; color: var(--ink);
+  transition: border-color var(--t-state), background-color var(--t-state);
+}
+.cr-filters .gb-seg { height: 30px; box-sizing: border-box; font-size: 13.5px; }
+.cr-filters .gb-seg button { padding: 0 14px; }
+.cr-search { position: relative; display: flex; align-items: center; flex: 0 1 300px; min-width: 200px; margin-right: 10px; }
+.cr-search input {
+  width: 100%; height: 30px; box-sizing: border-box; padding: 0 30px 0 14px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--ink); font: inherit; font-size: 13.5px; transition: border-color var(--t-state);
+}
+.cr-search input:hover { border-color: var(--r1); }
+.cr-search input:focus-visible { outline: 2px solid var(--fill); outline-offset: 1px; }
+.cr-search-x {
+  position: absolute; right: 4px; display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 999px;
+  background: transparent; color: var(--ink2);
+}
+.cr-search-x .sign { width: 12px; height: 12px; }
+.cr-search-x:hover { color: var(--gold-ink); }
+.cr-pill:hover { border-color: var(--r1); }
+.cr-pill[aria-pressed='true'] { background: var(--cr-gold-soft); border-color: var(--fill); }
+.cr-pill .sign { width: 17px; height: 17px; color: var(--ink2); }
+
+/* ---------- The grid: it reaches both edges, and its cards are one height ---------- */
+.cr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(262px, 1fr)); gap: 12px; }
+.cr-card {
+  position: relative; display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 12px; border: 1px solid var(--border);
+  border-radius: 14px; background: var(--surface); box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--hairline);
+  transition: border-color var(--t-state), background-color var(--t-state);
+}
+.cr-card:hover { border-color: var(--r1); }
+/* A card off the screen is not laid out or painted, and its face is not drawn: a roster of a hundred and more holds what is in view. */
+.cr-card { content-visibility: auto; contain-intrinsic-size: auto 118px; }
+.cr-link {
+  display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; color: inherit; text-decoration: none;
+  border-radius: 10px;
+}
+.cr-who { display: grid; gap: 1px; min-width: 0; }
+.cr-name { font-size: 18px; font-weight: 800; line-height: 1.15; overflow-wrap: anywhere; }
+.cr-level { font-size: 13.5px; color: var(--ink2); }
+.cr-kind { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 8px; margin-top: 2px; font-size: 13px; color: var(--ink2); }
+/* Without the focus the card is its link: the link's own area covers the whole card, its padding too. */
+.cr-card.whole { contain-intrinsic-size: auto 88px; justify-content: center; }
+.cr-card.whole .cr-link::after { content: ''; position: absolute; inset: 0; border-radius: 14px; }
+.cr-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; margin-top: auto; }
+.cr-focus-btn {
+  min-width: 118px; padding: 4px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--cr-paper);
+  color: var(--ink); font-size: 13px; font-weight: 700;
+  transition: border-color var(--t-state), background-color var(--t-state);
+}
+.cr-focus-btn:hover { border-color: var(--fill); }
+.cr-focus-btn.on { background: var(--cr-gold-soft); border-color: var(--fill); color: var(--gold-ink); }
+.cr-banner { font-size: 13px; font-weight: 700; color: var(--gold-ink); }
+
+/* A character the player does not have is greyed: her face and her name's colour, never the words, which keep their contrast. */
+.cr-card.not-owned { background: var(--tint); box-shadow: none; }
+.cr-card.not-owned .cx-ava { filter: grayscale(1); opacity: .75; }
+.cr-card.not-owned .cr-name { color: var(--ink2); }
+.cr-card.not-owned .cr-level { color: var(--muted); font-weight: 700; }
+.cr-card.not-owned .cx-chip i { background: var(--deemph); }

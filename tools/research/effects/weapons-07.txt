@@ -1,0 +1,103 @@
+@ rust
++ dmg 40/50/60/70/80 met Normal Attack DMG
+~ Charged Attack DMG is decreased by 10%, not counted
+
+@ mitternachts-waltz
++ dmg 20/25/30/35/40 met Elemental Skill DMG, 5s after a Normal Attack hits
++ dmg 20/25/30/35/40 met Normal Attack DMG, 5s after an Elemental Skill hits
+
+@ memory-of-dust
++ atk_pct 4/5/6/7/8*5 met at 5 stacks, 8s after scoring hits on opponents
+~ not counted: Shield Strength +20%/25%/30%/35%/40%; while protected by a shield the ATK increase is doubled, which depends on a shield
+
+@ royal-bow
++ cr 8/10/12/14/16*5 met at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)
+
+@ royal-longsword
++ cr 8/10/12/14/16*5 met at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)
+
+@ royal-grimoire
++ cr 8/10/12/14/16*5 met at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)
+
+@ royal-spear
++ cr 8/10/12/14/16*5 met at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)
+
+@ royal-greatsword
++ cr 8/10/12/14/16*5 met at 5 stacks, one per damaging hit (a CRIT Hit removes all stacks)
+
+@ skyward-spine
++ cr 8/10/12/14/16 always
+~ not counted: Normal ATK SPD +12%; a vacuum blade dealing 40%/55%/70%/85%/100% of ATK as AoE DMG
+
+@ skyward-harp
++ cd 20/25/30/35/40 always
+~ not counted: a small AoE attack dealing 125% Physical ATK DMG
+
+@ skyward-atlas
++ dmg 12/15/18/21/24 always
+~ not counted: clouds that attack for 160%/200%/240%/280%/320% ATK DMG
+
+@ skyward-blade
++ cr 4/5/6/7/8 always
+~ not counted: Skypiercing Might's Movement SPD +10%, ATK SPD +10% and extra Normal and Charged hit DMG of 20%/25%/30%/35%/40% of ATK
+
+@ skyward-pride
++ dmg 8/10/12/14/16 always
+~ not counted: a vacuum blade dealing 80%/100%/120%/140%/160% of ATK as DMG
+
+@ amenoma-kageuchi
+~ no stat: regenerates 6/7.5/9/10.5/12 Energy per Succession Seed after an Elemental Burst, not counted
+
+@ lost-prayer-to-the-sacred-winds
++ dmg 8/10/12/14/16*4 met Elemental DMG Bonus at 4 stacks, one every 4s in battle
+~ not counted: Movement SPD +10%
+
+@ dodoco-tales
++ dmg 16/20/24/28/32 met Charged Attack DMG, 6s after Normal Attacks hit
++ atk_pct 8/10/12/14/16 met 6s after Charged Attacks hit
+
+@ kitain-cross-spear
++ dmg 6/7.5/9/10.5/12 met Elemental Skill DMG
+~ not counted: Energy lost and regenerated after an Elemental Skill hits
+
+@ primordial-jade-winged-spear
++ atk_pct 3.2/3.9/4.6/5.3/6*7 met at 7 stacks, 6s after hits
++ dmg 12/15/18/21/24 met all DMG while at 7 stacks
+
+@ lithic-spear
++ atk_pct 7/8/9/10/11*4 met 4 party members from Liyue
++ cr 3/4/5/6/7*4 met 4 party members from Liyue
+
+@ lithic-blade
++ atk_pct 7/8/9/10/11*4 met 4 party members from Liyue
++ cr 3/4/5/6/7*4 met 4 party members from Liyue
+
+@ lion-s-roar
++ dmg 20/24/28/32/36 met against opponents affected by Pyro or Electro
+
+@ dragon-s-bane
++ dmg 20/24/28/32/36 met against opponents affected by Hydro or Pyro
+
+@ solar-pearl
++ dmg 20/25/30/35/40 met Elemental Skill and Elemental Burst DMG, 6s after Normal Attacks hit
++ dmg 20/25/30/35/40 met Normal Attack DMG, 6s after Elemental Skill or Burst hits
+
+@ deathmatch
++ atk_pct 16/20/24/28/32 met at least 2 opponents nearby
++ def_pct 16/20/24/28/32 met at least 2 opponents nearby
+~ with fewer than 2 opponents nearby ATK is increased by 24%/30%/36%/42%/48% instead of ATK and DEF; only the case of 2 or more is counted
+
+@ polar-star
++ dmg 12/15/18/21/24 met Elemental Skill and Elemental Burst DMG
++ atk_pct 48/60/72/84/96 met at 4 stacks of Ashen Nightstar, 12s each (10%/12.5%/15%/17.5%/20% at 1, 20%/25%/30%/35%/40% at 2, 30%/37.5%/45%/52.5%/60% at 3)
+
+@ everlasting-moonglow
++ heal 10/12.5/15/17.5/20 always
+~ not counted: Normal Attack DMG +1%/1.5%/2%/2.5%/3% of Max HP as flat DMG; Energy restored by Normal Attacks
+
+@ mappa-mare
++ dmg 8/10/12/14/16*2 met Elemental DMG Bonus at 2 stacks, 10s after triggering an Elemental Reaction
+
+@ the-catch
++ dmg 16/20/24/28/32 met Elemental Burst DMG
++ cr 6/7.5/9/10.5/12 met Elemental Burst CRIT Rate
