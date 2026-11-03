@@ -152,10 +152,12 @@ def test_a_network_path_is_no_gallery_folder():
 
 
 def test_settings_reject_an_unknown_currency():
-    assert (Settings().spending_currency, Settings().spending_prices) == ("PLN", {})
+    # US dollars by default, for a new player and the demo (the player's choice of 2026-11-03); a saved choice is kept.
+    assert (Settings().spending_currency, Settings().spending_prices) == ("USD", {})
     assert settings_from_dict({"spending_currency": "EUR"}).spending_currency == "EUR"
-    assert settings_from_dict({"spending_currency": "GBP"}).spending_currency == "PLN"
-    assert settings_from_dict({"spending_currency": ["EUR"]}).spending_currency == "PLN"
+    assert settings_from_dict({"spending_currency": "PLN"}).spending_currency == "PLN"
+    assert settings_from_dict({"spending_currency": "GBP"}).spending_currency == "USD"
+    assert settings_from_dict({"spending_currency": ["EUR"]}).spending_currency == "USD"
 
 
 def test_the_corrected_prices_keep_only_known_packs_and_plain_numbers():

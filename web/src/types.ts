@@ -122,7 +122,7 @@ export type Settings = {
   picture_quality: 'high' | 'medium' | 'low'
   /** The window's frame limit goes, from the next start: off by default. */
   smooth_animations: boolean
-  /** The currency of the Ledger's "Spent on Genshin": 'PLN' (the default), 'EUR' or 'USD'. */
+  /** The currency of the Ledger's "Spent on Genshin": 'USD' (the default), 'EUR' or 'PLN'. */
   spending_currency: 'PLN' | 'EUR' | 'USD'
   /** The player's corrections to the price list, by currency and then pack id; a pack left out keeps the default. */
   spending_prices: Partial<Record<'PLN' | 'EUR' | 'USD', Record<string, number>>>

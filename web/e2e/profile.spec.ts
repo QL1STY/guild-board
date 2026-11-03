@@ -94,7 +94,7 @@ test.describe('Your profile', () => {
     await expect(tile(page, 'Account')).toContainText('active, with 94 characters')
     await expect(tile(page, 'Wishes')).toContainText('62 pity')
     await expect(tile(page, 'Wishes')).toContainText('Only you')
-    await expect(tile(page, 'Spending')).toContainText('412 zł')
+    await expect(tile(page, 'Spending')).toContainText('$104')
     await expect(tile(page, 'Spending')).toContainText('Only you')
     await expect(tile(page, 'Primogems')).not.toContainText('Only you')
     await expect(share(page, 'Primogems')).toHaveAttribute('aria-pressed', 'true')

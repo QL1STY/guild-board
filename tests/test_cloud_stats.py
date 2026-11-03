@@ -61,7 +61,7 @@ def test_collect_stats_has_the_contracts_shape(demo_core):
     words = ("months", "weeks", "currency", "week_start", "month")  # the rest of a stat is numbers
     for key, value in stats.items():
         assert all(_number_or_none(number) for name, number in value.items() if name not in words), key
-    assert stats["spending"]["currency"] == "PLN"
+    assert stats["spending"]["currency"] == "USD"  # the default for a new player and the demo
     for key, value in stats.items():
         # The database allows 1,024 bytes of jsonb, which takes about half as much again as this text: shared_stats.sql has the size.
         assert len(json.dumps(value)) < 512, key
@@ -87,7 +87,7 @@ def test_a_stat_with_nothing_behind_it_is_none(live_core):
     assert stats["endgame"] == {"abyss_stars": None, "theater_act": None, "stygian": None}
     assert stats["account"] == {"days_active": None, "characters": None, "chests": None}
     assert stats["wishes"] == {"pity": None, "five_stars_90d": None}
-    assert stats["spending"] == {"month_total": None, "month": "2026-10", "currency": "PLN"}
+    assert stats["spending"] == {"month_total": None, "month": "2026-10", "currency": "USD"}
     # The list of achievements is installed, so its count is known, and no tick is a true nought.
     assert stats["achievements"]["ticked"] == 0 and stats["achievements"]["total"] > 0
 
@@ -205,10 +205,10 @@ def test_spent_in_counts_the_packs_of_those_days(store):
     keep(4, "2026-11-01 00:00:00", 1090, "Obtained via purchase")
     keep(5, "2026-10-15 12:00:00", -160, "Exchanged Genesis Crystals for Primogems")  # bought nothing
     keep(6, "2026-10-16 12:00:00", 680, BP_REWARD, "primogem")  # a Gnostic Hymn counts too
-    prices = DEFAULT_PRICES["PLN"]
+    prices = DEFAULT_PRICES["USD"]  # the default currency
     total, currency = spent_in(store, UID, settings, date(2026, 10, 1), date(2026, 10, 31))
-    assert (total, currency) == (round(prices["c300"] + prices["welkin"] + prices["gnostic_hymn"], 2), "PLN")
-    assert spent_in(store, None, settings, date(2026, 10, 1), date(2026, 10, 31)) == (0.0, "PLN")
+    assert (total, currency) == (round(prices["c300"] + prices["welkin"] + prices["gnostic_hymn"], 2), "USD")
+    assert spent_in(store, None, settings, date(2026, 10, 1), date(2026, 10, 31)) == (0.0, "USD")
     assert spent_in(store, UID, Settings(spending_currency="EUR"), date(2026, 10, 1), date(2026, 10, 1))[1] == "EUR"
 
 

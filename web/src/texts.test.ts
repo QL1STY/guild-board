@@ -6,11 +6,11 @@ import { FAN_MADE, HANDS_OFF, PRIVACY_URL, RISK, SOURCE_URL, WHAT_IS_READ } from
 // section 5): the two reads of the game's files on Import, the wish-history links in its web cache among them, and the
 // key of the link that answered, kept in memory alone for the import and for up to a day after it.
 describe('HANDS_OFF', () => {
-  it('names the only reads in the game folder, read-only and only on Import', () => {
+  it('names the only reads in the game folder, read-only, only on Import and only without a usable login', () => {
     expect(HANDS_OFF[0]).toBe(
       "It never changes, adds or deletes anything in the game's folder or in the game's Windows settings. " +
-        "The only things it reads there are the game's log and the wish-history links in its web cache, read-only, " +
-        'and only when you press Import on the Pulls page.',
+        "The only things it reads there are the game's log and the history links in its web cache, read-only, " +
+        'and only when you press Import on the Pulls or Ledger page and your HoYoLAB login cannot be used for it.',
     )
   })
 

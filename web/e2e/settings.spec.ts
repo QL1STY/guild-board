@@ -616,7 +616,7 @@ test("when the gallery cannot find the game's screenshot folder, a pasted path i
 
 test('currency and a corrected price save, and change the Ledger\'s "Spent" figure', async ({ page, api }) => {
   const currency = extras(page).getByRole('combobox', { name: 'Spending in' })
-  await expect(currency).toHaveValue('PLN')
+  await expect(currency).toHaveValue('USD')
   await currency.selectOption({ label: 'Euro' })
   await expect.poll(async () => (await api.get<Settings>('/api/settings')).spending_currency).toBe('EUR')
   const before = (await api.get<Ledger>('/api/ledger')).spent

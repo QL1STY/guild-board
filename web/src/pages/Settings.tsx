@@ -842,9 +842,9 @@ function GalleryFolder({ live, settings }: { live: Live; settings: SettingsModel
 }
 
 const CURRENCIES: readonly { value: Currency; label: string }[] = [
-  { value: 'PLN', label: 'Polish złoty' },
-  { value: 'EUR', label: 'Euro' },
   { value: 'USD', label: 'US dollar' },
+  { value: 'EUR', label: 'Euro' },
+  { value: 'PLN', label: 'Polish złoty' },
 ]
 
 /** A corrected price, at most (`config.py` MAX_PRICE). */

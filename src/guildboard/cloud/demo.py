@@ -58,7 +58,7 @@ def _my_stats(now: datetime) -> dict[str, dict[str, Any]]:
         "endgame": {"abyss_stars": 36, "theater_act": 10, "stygian": 5},
         "account": {"days_active": 812, "characters": 94, "chests": 3021},
         "wishes": {"pity": 62, "five_stars_90d": 3},
-        "spending": {"month_total": 412.0, "month": month, "currency": "PLN"},
+        "spending": {"month_total": 104.0, "month": month, "currency": "USD"},
     }
 
 

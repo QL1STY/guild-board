@@ -18,7 +18,7 @@ export const WHAT_IS_READ = [
 
 /** What Guild Board never does (spec section 3, and the Pulls design's section 4), in the player's words. */
 export const HANDS_OFF = [
-  "It never changes, adds or deletes anything in the game's folder or in the game's Windows settings. The only things it reads there are the game's log and the wish-history links in its web cache, read-only, and only when you press Import on the Pulls page.",
+  "It never changes, adds or deletes anything in the game's folder or in the game's Windows settings. The only things it reads there are the game's log and the history links in its web cache, read-only, and only when you press Import on the Pulls or Ledger page and your HoYoLAB login cannot be used for it.",
   "It never opens the game's process, reads or writes its memory, or hooks into it. All it learns about the game is whether it is running.",
   'It never sends keys or clicks to the game and never captures its screen.',
   "Your HoYoLAB login is kept only on this PC, encrypted for your Windows user. It is never written to a log and never sent anywhere but to HoYoverse. A wish-history link's key is kept in memory only, never on disk: for the import, and for up to a day after it to fetch new wishes.",
