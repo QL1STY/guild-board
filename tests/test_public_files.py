@@ -29,11 +29,19 @@ def test_the_licence_is_mit_for_the_handle():
     assert "Permission is hereby granted, free of charge" in text
 
 
-def test_the_readme_says_fan_made_links_the_download_and_leaves_the_screenshots_as_a_todo():
+SHOTS = "https://ql1sty.github.io/guild-board/shots/"
+
+
+def test_the_readme_says_fan_made_links_the_download_the_site_and_the_demo_and_shows_the_sites_screenshots():
     text = _text("README.md")
     assert text.count(FAN_MADE) == 2  # at the top and at the end
     assert "](https://github.com/QL1STY/guild-board-releases/releases/latest)" in text
-    assert re.search(r"^<!-- TODO: screenshots", text, re.MULTILINE)
+    assert "](https://ql1sty.github.io/guild-board/)" in text and "](https://ql1sty.github.io/guild-board/demo/)" in text
+    assert "TODO" not in text
+    # The pictures are the site's, taken from the demo's made-up account; none is kept in this repository.
+    pictures = re.findall(r'<img src="([^"]+)"', text)
+    assert pictures and all(picture.startswith(SHOTS) for picture in pictures), pictures
+    assert {"board.png", "pulls.png", "achievements.png", "stats.png", "overlay.png"} <= {p.removeprefix(SHOTS) for p in pictures}
     for name in ("LICENSE", "PRIVACY.md", "THIRD-PARTY-NOTICES.txt", "CONTRIBUTING.md", "docs/ARCHITECTURE.md"):
         assert f"]({name})" in text, name
         assert (ROOT / name).is_file(), name

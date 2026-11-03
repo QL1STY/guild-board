@@ -1,10 +1,75 @@
-# Guild Board
+<div align="center">
+
+# ✦ Guild Board
+
+**Your Genshin day on one board.**
+
+Resin, commissions, achievements, wishes, primogems and your characters' plans, in one Windows app that keeps it all on your PC and never touches the game.
+
+[![Latest release](https://img.shields.io/github/v/release/QL1STY/guild-board-releases?style=for-the-badge&color=a6751f&labelColor=3b4255&label=latest)](https://github.com/QL1STY/guild-board-releases/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/QL1STY/guild-board-releases/total?style=for-the-badge&color=a6751f&labelColor=3b4255)](https://github.com/QL1STY/guild-board-releases/releases)
+[![MIT licence](https://img.shields.io/badge/licence-MIT-a6751f?style=for-the-badge&labelColor=3b4255)](LICENSE)
+![Windows 10 and 11](https://img.shields.io/badge/Windows-10%20%7C%2011-a6751f?style=for-the-badge&labelColor=3b4255)
+
+### [⬇ Download for Windows](https://github.com/QL1STY/guild-board-releases/releases/latest) · [▶ Try it in your browser](https://ql1sty.github.io/guild-board/demo/) · [Website](https://ql1sty.github.io/guild-board/)
+
+<sub>Free and open source · no ads, no account needed · about 160 MB · no administrator rights · updates itself</sub>
+
+<br>
+
+<img src="https://ql1sty.github.io/guild-board/shots/board.png" alt="The Board on a made-up account: timers, commissions, resin, resets, expeditions, pinned achievements, a clock and notes" width="900">
+
+<sub>The Board, on a made-up account. Every card is a widget you can move, resize, add or remove.</sub>
 
 Unofficial and fan-made. Not affiliated with or endorsed by HoYoverse or COGNOSPHERE.
 
-Guild Board is a Windows companion for Genshin Impact. It reads your HoYoLAB account, with the login you give it, and keeps what it finds on your own PC: what is left to explore, your achievements, timers and commissions, your pulls and their history, your characters and what they need, and how your play changes over time. It can show a small overlay over the game. Unless you sign in to its optional online features, nothing about you reaches its developer.
+</div>
 
-<!-- TODO: screenshots (npm run screens:readme takes them from the demo's made-up account). -->
+<br>
+
+## What it does
+
+Guild Board reads your HoYoLAB account, with the login you give it, and keeps what it finds on your own PC. Unless you sign in to its optional online features, nothing about you reaches its developer.
+
+### 🧭 The Board: your day at a glance
+
+Widgets for **timers**, **today's commissions**, **Resin** and when it is full, **daily and weekly resets**, **expeditions**, **pinned achievements**, **notes**, a **clock** on server time, a **quick timer**, the **daily check-in** and six for your pulls. Press **Edit** to drag, resize and add. When a timer is ready you get a Windows notification, and while you play, a short line over the game.
+
+### ✦ Pulls: pity, savings and a plan
+
+Your wish history, the **pity** of every banner, your **luck** against a typical player, a **savings ledger** of the pulls you hold and the ones the next version gives, and a **planner** that says how likely you are to get the characters you want. **Import** reads the history with your HoYoLAB login, so you don't have to open the game first.
+
+<p align="center"><img src="https://ql1sty.github.io/guild-board/shots/pulls.png" alt="The Pulls page: the banners running now, the pity of each banner, the savings ledger and the planner" width="860"></p>
+
+### 🏆 Achievements
+
+The full list with progress counters, stages and **pins** for the ones you are working on. Tick them off by hand, or check Paimon.moe's public list for new ones when you ask. The primogems still to earn are counted for you.
+
+<p align="center"><img src="https://ql1sty.github.io/guild-board/shots/achievements.png" alt="The Achievements page: categories on the left, achievement cards with their progress on the right" width="860"></p>
+
+### 📊 Stats and the Ledger
+
+Chests, achievements, play time, days played and primogems, each against the period before: a **play-time calendar**, **when you play** by the hour, and **primogems by source** each day and month. The Ledger keeps the game's own history of primogems, crystals, resin and artifacts. Every chart can be shown as a table.
+
+<p align="center"><img src="https://ql1sty.github.io/guild-board/shots/stats.png" alt="The Stats page: summary tiles, a play-time calendar and charts of primogems and play time" width="860"></p>
+
+### 🗡 Characters
+
+A page for every character you own, built from your account: stats, weapon, artifacts with what to keep or replace, talents, constellations, and a **planner** that works out what each one needs for the levels you choose.
+
+### 🖥 The overlay
+
+Press **Ctrl+Alt+G** and a panel of your widgets appears over the game: timers, commissions, a quick timer, whatever you pinned. Press it again and it is gone. It is a window of Guild Board's own, laid over the screen, not a hook into the game.
+
+<p align="center"><img src="https://ql1sty.github.io/guild-board/shots/overlay.png" alt="The overlay open over the game's screen, with a quick timer, timers, commissions and a clock" width="860"></p>
+
+### 🔧 And the rest
+
+- **Backlog**: every region and area with what is left to explore, the oculi still missing, and open Archon Quests.
+- **The interactive map**: HoYoLAB's official Teyvat map inside Guild Board, in tabs you can name and keep.
+- **Gift codes**: paste one or several and redeem them, with a note when a new livestream code appears.
+- **Friends**: optional, with a Discord sign-in. Compare stats and see who is in game. Friends never see that Guild Board is open or when your PC is on.
+- **Screenshot gallery**, **backups** you can move to another PC, **start with Windows**, and **updates** that install with one button and keep your data.
 
 ## Download
 
@@ -14,7 +79,7 @@ An installed copy updates only to an installer that carries a signature by the r
 
 To check an installer before you run it, see [`SECURITY.md`](SECURITY.md): `gh attestation verify` shows which commit of this repository GitHub built it from.
 
-Want to look around first? Guild Board has a demo mode on a made-up account that contacts nothing.
+Want to look around first? [Try it in your browser](https://ql1sty.github.io/guild-board/demo/) on a made-up account, or start the installed app's demo mode, which contacts nothing.
 
 ## What it reads
 
@@ -32,7 +97,7 @@ Everything stays in one folder on your PC, `%LOCALAPPDATA%\GuildBoard`. Nothing 
 
 ## What it never does
 
-- It never changes, adds or deletes anything in the game's folder or in the game's Windows settings. The only things it reads there are the game's log and the wish-history links in its web cache, read-only, and only when you press Import on the Pulls page.
+- It never changes, adds or deletes anything in the game's folder or in the game's Windows settings. The only things it reads there are the game's log and the history links in its web cache, read-only, and only when you press Import on the Pulls or Ledger page and your HoYoLAB login cannot be used for it.
 - It never opens the game's process, reads or writes its memory, or hooks into it. All it learns about the game is whether it is running.
 - It never sends keys or clicks to the game and never captures its screen.
 - Your HoYoLAB login is kept only on this PC, encrypted for your Windows user. It is never written to a log and never sent anywhere but to HoYoverse. A wish-history link's key is kept in memory only, never on disk: for the import, and for up to a day after it to fetch new wishes.
