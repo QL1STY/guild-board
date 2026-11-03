@@ -57,6 +57,10 @@ def client(core):
         yield client
 
 
+def test_character_sync_says_its_cadence(core):
+    assert core.characters.sync_view()["every_minutes"] == 360
+
+
 def _published(queue) -> list[dict]:
     seen = []
     while not queue.empty():
@@ -232,15 +236,21 @@ def test_a_refresh_while_paused_or_waiting_for_a_check_is_refused_with_what_to_d
     try:
         with opened(core) as client:
             core.settings.sync_paused = True
+            assert core.characters.sync_view()["blocked"] == "paused"
             paused = client.post("/api/characters/refresh")
             assert (paused.status_code, paused.json()) == (409, {"error": "Syncing is paused. Resume it in Settings."})
             core.settings.sync_paused = False
             core.scheduler._block = "verification_needed"
+            assert core.characters.sync_view()["blocked"] == "verification_needed"
             check = client.post("/api/characters/refresh")
             assert (check.status_code, check.json()) == (
                 409, {"error": "HoYoLAB asked for a verification check. Finish it from the sync panel first."}
             )
             assert core.characters.sync_view()["can_refresh"] is False
+            core.scheduler._block = "login_needed"
+            assert core.characters.sync_view()["blocked"] == "login_needed"
+            core.scheduler._block = None
+            assert core.characters.sync_view()["blocked"] is None
     finally:
         core.store.close()
 

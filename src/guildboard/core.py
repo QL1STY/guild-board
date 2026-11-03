@@ -61,7 +61,9 @@ from guildboard.characters.service import Characters
 from guildboard.characters.wiki import CharacterWiki
 from guildboard.pulls import gamecache, nextversion, wishapi
 from guildboard.pulls.banners import Banners
-from guildboard.pulls.importer import AUTO_EVERY, WishImporter, demo_links, demo_pages, demo_pause
+from guildboard.pulls.importer import (
+    AUTO_EVERY, ImportBusy, ImportNotReady, WishImporter, demo_links, demo_pages, demo_pause,
+)
 from guildboard.pulls.planner import Planner
 from guildboard.pulls.wiki import WikiIcons, wanted_names
 from guildboard.records import LoginNeeded
@@ -375,7 +377,8 @@ class Core:
             seed_wishes(self.store, now)
             seed_banners(self.store, now)
         self.pulls = Planner(
-            self.store, self.clock, self.history, self.lists.current, self.server, self._account_uid, demo
+            self.store, self.clock, self.history, self.lists.current, self.server, self._account_uid, demo,
+            login_on=self._login_refresh_on,
         )
         # The import reads the game's two files and HoYoverse's history only on the player's press, and only once the
         # player has given the first run's consent (ruling R21). The demo's runs on stand-ins: a made-up link and pages
@@ -400,6 +403,7 @@ class Core:
         self._login_refused = False
         self._login_session = 0  # counts logins and logouts: a key asked for across one is not kept
         self._refresh_task: asyncio.Task[None] | None = None
+        self._import_task: asyncio.Task[None] | None = None  # the work of the last press of Import
         self._refresh_wake = asyncio.Event()
         self.wish_import = WishImporter(
             self.store, self.clock, self.bus, read_links=read_links, fetch=pages, sleep=pause,
@@ -530,7 +534,7 @@ class Core:
         """The Ledger page's model (the ledger design, section 6)."""
         return build_ledger(
             self.store, self.ledger_uid(), self.server(), self.today(), self.settings,
-            {**self.wish_import.state(), "ledger": self.wish_import.ledger_state()},
+            self.wish_import.ledger_import_state(),
         )
 
     def ledger_history(self, kind: str, before: int | None, limit: int) -> dict[str, Any]:
@@ -680,6 +684,7 @@ class Core:
         self.settings.sync_paused = paused
         save_settings(self.paths.settings_path, self.settings)
         self.scheduler.publish_state()
+        self.pulls_changed()  # Pulls and Ledger say whether their history updates itself: not while the sync is paused
         self._settings_changed()
 
     def update_settings(self, changes: Mapping[str, Any]) -> Settings:
@@ -1334,11 +1339,14 @@ class Core:
         )
 
     def _login_status(self) -> str | None:
-        """The pages' word on the updates with the login (the importer adds how its own go): None without them, "refused"
-        once HoYoverse refused the login, else "on"."""
+        """The pages' word on the updates with the login (the importer adds how its own go): None where nothing is read
+        with it (no login that can be given keys, the sync paused, or a login of another account), "refused" once HoYoverse
+        refused the login, else "on". A refusal is said even while the sync is paused: the player has to log in again."""
         if not self._login_refresh_ready():
             return None
-        return "refused" if self._login_refused else "on"
+        if self._login_refused:
+            return "refused"
+        return "on" if self._login_refresh_on() else None
 
     def forget_login_refusal(self) -> None:
         """A new login, or the demo's fault ended: the updates with the login may ask for keys again."""
@@ -1365,6 +1373,34 @@ class Core:
         except Exception:
             log.exception("the update of the histories with the login failed")
         return False
+
+    async def import_pressed(self) -> str:
+        """The player pressed Import (the freshness design, section 5). Where the histories can update themselves with
+        keys HoYoverse gives the HoYoLAB login, the press is that very run (refresh_from_login), which reads no file of
+        the game's; if it did not run, or HoYoverse refused the login on this press, the import from the game's files runs
+        in its place. A run that started and failed says so itself, through the importer: it is not run again from the
+        game's files. Without the login's updates (no login, a login of another account, the sync paused, a login
+        refused before), it is the import from the game's files. The way taken: "login" or "game". The work runs on as
+        a task. ImportBusy while an import or an update runs, ImportNotReady before the first run's consent, both before
+        any task starts."""
+        self.wish_import.ensure_pressable()
+        if self._import_task is not None and not self._import_task.done():
+            raise ImportBusy()  # the press before this one has not begun to run yet
+        self.wish_import.pressed()
+        if not self._login_refresh_on():
+            self.wish_import.start()
+            return "game"
+        self._import_task = self._spawn(self._import_with_login())
+        await asyncio.sleep(0)  # the task runs as far as its first wait: it holds the importer before the route answers
+        return "login"
+
+    async def _import_with_login(self) -> None:
+        if await self.refresh_from_login() or self.wish_import.running:
+            return
+        try:
+            self.wish_import.start()  # the login could not be had: the game's files, on this press
+        except (ImportBusy, ImportNotReady):
+            return  # an import began meanwhile, or the consent was taken back: it says so itself
 
     def _history_notice(self) -> dict[str, Any] | None:
         """That the game's history stopped updating, and what to do (freshness.py). The demo's stands still; a sync the player
@@ -1490,6 +1526,7 @@ class Core:
             self._watch_task, self._reminders_task, self._banners_task, self._icons_task, self._auto_task,
             self._last_auto_task, self._update_task, self._codes_watch, self._codes_send,
             self._live_look, self._refresh_task, self._characters_task, self._online_task, self._daily_task,
+            self._import_task,
         )
         for task in tasks:
             if task is not None:
@@ -1497,7 +1534,7 @@ class Core:
                 await asyncio.gather(task, return_exceptions=True)
         self._watch_task = self._reminders_task = self._banners_task = self._icons_task = None
         self._auto_task = self._last_auto_task = self._update_task = self._codes_watch = self._codes_send = self._live_look = None
-        self._refresh_task = self._characters_task = self._online_task = self._daily_task = None
+        self._refresh_task = self._characters_task = self._online_task = self._daily_task = self._import_task = None
         await self.checkin.stop()
         await self.online.stop()
         await self.characters.stop()

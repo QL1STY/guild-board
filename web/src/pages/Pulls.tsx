@@ -2,6 +2,8 @@ import { useEffect, useId, useState } from 'react'
 import '../styles/pulls.css'
 import { api, messageOf } from '../api.ts'
 import { Frame } from '../frame/Frame.tsx'
+import { FreshRing } from '../frame/FreshRing.tsx'
+import { pressed, useNewFlash, withFlash } from '../frame/freshview.ts'
 import { type Live, useModel, useTick } from '../live.ts'
 import type { Banner, Pulls as PullsModel } from '../types.ts'
 import { Picture } from '../ui/Picture.tsx'
@@ -9,23 +11,19 @@ import { PityCards } from './PullsCards.tsx'
 import { PullsHistory } from './PullsHistory.tsx'
 import { Planner } from './PullsPlanner.tsx'
 import { PullsSavings } from './PullsSavings.tsx'
-import {
-  autoLine, bannerLine, bannersShown, importLine, importWithAuto, loginImportLine, sharesPity, skyTitle, uidLine,
-} from './pullsview.ts'
+import { bannerLine, bannersShown, emptyLine, pullsFresh, pullsRunning, sharesPity, skyTitle, uidLine } from './pullsview.ts'
 
 /**
- * The Import button and its line in the top bar (the Pulls plan, calls item 15). A press starts an import in the core;
- * the line follows its progress from the event stream, or says what the core knows of the last one. The button rests
- * while one runs (aria-disabled, which keeps the focus). A press the core refuses says why until the next press, or
- * until the stream tells of an import, as one started from another window does. While no import runs, the sentence about
- * the link Import keeps for a day (the second pass) follows the line: how long it updates itself. Once HoYoverse has
- * refused that link, its sentence stands alone, in place of the failed update's own words: it says what to do.
+ * What a press of Import does, shared by the button in the top bar and the freshness ring beside the title. A press
+ * starts an import in the core; the ring follows its progress from the event stream, or says what the core knows of the
+ * last one. The button rests while one runs (aria-disabled, which keeps the focus). A press the core refuses says why, in
+ * the ring's tip, until the next press, or until the stream tells of an import, as one started from another window does.
  */
-function ImportControls({ live, model }: { live: Live; model: PullsModel | null }) {
+function useImport(live: Live, model: PullsModel | null) {
   const [pressing, setPressing] = useState(false)
   const [refusal, setRefusal] = useState<string | null>(null)
   useEffect(() => setRefusal(null), [live.pullsImport])
-  const running = pressing || (live.pullsImport?.state ?? model?.import.state) === 'running'
+  const running = pressing || (model === null ? live.pullsImport?.state === 'running' : pullsRunning(model.import, live.pullsImport))
   const press = async () => {
     if (running) return
     setPressing(true)
@@ -38,36 +36,34 @@ function ImportControls({ live, model }: { live: Live; model: PullsModel | null 
       setPressing(false)
     }
   }
-  const resting = refusal === null && model !== null && !running
-  const kept = resting && model !== null ? autoLine(model.import, live.now()) : null
-  const expired = kept !== null && model?.import.auto_stopped === 'expired'
-  // With the HoYoLAB login the history updates itself; a link a press keeps is said instead while it lives.
-  const login = resting && kept === null && model !== null && model.import.login !== null
-  const line =
-    refusal ??
-    (model === null
-      ? ''
-      : expired
-        ? kept
-        : login
-          ? loginImportLine(live.pullsImport, model.import)
-          : importWithAuto(importLine(live.pullsImport, model.import), kept))
+  return { pressing, refusal, running, press }
+}
+
+/** The Import button in the top bar. */
+function ImportButton({ running, press }: { running: boolean; press: () => Promise<void> }) {
   return (
-    <>
-      <button
-        type="button"
-        className="gb-btn"
-        aria-disabled={running}
-        title="Import from the game: reads the link the game writes when you open Wish → History."
-        onClick={() => void press()}
-      >
-        {running ? 'Importing…' : 'Import'}
-      </button>
-      <span className="gb-status pl-import" data-testid="pulls-import" role="status">
-        {line}
-      </span>
-    </>
+    <button
+      type="button"
+      className="gb-btn"
+      aria-disabled={running}
+      title="Import: reads your history with your HoYoLAB login, or, without one, from the link the game writes when you open Wish → History."
+      onClick={() => void press()}
+    >
+      {running ? 'Importing…' : 'Import'}
+    </button>
   )
+}
+
+/**
+ * The freshness ring beside the title (freshness design, section 1): when the history was last read, whether it updates
+ * itself, and the sentence the top bar used to show as its tip. "+N new" shows for six seconds after an import that found
+ * wishes.
+ */
+function ImportRing({ live, model, pressing, refusal }: { live: Live; model: PullsModel; pressing: boolean; refusal: string | null }) {
+  useTick(60_000) // the age and the ring's fill move on
+  const flash = useNewFlash(live.pullsImport)
+  const view = withFlash(pullsFresh(model.import, live.pullsImport, refusal, live.now()), flash)
+  return <FreshRing view={pressing ? pressed(view) : view} testId="pulls-import" />
 }
 
 /**
@@ -112,14 +108,20 @@ export function Pulls({ live }: { live: Live }) {
   useTick(60_000) // the strip's time left moves on once a minute
   const [by, setBy] = useState<string | null>(null)
   const { data, error } = useModel<PullsModel>(by === null ? '/api/pulls' : `/api/pulls?by=${by}`, live.version)
+  const press = useImport(live, data)
   const now = live.now()
   const other = data === null ? null : uidLine(data.uid, data.account_uid)
   return (
-    <Frame page="pulls" live={live} controls={<ImportControls live={live} model={data} />}>
+    <Frame
+      page="pulls"
+      live={live}
+      beside={data !== null && <ImportRing live={live} model={data} pressing={press.pressing} refusal={press.refusal} />}
+      controls={<ImportButton running={press.running} press={press.press} />}
+    >
       {data === null ? (
         <div className="gb-panel gb-empty">{error ?? 'Reading the pulls…'}</div>
       ) : data.uid === null ? (
-        <div className="gb-panel gb-empty">No wish history yet. Open Wish → History in the game, then press Import.</div>
+        <div className="gb-panel gb-empty">{emptyLine(data.import.login)}</div>
       ) : (
         <div className="gb-page pl-page">
           {other !== null && <p className="pl-uid">{other}</p>}

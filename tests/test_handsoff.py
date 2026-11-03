@@ -3,6 +3,7 @@ import ast
 import asyncio
 import base64
 import collections
+import dataclasses
 import functools
 import inspect
 import json
@@ -850,6 +851,8 @@ def test_nothing_of_the_login_goes_to_the_cloud(tmp_path, clock):
     })
     core.store.put_layout("board", "[]", 1, clock.now())  # the player's own data, which goes up with the first sync
     core.update_settings({"commission_region": "inazuma"})
+    # Presence goes up only while the game runs: so that a heartbeat is in what this test reads, the game is running.
+    core.online._local = dataclasses.replace(core.online._local, game=lambda: (True, clock.now()))
     with TestClient(create_app(core, PORT), base_url=BASE) as client:
         client.get("/launch", params={"k": core.launch_secret}, follow_redirects=False)
         client.post("/api/online/sign-in")
@@ -1668,6 +1671,128 @@ def test_the_logins_keys_go_only_to_the_histories_and_the_refresh_reads_no_game_
     try:
         assert kept.execute("SELECT COUNT(*) FROM wishes WHERE uid = 700000001").fetchone()[0] == 1
         assert kept.execute("SELECT COUNT(*) FROM ledger_entries WHERE uid = 700000001").fetchone()[0] == 2
+    finally:
+        kept.close()
+
+
+def test_a_press_of_import_with_the_login_reads_no_game_file_and_sends_the_keys_only_to_the_histories(tmp_path, clock, monkeypatch):
+    # The freshness design, section 5: Import first updates both histories with keys HoYoverse gives the login, and reads
+    # the game's files only when that cannot run. Here the login can be given keys, a made-up game lies where the game's
+    # would, and the keys it held are forgotten, so that the press itself asks for new ones and reads again: it opens
+    # neither the game's log nor its web cache, writes nothing in the game's folders, and the keys it asked for go only
+    # to the histories' addresses and to no log, answer, event or file.
+    global _watching, _read_under
+    from guildboard.sources import hoyolab
+
+    home = tmp_path / "home"
+    monkeypatch.setenv("USERPROFILE", str(home))
+    log_file, cache = made_up_game(home, MARKER_KEY)  # a made-up game, whose key the login's run must never read
+    first = 1_760_000_000_000_000_000
+    history = History({"301": [record(first + 1, "301", "2026-10-12 21:14:03", "Fischl", "Character", 4)]},
+                      keys=[MINTED_WISH_KEY])
+    ledgers = Ledgers({"GetPrimogemLog": [ledger_entry(5)], "GetResinLog": [ledger_entry(6, amount=-20)]},
+                      keys=[MINTED_CSC_KEY])
+    requests: list[tuple[str, str, dict[str, str], bytes | None]] = []
+
+    def wire(request, timeout):  # stands in for the network: each request recorded, only HoYoverse's answered
+        url = request.full_url
+        requests.append((request.get_method(), url, dict(request.header_items()), request.data))
+        if url == netpolicy.MINT_URL:
+            kind = json.loads(request.data)["auth_appid"]
+            key = MINTED_WISH_KEY if kind == "webview_gacha" else MINTED_CSC_KEY
+            return _Answer(json.dumps({"retcode": 0, "message": "OK", "data": {"authkey": key}}).encode())
+        if url.startswith(wishapi.HISTORY_URL):
+            return _Answer(history(url))
+        if ledgers.handles(url):
+            return _Answer(ledgers(url))
+        raise urllib.error.URLError("the tests contact nothing")
+
+    monkeypatch.setattr(netpolicy, "_open", wire)
+    paths = AppPaths(tmp_path / "data")
+    paths.ensure()
+    TokenStore(paths.token_path).save(StoredToken(dict(LOGIN_COOKIES), 700000001, "os_euro", "Traveler"))
+    save_settings(paths.settings_path, Settings(risk_acknowledged=True))
+
+    class LoginSource(AccountSource):  # the sync's stand-in, with the real mint of the HoYoLAB source
+        def __init__(self) -> None:
+            super().__init__()
+            self.real = hoyolab.HoyolabSource(TokenStore(paths.token_path))
+
+        def can_mint(self) -> bool:
+            return self.real.can_mint()
+
+        async def mint_key(self, auth_appid):
+            return await self.real.mint_key(auth_appid)
+
+    logging_setup.forget_secrets()
+    setup_logging(paths.logs_dir)
+    bodies: list[str] = []
+    core = Core(paths, demo=False, clock=clock, source=LoginSource(), process_lister=lambda: set())
+    core.wish_import._sleep = _quick
+    heard = core.bus.subscribe()
+    pressed_mints = 0
+    try:
+        with TestClient(create_app(core, PORT), base_url=BASE) as client:
+            client.portal.call(core.start)  # the first sync, then the histories with the login, on their own
+            try:
+                client.get("/launch", params={"k": core.launch_secret}, follow_redirects=False)
+                for _ in range(1000):
+                    if core.wish_import.ledger_state()["state"] == "done" and not core.wish_import.running:
+                        break
+                    time.sleep(0.01)
+                assert core.wish_import.state()["state"] == "done" and core.wish_import.state()["login"] == "on"
+                # The press: the keys it held are gone, a wish is new, and the watch is on the press alone.
+                core.wish_import.drop_minted()
+                history.add("301", [record(first + 2, "301", "2026-10-12 21:15:03", "Skirk", "Character", 5)])
+                before = len(requests)
+                while not heard.empty():
+                    heard.get_nowait()
+                _reads.clear()
+                _written.clear()
+                _read_under = _file_key(home)
+                _watching = True
+                pressed = client.post("/api/pulls/import")
+                assert pressed.json() == {"started": True}
+                bodies.append(pressed.text)
+                _wait_for_the_import(core)
+                _watching = False
+                assert core.wish_import.state()["state"] == "done" and core.wish_import.state()["login"] == "on"
+                for url in ("/api/status", "/api/pulls", "/api/ledger", "/api/settings", "/api/synclog"):
+                    bodies.append(client.get(url).text)
+                bodies.append(client.portal.call(_hello, client.app))
+                while not heard.empty():
+                    bodies.append(json.dumps(heard.get_nowait()))
+                pressed_requests = requests[before:]
+                pressed_mints = sum(1 for _, url, _, _ in pressed_requests if url == netpolicy.MINT_URL)
+            finally:
+                client.portal.call(core.stop)
+    finally:
+        _watching = False
+        _read_under = None
+        shutdown_logging()
+        logging_setup.forget_secrets()
+    # The press asked for new keys, read the new wish with them, and opened none of the game's files.
+    assert pressed_mints == 2
+    assert _reads == []
+    assert [path for path in _written if _inside(path, home)] == []
+    assert log_file.exists() and cache.exists()  # the made-up game was there to be read
+    assert all(MARKER_KEY not in url for _, url, _, _ in requests)  # and its key went nowhere
+    # The keys it asked for went only to their histories' addresses, and neither is in a log line, an answer, an event or
+    # a file of the data folder.
+    with_the_wish_key = [url for _, url, _, _ in pressed_requests if MINTED_WISH_KEY in url]
+    assert with_the_wish_key and all(url.startswith(wishapi.HISTORY_URL + "?") for url in with_the_wish_key)
+    with_the_csc_key = [url for _, url, _, _ in pressed_requests if MINTED_CSC_KEY in url]
+    assert with_the_csc_key and all(_a_ledger_address(url) for url in with_the_csc_key)
+    log_text = (paths.logs_dir / "guildboard.log").read_text(encoding="utf-8")
+    for marker in (MINTED_WISH_KEY, MINTED_CSC_KEY, MARKER_KEY):
+        assert marker not in log_text
+        assert all(marker not in body for body in bodies)
+        for file in paths.data_dir.rglob("*"):
+            if file.is_file() and file.name != "token.bin":
+                assert marker.encode() not in file.read_bytes(), file.name
+    kept = sqlite3.connect(paths.db_path)
+    try:
+        assert kept.execute("SELECT COUNT(*) FROM wishes WHERE uid = 700000001").fetchone()[0] == 2
     finally:
         kept.close()
 

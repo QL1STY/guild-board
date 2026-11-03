@@ -49,8 +49,12 @@ export type StatValues = {
 }
 export type Stats = Partial<StatValues>
 
-/** null for a friend who doesn't share Status: they are not called offline, and sort with those who are. */
-export type FriendStatus = 'in_game' | 'open' | 'offline' | null
+/**
+ * null for a friend who doesn't share Status: they are not called offline, and sort with those who are. `not_in_game` is
+ * only the player's own status, on their profile and in Compare: a friend is in game or offline, and nothing says when a
+ * PC is on or Guild Board is open.
+ */
+export type FriendStatus = 'in_game' | 'not_in_game' | 'offline' | null
 
 export type Card = { user_id: string; name: string; tag: string; has_picture: boolean; ar: number | null }
 

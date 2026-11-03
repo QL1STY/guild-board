@@ -24,6 +24,7 @@ from support import AccountSource, FakeSleep
 PORT = 4321
 BASE = f"http://127.0.0.1:{PORT}"
 NO_HISTORY = "No wish history yet. Open Wish → History in the game, then press Import."
+NO_HISTORY_LOGIN = "No wish history yet. Guild Board is reading it now with your HoYoLAB login."
 BAD_ENTRY = "Give a name, a kind (character or weapon), a day as 2026-11-11, and copies from 1 to 7."
 CITLALI = {"name": "Citlali", "kind": "character", "about": "2026-11-11", "copies": 1}
 
@@ -232,6 +233,15 @@ def test_the_switches_and_the_typed_events_are_set_by_the_settings_route(client,
         assert answer.status_code == 200, primogems
 
 
+def test_with_no_history_the_refusal_follows_the_login(client, core):
+    core.pulls._login_on = lambda: True  # a login that updates the history by itself
+    answer = client.put("/api/pulls/settings", json={"welkin": True})
+    assert (answer.status_code, answer.json()) == (409, {"error": NO_HISTORY_LOGIN})
+    core.pulls._login_on = lambda: False
+    answer = client.put("/api/pulls/settings", json={"welkin": True})
+    assert (answer.status_code, answer.json()) == (409, {"error": NO_HISTORY})
+
+
 def test_bad_switch_values_are_refused(client, core):
     # With no wish history there is no account shown, and a switch has nowhere to be kept (ruling R10).
     for good in ({"welkin": True}, {"gnostic_hymn": False}, {"events_typed": {"version": "7.2", "primogems": 2330}}):
@@ -428,6 +438,35 @@ def test_a_second_press_while_one_runs_is_refused_by_the_route(demo_client, demo
         release.set()
     _until_the_import_ends(demo_core)
     assert demo_core.wish_import.state()["state"] == "done"
+
+
+def test_a_press_while_an_update_with_the_login_runs_is_refused_by_the_route(demo_client, demo_core):
+    demo_core.wish_import.running = True  # an update with the login runs: the demo's press is that very run
+    try:
+        refused = demo_client.post("/api/pulls/import")
+        assert (refused.status_code, refused.json()) == (409, {"error": "An import is running."})
+    finally:
+        demo_core.wish_import.running = False
+    assert demo_client.post("/api/pulls/import").json() == {"started": True}
+    _until_the_import_ends(demo_core)
+    assert demo_core.wish_import.state()["state"] == "done"
+
+
+def test_the_import_is_running_when_the_press_is_answered(demo_client, demo_core):
+    release = threading.Event()
+    pages = demo_core.wish_import._fetch
+
+    async def slow(*args):
+        await asyncio.to_thread(release.wait, 10)
+        return await pages(*args)
+
+    demo_core.wish_import._fetch = slow
+    try:
+        assert demo_client.post("/api/pulls/import").json() == {"started": True}
+        assert demo_core.wish_import.running  # the login path has reserved the importer by then
+    finally:
+        release.set()
+    _until_the_import_ends(demo_core)
 
 
 NOT_STARTED = "Guild Board has not started yet. Read its first page, then press Continue."

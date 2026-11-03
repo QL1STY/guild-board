@@ -11,6 +11,7 @@ import './styles/frame.css'
 import './styles/note.css'
 import './styles/timers.css'
 import './styles/commissions.css'
+import './styles/fresh.css'
 import './styles/motion.css'
 import App from './App.tsx'
 

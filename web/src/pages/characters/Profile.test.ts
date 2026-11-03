@@ -152,9 +152,8 @@ test('a pane keeps room for its scrollbar away from the text, and shows none whi
   expect(ruleOf('.pf-pane.settling')).toContain('overflow-y: hidden')
 })
 
-test('without the focus the card keeps its Planner and has no focus button', () => {
+test('without the focus the card has no focus button', () => {
   const markup = renderToStaticMarkup(createElement(ProfileView, { profile, focus: [], onFocus: () => undefined, refusal: null, focusShown: false }))
-  expect(markup).toContain('Planner')
   expect(markup).not.toContain('Add to focus')
   expect(markup).not.toContain('aria-pressed')
 })
@@ -199,9 +198,9 @@ test('a character the card calls he or they is told so on every page of the card
   expect(they).toContain('How ready they are')
 })
 
-test('the planner is one link away, beside the focus button, the two of one size', () => {
+test('the planner is not a link of the card: the switch in the title holds it, and the focus button keeps its size', () => {
   const markup = draw(profile)
-  expect(markup).toContain('href="#/characters/sandrone/plan"')
+  expect(markup).not.toContain('href="#/characters/sandrone/plan"')
   expect(ruleOf('.pf-btn')).toMatch(/width:\s*150px/)
 })
 

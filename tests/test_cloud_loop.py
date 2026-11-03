@@ -1,6 +1,7 @@
 """The core's task: presence each minute, the stats and the friends every five, and quiet after a failure (the online plan,
 Task B3; Review Focus 1)."""
 import asyncio
+import json
 from datetime import date, datetime, timedelta, timezone
 
 import pytest
@@ -84,33 +85,123 @@ def _facts() -> dict:
     return {"uid": 700000001, "ar": 58, "picture_url": None}
 
 
-async def test_a_heartbeat_each_minute_while_status_is_shared(tmp_path, clock):
+def _beats(cloud: FakeCloud) -> list[dict]:
+    return [json.loads(body) for method, path, _, body in cloud.requests if "heartbeat" in path]
+
+
+class Game:
+    """The game as `Local.game` reads it: running or not, and since when."""
+
+    def __init__(self, started: datetime | None) -> None:
+        self.started = started
+
+    def __call__(self) -> tuple[bool, datetime | None]:
+        return (self.started is not None, self.started)
+
+
+async def test_no_heartbeat_while_the_game_is_closed(tmp_path, clock):
+    # Nothing a friend can see may say when the PC is on or Guild Board is open: no game, no heartbeat, and never "open".
+    cloud = scripted("status")
+    online = _online(tmp_path, clock, cloud, game=Game(None))
+    for _ in range(3):
+        await online.turn()
+        clock.advance(minutes=1)
+    assert _beats(cloud) == []
+    assert all(b"open" not in (body or b"") for method, path, _, body in cloud.requests)  # and no body says "open" either
+
+
+async def test_heartbeat_in_game_and_one_end_beat(tmp_path, clock):
     cloud = scripted("status")
     started = clock.now() - timedelta(minutes=42)
-    running = {"now": True}
-    online = _online(
-        tmp_path, clock, cloud, sleep=Sleeps(clock, 5),
-        game=lambda: (running["now"], started if running["now"] else None),
-    )
-    await _run(online)
-    beats = [body for method, path, _, body in cloud.requests if "heartbeat" in path]
-    assert len(beats) == 6  # now and each of five minutes
-    assert cloud.body(-1) == {"p_state": "in_game", "p_since": iso(started)}
+    game = Game(started)
+    online = _online(tmp_path, clock, cloud, game=game)
+    for _ in range(2):
+        await online.turn()
+        clock.advance(minutes=1)
+    game.started = None  # the game stops
+    for _ in range(2):
+        await online.turn()
+        clock.advance(minutes=1)
+    assert _beats(cloud) == [{"p_state": "in_game", "p_since": iso(started)}] * 3  # two while it ran, the end beat
+    await online.turn()
+    assert len(_beats(cloud)) == 3  # and nothing after it until the game runs again
+    game.started = clock.now()
+    await online.turn()
+    assert _beats(cloud)[-1] == {"p_state": "in_game", "p_since": iso(game.started)} and len(_beats(cloud)) == 4
 
-    # The game stops: Guild Board stays open, from then on.
-    running["now"] = False
-    stopped = clock.now()
-    online._sleep = Sleeps(clock, 1)
-    await _run(online)
-    assert cloud.body(-1) == {"p_state": "open", "p_since": iso(stopped)}
 
-
-async def test_open_since_guild_board_was_opened(tmp_path, clock):
+async def test_start_mid_game_beats_in_game_with_the_games_start(tmp_path, clock):
     cloud = scripted("status")
-    opened_at = clock.now()
-    online = _online(tmp_path, clock, cloud, sleep=Sleeps(clock, 2))
-    await _run(online)
-    assert cloud.body(-1) == {"p_state": "open", "p_since": iso(opened_at)}
+    started = clock.now() - timedelta(hours=3)
+    online = _online(tmp_path, clock, cloud, game=Game(started))
+    await online.turn()
+    assert _beats(cloud) == [{"p_state": "in_game", "p_since": iso(started)}]
+
+
+async def test_failed_end_beat_is_not_retried(tmp_path, clock):
+    cloud = scripted("status")
+    started = clock.now() - timedelta(minutes=5)
+    game = Game(started)
+    online = _online(tmp_path, clock, cloud, game=game)
+    await online.turn()
+    game.started = None
+    clock.advance(minutes=1)
+    cloud.answers[HEARTBEAT] = answer(503)
+    await online.turn()  # the end beat, refused: the core is quiet for five minutes
+    assert len(_beats(cloud)) == 2
+    cloud.answers[HEARTBEAT] = answer(204)
+    for _ in range(8):  # well past the quiet window, which would let a retry go
+        clock.advance(minutes=1)
+        await online.turn()
+    assert len(_beats(cloud)) == 2  # the one while it ran, and the end beat once
+
+
+async def test_a_late_end_beat_is_dropped(tmp_path, clock):
+    # The game stops, the PC sleeps: the first turn that reaches the beat, ten minutes on, says nothing of the game.
+    cloud = scripted("status")
+    game = Game(clock.now() - timedelta(minutes=5))
+    online = _online(tmp_path, clock, cloud, game=game)
+    await online.turn()
+    game.started = None
+    clock.advance(minutes=10)
+    await online.turn()
+    clock.advance(minutes=1)
+    await online.turn()
+    assert len(_beats(cloud)) == 1  # only the one while it ran
+
+
+async def test_no_end_beat_after_a_quiet_window(tmp_path, clock):
+    cloud = scripted("status")
+    game = Game(clock.now() - timedelta(minutes=5))
+    online = _online(tmp_path, clock, cloud, game=game)
+    await online.turn()
+    assert len(_beats(cloud)) == 1
+    game.started = None
+    cloud.answers[OVERVIEW] = answer(503)
+    clock.advance(minutes=5)
+    await online.turn()  # a step fails: the turn ends before the beat, and the core is quiet for five minutes
+    cloud.answers[OVERVIEW] = answer(200, NOBODY)
+    for _ in range(8):
+        clock.advance(minutes=1)
+        await online.turn()
+    assert len(_beats(cloud)) == 1  # the beat came to be reached long after the game stopped: it says nothing
+
+
+async def test_sign_out_in_game_leaves_no_end_beat_for_the_next_account(tmp_path, clock):
+    cloud = scripted("status")
+    cloud.answers[LOGOUT] = answer(204)
+    game = Game(clock.now() - timedelta(minutes=5))
+    online = _online(tmp_path, clock, cloud, game=game)
+    await online.turn()
+    assert len(_beats(cloud)) == 1
+    await online.sign_out()
+    game.started = None
+    online._store.save(CloudSession(
+        "ACCESS-0123456789", "REFRESH-0123456789", clock.now().timestamp() + 365 * 86_400, USER_ID, "Nova", "5120",
+    ))
+    clock.advance(seconds=30)
+    await online.turn()
+    assert len(_beats(cloud)) == 1
 
 
 async def test_no_heartbeat_while_status_is_off(tmp_path, clock):
@@ -123,7 +214,7 @@ async def test_a_refused_heartbeat_ends_nothing(tmp_path, clock):
     # Status turned off on another device, before this one has looked again.
     cloud = scripted("status")
     cloud.answers[HEARTBEAT] = answer(403, {"message": "new row violates row-level security policy"})
-    online = _online(tmp_path, clock, cloud, sleep=Sleeps(clock, 2))
+    online = _online(tmp_path, clock, cloud, sleep=Sleeps(clock, 2), game=Game(clock.now()))
     await _run(online)
     assert _count(cloud, "heartbeat") == 3
     assert online.view()["offline"] is False
@@ -134,16 +225,30 @@ async def test_a_refusal_ends_nothing_else(tmp_path, clock):
     cloud = scripted("status")
     cloud.answers[PROFILE_UPDATE] = answer(400, {"message": "refused"})
     cloud.answers[SET_UID] = answer(400, {"message": "refused"})
-    online = _online(tmp_path, clock, cloud, profile=_facts)
+    online = _online(tmp_path, clock, cloud, profile=_facts, game=Game(clock.now()))
     await online.turn()
     assert _count(cloud, "friends_overview") == 1 and _count(cloud, "heartbeat") == 1
 
 
+async def test_stats_wait_when_status_shared_but_game_closed(tmp_path, clock, monkeypatch):
+    # With Status shared, a number that changed on each pass while the game is closed would say when the PC is on: it follows
+    # the once-a-game-day rule, as with Status off. The minute is drawn from what is left of the game day.
+    monkeypatch.setattr("guildboard.cloud.service.random.randrange", lambda count: count // 2)
+    cloud = scripted("status", "primogems")
+    values = {"primogems": {"now": 0}}
+    online = _online(tmp_path, clock, cloud, stats=lambda: values, profile=_facts, game=Game(None))
+    for turn in range(6):  # a half hour: well short of the minute drawn
+        values["primogems"] = {"now": turn}
+        await online.turn()
+        clock.advance(minutes=5)
+    assert _count(cloud, "shared_stats") == 0
+
+
 async def test_stats_go_up_at_most_every_five_minutes_and_only_when_changed(tmp_path, clock):
-    # With Status shared: with it off, they go up once a game day (below).
+    # With Status shared and the game running: with it off, or the game closed, they go up once a game day (below).
     cloud = scripted("status", "primogems", "wishes")
     values = {"primogems": {"now": 1}, "wishes": {"pity": 2}, "endgame": {"abyss_stars": 36}}
-    online = _online(tmp_path, clock, cloud, stats=lambda: values, profile=_facts)
+    online = _online(tmp_path, clock, cloud, stats=lambda: values, profile=_facts, game=Game(clock.now()))
     await online.turn()
     assert _count(cloud, "shared_stats") == 1
     assert {row["key"]: row["value"] for row in cloud.body(-1 - _after(cloud, "shared_stats"))} == {
@@ -192,6 +297,57 @@ async def test_with_status_off_changed_stats_go_up_at_most_once_a_day(tmp_path, 
     assert {date(2026, 10, 13), date(2026, 10, 14), date(2026, 10, 15)} <= set(days)  # and on each day the PC was on
 
 
+def _card_online(tmp_path, clock, cloud, *, ar, game):
+    return _online(
+        tmp_path, clock, cloud, profile=lambda: {"uid": 700000001, "ar": ar(), "picture_url": None}, game=game,
+        server=lambda: "os_euro", today=lambda: game_day(clock.now(), "os_euro"),
+    )
+
+
+def _carded(*sharing: str) -> FakeCloud:
+    cloud = scripted(*sharing)
+    cloud.answers[PROFILE] = answer(200, [own_row(sharing=list(sharing), ar=50, uid=700000001)])
+    return cloud
+
+
+async def test_an_ar_change_with_the_game_closed_waits_for_the_days_minute(tmp_path, clock, monkeypatch):
+    # Friends see the card: the moment an AR changed would say when the PC came on. It waits as the stats do.
+    monkeypatch.setattr("guildboard.cloud.service.random.randrange", lambda count: count // 2)
+    cloud = _carded("status")
+    online = _card_online(tmp_path, clock, cloud, ar=lambda: 58, game=Game(None))
+    started = clock.now()
+    patched_at = None
+    for _ in range(12 * 12):
+        await online.turn()
+        if _count(cloud, "PATCH") and patched_at is None:
+            patched_at = clock.now()
+            break
+        clock.advance(minutes=5)
+    assert patched_at is not None and patched_at - started > timedelta(hours=8)  # not on the next pass: at the drawn minute
+
+
+async def test_an_ar_change_in_game_goes_up_on_the_next_pass(tmp_path, clock):
+    cloud = _carded("status")
+    online = _card_online(tmp_path, clock, cloud, ar=lambda: 58, game=Game(clock.now()))
+    await online.turn()
+    assert _count(cloud, "PATCH") == 1 and cloud.body(-1 - _after(cloud, "PATCH")) == {"ar": 58}
+
+
+async def test_an_ar_change_with_status_off_waits_too(tmp_path, clock):
+    cloud = _carded("primogems")
+    online = _card_online(tmp_path, clock, cloud, ar=lambda: 58, game=Game(clock.now()))
+    await online.turn()
+    assert _count(cloud, "PATCH") == 0
+
+
+async def test_the_first_sign_in_sends_the_profile_at_once(tmp_path, clock):
+    # No card yet: signing in is the player's own act, and the profile goes up with the game closed and Status off.
+    cloud = scripted()
+    online = _card_online(tmp_path, clock, cloud, ar=lambda: 58, game=Game(None))
+    await online.turn()
+    assert _count(cloud, "PATCH") == 1 and _count(cloud, "set_uid") == 1
+
+
 async def test_a_pc_that_starts_late_in_the_game_day_does_not_send_when_it_starts(tmp_path, clock, monkeypatch):
     # The minute is drawn from what is left of the game day: drawn over the whole day, a PC that comes on in the evening had
     # passed it already, and its upload fell at the moment Guild Board was opened, which is what the draw is there to hide.
@@ -221,10 +377,10 @@ async def test_a_pc_that_starts_late_in_the_game_day_does_not_send_when_it_start
 
 
 async def test_with_status_on_changed_stats_go_up_with_each_pass(tmp_path, clock):
-    # Status says when Guild Board is open anyway: the numbers change as they did.
+    # Status says the game runs anyway: while it does, the numbers change as they did.
     cloud = scripted("status", "primogems")
     values = {"primogems": {"now": 0}}
-    online = _online(tmp_path, clock, cloud, stats=lambda: values, profile=_facts)
+    online = _online(tmp_path, clock, cloud, stats=lambda: values, profile=_facts, game=lambda: (True, clock.now()))
     for turn in range(3):
         values["primogems"] = {"now": turn}
         await online.turn()
@@ -239,9 +395,9 @@ def _after(cloud: FakeCloud, what: str) -> int:
 
 
 async def test_a_key_turned_off_on_another_device_goes_up_when_it_comes_back(tmp_path, clock):
-    # Turning it off there deleted the row, so the same value is news again. (With Status shared, so that it goes at once.)
+    # Turning it off there deleted the row, so the same value is news again. (With Status shared and the game running, so that it goes at once.)
     cloud = scripted("status", "wishes")
-    online = _online(tmp_path, clock, cloud, stats=lambda: {"wishes": {"pity": 2}}, profile=_facts)
+    online = _online(tmp_path, clock, cloud, stats=lambda: {"wishes": {"pity": 2}}, profile=_facts, game=lambda: (True, clock.now()))
     await online.turn()
     assert _count(cloud, "shared_stats") == 1
     cloud.answers[PROFILE] = answer(200, [own_row(sharing=["status"])])
@@ -275,7 +431,7 @@ async def test_with_no_stat_on_nothing_is_worked_out(tmp_path, clock):
 async def test_a_failed_upload_is_sent_again(tmp_path, clock):
     cloud = scripted("status", "wishes")
     cloud.answers[UPLOAD] = [answer(503), answer(201)]
-    online = _online(tmp_path, clock, cloud, stats=lambda: {"wishes": {"pity": 2}}, profile=_facts)
+    online = _online(tmp_path, clock, cloud, stats=lambda: {"wishes": {"pity": 2}}, profile=_facts, game=lambda: (True, clock.now()))
     await online.turn()
     clock.advance(minutes=5)
     await online.turn()
@@ -397,7 +553,7 @@ async def test_the_loop_sleeps_until_a_sign_in_wakes_it(tmp_path, clock):
     cloud.answers[EXCHANGE] = token_answer()
     cloud.answers[ENSURE] = answer(200, {"name": "Nova", "discriminator": "5120"})
     opened: list[str] = []
-    online = _online(tmp_path, clock, cloud, signed_in=False, opened=opened, sleep=Sleeps(clock, 0))
+    online = _online(tmp_path, clock, cloud, signed_in=False, opened=opened, sleep=Sleeps(clock, 0), game=Game(clock.now()))
     task = asyncio.create_task(online.run())
     for _ in range(50):
         await asyncio.sleep(0)
@@ -420,7 +576,10 @@ async def test_a_new_sign_in_keeps_nothing_of_the_last_session(tmp_path, clock):
     cloud.answers[EXCHANGE] = token_answer()
     cloud.answers[ENSURE] = answer(200, {"name": "Elena", "discriminator": "0031"})
     opened: list[str] = []
-    online = _online(tmp_path, clock, cloud, opened=opened, stats=lambda: {"wishes": {"pity": 2}}, profile=_facts)
+    online = _online(
+        tmp_path, clock, cloud, opened=opened, stats=lambda: {"wishes": {"pity": 2}}, profile=_facts,
+        game=lambda: (True, clock.now()),
+    )
     await online.turn()
     assert len((await online.friends_model())["friends"]) == 1
 
@@ -491,7 +650,7 @@ async def test_a_stat_that_cant_be_worked_out_ends_nothing_else(tmp_path, clock)
     def broken() -> dict:
         raise RuntimeError("a stat could not be worked out")
 
-    online = _online(tmp_path, clock, cloud, sleep=Sleeps(clock, 1), stats=broken, profile=_facts)
+    online = _online(tmp_path, clock, cloud, sleep=Sleeps(clock, 1), stats=broken, profile=_facts, game=Game(clock.now()))
     await _run(online)
     assert _count(cloud, "heartbeat") == 2 and _count(cloud, "friends_overview") == 1
 
@@ -501,13 +660,21 @@ async def test_after_a_hoyolab_logout_the_last_values_stay(tmp_path, clock):
     online = _online(tmp_path, clock, cloud, stats=lambda: {"wishes": {"pity": 2}}, profile=lambda: None)
     await online.turn()
     assert _count(cloud, "shared_stats") == 0 and _count(cloud, "PATCH") == 0
-    assert _count(cloud, "heartbeat") == 1  # Guild Board itself is still open
+    assert _count(cloud, "heartbeat") == 0  # the game is not running: nothing says that Guild Board is
 
 
 def test_offline_after_three_minutes():
     assert status_of({"state": "in_game", "seen_seconds": 180}) == "in_game"
-    assert status_of({"state": "open", "seen_seconds": 12}) == "open"
+    assert status_of({"state": "open", "seen_seconds": 12}) == "offline"  # an old client's row: never shown as open
     assert status_of({"state": "in_game", "seen_seconds": 181}) == "offline"
+
+
+def test_open_row_reads_offline_without_time(clock):
+    # An old client may still write "open", however fresh: no friend sees that Guild Board is open, nor when it was last seen.
+    presence = {"state": "open", "since": "2026-10-13T07:00:00+00:00", "seen_seconds": 10}
+    assert status_of(presence) == "offline"
+    friend = friend_from({**RILEY_ROW, "presence": presence}, clock.now(), TODAY)
+    assert (friend["status"], friend["since"], friend["last_seen"]) == ("offline", None, None)
 
 
 def test_a_friend_who_hides_status_is_not_called_offline(clock):
@@ -571,7 +738,7 @@ async def test_a_friend_row_with_an_unreadable_presence_is_dropped(tmp_path, clo
     model = await online.friends_model()
     assert [friend["name"] for friend in model["friends"]] == ["Riley"]
     assert (model["incoming"], model["outgoing"]) == ([], [])  # and a list of requests that holds no rows is empty
-    assert (await online.friend_profile(USER_ID))["friend"]["status"] == "open"
+    assert (await online.friend_profile(USER_ID))["friend"]["status"] == "offline"
 
 
 async def test_a_refused_read_is_marked_old(tmp_path, clock):

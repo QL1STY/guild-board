@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react'
 import { api, messageOf } from '../../api.ts'
-import type { Live } from '../../live.ts'
+import { FreshRing } from '../../frame/FreshRing.tsx'
+import { type Live, useTick } from '../../live.ts'
 import type { CharSync } from '../../types.ts'
-import { CALCULATOR_OFF, syncWords } from './words.ts'
+import { CALCULATOR_OFF, charactersFresh } from './words.ts'
 
 /**
- * The Refresh button of the Characters pages and the lines beside it: when HoYoLAB was last read, the minutes to wait
- * after a read that was too soon, and what the core says when nothing can be read. A press asks the core for a
- * `characters` run (POST /api/characters/refresh); one it refuses (409) says why, with the minutes, until the next press
- * or until a new model comes. The button rests, and keeps its focus, while a run goes or one must wait (aria-disabled).
- * The long sentence about the calculator is not here: the pages that show held amounts say it in `CalculatorNote`.
+ * The freshness ring of the Characters pages, at the right end of the top bar (freshness design, section 1): when HoYoLAB
+ * was last read, and a press that reads now. A press asks the core for a `characters` run (POST /api/characters/refresh);
+ * one it refuses (409) says why in the ring's tip, with the minutes, until the next press or until a new model comes.
+ * The ring is always a button, so that the focus stays on it; it takes a press only while the core would take one
+ * (`can_refresh`) and no read runs, and otherwise rests (aria-disabled) and the tip says why. The long sentence
+ * about the calculator is not here: the pages that show held amounts say it in `CalculatorNote`.
  */
 export function SyncLine({ live, sync }: { live: Live; sync: CharSync }) {
+  useTick(60_000) // the age and the ring's fill move on
   const [pressing, setPressing] = useState(false)
   const [refusal, setRefusal] = useState<string | null>(null)
   // A new answer of the core (a run began or ended, a minute passed) takes the refusal away.
   useEffect(() => setRefusal(null), [sync])
-  const words = syncWords(sync, live.now())
-  const resting = words.disabled || pressing
+  const view = charactersFresh(sync, live.now(), refusal)
   const press = async () => {
-    if (resting) return
+    if (pressing || !sync.can_refresh) return
     setPressing(true)
     setRefusal(null)
     try {
@@ -30,16 +32,13 @@ export function SyncLine({ live, sync }: { live: Live; sync: CharSync }) {
       setPressing(false)
     }
   }
-  const lines = refusal === null ? words.lines.filter((line) => line !== CALCULATOR_OFF) : [refusal]
   return (
-    <>
-      <button type="button" className="gb-btn cx-refresh" aria-disabled={resting} onClick={() => void press()}>
-        {pressing ? 'Reading…' : words.button}
-      </button>
-      <span className="gb-status cx-sync" data-testid="characters-sync" role="status">
-        {lines.join(' ')}
-      </span>
-    </>
+    <FreshRing
+      view={pressing ? { ...view, turning: true, label: 'Reading…' } : view}
+      onPress={() => void press()}
+      disabled={!sync.can_refresh}
+      testId="characters-sync"
+    />
   )
 }
 

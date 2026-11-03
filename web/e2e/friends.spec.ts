@@ -5,7 +5,7 @@ import { expect, test } from './fixtures.ts'
 
 /*
  * The Friends page (the online plan, Task B6; the online design, section 9, mockup 1). The demo's account is Traveler#2048,
- * with Riley#7687 in game, Kira#0412 with Guild Board open, Milo#3391 offline and sharing nothing, and a request from
+ * with Riley#7687 in game, Kira#0412 and Milo#3391 offline and sharing nothing, and a request from
  * Nova#5120. Every test starts a core of its own, so what one changes the next does not see.
  */
 
@@ -24,7 +24,7 @@ async function clipboardOf(page: Page): Promise<string> {
   return page.evaluate(() => navigator.clipboard.readText())
 }
 
-test('Friends sits between Ledger and Settings in the rail, and lists the friends in game, open, then offline', async ({ page }) => {
+test('Friends sits between Ledger and Settings in the rail, and lists the friends in game, then offline', async ({ page }) => {
   const names = await page.getByRole('navigation', { name: 'Pages' }).locator('.gb-nav').allTextContents()
   expect(names.indexOf('Friends')).toBe(names.indexOf('Ledger') + 1)
   expect(names.indexOf('Settings')).toBe(names.indexOf('Friends') + 1)
@@ -36,11 +36,13 @@ test('Friends sits between Ledger and Settings in the rail, and lists the friend
   await expect(rows.nth(0)).toContainText('Riley#7687')
   await expect(rows.nth(0)).toContainText(/In game for 4\d min/)
   await expect(rows.nth(1)).toContainText('Kira#0412')
-  await expect(rows.nth(1)).toContainText('Guild Board open')
+  await expect(rows.nth(1)).toContainText(/Offline 3 h ago/)
+  await expect(rows.nth(1)).not.toContainText('Guild Board open')
   await expect(rows.nth(2)).toContainText('Milo#3391')
   await expect(rows.nth(2)).toContainText('Offline 2 days ago')
-  // The top bar counts those who can be played with right now.
-  await expect(page.getByTestId('friends-count')).toHaveText('1 in game, 1 with Guild Board open')
+  // The top bar counts those who can be played with right now: the ones in game, and nothing says who has Guild Board open.
+  await expect(page.getByTestId('friends-count')).toHaveText('1 in game')
+  await expect(page.getByText('Guild Board open')).toHaveCount(0)
 })
 
 test('each friend shows their pinned stats as chips, and a friend who shares nothing says so', async ({ page }) => {

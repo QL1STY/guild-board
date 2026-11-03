@@ -4,7 +4,7 @@ import { api, messageOf } from '../../api.ts'
 import { Frame } from '../../frame/Frame.tsx'
 import { type Live, useModel } from '../../live.ts'
 import { hashOf } from '../../route.ts'
-import type { Profile as ProfileModel, RosterEntry } from '../../types.ts'
+import type { Profile as ProfileModel } from '../../types.ts'
 import { clipReveal, reducedMotion, rise, SPRING_EASE } from '../../ui/motion.tsx'
 import { sizedArt } from '../../ui/artsize.ts'
 import { Picture } from '../../ui/Picture.tsx'
@@ -20,8 +20,8 @@ import { rosterOrderFor, useRoster, useRosterMemory } from './memory.ts'
 import { ReadinessRing } from './ReadinessRing.tsx'
 import { weekShown } from './hidden.ts'
 import { neighbours, toggleFocus } from './rosterview.ts'
-import { Avatar } from './Avatar.tsx'
 import { SyncLine } from './SyncLine.tsx'
+import { PageSwitch, Trail } from './Trail.tsx'
 import { Tip, useTip } from './Tip.tsx'
 
 /**
@@ -339,9 +339,6 @@ export function ProfileView({
                   {refusal}
                 </p>
               )}
-              <a className="pf-btn" href={hashOf({ page: 'characters', view: 'plan', key: profile.key })}>
-                Planner
-              </a>
               {focusShown && (
                 <button type="button" className="pf-btn" aria-pressed={inFocus} disabled={focus === null} onClick={() => onFocus(profile.key)}>
                   {profile.owned ? (inFocus ? 'In focus' : 'Add to focus') : inFocus ? 'Pre-farming' : 'Pre-farm'}
@@ -361,56 +358,6 @@ export function ProfileView({
   )
 }
 
-/** The arrow of a step: drawn, so that it is as sharp as the lines round it and points the same way on every system. */
-function StepArrow({ direction }: { direction: 'previous' | 'next' }) {
-  return (
-    <svg className="pf-arrow-glyph" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
-      <path d={direction === 'previous' ? 'M13 8H3M7.5 3.5L3 8l4.5 4.5' : 'M3 8h10M8.5 3.5L13 8l-4.5 4.5'} />
-    </svg>
-  )
-}
-
-/**
- * One of the card's two arrows, a button of one size whatever the character: an arrow and the face of the character beside
- * her in the roster, or the arrow alone and dim at the end of the roster, where it stays in its place. The name is not on the
- * button but in a tip, on the pointer and on the keyboard's focus, and in the accessible name. `entry` is none at an end, and
- * `waiting` before the roster is known: the button is there all the same, so that nothing beside it moves when it comes.
- */
-function Step({
-  entry,
-  direction,
-  waiting,
-  tipOf,
-}: {
-  entry: RosterEntry | null
-  direction: 'previous' | 'next'
-  waiting: boolean
-  tipOf: ReturnType<typeof useTip>['tipOf']
-}) {
-  const label = direction === 'previous' ? 'Previous character' : 'Next character'
-  const arrow = <StepArrow direction={direction} />
-  if (entry === null) {
-    return (
-      <button type="button" className={`gb-btn quiet pf-arrow ${direction} end`} disabled aria-label={waiting ? label : `${label}: none`}>
-        {arrow}
-      </button>
-    )
-  }
-  const face = <Avatar src={entry.icon} element={entry.element} size="22px" />
-  return (
-    <a
-      className={`gb-btn quiet pf-arrow ${direction}`}
-      href={hashOf({ page: 'characters', view: 'profile', key: entry.key })}
-      aria-label={`${label}: ${entry.name}`}
-      {...tipOf(entry.name)}
-    >
-      {direction === 'previous' && arrow}
-      {face}
-      {direction === 'next' && arrow}
-    </a>
-  )
-}
-
 /** A character's profile page: the model, and the focus it can change. */
 export function Profile({ live, characterKey }: { live: Live; characterKey: string }) {
   const [changed, setChanged] = useState(0)
@@ -420,10 +367,11 @@ export function Profile({ live, characterKey }: { live: Live; characterKey: stri
   const [refusal, setRefusal] = useState<string | null>(null)
   const [cardOpen, setCardOpen] = useState(false)
 
-  // The character beside her in the roster as the player left it: its search, its filters and its sort. The arrows stop at
+  // The character beside her in the roster as the player left it: its search, its filters and its sort. The ← and → keys stop at
   // the ends. The card (and its page of the sidebar) stays when they move on; only the character changes.
   const { previous, next } = neighbours(rosterOrderFor(memory, characterKey), characterKey)
-  const entryOf = (key: string | null) => (key === null ? null : (memory.data?.entries.find((entry) => entry.key === key) ?? null))
+  // Her face and element for the trail, from the roster as the player left it, while her own model is on its way.
+  const known = memory.data?.entries.find((entry) => entry.key === (data?.key ?? characterKey)) ?? null
   const target = useRef({ previous, next, cardOpen })
   target.current = { previous, next, cardOpen }
   useEffect(() => {
@@ -438,10 +386,6 @@ export function Profile({ live, characterKey }: { live: Live; characterKey: stri
     return () => window.removeEventListener('keydown', onKey)
   }, [])
   useEffect(() => setRefusal(null), [characterKey])
-  // The arrows' tip names the neighbour of the card shown; when the card moves on it is no longer true, so it goes.
-  const arrowTip = useTip()
-  const hideArrowTip = arrowTip.hide
-  useEffect(() => hideArrowTip(), [characterKey, hideArrowTip])
 
   const toggle = async (key: string) => {
     if (roster.data === null) return
@@ -459,25 +403,18 @@ export function Profile({ live, characterKey }: { live: Live; characterKey: stri
     setChanged((count) => count + 1)
   }
 
+  // The trail names the character on the page: her model, else the roster as the player left it while hers is on its way.
+  const name = data?.name ?? known?.name ?? 'Character'
+  const shown = data !== null ? { key: data.key, icon: known?.icon ?? null, element: data.element } : known
   // The model of the character before stays on the page until the one asked for has come.
   const unknown = error !== null && (data === null || data.key !== characterKey)
   return (
     <Frame
       page="characters"
       live={live}
-      controls={
-        <>
-          <span className="pf-arrows">
-            <Step entry={entryOf(previous)} direction="previous" waiting={memory.data === null} tipOf={arrowTip.tipOf} />
-            <Step entry={entryOf(next)} direction="next" waiting={memory.data === null} tipOf={arrowTip.tipOf} />
-          </span>
-          <Tip tip={arrowTip.tip} light />
-          <a className="gb-btn quiet" href={hashOf({ page: 'characters', view: 'roster' })}>
-            All characters
-          </a>
-          {data !== null && <SyncLine live={live} sync={data.sync} />}
-        </>
-      }
+      heading={<Trail here={name} character={shown} />}
+      beside={shown !== null && <PageSwitch here={name} characterKey={shown.key} view="profile" />}
+      controls={data !== null && <SyncLine live={live} sync={data.sync} />}
     >
       {data === null || unknown ? (
         <div className="gb-panel gb-empty">

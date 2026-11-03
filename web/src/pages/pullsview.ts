@@ -1,4 +1,5 @@
 import { dayMonth, localDay, localTime, num, pct, period, plural } from '../format.ts'
+import { ageLabel, type FreshView, ringFill } from '../frame/freshview.ts'
 import type {
   Banner, FiveResult, NextVersion, PityCard, Pulls, PullsImportEvent, PullsPool, SavingsRow, SavingsRowKey,
 } from '../types.ts'
@@ -514,6 +515,79 @@ export function loginImportLine(state: PullsImportEvent | null, model: Pulls['im
       : `Updated automatically with your HoYoLAB login · last ${localTime(model.last_at)}`
   }
   return importWithAuto(importLine(state, model), LOGIN_UPDATES)
+}
+
+/** What the ring's tip ends with where the history does not update itself. */
+export const PRESS_IMPORT = 'Press Import to update it.'
+
+/** The later of two instants, either of which may be missing. */
+function newest(first: string | null, second: string | null): string | null {
+  if (first === null) return second
+  if (second === null) return first
+  return Date.parse(second) > Date.parse(first) ? second : first
+}
+
+/**
+ * The empty page's sentence before any wish is kept: that Guild Board is reading the history now where the HoYoLAB login
+ * updates it, else how to start an import from the game.
+ */
+export function emptyLine(login: Pulls['import']['login']): string {
+  return login === 'on' || login === 'minting'
+    ? 'No wish history yet. Guild Board is reading it now with your HoYoLAB login.'
+    : 'No wish history yet. Open Wish → History in the game, then press Import.'
+}
+
+/**
+ * Whether an import or an update goes now, for the Import button and the ring: the stream's word, else the model's, and
+ * also while the keys for an update with the login are asked for, when the core already holds the importer and refuses a
+ * second press as busy.
+ */
+export function pullsRunning(model: Pulls['import'], event: PullsImportEvent | null): boolean {
+  return (event?.state ?? model.state) === 'running' || model.login === 'minting'
+}
+
+/**
+ * The freshness ring of the Pulls page (freshness design, section 1). The tip is the sentence the top bar used to show,
+ * built by the functions above; this adds the tone, the fill, the few words beside the ring, and whether it turns. While an
+ * import or an update runs the words are its progress ("page 3 · 41 new"); amber where the player has to act (HoYoverse
+ * refused the login, or the link from Wish → History expired), or a read failed; gold while the history updates itself
+ * (`every_minutes` set), else grey with a tip that says to press Import. `refusal` is what the core said to a press it
+ * refused: it is the tip, in place of the sentence. The age is that of the newest of the last import and the kept link's
+ * last update. `now` is the core's time.
+ */
+export function pullsFresh(
+  model: Pulls['import'],
+  event: PullsImportEvent | null,
+  refusal: string | null,
+  now: Date,
+): FreshView {
+  const progress: PullsImportEvent | null = event ?? (model.state === 'idle' ? null : { ...model, state: model.state })
+  const running = progress?.state === 'running'
+  const read = newest(model.last_at, model.auto?.last_at ?? null)
+  const fill = ringFill(read, model.every_minutes, now)
+  const age = ageLabel(read, now)
+  const kept = running ? null : autoLine(model, now)
+  const expired = kept !== null && model.auto_stopped === 'expired'
+  const login = !running && kept === null && model.login !== null
+  const sentence = expired
+    ? kept
+    : login
+      ? loginImportLine(event, model)
+      : importWithAuto(importLine(event, model), kept)
+  const tip = (rest: string): string => refusal ?? rest
+  if (progress !== null && running) {
+    const label = progress.pool === null ? 'Importing…' : `page ${num(progress.pages)} · ${num(progress.found)} new`
+    return { tone: 'gold', fill, label, tip: tip(sentence), turning: true }
+  }
+  if (model.login === 'minting') return { tone: 'gold', fill, label: 'Importing…', tip: tip(sentence), turning: true }
+  if (expired) return { tone: 'amber', fill, label: 'Open Wish History', tip: tip(sentence), turning: false }
+  if (login && model.login === 'refused') return { tone: 'amber', fill, label: 'Log in', tip: tip(sentence), turning: false }
+  if (login && model.login === 'failed') return { tone: 'amber', fill, label: 'Will retry', tip: tip(sentence), turning: false }
+  if (progress?.state === 'failed') return { tone: 'amber', fill, label: 'Import failed', tip: tip(sentence), turning: false }
+  if (model.every_minutes === null) {
+    return { tone: 'grey', fill, label: age, tip: refusal ?? importWithAuto(sentence, PRESS_IMPORT), turning: false }
+  }
+  return { tone: 'gold', fill, label: age, tip: tip(sentence), turning: false }
 }
 
 /** The earliest of some instants. */

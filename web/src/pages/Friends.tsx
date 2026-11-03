@@ -8,23 +8,13 @@ import { hashOf } from '../route.ts'
 import { Avatar, Chips, CompareButton, Doing, Gate, OldMark, pictureOf, usePolled, useCopy } from './FriendsParts.tsx'
 import { chipsOf, clockOf, nameText, SHARES_NOTHING, showsFriends, sortedFriends, statusLine, summaryOf } from './friendsview.ts'
 
-/** The top bar's count: "1 in game, 1 with Guild Board open". Nothing where no friend is either. */
+/** The top bar's count: "1 in game". Nothing where no friend is. */
 function Count({ friends }: { friends: readonly Friend[] }) {
-  const { inGame, open } = summaryOf(friends)
-  if (inGame === 0 && open === 0) return null
+  const { inGame } = summaryOf(friends)
+  if (inGame === 0) return null
   return (
     <span className="gb-status" data-testid="friends-count">
-      {inGame > 0 && (
-        <>
-          <b>{inGame}</b> in game
-        </>
-      )}
-      {inGame > 0 && open > 0 && ', '}
-      {open > 0 && (
-        <>
-          <b>{open}</b> with Guild Board open
-        </>
-      )}
+      <b>{inGame}</b> in game
     </span>
   )
 }

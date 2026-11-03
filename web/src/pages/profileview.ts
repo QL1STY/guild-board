@@ -101,7 +101,7 @@ const TILES: Record<StatKey, (stat: unknown, own: boolean) => Tile> = {
   },
 }
 
-const DOING: Record<NonNullable<FriendStatus>, string> = { in_game: 'In game', open: 'Guild Board open', offline: 'Offline' }
+const DOING: Record<NonNullable<FriendStatus>, string> = { in_game: 'In game', not_in_game: 'Not in game', offline: 'Offline' }
 
 /** One tile, from what it is made of. */
 export function tileOf(key: ShareKey, context: TileContext): Tile {

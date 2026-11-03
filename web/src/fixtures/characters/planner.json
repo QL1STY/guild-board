@@ -548,8 +548,10 @@
     "can_refresh": true,
     "wait_minutes": null,
     "reading": false,
+    "blocked": null,
     "read_at": "2026-10-25T07:00:00+00:00",
     "calculator": "on",
-    "message": null
+    "message": null,
+    "every_minutes": 360
   }
 }

@@ -36,6 +36,16 @@ export function coverageNote(coverage: Stats['coverage']): string | null {
   return coverage.partial ? `Tracking since ${dayMonth(coverage.tracking_since)}` : null
 }
 
+/**
+ * The date range beside the title (freshness design, section 2): "5 Oct – 3 Nov", and its tip, which adds where the
+ * history begins when it does not reach back over the whole period: "5 Oct – 3 Nov. Tracking since 19 Oct."
+ */
+export function rangeChip(first: string, last: string, coverage: Stats['coverage']): { label: string; tip: string } {
+  const label = first === last ? dayMonth(first) : `${dayMonth(first)} – ${dayMonth(last)}`
+  const note = coverageNote(coverage)
+  return { label, tip: note === null ? label : `${label}. ${note}.` }
+}
+
 export type TileView = {
   id: Tile['id']
   label: string

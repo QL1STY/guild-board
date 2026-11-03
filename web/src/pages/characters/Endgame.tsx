@@ -17,6 +17,7 @@ import {
 } from './endgameview.ts'
 import { toggleFocus } from './rosterview.ts'
 import { SyncLine } from './SyncLine.tsx'
+import { Trail } from './Trail.tsx'
 import { CharactersTabs } from './Tabs.tsx'
 
 /** A face on a ring; the name is beside it where there is room, and said to a screen reader where there is not. */
@@ -339,7 +340,12 @@ export function Endgame({ live }: { live: Live }) {
   }
 
   return (
-    <Frame page="characters" live={live} controls={endgame !== null && <SyncLine live={live} sync={endgame.sync} />}>
+    <Frame
+      page="characters"
+      live={live}
+      heading={<Trail here="Endgame" character={null} />}
+      controls={endgame !== null && <SyncLine live={live} sync={endgame.sync} />}
+    >
       {endgame === null ? (
         <div className="gb-panel gb-empty">{error ?? 'Reading your endgame…'}</div>
       ) : (

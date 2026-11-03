@@ -32,9 +32,6 @@
 .cx-ready-in b small { font-size: 55%; color: var(--ink2); font-weight: 700; }
 .cx-ready-cap { margin-top: 3cqi; font-size: 8.5cqi; color: var(--ink2); max-width: 58cqi; text-align: center; line-height: 1.15; text-wrap: balance; }
 
-/* ---------- The Refresh line, in the top bar ---------- */
-.cx-sync { max-width: 520px; }
-
 /* ---------- The calculator's note, where held amounts are ---------- */
 .cx-note {
   margin: 0;
@@ -56,5 +53,16 @@
 .cx-tip.light { border-color: var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; box-shadow: 0 6px 18px rgba(60, 40, 10, .22); }
 .cx-tip b { display: block; margin-bottom: 2px; font-family: var(--c-serif); font-size: 15px; }
 
-/* Refresh is as tall as All characters beside it, whose border it has too, but transparent. */
-.cx-refresh { border: 1px solid transparent; }
+/* ---------- The trail in a character's title, and the switch of her two views (freshness design, section 4) ---------- */
+.cx-trail { display: inline-flex; align-items: center; gap: 8px; vertical-align: middle; }
+.cx-crumb { color: var(--ink2); text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 5px; }
+.cx-crumb:hover { color: var(--ink); text-decoration-color: var(--fill); }
+.cx-sep { color: var(--muted); font-weight: 400; }
+.cx-trail .cx-ava { --size: 30px; flex: none; border-width: 2px; }
+.cx-switch {
+  display: inline-flex; gap: 2px; padding: 3px;
+  border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 14px; font-weight: 400;
+}
+.cx-switch a { padding: 5px 16px; border-radius: 999px; color: var(--ink2); text-decoration: none; }
+.cx-switch a:hover { color: var(--ink); }
+.cx-switch a[aria-current='page'] { background: var(--rail); color: var(--rail-text); font-weight: 700; }

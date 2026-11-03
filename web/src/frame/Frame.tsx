@@ -73,6 +73,8 @@ export function Frame({
   page,
   live,
   title,
+  heading,
+  beside,
   controls,
   wide = false,
   bare = false,
@@ -82,6 +84,10 @@ export function Frame({
   live: Live
   /** The page's own title where it is not the rail's name for it: "Your profile", or "You and Riley". */
   title?: string
+  /** Drawn inside the title instead of its text, where the title carries more than words. */
+  heading?: ReactNode
+  /** Drawn right after the title and the demo badge: the page's freshness ring. */
+  beside?: ReactNode
   controls?: ReactNode
   /** The page takes the window's whole width, as the Board does; the top bar and the banners keep the frame's. */
   wide?: boolean
@@ -136,8 +142,9 @@ export function Frame({
         <NoteHost />
         {!bare && (
           <header className="gb-top">
-            <h1 className="gb-title" tabIndex={-1}>{title ?? PAGE_TITLES[page]}</h1>
+            <h1 className="gb-title" tabIndex={-1}>{heading ?? title ?? PAGE_TITLES[page]}</h1>
             {status?.mode === 'demo' && <span className="gb-badge">Demo data</span>}
+            {beside}
             <span className="gb-grow" />
             {controls}
             {status !== null && <Plate live={live} status={status} />}

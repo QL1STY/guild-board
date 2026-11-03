@@ -39,6 +39,7 @@ from guildboard.pulls import POOL_LABELS
 from guildboard.pulls.planner import Planner
 from guildboard.records import CalcItemRecord, CalcTarget
 from guildboard.store import Store
+from guildboard.sync.policy import CADENCE
 
 log = logging.getLogger(__name__)
 
@@ -625,9 +626,11 @@ class Characters:
             "can_refresh": not reading and not blocked and not login and wait_minutes is None,
             "wait_minutes": wait_minutes,
             "reading": reading,
+            "blocked": blocked or None,
             "read_at": read_at.isoformat(timespec="seconds") if read_at is not None else None,
             "calculator": calculator,
             "message": message,
+            "every_minutes": int(CADENCE["characters"].total_seconds() // 60),
         }
 
     # ------------------------------------------------------------------------------------------ pity

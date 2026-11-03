@@ -37,16 +37,16 @@ function friend(over: Partial<Friend> = {}): Friend {
 }
 
 describe('the order of the list', () => {
-  test('friends sort in game, then Guild Board open, then offline, and those who hide their status go with the offline', () => {
+  test('friends sort in game, then the rest, and those who hide their status go with the offline', () => {
     const list = [
       friend({ name: 'Milo', status: 'offline' }),
-      friend({ name: 'Kira', status: 'open' }),
+      friend({ name: 'Kira', status: 'offline' }),
       friend({ name: 'Zed', status: null }),
       friend({ name: 'Riley', status: 'in_game' }),
-      friend({ name: 'Nova', status: 'open' }),
+      friend({ name: 'Nova', status: 'in_game' }),
       friend({ name: 'anna', status: 'offline' }),
     ]
-    expect(sortedFriends(list).map((one) => one.name)).toEqual(['Riley', 'Kira', 'Nova', 'anna', 'Milo', 'Zed'])
+    expect(sortedFriends(list).map((one) => one.name)).toEqual(['Nova', 'Riley', 'anna', 'Kira', 'Milo', 'Zed'])
   })
 
   test('a list is sorted without being changed, and a name that is no text cannot break it', () => {
@@ -64,11 +64,19 @@ describe('the status line', () => {
     const game = friend({ status: 'in_game', since: '2026-10-13T07:18:00Z' })
     expect(statusLine(game, NOW)).toEqual({ tone: 'game', text: 'In game', when: 'for 42 min' })
     expect(statusText(statusLine(game, NOW))).toBe('In game for 42 min')
-    const open = friend({ status: 'open', since: '2026-10-13T06:00:00Z' })
-    expect(statusText(statusLine(open, NOW))).toBe('Guild Board open')
+    const own = friend({ status: 'not_in_game', since: null })
+    expect(statusLine(own, NOW)).toEqual({ tone: 'off', text: 'Not in game', when: '' })
     const away = friend({ status: 'offline', since: null, last_seen: '2026-10-11T08:00:00Z' })
     expect(statusLine(away, NOW)).toEqual({ tone: 'off', text: 'Offline', when: '2 days ago' })
     expect(statusText(statusLine(away, NOW))).toBe('Offline 2 days ago')
+  })
+
+  test('no line says that Guild Board is open, whatever a row holds', () => {
+    for (const status of ['in_game', 'not_in_game', 'offline', null, 'open'] as const) {
+      const line = statusLine(friend({ status: status as never, since: '2026-10-13T06:00:00Z' }), NOW)
+      expect(statusText(line)).not.toMatch(/guild board/i)
+      expect(line.tone).not.toBe('open')
+    }
   })
 
   test('counts the minutes down, not up: a friend 42 minutes in is not 43 at the half minute', () => {
@@ -86,7 +94,7 @@ describe('the status line', () => {
     'a start of "%s" is left out of the line and is not a time',
     (since) => {
       expect(statusText(statusLine(friend({ since }), NOW))).toBe('In game')
-      expect(statusText(statusLine(friend({ since: since as never, status: 'open' }), NOW))).toBe('Guild Board open')
+      expect(statusText(statusLine(friend({ since: since as never, status: 'not_in_game' }), NOW))).toBe('Not in game')
     },
   )
 
@@ -206,16 +214,15 @@ describe('Compare on a friend', () => {
 })
 
 describe('the count in the top bar', () => {
-  test('counts those in game and those with Guild Board open', () => {
+  test('counts those in game, and nothing else', () => {
     const list = [
       friend({ status: 'in_game' }),
-      friend({ status: 'open' }),
-      friend({ status: 'open' }),
+      friend({ status: 'offline' }),
       friend({ status: 'offline' }),
       friend({ status: null }),
     ]
-    expect(summaryOf(list)).toEqual({ inGame: 1, open: 2 })
-    expect(summaryOf([])).toEqual({ inGame: 0, open: 0 })
+    expect(summaryOf(list)).toEqual({ inGame: 1 })
+    expect(summaryOf([])).toEqual({ inGame: 0 })
   })
 })
 

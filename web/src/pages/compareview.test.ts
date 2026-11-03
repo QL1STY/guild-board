@@ -38,7 +38,7 @@ function friend(over: Partial<Friend> = {}): Friend {
 
 function model(over: { mine?: Stats; theirs?: Stats; keys?: StatKey[]; name?: string } = {}): CompareModel {
   return {
-    me: { user_id: 'me', name: 'Traveler', tag: '2048', has_picture: false, ar: 59, status: 'open', since: null },
+    me: { user_id: 'me', name: 'Traveler', tag: '2048', has_picture: false, ar: 59, status: 'not_in_game', since: null },
     friend: friend({ name: over.name ?? 'Riley', stats: over.theirs ?? THEIRS }),
     keys: over.keys ?? KEYS,
     mine: over.mine ?? MINE,

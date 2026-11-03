@@ -33,6 +33,14 @@ export function useTip(): {
   return { tip, tipOf, show, hide }
 }
 
+/**
+ * The tip while it is open, with the words the element has now: `useTip` keeps the body it had when the tip opened, and an
+ * element whose words change while the tip is open (a ring whose press was refused) shows the new ones.
+ */
+export function currentTip(tip: TipState, body: ReactNode): TipState {
+  return tip === null ? null : { ...tip, body }
+}
+
 export type TipProps = {
   tabIndex: number
   onMouseMove: (event: MouseEvent) => void

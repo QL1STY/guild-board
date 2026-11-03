@@ -172,6 +172,40 @@ def test_the_api_never_returns_a_key(tmp_path, clock):
         core.store.close()
 
 
+def test_import_model_cadence_follows_the_login(tmp_path, clock):
+    core = _core(tmp_path, clock)
+    try:
+        for login, run_state, minutes in (
+            ("on", "on", 30), ("on", "minting", 30), ("on", "failed", 30), ("refused", "on", None), (None, "on", None),
+        ):
+            core.wish_import._login = lambda login=login: login
+            core.wish_import._login_run = run_state
+            assert core.ledger()["import"]["every_minutes"] == minutes, (login, run_state)
+    finally:
+        core.store.close()
+
+
+def test_the_ledgers_cadence_holds_while_its_own_kept_link_lives(tmp_path, clock):
+    # The core's AUTO_EVERY update reads the Feedback link too (WishImporter.auto_update): the ledger page updates itself
+    # while its link lives, with no login and no wish link. The Pulls page does not.
+    from guildboard.pulls.importer import _Kept
+    from ledger_samples import csc_link
+
+    core = _core(tmp_path, clock)
+    try:
+        run = core.wish_import
+        run._login = lambda: None
+        assert core.ledger()["import"]["every_minutes"] is None
+        run._kept_ledger = _Kept(csc_link("MARKER-KEY-0123456789"), clock.now() + timedelta(hours=1), uid=UID)
+        assert core.ledger()["import"]["every_minutes"] == 30
+        assert run.state()["every_minutes"] is None  # the Pulls page's block is its wish link's and the login's alone
+        clock.advance(hours=1)  # the link's day is over
+        assert core.ledger()["import"]["every_minutes"] is None
+    finally:
+        core.wish_import._kept_ledger = None
+        core.store.close()
+
+
 def test_demo_ledger_is_full(tmp_path, clock):
     core = _core(tmp_path, clock, demo=True)
     try:

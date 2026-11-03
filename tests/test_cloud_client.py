@@ -35,14 +35,14 @@ def _refreshes(cloud: FakeCloud) -> list[str]:
 # ---------------------------------------------------------------- what is sent
 
 CALLS = {
-    "rpc": lambda client: client.rpc("heartbeat", {"p_state": "open"}),
+    "rpc": lambda client: client.rpc("heartbeat", {"p_state": "in_game"}),
     "select": lambda client: client.select("profiles", "select=name"),
     "upsert": lambda client: client.upsert("shared_stats", [{"key": "wishes"}]),
     "update": lambda client: client.update("profiles", "user_id=eq.x", {"ar": 58}),
     "delete": lambda client: client.delete("shared_stats", "key=eq.wishes"),
 }
 WIRE = {
-    "rpc": ("POST", "/rest/v1/rpc/heartbeat", {"p_state": "open"}),
+    "rpc": ("POST", "/rest/v1/rpc/heartbeat", {"p_state": "in_game"}),
     "select": ("GET", "/rest/v1/profiles?select=name", None),
     "upsert": ("POST", "/rest/v1/shared_stats", [{"key": "wishes"}]),
     "update": ("PATCH", "/rest/v1/profiles?user_id=eq.x", {"ar": 58}),

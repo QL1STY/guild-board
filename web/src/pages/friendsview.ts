@@ -109,7 +109,7 @@ export function pillKeys(pins: readonly unknown[], shared: readonly unknown[]): 
 }
 
 function rankOf(friend: Pick<Friend, 'status'>): number {
-  return friend.status === 'in_game' ? 0 : friend.status === 'open' ? 1 : 2
+  return friend.status === 'in_game' ? 0 : 1
 }
 
 const textOf = (value: unknown): string => (typeof value === 'string' ? value : '')
@@ -129,15 +129,15 @@ export function nameText(value: unknown): string {
 }
 
 /**
- * The list's order: in game, then Guild Board open, then offline. A friend who hides their status is not called offline,
- * and sorts with those who are. Within a group by name, so that the list does not shuffle when it is read again.
+ * The list's order: in game, then the rest. A friend who hides their status is not called offline, and sorts with those
+ * who are. Within a group by name, so that the list does not shuffle when it is read again.
  */
 export function sortedFriends(friends: readonly Friend[]): Friend[] {
   const by = (a: unknown, b: unknown) => textOf(a).localeCompare(textOf(b), 'en', { sensitivity: 'base' })
   return [...friends].sort((a, b) => rankOf(a) - rankOf(b) || by(a.name, b.name) || by(a.tag, b.tag))
 }
 
-export type StatusLine = { tone: 'game' | 'open' | 'off' | 'none'; text: string; when: string }
+export type StatusLine = { tone: 'game' | 'off' | 'none'; text: string; when: string }
 
 /** An instant that may be ahead of the clock by this much is now, not a mistake. */
 const SKEW_MINUTES = 5
@@ -167,8 +167,9 @@ export function agoText(seconds: number): string {
 }
 
 /**
- * What a friend is doing (mockup 1), from the core's clock: "In game for 42 min", "Guild Board open", "Offline 2 days ago".
- * A time that cannot be told is left out and the rest stays. A friend whose status is not shared has no line at all.
+ * What a friend is doing (mockup 1), from the core's clock: "In game for 42 min", "Offline 2 days ago", and for the player's own
+ * profile "Not in game". A time that cannot be told is left out and the rest stays. A friend whose status is not shared has no
+ * line at all.
  */
 export function statusLine(friend: Pick<Friend, 'status' | 'since' | 'last_seen'>, now: Date): StatusLine {
   switch (friend.status) {
@@ -176,8 +177,8 @@ export function statusLine(friend: Pick<Friend, 'status' | 'since' | 'last_seen'
       const minutes = elapsedMinutes(friend.since, now, LONGEST_GAME_MINUTES)
       return { tone: 'game', text: 'In game', when: minutes === null ? '' : `for ${duration(Math.floor(minutes))}` }
     }
-    case 'open':
-      return { tone: 'open', text: 'Guild Board open', when: '' }
+    case 'not_in_game':
+      return { tone: 'off', text: 'Not in game', when: '' }
     case 'offline': {
       const minutes = elapsedMinutes(friend.last_seen, now, Infinity)
       return { tone: 'off', text: 'Offline', when: minutes === null ? '' : agoText(minutes * 60) }
@@ -208,12 +209,9 @@ export function compareState(friend: Pick<Friend, 'compare' | 'name'>): { enable
   return { enabled: false, tip: `You and ${nameText(friend.name)} share no stat in common yet.` }
 }
 
-/** How many friends are in game and how many have Guild Board open, for the top bar. */
-export function summaryOf(friends: readonly Pick<Friend, 'status'>[]): { inGame: number; open: number } {
-  return {
-    inGame: friends.filter((one) => one.status === 'in_game').length,
-    open: friends.filter((one) => one.status === 'open').length,
-  }
+/** How many friends are in game, for the top bar. */
+export function summaryOf(friends: readonly Pick<Friend, 'status'>[]): { inGame: number } {
+  return { inGame: friends.filter((one) => one.status === 'in_game').length }
 }
 
 type Age = Pick<FriendsModel, 'stale' | 'read_at'>

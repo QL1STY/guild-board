@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import type { Stats, Tile } from '../types.ts'
 import { countValue } from '../ui/motion.tsx'
-import { countedValue, coverageNote, figureOf, inPeriod, periodTitle, type Scope, startLabel, tileView } from './statsview.ts'
+import { countedValue, coverageNote, figureOf, inPeriod, periodTitle, rangeChip, type Scope, startLabel, tileView } from './statsview.ts'
 
 const COVERED: Stats['coverage'] = {
   tracking_since: '2026-07-15', tracked_days: 30, full: true, partial: false, compare: true,
@@ -115,4 +115,19 @@ test('the page names the day tracking began when the period reaches back further
   expect(startLabel(MONTH)).toBe('30 days ago')
   expect(startLabel(LATE)).toBe('On 1 Oct')
   expect(startLabel(ALL)).toBe('On 15 Jul')
+})
+
+test('the date range is a label with an en dash, and a tip that adds how far the history reaches', () => {
+  const { first, last } = MONTH.period
+  expect(rangeChip(first, last, LATE.coverage)).toEqual({
+    label: '14 Sep – 13 Oct',
+    tip: '14 Sep – 13 Oct. Tracking since 1 Oct.',
+  })
+  // A history that covers the whole period adds nothing.
+  expect(rangeChip(first, last, COVERED)).toEqual({ label: '14 Sep – 13 Oct', tip: '14 Sep – 13 Oct' })
+  expect(rangeChip(first, last, { ...LATE.coverage, tracking_since: null, tracked_days: 0 }).tip).toBe(
+    '14 Sep – 13 Oct. No history yet.',
+  )
+  // One day is one day.
+  expect(rangeChip('2026-10-13', '2026-10-13', COVERED).label).toBe('13 Oct')
 })

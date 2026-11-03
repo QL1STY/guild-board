@@ -59,7 +59,7 @@ test.describe('Your profile', () => {
   test('the header has the name and tag, the server and UID, and what the player is doing', async ({ page }) => {
     await expect(page.getByTestId('your-name')).toHaveText('Traveler#2048')
     await expect(page.getByTestId('your-header')).toHaveText('Europe. UID 700000001, checked with your HoYoLAB login.')
-    await expect(page.getByTestId('your-status')).toHaveText('Guild Board open')
+    await expect(page.getByTestId('your-status')).toHaveText('Not in game')
     await expect(page.getByRole('link', { name: 'Back to Friends' })).toHaveAttribute('href', '#/friends')
   })
 
@@ -81,7 +81,7 @@ test.describe('Your profile', () => {
   })
 
   test('each tile says what a friend would read, and a tile that is off says Only you', async ({ page }) => {
-    await expect(tile(page, 'Status')).toContainText('Guild Board open')
+    await expect(tile(page, 'Status')).toContainText('Not in game')
     await expect(tile(page, 'Status')).toContainText('and when you were last seen')
     await expect(tile(page, 'Primogems')).toContainText('16,040')
     await expect(tile(page, 'Primogems')).toContainText('now, and 9,880 earned in October')

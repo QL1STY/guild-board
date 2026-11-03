@@ -616,6 +616,8 @@ export type Pulls = {
      * well, "refused" once HoYoverse refused the login.
      */
     login: 'on' | 'minting' | 'failed' | 'refused' | null
+    /** Minutes between the history's updates by itself: with the login's keys, or while a link kept from a press lives; null otherwise. */
+    every_minutes: number | null
   }
   banners: Banner[]
   pity: PityCard[]
@@ -746,7 +748,7 @@ export type WeaponType = 'Sword' | 'Claymore' | 'Polearm' | 'Bow' | 'Catalyst'
 export type Slot = 'flower' | 'plume' | 'sands' | 'goblet' | 'circlet'
 export type Weight = 'wants' | 'some' | 'none'
 export type Pronouns = { she: string; her: string; hers: string }   // "she"/"her"/"her", "he"/"him"/"his", "they"/"them"/"their"
-export type CharSync = { can_refresh: boolean; wait_minutes: number | null; reading: boolean; read_at: string | null; calculator: 'on' | 'off' | 'unknown'; message: string | null }
+export type CharSync = { can_refresh: boolean; wait_minutes: number | null; reading: boolean; /** What stops the sync until the player acts: paused, the login to give again, or a check to pass. */ blocked: 'paused' | 'login_needed' | 'verification_needed' | null; read_at: string | null; calculator: 'on' | 'off' | 'unknown'; message: string | null; /** Minutes between the reads it makes by itself. */ every_minutes: number }
 
 export type RosterEntry = {
   key: string; name: string; element: Element; weapon: WeaponType; rarity: 4 | 5

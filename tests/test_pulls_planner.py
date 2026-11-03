@@ -75,7 +75,7 @@ def test_the_model_is_empty_before_any_import(core):
     # The importer's live state (its day-long link) replaces this block in the route; the planner's has the same keys.
     assert model["import"] == {
         "state": "idle", "last_at": None, "found": 0, "pages": 0, "pool": None, "message": None,
-        "auto": None, "auto_stopped": None, "login": None,
+        "auto": None, "auto_stopped": None, "login": None, "every_minutes": None,
     }
     assert model["savings"]["pulls"] is None and model["savings"]["estimated"] is None
     # Without an account the ledger still names the next version, with the switches off and no total.
@@ -117,7 +117,7 @@ def test_the_model_has_the_four_cards_and_the_history(core):
     assert model["history_from"] == iso(NOW - timedelta(days=180))
     assert model["import"] == {
         "state": "done", "last_at": iso(NOW), "found": 387, "pages": 20, "pool": None, "message": None,
-        "auto": None, "auto_stopped": None, "login": None,
+        "auto": None, "auto_stopped": None, "login": None, "every_minutes": None,
     }
 
 

@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test'
 import { ARTIFACT_HISTORY_FIXTURE, HISTORY_FIXTURE, LEDGER_FIXTURE, type Ledger, type LedgerHistory } from '../src/ledgertypes.ts'
 import { expect, test } from './fixtures.ts'
+import { ring } from './ring.ts'
 
 /**
  * The Ledger page (the ledger plan, Task 8). Most tests answer the page's two reads with the fixtures the page was built
@@ -99,9 +100,9 @@ test('empty ledger shows the import explanation', async ({ page, core }) => {
   await answer(page, model, () => ({ entries: [], more: false }))
   await page.goto(`${core.origin}/#/ledger`)
   const empty = page.getByTestId('ledger-empty')
-  await expect(empty).toContainText('open Feedback from the Paimon menu in the game once, then press Import from the game')
+  await expect(empty).toContainText('open Feedback from the Paimon menu in the game once, then press Import.')
   await expect(empty).toContainText('only reads')
-  await expect(page.getByRole('button', { name: 'Import from the game' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Import', exact: true })).toBeVisible()
 })
 
 test('with the HoYoLAB login the empty ledger says it is reading the history now', async ({ page, core }) => {
@@ -109,17 +110,23 @@ test('with the HoYoLAB login the empty ledger says it is reading the history now
   model.empty = true
   model.last_import = null
   model.import.login = 'on'
+  model.import.every_minutes = 30 // what the core sends where the login updates the history by itself
   await answer(page, model, () => ({ entries: [], more: false }))
   await page.goto(`${core.origin}/#/ledger`)
   const empty = page.getByTestId('ledger-empty')
   await expect(empty).toContainText('Guild Board is reading them now with your HoYoLAB login.')
   await expect(empty).not.toContainText('open Feedback')
-  await expect(page.getByTestId('ledger-import')).toHaveText('Updates automatically with your HoYoLAB login')
-  // Import from the game stays, for a reading of the game's own link.
-  await expect(page.getByRole('button', { name: 'Import from the game' })).toBeVisible()
+  // The ring's sentence, which is its accessible name, says it; the few words beside it say that nothing was read yet.
+  await expect(ring(page, 'ledger-import').mark).toHaveAttribute(
+    'aria-label',
+    'Updates automatically with your HoYoLAB login',
+  )
+  await expect(ring(page, 'ledger-import').label).toHaveText('Not read yet')
+  // Import stays, for a reading of the game's own link.
+  await expect(page.getByRole('button', { name: 'Import', exact: true })).toBeVisible()
 })
 
-test("Import from the game starts the Pulls page's import and shows the ledger's progress", async ({ page, core }) => {
+test("Import starts the Pulls page's import and shows the ledger's progress", async ({ page, core }) => {
   const model = structuredClone(LEDGER_FIXTURE)
   let pressed = false
   await page.route('**/api/pulls/import', (route) => {
@@ -132,9 +139,10 @@ test("Import from the game starts the Pulls page's import and shows the ledger's
   })
   await page.route('**/api/ledger/history?*', (route) => route.fulfill({ json: HISTORY_FIXTURE }))
   await page.goto(`${core.origin}/#/ledger`)
-  const line = page.getByTestId('ledger-import')
-  await expect(line).toHaveText(/^History from the game up to /)
-  await page.getByRole('button', { name: 'Import from the game' }).click()
-  await expect(line).toHaveText('Reading primogem history… 340 entries')
+  const { label, mark } = ring(page, 'ledger-import')
+  await expect(mark).toHaveAttribute('aria-label', /^History from the game up to /)
+  await page.getByRole('button', { name: 'Import', exact: true }).click()
+  await expect(mark).toHaveAttribute('aria-label', 'Reading primogem history… 340 entries')
+  await expect(label).toHaveText('340 entries')
   await expect(page.getByRole('button', { name: 'Importing…' })).toHaveAttribute('aria-disabled', 'true')
 })

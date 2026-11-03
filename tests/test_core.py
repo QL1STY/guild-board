@@ -1145,6 +1145,324 @@ async def test_the_demo_updates_with_its_stand_in_login_and_recovers_from_its_lo
         await core.stop()
 
 
+# ---------------------------------------------------------------- Import reads with the login first (the freshness design, section 5)
+
+_PRESS_UID = 700000001
+_PRESS_KEY = "MADE-UP-KEY-0123456789"
+
+
+class _PressedGame:
+    """What a press reads of the game's files (the importer's cache reader): each read remembered, and the one link it
+    finds is made up."""
+
+    def __init__(self) -> None:
+        self.reads = 0
+
+    def __call__(self):
+        from pulls_samples import wish_link
+
+        self.reads += 1
+        return [wish_link(_PRESS_KEY)]
+
+
+def _pressed_core(tmp_path, clock, *, login: bool = True):
+    """A live core whose importer reads three wishes from HoYoverse's stand-in, with a key from the login (its mint gives
+    the made-up key) or, from the game's files, with the made-up link of `_PressedGame`. `login` False is a core with no
+    login."""
+    import functools
+
+    from pulls_samples import History, record, wish_link
+
+    from guildboard.pulls import wishapi
+    from guildboard.pulls.gamecache import MintedLink
+
+    if login:
+        core, source, _ = _live_core_with_login(tmp_path, clock)
+    else:
+        paths = AppPaths(tmp_path / "data")
+        paths.ensure()
+        source = AccountSource()
+        core = Core(paths, demo=False, clock=clock, source=source, process_lister=lambda: set())
+        core.update_settings({"risk_acknowledged": True})
+    first = 1_760_000_000_000_000_000
+    history = History(
+        {"301": [record(first + n, "301", f"2026-10-12 21:1{n}:03", "Fischl", "Character", 4) for n in (1, 2, 3)]},
+        keys=[_PRESS_KEY],
+    )
+    game = _PressedGame()
+    core.wish_import = WishImporter(
+        core.store, clock, core.bus, game, functools.partial(wishapi.fetch_page, fetch=history), FakeSleep(clock), None,
+        ready=lambda: True, login=core._login_status,
+    )
+
+    async def mint_key(auth_appid):
+        source.minted.append(auth_appid)
+        if source.refuse:
+            from guildboard.records import LoginNeeded
+
+            raise LoginNeeded("HoYoLAB no longer accepts the saved login.")
+        return MintedLink(wish_link(_PRESS_KEY), _PRESS_UID, "os_euro") if auth_appid == "webview_gacha" else None
+
+    if login:
+        source.mint_key = mint_key
+    return core, source, game, history
+
+
+async def _press_ended(core) -> None:
+    await _until(lambda: core._import_task is None or core._import_task.done())
+    await _until(lambda: not core.wish_import.running)
+    await asyncio.gather(*core.wish_import._tasks)  # the fallback's own task, when one started
+
+
+async def test_import_with_the_login_reads_no_game_file(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    try:
+        assert await core.import_pressed() == "login"
+        await _press_ended(core)
+        assert source.minted == ["webview_gacha"]  # the mint is asked
+        assert game.reads == 0  # the game's files are not
+        assert core.store.wish_count(_PRESS_UID) == 3
+        assert core.wish_import.state()["state"] == "done" and core.wish_import.state()["login"] == "on"
+    finally:
+        await core.stop()
+
+
+async def test_import_falls_back_to_the_game_when_the_login_is_refused(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    source.refuse = True
+    try:
+        assert await core.import_pressed() == "login"
+        await _press_ended(core)
+        assert source.minted == ["webview_gacha"]
+        assert game.reads == 1  # the game-file Import ran on the same press
+        assert core.store.wish_count(_PRESS_UID) == 3 and core.wish_import.state()["state"] == "done"
+        assert core.wish_import.state()["login"] == "refused" and core._login_status() == "refused"
+        # The next press asks no key of a refused login: it reads the game at once.
+        assert await core.import_pressed() == "game"
+        await _press_ended(core)
+        assert source.minted == ["webview_gacha"] and game.reads == 2
+    finally:
+        await core.stop()
+
+
+async def test_import_falls_back_to_the_game_when_the_login_gives_no_key(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock)
+
+    async def no_key(auth_appid):
+        source.minted.append(auth_appid)
+        return None
+
+    source.mint_key = no_key
+    try:
+        assert await core.import_pressed() == "login"
+        await _press_ended(core)
+        assert source.minted == ["webview_gacha"] and game.reads == 1
+        assert core.store.wish_count(_PRESS_UID) == 3
+        assert core._login_status() == "on"  # no key is no refusal: the automatic updates go on
+    finally:
+        await core.stop()
+
+
+async def test_import_without_a_login_reads_the_game(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock, login=False)
+    try:
+        assert await core.import_pressed() == "game"
+        await _press_ended(core)
+        assert game.reads == 1 and core.store.wish_count(_PRESS_UID) == 3
+        assert core.wish_import.state()["state"] == "done"
+    finally:
+        await core.stop()
+
+
+async def test_import_with_the_sync_paused_reads_the_game(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    core.set_paused(True)
+    try:
+        assert await core.import_pressed() == "game"
+        await _press_ended(core)
+        assert source.minted == [] and game.reads == 1
+    finally:
+        await core.stop()
+
+
+async def test_import_while_an_update_runs_is_busy(tmp_path, clock):
+    from guildboard.pulls.importer import ImportBusy
+
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    try:
+        core.wish_import.running = True  # an update with the login (or an import) runs
+        with pytest.raises(ImportBusy) as busy:
+            await core.import_pressed()
+        assert str(busy.value) == "An import is running."
+        assert core._import_task is None and source.minted == [] and game.reads == 0
+        core.wish_import.running = False
+        # Two presses in the same instant: the second is refused too.
+        assert await core.import_pressed() == "login"
+        with pytest.raises(ImportBusy):
+            await core.import_pressed()
+        await _press_ended(core)
+        assert game.reads == 0 and source.minted == ["webview_gacha"]
+    finally:
+        await core.stop()
+
+
+async def test_the_login_run_has_reserved_the_importer_when_the_press_returns(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    try:
+        assert await core.import_pressed() == "login"
+        assert core.wish_import.running  # no gap in which another press, or a tick, could start a second run
+        await _press_ended(core)
+    finally:
+        await core.stop()
+
+
+async def test_import_before_the_first_runs_consent_is_refused_and_asks_nothing(tmp_path, clock):
+    from guildboard.pulls.importer import ImportNotReady
+
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    core.wish_import._ready = lambda: False
+    try:
+        with pytest.raises(ImportNotReady):
+            await core.import_pressed()
+        assert core._import_task is None and source.minted == [] and game.reads == 0
+    finally:
+        await core.stop()
+
+
+async def test_a_run_with_the_login_that_fails_on_the_network_does_not_read_the_game(tmp_path, clock):
+    from pulls_samples import TOO_FREQUENT
+
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    history.refuse = lambda query: TOO_FREQUENT  # the key was given, then the page fetch fails
+    try:
+        assert await core.import_pressed() == "login"
+        await _press_ended(core)
+        assert source.minted == ["webview_gacha"]
+        assert game.reads == 0  # the run reports itself through the importer's states: no fallback
+        assert core.wish_import.state()["state"] == "failed" and core.wish_import.state()["login"] == "failed"
+        assert core.store.wish_count(_PRESS_UID) == 0
+    finally:
+        await core.stop()
+
+
+async def test_a_login_run_that_follows_a_refused_press_link_clears_the_word_that_the_updates_stopped(tmp_path, clock):
+    from pulls_samples import KEY_EXPIRED
+
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    source.refuse = True
+    try:
+        # 1. The login is refused; 2. the game-file import on the same press keeps a link.
+        assert await core.import_pressed() == "login"
+        await _press_ended(core)
+        assert core._login_status() == "refused" and game.reads == 1
+        assert core.wish_import.state()["auto"] is not None
+        # 3. The player logs in again. 4. The login run uses the kept link, which HoYoverse now refuses.
+        source.refuse = False
+        core.forget_login_refusal()
+        history.keys[_PRESS_KEY] = KEY_EXPIRED
+        assert await core.refresh_from_login() is True
+        assert core.wish_import.state()["auto_stopped"] == "expired" and source.minted == ["webview_gacha"]
+        # 5. The next login run mints a key and succeeds: the word that the updates stopped goes.
+        history.keys[_PRESS_KEY] = None
+        assert await core.refresh_from_login() is True
+        assert source.minted == ["webview_gacha", "webview_gacha"]
+        assert core.wish_import.state()["state"] == "done" and core.wish_import.state()["auto_stopped"] is None
+        assert game.reads == 1
+    finally:
+        await core.stop()
+
+
+async def test_a_press_through_the_login_clears_the_word_that_the_updates_stopped(tmp_path, clock):
+    from guildboard.pulls.importer import ImportBusy
+
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    try:
+        core.wish_import._auto_stopped = "expired"
+        assert await core.import_pressed() == "login"
+        assert core.wish_import.state()["auto_stopped"] is None  # at once, whatever the run comes to
+        await _press_ended(core)
+        assert core.wish_import.state()["auto_stopped"] is None
+        # A press that is refused as busy leaves it as it was.
+        core.wish_import._auto_stopped = "expired"
+        core.wish_import.running = True
+        with pytest.raises(ImportBusy):
+            await core.import_pressed()
+        assert core.wish_import.state()["auto_stopped"] == "expired"
+        core.wish_import.running = False
+    finally:
+        await core.stop()
+
+
+async def test_the_pages_are_not_told_the_history_updates_itself_while_the_sync_is_paused(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    try:
+        assert core._login_status() == "on" and core.wish_import.state()["every_minutes"] == 30
+        assert core.ledger()["import"]["every_minutes"] == 30
+        heard = core.bus.subscribe()
+        core.set_paused(True)
+        assert core._login_status() is None  # the login is there, but nothing is read with it
+        assert core.wish_import.state()["login"] is None and core.wish_import.state()["every_minutes"] is None
+        assert core.ledger()["import"]["every_minutes"] is None
+        assert "pulls_changed" in [heard.get_nowait()["type"] for _ in range(heard.qsize())]  # the pages read the model again
+        core.set_paused(False)
+        assert core._login_status() == "on" and core.wish_import.state()["every_minutes"] == 30
+    finally:
+        await core.stop()
+
+
+async def test_the_pages_are_not_told_the_history_updates_itself_with_the_login_of_another_account(tmp_path, clock):
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    try:
+        core.store.set_meta("account_uid", "700000002")  # the history belongs to another game account than the login
+        assert core._login_of_another_account() is not None
+        assert core._login_status() is None
+        assert core.wish_import.state()["login"] is None and core.wish_import.state()["every_minutes"] is None
+        assert core.ledger()["import"]["every_minutes"] is None
+        core.store.set_meta("account_uid", "700000001")
+        assert core._login_status() == "on" and core.wish_import.state()["every_minutes"] == 30
+        # A login the HoYoverse refused is still said, paused or not: the player has to log in again.
+        core._login_refused = True
+        core.set_paused(True)
+        assert core._login_status() == "refused"
+    finally:
+        await core.stop()
+
+
+async def test_the_planners_refusal_with_no_history_follows_the_logins_updates(tmp_path, clock):
+    from guildboard.pulls.planner import PullsConflict
+
+    core, source, game, history = _pressed_core(tmp_path, clock)
+    try:
+        assert core.pulls._login_on() is True
+        with pytest.raises(PullsConflict, match="reading it now with your HoYoLAB login"):
+            core.pulls.set_settings({"welkin": True})
+        core.set_paused(True)
+        assert core.pulls._login_on() is False
+        with pytest.raises(PullsConflict, match="Open Wish"):
+            core.pulls.set_settings({"welkin": True})
+    finally:
+        await core.stop()
+
+
+async def test_the_demo_import_is_the_run_of_its_stand_in_login(tmp_path, clock):
+    from guildboard.records import LoginNeeded
+
+    core = _core(tmp_path, clock, demo=True)
+    try:
+        assert await core.import_pressed() == "login"
+        await _press_ended(core)
+        assert core.wish_import.state()["state"] == "done" and core.wish_import.state()["found"] == 3
+        assert core.wish_import.ledger_state()["state"] == "done"
+        # With its stand-in login refused (a demo fault), the demo reads its stand-in links, as it always did.
+        core.wish_import.drop_minted()  # its key is not kept for ever: the next one is asked for
+        core.source.fault = LoginNeeded("HoYoLAB no longer accepts the saved login.")
+        assert await core.import_pressed() == "login"
+        await _press_ended(core)
+        assert core.wish_import.state()["state"] == "done" and core._login_status() == "refused"
+    finally:
+        await core.stop()
+
+
 async def test_refresh_characters_asks_the_scheduler_for_the_characters_group_within_its_limits(tmp_path, clock):
     paths = AppPaths(tmp_path / "data")
     paths.ensure()

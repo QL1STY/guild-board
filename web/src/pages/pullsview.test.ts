@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
+import { ringFill } from '../frame/freshview.ts'
 import type { Banner, NextVersion, PityCard, Pulls, PullsImportEvent, SavingsRow } from '../types.ts'
 import {
   achievementsNote, autoLine, balanceWords, bannerLine, bannersShown, cardForm, cardLabel, chanceWords, correctionLabel,
   endsIn, eventsCount, forecastLine, historyCaption, importLine, importWithAuto, isCertain, isRunning, loginImportLine, luckTiles,
-  pathWords, percent, pityWords, plannerName, plannerWhen, POOL_LABELS, resultWords, rowAmount, rowLabel, sharesPity, skyTitle,
+  pathWords, percent, pityWords, plannerName, plannerWhen, POOL_LABELS, emptyLine, pullsFresh, pullsRunning, resultWords, rowAmount, rowLabel, sharesPity, skyTitle,
   totalAmount, totalLine, typed, uidLine, versionAmount, versionOffers, versionTitle, wishWhen,
 } from './pullsview.ts'
 
@@ -399,7 +400,7 @@ describe('the forecast', () => {
 
 describe('the import line', () => {
   const model = (over: Partial<Pulls['import']> = {}): Pulls['import'] => ({
-    state: 'idle', last_at: null, found: 0, pages: 0, pool: null, message: null, auto: null, auto_stopped: null, login: null,
+    state: 'idle', last_at: null, found: 0, pages: 0, pool: null, message: null, auto: null, auto_stopped: null, login: null, every_minutes: null,
     ...over,
   })
   const event = (over: Partial<PullsImportEvent> = {}): PullsImportEvent => ({
@@ -753,7 +754,7 @@ describe('the luck tiles (the second pass, spec 3.3)', () => {
 describe("the import line's day-long updates (the second pass, spec 3.5)", () => {
   const model = (over: Partial<Pulls['import']> = {}): Pulls['import'] => ({
     state: 'done', last_at: local(9, 24, 19, 52).toISOString(), found: 3, pages: 4, pool: null, message: null, auto: null,
-    auto_stopped: null, login: null, ...over,
+    auto_stopped: null, login: null, every_minutes: null, ...over,
   })
   const until = local(9, 25, 19, 52).toISOString() // 19:52 tomorrow, 24 hours after the import
   const evening = local(9, 24, 20, 5)
@@ -818,7 +819,7 @@ describe("the import line's day-long updates (the second pass, spec 3.5)", () =>
 describe('the import line while the history updates itself with the HoYoLAB login', () => {
   const model = (over: Partial<Pulls['import']> = {}): Pulls['import'] => ({
     state: 'idle', last_at: local(9, 13, 10, 2).toISOString(), found: 0, pages: 0, pool: null, message: null, auto: null,
-    auto_stopped: null, login: 'on', ...over,
+    auto_stopped: null, login: 'on', every_minutes: 30, ...over,
   })
 
   it('says it updates itself, and when it last did, at rest', () => {
@@ -847,5 +848,106 @@ describe('the import line while the history updates itself with the HoYoLAB logi
       'Last import 13 Oct, 10:02. Automatic updates need a fresh HoYoLAB login. Log in again, or open Wish → History ' +
         'in the game and press Import.',
     )
+  })
+})
+
+describe('the empty Pulls page', () => {
+  it('says it is reading the history now where the login updates it, and how to start an import otherwise', () => {
+    expect(emptyLine('on')).toBe('No wish history yet. Guild Board is reading it now with your HoYoLAB login.')
+    expect(emptyLine('minting')).toBe(emptyLine('on'))
+    const today = 'No wish history yet. Open Wish → History in the game, then press Import.'
+    expect(emptyLine(null)).toBe(today)
+    expect(emptyLine('refused')).toBe(today)
+    expect(emptyLine('failed')).toBe(today)
+  })
+})
+
+describe('the freshness ring of the Pulls page', () => {
+  const model = (over: Partial<Pulls['import']> = {}): Pulls['import'] => ({
+    state: 'idle', last_at: local(9, 24, 7, 40).toISOString(), found: 0, pages: 0, pool: null, message: null, auto: null,
+    auto_stopped: null, login: 'on', every_minutes: 30, ...over,
+  })
+  const running = (over: Partial<PullsImportEvent> = {}): PullsImportEvent => ({
+    state: 'running', pool: 'character', pages: 3, found: 41, message: null, ...over,
+  })
+
+  it('shows the progress in a few words, turning, while an import runs', () => {
+    const view = pullsFresh(model(), running(), null, now)
+    expect(view).toMatchObject({ tone: 'gold', label: 'page 3 · 41 new', turning: true })
+    expect(view.tip).toBe('Importing the character event wish, page 3 · 41 new')
+    expect(pullsFresh(model(), running({ pool: null }), null, now).label).toBe('Importing…')
+    // The model alone says a run goes when the stream has told nothing yet.
+    expect(pullsFresh(model({ state: 'running', pool: 'weapon', pages: 1, found: 0 }), null, null, now).label).toBe('page 1 · 0 new')
+  })
+
+  it('keeps turning while the key is asked for after a press, and counts as running', () => {
+    const view = pullsFresh(model({ login: 'minting' }), null, null, now)
+    expect(view).toMatchObject({ tone: 'gold', label: 'Importing…', turning: true, tip: 'Getting a key from HoYoLAB…' })
+    expect(pullsRunning(model({ login: 'minting' }), null)).toBe(true)
+    expect(pullsRunning(model(), null)).toBe(false)
+    expect(pullsRunning(model(), running())).toBe(true)
+    expect(pullsRunning(model({ state: 'running' }), null)).toBe(true)
+    expect(pullsRunning(model({ state: 'running' }), running({ state: 'done' }))).toBe(false) // the stream is the newer word
+  })
+
+  it('is gold with the age of the newest read, and a fill from it, when the login updates the history', () => {
+    const view = pullsFresh(model(), null, null, now)
+    expect(view).toMatchObject({ tone: 'gold', label: '20 min ago', turning: false })
+    expect(view.fill).toBe(ringFill(local(9, 24, 7, 40).toISOString(), 30, now))
+    expect(view.tip).toBe(loginImportLine(null, model()))
+  })
+
+  it('takes the newest of the last import and the last update of the kept link', () => {
+    const tick = local(9, 24, 7, 55).toISOString()
+    const until = local(9, 25, 7, 0).toISOString()
+    const view = pullsFresh(model({ login: null, auto: { until, last_at: tick } }), null, null, now)
+    expect(view.label).toBe('5 min ago')
+    expect(view.fill).toBe(ringFill(tick, 30, now))
+    expect(view.tone).toBe('gold')
+    const kept = model({ login: null, auto: { until, last_at: tick } })
+    expect(view.tip).toBe(importWithAuto(importLine(null, kept), autoLine(kept, now)))
+  })
+
+  it('is grey without an update by itself, and the tip says to press Import', () => {
+    const view = pullsFresh(model({ login: null, every_minutes: null, state: 'done', found: 3, message: 'Imported 3 new wishes.' }), null, null, now)
+    expect(view).toMatchObject({ tone: 'grey', fill: 0, label: '20 min ago' })
+    expect(view.tip).toBe('Imported 3 new wishes. Press Import to update it.')
+    expect(pullsFresh(model({ login: null, every_minutes: null, last_at: null }), null, null, now)).toMatchObject({
+      tone: 'grey', label: 'Not read yet', tip: 'Press Import to update it.',
+    })
+  })
+
+  it('is empty and gold before any read when the login will update it', () => {
+    expect(pullsFresh(model({ last_at: null }), null, null, now)).toMatchObject({ tone: 'gold', fill: 0, label: 'Not read yet' })
+  })
+
+  it('is amber and asks for a login once HoYoverse refused it', () => {
+    const view = pullsFresh(model({ login: 'refused' }), null, null, now)
+    expect(view).toMatchObject({ tone: 'amber', label: 'Log in', turning: false })
+    expect(view.tip).toBe(loginImportLine(null, model({ login: 'refused' })))
+  })
+
+  it('is amber and says it will retry after an update with the login that did not finish', () => {
+    const view = pullsFresh(model({ login: 'failed', state: 'failed', message: 'HoYoverse could not be reached.' }), null, null, now)
+    expect(view).toMatchObject({ tone: 'amber', label: 'Will retry' })
+    expect(view.tip).toContain('Guild Board tries again in half an hour.')
+  })
+
+  it('is amber and asks to open Wish History once the kept link expired', () => {
+    const view = pullsFresh(model({ login: null, every_minutes: null, auto_stopped: 'expired' }), null, null, now)
+    expect(view).toMatchObject({ tone: 'amber', label: 'Open Wish History' })
+    expect(view.tip).toBe('The link from Wish → History has expired. Open it in the game, then press Import.')
+  })
+
+  it('is amber when a press ended in a failure, with its sentence as the tip', () => {
+    const failed: PullsImportEvent = { state: 'failed', pool: null, pages: 0, found: 0, message: 'No wish history link was found.' }
+    const view = pullsFresh(model({ login: null, every_minutes: null }), failed, null, now)
+    expect(view).toMatchObject({ tone: 'amber', label: 'Import failed' })
+    expect(view.tip).toBe('No wish history link was found.')
+  })
+
+  it('shows the refusal of a press as the tip, keeping the rest', () => {
+    const view = pullsFresh(model({ login: null, every_minutes: null }), null, 'An import is already running.', now)
+    expect(view).toMatchObject({ tone: 'grey', label: '20 min ago', tip: 'An import is already running.' })
   })
 })

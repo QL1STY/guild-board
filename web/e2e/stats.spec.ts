@@ -8,9 +8,12 @@ test.beforeEach(async ({ page, core }) => {
   await page.goto(`${core.origin}/#/stats`)
 })
 
+/** The calendar chip beside the title (freshness design, section 2): the range is its label, its tip is its accessible name. */
+const chipOf = (page: Page): Locator => page.locator('.gb-chip', { has: page.getByTestId('period') }).locator('[aria-label]')
+
 test('the tiles show the last 30 days', async ({ page }) => {
   await expect(page.getByRole('radio', { name: '30 days' })).toHaveAttribute('aria-checked', 'true')
-  await expect(page.getByTestId('period')).toHaveText('14 Sep to 13 Oct')
+  await expect(page.getByTestId('period')).toHaveText('14 Sep – 13 Oct')
   const chests = page.getByTestId('tile-chests')
   await expect(chests).toContainText('Chests opened')
   await expect(chests).toContainText('211')
@@ -25,10 +28,10 @@ test('the tiles show the last 30 days', async ({ page }) => {
 
 test('the period switch scopes the tiles', async ({ page }) => {
   await page.getByRole('radio', { name: '7 days' }).click()
-  await expect(page.getByTestId('period')).toHaveText('7 Oct to 13 Oct')
+  await expect(page.getByTestId('period')).toHaveText('7 Oct – 13 Oct')
   await expect(page.getByTestId('tile-chests')).toContainText('▼ 8 vs previous 7 days')
   await page.getByRole('radio', { name: 'All' }).click()
-  await expect(page.getByTestId('period')).toHaveText('15 Jul to 13 Oct')
+  await expect(page.getByTestId('period')).toHaveText('15 Jul – 13 Oct')
   await expect(page.getByTestId('tile-chests')).toContainText('579')
   await expect(page.getByTestId('tile-chests')).toContainText('Since 15 Jul')
   await expect(page.getByText('vs previous')).toHaveCount(0)
@@ -57,7 +60,9 @@ test('partial coverage is said and comparisons are hidden', async ({ page }) => 
     }
   })
   await page.reload()
-  await expect(page.getByTestId('period')).toHaveText('14 Sep to 13 Oct · Tracking since 1 Oct')
+  await expect(page.getByTestId('period')).toHaveText('14 Sep – 13 Oct')
+  // The chip's tip, which is also its accessible name, adds where the history begins.
+  await expect(chipOf(page)).toHaveAttribute('aria-label', '14 Sep – 13 Oct. Tracking since 1 Oct.')
   await expect(page.getByTestId('tile-chests')).toContainText('No earlier period to compare')
   await expect(page.getByTestId('tile-playtime')).toContainText('No earlier period to compare')
   await expect(page.getByText('vs previous')).toHaveCount(0)
@@ -77,7 +82,7 @@ test.describe('before the first sync', () => {
 
   test('the statistics say that there is nothing yet', async ({ page }) => {
     await expect(page.getByText('Nothing to show yet. Statistics build up from the first sync.')).toBeVisible()
-    await expect(page.getByTestId('period')).toHaveText(/ · No history yet$/)
+    await expect(chipOf(page)).toHaveAttribute('aria-label', /\. No history yet\.$/)
     await expect(page.getByTestId('tile-chests')).toHaveCount(0)
   })
 })
@@ -497,7 +502,7 @@ test('the tiles count up to their values', async ({ page, api }) => {
   const value = 'value' in week ? week.value : -1
   expect(value).toBeLessThan(211)
   await page.getByRole('radio', { name: '7 days' }).click()
-  await expect(page.getByTestId('period')).toHaveText('7 Oct to 13 Oct')
+  await expect(page.getByTestId('period')).toHaveText('7 Oct – 13 Oct')
   await page.clock.runFor(100)
   const down = await figureNumber(page, 'chests')
   expect(down).toBeLessThan(211)

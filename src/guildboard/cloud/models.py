@@ -86,12 +86,14 @@ def card_from(row: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def status_of(presence: Mapping[str, Any] | None) -> str | None:
-    """None for a friend who doesn't share Status: they are not called offline, and their row shows nothing there."""
+    """None for a friend who doesn't share Status: they are not called offline, and their row shows nothing there. A friend is
+    in game or offline, nothing between: a row that says Guild Board is open (an older version wrote those) is offline
+    however fresh, as nothing a friend sees may say when a PC is on."""
     if presence is None:
         return None
-    if presence["seen_seconds"] > OFFLINE_AFTER:
+    if presence["state"] != "in_game" or presence["seen_seconds"] > OFFLINE_AFTER:
         return "offline"
-    return "in_game" if presence["state"] == "in_game" else "open"
+    return "in_game"
 
 
 def pills_of(pins: Sequence[str], stats: Mapping[str, Any]) -> list[str]:
@@ -163,7 +165,11 @@ def friend_from(row: Mapping[str, Any], read_at: datetime, today: date) -> dict[
         "uid": row.get("uid"),
         "status": status,
         "since": presence.get("since") if presence is not None and status != "offline" else None,
-        "last_seen": iso(read_at - timedelta(seconds=presence["seen_seconds"])) if presence is not None else None,
+        # Only a game's end is told; the last time a row said Guild Board was open is not.
+        "last_seen": (
+            iso(read_at - timedelta(seconds=presence["seen_seconds"]))
+            if presence is not None and presence["state"] == "in_game" else None
+        ),
         "stats": stats,
         "pills": pills_of(pins, stats),
         "compare": row.get("compare") is True,

@@ -1173,7 +1173,7 @@ test.describe('characters', () => {
     })
   }
 
-  test('the roster with a search, and a card with the arrows to the characters beside it', { tag: CHARACTERS }, async ({ page, core }) => {
+  test('the roster with a search, and a card stepped to by the keys, with the trail and the switch', { tag: CHARACTERS }, async ({ page, core }) => {
     await page.setViewportSize({ width: 1640, height: 1100 })
     await page.goto(`${core.origin}/#/characters`)
     await expect(page.locator('.cr-card[data-key="sandrone"]')).toContainText('Level 90')
@@ -1182,17 +1182,17 @@ test.describe('characters', () => {
     await page.getByRole('radio', { name: 'Name', exact: true }).click()
     await expect(page.locator('.cr-card .cr-kind').first()).toContainText('Catalyst')
     await characters(page, 'roster-search-1640')
-    // A card from the middle of that list, with its arrows both ways, and the first of it, which has none back.
+    // A card from the middle of that list, with the trail and the switch in the bar, and the first of it, stepped back to by the key.
     const names = await page.locator('.cr-card .cr-name').allTextContents()
     expect(names.length).toBeGreaterThan(2)
     await page.locator('.cr-card a.cr-link').nth(1).click()
     await expect(page.locator('.pf-name')).toHaveText(names[1])
-    await expect(page.getByRole('link', { name: `Next character: ${names[2]}` })).toBeVisible()
-    await characters(page, 'profile-arrows-1640')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(new RegExp(`^Characters\\s*›\\s*${names[1]}$`))
+    await characters(page, 'profile-keys-1640')
     await page.keyboard.press('ArrowLeft')
     await expect(page.locator('.pf-name')).toHaveText(names[0])
-    await expect(page.getByLabel('Previous character: none')).toBeVisible()
-    await characters(page, 'profile-arrows-first-1640')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(new RegExp(`^Characters\\s*›\\s*${names[0]}$`))
+    await characters(page, 'profile-keys-first-1640')
   })
 
   const PANES: [name: string, label: string][] = [

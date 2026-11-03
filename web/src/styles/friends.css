@@ -52,7 +52,6 @@
 .frd-dot { position: absolute; right: -2px; top: -2px; width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 2px var(--surface); }
 .frd-ava.big .frd-dot { width: 14px; height: 14px; }
 .frd-dot.game { background: var(--done); }
-.frd-dot.open { background: var(--series); }
 .frd-dot.off { background: var(--deemph); }
 
 /* What a friend is doing: a dot of the status and the words. */
@@ -60,8 +59,6 @@
 .frd-st::before { content: ''; flex: none; width: 9px; height: 9px; border-radius: 50%; }
 .frd-st.game { color: var(--good); font-weight: 700; }
 .frd-st.game::before { background: var(--done); }
-.frd-st.open { color: var(--ink); font-weight: 700; }
-.frd-st.open::before { background: var(--series); }
 .frd-st.off { color: var(--muted); }
 .frd-st.off::before { background: var(--deemph); }
 .frd-st.none::before { display: none; }
@@ -185,7 +182,6 @@
 .prf-nm span { margin-left: 6px; color: var(--gold-ink); font-size: 17px; }
 .prf-meta { color: var(--muted); font-size: 13px; }
 .prf-meta.game { color: var(--good); font-weight: 700; }
-.prf-meta.open { color: var(--ink); font-weight: 700; }
 .prf-h { margin-top: 18px; }
 .prf-always { margin-top: 4px; color: var(--ink2); font-size: 12.5px; }
 .prf-none { margin-top: 12px; color: var(--ink2); }
@@ -233,7 +229,6 @@
 .cmp-nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 18px; font-weight: 800; }
 .cmp-meta { color: var(--muted); font-size: 12.5px; }
 .cmp-meta.game { color: var(--good); font-weight: 700; }
-.cmp-meta.open { color: var(--ink); font-weight: 700; }
 .cmp-score { text-align: center; }
 .cmp-score b { display: block; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .cmp-mine { color: var(--gold-ink); }

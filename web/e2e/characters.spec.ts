@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from './fixtures.ts'
+import { ring } from './ring.ts'
 
 /**
  * The demo ships none of the game's pictures and downloads none, so its pages show the drawn signs. The tests of how a
@@ -122,7 +123,7 @@ test('the entrance plays on the first visit only: coming back from a card or ano
       if (document.querySelector('.cr-page') !== null && document.getAnimations().some((animation) => !(animation instanceof CSSTransition) && (animation.effect as KeyframeEffect | null)?.target?.closest?.('.cr-page'))) seen.animated = true
     }).observe(document.body, { childList: true, subtree: true, attributes: true })
   })
-  await page.getByRole('link', { name: 'All characters' }).click()
+  await page.locator('.cx-trail').getByRole('link', { name: 'Characters', exact: true }).click()
   await expect(page.locator('.cr-card').first()).toBeVisible()
   expect(await page.locator('.cr-card .cr-name').allTextContents()).toEqual(shown)
   await expect(page.getByRole('textbox', { name: 'Search characters' })).toHaveValue('a')
@@ -156,7 +157,7 @@ test('the roster is read again quietly: a card that changed updates and the othe
   await expect(page.getByText('Reading your characters')).toHaveCount(0)
 })
 
-test("a character's card has arrows to the characters beside her in the roster as the player left it, by the keyboard and on the screen", async ({ page, core, api }) => {
+test("the ← and → keys step to the characters beside a card in the roster as the player left it, and the card has no arrows on the screen", async ({ page, core, api }) => {
   const all = (await api.get<{ entries: { key: string; name: string; weapon: string }[] }>('/api/characters')).entries
   const order = all.filter((one) => one.weapon === 'Catalyst').sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
   expect(order.length).toBeGreaterThan(3)
@@ -166,9 +167,11 @@ test("a character's card has arrows to the characters beside her in the roster a
   await expect(page.locator('.cr-card')).toHaveCount(order.length)
   await page.locator(`.cr-card[data-key="${order[0].key}"] a.cr-link`).click()
   await expect(page.locator('.pf-name')).toHaveText(order[0].name)
-  // The first of the roster: no arrow back, and the arrow keys stop there.
-  await expect(page.getByLabel('Previous character: none')).toBeVisible()
-  await expect(page.getByRole('link', { name: `Next character: ${order[1].name}` })).toBeVisible()
+  // The title holds the trail alone: the arrows that stood in the top bar are gone (freshness design, section 4).
+  await expect(page.getByRole('link', { name: /^Next character/ })).toHaveCount(0)
+  await expect(page.getByRole('link', { name: /^Previous character/ })).toHaveCount(0)
+  await expect(page.locator('.pf-arrow')).toHaveCount(0)
+  // The first of the roster: the left key stops there.
   await page.keyboard.press('ArrowLeft')
   await expect(page.locator('.pf-name')).toHaveText(order[0].name)
   await expect(page).toHaveURL(new RegExp(`#/characters/${order[0].key}$`))
@@ -187,14 +190,12 @@ test("a character's card has arrows to the characters beside her in the roster a
       document.getAnimations().filter((animation) => (animation.effect as KeyframeEffect | null)?.getKeyframes().some((frame) => 'translate' in frame)).length,
     )
   expect(await entering()).toBe(0)
-  // The arrows on the screen: the neighbours' names are their names, and a click moves on.
-  await expect(page.getByRole('link', { name: `Previous character: ${order[0].name}` })).toBeVisible()
-  // With both arrows the top bar is still one row: the title and the plate are level.
+  // With the trail, the switch and the ring the top bar is still one row: the title and the plate are level.
   const rows = await page.evaluate(() => [document.querySelector('.gb-title')!, document.querySelector('.gb-plate-wrap')!].map((one) => one.getBoundingClientRect().top))
   expect(Math.abs(rows[0] - rows[1])).toBeLessThan(40)
-  await page.getByRole('link', { name: `Next character: ${order[2].name}` }).click()
+  await page.keyboard.press('ArrowRight')
   await expect(page.locator('.pf-name')).toHaveText(order[2].name)
-  await page.getByRole('link', { name: `Previous character: ${order[1].name}` }).click()
+  await page.keyboard.press('ArrowLeft')
   await expect(page.locator('.pf-name')).toHaveText(order[1].name)
   // Not while the Card panel is open.
   await page.getByRole('button', { name: /card$/ }).first().click()
@@ -205,7 +206,7 @@ test("a character's card has arrows to the characters beside her in the roster a
 
 test('a tip of the character before goes when the card moves on, and the keys wait while the Card panel is open', async ({ page, core }) => {
   await page.goto(`${core.origin}/#/characters/sandrone`)
-  await expect(page.locator('.pf-arrow.next')).toBeVisible()
+  await expect(page.locator('.pf-name')).toHaveText('Sandrone')
   await page.locator('.pf-panel [tabindex="0"]').first().hover({ position: { x: 20, y: 8 } })
   await expect(page.locator('.cx-tip')).toBeVisible()
   await page.keyboard.press('ArrowRight')
@@ -219,7 +220,7 @@ test('a tip of the character before goes when the card moves on, and the keys wa
   expect(page.url()).toBe(here)
 })
 
-test('the last of the roster has no arrow forward, and the arrows wait for the quiet of reduced motion', async ({ page, core, api }) => {
+test('the → key stops at the last of the roster, and the cards step without a cross-fade under reduced motion', async ({ page, core, api }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   const all = (await api.get<{ entries: { key: string; name: string }[] }>('/api/characters')).entries
   await page.goto(`${core.origin}/#/characters`)
@@ -230,7 +231,6 @@ test('the last of the roster has no arrow forward, and the arrows wait for the q
   const before = all.find((one) => one.name === names.at(-2))!
   await page.goto(`${core.origin}/#/characters/${last.key}`)
   await expect(page.locator('.pf-name')).toHaveText(last.name)
-  await expect(page.getByLabel('Next character: none')).toBeVisible()
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('.pf-name')).toHaveText(last.name)
   await page.keyboard.press('ArrowLeft')
@@ -255,7 +255,7 @@ test("the pictures are asked for at the size they are shown, the roster's faces 
   await expect(page.locator('.pf-cstage')).toHaveCount(1)
   await page.getByRole('navigation', { name: "Sandrone's pages" }).getByRole('button', { name: 'Attributes' }).click()
   await expect(page.locator('.pf-cstage')).toHaveCount(0)
-  await page.getByRole('link', { name: 'All characters' }).click()
+  await page.locator('.cx-trail').getByRole('link', { name: 'Characters', exact: true }).click()
   await expect(page.locator('.pf-art')).toHaveCount(0)
   expect(asked.length).toBeGreaterThan(0)
   for (const address of asked) {
@@ -398,7 +398,7 @@ test("the picture quality sets how large her art is fetched, at once and without
   await expect(art).toHaveAttribute('src', /\/api\/art\/[0-9a-f]{32}\?size=1536$/)
   await api.put('/api/settings', { picture_quality: 'high' })
   await expect(art).toHaveAttribute('src', /\/api\/art\/[0-9a-f]{32}$/)
-  await page.getByRole('link', { name: 'All characters' }).click()
+  await page.locator('.cx-trail').getByRole('link', { name: 'Characters', exact: true }).click()
   await api.put('/api/settings', { picture_quality: 'low' })
   await expect(page.locator('.cr-card').first()).toBeVisible()
   const faces = await page.locator('.cr-card .pic img').evaluateAll((images) => images.map((image) => image.getAttribute('src')))
@@ -476,7 +476,7 @@ test('a card with no stars puts the six on a ring, and each keeps its number', a
   await expect(page.locator('.pf-cwrap .pf-cstar').first()).toHaveAttribute('aria-label', /^C1\. /)
 })
 
-test("the arrows on a card are two buttons of one size with a face and no name, the name is in a tip, and they stay put from card to card", async ({ page, core, api }) => {
+test("walking the roster with the keys keeps the top bar in one row: the trail, the switch and the ring, and nothing else of the old arrows", async ({ page, core, api }) => {
   const all = (await api.get<{ entries: { key: string; name: string; weapon: string }[] }>('/api/characters')).entries
   const order = all.filter((one) => one.weapon === 'Catalyst').sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
   const longest = order.reduce((one, other) => (other.name.length > one.name.length ? other : one))
@@ -486,53 +486,44 @@ test("the arrows on a card are two buttons of one size with a face and no name, 
   await page.getByRole('radio', { name: 'Name', exact: true }).click()
   await expect(page.locator('.cr-card')).toHaveCount(order.length)
   await page.locator(`.cr-card[data-key="${order[0].key}"] a.cr-link`).click()
-  const boxes = async () =>
+  const bar = async () =>
     page.evaluate(() => {
       const box = (element: Element | null) => {
         const rect = element!.getBoundingClientRect()
-        return { left: Math.round(rect.left * 10) / 10, width: Math.round(rect.width * 10) / 10, height: Math.round(rect.height * 10) / 10 }
+        return { left: rect.left, right: rect.right, top: rect.top, width: Math.round(rect.width * 10) / 10, height: Math.round(rect.height * 10) / 10 }
       }
       return {
-        previous: box(document.querySelector('.pf-arrow.previous')),
-        next: box(document.querySelector('.pf-arrow.next')),
-        all: box([...document.querySelectorAll('.gb-top a.gb-btn')].find((one) => one.textContent === 'All characters') ?? null),
-        refresh: box(document.querySelector('.gb-top .cx-refresh')),
+        title: box(document.querySelector('.gb-top .gb-title')),
+        switcher: box(document.querySelector('.gb-top .cx-switch')),
+        ring: box(document.querySelector('.gb-top .gb-fresh-ring-box')),
+        old: ['.pf-arrow', '.cx-refresh', '.gb-top a.gb-btn'].map((selector) => document.querySelectorAll(selector).length),
       }
     })
   await expect(page.locator('.pf-name')).toHaveText(order[0].name)
-  const first = await boxes()
-  expect(first.previous.width, 'the same width').toBe(first.next.width)
-  expect(first.previous.height, 'the same height as All characters').toBe(first.all.height)
-  expect(first.next.height).toBe(first.all.height)
-  expect(first.refresh.height, 'and as Refresh').toBe(first.all.height)
-  // No name on a button, only the arrow and a face; the end is a disabled button that stays in place.
-  await expect(page.locator('.pf-arrow')).toHaveText(['', ''])
-  await expect(page.getByRole('button', { name: 'Previous character: none' })).toBeDisabled()
-  await expect(page.locator('.pf-arrow.next img, .pf-arrow.next svg')).not.toHaveCount(0)
-  // Walking through the roster to its last card, in the order of the sort: the buttons never move or change size.
-  for (let at = 1; at < order.length; at += 1) {
-    await page.keyboard.press('ArrowRight')
-    await expect(page.locator('.pf-name')).toHaveText(order[at].name)
-    expect(await boxes(), `on ${order[at].name}`).toEqual(first)
+  const first = await bar()
+  expect(first.old, 'no arrows, no Refresh and no All characters or Her profile buttons').toEqual([0, 0, 0])
+  // Walking through the roster to its last card, in the order of the sort: the switch follows the title, the ring keeps its
+  // place at the right of both, the three are level, and the ring never changes size.
+  for (let at = 0; at < order.length; at += 1) {
+    if (at > 0) {
+      await page.keyboard.press('ArrowRight')
+      await expect(page.locator('.pf-name')).toHaveText(order[at].name)
+    }
+    const now = await bar()
+    expect(now.switcher.left, `the switch follows the title on ${order[at].name}`).toBeGreaterThanOrEqual(now.title.left)
+    expect(now.ring.left, `the ring is at the right of the switch on ${order[at].name}`).toBeGreaterThan(now.switcher.right)
+    expect(Math.abs(now.switcher.top + now.switcher.height / 2 - (now.title.top + now.title.height / 2)), 'level with the title').toBeLessThan(20)
+    expect(Math.abs(now.ring.top + now.ring.height / 2 - (now.title.top + now.title.height / 2)), 'level with the title').toBeLessThan(20)
+    expect(now.ring.width).toBe(first.ring.width)
+    expect(now.ring.height).toBe(first.ring.height)
+    expect(now.ring.right, 'the ring stays at the right end').toBe(first.ring.right)
   }
-  await expect(page.getByRole('button', { name: 'Next character: none' })).toBeDisabled()
-  // The longest name does not widen anything either.
+  // The longest name does not push the ring out of the bar either.
   await page.goto(`${core.origin}/#/characters/${longest.key}`)
   await expect(page.locator('.pf-name')).toHaveText(longest.name)
-  expect((await boxes()).next.width).toBe(first.next.width)
-  // The name is in a tip on the pointer and on the keyboard's focus, and a button has its accessible name.
-  await page.goto(`${core.origin}/#/characters`)
-  await page.getByRole('textbox', { name: 'Search characters' }).fill('catalyst')
-  await page.getByRole('radio', { name: 'Name', exact: true }).click()
-  await page.locator(`.cr-card[data-key="${order[1].key}"] a.cr-link`).click()
-  await expect(page.locator('.pf-name')).toHaveText(order[1].name)
-  const next = page.getByRole('link', { name: `Next character: ${order[2].name}` })
-  await next.hover()
-  await expect(page.getByRole('tooltip')).toHaveText(order[2].name)
-  await page.mouse.move(5, 500)
-  await expect(page.getByRole('tooltip')).toHaveCount(0)
-  await page.getByRole('link', { name: `Previous character: ${order[0].name}` }).focus()
-  await expect(page.getByRole('tooltip')).toHaveText(order[0].name)
+  const widest = await bar()
+  expect(widest.ring.right).toBe(first.ring.right)
+  expect(widest.ring.left).toBeGreaterThan(widest.switcher.right)
 })
 
 test('a pane that fits never shows a scrollbar as it comes in', async ({ page, core }) => {
@@ -542,4 +533,127 @@ test('a pane that fits never shows a scrollbar as it comes in', async ({ page, c
   const pane = page.locator('.pf-pane')
   await expect(pane).toHaveClass(/settling/)
   await expect(pane).not.toHaveClass(/settling/)
+})
+
+/** The pages a character has: her profile and her planner (the freshness design, section 4). */
+const PAGES = [
+  { name: 'profile', hash: '#/characters/sandrone' },
+  { name: 'planner', hash: '#/characters/sandrone/plan' },
+] as const
+
+for (const one of PAGES) {
+  test(`the title of her ${one.name} holds the trail alone, and its Characters link goes to the roster`, async ({ page, core }) => {
+    await page.goto(`${core.origin}/${one.hash}`)
+    const title = page.getByRole('heading', { level: 1 })
+    await expect(title).toHaveText(/^Characters\s*›\s*Sandrone$/)
+    // Only the link back in the title: the switch, the arrows and the buttons that stood in the top bar are not in it.
+    await expect(title.getByRole('link')).toHaveCount(1)
+    await expect(title.getByRole('button')).toHaveCount(0)
+    await expect(title.getByRole('link', { name: 'Characters', exact: true })).toHaveAttribute('href', '#/characters')
+    await expect(page.getByRole('link', { name: 'All characters' })).toHaveCount(0)
+    await expect(page.getByRole('link', { name: 'Her profile' })).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Refresh' })).toHaveCount(0)
+    await title.getByRole('link', { name: 'Characters', exact: true }).click()
+    await expect(page).toHaveURL(/#\/characters$/)
+    await expect(page.locator('.cr-card').first()).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Characters')
+  })
+}
+
+test('the switch marks the page she is on, and Profile and Planner move between her two views', async ({ page, core }) => {
+  await page.goto(`${core.origin}/#/characters/sandrone`)
+  const group = page.getByRole('group', { name: "Sandrone's pages" })
+  const profile = group.getByRole('link', { name: 'Profile', exact: true })
+  const planner = group.getByRole('link', { name: 'Planner', exact: true })
+  await expect(group.getByRole('link')).toHaveCount(2)
+  await expect(profile).toHaveAttribute('aria-current', 'page')
+  await expect(planner).not.toHaveAttribute('aria-current', 'page')
+  // In the top bar after the title (the Frame's `beside` slot), and not inside it.
+  expect(
+    await group.evaluate((element) => {
+      const title = document.querySelector('header.gb-top > h1.gb-title')!
+      return element.parentElement === title.parentElement && !title.contains(element) && title.compareDocumentPosition(element) === Node.DOCUMENT_POSITION_FOLLOWING
+    }),
+  ).toBe(true)
+  await planner.click()
+  await expect(page).toHaveURL(/#\/characters\/sandrone\/plan$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^Characters\s*›\s*Sandrone$/)
+  await expect(planner).toHaveAttribute('aria-current', 'page')
+  await expect(profile).not.toHaveAttribute('aria-current', 'page')
+  await profile.click()
+  await expect(page).toHaveURL(/#\/characters\/sandrone$/)
+  await expect(profile).toHaveAttribute('aria-current', 'page')
+  await expect(page.locator('.pf-name')).toHaveText('Sandrone')
+})
+
+test('the ← and → keys step the profile to the character beside her, and the trail and the switch follow', async ({ page, core }) => {
+  // The keys step by the roster as the player left it, which the page reads beside her model: they wait for it.
+  const roster = page.waitForResponse((response) => /\/api\/characters$/.test(response.url()))
+  await page.goto(`${core.origin}/#/characters/sandrone`)
+  await roster
+  await expect(page.locator('.pf-name')).toHaveText('Sandrone')
+  await page.waitForFunction(() => document.getAnimations().length === 0, undefined, { timeout: 15_000 })
+  await page.keyboard.press('ArrowRight')
+  await expect(page).not.toHaveURL(/#\/characters\/sandrone$/)
+  await expect(page.locator('.pf-name')).not.toHaveText('Sandrone')
+  const next = (await page.locator('.pf-name').textContent())!
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(new RegExp(`^Characters\\s*›\\s*${next}$`))
+  const group = page.getByRole('group', { name: `${next}'s pages` })
+  await expect(group.getByRole('link', { name: 'Profile', exact: true })).toHaveAttribute('aria-current', 'page')
+  await page.keyboard.press('ArrowLeft')
+  await expect(page).toHaveURL(/#\/characters\/sandrone$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^Characters\s*›\s*Sandrone$/)
+})
+
+test('a press of the ring while it is too soon sends nothing, and its name says when to try again', async ({ page, core, api }) => {
+  await page.goto(`${core.origin}/#/characters/sandrone`)
+  await api.advance(6 * 60) // past the wait that follows the sync at start-up
+  const { label, mark: button } = ring(page, 'characters-sync')
+  await expect(button).not.toHaveAttribute('aria-disabled', 'true')
+  await expect(button).toHaveAccessibleName(/^Read from HoYoLAB .*Reads again by itself every 6 hours\.$/)
+  const presses: string[] = []
+  page.on('request', (request) => {
+    if (request.url().endsWith('/api/characters/refresh')) presses.push(request.method())
+  })
+  await button.click()
+  // The read began: the ring rests while it runs, and after it the core asks for a wait before the next.
+  await expect.poll(() => presses.length).toBe(1)
+  await expect(button).toHaveAttribute('aria-disabled', 'true')
+  await expect(button).toHaveAccessibleName(/ Try again in \d+ minutes?\.$/)
+  await expect(label).toHaveText(/^(just now|\d+ min ago)$/)
+  // Too soon: the press does nothing (the ring is aria-disabled, so Playwright is made to press it), and the name still says why.
+  await button.click({ force: true })
+  await page.waitForTimeout(300)
+  expect(presses).toEqual(['POST'])
+  await expect(button).toHaveAccessibleName(/ Try again in \d+ minutes?\.$/)
+})
+
+test("a press that the core refuses puts the core's words in the ring's name until the next model", async ({ page, core, api }) => {
+  await page.goto(`${core.origin}/#/characters/sandrone`)
+  await api.advance(6 * 60)
+  const { mark: button } = ring(page, 'characters-sync')
+  await expect(button).not.toHaveAttribute('aria-disabled', 'true')
+  await page.waitForTimeout(1000) // the models the clock's jump brings have come: a new model would take the refusal away
+  const refusal = 'Guild Board read HoYoLAB a moment ago. Try again in 4 minutes.'
+  await page.route('**/api/characters/refresh', (route) => route.fulfill({ status: 409, json: { error: refusal } }))
+  await button.click()
+  await expect(button).toHaveAccessibleName(refusal)
+  // The tip shows the same words on the pointer.
+  await button.hover()
+  await expect(page.getByRole('tooltip')).toHaveText(refusal)
+})
+
+test('a tip that is open when the core refuses a keyboard press shows the new words', async ({ page, core, api }) => {
+  await page.goto(`${core.origin}/#/characters/sandrone`)
+  await api.advance(6 * 60)
+  const { mark: button } = ring(page, 'characters-sync')
+  await expect(button).not.toHaveAttribute('aria-disabled', 'true')
+  await page.waitForTimeout(1000) // the models the clock's jump brings have come: a new model would take the refusal away
+  const refusal = 'Guild Board read HoYoLAB a moment ago. Try again in 4 minutes.'
+  await page.route('**/api/characters/refresh', (route) => route.fulfill({ status: 409, json: { error: refusal } }))
+  await button.focus()
+  await expect(page.getByRole('tooltip')).toContainText('Reads again by itself')
+  await page.keyboard.press('Enter')
+  await expect(button).toHaveAccessibleName(refusal)
+  await expect(page.getByRole('tooltip')).toHaveText(refusal) // the tip is still open, with the words the ring has now
 })

@@ -29,7 +29,7 @@ test.describe('with Riley', () => {
   })
 
   test('has the two of you at the head with the score between, and a link back', async ({ page }) => {
-    await expect(page.getByTestId('compare-me-status')).toHaveText('Guild Board open')
+    await expect(page.getByTestId('compare-me-status')).toHaveText('Not in game')
     await expect(page.getByTestId('compare-friend-status')).toHaveText(/^In game for 4\d min$/)
     await expect(page.getByTestId('compare-score')).toContainText('8 – 3')
     await expect(page.getByTestId('compare-score')).toContainText('stats where each of you leads, 2 tied')

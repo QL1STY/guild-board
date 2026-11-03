@@ -21,6 +21,7 @@ import { agree, matWords, objectPronoun } from './profileview.ts'
 import { scaleStyle, useCharactersScale } from './scale.ts'
 import { toggleFocus } from './rosterview.ts'
 import { CalculatorNote, SyncLine } from './SyncLine.tsx'
+import { PageSwitch, Trail } from './Trail.tsx'
 import { Tip, useTip } from './Tip.tsx'
 
 const SLOT_LABEL: Record<Slot, string> = { flower: 'Flower', plume: 'Plume', sands: 'Sands', goblet: 'Goblet', circlet: 'Circlet' }
@@ -948,17 +949,14 @@ export function Planner({ live, characterKey }: { live: Live; characterKey: stri
     <Frame
       page="characters"
       live={live}
-      controls={
-        <>
-          <a className="gb-btn quiet" href={hashOf({ page: 'characters', view: 'roster' })}>
-            All characters
-          </a>
-          <a className="gb-btn quiet" href={hashOf({ page: 'characters', view: 'profile', key: characterKey })}>
-            {model === null ? 'Profile' : `${cap(model.pronouns.hers)} profile`}
-          </a>
-          {model !== null && <SyncLine live={live} sync={model.sync} />}
-        </>
+      heading={
+        <Trail
+          here={model?.name ?? 'Character'}
+          character={model === null ? null : { key: characterKey, icon: model.icon, element: model.element }}
+        />
       }
+      beside={model !== null && <PageSwitch here={model.name} characterKey={characterKey} view="plan" />}
+      controls={model !== null && <SyncLine live={live} sync={model.sync} />}
     >
       {model === null || plan === null || piece === null ? (
         <div className="gb-panel gb-empty">

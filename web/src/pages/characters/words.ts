@@ -1,4 +1,5 @@
 import { ago, plural } from '../../format.ts'
+import { ageLabel, type FreshView, ringFill } from '../../frame/freshview.ts'
 import type { CharSync } from '../../types.ts'
 
 /**
@@ -31,19 +32,53 @@ export const NOTHING_YET = 'Nothing to show until you choose a character.'
 /** A character the player does not have. */
 export const NOT_YOURS = 'Not yours yet'
 
-/** What the Refresh button and the lines beside it say, from the sync part of a model. */
-export type SyncWords = { button: string; disabled: boolean; lines: string[] }
+/** What the core says when nobody is logged in to HoYoLAB (`characters/service.py` LOGIN_FIRST). */
+export const LOGIN_FIRST = 'Log in to HoYoLAB to see your builds.'
 
-/** `now` is the core's time (live.now()), not the browser's. */
-export function syncWords(sync: CharSync, now: Date): SyncWords {
-  const lines: string[] = []
-  if (sync.message !== null) lines.push(sync.message)
+/** What the ring says while the sync is blocked until the player acts (the plate's and the refusal's own sentences). */
+const BLOCKED_TIPS = {
+  login_needed: 'Log in to HoYoLAB so that Guild Board can read your account.',
+  verification_needed: 'HoYoLAB asked for a verification check. Finish it from the sync panel first.',
+  paused: 'Syncing is paused. Resume it in Settings.',
+} as const
+
+/** "6 hours", "an hour", "30 minutes": how often the core reads again by itself. */
+function everyWords(minutes: number): string {
+  if (minutes % 60 !== 0) return plural(minutes, 'minute')
+  return minutes === 60 ? 'hour' : plural(minutes / 60, 'hour')
+}
+
+/** The first sentence of the tip: when HoYoLAB was last read. */
+function readSentence(sync: CharSync, now: Date): string {
+  return sync.read_at === null ? 'Not read from HoYoLAB yet.' : `Read from HoYoLAB ${ago(sync.read_at, now)}.`
+}
+
+/**
+ * The freshness ring of the Characters pages, from the sync part of a model (freshness design, section 1). `now` is the
+ * core's time (live.now()), not the browser's. `refusal` is what the core said to a press it would not take; it is the tip
+ * until the next model.
+ */
+export function charactersFresh(sync: CharSync, now: Date, refusal: string | null): FreshView {
+  const fill = ringFill(sync.read_at, sync.every_minutes, now)
+  const age = ageLabel(sync.read_at, now)
+  if (refusal !== null) return { tone: 'gold', fill, label: age, tip: refusal, turning: false }
   if (sync.reading) {
-    return { button: 'Reading…', disabled: true, lines: ['Reading your characters from HoYoLAB…'] }
+    return { tone: 'gold', fill, label: 'Reading…', tip: 'Reading your characters from HoYoLAB…', turning: true }
   }
-  if (sync.read_at !== null) lines.push(`Read from HoYoLAB ${ago(sync.read_at, now)}.`)
-  else if (sync.message === null) lines.push('Not read from HoYoLAB yet.')
-  if (!sync.can_refresh && sync.wait_minutes !== null) lines.push(`Try again in ${plural(sync.wait_minutes, 'minute')}.`)
-  if (sync.calculator === 'off') lines.push(CALCULATOR_OFF)
-  return { button: 'Refresh', disabled: !sync.can_refresh, lines }
+  if (sync.message === LOGIN_FIRST) return { tone: 'amber', fill, label: 'Log in', tip: sync.message, turning: false }
+  if (sync.blocked !== null) {
+    // Nothing reads by itself while the sync waits for the player, so the tip says what is wrong and not that it reads again.
+    const tip = `${readSentence(sync, now)} ${BLOCKED_TIPS[sync.blocked]}`
+    if (sync.blocked === 'paused') return { tone: 'grey', fill, label: age, tip, turning: false }
+    return { tone: 'amber', fill, label: sync.blocked === 'login_needed' ? 'Log in' : 'Check needed', tip, turning: false }
+  }
+  if (sync.calculator === 'off') {
+    return { tone: 'amber', fill, label: 'Calculator off', tip: `${readSentence(sync, now)} ${CALCULATOR_OFF}`, turning: false }
+  }
+  const sentences: string[] = []
+  if (sync.message !== null) sentences.push(sync.message)
+  sentences.push(readSentence(sync, now))
+  sentences.push(`Reads again by itself every ${everyWords(sync.every_minutes)}.`)
+  if (!sync.can_refresh && sync.wait_minutes !== null) sentences.push(`Try again in ${plural(sync.wait_minutes, 'minute')}.`)
+  return { tone: sync.read_at === null ? 'grey' : 'gold', fill, label: age, tip: sentences.join(' '), turning: false }
 }

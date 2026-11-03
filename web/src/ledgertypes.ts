@@ -98,6 +98,7 @@ export const LEDGER_FIXTURE: Ledger = {
     auto: null,
     auto_stopped: null,
     login: null,
+    every_minutes: null,
     ledger: { state: 'idle', kind: null, found: 0, message: null, last_at: '2026-10-27T09:41:00+01:00' },
   },
   spent: {

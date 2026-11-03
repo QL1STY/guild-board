@@ -360,23 +360,3 @@
 .pf-gain { font-weight: 800; color: var(--gold-ink); white-space: nowrap; }
 .pf-cardline { margin: 0; color: var(--ink2); font-size: 13.5px; }
 .pf-sheet.solo { grid-template-columns: 1fr; }
-
-/* ---------- The arrows to the character before and after her in the roster (in the top bar, beside All characters) ---------- */
-.pf-arrows { display: inline-flex; align-items: center; gap: 6px; }
-/*
- * Two buttons of one size, however the neighbour is called: the height of All characters and Refresh (a line and 12 pixels, which
- * the border of the one and the padding of the other make), and a width that holds the arrow and a face and no more. The arrow
- * stays at the outer edge, so that a dim button at the end of the roster, with the arrow alone, keeps it where it was.
- */
-.pf-arrow {
-  display: inline-flex; align-items: center; gap: 8px; box-sizing: border-box; width: 72px; height: calc(1lh + 12px); padding: 0 12px;
-  text-decoration: none;
-}
-.pf-arrow.previous { justify-content: flex-start; }
-.pf-arrow.next { justify-content: flex-end; }
-.pf-arrow .cx-ava { --size: 22px; flex: none; border-width: 1.5px; }
-.pf-arrow-glyph { flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; color: var(--ink2); }
-a.pf-arrow:hover { border-color: var(--fill); }
-a.pf-arrow:hover .pf-arrow-glyph { color: var(--ink); }
-.pf-arrow:focus-visible { outline-offset: 2px; }
-.pf-arrow.end { opacity: .45; }

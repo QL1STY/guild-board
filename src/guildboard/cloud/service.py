@@ -10,7 +10,7 @@ import re
 import webbrowser
 from dataclasses import dataclass, replace
 from datetime import date, datetime, timedelta, timezone
-from typing import Any, Awaitable, Callable, Iterable, Mapping, Sequence
+from typing import Any, Awaitable, Callable, Iterable, Literal, Mapping, Sequence
 
 from guildboard.clock import Clock
 from guildboard.cloud import SHARE_KEYS, SITE, STAT_KEYS
@@ -53,6 +53,7 @@ GAME_DAY_MINUTES = 24 * 60  # with Status off, the stats that changed go up at o
 # send_friend_request's two refusals that are its answer and not an error (0002_friends.sql says why).
 MISSES = ("no_such_tag", "no_such_uid")
 PICTURE = re.compile(r"https://([a-z0-9-]+\.)*(hoyolab|hoyoverse|mihoyo)\.com/")
+END_BEAT_WITHIN = 120  # seconds after the game was last seen running that its end beat may still go
 MAX_PICTURE = 500
 MAX_AR = 60
 
@@ -131,8 +132,9 @@ class Online:
         self._stats_day: date | None = None
         self._stats_minute: tuple[date, datetime] | None = None
         self._uid_refused: int | None = None  # the UID the server said another account holds
-        self._open_since = clock.now()  # when Guild Board was last open with no game running
-        self._was_in_game = False
+        self._game_since: datetime | None = None  # when the game that last ran began, until its end beat has gone
+        self._game_seen: datetime | None = None  # when the game was last found running, by the core's clock
+        self._profile_day: date | None = None  # the game day whose changed profile went up, with Status off or the game closed
         self._overview: Mapping[str, Any] | None = None  # the last friends_overview
         self._read_at: datetime | None = None  # when it was read
         self._compared: dict[str, tuple[float, list[Any]]] = {}  # what compare_keys said of each friend, and when
@@ -275,7 +277,8 @@ class Online:
         """Nothing of a session that ended stays: the next one may be another Discord account's."""
         self._lost = self._offline = self._stale = False
         self._own = self._uid_refused = self._overview = self._read_at = None
-        self._stats_day = self._stats_minute = None
+        self._stats_day = self._stats_minute = self._profile_day = None
+        self._game_since = self._game_seen = None  # the next account gets no end beat for a game it never saw
         self._sent.clear()
         self._compared.clear()
         self._next_pass = self._quiet_until = 0.0
@@ -375,22 +378,21 @@ class Online:
             raise OnlineRefused(NOT_READ, 503)  # the server answered with no row it could read
         return self._own
 
-    def _my_status(self) -> tuple[str, datetime]:
-        """In game while the game runs, Guild Board open otherwise, and when that began."""
+    def _my_status(self) -> tuple[Literal["in_game", "not_in_game"], datetime | None]:
+        """In game while the game runs, and since when it began; not in game otherwise, with no time. Whether Guild Board is
+        open is told to nobody."""
         running, started = self._local.game()
         if running and started is not None:
-            self._was_in_game = True
+            self._game_seen = self._clock.now()
             return "in_game", started
-        if self._was_in_game:
-            self._was_in_game, self._open_since = False, self._clock.now()
-        return "open", self._open_since
+        return "not_in_game", None
 
     def _profile_model(self) -> dict[str, Any]:
         session, own = self._session(), self._own or _own_from({})
         status, since = self._my_status()
         return {
             "name": session.name, "tag": session.tag, "uid": own["uid"], "server": self._local.server(),
-            "status": status, "since": iso(since), "find_by_uid": own["find_by_uid"],
+            "status": status, "since": iso(since) if since is not None else None, "find_by_uid": own["find_by_uid"],
             "sharing": list(own["sharing"]), "pins": list(own["pins"]), "stats": self._local.stats(),
         }
 
@@ -520,7 +522,8 @@ class Online:
         status, since = self._my_status()
         me = {
             "user_id": session.user_id, "name": session.name, "tag": session.tag, "has_picture": own["picture_url"] is not None,
-            "ar": own["ar"], "status": status, "since": iso(since),
+            "ar": own["ar"], "status": status,
+            "since": iso(since) if since is not None else None,
         }
         keys = [key for key in STAT_KEYS if key in names]
         return build_compare(me, friend, keys, self._local.stats(), week_start(self._local.today()), friends)
@@ -616,6 +619,7 @@ class Online:
         """Whatever is due. One failure ends the turn: nothing more goes out, and the next try is the only one for five
         minutes, so that a paused project sees no storm and nothing is lost."""
         now = self._now()
+        self._my_status()  # notes whether the game runs, also for a turn that ends early: an end beat is sent only soon after
         if self._store.load() is None or self._lost or self._quiet():
             return
         due = now >= self._next_pass
@@ -834,11 +838,25 @@ class Online:
         return not self._clock_off()
 
     async def _beat(self) -> None:
+        """Presence goes up only while the game runs, and once more on the turn after it stops (the end beat, so that a friend
+        sees the game end at once). "open" is never sent: nothing a friend sees may say when the PC is on. The end beat is not
+        tried again if it fails. It goes only if the game was seen running within `END_BEAT_WITHIN` seconds; later, the beat is
+        dropped, for it would tell when the PC woke or the core came back."""
         own = self._own
         if own is None or "status" not in own["sharing"]:
+            self._game_since = None  # no end beat for a game that ran while Status was off
             return
-        state, since = self._my_status()
-        await self._client.rpc("heartbeat", {"p_state": state, "p_since": iso(since)})
+        _, since = self._my_status()
+        if since is not None:
+            self._game_since = since
+        elif self._game_since is not None:
+            since, self._game_since = self._game_since, None
+            seen = self._game_seen
+            if seen is None or (self._clock.now() - seen).total_seconds() > END_BEAT_WITHIN:
+                return  # the game ended long ago (a sleeping PC, a quiet window): a beat now would say when the PC woke
+        else:
+            return
+        await self._client.rpc("heartbeat", {"p_state": "in_game", "p_since": iso(since)})
 
     async def _read_friends(self) -> None:
         self._stale = True  # until this read has answered
@@ -885,6 +903,12 @@ class Online:
         facts, own = self._facts_to_send(), self._own
         if facts is None or own is None:
             return
+        # Friends see the card: the moment its AR or picture changes would say when the PC came on, so a change waits as the
+        # stats do. A card with nothing on it yet (the first sign-in) goes up at once.
+        bare = own["ar"] is None and own["picture_url"] is None and own["uid"] is None
+        if not bare and self._day_wait(own, self._profile_day):
+            return
+        day = self._local.today()
         wanted = dict(facts)
         if not _picture_fits(wanted.get("picture_url")):
             wanted.pop("picture_url", None)
@@ -899,6 +923,8 @@ class Online:
         if changes:
             await self._client.update("profiles", f"user_id=eq.{self._signed_in().user_id}", changes)
             self._own = {**own, **changes}
+        if not bare:
+            self._profile_day = day  # the day's pass is spent, also when nothing had changed
 
     async def _send_uid(self, uid: int, find: bool) -> bool:
         """The game account's UID goes up through set_uid, with the switch as the server holds it: the profile's columns take
@@ -922,13 +948,18 @@ class Online:
         return True
 
     def _stats_wait(self, own: Mapping[str, Any]) -> bool:
-        """Whether the stats that changed wait, on a pass of the turns. With Status shared, a friend sees when Guild Board is
-        open anyway, and they go up with each pass. With it off, the moment a number changes would tell the same: they go up
-        once a game day, on the first pass at or after a minute of it drawn at random (the player's decision of 2026-11-01)."""
-        if "status" in own["sharing"]:
+        return self._day_wait(own, self._stats_day)
+
+    def _day_wait(self, own: Mapping[str, Any], spent: date | None) -> bool:
+        """Whether the stats that changed, or the profile's (`spent` is the game day whose pass each has had), wait, on a pass
+        of the turns. With Status shared and the game running, a friend sees
+        the game run anyway, and they go up with each pass. Otherwise the moment a number changes would say when the PC is on:
+        they go up once a game day, on the first pass at or after a minute of it drawn at random (the player's decision of
+        2026-11-01)."""
+        if "status" in own["sharing"] and self._my_status()[1] is not None:
             return False
         today = self._local.today()
-        if self._stats_day == today:
+        if spent == today:
             return True
         if self._stats_minute is None or self._stats_minute[0] != today:
             try:

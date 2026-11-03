@@ -327,7 +327,7 @@ def import_model(run: WishImportRow | None) -> dict[str, Any]:
     if run is None:
         return {
             "state": "idle", "last_at": None, "found": 0, "pages": 0, "pool": None, "message": None,
-            "auto": None, "auto_stopped": None, "login": None,
+            "auto": None, "auto_stopped": None, "login": None, "every_minutes": None,
         }
     return {
         "state": IMPORT_STATES.get(run.outcome, "failed"),
@@ -339,6 +339,7 @@ def import_model(run: WishImportRow | None) -> dict[str, Any]:
         "auto": None,
         "auto_stopped": None,
         "login": None,
+        "every_minutes": None,
     }
 
 

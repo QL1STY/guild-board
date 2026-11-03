@@ -88,7 +88,8 @@ describe('each tile says what a friend sees, in words', () => {
 
   test('Status: what the player is doing, and that friends see when they were last seen', () => {
     expect(tileOf('status', context())).toMatchObject({ name: 'Status', value: 'In game', unit: '', detail: 'and when you were last seen', known: true })
-    expect(tileOf('status', context({ status: 'open' }))).toMatchObject({ value: 'Guild Board open' })
+    expect(tileOf('status', context({ status: 'not_in_game' }))).toMatchObject({ value: 'Not in game' })
+    expect(tileOf('status', context({ status: 'offline' }))).toMatchObject({ value: 'Offline' })
     expect(tileOf('status', context({ status: null }))).toMatchObject({ value: '—', known: false })
   })
 

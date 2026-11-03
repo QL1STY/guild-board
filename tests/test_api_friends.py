@@ -1,7 +1,8 @@
 """What a player shares, through the API: the switches, the pins and the profile (the online plan, Task B2), and the
 friends themselves (Task B3)."""
 import json
-from datetime import datetime, timezone
+from dataclasses import replace
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -111,7 +112,7 @@ def test_your_profile_holds_this_pcs_stats_also_for_what_is_off(tmp_path, clock)
     }
     assert model["uid"] == 700000001 and model["sharing"] == ["status", "primogems"]
     assert "wishes" in model["stats"] and "primogems" in model["stats"]
-    assert (model["status"], model["since"]) == ("open", iso(clock.now()))
+    assert (model["status"], model["since"]) == ("not_in_game", None)  # nothing says when Guild Board is open
 
 
 def test_sharing_on_uploads_only_switched_on_keys(tmp_path, clock):
@@ -130,13 +131,14 @@ def test_sharing_on_uploads_only_switched_on_keys(tmp_path, clock):
 
 
 def test_a_key_turned_off_is_not_uploaded_again(tmp_path, clock):
-    # With Status shared, so that the stats go up with the first pass (with it off, they wait for the day's minute).
+    # With Status shared and the game running, so that the stats go up with the first pass (with it off, they wait for the day's minute).
     cloud = FakeCloud({
         PROFILE: answer(200, [own_row(sharing=["status", "primogems", "wishes"])]), SET_SHARING: answer(204),
         UPLOAD: answer(201), PROFILE_UPDATE: answer(204), OVERVIEW: answer(200, OVERVIEW_ROWS),
         ("POST", "/rest/v1/rpc/heartbeat"): answer(204), SET_UID: answer(204),
     })
     with Page(tmp_path, clock, cloud) as page:
+        page.core.online._local = replace(page.core.online._local, game=lambda: (True, clock.now()))
         page.turn()
         assert sorted(row["key"] for row in cloud.body(_at(cloud, "shared_stats"))) == ["primogems", "wishes"]
         assert page.client.put("/api/profile/sharing", json={"keys": ["status", "primogems"]}).status_code == 200
@@ -555,8 +557,8 @@ def test_compare_keeps_only_keys_both_share(tmp_path, clock):
     assert set(model["mine"]) == {"primogems", "playtime"}
     assert model["friend"]["pills"] == []  # wishes is pinned, and not for this page
     assert model["me"] == {
-        "user_id": USER_ID, "name": "Nova", "tag": "5120", "has_picture": True, "ar": 60, "status": "open",
-        "since": iso(clock.now()),
+        "user_id": USER_ID, "name": "Nova", "tag": "5120", "has_picture": True, "ar": 60, "status": "not_in_game",
+        "since": None,
     }
     assert cloud.body(_at(cloud, "compare_keys")) == {"p_friend": FRIEND_ID}
 
@@ -812,3 +814,19 @@ def test_one_friends_impossible_number_costs_the_player_nothing(tmp_path, clock,
         assert friend["stats"]["wishes"]["pity"] == 3  # the rest of what they share stands
         assert page.client.post("/api/friends/request", json={"query": "Kira#0412"}).status_code == 200
         assert page.client.delete(f"/api/friends/{FRIEND_ID}").status_code == 200  # and the player can remove them
+
+
+def test_own_status_is_in_game_or_not_in_game(tmp_path, clock):
+    started = clock.now() - timedelta(minutes=30)
+    cloud = FakeCloud({
+        PROFILE: answer(200, [own_row(sharing=["primogems"])]), OVERVIEW: answer(200, OVERVIEW_ROWS),
+        COMPARE: answer(200, ["primogems"]),
+    })
+    with Page(tmp_path, clock, cloud) as page:
+        online = page.core.online
+        for running, expected in ((False, ("not_in_game", None)), (True, ("in_game", iso(started)))):
+            online._local = replace(online._local, game=lambda: (running, started if running else None))
+            profile = page.client.get("/api/profile").json()
+            me = page.client.get(f"/api/friends/{FRIEND_ID}/compare").json()["me"]
+            assert (profile["status"], profile["since"]) == expected
+            assert (me["status"], me["since"]) == expected

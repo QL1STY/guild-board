@@ -269,6 +269,18 @@ def test_without_a_login_the_profile_says_nothing_is_owned_and_the_roster_still_
     assert roster["sync"]["can_refresh"] is False
 
 
+@pytest.mark.parametrize("state", ["paused", "login_needed", "verification_needed"])
+def test_the_sync_view_says_what_blocks_the_sync(store, clock, tmp_path, state):
+    service = sandrone(store, clock, tmp_path, sync=lambda: {"blocked": state})
+    view = service.sync_view()
+    assert view["blocked"] == state and view["can_refresh"] is False
+
+
+def test_the_sync_view_has_no_blocked_word_when_nothing_blocks_the_sync(store, clock, tmp_path):
+    assert sandrone(store, clock, tmp_path, sync=lambda: {}).sync_view()["blocked"] is None
+    assert sandrone(store, clock, tmp_path, sync=lambda: {"blocked": None}).sync_view()["blocked"] is None
+
+
 def test_the_week_has_seven_days_today_first_and_sundays_loud_alert(store, clock, tmp_path):
     service = sandrone(store, clock, tmp_path)
     service.put_focus(["sandrone"])

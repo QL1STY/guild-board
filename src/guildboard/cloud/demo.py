@@ -89,7 +89,7 @@ def _riley(now: datetime) -> dict[str, Any]:
 def _kira() -> dict[str, Any]:
     return {
         "user_id": "00000000-0000-4000-8000-000000000412", "name": "Kira", "tag": "0412", "has_picture": False, "ar": 60,
-        "uid": None, "presence": ("open", HOUR, 30), "pins": ["achievements", "playtime"],
+        "uid": None, "presence": ("in_game", 4 * HOUR, 3 * HOUR), "pins": ["achievements", "playtime"],
         "stats": {
             "achievements": {"ticked": 1288, "total": TOTAL_STAGES},
             "playtime": {
@@ -102,7 +102,7 @@ def _kira() -> dict[str, Any]:
 def _milo() -> dict[str, Any]:
     return {
         "user_id": "00000000-0000-4000-8000-000000003391", "name": "Milo", "tag": "3391", "has_picture": False, "ar": 55,
-        "uid": None, "presence": ("open", 3 * DAY, 2 * DAY), "pins": [], "stats": {},
+        "uid": None, "presence": ("in_game", 3 * DAY, 2 * DAY), "pins": [], "stats": {},
     }
 
 
@@ -116,7 +116,7 @@ ELENA = _card("00000000-0000-4000-8000-000000000031", "Elena", "0031", None)  # 
 
 def _as_friend(card: Mapping[str, Any]) -> dict[str, Any]:
     return {
-        **card, "uid": None, "presence": ("open", HOUR, 30), "pins": [],
+        **card, "uid": None, "presence": ("in_game", 2 * HOUR, HOUR), "pins": [],
         "stats": {"achievements": {"ticked": 640, "total": TOTAL_STAGES}},
     }
 
@@ -136,7 +136,6 @@ class DemoOnline:
         self._outgoing: list[dict[str, Any]] = []
         self._invite: dict[str, Any] | None = None
         self._message: str | None = None
-        self._since = clock.now()
         self._shown = self.view()
 
     # ------------------------------------------------------------------ what the pages read
@@ -206,8 +205,8 @@ class DemoOnline:
     # ------------------------------------------------------------------ what a player shares
     def _profile(self) -> dict[str, Any]:
         return {
-            "name": self._name, "tag": DEMO_TAG, "uid": DEMO_ACCOUNT.uid, "server": DEMO_SERVER, "status": "open",
-            "since": iso(self._since), "find_by_uid": self._find_by_uid, "sharing": list(self._sharing), "pins": list(self._pins),
+            "name": self._name, "tag": DEMO_TAG, "uid": DEMO_ACCOUNT.uid, "server": DEMO_SERVER, "status": "not_in_game",
+            "since": None, "find_by_uid": self._find_by_uid, "sharing": list(self._sharing), "pins": list(self._pins),
             "stats": _my_stats(self._clock.now()),
         }
 
@@ -326,7 +325,7 @@ class DemoOnline:
         friend = self._friend(user)
         me = {
             "user_id": DEMO_USER, "name": self._name, "tag": DEMO_TAG, "has_picture": False, "ar": DEMO_ACCOUNT.level,
-            "status": "open", "since": iso(self._since),
+            "status": "not_in_game", "since": None,
         }
         now = self._clock.now()
         week = week_start(game_day(now, DEMO_SERVER))

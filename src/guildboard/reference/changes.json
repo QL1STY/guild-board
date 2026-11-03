@@ -16,6 +16,26 @@
       "text": "Settings shows how much of your online space your synced data takes."
     },
     {
+      "kind": "new",
+      "title": "Import without the game",
+      "text": "Import reads your wishes and the game's history with your HoYoLAB login, so you no longer open the game first. The game is needed only without a login."
+    },
+    {
+      "kind": "better",
+      "title": "Freshness at a glance",
+      "text": "Characters, Pulls and Ledger show one small ring with how fresh the data is, instead of a sentence. Point at it for the details."
+    },
+    {
+      "kind": "better",
+      "title": "A clearer Characters bar",
+      "text": "A character's pages show where you are, Characters and the name, with a switch between Profile and Planner."
+    },
+    {
+      "kind": "better",
+      "title": "Friends see less",
+      "text": "Friends see only whether you are in game and for how long, never that Guild Board is open or when your PC is on."
+    },
+    {
       "kind": "better",
       "title": "No e-mail address online",
       "text": "Signing in with Discord now asks only for your name and picture, and no e-mail address is kept."

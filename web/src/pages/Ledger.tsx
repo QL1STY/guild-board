@@ -3,11 +3,13 @@ import '../styles/ledger.css'
 import { LEDGER_PATH, ledgerApi, messageOf } from '../api.ts'
 import { num } from '../format.ts'
 import { Frame } from '../frame/Frame.tsx'
+import { FreshRing } from '../frame/FreshRing.tsx'
+import { pressed, useNewFlash, withFlash } from '../frame/freshview.ts'
 import type { Ledger as LedgerModel, LedgerEntry, LedgerKind } from '../ledgertypes.ts'
-import { type Live, useModel } from '../live.ts'
+import { type Live, useModel, useTick } from '../live.ts'
 import { Segmented } from '../ui/Segmented.tsx'
 import {
-  CURRENCY_NAMES, KIND_LABELS, fivesNote, historyRow, importLine, luckLine, priceParts, money, restLine, signed,
+  CURRENCY_NAMES, KIND_LABELS, fivesNote, historyRow, ledgerFresh, ledgerRunning, luckLine, priceParts, money, signed,
   sinceLine, topOutLine,
 } from './ledgerview.ts'
 
@@ -25,20 +27,11 @@ function Stars({ count }: { count: number }) {
 }
 
 /**
- * Import from the game, beside the line saying up to when the game's history is read, or how the reading goes: the
- * Pulls page's Import, which reads the wishes and then the four logs. The button rests while one runs.
+ * What a press of Import does, shared by the button in the top bar and the freshness ring beside the title: the Pulls
+ * page's Import, which reads the wishes and then the four logs. The button rests while one runs. A press the core refuses
+ * says why in the ring's tip until the next press.
  */
-function ImportControls({
-  live,
-  model,
-  running,
-  onPressed,
-}: {
-  live: Live
-  model: LedgerModel | null
-  running: boolean
-  onPressed: () => void
-}) {
+function useImport(running: boolean, onPressed: () => void) {
   const [pressing, setPressing] = useState(false)
   const [refusal, setRefusal] = useState<string | null>(null)
   const busy = pressing || running
@@ -55,19 +48,34 @@ function ImportControls({
       onPressed()
     }
   }
-  const progress = model === null ? '' : importLine(model.import, live.pullsImport)
-  const rest = model === null ? '' : restLine(model.import.login, model.last_import, live.now())
-  const line = refusal ?? (progress !== '' ? progress : rest)
+  return { pressing, refusal, busy, press }
+}
+
+/** The Import button in the top bar. */
+export function ImportButton({ busy, press }: { busy: boolean; press: () => Promise<void> }) {
   return (
-    <>
-      <span className="gb-status ld-import" data-testid="ledger-import" role="status">
-        {line}
-      </span>
-      <button type="button" className="gb-btn" aria-disabled={busy} onClick={() => void press()}>
-        {busy ? 'Importing…' : 'Import from the game'}
-      </button>
-    </>
+    <button
+      type="button"
+      className="gb-btn"
+      aria-disabled={busy}
+      title="Import: reads your history with your HoYoLAB login, or, without one, from the link the game writes when you open Feedback."
+      onClick={() => void press()}
+    >
+      {busy ? 'Importing…' : 'Import'}
+    </button>
   )
+}
+
+/**
+ * The freshness ring beside the title (freshness design, section 1): when the game's history was last read, whether it
+ * updates itself, and the sentence the top bar used to show as its tip. "+N new" shows for six seconds after a reading of
+ * the logs that found new entries (the ledger's own count, not the wishes').
+ */
+function ImportRing({ live, model, pressing, refusal }: { live: Live; model: LedgerModel; pressing: boolean; refusal: string | null }) {
+  useTick(60_000) // the age and the ring's fill move on
+  const flash = useNewFlash(model.import.ledger)
+  const view = withFlash(ledgerFresh(model.import, model.last_import, live.pullsImport, refusal, live.now()), flash)
+  return <FreshRing view={pressing ? pressed(view) : view} testId="ledger-import" />
 }
 
 function Tiles({ model }: { model: LedgerModel }) {
@@ -277,22 +285,19 @@ export function Ledger({ live }: { live: Live }) {
     if (live.pullsImport !== firstEvent.current) setBump((count) => count + 1)
   }, [live.pullsImport])
   const { data, error } = useModel<LedgerModel>(LEDGER_PATH, live.version + bump)
-  const running =
-    live.pullsImport?.state === 'running' ||
-    data?.import.state === 'running' ||
-    data?.import.ledger.state === 'running'
+  const running = data === null ? live.pullsImport?.state === 'running' : ledgerRunning(data.import, live.pullsImport)
   useEffect(() => {
     if (!running) return
     const timer = window.setInterval(() => setBump((count) => count + 1), 1500)
     return () => window.clearInterval(timer)
   }, [running])
+  const press = useImport(running, () => setBump((count) => count + 1))
   return (
     <Frame
       page="ledger"
       live={live}
-      controls={
-        <ImportControls live={live} model={data} running={running} onPressed={() => setBump((count) => count + 1)} />
-      }
+      beside={data !== null && <ImportRing live={live} model={data} pressing={press.pressing} refusal={press.refusal} />}
+      controls={<ImportButton busy={press.busy} press={press.press} />}
     >
       {data === null ? (
         <div className="gb-panel gb-empty">{error ?? 'Reading the ledger…'}</div>
@@ -311,7 +316,7 @@ export function Ledger({ live }: { live: Live }) {
         <div className="gb-panel gb-empty ld-start" data-testid="ledger-empty">
           <p>
             This page shows the histories the game keeps: primogems, Genesis Crystals, resin and artifacts. To read them,
-            open Feedback from the Paimon menu in the game once, then press Import from the game.
+            open Feedback from the Paimon menu in the game once, then press Import.
           </p>
           <p className="gb-note">
             Guild Board reads the history link the game writes when Feedback opens, the same way it reads your wishes,

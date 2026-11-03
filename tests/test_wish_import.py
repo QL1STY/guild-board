@@ -26,7 +26,7 @@ from guildboard.events import EventBus
 from guildboard.logging_setup import setup_logging, shutdown_logging
 from guildboard.pulls import gamecache, wishapi
 from guildboard.pulls.gamecache import CacheProblem, WishLink
-from guildboard.pulls.importer import ImportBusy, ImportNotReady, WishImporter, demo_links
+from guildboard.pulls.importer import ImportBusy, ImportNotReady, WishImporter, _Kept, demo_links
 from guildboard.store import iso
 from pulls_samples import (
     KEY_EXPIRED, KEY_INVALID, TOO_FREQUENT, History, cache_holding, made_up_game, record, wish_link,
@@ -240,7 +240,7 @@ async def test_the_first_import_fetches_every_type_page_by_page_and_keeps_every_
     run, sleep = importer(store, history, bus=bus)
     assert run.state() == {
         "state": "idle", "last_at": None, "found": 0, "pages": 0, "pool": None, "message": None, "auto": None,
-        "auto_stopped": None, "login": None,
+        "auto_stopped": None, "login": None, "every_minutes": None,
     }
     await run.run()
     # The character event in three pages, 20, 20 and 1, each after the last record of the page before; every other
@@ -275,7 +275,7 @@ async def test_the_first_import_fetches_every_type_page_by_page_and_keeps_every_
     assert run.state() == {
         "state": "done", "last_at": iso(row.finished_at), "found": 41, "pages": 8, "pool": None,
         "message": "Imported 41 new wishes.", "auto": {"until": iso(NOW + timedelta(hours=24)), "last_at": None},
-        "auto_stopped": None, "login": None,
+        "auto_stopped": None, "login": None, "every_minutes": 30,
     }
     assert run.running is False
 
@@ -349,7 +349,7 @@ async def test_an_import_that_cannot_read_the_cache_records_a_failed_run_and_kee
     # The page still names the last import that ended well.
     assert run.state() == {
         "state": "failed", "last_at": iso(done.finished_at), "found": 0, "pages": 0, "pool": None, "message": HELD_OPEN,
-        "auto": None, "auto_stopped": None, "login": None,
+        "auto": None, "auto_stopped": None, "login": None, "every_minutes": None,
     }
     # A failure of another kind while reading the files ends the run the same way, with the sentence for it.
 
@@ -461,7 +461,7 @@ async def test_the_state_when_idle_names_the_last_import_that_ended_well(store):
     later, _ = importer(store, History())  # as after a start of Guild Board
     assert later.state() == {
         "state": "idle", "last_at": iso(row.finished_at), "found": 3, "pages": 6, "pool": None, "message": None,
-        "auto": None, "auto_stopped": None, "login": None,  # after a start nothing is kept: the key lives in memory alone
+        "auto": None, "auto_stopped": None, "login": None, "every_minutes": None,  # after a start nothing is kept: the key lives in memory alone
     }
 
 
@@ -480,7 +480,7 @@ async def test_after_a_start_an_import_the_closing_cut_short_shows_how_it_ended(
     later, _ = importer(store, History())  # as after a start of Guild Board
     assert later.state() == {
         "state": "failed", "last_at": iso(done.finished_at), "found": 0, "pages": 0, "pool": None, "message": CLOSED,
-        "auto": None, "auto_stopped": None, "login": None,
+        "auto": None, "auto_stopped": None, "login": None, "every_minutes": None,
     }
     # Once a newer import ended well, it is idle again, with that one's figures.
     history = History({"301": records("301", 5, FIRST)}, keys=[KEY])
@@ -488,7 +488,7 @@ async def test_after_a_start_an_import_the_closing_cut_short_shows_how_it_ended(
     [newest] = store.wish_imports(1)
     assert importer(store, History())[0].state() == {
         "state": "idle", "last_at": iso(newest.finished_at), "found": 2, "pages": 6, "pool": None, "message": None,
-        "auto": None, "auto_stopped": None, "login": None,
+        "auto": None, "auto_stopped": None, "login": None, "every_minutes": None,
     }
     # A newer import that failed for another reason, in an earlier session, leaves it idle, as before.
     await importer(store, History())[0].run()  # the key is too old
@@ -1265,6 +1265,27 @@ async def test_the_page_is_told_whether_the_history_updates_itself_with_the_logi
     assert run.state()["login"] == "refused"
     login[0] = None
     assert run.state()["login"] is None
+
+
+def test_import_model_cadence_follows_the_login(store):
+    run, _ = importer(store, History({}, keys=[KEY]), _no_game_files)
+    for login, run_state, minutes in (
+        ("on", "on", 30), ("on", "minting", 30), ("on", "failed", 30), ("refused", "on", None), (None, "on", None),
+    ):
+        run._login = lambda login=login: login
+        run._login_run = run_state
+        assert run.state()["every_minutes"] == minutes, (login, run_state)
+
+
+def test_import_model_cadence_holds_while_a_link_from_a_press_is_kept(store):
+    # The history updates itself every AUTO_EVERY while the game runs and a press's link lives, with no login at all.
+    run, _ = importer(store, History({}, keys=[KEY]), _no_game_files)
+    run._login = lambda: None
+    assert run.state()["every_minutes"] is None
+    run._kept = _Kept(wish_link(KEY), run._clock.now() + timedelta(hours=1))
+    assert run.state()["every_minutes"] == 30
+    run._clock.advance(hours=1)  # the link's day is over: it is dropped and nothing reads by itself
+    assert run.state()["every_minutes"] is None and run.state()["auto"] is None
 
 
 async def test_a_key_asked_for_while_the_login_changed_is_not_kept(store):

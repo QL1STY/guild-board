@@ -1,7 +1,8 @@
 import { MONTHS, localTime, num, plural } from '../format.ts'
 import type { Currency, Ledger, LedgerEntry, LedgerImportState, LedgerKind } from '../ledgertypes.ts'
 import type { PullsImportEvent } from '../types.ts'
-import { LOGIN_FAILED, LOGIN_MINTING, loginRefused } from './pullsview.ts'
+import { ageLabel, type FreshView, ringFill } from '../frame/freshview.ts'
+import { LOGIN_FAILED, LOGIN_MINTING, PRESS_IMPORT, importWithAuto, loginRefused } from './pullsview.ts'
 
 /** The words of the Ledger page (the ledger design, sections 0 and 6), apart from its drawing. */
 
@@ -192,4 +193,55 @@ export function importLine(state: LedgerImportState, event: PullsImportEvent | n
   }
   if (ledger.state === 'failed') return "Guild Board could not read the game's history. Press Import to try again."
   return ''
+}
+
+/**
+ * Whether an import or an update goes now, for the Import button and the ring: the wishes or the logs are read, or the keys
+ * for an update with the login are asked for, when the core already holds the importer and refuses a second press as busy.
+ */
+export function ledgerRunning(state: LedgerImportState, event: PullsImportEvent | null): boolean {
+  return state.ledger.state === 'running' || event?.state === 'running' || state.state === 'running' || state.login === 'minting'
+}
+
+/**
+ * The freshness ring of the Ledger page (freshness design, section 1). The tip is the sentence the top bar used to show
+ * (`refusal`, else the import's progress, else the line at rest); this adds the tone, the fill, the few words beside the
+ * ring, and whether it turns. While the logs are read the words are the entries so far ("340 entries"); amber where the
+ * player has to act (the login was refused, or the link from Feedback is gone) or a read failed; gold while the history
+ * updates itself (`every_minutes` set, which a Feedback link kept from a press counts for), else grey with a tip that says
+ * to press Import. The age is that of `lastImport`. `now` is the core's time.
+ */
+export function ledgerFresh(
+  state: LedgerImportState,
+  lastImport: string | null,
+  event: PullsImportEvent | null,
+  refusal: string | null,
+  now: Date,
+): FreshView {
+  const ledger = state.ledger
+  const progress = importLine(state, event)
+  const sentence = progress !== '' ? progress : restLine(state.login, lastImport, now)
+  const tip = (rest: string): string => refusal ?? rest
+  const fill = ringFill(lastImport, state.every_minutes, now)
+  const age = ageLabel(lastImport, now)
+  if (ledger.state === 'running' || event?.state === 'running' || state.state === 'running') {
+    const label =
+      ledger.state !== 'running'
+        ? 'Reading wishes…'
+        : ledger.kind === null
+          ? 'Reading…'
+          : plural(ledger.found, 'entry', 'entries')
+    return { tone: 'gold', fill, label, tip: tip(sentence), turning: true }
+  }
+  if (state.login === 'minting') return { tone: 'gold', fill, label: 'Importing…', tip: tip(sentence), turning: true }
+  if (state.login === 'refused') return { tone: 'amber', fill, label: 'Open Feedback', tip: tip(sentence), turning: false }
+  if (state.login === 'failed') return { tone: 'amber', fill, label: 'Will retry', tip: tip(sentence), turning: false }
+  if (ledger.state === 'failed') {
+    const label = ledger.message?.includes('Feedback') ? 'Open Feedback' : 'Import failed'
+    return { tone: 'amber', fill, label, tip: tip(sentence), turning: false }
+  }
+  if (state.every_minutes === null) {
+    return { tone: 'grey', fill, label: age, tip: refusal ?? importWithAuto(sentence, PRESS_IMPORT), turning: false }
+  }
+  return { tone: 'gold', fill, label: age, tip: tip(sentence), turning: false }
 }

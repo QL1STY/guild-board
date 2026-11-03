@@ -118,10 +118,20 @@ def test_the_four_players_of_the_design(demo):
     model = demo.get("/api/friends").json()
     assert model["me"] == {"name": "Traveler", "tag": "2048"}
     assert {(friend["name"], friend["tag"], friend["status"]) for friend in model["friends"]} == {
-        ("Riley", "7687", "in_game"), ("Kira", "0412", "open"), ("Milo", "3391", "offline"),
+        ("Riley", "7687", "in_game"), ("Kira", "0412", "offline"), ("Milo", "3391", "offline"),
     }
     assert [(card["name"], card["tag"]) for card in model["incoming"]] == [("Nova", "5120")]
     assert model["outgoing"] == [] and model["stale"] is False
+
+
+def test_the_demo_shows_no_guild_board_open_anywhere(demo):
+    # Nothing a friend sees says when a PC is on: no status "open" in the friends, the profile or Compare.
+    friends = demo.get("/api/friends").json()["friends"]
+    assert "open" not in {friend["status"] for friend in friends}
+    profile = demo.get("/api/profile").json()
+    assert (profile["status"], profile["since"]) == ("not_in_game", None)
+    me = demo.get(f"/api/friends/{RILEY}/compare").json()["me"]
+    assert (me["status"], me["since"]) == ("not_in_game", None)
 
 
 def test_milo_is_offline_and_shares_nothing(demo):

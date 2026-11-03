@@ -39,6 +39,7 @@ from guildboard.views.pulls import (
 # The sentences the player reads (the plan's contract, and rulings R8 and R10).
 EARLIER_DAY = "Choose today or a later day."
 NO_HISTORY = "No wish history yet. Open Wish → History in the game, then press Import."
+NO_HISTORY_LOGIN = "No wish history yet. Guild Board is reading it now with your HoYoLAB login."  # where the login reads it
 BAD_PITY = "Give the pity as a whole number from 0 to {top}."
 BAD_POINTS = "Give the Fate Points as 0 or 1."
 BAD_BALANCE = "Give primogems and fates as whole numbers."
@@ -168,6 +169,7 @@ class Planner:
         server: Callable[[], str],
         uid: Callable[[], int | None],
         demo: bool,
+        login_on: Callable[[], bool] = lambda: False,
     ) -> None:
         self._store = store
         self._clock = clock
@@ -176,6 +178,7 @@ class Planner:
         self._server = server  # the server's key, which says when a game day starts
         self._uid = uid  # the game account HoYoLAB named, None before a login
         self._demo = demo
+        self._login_on = login_on  # whether the history updates itself with the HoYoLAB login: it says so, not to open the game
 
     # ------------------------------------------------------------------ the accounts
     def uid(self) -> int | None:
@@ -193,7 +196,7 @@ class Planner:
         """The account a change is kept for; refused while no history is kept (ruling R10)."""
         uid = self.uid()
         if uid is None:
-            raise PullsConflict(NO_HISTORY)
+            raise PullsConflict(NO_HISTORY_LOGIN if self._login_on() else NO_HISTORY)
         return uid
 
     # ------------------------------------------------------------------ reading

@@ -3,7 +3,6 @@
  * History, then the Artifacts, in the page's 1,440-pixel cap. Its labels are not set in capitals (the look pass, spec 3).
  */
 .ld-page { display: flex; flex-direction: column; gap: 14px; }
-.ld-import { max-width: 46ch; text-align: right; }
 
 .ld-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .ld-tile { padding: 14px 18px; }

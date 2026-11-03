@@ -1,7 +1,8 @@
 import { expect, test } from 'vitest'
+import { ringFill } from '../frame/freshview.ts'
 import { ARTIFACT_HISTORY_FIXTURE, HISTORY_FIXTURE, LEDGER_FIXTURE, type Ledger } from '../ledgertypes.ts'
 import {
-  entryTime, fivesNote, historyRow, importLine, loginUpToLine, luckLine, money, monthLine, restLine, signed, sinceLine, spentLine, topOutLine, upToLine,
+  entryTime, fivesNote, historyRow, importLine, ledgerFresh, ledgerRunning, loginUpToLine, luckLine, money, monthLine, restLine, signed, sinceLine, spentLine, topOutLine, upToLine,
 } from './ledgerview.ts'
 
 const ledger = (change: (data: Ledger) => void = () => {}): Ledger => {
@@ -119,4 +120,80 @@ test('the import line follows the ledger block, after the wishes', () => {
   }
   expect(importLine(failed, null)).toBe('The history link from Feedback has expired.')
   expect(importLine(block, null)).toBe('')
+})
+
+test('the freshness ring follows the ledger block while the logs are read', () => {
+  const now = new Date('2026-10-27T15:00:00')
+  const block = { ...LEDGER_FIXTURE.import, login: 'on' as const, every_minutes: 30 }
+  const reading = { ...block, ledger: { ...block.ledger, state: 'running' as const, kind: 'primogem' as const, found: 340 } }
+  const view = ledgerFresh(reading, '2026-10-27T14:50:00', null, null, now)
+  expect(view).toMatchObject({ tone: 'gold', label: '340 entries', turning: true })
+  expect(view.tip).toBe('Reading primogem history… 340 entries')
+  expect(ledgerFresh({ ...reading, ledger: { ...reading.ledger, found: 1 } }, null, null, null, now).label).toBe('1 entry')
+  expect(ledgerFresh({ ...reading, ledger: { ...reading.ledger, kind: null } }, null, null, null, now).label).toBe('Reading…')
+  // The wishes come first in the same press.
+  const wishes = { state: 'running' as const, pool: 'character', pages: 2, found: 0, message: null }
+  expect(ledgerFresh(block, null, wishes, null, now)).toMatchObject({ label: 'Reading wishes…', turning: true, tip: 'Reading the wish history first…' })
+})
+
+test('the freshness ring keeps turning while the key is asked for after a press, and the page counts it as running', () => {
+  const now = new Date('2026-10-27T15:00:00')
+  const block = { ...LEDGER_FIXTURE.import, login: 'minting' as const, every_minutes: 30 }
+  expect(ledgerFresh(block, '2026-10-27T14:40:00', null, null, now)).toMatchObject({
+    tone: 'gold', label: 'Importing…', turning: true, tip: 'Getting a key from HoYoLAB…',
+  })
+  expect(ledgerRunning(block, null)).toBe(true)
+  expect(ledgerRunning({ ...block, login: 'on' }, null)).toBe(false)
+  expect(ledgerRunning({ ...block, login: 'on', ledger: { ...block.ledger, state: 'running' } }, null)).toBe(true)
+})
+
+test('the freshness ring is gold with the age of the last import when the login updates the history', () => {
+  const now = new Date('2026-10-27T15:00:00')
+  const block = { ...LEDGER_FIXTURE.import, login: 'on' as const, every_minutes: 30 }
+  const view = ledgerFresh(block, '2026-10-27T14:40:00', null, null, now)
+  expect(view).toMatchObject({ tone: 'gold', label: '20 min ago', turning: false })
+  expect(view.fill).toBe(ringFill('2026-10-27T14:40:00', 30, now))
+  expect(view.tip).toBe('Updated automatically with your HoYoLAB login · last today 14:40')
+  expect(ledgerFresh(block, null, null, null, now)).toMatchObject({ tone: 'gold', fill: 0, label: 'Not read yet' })
+})
+
+test('without an update by itself the ring is grey and the tip says to press Import', () => {
+  const now = new Date('2026-10-27T15:00:00')
+  const block = { ...LEDGER_FIXTURE.import, login: null, every_minutes: null }
+  const view = ledgerFresh(block, '2026-10-27T14:40:00', null, null, now)
+  expect(view).toMatchObject({ tone: 'grey', fill: 0, label: '20 min ago' })
+  expect(view.tip).toBe('History from the game up to today 14:40. Press Import to update it.')
+  expect(ledgerFresh(block, null, null, null, now)).toMatchObject({ tone: 'grey', label: 'Not read yet', tip: 'Press Import to update it.' })
+  // A link kept from a press counts as an update by itself: the core says so in every_minutes.
+  expect(ledgerFresh({ ...block, every_minutes: 30 }, '2026-10-27T14:40:00', null, null, now).tone).toBe('gold')
+})
+
+test('the freshness ring turns amber when the login is refused, or an update did not finish', () => {
+  const now = new Date('2026-10-27T15:00:00')
+  const block = { ...LEDGER_FIXTURE.import, every_minutes: 30 }
+  const refused = ledgerFresh({ ...block, login: 'refused' }, '2026-10-27T14:40:00', null, null, now)
+  expect(refused).toMatchObject({ tone: 'amber', label: 'Open Feedback' })
+  expect(refused.tip).toBe(restLine('refused', '2026-10-27T14:40:00', now))
+  const failed = ledgerFresh({ ...block, login: 'failed' }, '2026-10-27T14:40:00', null, null, now)
+  expect(failed).toMatchObject({ tone: 'amber', label: 'Will retry' })
+  expect(failed.tip).toBe(restLine('failed', '2026-10-27T14:40:00', now))
+})
+
+test('the freshness ring turns amber when the Feedback link is gone, and when the logs failed for another reason', () => {
+  const now = new Date('2026-10-27T15:00:00')
+  const block = { ...LEDGER_FIXTURE.import, login: null, every_minutes: null }
+  const expired = { ...block, ledger: { ...block.ledger, state: 'failed' as const, message: 'The history link from Feedback has expired.' } }
+  expect(ledgerFresh(expired, null, null, null, now)).toMatchObject({
+    tone: 'amber', label: 'Open Feedback', tip: 'The history link from Feedback has expired.',
+  })
+  const other = { ...block, ledger: { ...block.ledger, state: 'failed' as const, message: 'The import failed unexpectedly. See the log file.' } }
+  expect(ledgerFresh(other, null, null, null, now)).toMatchObject({ tone: 'amber', label: 'Import failed' })
+})
+
+test('a refusal of a press is the tip of the ring, and the rest stays', () => {
+  const now = new Date('2026-10-27T15:00:00')
+  const block = { ...LEDGER_FIXTURE.import, login: null, every_minutes: null }
+  expect(ledgerFresh(block, '2026-10-27T14:40:00', null, 'An import is already running.', now)).toMatchObject({
+    tone: 'grey', label: '20 min ago', tip: 'An import is already running.',
+  })
 })

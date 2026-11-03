@@ -1,0 +1,55 @@
+/*
+ * The freshness ring (freshness design, section 1, option E). A ring of 26 px that empties as the next read by itself comes
+ * closer, with the sync sign inside it and a few words beside it. The tones are the page's own colours: gold while the source
+ * reads by itself, grey when it does not, amber when the player has to act. The turn and the fill's easing are those of
+ * motion.css, which also stops them when the window asks for less motion.
+ */
+.gb-fresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.gb-fresh.grey { --ring-fill: var(--deemph); --ring-ground: var(--surface); }
+.gb-fresh.gold { --ring-fill: var(--fill); --ring-ground: var(--surface); }
+.gb-fresh.amber { --ring-fill: var(--warn-line); --ring-ground: var(--warn-soft); }
+
+.gb-fresh-ring-box {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ring-fill);
+}
+button.gb-fresh-ring-box { cursor: pointer; }
+button.gb-fresh-ring-box[aria-disabled='true'] { cursor: default; }
+.gb-fresh-ring-box:focus-visible { outline: 2px solid var(--fill); outline-offset: 2px; }
+
+.gb-fresh-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); pointer-events: none; }
+.gb-fresh-ring circle { stroke-width: 3; }
+.gb-fresh-track { fill: var(--ring-ground); stroke: var(--track); }
+.gb-fresh-arc {
+  fill: none;
+  stroke: var(--ring-fill);
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--t-move) var(--ease-move);
+}
+.gb-fresh-ring-box .sign { position: relative; width: 14px; height: 14px; }
+.gb-fresh-ring-box .sign.turning { animation: gb-spin 1.1s linear infinite; }
+
+.gb-fresh-label { white-space: nowrap; }
+.gb-fresh.amber .gb-fresh-label { color: var(--ink); }
+
+/* The date range on Stats: the calendar sign where the ring has its ring, the range where it has its words. */
+.gb-chip { --ring-fill: var(--muted); }
+.gb-chip-box { display: grid; flex: none; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: var(--ring-fill); }
+.gb-chip-box:focus-visible { outline: 2px solid var(--fill); outline-offset: 2px; }
+.gb-chip-box .sign { width: 16px; height: 16px; }

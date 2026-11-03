@@ -3,6 +3,7 @@ import type { Ledger } from '../src/ledgertypes.ts'
 import type { PityCard, Pulls } from '../src/types.ts'
 import { changeAnswer, holding } from './answers.ts'
 import { type Api, DEMO_NOW, expect, test } from './fixtures.ts'
+import { ring } from './ring.ts'
 
 test.beforeEach(async ({ page, core }) => {
   await page.goto(`${core.origin}/#/pulls`)
@@ -42,7 +43,8 @@ test("the page shows the demo's banners, cards, savings, planner and history", a
   const model = await api.get<Pulls>('/api/pulls')
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pulls')
   // The demo's import ran when it was seeded, at the demo's start, and its history updates itself with its login.
-  await expect(page.getByTestId('pulls-import')).toHaveText(
+  await expect(ring(page, 'pulls-import').mark).toHaveAttribute(
+    'aria-label',
     /^Updated automatically with your HoYoLAB login · last 13 Oct, \d\d:\d\d$/,
   )
 
@@ -125,30 +127,29 @@ test("the page shows the demo's banners, cards, savings, planner and history", a
 })
 
 /**
- * The top bar's line after an import that ended well: the import's own sentence, and then that Import updates itself until
- * a time of day, today or tomorrow, since the core keeps the link the import found for a day (the second pass), in the
- * demo as for the player.
+ * The ring's sentence after an import that ended well, on the demo: a press takes the HoYoLAB login path first (the design,
+ * section 5), so the import's own sentence is followed by that the history updates by itself with the login. (The tests that
+ * route the model without the login give the sentences of the link a press keeps.)
  */
-const withUpdates = (sentence: string): RegExp =>
-  new RegExp(`^${sentence.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} Updates itself until \\d\\d:\\d\\d (today|tomorrow)\\.$`)
+const withLogin = (sentence: string): string => `${sentence} Updates automatically with your HoYoLAB login.`
 
 test('Import runs on the demo and says what it found', async ({ page, api }) => {
-  const line = page.getByTestId('pulls-import')
+  const line = ring(page, 'pulls-import').mark
   // the demo's own import, at its start
-  await expect(line).toHaveText(/^Updated automatically with your HoYoLAB login · last 13 Oct, \d\d:\d\d$/)
-  // Every text the line shows: the demo's import reads one page of each wish type, a twentieth of a second apart.
+  await expect(line).toHaveAttribute('aria-label', /^Updated automatically with your HoYoLAB login · last 13 Oct, \d\d:\d\d$/)
+  // Every sentence the ring shows (its accessible name): the demo's import reads one page of each wish type, a twentieth of a
+  // second apart. The few words beside the ring follow them as "page 1 · 3 new".
   await line.evaluate((element) => {
     const shown: string[] = []
     ;(window as unknown as { importLines: string[] }).importLines = shown
-    new MutationObserver(() => shown.push(element.textContent ?? '')).observe(element, {
-      childList: true,
-      characterData: true,
-      subtree: true,
+    new MutationObserver(() => shown.push(element.getAttribute('aria-label') ?? '')).observe(element, {
+      attributes: true,
+      attributeFilter: ['aria-label'],
     })
   })
   const lines = () => page.evaluate(() => (window as unknown as { importLines: string[] }).importLines)
   await page.getByRole('button', { name: 'Import', exact: true }).click()
-  await expect(line).toHaveText(withUpdates('Imported 3 new wishes.'))
+  await expect(line).toHaveAttribute('aria-label', withLogin('Imported 3 new wishes.'))
   // On the way: the wish being read by the core's name for it, with its page and what is new so far. The lines that stay
   // up for a pause are the ones checked: the start comes with the first page, and the beginners' wish, read last, with
   // the end, so either may show for no time at all (pullsview.test.ts has their words).
@@ -162,17 +163,31 @@ test('Import runs on the demo and says what it found', async ({ page, api }) => 
   // The three new wishes are kept, newest first: the history counts them.
   await expect(page.getByTestId('pulls-history')).toContainText('History · 390 pulls kept')
   await expect(page.getByTestId('history-row').first()).toContainText('13 Oct')
-  // The same press reads the game's own history logs after the wishes (the ledger design, section 0), and is running
+  // The same press reads the four history logs after the wishes (the ledger design, section 0), with the login, and is running
   // until they are read.
   await expect.poll(async () => (await api.get<Ledger>('/api/ledger')).import.ledger.state).toBe('done')
   // A second press finds nothing more.
   await page.getByRole('button', { name: 'Import', exact: true }).click()
-  await expect(line).toHaveText(withUpdates('Nothing new. The history is up to date.'))
+  await expect(line).toHaveAttribute('aria-label', withLogin('Nothing new. The history is up to date.'))
   await expect(page.getByTestId('pulls-history')).toContainText('History · 390 pulls kept')
   // The page read again, as Guild Board's window is opened again, keeps what this session's import ended with, and the
-  // link it keeps.
+  // sentence it ended with.
   await page.reload()
-  await expect(line).toHaveText(withUpdates('Nothing new. The history is up to date.'))
+  await expect(line).toHaveAttribute('aria-label', withLogin('Nothing new. The history is up to date.'))
+})
+
+test("the ring empties and the age grows as the demo's clock moves on, with no reload", async ({ page, api }) => {
+  const { label, mark, arc } = ring(page, 'pulls-import')
+  // The demo's import ran at its start, and the history updates itself every 30 minutes: the ring is full and the age is nil.
+  const offset = async (): Promise<number> => Number((await arc.getAttribute('stroke-dashoffset')) ?? 100)
+  await expect(label).toHaveText('just now')
+  expect(await offset()).toBeLessThan(5)
+  // The page's own clock follows the core's: 20 of the 30 minutes pass and a third of the ring is left, the age reads 20 min.
+  await api.advance(20 * 60)
+  await expect(label).toHaveText('20 min ago')
+  await expect.poll(offset).toBeGreaterThan(60)
+  await expect.poll(offset).toBeLessThan(72)
+  await expect(mark).toHaveAttribute('aria-label', /^Updated automatically with your HoYoLAB login · last 13 Oct, \d\d:\d\d$/)
 })
 
 /** An instant as the import line says it, in this PC's own time: "07:52". */
@@ -196,11 +211,11 @@ test('the import line says how long Import updates itself, and when its link has
     Object.assign(data.import, { state: 'done', found: 41, auto: null, auto_stopped: null, login: null })
     keep(data.import)
   })
-  const line = page.getByTestId('pulls-import')
+  const line = ring(page, 'pulls-import').mark
   const imported = 'Imported 41 new wishes.'
   const shows = async (text: string) => {
     await page.reload()
-    await expect(line).toHaveText(text)
+    await expect(line).toHaveAttribute('aria-label', text)
   }
 
   // No link kept: the import's own sentence, as it was.
@@ -230,15 +245,15 @@ test('the import line says how long Import updates itself, and when its link has
 test('the history updates itself with the HoYoLAB login, reading no file of the game', async ({ page, api }) => {
   // The demo's stand-in for the keys HoYoverse gives the login: the core's half-hourly update, asked for at once. It finds
   // the demo's three new wishes, and then reads the game's own history as well.
-  const line = page.getByTestId('pulls-import')
-  await expect(line).toHaveText(/^Updated automatically with your HoYoLAB login · last /)
+  const line = ring(page, 'pulls-import').mark
+  await expect(line).toHaveAttribute('aria-label', /^Updated automatically with your HoYoLAB login · last /)
   await api.post('/api/demo/refresh')
-  await expect(line).toHaveText('Imported 3 new wishes. Updates automatically with your HoYoLAB login.')
+  await expect(line).toHaveAttribute('aria-label', 'Imported 3 new wishes. Updates automatically with your HoYoLAB login.')
   await expect(page.getByTestId('pulls-history')).toContainText('History · 390 pulls kept')
   await expect.poll(async () => (await api.get<Ledger>('/api/ledger')).import.ledger.state).toBe('done')
-  // Import stays, reading the game's files; the link a press keeps is said while it lives.
+  // Import stays; with the login a press reads with it first, and the ring says the history updates by itself.
   await page.getByRole('button', { name: 'Import', exact: true }).click()
-  await expect(line).toHaveText(withUpdates('Nothing new. The history is up to date.'))
+  await expect(line).toHaveAttribute('aria-label', withLogin('Nothing new. The history is up to date.'))
 })
 
 test('the import line says nothing of the kept link while an import runs, nor beside a refusal', async ({ page }) => {
@@ -248,12 +263,12 @@ test('the import line says nothing of the kept link while an import runs, nor be
     })
   })
   await page.reload()
-  const line = page.getByTestId('pulls-import')
-  await expect(line).toContainText('Updates itself until')
+  const line = ring(page, 'pulls-import').mark
+  await expect(line).toHaveAttribute('aria-label', /Updates itself until/)
   // A press the core refuses is said alone.
   await page.route('**/api/pulls/import', (route) => route.fulfill({ status: 409, json: { error: 'An import is running.' } }))
   await page.getByRole('button', { name: 'Import', exact: true }).click()
-  await expect(line).toHaveText('An import is running.')
+  await expect(line).toHaveAttribute('aria-label', 'An import is running.')
   await page.unroute('**/api/pulls/import')
   // While one the press started is on its way, the line follows it and says nothing of the link.
   const { held, release } = holding()
@@ -264,7 +279,7 @@ test('the import line says nothing of the kept link while an import runs, nor be
   const button = page.getByRole('button', { name: /^Import/ })
   await button.click()
   await expect(button).toHaveText('Importing…')
-  await expect(line).not.toContainText('Updates itself')
+  await expect(line).not.toHaveAttribute('aria-label', /Updates itself/)
   release()
   await expect(button).toHaveText('Import')
 })
@@ -280,12 +295,12 @@ test('the import line says when the link last updated as soon as the core says t
     Object.assign(data.import, { state: 'done', found: 0, auto: { until, last_at: last }, auto_stopped: null })
   })
   await page.reload()
-  const line = page.getByTestId('pulls-import')
+  const line = ring(page, 'pulls-import').mark
   const nothing = 'Nothing new. The history is up to date.'
-  await expect(line).toHaveText(`${nothing} Updates itself until ${clock(until)} ${dayWord(until)}.`)
+  await expect(line).toHaveAttribute('aria-label', `${nothing} Updates itself until ${clock(until)} ${dayWord(until)}.`)
   last = tick
   await api.put('/api/pulls/settings', { corrections: {} })
-  await expect(line).toHaveText(`${nothing} Updated ${clock(tick)}, and again until ${clock(until)} ${dayWord(until)}.`)
+  await expect(line).toHaveAttribute('aria-label', `${nothing} Updated ${clock(tick)}, and again until ${clock(until)} ${dayWord(until)}.`)
 })
 
 test('a correction turns at least into a number', async ({ page, api }) => {
@@ -1070,7 +1085,7 @@ test('the Import button reads Importing… and rests while an import runs', asyn
   })
   await button.click({ force: true })
   release()
-  await expect(page.getByTestId('pulls-import')).toHaveText(withUpdates('Imported 3 new wishes.'))
+  await expect(ring(page, 'pulls-import').mark).toHaveAttribute('aria-label', withLogin('Imported 3 new wishes.'))
   await expect(button).toHaveText('Import')
   await expect(button).toHaveAttribute('aria-disabled', 'false')
   expect(presses).toEqual([])
@@ -1079,12 +1094,12 @@ test('the Import button reads Importing… and rests while an import runs', asyn
 test('a refused press is said on the line until the stream tells of an import', async ({ page, api }) => {
   await page.route('**/api/pulls/import', (route) => route.fulfill({ status: 409, json: { error: 'An import is running.' } }))
   await page.getByRole('button', { name: 'Import', exact: true }).click()
-  const line = page.getByTestId('pulls-import')
-  await expect(line).toHaveText('An import is running.')
+  const line = ring(page, 'pulls-import').mark
+  await expect(line).toHaveAttribute('aria-label', 'An import is running.')
   await page.unroute('**/api/pulls/import')
   // An import started elsewhere, as from another window: its events reach this page, and the refusal goes.
   await api.post('/api/pulls/import')
-  await expect(line).toHaveText(withUpdates('Imported 3 new wishes.'))
+  await expect(line).toHaveAttribute('aria-label', withLogin('Imported 3 new wishes.'))
 })
 
 test('the strip places each banner by its times, not by the flag read with the model', async ({ page }) => {
@@ -1158,6 +1173,26 @@ test.describe('before any import', () => {
     await expect(page.getByRole('button', { name: 'Import', exact: true })).toBeVisible()
     await expect(page.getByTestId('pulls-sky')).toHaveCount(0)
     await expect(page.getByTestId('pity-card')).toHaveCount(0)
+  })
+
+  test('with the HoYoLAB login on, it says Guild Board is reading the history now', async ({ page }) => {
+    await changeAnswer<Pulls>(page, '/api/pulls', (data) => {
+      data.import.login = 'on'
+      data.import.every_minutes = 30
+    })
+    await page.reload()
+    await expect(page.getByText('No wish history yet. Guild Board is reading it now with your HoYoLAB login.')).toBeVisible()
+    await expect(page.getByText('Open Wish → History')).toHaveCount(0)
+  })
+
+  test('while the key is asked for after a press the ring turns and Import rests', async ({ page }) => {
+    await changeAnswer<Pulls>(page, '/api/pulls', (data) => {
+      data.import.login = 'minting'
+      data.import.every_minutes = 30
+    })
+    await page.reload()
+    await expect(page.getByRole('button', { name: 'Importing…' })).toHaveAttribute('aria-disabled', 'true')
+    await expect(page.locator('.gb-fresh', { has: page.getByTestId('pulls-import') }).locator('.sign.turning')).toHaveCount(1)
   })
 })
 

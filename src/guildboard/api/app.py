@@ -1163,10 +1163,12 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
     # ------------------------------------------------------------------ Pulls: the import of the wish history (Part B)
     @app.post("/api/pulls/import")
     async def pulls_import() -> Response:
-        """Import the wish history, on the player's press: it runs on as a task, and its progress comes as pulls_import
-        events. The demo's runs on its stand-ins. Refused while an import runs, and before the first run's consent."""
+        """Import the histories, on the player's press: it runs on as a task, and its progress comes as pulls_import
+        events. With the HoYoLAB login it is the run of the automatic updates, reading no file of the game's, and the
+        game's files only when that cannot run (Core.import_pressed). The demo's runs on its stand-ins. Refused while
+        an import or an update runs, and before the first run's consent."""
         try:
-            core.wish_import.start()
+            await core.import_pressed()
         except (ImportBusy, ImportNotReady) as error:
             return _error(409, str(error))
         return JSONResponse({"started": True})

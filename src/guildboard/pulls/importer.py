@@ -206,18 +206,23 @@ class WishImporter:
         last import that ended well finished, None before any; and the updates of the link kept for the day: `auto`
         while one lives (until when, and when it last updated, None before an update), `auto_stopped` once HoYoverse
         refused it, until the next press. A key from the login is no link of a press's: `auto` leaves it out, and `login`
-        says whether the history updates itself with the login."""
+        says whether the history updates itself with the login, with `every_minutes` how often the history updates itself (None when nothing does)."""
         runs = self._store.wish_imports(RECORDS_LOOKED_AT)
         last = next((row for row in runs if row.outcome == "ok" and row.finished_at), None)
         last_at = iso(last.finished_at) if last is not None and last.finished_at is not None else None
         kept = self._live()
+        login = self.login_state()
         auto = {
             "auto": None if kept is None or kept.minted else {
                 "until": iso(kept.until), "last_at": iso(kept.last_at) if kept.last_at is not None else None,
             },
             "auto_stopped": self._auto_stopped,
-            "login": self.login_state(),
+            "login": login,
         }
+        # The history reads itself every AUTO_EVERY with the login's keys or while a press's link lives (the core asks
+        # for an update then), and not otherwise.
+        reads_itself = login in ("on", "minting", "failed") or auto["auto"] is not None
+        auto["every_minutes"] = int(AUTO_EVERY.total_seconds() // 60) if reads_itself else None
         if self._shown is not None:
             return {**self._shown, "last_at": last_at, **auto}
         newest = runs[0] if runs else None
@@ -244,6 +249,14 @@ class WishImporter:
                 "until": iso(kept.until), "last_at": iso(kept.last_at) if kept.last_at is not None else None,
             },
         }
+
+    def ledger_import_state(self) -> dict[str, Any]:
+        """The Ledger page's import block: state() with the ledger block, whose `every_minutes` also holds while the
+        Feedback link kept from a press lives (auto_update reads it on the same AUTO_EVERY)."""
+        state = {**self.state(), "ledger": self.ledger_state()}
+        if state["every_minutes"] is None and state["ledger"]["auto"] is not None:
+            state["every_minutes"] = int(AUTO_EVERY.total_seconds() // 60)
+        return state
 
     def _show_ledger(self, state: str, kind: str | None, found: int, message: str | None) -> None:
         self._ledger_shown = {"state": state, "kind": kind, "found": found, "message": message}
@@ -281,13 +294,21 @@ class WishImporter:
         await asyncio.gather(*tasks, return_exceptions=True)
         self.running = False
 
-    def _reserve(self) -> None:
+    def ensure_pressable(self) -> None:
+        """Raise what a press would: ImportNotReady before the first run's consent, ImportBusy while a run goes."""
         if not self._ready():
             raise ImportNotReady()
         if self.running:
             raise ImportBusy()
+
+    def pressed(self) -> None:
+        """An accepted press starts over, whichever way it is read: whatever stopped the updates before is said no more."""
+        self._auto_stopped = None
+
+    def _reserve(self) -> None:
+        self.ensure_pressable()
         self.running = True
-        self._auto_stopped = None  # a press starts over: whatever stopped the updates before is said no more
+        self.pressed()
 
     # ------------------------------------------------------------------ the updates of the kept link
     async def auto_update(self) -> bool:
@@ -357,6 +378,8 @@ class WishImporter:
             (wishes and (self._shown or {}).get("state") == "failed")
             or (ledgers and (self._ledger_shown or {}).get("state") == "failed")
         )
+        if ran and not failed:
+            self.pressed()  # the updates go well again, with the login's key: the word that a link was refused is stale
         self._set_login_run("failed" if failed else "on")
         return ran
 

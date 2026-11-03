@@ -10,7 +10,7 @@ import { CalculatorNote, SyncLine } from './SyncLine.tsx'
 
 const live = { now: () => new Date('2026-10-25T07:20:00+00:00') } as unknown as Live
 const sync: CharSync = {
-  can_refresh: true, wait_minutes: null, reading: false, read_at: '2026-10-25T07:00:00+00:00', calculator: 'on', message: null,
+  can_refresh: true, wait_minutes: null, reading: false, blocked: null, read_at: '2026-10-25T07:00:00+00:00', calculator: 'on', message: null, every_minutes: 360,
 }
 
 test('a face sits on a ring of her element, with her drawn bust where there is no picture', () => {
@@ -35,19 +35,29 @@ test('the readiness ring gives its figure as text and as its name', () => {
   expect(renderToStaticMarkup(createElement(ReadinessRing, { value: 140, size: '46px', caption: 'of her full potential' }))).toContain('100<small>%</small>')
 })
 
-test('the Refresh line offers the button, and rests it while a read must wait', () => {
+test('the ring beside the characters offers a press and rests it while a read must wait', () => {
   const ready = renderToStaticMarkup(createElement(SyncLine, { live, sync }))
-  expect(ready).toContain('>Refresh</button>')
-  expect(ready).toContain('aria-disabled="false"')
-  expect(ready).toContain('Read from HoYoLAB 20 min ago.')
+  expect(ready).toContain('<button')
+  expect(ready).not.toContain('>Refresh<')
+  expect(ready).not.toContain('aria-disabled')
+  expect(ready).toContain('data-testid="characters-sync"')
+  expect(ready).toContain('>20 min ago</span>')
+  expect(ready).toContain('Reads again by itself every 6 hours.')
+  // The ring is a button in every state, so that the keyboard's focus stays on it when a read starts or must wait.
   const waiting = renderToStaticMarkup(createElement(SyncLine, { live, sync: { ...sync, can_refresh: false, wait_minutes: 3 } }))
+  expect(waiting).toContain('<button')
   expect(waiting).toContain('aria-disabled="true"')
   expect(waiting).toContain('Try again in 3 minutes.')
+  const reading = renderToStaticMarkup(createElement(SyncLine, { live, sync: { ...sync, can_refresh: false, reading: true } }))
+  expect(reading).toContain('<button')
+  expect(reading).toContain('aria-disabled="true"')
+  expect(reading).toContain('Reading your characters from HoYoLAB')
 })
 
-test('the calculator sentence is said by its note and not by the top bar\'s line', () => {
+test('the calculator sentence is said in full by its note, and in the ring only as a tip', () => {
   const off: CharSync = { ...sync, calculator: 'off' }
-  expect(renderToStaticMarkup(createElement(SyncLine, { live, sync: off }))).not.toContain('Calculator sync is off')
+  const ring = renderToStaticMarkup(createElement(SyncLine, { live, sync: off }))
+  expect(ring).toContain('>Calculator off</span>') // the label is short; the long sentence is the ring's tip
   expect(renderToStaticMarkup(createElement(CalculatorNote, { sync: off }))).toContain('Calculator sync is off in HoYoLAB, so Guild Board can&#x27;t see what you hold.')
   expect(renderToStaticMarkup(createElement(CalculatorNote, { sync }))).toBe('')
 })
