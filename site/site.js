@@ -84,6 +84,13 @@ if (typeof document !== 'undefined') (function () {
       .then(function () { clearTimeout(giveUp); });
   }
 
+  // The game's icons on the hero's Board come from HoYoverse; one that does not load gives way to its drawn sign.
+  all('.game-icon').forEach(function (icon) {
+    function gone() { icon.parentNode.classList.add('no-icon'); }
+    if (icon.complete && icon.naturalWidth === 0) gone();
+    else icon.addEventListener('error', gone);
+  });
+
   // The hero's Board: a made-up month of check-ins, and commissions to tick.
   var days = document.getElementById('days');
   var count = 11;

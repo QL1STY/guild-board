@@ -41,11 +41,25 @@ def test_the_site_is_three_files_and_holds_no_picture():
     assert sorted(path.name for path in SITE.iterdir()) == ["index.html", "site.css", "site.js"]
 
 
-def test_the_page_loads_nothing_from_a_third_party_and_runs_no_inline_script():
+# The two game icons of the hero's sample widgets, read by the visitor's browser from HoYoverse's own addresses (the player's
+# choice of 2026-11-03), as the browser demo reads its pictures: the primogem of the check-in and the resin in its ring. No
+# game picture is kept in the repository, and the page sends no referrer.
+GAME_ICONS = {
+    "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/19/194600931/8902272b2dbb45cce8fbd6f596c6904b_3502391192719350131.png",
+    "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/03/237301566/4328202cd795d7c4a7d5cd54e331c43b_1224981524026882289.png",
+}
+
+
+def test_the_page_loads_nothing_from_a_third_party_but_the_two_game_icons_and_runs_no_inline_script():
     page = _page()
+    icons = []
     for tag, attrs in page.tags:
         if tag in {"script", "link", "img", "iframe", "source", "video", "audio", "embed", "object"}:
             address = attrs.get("src") or attrs.get("href") or ""
+            if tag == "img" and address in GAME_ICONS:
+                icons.append(address)
+                assert attrs.get("referrerpolicy") == "no-referrer" and attrs.get("alt") == "", attrs
+                continue
             assert address == "" or not re.match(r"(https?:)?//", address), (tag, address)
         assert "style" not in attrs, f"an inline style on <{tag}> would need 'unsafe-inline'"
         assert not any(name.startswith("on") for name in attrs), f"an inline handler on <{tag}>"
@@ -57,6 +71,8 @@ def test_the_page_loads_nothing_from_a_third_party_and_runs_no_inline_script():
     policy = next(attrs["content"] for tag, attrs in page.tags if tag == "meta" and attrs.get("http-equiv") == "Content-Security-Policy")
     assert "default-src 'none'" in policy and "connect-src https://api.github.com;" in policy
     assert "unsafe" not in policy
+    assert sorted(icons) == sorted(GAME_ICONS), "each game icon is on the page once"
+    assert "img-src 'self' data: https://upload-static.hoyoverse.com https://act-upload.hoyoverse.com;" in policy
     # The only request the script makes is GitHub's public API, for the releases repository's latest release.
     assert re.findall(r"https?://[^'\"\s)]+", JS) == ["https://api.github.com/repos/"]
     assert "XMLHttpRequest" not in JS and "sendBeacon" not in JS and "document.cookie" not in JS

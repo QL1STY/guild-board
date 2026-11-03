@@ -70,6 +70,12 @@ code { padding: 1px 5px; border-radius: 4px; background: var(--tint); font: 500 
 .checkin { display: flex; align-items: center; gap: 16px; }
 .prize { position: relative; flex: none; display: grid; place-items: center; width: 84px; height: 84px; border: 2px solid var(--fill); border-radius: 50%; background: rgba(232, 190, 100, .28); }
 .prize svg { width: 44px; height: 44px; fill: var(--fill); }
+/* The game's own icons, read from HoYoverse; where one does not load, its drawn sign shows instead (site.js). */
+.prize .game-icon { width: 56px; height: 56px; object-fit: contain; }
+.prize .sign, .no-icon > .game-icon { display: none; }
+.prize.no-icon .sign { display: block; }
+.ring-wrap { position: relative; width: 66px; height: 66px; flex: none; }
+.ring-wrap .game-icon { position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; object-fit: contain; transform: translate(-50%, -50%); }
 .claimed .prize { border-color: var(--done); background: var(--tint); }
 .stamp { position: absolute; right: -4px; bottom: -4px; display: none; place-items: center; width: 30px; height: 30px; border: 2px solid var(--surface); border-radius: 50%; background: var(--done); color: #fff; font-weight: 800; }
 .claimed .stamp { display: grid; }
