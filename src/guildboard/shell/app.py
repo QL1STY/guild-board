@@ -412,6 +412,7 @@ class ShellApp(QObject):
         # The settings come once before the core is ready, when there is no overlay yet: it reads them when it is made.
         if self._overlay is None or previous is None:
             return
+        self._overlay.set_full_screen_game(settings.overlay_full_screen)
         # A hotkey another program held is asked for again with any settings, as when the player saves it again.
         if settings.overlay_hotkey != previous.overlay_hotkey or self._hotkey_state == "taken":
             self._hold_hotkey()
@@ -573,6 +574,7 @@ class ShellApp(QObject):
         for the Overlay settings. The window shows, closed, if the game runs already."""
         self._overlay = self._windows.overlay(link)
         self._overlay.closed.connect(self._on_overlay_closed)
+        self._overlay.set_full_screen_game((self._settings or Settings()).overlay_full_screen)
         self._place_overlay()
         self._hotkey = self._windows.hotkey()
         self._hotkey.pressed.connect(self._on_hotkey)

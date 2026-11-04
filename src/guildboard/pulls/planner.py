@@ -26,7 +26,9 @@ from guildboard.gameday import game_day, game_day_start
 from guildboard.history import History
 from guildboard.ledger import income
 from guildboard.metrics import EARNED_KEY, diary_sources
+from guildboard.characters.reference import load_inventory
 from guildboard.pulls import ALL_POOLS, POOLS, nextversion
+from guildboard.pulls.choices import load_upcoming, wish_choices
 from guildboard.pulls.rules import PATHS, Correction, PoolState, Wish, load_reference, pool_state, window_start
 from guildboard.pulls.savings import Balance, Estimate, balance_now
 from guildboard.sources.demo import DEMO_ACCOUNT
@@ -360,6 +362,12 @@ class Planner:
                 windows=windows,
                 months=wish_months(wishes, today, server),
             )
+        )
+
+    def choices(self) -> dict[str, list[dict[str, Any]]]:
+        """What Add a wish offers (pulls/choices.py): every character and weapon that can be wished for, in its group."""
+        return wish_choices(
+            load_inventory(), self._store.wiki_items(), load_upcoming(), self._store.banners(), self._clock.now()
         )
 
     def history(self, before: int | None, limit: int) -> dict[str, Any]:

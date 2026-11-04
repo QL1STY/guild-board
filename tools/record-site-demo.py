@@ -51,7 +51,7 @@ PAGES: dict[str, tuple[str, ...]] = {
     "backlog": tuple(f"/api/backlog?sort={sort}" for sort in ("least", "closest", "game")),
     "map": ("/api/map",),
     "stats": tuple(f"/api/stats?range={span}" for span in ("7", "30", "90", "all")),
-    "pulls": ("/api/pulls",),
+    "pulls": ("/api/pulls", "/api/pulls/choices"),
     "ledger": ("/api/ledger",) + tuple(f"/api/ledger/history?kind={kind}&limit=50" for kind in ("primogem", "crystal", "resin", "artifact")),
     "friends": ("/api/friends", "/api/friends?fresh=1", "/api/profile"),
     "characters": ("/api/characters",),

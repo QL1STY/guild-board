@@ -667,6 +667,7 @@ function OverlaySettings({ live, settings, id }: { live: Live; settings: Setting
   const [opacity, chooseOpacity] = useSetting(live, settings, 'overlay_opacity', run)
   const [pinned, choosePinned] = useSetting(live, settings, 'overlay_pinned', run)
   const [lines, chooseLines] = useSetting(live, settings, 'overlay_lines', run)
+  const [fullScreen, chooseFullScreen] = useSetting(live, settings, 'overlay_full_screen', run)
   const radios = useId() // the display's radio buttons, one group
   const listed = overlay?.displays ?? []
   const displays = listed.length === 0 ? [MAIN_DISPLAY] : listed
@@ -717,6 +718,22 @@ function OverlaySettings({ live, settings, id }: { live: Live; settings: Setting
           <Switch on={lines} label="Lines over the game" className="set-switch" onPress={() => chooseLines(!lines)} />
         </div>
         <p className="set-aside">While the game runs, a line at the top of the overlay says when a timer is ready.</p>
+      </div>
+      <div className="set-part">
+        <div className="set-line">
+          <span>The game runs in full screen</span>
+          <Switch
+            on={fullScreen}
+            label="The game runs in full screen"
+            className="set-switch"
+            onPress={() => chooseFullScreen(!fullScreen)}
+          />
+        </div>
+        <p className="set-aside">
+          Turn on if the game's Display Mode is Fullscreen, which minimizes the game when the open overlay takes the
+          keyboard. The game then keeps the keyboard: hold Alt in the game to show the pointer and click, and close the
+          overlay with its hotkey or Close. Notes and timers are typed on the Board.
+        </p>
       </div>
       <Notice text={notice} />
     </div>

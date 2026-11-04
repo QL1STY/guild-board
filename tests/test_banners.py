@@ -155,6 +155,17 @@ def test_a_name_that_holds_and_is_one_name():
     assert (row.name, row.pool, row.featured) == ("Twirling Lotus", "character", ("Nilou",))
 
 
+def test_a_title_written_in_lower_case_keeps_its_pool():
+    # HoYoverse's title for Mitya's wish, 2026-11-04, writes "drop rate" in lower case; it is still the character event.
+    mitya = 'Event Wish "Myriad Patterns Unfold" - Boosted drop rate for "Rules Set at Naught" Mitya (Electro)!'
+    weapons = 'Event Wish "Epitome Invocation" - Boosted drop rates for Starsealed Edict (Catalyst) and Azurelight (Sword)!'
+    rows = parse_banners(ann_list(entry(21997, mitya), entry(21977, weapons)), ann_content(), NOW)
+    assert [(row.name, row.pool, row.featured) for row in rows] == [
+        ("Myriad Patterns Unfold", "character", ("Mitya",)),
+        ("Epitome Invocation", "weapon", ("Starsealed Edict", "Azurelight")),
+    ]
+
+
 def test_other_announcements_are_left_out():
     rows = parse_banners(ANN_LIST, ANN_CONTENT, NOW)
     # The event that names the standard wish, and the Game and Miliastra Wonderland entries, are not banners.

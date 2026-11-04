@@ -1121,7 +1121,7 @@ def test_a_setting_about_this_pc_never_goes_up(tmp_path, clock):
             "overlay_display": "DISPLAY2", "gallery_folder": "D:/Games/ScreenShot", "gallery_enabled": True,
             "overlay_hotkey": "Ctrl+Alt+H", "overlay_opacity": 80, "overlay_pinned": False, "overlay_lines": False,
             "overlay_size": 150, "start_with_windows": True, "in_session_interval_min": 30, "picture_quality": "low",
-            "tray_hint_shown": True, "risk_acknowledged": True, "sync_my_data": False,
+            "tray_hint_shown": True, "risk_acknowledged": True, "sync_my_data": False, "overlay_full_screen": True,
         })
         assert core.store.sync_outbox(100) == []
         assert core.settings.overlay_display == "DISPLAY2" and core.settings.overlay_hotkey == "Ctrl+Alt+H"

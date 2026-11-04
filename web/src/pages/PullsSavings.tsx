@@ -186,17 +186,6 @@ function Switches({ owned }: { owned: Pulls['savings']['owned'] }) {
   )
 }
 
-/** A small gold ornament in a top corner of the ledger: two thin lines round a corner and a dot (the mockup's). */
-function Corner({ side }: { side: 'tl' | 'tr' }) {
-  return (
-    <svg className={`pl-corner ${side}`} viewBox="0 0 34 34" aria-hidden="true" focusable="false">
-      <path className="c1" d="M2 32 V10 Q2 2 10 2 H32" />
-      <path className="c2" d="M6 32 V12 Q6 6 12 6 H32" />
-      <circle cx="10" cy="10" r="2" />
-    </svg>
-  )
-}
-
 /**
  * Savings, the ledger (the second pass, spec 3.1; the accepted mockup savings-chosen.html): the balance in pulls now and
  * what it is made of, the Welkin Moon and Gnostic Hymn switches, the next version's primogems source by source, the
@@ -252,8 +241,6 @@ export function PullsSavings({
   const note = achievementsNote(savings.achievements_pulls)
   return (
     <section className="gb-panel pl-ledger" data-testid="pulls-savings" aria-labelledby={titleId}>
-      <Corner side="tl" />
-      <Corner side="tr" />
       <div className="pl-lhead">
         <h2 id={titleId} className="gb-h">
           Savings

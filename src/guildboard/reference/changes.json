@@ -1,4 +1,36 @@
 {
+  "1.0.1": [
+    {
+      "kind": "new",
+      "title": "A clearer planner",
+      "text": "Pulls shows each wish as Certain, Likely, Maybe or Unlikely at a glance. Add a wish lets you pick a character or weapon by their face, including the ones announced and not out yet."
+    },
+    {
+      "kind": "new",
+      "title": "The overlay over a full-screen game",
+      "text": "If the game's Display Mode is Fullscreen, turn on The game runs in full screen in Settings, Overlay. The open overlay then no longer minimizes the game: hold Alt in the game for the pointer."
+    },
+    {
+      "kind": "better",
+      "title": "New characters on their own",
+      "text": "A new version's characters show up in Characters and in the planner by themselves, as soon as the HoYoLAB wiki lists them."
+    },
+    {
+      "kind": "better",
+      "title": "US dollars by default",
+      "text": "A new player and the demo see the Ledger's prices in US dollars. A currency you chose stays."
+    },
+    {
+      "kind": "fixed",
+      "title": "A missing banner",
+      "text": "The planner now counts a character banner whose announcement writes its title in lower case, as Mitya's did."
+    },
+    {
+      "kind": "fixed",
+      "title": "The first run's Import",
+      "text": "The first run now says that Import reads the game's files only when there is no usable HoYoLAB login."
+    }
+  ],
   "1.0.0": [
     {
       "kind": "new",

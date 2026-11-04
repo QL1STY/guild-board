@@ -218,17 +218,45 @@ export function resultWords(result: FiveResult, pool: PullsPool | 'novice'): str
   return result === null ? '' : (RESULTS[pool][result] ?? '')
 }
 
+/** How a planner's chance reads at a glance: its chip's colour. */
+export type Tone = 'certain' | 'likely' | 'maybe' | 'unlikely'
+
 /**
- * The chance at a featured 5★ with the pulls there will be by then (spec 2.3): "Certain within 29 pulls" once the
- * pulls reach the point where it is certain, else "74% with 86 pulls by then"; with "; a second copy 62%" when the
- * second copy's chance is given. Chances are from 0 to 1.
+ * A featured 5★'s chance as a verdict (the planner's light update): "Certain" once the pulls by then reach the point
+ * where it is certain even at hard pity, else "Likely · 63%" from 60%, "Maybe · 43%" from 25% and "Unlikely · 6%" below.
+ * Chances are from 0 to 1, and a chance short of certain never reads 100%.
  */
-export function chanceWords(chance: number, certainWithin: number | null, pulls: number, second?: number): string {
-  const first =
-    certainWithin !== null && isCertain({ certain_within: certainWithin, pulls_by_then: pulls })
-      ? `Certain within ${plural(certainWithin, 'pull')}`
-      : `${percent(chance)} with ${plural(pulls, 'pull')} by then`
-  return second === undefined ? first : `${first}; a second copy ${percent(second)}`
+export function verdict(entry: { chance: number; certain_within: number | null; pulls_by_then: number }): {
+  tone: Tone
+  label: string
+} {
+  if (isCertain(entry)) return { tone: 'certain', label: 'Certain' }
+  const tone: Tone = entry.chance >= 0.6 ? 'likely' : entry.chance >= 0.25 ? 'maybe' : 'unlikely'
+  const word = { likely: 'Likely', maybe: 'Maybe', unlikely: 'Unlikely' }[tone]
+  return { tone, label: `${word} · ${percent(entry.chance)}` }
+}
+
+/** What a verdict rests on: "at most 29 pulls" once certain, else "86 pulls by then". */
+function reach(entry: { certain_within: number | null; pulls_by_then: number }): string {
+  return entry.certain_within !== null && isCertain(entry)
+    ? `at most ${plural(entry.certain_within, 'pull')}`
+    : `${plural(entry.pulls_by_then, 'pull')} by then`
+}
+
+/** Under a planner entry's verdict: "at most 29 pulls · 2nd copy 39%", or "86 pulls by then · 2nd copy 9%". */
+export function planReason(entry: Pulls['planner'][number]): string {
+  return `${reach(entry)} · 2nd copy ${percent(entry.second)}`
+}
+
+/** Under a wishlist 5★'s verdict: "at most 29 pulls", "86 pulls by then", with "for all 3 · " first for several copies. */
+export function wishReason(entry: Pulls['wishlist'][number]): string {
+  return entry.copies > 1 ? `for all ${entry.copies} · ${reach(entry)}` : reach(entry)
+}
+
+/** Over the banners' entries: "you have 93 pulls by 24 Nov", the pulls by the first banner's end; "" with none. */
+export function bannersBudget(planner: Pulls['planner']): string {
+  const first = planner[0]
+  return first === undefined ? '' : `you have ${plural(first.pulls_by_then, 'pull')} by ${localDay(first.banner.ends_at)}`
 }
 
 /** The words of the ledger's balance (`balanceWords`). */
@@ -618,23 +646,18 @@ export function cardLabel(card: PityCard): string {
   return words.tag === null ? head : `${head}, ${words.tag.charAt(0).toLowerCase()}${words.tag.slice(1)}`
 }
 
-/** When a planner entry's banner runs (the mockup's): "now, until 3 Nov", its end in this PC's own time. */
+/** When a planner entry's banner runs: "until 3 Nov", its end in this PC's own time. */
 export function plannerWhen(banner: Banner): string {
-  return `now, until ${localDay(banner.ends_at)}`
+  return `until ${localDay(banner.ends_at)}`
 }
 
 /**
- * A wishlist entry's day and chance (the mockup's): "about 11 Nov, 74%", or "about 11 Nov, certain within 29 pulls" once
- * the pulls by then reach the point where it is certain. A 4★ has its day alone: the chain does not count it (the
- * plan's call 7), so the model gives it no chance.
+ * A wishlist entry's day, with its copies when several: "about 11 Nov", "about 16 Dec · 3 copies". A 4★ has no verdict
+ * beside it: the chain does not count it (the plan's call 7), so the model gives it no chance.
  */
 export function wishWhen(entry: Pulls['wishlist'][number]): string {
   const about = `about ${dayMonth(entry.about)}`
-  if (entry.rank < 5) return about
-  if (entry.certain_within !== null && isCertain(entry)) {
-    return `${about}, certain within ${plural(entry.certain_within, 'pull')}`
-  }
-  return `${about}, ${percent(entry.chance)}`
+  return entry.copies > 1 ? `${about} · ${entry.copies} copies` : about
 }
 
 /** The featured name a planner entry is for: the charted weapon on the weapon banner, else the banner's first featured. */

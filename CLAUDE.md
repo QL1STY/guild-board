@@ -16,7 +16,7 @@ A Windows companion for Genshin Impact, an unofficial fan project. It reads a Ho
 
 ## Working here
 
-- Python 3.12 with uv. Run tests with `uv run pytest`. A few tests (the PowerShell scripts', the window's) need Windows.
+- Python 3.12 with uv. Run the whole suite with `uv run pytest -n auto` (every core), and one file while you work with `uv run pytest tests/test_x.py`. Run the Python suite and the browser tests one after the other, not at once. A few tests (the PowerShell scripts', the window's) need Windows.
 - Set up a fresh checkout with `powershell -ExecutionPolicy Bypass -File setup.ps1`. It quits a running Guild Board, installs, builds the interface and makes the desktop shortcut.
 - Run Guild Board with its window on demo data with `uv run guildboard --demo`; add `--no-shell` to run the core alone and get a link for the browser. `uv run guildboard --quit` asks the Guild Board that is running to quit, which may be your own installed copy: do not run it to stop a demo, stop the demo by its process.
 - Make the installer to give Guild Board to someone else with `powershell -ExecutionPolicy Bypass -File build-installer.ps1`. It refuses to build until the release key is pinned in `selfupdate.py` (`-WithoutReleaseKey` builds an installer that never updates, and says so again at the end). It writes `dist-installer\Guild Board Setup <version>.exe` (about 150 MB), building in `.venv-package` so a running Guild Board keeps running; the recipes are in `packaging/`. The installer needs no administrator rights, and an update or an uninstall leaves the player's data.

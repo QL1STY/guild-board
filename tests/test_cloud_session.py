@@ -80,7 +80,7 @@ def test_a_session_never_shows_its_tokens():
     protect(b'{"access_token": "MARKER-IN-THE-FILE", "refresh_token": "r", "expires_at": "soon", "user_id": "u", '
             b'"name": "n", "tag": "1"}'),
     protect(b"[1, 2]"),
-])
+], ids=["damaged", "plain words", "no refresh token", "a field of no kind", "a list"])  # DPAPI's bytes differ on each run
 def test_an_unreadable_file_is_no_session(tmp_path, caplog, content):
     path = tmp_path / "cloud.bin"
     path.write_bytes(content)

@@ -493,7 +493,7 @@ describe('the Pulls widgets (the Pulls plan, Task 12)', () => {
   it("say a wishlist entry in short: certain, or the chance", () => {
     const wish = (over: Partial<Pulls['wishlist'][number]>): Pulls['wishlist'][number] => ({
       id: 1, name: 'Citlali', kind: 'character', rank: 5, pool: 'character', about: '2026-11-11', copies: 1, icon: null,
-      chance: 0.74, certain_within: 209, pulls_by_then: 112, ...over,
+      chance: 0.74, certain_within: 209, pulls_by_then: 112, soon: false, ...over,
     })
     expect(wishShort(wish({}))).toBe('about 11 Nov, 74%')
     expect(wishShort(wish({ chance: 1, certain_within: 29, pulls_by_then: 154 }))).toBe('about 11 Nov, certain')

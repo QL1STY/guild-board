@@ -938,6 +938,19 @@ def test_a_new_display_setting_or_a_change_of_displays_places_the_overlay_again(
     assert {state for _, state in reports} == {"held"}
 
 
+def test_the_full_screen_setting_reaches_the_overlay(qtbot, shell):
+    # Off by default: the open overlay takes the focus, as a game in a window or borderless allows. On, for a game in
+    # full screen, which minimizes when it loses the focus.
+    app, _, _ = shell()
+    _window(qtbot, app)
+    overlay = app.overlay()
+    assert overlay.full_screen_game is False
+    app.call(lambda core: core.update_settings({"overlay_full_screen": True})).result(5)
+    qtbot.waitUntil(lambda: overlay.full_screen_game is True)
+    app.call(lambda core: core.update_settings({"overlay_full_screen": False})).result(5)
+    qtbot.waitUntil(lambda: overlay.full_screen_game is False)
+
+
 def test_the_tray_can_hide_the_pinned_widgets_and_move_the_overlay_to_the_main_display(qtbot, shell):
     app, _, _ = shell()
     _window(qtbot, app)

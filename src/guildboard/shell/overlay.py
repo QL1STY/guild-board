@@ -1,7 +1,9 @@
 """The overlay's window: Guild Board's own, frameless, see-through and always on top, over a whole display. It shows
 the interface's overlay page in a view of its own (stage 2A spec 14.3). Closed, it lets clicks through and never takes
-the focus, so the game keeps both; open, on the hotkey, it takes them. The window and the page say open or closed to
-each other through the page's address alone: #/overlay or #/overlay/open.
+the focus, so the game keeps both; open, on the hotkey, it takes them. For a game in full screen, which minimizes
+whenever it loses the focus (2026-11-04), the player turns on a setting, and the open window then takes the clicks but
+never the focus: the game stays in front, and its own Alt shows the pointer. The window and the page say open or closed
+to each other through the page's address alone: #/overlay or #/overlay/open.
 
 It never looks for the game's window, never activates it and never sends it input. Closing only makes this window
 click-through again, or hides it, and Windows hands the focus back (stage 2A spec 4)."""
@@ -25,6 +27,8 @@ OPEN = "/overlay/open"  # and while it is open: every widget, with Edit
 ALWAYS = Qt.WindowType.Tool | Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
 # Only while closed: clicks go through, and the focus stays where it is.
 CLICK_THROUGH = Qt.WindowType.WindowTransparentForInput | Qt.WindowType.WindowDoesNotAcceptFocus
+# Open for a game in full screen: the clicks come to the window, and the focus still stays where it is.
+NO_FOCUS = Qt.WindowType.WindowDoesNotAcceptFocus
 
 
 def overlay_view(parent: QWidget, origin: str) -> QWidget:
@@ -74,6 +78,7 @@ class OverlayWindow(QWidget):
         self._loaded = False
         self._launch_failed = False  # the last launch did not load: the next show loads it again
         self._zoom = 1.0  # how large the page draws, kept for each load
+        self._full_screen_game = False  # the setting: open, the window takes the clicks but never the focus
         self._layout = QVBoxLayout(self)
         self._layout.setContentsMargins(0, 0, 0, 0)
         # Every change of Qt's focus window, from whichever of Guild Board's windows: a change of activation reaches
@@ -86,6 +91,14 @@ class OverlayWindow(QWidget):
     @property
     def is_open(self) -> bool:
         return self._open
+
+    @property
+    def full_screen_game(self) -> bool:
+        return self._full_screen_game
+
+    def set_full_screen_game(self, on: bool) -> None:
+        """The game runs in full screen: from the next opening, the open window takes the clicks but never the focus."""
+        self._full_screen_game = on
 
     def place_on(self, screen: QScreen) -> None:
         """Covers all of the display."""
@@ -182,15 +195,19 @@ class OverlayWindow(QWidget):
     def _show_open(self) -> None:
         self._wake()
         self.show()  # Qt hides a window whose flags change
+        if self._full_screen_game:
+            self._address(OPEN)  # the game keeps the focus and the keyboard: the hotkey or Close closes the overlay
+            return
         self.raise_()
         self.activateWindow()
         self._view.setFocus()  # Esc goes to the page
         self._address(OPEN)
 
     def _click_through(self, on: bool) -> None:
-        flags = self.windowFlags()
-        self.setWindowFlags(flags | CLICK_THROUGH if on else flags & ~CLICK_THROUGH)
-        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating, on)
+        flags = self.windowFlags() & ~CLICK_THROUGH
+        keeps_focus_away = on or self._full_screen_game
+        self.setWindowFlags(flags | CLICK_THROUGH if on else flags | NO_FOCUS if keeps_focus_away else flags)
+        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating, keeps_focus_away)
 
     def _address(self, fragment: str) -> None:
         """Sets the page's address fragment, which the page follows without loading again: once the launch has

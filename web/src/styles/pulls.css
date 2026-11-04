@@ -167,8 +167,8 @@
 
 /*
  * ---------- Savings, the ledger (the second pass; the accepted mockup savings-chosen.html) ----------
- * Parchment made premium: a card lit from its top, a thin inner frame, a small gold ornament in each top corner and a
- * gold double rule between its parts. Its type is the mockup's, drawn at 16 pixels, with the balance in 54.
+ * Parchment made premium: a card lit from its top, a thin inner frame and a gold double rule between its parts. The gold
+ * ornaments it had in its top corners went in the planner's light update (2026-11-04): no other card has them. Its type is the mockup's, drawn at 16 pixels, with the balance in 54.
  */
 .pl-ledger {
   position: relative;
@@ -177,41 +177,10 @@
   box-shadow: inset 0 0 0 4px var(--ledger-light), inset 0 0 0 5px var(--hairline);
   font-size: 16px;
 }
-.pl-corner {
-  position: absolute;
-  top: 9px;
-  width: 34px;
-  height: 34px;
-  opacity: .8;
-  pointer-events: none;
-}
-.pl-corner.tl {
-  left: 9px;
-}
-.pl-corner.tr {
-  right: 9px;
-  transform: scaleX(-1);
-}
-.pl-corner path {
-  fill: none;
-}
-.pl-corner .c1 {
-  stroke: var(--r1);
-  stroke-width: 1.2;
-}
-.pl-corner .c2 {
-  stroke: var(--border);
-  stroke-width: 1;
-}
-.pl-corner circle {
-  fill: var(--r1);
-}
-/* The head keeps clear of the ornaments. */
 .pl-lhead {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 0 30px;
 }
 .pl-ledger .gb-h {
   margin: 0;
@@ -391,31 +360,140 @@
   list-style: none;
 }
 .pl-list > li {
-  flex: 1 1 0;
+  flex: none;
 }
 .pl-list > li + li {
   border-top: 1px solid var(--hairline);
 }
-.pl-plan,
-.pl-wish {
+/* A row (the light update): the face, the name over its day, the verdict, and on the wishlist its Remove. */
+.pl-item {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto 22px;
   align-content: center;
   align-items: center;
-  column-gap: 9px;
-  padding-block: 5px;
+  column-gap: 12px;
+  padding-block: 6px;
 }
-.pl-plan .pl-face {
-  grid-row: span 2;
+.pl-item .pl-face {
+  width: 38px;
+  height: 38px;
 }
-.pl-chance {
-  grid-column: 2 / -1;
+.pl-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pl-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 7px;
+  font-size: 15px;
+}
+.pl-pool {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.pl-tag {
+  padding: 0 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.pl-when {
   font-size: 13px;
+  color: var(--muted);
+}
+/* The verdict: what it rests on beside its chip, and a bar of the chance under both, right-aligned. */
+.pl-verdict {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: center;
+  gap: 3px 8px;
+  min-width: 200px;
+}
+.pl-verdict .pl-bar {
+  grid-column: 1 / -1;
+}
+.pl-chip {
+  padding: 1px 10px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 800;
+}
+.pl-chip.certain {
+  background: color-mix(in srgb, var(--good) 14%, var(--surface));
+  color: var(--good);
+}
+.pl-chip.likely {
+  background: color-mix(in srgb, var(--fill) 16%, var(--surface));
+  color: var(--gold-ink);
+}
+.pl-chip.maybe {
+  background: var(--warn-soft);
+  color: var(--ink);
+}
+.pl-chip.unlikely {
+  background: color-mix(in srgb, var(--spent) 12%, var(--surface));
+  color: var(--spent);
+}
+.pl-why {
+  grid-row: 1;
+  grid-column: 1;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+}
+.pl-chip {
+  grid-row: 1;
+  grid-column: 2;
+  justify-self: end;
+}
+.pl-bar {
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--track);
+}
+.pl-bar i {
+  display: block;
+  height: 100%;
+  background: var(--fill);
+}
+.pl-bar i.certain {
+  background: var(--done);
+}
+.pl-remove {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+}
+.pl-remove:hover {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: var(--ink);
+}
+/* A group's heading: its name, and on the right what it rests on. */
+.pl-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 8px 0 2px;
+  font-size: 12.5px;
+  font-weight: 700;
   color: var(--ink2);
 }
-.pl-chance.good {
-  color: var(--good);
-  font-weight: 700;
+.pl-group .pl-muted {
+  font-weight: 400;
 }
 .pl-muted {
   color: var(--muted);
@@ -427,8 +505,7 @@
 .pl-wishlist {
   display: flex;
   flex-direction: column;
-  flex-shrink: 1;
-  flex-basis: auto;
+  flex: 1 1 auto;
   min-height: 0;
   margin-top: 4px;
   padding-top: 6px;
@@ -441,23 +518,198 @@
  */
 .pl-wishes {
   --fade: 12px;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
   padding-right: 4px;
 }
-/* The entries fill the room the scroll has, and stand taller than it where they are more. */
 .pl-wishes .pl-list {
-  min-height: 100%;
   margin-top: 0;
 }
-/* The words that stand for no entries take the room, in its middle. */
-.pl-hint {
-  display: grid;
-  align-content: center;
-  min-height: 100%;
+/*
+ * The card's spare room under the last entry: a dashed place that opens Add a wish. It takes what room there is and no
+ * more, and shows only where that is a row's height at least: a thinner strip would be a sliver of dashes.
+ */
+.pl-filler {
+  flex: 1 1 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  container-type: size;
+}
+.pl-filler > span {
+  display: none;
+}
+@container (min-height: 48px) {
+  .pl-filler > span {
+    display: grid;
+    place-items: center;
+    height: calc(100% - 6px);
+    margin-top: 6px;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+}
+.pl-filler:hover > span {
+  border-color: var(--fill);
+  background: color-mix(in srgb, var(--fill) 6%, transparent);
+  color: var(--gold-ink);
 }
 .pl-wishfoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
   flex: none;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hairline);
+}
+.pl-key {
+  flex: 1 1 260px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- Add a wish: the faces in their groups, a search, and the pick's day and copies at the foot ---------- */
+.pl-picker {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.pl-pickhead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.pl-search {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13.5px;
+}
+.pl-choices {
+  --fade: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 4px;
+  padding-right: 4px;
+}
+.pl-faces {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+  gap: 4px;
+}
+.pl-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 2px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: center;
+}
+.pl-cell:hover {
+  background: color-mix(in srgb, var(--fill) 10%, transparent);
+}
+.pl-cell.on {
+  background: color-mix(in srgb, var(--fill) 18%, var(--surface));
+  outline: 2px solid var(--fill);
+  outline-offset: -2px;
+}
+.pl-cell .pl-face {
+  width: 46px;
+  height: 46px;
+}
+.pl-face.soon {
+  border-style: dashed;
+}
+.pl-cellname {
+  max-width: 100%;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pl-cellnote {
+  min-height: 1.2em;
+  font-size: 11px;
+  color: var(--muted);
+}
+.pl-astyped {
+  margin: 12px 0;
+  font-size: 13px;
+}
+.pl-choose {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 14px;
+  flex: none;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--tint);
+  font-size: 13px;
+}
+.pl-chosen {
+  align-self: center;
+  min-width: 110px;
+  font-size: 15px;
+}
+.pl-choose input[type='date'] {
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+}
+.pl-step {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.pl-step button {
+  width: 26px;
+  padding: 1px 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+}
+.pl-step button[aria-disabled='true'] {
+  opacity: .4;
+}
+.pl-step output {
+  min-width: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+.pl-choose .pl-buttons {
+  margin-left: auto;
 }
 
 /* A face: the wiki's icon in a round frame, or the sign of a character or a weapon. */

@@ -1329,6 +1329,11 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
             lambda _: core.pulls.model()["savings"],
         )
 
+    @app.get("/api/pulls/choices")
+    async def pulls_choices() -> Response:
+        """What Add a wish offers: the characters and weapons that can be wished for, each with its face and group."""
+        return JSONResponse(core.pulls.choices())
+
     @app.post("/api/pulls/wishlist")
     async def pulls_wishlist_add(body: dict[str, Any] = Body(...)) -> Response:
         """Add an entry to the wishlist; its icon is read from the wiki afterwards when the wiki's lists lack it."""

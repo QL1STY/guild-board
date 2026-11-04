@@ -452,6 +452,17 @@ def test_a_wishlist_entry_the_wiki_does_not_know_counts_as_its_kind_and_a_four_s
     assert [weapon["chance"], character["chance"]] == pytest.approx(chain(entries))
 
 
+def test_a_wishlist_entry_coming_soon_says_so_until_the_wiki_lists_them(core):
+    keep_demo_like(core.store)
+    core.pulls.add_wish("tsaritsa", "character", date(2026, 12, 16), 3)
+    core.pulls.add_wish("A New Face", "character", date(2026, 12, 20), 1)
+    tsaritsa, other = core.pulls.model()["wishlist"]
+    assert (tsaritsa["soon"], other["soon"]) == (True, False)  # the coming-soon list, in any case
+    assert tsaritsa["rank"] == 5 and tsaritsa["certain_within"] is not None  # counted as a 5★ meanwhile
+    wiki_items(core, ("character", "Tsaritsa", 5))
+    assert core.pulls.model()["wishlist"][0]["soon"] is False
+
+
 def _weapon_state(five: str, path_item: str) -> PoolState:
     """The weapon card of a running banner: a 5★ `five` inside it at the 30th wish, then 10 more: pity 10."""
     drawn = [

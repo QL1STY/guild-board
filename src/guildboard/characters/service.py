@@ -964,6 +964,12 @@ class Characters:
         if not self._ready():
             return
         await self._wiki.lists()
+        # A character newer than the inventory is listed only once her entry says her element (`keys`), and her page cannot be
+        # opened before she is listed: her entry is read here, once, as soon as the wiki's list names her.
+        inventory = self.inventory()
+        for key, row in self._wiki_characters().items():
+            if key not in inventory and self._store.wiki_entry(row.entry_page_id) is None:
+                await self._wiki.entry(row.entry_page_id, "character")
         for key in keys:
             entry = self._character_entry(key, self._records().get(key), self.inventory().get(key))
             if entry:

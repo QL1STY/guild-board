@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest'
 import { ringFill } from '../frame/freshview.ts'
 import type { Banner, NextVersion, PityCard, Pulls, PullsImportEvent, SavingsRow } from '../types.ts'
 import {
-  achievementsNote, autoLine, balanceWords, bannerLine, bannersShown, cardForm, cardLabel, chanceWords, correctionLabel,
+  achievementsNote, autoLine, balanceWords, bannerLine, bannersBudget, bannersShown, cardForm, cardLabel, correctionLabel,
   endsIn, eventsCount, forecastLine, historyCaption, importLine, importWithAuto, isCertain, isRunning, loginImportLine, luckTiles,
   pathWords, percent, pityWords, plannerName, plannerWhen, POOL_LABELS, emptyLine, pullsFresh, pullsRunning, resultWords, rowAmount, rowLabel, sharesPity, skyTitle,
-  totalAmount, totalLine, typed, uidLine, versionAmount, versionOffers, versionTitle, wishWhen,
+  totalAmount, totalLine, typed, uidLine, verdict, versionAmount, versionOffers, versionTitle, planReason, wishReason, wishWhen,
 } from './pullsview.ts'
 
 /** An instant given in this PC's own time, as the page shows times: month 9 is October. */
@@ -256,18 +256,20 @@ describe('how a 5★ fell, in the words of its wish', () => {
 
 describe('the chance at the featured 5★', () => {
   it('says certain within the pulls when the pulls by then reach it, with the second copy', () => {
-    expect(chanceWords(1, 29, 86, 0.62)).toBe('Certain within 29 pulls; a second copy 62%')
-    expect(chanceWords(1, 86, 86)).toBe('Certain within 86 pulls')
+    expect(verdict({ chance: 1, certain_within: 29, pulls_by_then: 86 })).toEqual({ tone: 'certain', label: 'Certain' })
+    expect(verdict({ chance: 1, certain_within: 86, pulls_by_then: 86 })).toEqual({ tone: 'certain', label: 'Certain' })
   })
 
-  it('gives the chance with the pulls by then otherwise', () => {
-    expect(chanceWords(0.74, 180, 86)).toBe('74% with 86 pulls by then')
-    expect(chanceWords(0.74, 180, 86, 0.12)).toBe('74% with 86 pulls by then; a second copy 12%')
-    expect(chanceWords(0.4, null, 1)).toBe('40% with 1 pull by then')
+  it('reads the chance as likely from 60%, maybe from 25% and unlikely below', () => {
+    expect(verdict({ chance: 0.63, certain_within: 180, pulls_by_then: 86 })).toEqual({ tone: 'likely', label: 'Likely · 63%' })
+    expect(verdict({ chance: 0.6, certain_within: 180, pulls_by_then: 86 }).tone).toBe('likely')
+    expect(verdict({ chance: 0.599, certain_within: null, pulls_by_then: 86 })).toEqual({ tone: 'maybe', label: 'Maybe · 59%' })
+    expect(verdict({ chance: 0.25, certain_within: null, pulls_by_then: 86 }).tone).toBe('maybe')
+    expect(verdict({ chance: 0.06, certain_within: 400, pulls_by_then: 3 })).toEqual({ tone: 'unlikely', label: 'Unlikely · 6%' })
   })
 
   it('never reads 100% short of certain', () => {
-    expect(chanceWords(0.9996, 180, 120)).toBe('99% with 120 pulls by then')
+    expect(verdict({ chance: 0.9996, certain_within: 180, pulls_by_then: 120 }).label).toBe('Likely · 99%')
   })
 })
 
@@ -591,21 +593,38 @@ describe('a chance, and when it is certain', () => {
 
 describe("the planner's and the wishlist's days", () => {
   it('say a planner entry runs now, until its banner ends', () => {
-    expect(plannerWhen(demoBanner({ ends_at: local(10, 3, 15, 59).toISOString() }))).toBe('now, until 3 Nov')
+    expect(plannerWhen(demoBanner({ ends_at: local(10, 3, 15, 59).toISOString() }))).toBe('until 3 Nov')
+  })
+
+  const plan = (over: Partial<Pulls['planner'][number]> = {}): Pulls['planner'][number] => ({
+    banner: demoBanner({ ends_at: local(10, 24, 16, 59).toISOString() }), chance: 1, second: 0.39, certain_within: 29,
+    pulls_by_then: 93, icon: null, ...over,
+  })
+
+  it("say what a banner's verdict rests on, with the second copy", () => {
+    expect(planReason(plan())).toBe('at most 29 pulls · 2nd copy 39%')
+    expect(planReason(plan({ chance: 0.63, certain_within: 180, second: 0.09 }))).toBe('93 pulls by then · 2nd copy 9%')
+  })
+
+  it("say the pulls by the first banner's end over the banners, and nothing with none", () => {
+    expect(bannersBudget([plan()])).toBe('you have 93 pulls by 24 Nov')
+    expect(bannersBudget([])).toBe('')
   })
 
   const entry = (over: Partial<Pulls['wishlist'][number]> = {}): Pulls['wishlist'][number] => ({
     id: 1, name: 'Citlali', kind: 'character', rank: 5, pool: 'character', about: '2026-11-11', copies: 1, icon: null,
-    chance: 0.74, certain_within: 209, pulls_by_then: 112, ...over,
+    chance: 0.74, certain_within: 209, pulls_by_then: 112, soon: false, ...over,
   })
 
-  it('give a wishlist entry its day and its chance, or certain within the pulls once they reach it', () => {
-    expect(wishWhen(entry())).toBe('about 11 Nov, 74%')
-    expect(wishWhen(entry({ chance: 1, certain_within: 29, pulls_by_then: 154 }))).toBe('about 11 Nov, certain within 29 pulls')
+  it('give a wishlist entry its day, with its copies when several', () => {
+    expect(wishWhen(entry())).toBe('about 11 Nov')
+    expect(wishWhen(entry({ copies: 3 }))).toBe('about 11 Nov · 3 copies')
   })
 
-  it("give a 4★ entry its day alone, as the chain does not count it", () => {
-    expect(wishWhen(entry({ rank: 4, chance: 0, certain_within: null }))).toBe('about 11 Nov')
+  it("say what a wishlist verdict rests on, for all its copies", () => {
+    expect(wishReason(entry())).toBe('112 pulls by then')
+    expect(wishReason(entry({ chance: 1, certain_within: 29, pulls_by_then: 154 }))).toBe('at most 29 pulls')
+    expect(wishReason(entry({ copies: 3 }))).toBe('for all 3 · 112 pulls by then')
   })
 })
 

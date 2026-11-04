@@ -123,6 +123,15 @@ def test_closed_takes_no_clicks_and_no_focus(qtbot):
     assert window.view().addresses == [LAUNCH]  # the redirect already landed on #/overlay
 
 
+def _takes_clicks_but_no_focus(window: OverlayWindow) -> bool:
+    flags = window.windowFlags()
+    return (
+        not flags & Qt.WindowType.WindowTransparentForInput
+        and bool(flags & Qt.WindowType.WindowDoesNotAcceptFocus)
+        and window.testAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+    )
+
+
 def test_open_takes_clicks_and_says_so_in_the_address(qtbot):
     window = _shown_closed(qtbot)
     view = window.view()
@@ -141,6 +150,31 @@ def test_open_takes_clicks_and_says_so_in_the_address(qtbot):
     assert not window.is_open and window.isVisible()  # still shown, for the pinned widgets and the lines
     assert _takes_no_clicks_and_no_focus(window)
     assert view.addresses == [LAUNCH, OPEN, CLOSED]
+
+
+def test_for_a_game_in_full_screen_the_open_overlay_takes_clicks_but_never_the_focus(qtbot):
+    # The game in full screen minimizes whenever another window takes the focus, as on Alt+Tab (2026-11-04, the focus
+    # probe: a plain window, a browser panel and the whole overlay each minimized it). A window that takes the clicks
+    # but never the focus left it in full screen, and its clicks reached the window, not the game.
+    window = _shown_closed(qtbot)
+    window.set_full_screen_game(True)
+    view = window.view()
+    with qtbot.waitSignal(window.opened):
+        window.open()
+    assert window.is_open and window.isVisible() and _takes_clicks_but_no_focus(window)
+    assert QApplication.activeWindow() is not window
+    flags = window.windowFlags()
+    assert window.windowType() == Qt.WindowType.Tool
+    assert flags & Qt.WindowType.FramelessWindowHint and flags & Qt.WindowType.WindowStaysOnTopHint
+    assert view.addresses == [LAUNCH, OPEN]
+    window.close_overlay()
+    assert not window.is_open and window.isVisible() and _takes_no_clicks_and_no_focus(window)
+    # The setting goes back off: the next opening takes the focus again, as it does by default.
+    window.set_full_screen_game(False)
+    window.open()
+    assert not window.testAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+    assert not window.windowFlags() & Qt.WindowType.WindowDoesNotAcceptFocus
+    assert window.focusWidget() is view  # Esc goes to the page
 
 
 def test_the_page_closing_itself_makes_the_window_click_through(qtbot):

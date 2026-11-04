@@ -100,6 +100,9 @@ class Settings:
     overlay_pinned: bool = True  # pinned widgets over the game
     overlay_lines: bool = True  # a line over the game when a timer is ready
     overlay_size: int = 100  # how large the overlay draws, in percent: one of OVERLAY_SIZES, any other value 100
+    # The game runs in full screen, which minimizes it whenever it loses the focus: the open overlay then takes the
+    # clicks but never the focus. Off, it takes both, as a game in a window or borderless allows.
+    overlay_full_screen: bool = False
     last_seen_version: str = ""  # the version whose "What's new" card the player has seen; "" before any
     codes_login_done: bool = False  # a login has finished: HoYoverse's first code of an account needs a fresh one
     gallery_enabled: bool = False  # the screenshot gallery (the ledger design, section 7): off, nothing of it is read

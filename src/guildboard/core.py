@@ -98,7 +98,7 @@ EDITABLE_SETTINGS = (
     "commission_region", "fishing_rule", "notifications",
     "characters_notice_weekly", "characters_notice_domain", "characters_notice_ready",
     "overlay_hotkey", "overlay_display", "overlay_opacity", "overlay_pinned", "overlay_lines", "overlay_size",
-    "gallery_enabled", "gallery_folder", "spending_currency", "spending_prices", "picture_quality", "smooth_animations",
+    "overlay_full_screen", "gallery_enabled", "gallery_folder", "spending_currency", "spending_prices", "picture_quality", "smooth_animations",
     "sync_my_data",
 )
 # The shell holds the overlay's hotkey, or another program does, or there is no hotkey to hold.

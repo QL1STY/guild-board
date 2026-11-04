@@ -17,7 +17,7 @@ from guildboard.api.app import UNEXPECTED_REQUEST, create_app
 from guildboard.config import AppPaths
 from guildboard.core import Core
 from guildboard.store import iso
-from pulls_history import NOW, UID, keep_demo_like
+from pulls_history import DEMO_BANNERS, NOW, UID, keep_demo_like
 from pulls_shape import problem_with
 from support import AccountSource, FakeSleep
 
@@ -277,6 +277,18 @@ def test_a_request_of_another_shape_is_refused(client, core):
         answer = client.put("/api/pulls/settings", json=bad)
         assert (answer.status_code, answer.json()) == (422, {"error": UNEXPECTED_REQUEST}), bad
     assert client.put("/api/pulls/settings", json=[1]).json() == {"error": UNEXPECTED_REQUEST}
+
+
+def test_add_a_wish_offers_the_characters_and_weapons_in_their_groups(client, core):
+    keep_demo_like(core.store)  # the three banners of 2026-09-23, running
+    answer = client.get("/api/pulls/choices")
+    assert answer.status_code == 200
+    choices = answer.json()
+    groups = {(c["name"], c["group"]) for c in choices["characters"]}
+    assert {("Danica", "soon"), ("Skirk", "now"), ("Escoffier", "now"), ("Furina", "five"), ("Bennett", "four")} <= groups
+    assert ("Azurelight", "now") in {(c["name"], c["group"]) for c in choices["weapons"]}
+    skirk = next(c for c in choices["characters"] if c["name"] == "Skirk")
+    assert skirk["ends_at"] == DEMO_BANNERS[0].ends_at.isoformat()
 
 
 def test_the_wishlist_is_chained_in_date_order(client, core):

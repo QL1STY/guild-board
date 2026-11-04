@@ -108,12 +108,14 @@ def _data(body: bytes, what: str) -> dict[str, Any]:
 
 
 def _pool(kind: str, name: str, title: str) -> str:
-    """The pool of the cards a wish belongs to: a chronicled wish first, as its title may name rates for several."""
+    """The pool of the cards a wish belongs to: a chronicled wish first, as its title may name rates for several. The
+    titles' case varies ("Boosted drop rate for", 2026-11-04), so the words are matched in any case."""
     if kind == "Chronicled" or "Chronicled" in name or "Lightrace" in name:
         return "chronicled"
-    if name == "Epitome Invocation" or "Boosted Drop Rates for" in title:
+    lowered = title.lower()
+    if name == "Epitome Invocation" or "boosted drop rates for" in lowered:
         return "weapon"
-    if "Boosted Drop Rate for" in title:
+    if "boosted drop rate for" in lowered:
         return "character"
     return "other"
 

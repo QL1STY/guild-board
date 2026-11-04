@@ -16,7 +16,7 @@ That installs the Python packages and the interface's, builds the interface and 
 
 Write the test first, and make one commit for each task.
 
-- `uv run pytest` runs the Python tests. A few need Windows.
+- `uv run pytest -n auto` runs the Python tests on every core. A few need Windows.
 - In `web/`, `npm ci` once, then `npm test` for the unit tests and `npm run e2e` for the browser tests, which build the interface and run each against a fresh demo core in Microsoft Edge.
 
 ## The site

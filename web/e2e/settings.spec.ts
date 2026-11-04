@@ -108,6 +108,11 @@ test('every setting from before is still reachable', async ({ page }) => {
   await expect(overlay.getByRole('slider', { name: "Pinned widgets' opacity" })).toBeVisible()
   await expect(overlay.getByRole('button', { name: 'Show pinned widgets over the game' })).toHaveAttribute('aria-pressed', 'true')
   await expect(overlay.getByRole('button', { name: 'Lines over the game' })).toHaveAttribute('aria-pressed', 'true')
+  // Off by default: the open overlay takes the keyboard, as a game in a window or borderless allows.
+  const fullScreen = overlay.getByRole('button', { name: 'The game runs in full screen' })
+  await expect(fullScreen).toHaveAttribute('aria-pressed', 'false')
+  await fullScreen.click()
+  await expect(fullScreen).toHaveAttribute('aria-pressed', 'true')
   // Extras: the gallery, new.
   await expect(extras(page).getByRole('button', { name: 'Screenshot gallery' })).toHaveAttribute('aria-pressed', 'false')
   // Achievements and commissions: the region, the fishing rule and the list's check.

@@ -512,6 +512,38 @@ async def test_the_wiki_is_read_for_a_character_only_after_consent(store, clock,
     assert service.profile("sandrone")["title"] == "Mirrored Analysis"
 
 
+async def test_a_character_newer_than_the_inventory_is_listed_once_the_wiki_lists_her(store, clock, tmp_path):
+    # Mitya came out in 7.2, after the inventory was made: the wiki's list names her, and the roster's own read fetches
+    # her entry, which says her element, so the pages list her without anyone opening her page first.
+    import copy
+    import json
+
+    from guildboard.store import WikiItemRow
+
+    service = sandrone(store, clock, tmp_path, ready=lambda: True)
+    now = clock.now()
+    store.replace_wiki_items("character", [WikiItemRow("character", "Mitya", 5, "", "11827", now)])
+    store.replace_wiki_items("weapon", [WikiItemRow("weapon", "Azurelight", 5, "", "1", now)])
+    store.replace_wiki_items("set", [WikiItemRow("set", "Blizzard Strayer", 5, "", "10760", now)])
+    mitya = copy.deepcopy(samples.WIKI_RECORDED["10920"])
+    mitya["data"]["page"].update(id="11827", name="Mitya")
+    counting = _Counting()
+    recorded = counting._wiki
+    counting._wiki = lambda url, **kwargs: (
+        json.dumps(mitya).encode("utf-8") if url.endswith("11827") else recorded(url, **kwargs)
+    )
+    service._wiki._fetch = counting
+    assert "mitya" not in service.keys()
+    service.wanted()                                  # what the roster asks for: no character in particular
+    await service._filler
+    assert "mitya" in service.keys() and service.char("mitya").name == "Mitya"
+    assert [url for url in counting.asked if url.endswith("11827")] != []
+    asked = len(counting.asked)
+    service.wanted()
+    await service._filler
+    assert [url for url in counting.asked[asked:] if url.endswith("11827")] == []   # kept: not asked again
+
+
 def test_the_profile_carries_the_card_itself_for_the_card_panel(store, clock, tmp_path):
     service = sandrone(store, clock, tmp_path, meta=lambda key: (("https://example.com/guide",), "2026-10-20"))
     card = service.profile("sandrone")["card"]

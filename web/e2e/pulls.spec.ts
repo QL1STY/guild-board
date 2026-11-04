@@ -101,17 +101,19 @@ test("the page shows the demo's banners, cards, savings, planner and history", a
   await expect(savings).toContainText('more if you finish your remaining achievements')
 
   // The planner: each running character banner, and the weapon banner, which features the charted Azurelight.
-  const plans = page.getByTestId('pulls-planner').getByTestId('plan')
+  const planner = page.getByTestId('pulls-planner')
+  const plans = planner.getByTestId('plan')
   await expect(plans).toHaveCount(3)
-  await expect(plans.nth(0)).toContainText('Skirk · now, until 24 Oct')
-  await expect(plans.nth(0)).toContainText('Certain within 29 pulls; a second copy')
-  await expect(plans.nth(2)).toContainText('Azurelight · now, until 24 Oct')
-  await expect(plans.nth(2)).toContainText(/\d+% with \d+ pulls by then; a second copy \d+%/)
+  await expect(planner).toContainText(/On the banners now\s*you have \d+ pulls by 24 Oct/)
+  await expect(plans.nth(0)).toContainText('SkirkCharacter eventuntil 24 Oct')
+  await expect(plans.nth(0)).toContainText('Certainat most 29 pulls · 2nd copy')
+  await expect(plans.nth(2)).toContainText('AzurelightWeapon eventuntil 24 Oct')
+  await expect(plans.nth(2)).toContainText(/(Likely|Maybe|Unlikely) · \d+%\d+ pulls by then · 2nd copy \d+%/)
   // The wishlist: Citlali, who is certain by her day, as the first character on the list starts from the card's
   // guarantee.
   const wishes = page.getByTestId('pulls-wishlist').getByRole('listitem')
   await expect(wishes).toHaveCount(1)
-  await expect(wishes.first()).toContainText('Citlali · about 11 Nov, certain within 29 pulls')
+  await expect(wishes.first()).toContainText('Citlaliabout 11 NovCertainat most 29 pulls')
 
   // The history: 100 rows, newest first.
   const history = page.getByTestId('pulls-history')
@@ -852,9 +854,9 @@ async function wishlistOf(page: Page, api: Api, count: number): Promise<void> {
 }
 
 /**
- * The planner's parts, top to bottom, as what each shows: its heading, the words of each row (its face, its name, its
- * chance and its Remove), the words that stand for no entries, and its form; the gaps between them, in pixels; and the
- * height of its tallest row, which counts its room round its words.
+ * The planner's parts, top to bottom, as what each shows: its heading, its groups' headings, the words of each row (its
+ * face, its name, its verdict and its Remove), the dashed place that takes the spare room, and its foot; the gaps between
+ * them, in pixels; and the height of its tallest row, which counts its room round its words.
  */
 function plannerGaps(page: Page): Promise<{ gaps: number[]; row: number }> {
   return page.evaluate(() => {
@@ -866,19 +868,19 @@ function plannerGaps(page: Page): Promise<{ gaps: number[]; row: number }> {
       return { top: box.top, bottom: box.bottom }
     }
     const rows = [...planner.querySelectorAll('li')]
-    const hints = [...planner.querySelectorAll('.pl-hint')]
     const parts = [
       words(planner.querySelector('h2')!),
+      ...[...planner.querySelectorAll('.pl-group')].map(words),
       ...rows.map((row) => {
         const boxes = [...row.children].map((child) => child.getBoundingClientRect())
         return { top: Math.min(...boxes.map((box) => box.top)), bottom: Math.max(...boxes.map((box) => box.bottom)) }
       }),
-      ...hints.map(words),
-      planner.querySelector('form')!.getBoundingClientRect(),
+      planner.querySelector('.pl-filler')!.getBoundingClientRect(),
+      planner.querySelector('[data-testid="wishes-foot"]')!.getBoundingClientRect(),
     ].sort((a, b) => a.top - b.top)
     return {
       gaps: parts.slice(1).map((part, at) => Math.round(part.top - parts[at].bottom)),
-      row: Math.max(...[...rows, ...hints].map((row) => row.getBoundingClientRect().height)),
+      row: Math.max(56, ...rows.map((row) => row.getBoundingClientRect().height)),
     }
   })
 }
@@ -938,7 +940,7 @@ test.describe('no blank space', () => {
     }
   })
 
-  test('a wishlist longer than the card holds scrolls in it, with the fade, and the form keeps the foot', async ({ page, api }) => {
+  test('a wishlist longer than the card holds scrolls in it, with the fade, and Add a wish keeps the foot', async ({ page, api }) => {
     await page.setViewportSize({ width: 1640, height: 1100 })
     await wishlistOf(page, api, 10)
     for (const name of ['Dehya', 'Alhaitham', 'Cyno']) {
@@ -959,8 +961,8 @@ test.describe('no blank space', () => {
     expect(shown.scrollbar).toBe('none')
     expect(shown.mask).toContain('linear-gradient')
     await expect(scroll).toHaveClass(/w-scroll/)
-    // The form stays at the card's foot, whole, however many entries there are.
-    const form = page.getByTestId('pulls-wishlist').locator('form')
+    // The foot, with Add a wish, stays at the card's foot, whole, however many entries there are.
+    const form = page.getByTestId('wishes-foot')
     const planner = (await page.getByTestId('pulls-planner').boundingBox())!
     const at = (await form.boundingBox())!
     expect(planner.y + planner.height - (at.y + at.height)).toBeGreaterThanOrEqual(0)
@@ -973,34 +975,57 @@ test.describe('no blank space', () => {
   })
 })
 
-test('the wishlist adds, chains and removes', async ({ page }) => {
+test('the wishlist adds from the faces, chains and removes', async ({ page }) => {
+  const planner = page.getByTestId('pulls-planner')
   const wishlist = page.getByTestId('pulls-wishlist')
   const wishes = wishlist.getByRole('listitem')
   await expect(wishes).toHaveCount(1)
-  await wishlist.getByLabel('Name').fill('Mavuika')
-  await expect(wishlist.getByLabel('Character or weapon')).toHaveValue('character')
-  await wishlist.getByLabel('About').fill('2026-12-05')
-  await expect(wishlist.getByLabel('Copies')).toHaveValue('1')
-  const sent = page.waitForRequest((request) => request.method() === 'POST' && request.url().endsWith('/api/pulls/wishlist'))
-  await wishlist.getByRole('button', { name: 'Add' }).click()
-  expect((await sent).postDataJSON()).toEqual({ name: 'Mavuika', kind: 'character', about: '2026-12-05', copies: 1 })
-  // Mavuika comes after Citlali, who takes the card's guarantee, so her chance is lower: a 50/50 from a count of 0.
-  await expect(wishes).toHaveCount(2)
-  await expect(wishes.nth(0)).toContainText('Citlali · about 11 Nov, certain within 29 pulls')
-  await expect(wishes.nth(1)).toContainText(/Mavuika · about 5 Dec, \d{1,2}%/)
-  await expect(wishlist.getByLabel('Name')).toHaveValue('') // the form is empty again
-  // A refused entry says why.
-  await wishlist.getByRole('button', { name: 'Add' }).click()
-  await expect(wishlist.getByRole('alert')).toHaveText(
+  await planner.getByRole('button', { name: '+ Add a wish' }).click()
+  const picker = page.getByTestId('wish-picker')
+  await expect(picker.getByRole('searchbox', { name: 'Search by name' })).toBeFocused()
+  // The groups in their order: the ones coming soon, those on the banners now with their banner's end, then every 5★ and 4★.
+  await expect(picker.getByRole('region')).toHaveText([/^Coming soon/, /^On the banners now/, /^Every 5★/, /^Every 4★/])
+  await expect(picker.getByRole('region', { name: 'Coming soon' })).toContainText('Danicanot out yet')
+  await expect(picker.getByRole('region', { name: 'On the banners now' })).toContainText('Skirkuntil 24 Oct')
+  // A face on a banner now takes the banner's end as its day.
+  await picker.getByRole('button', { name: /^Skirk/ }).click()
+  await expect(picker.getByLabel('About when')).toHaveValue('2026-10-24')
+  // The search finds a name; another pick takes no day of its own.
+  await picker.getByRole('searchbox', { name: 'Search by name' }).fill('mavu')
+  await expect(picker.getByRole('button', { name: /^Mavuika/ })).toHaveCount(1)
+  await picker.getByRole('button', { name: /^Mavuika/ }).click()
+  await expect(picker.getByLabel('About when')).toHaveValue('')
+  // A refused entry says why: no day yet.
+  await picker.getByRole('button', { name: 'Add', exact: true }).click()
+  await expect(picker.getByRole('alert')).toHaveText(
     'Give a name, a kind (character or weapon), a day as 2026-11-11, and copies from 1 to 7.',
   )
-  // Remove hands the focus to the next entry's Remove, and after the last to the Name field.
+  await picker.getByLabel('About when').fill('2026-12-05')
+  await picker.getByRole('button', { name: 'One copy more' }).click()
+  await expect(picker.getByRole('group', { name: 'Copies' }).locator('output')).toHaveText('2')
+  const sent = page.waitForRequest((request) => request.method() === 'POST' && request.url().endsWith('/api/pulls/wishlist'))
+  await picker.getByRole('button', { name: 'Add', exact: true }).click()
+  expect((await sent).postDataJSON()).toEqual({ name: 'Mavuika', kind: 'character', about: '2026-12-05', copies: 2 })
+  // Back on the planner, the focus on Add a wish. Mavuika comes after Citlali, who takes the card's guarantee.
+  await expect(planner.getByRole('button', { name: '+ Add a wish' })).toBeFocused()
+  await expect(wishes).toHaveCount(2)
+  await expect(wishes.nth(0)).toContainText('Citlaliabout 11 NovCertainat most 29 pulls')
+  await expect(wishes.nth(1)).toContainText(/Mavuikaabout 5 Dec · 2 copies(Likely|Maybe|Unlikely) · \d{1,2}%for all 2/)
+  // A name the lists lack is added as typed; Escape goes back without adding.
+  await planner.getByRole('button', { name: '+ Add a wish' }).click()
+  await picker.getByRole('searchbox', { name: 'Search by name' }).fill('Someone New')
+  await picker.getByRole('button', { name: 'Add “Someone New” as typed' }).click()
+  await expect(picker.getByText('Someone New', { exact: true })).toBeVisible()
+  await picker.getByLabel('About when').press('Escape')
+  await expect(planner.getByRole('button', { name: '+ Add a wish' })).toBeFocused()
+  await expect(wishes).toHaveCount(2)
+  // Remove hands the focus to the next entry's Remove, and after the last to Add a wish.
   await wishes.nth(0).getByRole('button', { name: 'Remove Citlali' }).click()
   await expect(wishes).toHaveCount(1)
   await expect(wishes.first().getByRole('button', { name: 'Remove Mavuika' })).toBeFocused()
   await wishes.first().getByRole('button', { name: 'Remove Mavuika' }).click()
   await expect(wishlist).toContainText('Add the characters you are saving for, with a rough date.')
-  await expect(wishlist.getByLabel('Name')).toBeFocused()
+  await expect(planner.getByRole('button', { name: '+ Add a wish' })).toBeFocused()
 })
 
 test('a planner entry shows the icon the model gives it', async ({ page }) => {

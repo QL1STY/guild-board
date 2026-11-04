@@ -24,11 +24,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 from datetime import date, datetime
-from typing import Any, Callable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Sequence
 
 from guildboard.gameday import game_day, server_tz
 from guildboard.metrics import slug
 from guildboard.pulls import POOL_LABELS, POOLS, PULL_PRIMOGEMS
+from guildboard.pulls.choices import load_upcoming
 from guildboard.pulls.nextversion import NextVersion
 from guildboard.pulls.rules import Correction, FiveStar, PoolState, Wish, load_reference, luck, typical_average
 from guildboard.pulls.savings import (
@@ -267,11 +268,15 @@ def wishlist_entries(
     wiki: Mapping[tuple[str, str], WikiItemRow],
     budget_by: Callable[[date], int],
     point_until: date | None,
+    upcoming: Iterable[str] = (),
 ) -> list[dict[str, Any]]:
     """The wishlist in date order, each entry with its chance in the chain and the pulls the forecast gives by its day.
     `point_until` is the last day of the running weapon banner that features the charted weapon, None with none: the
-    card's Fate Point counts for an entry of that weapon up to that day, and is gone after it."""
+    card's Fate Point counts for an entry of that weapon up to that day, and is gone after it. An entry is `soon` while
+    its name, in any case, is one of the `upcoming` characters and the wiki does not list it yet."""
     out: list[dict[str, Any]] = []
+    listed = {name.casefold() for _, name in wiki}
+    coming = {name.casefold() for name in upcoming} - listed
     chained: list[tuple[int, ChainEntry]] = []
     started: set[str] = set()
     reach = 0
@@ -293,6 +298,7 @@ def wishlist_entries(
             "chance": 0.0,
             "certain_within": None,
             "pulls_by_then": budget,
+            "soon": entry.name.casefold() in coming,
         }
         if rank >= 5:
             point_counts = (
@@ -442,7 +448,7 @@ def build_pulls(data: PullsData) -> dict[str, Any]:
             "next": next_model(next_version, typed),
             "by_next_end": pulls_by(next_version.ends_on) if estimate is not None else None,  # no balance, no total
         },
-        "wishlist": wishlist_entries(data.wishlist, states, data.wiki, pulls_by, point_until) if states else [],
+        "wishlist": wishlist_entries(data.wishlist, states, data.wiki, pulls_by, point_until, load_upcoming()) if states else [],
         "planner": planner,
         "history": {
             "count": data.count,

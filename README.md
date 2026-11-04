@@ -136,7 +136,7 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 `setup.ps1` installs the Python packages and the interface's, builds the interface and puts a shortcut on your desktop. Then:
 
 - `uv run guildboard --demo` runs Guild Board with its window on made-up data. Add `--no-shell` to run the core alone and get a link for your browser.
-- `uv run pytest` runs the Python tests. In `web/`, `npm test` runs the interface's unit tests and `npm run e2e` its browser tests.
+- `uv run pytest -n auto` runs the Python tests on every core. In `web/`, `npm test` runs the interface's unit tests and `npm run e2e` its browser tests.
 - `powershell -ExecutionPolicy Bypass -File build-installer.ps1` makes the installer. It refuses to build until a release key is pinned in `src/guildboard/selfupdate.py`; `-WithoutReleaseKey` builds an installer that never updates.
 
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) says how the parts fit together, and [`CONTRIBUTING.md`](CONTRIBUTING.md) how to help.

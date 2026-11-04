@@ -114,6 +114,8 @@ export type Settings = {
   characters_notice_ready?: boolean
   /** How large the overlay draws, in percent: 100, the Board's size and the default, or 125, 150, 175 or 200. */
   overlay_size: number
+  /** The game runs in full screen: the open overlay takes the clicks but never the focus, so the game is not minimized. */
+  overlay_full_screen: boolean
   /** The screenshot gallery (the ledger design, section 7): off by default; while off, nothing of the game's is read. */
   gallery_enabled: boolean
   /** The game's ScreenShot folder, found or pasted; "" before either. */
@@ -503,6 +505,21 @@ export type QuickTimersModel = { quick_timers: QuickTimer[] }
 // ---------------------------------------------------------------- Pulls (src/guildboard/pulls/, the Pulls design)
 
 export type PullsPool = 'character' | 'weapon' | 'standard' | 'chronicled'
+/** One choice of Add a wish (pulls/choices.py), in its group: coming soon, on the banners now, every 5★, every 4★. */
+export type WishChoice = {
+  name: string
+  kind: WishKind
+  rank: number
+  group: 'soon' | 'now' | 'five' | 'four'
+  /** Its face in the core's icon cache, or null where the wiki has none. */
+  icon: string | null
+  /** The end of the running banner that features it, which the form takes as its day; null for one on no banner now. */
+  ends_at: string | null
+}
+
+/** GET /api/pulls/choices. */
+export type WishChoices = { characters: WishChoice[]; weapons: WishChoice[] }
+
 export type WishKind = 'character' | 'weapon'
 export type FiveResult = 'won' | 'lost' | 'guaranteed' | 'featured' | 'path' | 'off-path' | null
 
@@ -649,6 +666,8 @@ export type Pulls = {
     chance: number
     certain_within: number | null
     pulls_by_then: number
+    /** A character announced and not out yet (reference/upcoming.json), until the wiki lists them. */
+    soon: boolean
   }[]
   planner: {
     banner: Banner
