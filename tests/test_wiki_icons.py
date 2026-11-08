@@ -283,7 +283,7 @@ def test_the_core_reads_the_icons_after_a_banners_read_that_keeps_a_new_featured
         with TestClient(create_app(core, PORT), base_url=BASE) as client:
             heard = Heard(core)
             assert client.portal.call(core.banners.refresh, True) == 3
-            _until(lambda: ("weapon", "Azurelight") in core.store.wiki_items())
+            _until(lambda: ("weapon", "Azurelight") in client.portal.call(core.store.wiki_items))  # on the core's loop, as the app reads it
             _until(lambda: heard.changes() == 2)  # the banners, then their icons
             reads = len(wiki.asked)
             clock.advance(hours=2)
@@ -306,7 +306,7 @@ def test_the_core_reads_the_icons_after_a_wishlist_add_at_most_once_a_day(tmp_pa
             heard = Heard(core)
             entry = {"name": "Skirk", "kind": "character", "about": "2026-11-11", "copies": 1}
             assert client.post("/api/pulls/wishlist", json=entry).status_code == 200
-            _until(lambda: ("character", "Skirk") in core.store.wiki_items())
+            _until(lambda: ("character", "Skirk") in client.portal.call(core.store.wiki_items))
             _until(lambda: heard.changes() == 2)  # the entry, then its icon
             [skirk] = [one for one in client.get("/api/pulls").json()["wishlist"] if one["name"] == "Skirk"]
             assert skirk["icon"] == "/api/icon/wish.character.skirk"

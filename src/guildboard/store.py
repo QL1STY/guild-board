@@ -1808,9 +1808,12 @@ class Store:
         rows = self._conn.execute(f"SELECT {self._WISH_COLUMNS} FROM wishes {where} ORDER BY id", args).fetchall()
         return [self._wish(row) for row in rows]
 
-    def wishes_before(self, uid: int, before_id: int | None, limit: int) -> list[WishRow]:
-        """Up to `limit` of an account's wishes, newest first, older than the wish `before_id` when it is given."""
-        where, args = ("WHERE uid = ?", (uid,)) if before_id is None else ("WHERE uid = ? AND id < ?", (uid, before_id))
+    def wishes_before(self, uid: int, before_id: int | None, limit: int, *, min_rank: int = 3) -> list[WishRow]:
+        """Up to `limit` of an account's wishes of `min_rank` stars and up, newest first, older than the wish
+        `before_id` when it is given."""
+        where, args = ("WHERE uid = ? AND rank >= ?", (uid, min_rank))
+        if before_id is not None:
+            where, args = where + " AND id < ?", (*args, before_id)
         rows = self._conn.execute(
             f"SELECT {self._WISH_COLUMNS} FROM wishes {where} ORDER BY id DESC LIMIT ?", (*args, limit)
         ).fetchall()

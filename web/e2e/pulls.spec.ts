@@ -1039,6 +1039,28 @@ test('a planner entry shows the icon the model gives it', async ({ page }) => {
   await expect(plans.nth(1).locator('img')).not.toHaveAttribute('src') // Escoffier's entry has none
 })
 
+test('the history shows every wish, the 4★ and 5★, or the 5★ alone', async ({ page }) => {
+  const rows = page.getByTestId('history-row')
+  const ranks = () => rows.evaluateAll((all) => all.map((row) => row.getAttribute('data-rank')))
+  await expect(rows).toHaveCount(100)
+  const show = page.getByRole('radiogroup', { name: 'Show' })
+  await expect(show.getByRole('radio', { name: 'Every wish' })).toBeChecked()
+  // The demo keeps 445 wishes: 48 of them 4★ or 5★, and 5 of those 5★. A rarity's rows are read from the core, past
+  // the first hundred of every wish, and fit on its first page.
+  const read = page.waitForRequest((request) => request.url().endsWith('/api/pulls/history?rank=5'))
+  await show.getByRole('radio', { name: '5★', exact: true }).click()
+  await read
+  await expect(rows).toHaveCount(5)
+  expect(new Set(await ranks())).toEqual(new Set(['5']))
+  await show.getByRole('radio', { name: '4★ and 5★' }).click()
+  await expect(rows).toHaveCount(48)
+  expect((await ranks()).includes('3')).toBe(false)
+  await expect(page.getByRole('button', { name: 'Show more' })).toHaveCount(0)
+  await show.getByRole('radio', { name: 'Every wish' }).click()
+  await expect(rows).toHaveCount(100)
+  await expect(page.getByRole('button', { name: 'Show more' })).toBeVisible()
+})
+
 test('a row without an icon shows the sign', async ({ page }) => {
   const rows = page.getByTestId('history-row')
   await expect(rows).toHaveCount(100)

@@ -1063,3 +1063,19 @@
 .pl-more {
   margin-top: 10px;
 }
+/* The rarity switch over the rows: every wish, the 4★ and 5★, or the 5★. */
+.pl-show {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 8px;
+}
+.pl-show-lab {
+  color: var(--muted);
+  font-size: 13px;
+}
+.pl-show-none {
+  margin: 10px 8px 0;
+  color: var(--muted);
+  font-size: 13px;
+}

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { ringFill } from '../frame/freshview.ts'
-import type { Banner, NextVersion, PityCard, Pulls, PullsImportEvent, SavingsRow } from '../types.ts'
+import type { Banner, HistoryRow, NextVersion, PityCard, Pulls, PullsImportEvent, SavingsRow } from '../types.ts'
 import {
   achievementsNote, autoLine, balanceWords, bannerLine, bannersBudget, bannersShown, cardForm, cardLabel, correctionLabel,
-  endsIn, eventsCount, forecastLine, historyCaption, importLine, importWithAuto, isCertain, isRunning, loginImportLine, luckTiles,
+  endsIn, eventsCount, forecastLine, historyCaption, historyEmpty, historyPath, historyShown, importLine, importWithAuto, isCertain, isRunning, loginImportLine, luckTiles,
   pathWords, percent, pityWords, plannerName, plannerWhen, POOL_LABELS, emptyLine, pullsFresh, pullsRunning, resultWords, rowAmount, rowLabel, sharesPity, skyTitle,
   totalAmount, totalLine, typed, uidLine, verdict, versionAmount, versionOffers, versionTitle, planReason, wishReason, wishWhen,
 } from './pullsview.ts'
@@ -636,6 +636,29 @@ describe("the planner entry's name", () => {
     const plan = (banner: Banner) => ({ banner, chance: 1, second: 0.3, certain_within: 57, pulls_by_then: 86, icon: null })
     expect(plannerName(plan(epitome), cards)).toBe('Azurelight')
     expect(plannerName(plan(demoBanner()), cards)).toBe('Skirk')
+  })
+})
+
+describe("the history's rarity filter", () => {
+  const row = (id: string, rank: 3 | 4 | 5) => ({ id, rank }) as HistoryRow
+
+  it('asks the core for the rarity and up, and the rows before the last one shown', () => {
+    expect(historyPath('every', null)).toBe('/api/pulls/history')
+    expect(historyPath('every', '1700000000000000346')).toBe('/api/pulls/history?before=1700000000000000346')
+    expect(historyPath('four', null)).toBe('/api/pulls/history?rank=4')
+    expect(historyPath('five', '17')).toBe('/api/pulls/history?rank=5&before=17')
+  })
+
+  it('keeps the rows of the rarity and up', () => {
+    const rows = [row('4', 3), row('3', 5), row('2', 4), row('1', 3)]
+    expect(historyShown(rows, 'every').map((one) => one.id)).toEqual(['4', '3', '2', '1'])
+    expect(historyShown(rows, 'four').map((one) => one.id)).toEqual(['3', '2'])
+    expect(historyShown(rows, 'five').map((one) => one.id)).toEqual(['3'])
+  })
+
+  it('says when none are kept', () => {
+    expect(historyEmpty('four')).toBe('No 4★ or 5★ wishes kept yet.')
+    expect(historyEmpty('five')).toBe('No 5★ wishes kept yet.')
   })
 })
 

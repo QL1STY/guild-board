@@ -11,8 +11,8 @@ import { type Filters, NO_FILTERS, type Sort, sorted, visible } from './rostervi
  * reads the same memory for the order of its arrows (the roster as the player left it).
  */
 
-/** What the player set on the roster page. */
-export type RosterView = { search: string; filters: Filters; sort: Sort }
+/** What the player set on the roster page: `reversed` is the sort's order turned round, by a second press on it. */
+export type RosterView = { search: string; filters: Filters; sort: Sort; reversed: boolean }
 
 export type RosterMemory = {
   data: Roster | null
@@ -22,7 +22,7 @@ export type RosterMemory = {
   account: number | null | undefined
 }
 
-const FRESH: RosterMemory = { data: null, view: { search: '', filters: NO_FILTERS, sort: 'readiness' }, scroll: 0, account: undefined }
+const FRESH: RosterMemory = { data: null, view: { search: '', filters: NO_FILTERS, sort: 'readiness', reversed: false }, scroll: 0, account: undefined }
 
 let memory: RosterMemory = FRESH
 let entered = false
@@ -80,7 +80,7 @@ export function entranceDone(): boolean {
 /** The keys of the characters the roster shows, in its order: the search, the filters and the sort the player left it with. */
 export function rosterOrder(kept: RosterMemory): string[] {
   if (kept.data === null) return []
-  return sorted(visible(kept.data.entries, kept.view.filters, kept.view.search), kept.view.sort).map((entry) => entry.key)
+  return sorted(visible(kept.data.entries, kept.view.filters, kept.view.search), kept.view.sort, kept.view.reversed).map((entry) => entry.key)
 }
 
 /**
@@ -90,7 +90,7 @@ export function rosterOrder(kept: RosterMemory): string[] {
 export function rosterOrderFor(kept: RosterMemory, key: string): string[] {
   const shown = rosterOrder(kept)
   if (kept.data === null || shown.includes(key)) return shown
-  return sorted(kept.data.entries, kept.view.sort).map((entry) => entry.key)
+  return sorted(kept.data.entries, kept.view.sort, kept.view.reversed).map((entry) => entry.key)
 }
 
 const same = (a: unknown, b: unknown) => a === b || JSON.stringify(a) === JSON.stringify(b)

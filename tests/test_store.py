@@ -748,6 +748,15 @@ def test_wishes_are_read_in_the_order_of_their_ids_whatever_the_order_they_were_
     assert [row.id for row in store.wishes_before(UID, 30, 2)] == [20, 10]
 
 
+def test_wishes_before_can_keep_to_a_rarity_and_up(store):
+    run = store.start_wish_import(NOW)
+    store.add_wishes([_wish(10, run, rank=3), _wish(20, run, rank=5), _wish(30, run, rank=4), _wish(40, run, rank=3)])
+    assert [row.id for row in store.wishes_before(UID, None, 10, min_rank=4)] == [30, 20]
+    assert [row.id for row in store.wishes_before(UID, 30, 10, min_rank=4)] == [20]
+    assert [row.id for row in store.wishes_before(UID, None, 10, min_rank=5)] == [20]
+    assert [row.id for row in store.wishes_before(UID, None, 10)] == [40, 30, 20, 10]
+
+
 def test_wish_uids_come_the_account_the_newest_import_found_first(store):
     def one_import(day: int, found_uid: int, outcome: str, kept: list[tuple[int, int]]) -> None:
         """An import on `day` that found `found_uid` and kept the wishes given as (id, uid)."""

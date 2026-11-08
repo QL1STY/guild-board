@@ -2,17 +2,24 @@ import { dayMonth } from '../../format.ts'
 import type { Element, Roster, RosterEntry, WeaponType } from '../../types.ts'
 import { FOUR_AT_MOST, NOT_YOURS } from './words.ts'
 
-/** What the roster's filters hold (the design's section 6.1): an element and a weapon type, owned only, and in focus only. */
-export type Filters = { element: Element | null; weapon: WeaponType | null; owned: boolean; inFocus: boolean }
+/**
+ * What the roster's filters hold (the design's section 6.1): an element, a weapon type and a rarity (a player's ask after
+ * the launch), owned only, and in focus only.
+ */
+export type Filters = { element: Element | null; weapon: WeaponType | null; rarity: 4 | 5 | null; owned: boolean; inFocus: boolean }
 
-export const NO_FILTERS: Filters = { element: null, weapon: null, owned: false, inFocus: false }
+export const NO_FILTERS: Filters = { element: null, weapon: null, rarity: null, owned: false, inFocus: false }
 
-/** How the grid is ordered: by readiness, level or name, or newest, which is the order the core lists them in. */
-export type Sort = 'readiness' | 'level' | 'name' | 'newest'
+/** The rarities a character has, the highest first. */
+export const RARITIES = [5, 4] as const
+
+/** How the grid is ordered: by readiness, level, rarity or name, or newest, which is the order the core lists them in. */
+export type Sort = 'readiness' | 'level' | 'rarity' | 'name' | 'newest'
 
 export const SORTS: readonly { value: Sort; label: string }[] = [
   { value: 'readiness', label: 'Readiness' },
   { value: 'level', label: 'Level' },
+  { value: 'rarity', label: 'Rarity' },
   { value: 'name', label: 'Name' },
   { value: 'newest', label: 'Newest' },
 ]
@@ -36,6 +43,7 @@ export function visible(entries: readonly RosterEntry[], filters: Filters, searc
     (entry) =>
       (filters.element === null || entry.element === filters.element) &&
       (filters.weapon === null || entry.weapon === filters.weapon) &&
+      (filters.rarity === null || entry.rarity === filters.rarity) &&
       (!filters.owned || entry.owned) &&
       (!filters.inFocus || entry.focus !== null),
   )
@@ -44,15 +52,22 @@ export function visible(entries: readonly RosterEntry[], filters: Filters, searc
 const byName = (a: RosterEntry, b: RosterEntry) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
 
 /**
- * The characters in the order chosen, a new list. Readiness and level put the most first and a character the player
- * does not have last (she has neither), ties by name. Newest is the core's own order, which lists the newest first.
+ * The characters in the order chosen, a new list. Readiness, level and rarity put the most first, and a character the
+ * player does not have last for readiness and level (she has neither), ties by name. Name is A to Z, and newest is the
+ * core's own order, which lists the newest first. Reversed turns each round (the least first, Z to A, the oldest first),
+ * and a character without readiness or level still goes last.
  */
-export function sorted(entries: readonly RosterEntry[], sort: Sort): RosterEntry[] {
+export function sorted(entries: readonly RosterEntry[], sort: Sort, reversed = false): RosterEntry[] {
   const list = [...entries]
-  if (sort === 'newest') return list
-  if (sort === 'name') return list.sort(byName)
-  const key = (entry: RosterEntry) => (sort === 'level' ? (entry.level ?? -1) : entry.owned ? entry.readiness : -1)
-  return list.sort((a, b) => key(b) - key(a) || byName(a, b))
+  if (sort === 'newest') return reversed ? list.reverse() : list
+  if (sort === 'name') return list.sort((a, b) => (reversed ? byName(b, a) : byName(a, b)))
+  const key = (entry: RosterEntry) => (sort === 'rarity' ? entry.rarity : sort === 'level' ? entry.level : entry.owned ? entry.readiness : null)
+  const way = reversed ? -1 : 1
+  return list.sort((a, b) => {
+    const [first, second] = [key(a), key(b)]
+    if (first === null || second === null) return (first === null ? 1 : 0) - (second === null ? 1 : 0) || byName(a, b)
+    return way * (second - first) || byName(a, b)
+  })
 }
 
 /** The characters before and after this one in an order of keys, or null past either end: the arrows stop there, they do not wrap. */

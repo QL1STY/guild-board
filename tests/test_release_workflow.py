@@ -111,7 +111,7 @@ def test_the_build_runs_on_windows_and_goes_through_the_steps_in_order():
         "npm ci --prefix web",
         "npm ci --prefix shell",
         "npm test --prefix shell",
-        "uv run --frozen python -m pytest -q -p no:cacheprovider",
+        "uv run --frozen python -m pytest -q -p no:cacheprovider -n auto",
         "npx vitest run",
         "build-installer.ps1",
         "Get-FileHash",

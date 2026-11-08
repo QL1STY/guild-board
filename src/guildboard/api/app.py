@@ -1336,11 +1336,14 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
             return _error(422, str(error))
 
     @app.get("/api/pulls/history")
-    async def pulls_history(before: int | None = None, limit: int = HISTORY_ROUTE_ROWS) -> Response:
-        """The history's rows, newest first, older than the wish `before` when it is given; 1 to 500 of them."""
+    async def pulls_history(before: int | None = None, limit: int = HISTORY_ROUTE_ROWS, rank: int = 3) -> Response:
+        """The history's rows of `rank` stars and up (3, 4 or 5), newest first, older than the wish `before` when it is
+        given; 1 to 500 of them."""
         if before is not None and not 0 <= before < 2**63:  # past what SQLite keeps, and so past every id
             return _error(422, UNEXPECTED_REQUEST)
-        return JSONResponse(core.pulls.history(before, max(1, min(limit, MAX_HISTORY_ROWS))))
+        if rank not in (3, 4, 5):
+            return _error(422, UNEXPECTED_REQUEST)
+        return JSONResponse(core.pulls.history(before, max(1, min(limit, MAX_HISTORY_ROWS)), rank))
 
     @app.get("/api/ledger")
     async def ledger() -> Response:

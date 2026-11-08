@@ -1,4 +1,16 @@
 {
+  "2.0.2": [
+    {
+      "kind": "new",
+      "title": "Wish history by rarity",
+      "text": "Over the wish history on the Pulls page, show every wish, only the 4★ and 5★, or only the 5★."
+    },
+    {
+      "kind": "new",
+      "title": "Characters by rarity",
+      "text": "Filter the Characters page to the 5★ or the 4★, or sort it by rarity. Press the chosen sort again to reverse its order."
+    }
+  ],
   "2.0.1": [
     {
       "kind": "new",

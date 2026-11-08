@@ -369,15 +369,16 @@ class Planner:
             load_inventory(), self._store.wiki_items(), load_upcoming(), self._store.banners(), self._clock.now()
         )
 
-    def history(self, before: int | None, limit: int) -> dict[str, Any]:
-        """Up to `limit` rows of the history, newest first, older than the wish `before` when it is given."""
+    def history(self, before: int | None, limit: int, min_rank: int = 3) -> dict[str, Any]:
+        """Up to `limit` rows of the history of `min_rank` stars and up, newest first, older than the wish `before`
+        when it is given."""
         uid = self.uid()
         if uid is None:
             return {"rows": [], "more": False}
         now, wishes = self._clock.now(), self._wishes(uid)
         windows = self._windows(uid, self._store.wish_imports(RUNS), wishes, now)
         states = self._states(wishes, self._store.pulls_account(uid), windows, self._store.banners(), now)
-        rows = self._store.wishes_before(uid, before, limit + 1)
+        rows = self._store.wishes_before(uid, before, limit + 1, min_rank=min_rank)
         return {
             "rows": history_rows(rows[:limit], states, four_counts(wishes), self._store.wiki_items()),
             "more": len(rows) > limit,

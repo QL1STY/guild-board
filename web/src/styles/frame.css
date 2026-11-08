@@ -127,6 +127,10 @@ a.gb-nav:hover { color: var(--rail-text); }
 .gb-section-h::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--gold) 0 60%, transparent); }
 .gb-seg { display: inline-flex; overflow: hidden; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 12.5px; }
 .gb-seg button { padding: 4px 13px; border: 0; background: none; color: var(--ink2); }
+/* The chosen sort's way, where a second press turns it round (Segmented's onRepeat): down for the usual order, up for its reverse. */
+.gb-seg-way { display: inline-flex; margin: 0 -4px 0 4px; vertical-align: -2px; transition: transform var(--t-state); }
+.gb-seg-way .sign { width: 14px; height: 14px; }
+.gb-seg-way.up { transform: rotate(180deg); }
 .gb-seg button.on { background: var(--button); color: var(--button-text); font-weight: 700; }
 /* The ring inside the option: the pill clips what lies outside it (overflow: hidden). */
 .gb-seg button:focus-visible { outline-offset: -2px; }

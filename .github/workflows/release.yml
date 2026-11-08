@@ -88,8 +88,9 @@ jobs:
         # They start the core and check that it writes only inside its data folder (tests/test_handsoff.py), so they run here
         # as on the maintainer's PC; the window's own check is the shell's end-to-end test, run before a release. Windows
         # PowerShell, as the release scripts' tests start it: from PowerShell 7 it would inherit a module path it cannot use.
+        # On every core of the runner (pytest-xdist): one by one they took 22 minutes.
         shell: powershell
-        run: uv run --frozen python -m pytest -q -p no:cacheprovider
+        run: uv run --frozen python -m pytest -q -p no:cacheprovider -n auto
 
       - name: Run the interface's tests
         working-directory: web

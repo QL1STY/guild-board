@@ -674,6 +674,35 @@ export function historyCaption(count: number): string {
   return `History · ${plural(count, 'pull')} kept`
 }
 
+/** Which wishes the history shows: every one, the 4★ and 5★, or the 5★ alone (a player's ask after the launch). */
+export type HistoryShow = 'every' | 'four' | 'five'
+
+export const HISTORY_SHOWS: readonly { value: HistoryShow; label: string }[] = [
+  { value: 'every', label: 'Every wish' },
+  { value: 'four', label: '4★ and 5★' },
+  { value: 'five', label: '5★' },
+]
+
+const LEAST_RANK: Record<HistoryShow, 3 | 4 | 5> = { every: 3, four: 4, five: 5 }
+
+/** The core's route for the history's rows of a rarity and up, older than the wish `before` when it is given. */
+export function historyPath(show: HistoryShow, before: string | null): string {
+  const query = [show === 'every' ? null : `rank=${LEAST_RANK[show]}`, before === null ? null : `before=${before}`]
+    .filter((part) => part !== null)
+    .join('&')
+  return query === '' ? '/api/pulls/history' : `/api/pulls/history?${query}`
+}
+
+/** The rows of a rarity and up, in their order. */
+export function historyShown<T extends { rank: number }>(rows: readonly T[], show: HistoryShow): T[] {
+  return rows.filter((row) => row.rank >= LEAST_RANK[show])
+}
+
+/** The line where a rarity has no wish kept. */
+export function historyEmpty(show: Exclude<HistoryShow, 'every'>): string {
+  return show === 'four' ? 'No 4★ or 5★ wishes kept yet.' : 'No 5★ wishes kept yet.'
+}
+
 /**
  * The sentence over a history of another game account than the HoYoLAB login's (the plan's review focus, item 3):
  * "This history is UID 700000002. Guild Board's HoYoLAB account is UID 700000001." Null when they agree, or either is

@@ -42,9 +42,17 @@ def test_every_shipped_item_is_valid():
     assert ChangeItem  # the type is public
 
 
-def test_the_next_release_tells_of_the_page_size():
+def test_the_next_release_tells_of_the_rarity_filters():
     notes = load_changes()
-    assert next(iter(notes)) == "2.0.1"
+    assert next(iter(notes)) == "2.0.2"
+    assert [(item["kind"], item["title"]) for item in notes["2.0.2"]] == [
+        ("new", "Wish history by rarity"), ("new", "Characters by rarity"),
+    ]
+    assert "reverse" in notes["2.0.2"][1]["text"]
+
+
+def test_2_0_1_tells_of_the_page_size():
+    notes = load_changes()
     assert [(item["kind"], item["title"]) for item in notes["2.0.1"]] == [
         ("new", "Page size"), ("new", "A Board for a full screen"), ("better", "Updates from the code's own page"),
     ]

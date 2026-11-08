@@ -102,6 +102,21 @@ def test_the_history_route_pages_newest_first(client, core):
         assert (answer.status_code, answer.json()) == (422, {"error": UNEXPECTED_REQUEST}), bad
 
 
+def test_the_history_route_keeps_to_a_rarity_and_up(client, core):
+    keep_demo_like(core.store)
+    every = client.get("/api/pulls/history", params={"limit": 500}).json()["rows"]
+    for rank in (4, 5):
+        first = client.get("/api/pulls/history", params={"rank": rank, "limit": 5}).json()
+        wanted = [row for row in every if row["rank"] >= rank]
+        assert first["rows"] == wanted[:5] and first["more"] == (len(wanted) > 5)
+        rest = client.get("/api/pulls/history", params={"rank": rank, "before": first["rows"][-1]["id"], "limit": 500}).json()
+        assert (rest["rows"], rest["more"]) == (wanted[5:], False)
+    assert client.get("/api/pulls/history", params={"rank": 3, "limit": 500}).json()["rows"] == every
+    for bad in ("2", "6", "five"):
+        answer = client.get("/api/pulls/history", params={"rank": bad})
+        assert (answer.status_code, answer.json()) == (422, {"error": UNEXPECTED_REQUEST}), bad
+
+
 def test_the_balance_is_set_and_estimated(client, core, clock):
     keep_demo_like(core.store)
     answer = client.put("/api/pulls/balance", json={"primogems": 9840, "fates": 14})

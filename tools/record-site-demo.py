@@ -142,6 +142,8 @@ EXPANDERS: dict[str, Callable[[Get], list[str]]] = {
     "friends": _friends,
     "map": _map,
     "overlay": _widgets,
+    # The first rows of the history's rarity switch (PullsHistory.tsx); Show more's further pages are not recorded.
+    "pulls": lambda get: ["/api/pulls/history?rank=4", "/api/pulls/history?rank=5"],
     "stats": _stats,
 }
 
@@ -152,7 +154,7 @@ NOT_RECORDED = {
     "/api/art/": "a picture, read by the browser from HoYoverse's address (web/src/sitedemo.ts)",
     "/api/gallery/": "the gallery is off, and its pictures are the player's own",
     "/api/friends/": "a friend's picture, read from an address",
-    "/api/pulls/history": "the next page of the Pulls history: the first hundred rows are in /api/pulls",
+    "/api/pulls/history": "the next page of the Pulls history: the first hundred rows are in /api/pulls, and the first of each rarity are recorded",
     "/api/commissions": "another day's or region's model that the page has no list of: those of each region are recorded",
 }
 

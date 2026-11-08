@@ -44,7 +44,7 @@ test('the window remembers the roster, the search, the filters, the sort and the
   saveRosterScroll(640)
   const kept = rosterMemory()
   expect(kept.data).toBe(roster)
-  expect(kept.view).toEqual({ search: 'hydro', filters: { ...NO_FILTERS, owned: true }, sort: 'name' })
+  expect(kept.view).toEqual({ search: 'hydro', filters: { ...NO_FILTERS, owned: true }, sort: 'name', reversed: false })
   expect(kept.scroll).toBe(640)
 })
 
@@ -86,6 +86,8 @@ test("the order of the cards is the roster's as the player left it: the search, 
   expect(rosterOrder(rosterMemory())).toHaveLength(16)
   setRosterView({ search: 'catalyst', sort: 'name' })
   expect(rosterOrder(rosterMemory())).toEqual(['columbina', 'lan-yan', 'lauma', 'nefer', 'odette'])
+  setRosterView({ reversed: true })
+  expect(rosterOrder(rosterMemory())).toEqual(['odette', 'nefer', 'lauma', 'lan-yan', 'columbina'])
 })
 
 test("a character the search or the filters leave out still has neighbours: the roster's order as sorted, whole", () => {

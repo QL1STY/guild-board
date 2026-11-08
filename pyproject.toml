@@ -1,6 +1,6 @@
 [project]
 name = "guildboard"
-version = "2.0.1"
+version = "2.0.2"
 description = "Personal Genshin Impact companion: backlog, stats, goals and pull planning."
 requires-python = ">=3.12,<3.13"
 dependencies = [

@@ -16,7 +16,7 @@ import { entranceDone, rosterMemory, saveRosterScroll, setRosterView, takeEntran
 import { rosterScale, scaleStyle, useCharactersScale } from './scale.ts'
 import { ReadinessRing } from './ReadinessRing.tsx'
 import {
-  bannerLine, countLine, FOCUS_MAX, type Filters, focusCards, levelLine, type Sort, SORTS, sorted, toggleFocus, visible,
+  bannerLine, countLine, FOCUS_MAX, type Filters, focusCards, levelLine, RARITIES, type Sort, SORTS, sorted, toggleFocus, visible,
 } from './rosterview.ts'
 import { SyncLine } from './SyncLine.tsx'
 import { CharactersTabs } from './Tabs.tsx'
@@ -168,17 +168,21 @@ function Filtering({
   focusShown,
   filters,
   sort,
+  reversed,
   search,
   onFilters,
   onSort,
+  onReverse,
   onSearch,
 }: {
   focusShown: boolean
   filters: Filters
   sort: Sort
+  reversed: boolean
   search: string
   onFilters: (next: Filters) => void
   onSort: (next: Sort) => void
+  onReverse: () => void
   onSearch: (next: string) => void
 }) {
   return (
@@ -219,6 +223,16 @@ function Filtering({
             {weapon}
           </Pill>
         ))}
+        <span className="cr-lab cr-lab-next">Rarity</span>
+        {RARITIES.map((rarity) => (
+          <Pill
+            key={rarity}
+            on={filters.rarity === rarity}
+            onPress={() => onFilters({ ...filters, rarity: filters.rarity === rarity ? null : rarity })}
+          >
+            {rarity}★
+          </Pill>
+        ))}
         {focusShown && (
           <Pill on={filters.inFocus} onPress={() => onFilters({ ...filters, inFocus: !filters.inFocus })}>
             In focus
@@ -226,7 +240,7 @@ function Filtering({
         )}
         <span className="cr-grow" />
         <span className="cr-lab">Sort</span>
-        <Segmented label="Sort by" options={SORTS} value={sort} onChange={onSort} />
+        <Segmented label="Sort by" options={SORTS} value={sort} onChange={onSort} onRepeat={onReverse} way={reversed ? 'up' : 'down'} />
       </div>
     </section>
   )
@@ -239,7 +253,7 @@ export function Roster({ live }: { live: Live }) {
   const { data, error } = useRoster(live.version + changed, live.status)
   // The window remembers the search, the filters, the sort and the scroll (memory.ts): coming back shows them at once.
   const { view } = useRosterMemory()
-  const { filters, sort, search } = view
+  const { filters, sort, reversed, search } = view
   const [refusal, setRefusal] = useState<string | null>(null)
   const page = useRef<HTMLDivElement>(null)
   const grid = useRef<HTMLDivElement>(null)
@@ -280,7 +294,7 @@ export function Roster({ live }: { live: Live }) {
     }
   }, [])
 
-  const shown = data === null ? [] : sorted(visible(data.entries, filters, search), sort)
+  const shown = data === null ? [] : sorted(visible(data.entries, filters, search), sort, reversed)
   // A card that a filter or the sort moves glides to its place.
   useGlide(grid, 'data-glide', shown.map((entry) => entry.key).join())
 
@@ -328,12 +342,15 @@ export function Roster({ live }: { live: Live }) {
             focusShown={weekShown(live.status)}
             filters={filters}
             sort={sort}
+            reversed={reversed}
             search={search}
             onFilters={(next) => {
               setRefusal(null)
               setRosterView({ filters: next })
             }}
-            onSort={(next) => setRosterView({ sort: next })}
+            // Another sort starts in its usual order; a second press on the chosen one turns it round.
+            onSort={(next) => setRosterView({ sort: next, reversed: false })}
+            onReverse={() => setRosterView({ reversed: !reversed })}
             onSearch={(next) => {
               setRefusal(null)
               setRosterView({ search: next })

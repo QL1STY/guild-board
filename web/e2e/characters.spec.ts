@@ -54,6 +54,39 @@ test("the roster opens a character's profile, and the focus on a card shows its 
   await expect(page.locator('.pf-name')).toHaveText('Sandrone')
 })
 
+test('the rarity filter keeps the 5★ or the 4★, and the rarity sort puts the 5★ first', async ({ page, core, api }) => {
+  const all = (await api.get<{ entries: { key: string; rarity: number }[] }>('/api/characters')).entries
+  const fours = all.filter((one) => one.rarity === 4)
+  expect(fours.length).toBeGreaterThan(0)
+  await page.goto(`${core.origin}/#/characters`)
+  const cards = page.locator('.cr-card')
+  await expect(cards).toHaveCount(all.length)
+  await page.getByRole('button', { name: '4★', exact: true }).click()
+  await expect(page.getByRole('button', { name: '4★', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(cards).toHaveCount(fours.length)
+  await expect(cards.locator('.cr-kind', { hasText: '5★' })).toHaveCount(0)
+  await page.getByRole('button', { name: '5★', exact: true }).click()
+  await expect(cards).toHaveCount(all.length - fours.length)
+  await page.getByRole('button', { name: '5★', exact: true }).click()
+  await expect(cards).toHaveCount(all.length)
+  await page.getByRole('radio', { name: 'Rarity', exact: true }).click()
+  const kinds = await cards.locator('.cr-kind').allTextContents()
+  const stars = kinds.map((kind) => Number(/([45])★/.exec(kind)?.[1]))
+  expect(stars).toEqual([...stars].sort((a, b) => b - a))
+  // A second press on the chosen sort turns it round: the 4★ first, its chevron up; another sort starts in its usual order.
+  const rarity = page.getByRole('radio', { name: 'Rarity', exact: true })
+  await rarity.click()
+  await expect(rarity.locator('.gb-seg-way')).toHaveClass(/up/)
+  await expect(cards.first().locator('.cr-kind')).toContainText('4★')
+  await rarity.click()
+  await expect(cards.first().locator('.cr-kind')).toContainText('5★')
+  await rarity.click()
+  await page.getByRole('radio', { name: 'Name', exact: true }).click()
+  await expect(page.getByRole('radio', { name: 'Name', exact: true }).locator('.gb-seg-way')).toHaveClass(/down/)
+  const names = await cards.locator('.cr-name').allTextContents()
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' })))
+})
+
 test('the search finds by name, element and weapon type, works with the filters and the sort, and Escape clears it', async ({ page, core, api }) => {
   const all = (await api.get<{ entries: { key: string; name: string; element: string; weapon: string }[] }>('/api/characters')).entries
   await page.goto(`${core.origin}/#/characters`)

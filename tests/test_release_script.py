@@ -305,6 +305,9 @@ def test_release_refuses_a_dirty_tree_or_a_version_without_notes_and_runs_the_te
         [line] = [line for line in script.splitlines() if step in line]
         assert line.startswith("Step '"), line
     assert "$env:UV_PROJECT_ENVIRONMENT = '.venv-package'" in script.split("pytest")[0]
+    # The Python tests run on every core, or on four while the game runs, so that the player's frames are left alone.
+    assert "python -m pytest -q -p no:cacheprovider -n $workers" in script
+    assert "Get-Process -Name GenshinImpact, YuanShen -ErrorAction SilentlyContinue" in script
     # The build, on GitHub, installs exactly the locked packages.
     build = _code(ROOT / "build-installer.ps1")
     assert "uv sync --locked --no-dev --group package" in build

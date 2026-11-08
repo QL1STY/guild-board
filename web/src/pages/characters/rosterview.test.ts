@@ -24,6 +24,28 @@ test('the weapon filter, the owned filter and the focus filter each narrow the l
   expect(visible(roster.entries, { ...NO_FILTERS, element: 'Geo', weapon: 'Sword' })).toEqual([])
 })
 
+test('the rarity filter keeps the 5★ or the 4★, with the others', () => {
+  expect(names(visible(roster.entries, { ...NO_FILTERS, rarity: 4 }))).toEqual(['Alyosha', 'Jahoda', 'Lan Yan', 'Iansan', 'Aino', 'Dahlia'])
+  expect(visible(roster.entries, { ...NO_FILTERS, rarity: 5 })).toHaveLength(10)
+  expect(names(visible(roster.entries, { ...NO_FILTERS, rarity: 4, weapon: 'Polearm' }))).toEqual(['Iansan'])
+})
+
+test('sorting by rarity puts the 5★ first, by name where they tie', () => {
+  const order = names(sorted(roster.entries, 'rarity'))
+  expect(order.slice(0, 3)).toEqual(['Columbina', 'Durin', 'Escoffier'])
+  expect(order.slice(10)).toEqual(['Aino', 'Alyosha', 'Dahlia', 'Iansan', 'Jahoda', 'Lan Yan'])
+})
+
+test('a sort reversed puts the least first, and still leaves a character the player does not have last', () => {
+  const order = names(sorted(roster.entries, 'readiness', true))
+  expect(order.slice(0, 2)).toEqual(['Linnea', 'Vesna'])
+  expect(order.at(-1)).toBe('Escoffier')
+  expect(sorted(roster.entries, 'level', true).at(-1)?.name).toBe('Escoffier')
+  expect(names(sorted(roster.entries, 'rarity', true)).slice(0, 2)).toEqual(['Aino', 'Alyosha'])
+  expect(names(sorted(roster.entries, 'name', true)).slice(0, 2)).toEqual(['Vesna', 'Sandrone'])
+  expect(names(sorted(roster.entries, 'newest', true))).toEqual(names(roster.entries).reverse())
+})
+
 test('sorting by readiness puts the most ready first, and the ones not owned last, by name where they tie', () => {
   const order = names(sorted(roster.entries, 'readiness'))
   expect(order.slice(0, 3)).toEqual(['Sandrone', 'Nefer', 'Columbina'])
