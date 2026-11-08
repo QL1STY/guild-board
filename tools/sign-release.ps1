@@ -7,32 +7,39 @@
 # In order, and stopping with a plain sentence at any failure, with nothing published:
 #   1. gh is logged in as QL1STY, GUILDBOARD_RELEASE_KEY names the key (outside this repository), and the key is the one
 #      the app pins (selfupdate.py). Nothing is downloaded before this.
-#   2. The tag has no release yet in QL1STY/guild-board-releases, the repository installed copies look in.
+#   2. The tag has no release yet where it is to be released: the repository that built it, which installed copies of
+#      2.0.1 and later look in, or with -Bridge the old QL1STY/guild-board-releases.
 #   3. The workflow ran successfully for the tag, on the commit the tag names now.
 #   4. Its installer and its SHA-256 are downloaded into a new folder outside this repository, and the SHA-256 is checked.
 #   5. gh attestation verify checks that the installer was built by the workflow in the repository, unless -NoAttestation.
-#   6. A draft release of the releases repository is made with the installer, which installed copies do not see; it is
-#      read back, signed with the release key, the signature is uploaded and read back, and only then is it published
-#      (tools\release-signing.ps1, as release.ps1 does it).
+#   6. A draft release is made with the installer, which installed copies do not see, on the tag that is there already;
+#      it is read back, signed with the release key, the signature is uploaded and read back, and only then is it
+#      published (tools\release-signing.ps1).
 #
 # Run it from this folder's parent with, for example:
 #     powershell -ExecutionPolicy Bypass -File tools\sign-release.ps1 -Tag v1.0.0
 #
-# -Repo is the repository that built the installer, QL1STY/guild-board by default. -NoAttestation skips step 5 for a trial
-# on a private repository, where attestations may not be available; it is refused for a public one. The release notes
-# are those of the version in src\guildboard\reference\changes.json at the tag.
+# -Repo is the repository that built the installer, QL1STY/guild-board by default, and the release is made there.
+# -NoAttestation skips step 5 for a trial on a private repository, where attestations may not be available; it is refused
+# for a public one. The release notes are those of the version in src\guildboard\reference\changes.json at the tag.
+#
+# -Bridge releases the same installer, built and attested by -Repo, in QL1STY/guild-board-releases instead: the repository
+# 2.0.0 and earlier look in. 2.0.1, the first version that looks in the code's repository, is released in both, with a run
+# without -Bridge and one with it, so that it brings the older copies over. Each run stands alone and can be run again.
 
 param(
     [Parameter(Mandatory = $true)][string]$Tag,
     [string]$Repo = 'QL1STY/guild-board',
-    [switch]$NoAttestation
+    [switch]$NoAttestation,
+    [switch]$Bridge
 )
 
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..')).TrimEnd('\')
 Set-Location -LiteralPath $root
-$releases = 'QL1STY/guild-board-releases'
 $account = 'QL1STY'
+# Where it is released: the repository that built it, or the old releases repository with -Bridge.
+$releases = if ($Bridge) { 'QL1STY/guild-board-releases' } else { $Repo }
 $artifact = 'guild-board-installer'
 $workflow = 'release.yml'
 . (Join-Path $PSScriptRoot 'release-signing.ps1')
@@ -129,10 +136,13 @@ $changes = (gh api -H 'Accept: application/vnd.github.raw+json' "repos/$Repo/con
 if ($LASTEXITCODE -ne 0) { Stop-With "GitHub did not give changes.json at $Tag. $unpublished" }
 try { $notes = Get-ReleaseNotes $Version $changes } catch { Stop-With "changes.json at $Tag is not readable. $unpublished" }
 
-Write-Output "- Upload Guild Board $Version as a draft, which installed copies do not see"
-if (-not (New-DraftRelease $Tag $Version $setup $notes $releases)) { Stop-With "The draft could not be made. $unpublished" }
+Write-Output "- Upload Guild Board $Version to $releases as a draft, which installed copies do not see"
+# In the repository that built it, the tag is there already, and the release must be on it.
+if (-not (New-DraftRelease $Tag $Version $setup $notes $releases -VerifyTag:(-not $Bridge))) {
+    Stop-With "The draft could not be made. $unpublished"
+}
 Publish-SignedDraft $Tag $Version $setup $keyFile $trusted $releases
 
 Remove-Item -LiteralPath $folder -Recurse -Force -ErrorAction SilentlyContinue
-Write-Output "Guild Board $Version is released. Installed copies offer it within twelve hours, or at their next start."
+Write-Output "Guild Board $Version is released in $releases. Installed copies that look there offer it within twelve hours, or at their next start."
 Write-Output "It was built by $Repo at commit $($tagged.Substring(0, 7)); the installer's SHA-256 is $actual."

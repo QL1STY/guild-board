@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
-from guildboard.config import AppPaths, Settings, default_data_dir, load_settings, save_settings, settings_from_dict
+from guildboard.config import (
+    PAGE_SIZES, AppPaths, Settings, default_data_dir, load_settings, save_settings, settings_from_dict,
+)
 
 
 def test_default_data_dir_is_under_local_app_data(monkeypatch):
@@ -133,6 +135,24 @@ def test_the_overlay_size_is_one_of_five_sizes_and_100_percent_unless_another_is
     # Anything else is taken as 100, the 0 that "Automatic" saved before included.
     for refused in (0, 50, 110, 225, True, 150.0, "150", None):
         assert settings_from_dict({"overlay_size": refused}).overlay_size == 100, refused
+
+
+def test_the_page_sizes_are_one_of_seven_steps_and_100_percent_unless_another_is_chosen():
+    assert PAGE_SIZES == (70, 80, 90, 100, 110, 120, 130)  # the window's steps too (PAGE_SIZES in shell/src/dashboard.ts)
+    # One for a window and one for a maximized window; the page grows with the window, as it did before the settings.
+    for name in ("page_size", "page_size_maximized"):
+        assert getattr(Settings(), name) == 100
+        for size in PAGE_SIZES:
+            assert getattr(settings_from_dict({name: size}), name) == size
+        for refused in (0, 60, 75, 140, True, 90.0, "90", None):
+            assert getattr(settings_from_dict({name: refused}), name) == 100, (name, refused)
+
+
+def test_the_page_sizes_are_kept_in_the_file(tmp_path):
+    path = tmp_path / "settings.json"
+    save_settings(path, Settings(page_size=110, page_size_maximized=80))
+    kept = load_settings(path)
+    assert (kept.page_size, kept.page_size_maximized) == (110, 80)
 
 
 def test_overlay_settings_are_kept_in_the_file(tmp_path):

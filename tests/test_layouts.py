@@ -90,6 +90,27 @@ def test_a_refused_place_is_refused_in_the_layouts_sentence(layouts):
     assert layouts.get("board")["saved"] is False
 
 
+def test_a_widgets_place_in_a_maximized_window_is_kept_beside_its_place_in_a_window(layouts):
+    widget = {
+        "id": "c", "type": "clock", "w": 2, "h": 1, "settings": {}, "x": 3, "y": 5,
+        "full": {"x": 7, "y": 0, "w": 3, "h": 2},
+    }
+    assert layouts.save("board", 0, [widget])["widgets"] == [widget]
+    unplaced = {"id": "d", "type": "clock", "w": 2, "h": 1, "settings": {}, "full": {"x": 99, "y": 199, "w": 8, "h": 8}}
+    assert layouts.save("board", 1, [unplaced])["widgets"] == [unplaced]  # added there: no place in a window yet
+
+
+@pytest.mark.parametrize("full", [
+    {"x": 0, "y": 0, "w": 0, "h": 1}, {"x": 100, "y": 0, "w": 1, "h": 1}, {"x": 0, "y": 200, "w": 1, "h": 1},
+    {"x": 0, "y": 0, "w": 9, "h": 1}, {"x": -1, "y": 0, "w": 1, "h": 1}, {"x": 0, "y": 0, "w": 1},
+    {"x": "1", "y": 0, "w": 1, "h": 1}, {"x": True, "y": 0, "w": 1, "h": 1}, {"x": 0, "y": 0, "w": 1.0, "h": 1},
+    {"x": 0, "y": 0, "w": 1, "h": 1, "z": 2}, [0, 0, 1, 1], None,
+])
+def test_a_place_in_a_maximized_window_is_whole_cells_with_a_size_or_is_refused(layouts, full):
+    with pytest.raises(LayoutError, match=re.escape(SHAPE)):
+        layouts.save("board", 0, [{"id": "c", "type": "clock", "w": 2, "h": 1, "settings": {}, "full": full}])
+
+
 def test_a_type_or_a_key_this_version_does_not_know_is_kept(store, clock):
     later = {"id": "map-1", "type": "map", "w": 6, "h": 4, "settings": {"tab": "fishing"}, "anchor": "top-right"}
     layouts = Layouts(store, clock)

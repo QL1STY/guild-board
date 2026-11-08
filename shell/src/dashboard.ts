@@ -1,7 +1,8 @@
 /**
  * The dashboard window (dashboard.py): the interface in a window that may show only the core's own pages. Closing hides
  * it, and the page is released a moment later, so only the core keeps running. The page zooms with the window's width,
- * from the usual 1,640 pixels up to twice the size. Nothing here touches Electron: `main.ts` hands the window in through
+ * from the usual 1,640 pixels up to twice the size, times the player's page size (Settings, or Ctrl and + or -), which a
+ * maximized window has apart. Nothing here touches Electron: `main.ts` hands the window in through
  * `DashboardDeps.createWindow`.
  */
 import { opensOutside, sameOrigin } from './links.js'
@@ -16,9 +17,58 @@ export const REFERENCE_WIDTH = 1640
 // `--page-dark` (web/src/styles/tokens.css): the window opens in the page's colour, with no white flash.
 export const BACKGROUND = '#E6DDCA'
 
-/** How large the page draws in a window this wide: the width over 1,640, from 1 to 2. */
-export function zoomFor(width: number): number {
-  return Math.min(2, Math.max(1, width / REFERENCE_WIDTH))
+// The page sizes, in percent of the size the page grows to with the window: 100 fills the window as before the setting
+// (PAGE_SIZES in src/guildboard/config.py). Ctrl and + or -, and Ctrl and the mouse wheel, step through them.
+export const PAGE_SIZES: readonly number[] = [70, 80, 90, 100, 110, 120, 130]
+const USUAL_SIZE = 100
+// One turn of the mouse wheel with Ctrl: the engine asks for the zoom twice for it, a fraction of a millisecond apart (seen
+// in the shell's e2e test with Electron 45), so a second ask this soon after a step is the same turn. A fast spin takes a
+// step every this many milliseconds.
+export const WHEEL_TURN_MS = 50
+
+/** How large the page draws in a window this wide: the width over 1,640, from 1 to 2, times the page size. */
+export function zoomFor(width: number, pageSize = USUAL_SIZE): number {
+  return (Math.min(2, Math.max(1, width / REFERENCE_WIDTH)) * pageSize) / 100
+}
+
+/** The page size a setting holds: one of PAGE_SIZES, and 100 for anything else. */
+export function pageSizeOf(value: unknown): number {
+  return typeof value === 'number' && PAGE_SIZES.includes(value) ? value : USUAL_SIZE
+}
+
+export type PageStep = 'in' | 'out' | 'reset'
+
+/** The size a step leads to: the next larger or smaller, staying at the ends; a reset, and any size not listed, is 100. */
+export function steppedSize(size: number, step: PageStep): number {
+  const at = PAGE_SIZES.indexOf(size)
+  if (step === 'reset' || at < 0) return USUAL_SIZE
+  const next = at + (step === 'in' ? 1 : -1)
+  return PAGE_SIZES[Math.max(0, Math.min(PAGE_SIZES.length - 1, next))]
+}
+
+/** A key press as Electron reports it before the page sees it (`before-input-event`). */
+export interface KeyInput {
+  type: string
+  key: string
+  code: string
+  control: boolean
+  alt: boolean
+  meta: boolean
+  shift?: boolean
+}
+
+/**
+ * The step a key press asks for, as a browser's: Ctrl with + (or =), with - and with 0, also on the number pad, by the
+ * character the key types. Null for anything else: the number pad's 0 with Num Lock off is Insert, and Ctrl+Insert copies.
+ * Null for a press with Alt too: Windows reports AltGr, which types on the player's Polish layout, as Ctrl+Alt. Ctrl+0 can
+ * be no overlay hotkey (hotkeys.py).
+ */
+export function pageStepOf(input: KeyInput): PageStep | null {
+  if (input.type !== 'keyDown' || !input.control || input.alt || input.meta) return null
+  if (input.key === '+' || input.key === '=') return 'in'
+  if (input.key === '-') return 'out'
+  if (input.key === '0') return 'reset'
+  return null
 }
 
 /**
@@ -103,6 +153,18 @@ export interface DashboardDeps {
   onEnded(): void
   /** A line for the log; the placement file that cannot be written is told of here. */
   warn?(text: string): void
+  /** The saved page size of a window, or of a maximized one (the settings `page_size` and `page_size_maximized`). Default 100. */
+  pageSize?(maximized: boolean): number
+  /** Saves a page size the player stepped to in the window, a maximized one's or not. */
+  choosePageSize?(size: number, maximized: boolean): Promise<unknown>
+  /** Tells the core whether the window is maximized (`window_state`): the Board keeps an arrangement for each. */
+  reportMaximized?(maximized: boolean): void
+}
+
+/** The page's two sizes: one for a window, and one for a maximized window, which a full screen may want smaller. */
+interface PageSizes {
+  window: number
+  maximized: number
 }
 
 export class Dashboard {
@@ -113,8 +175,17 @@ export class Dashboard {
   private readonly fragmentCallbacks: ((fragment: string) => void)[] = []
   private ending = false // the app is quitting, or the demo's window was closed: a close is no longer turned into a hide
   private ended = false
+  private sizes: PageSizes // the page sizes the page draws at
+  // The page sizes stepped to in the window, saved one after another. While any is unsaved, the sizes the core reports are
+  // older ones, and the player's latest step stays.
+  private saving: Promise<unknown> = Promise.resolve()
+  private unsaved = 0
+  private wheeled = Number.NEGATIVE_INFINITY // when the wheel last took a step
+  private reported: boolean | null = null // whether the window is maximized, as the core was last told
 
-  constructor(private readonly deps: DashboardDeps) {}
+  constructor(private readonly deps: DashboardDeps) {
+    this.sizes = this.savedSizes()
+  }
 
   isOpen(): boolean {
     return this.window !== null && !this.window.isDestroyed()
@@ -126,7 +197,62 @@ export class Dashboard {
 
   /** How large the page draws now: 1 while there is no window. */
   zoom(): number {
-    return this.isOpen() ? zoomFor(this.window!.getContentSize()[0]) : 1
+    return this.isOpen() ? zoomFor(this.window!.getContentSize()[0], this.sizeOf(this.window!)) : 1
+  }
+
+  /** The saved page sizes changed, as when one is chosen in Settings: the page takes them, unless a step is still saving. */
+  pageSizeChanged(): void {
+    if (this.unsaved === 0) this.resize(this.savedSizes())
+  }
+
+  private savedSizes(): PageSizes {
+    return {
+      window: pageSizeOf(this.deps.pageSize?.(false) ?? USUAL_SIZE),
+      maximized: pageSizeOf(this.deps.pageSize?.(true) ?? USUAL_SIZE),
+    }
+  }
+
+  /** The page size for the window as it is now, maximized or not. */
+  private sizeOf(win: WindowLike): number {
+    return win.isMaximized() ? this.sizes.maximized : this.sizes.window
+  }
+
+  /**
+   * A step in the window, of the size for the window as it is now: the page takes it at once, and it is saved after any
+   * step before it.
+   */
+  private step(win: WindowLike, step: PageStep): void {
+    if (this.window !== win) return // a window that is closing
+    const maximized = win.isMaximized()
+    const current = this.sizeOf(win)
+    const size = steppedSize(current, step)
+    if (size === current) return
+    this.resize(maximized ? { ...this.sizes, maximized: size } : { ...this.sizes, window: size })
+    this.unsaved += 1
+    this.saving = this.saving
+      .then(() => this.deps.choosePageSize?.(size, maximized))
+      .then(
+        () => undefined,
+        () => this.deps.warn?.('The page size could not be saved.'),
+      )
+      .finally(() => {
+        this.unsaved -= 1
+        this.pageSizeChanged() // the saved size, which is the latest step unless a save failed
+      })
+  }
+
+  /** Keeps these page sizes, and the page takes the one for its window. */
+  private resize(sizes: PageSizes): void {
+    if (sizes.window === this.sizes.window && sizes.maximized === this.sizes.maximized) return
+    this.sizes = sizes
+    this.rezoom()
+  }
+
+  /** The page takes the zoom for its window as it is now; when that is a new zoom, the map views follow it. */
+  private rezoom(): void {
+    const win = this.window
+    if (win === null || win.isDestroyed()) return
+    if (this.applyZoom(win)) for (const cb of this.resizedCallbacks) cb()
   }
 
   /** `cb` is called after the window changed size and the page has taken its zoom: the map views follow. */
@@ -215,8 +341,21 @@ export class Dashboard {
     win.setMenu(null)
     this.wire(win)
     void win.webContents.loadURL(placeUrl(this.deps.link, place, false)).catch(() => undefined)
-    this.applyZoom(win) // at once, so that the page does not paint at 100% until it has loaded
     if (maximized) win.maximize()
+    // At once, so that the page does not paint at 100% until it has loaded, and after the maximize: a maximized window has
+    // a page size of its own.
+    this.applyZoom(win)
+    this.reported = null // a window made again is told of, whatever was told before
+    this.report(win)
+  }
+
+  /** Tells the core whether the window is maximized, when that is not what it was told last. */
+  private report(win: WindowLike): void {
+    if (win.isDestroyed() || win.isMinimized()) return // minimized, it says it is not maximized: the restore tells
+    const maximized = win.isMaximized()
+    if (maximized === this.reported) return
+    this.reported = maximized
+    this.deps.reportMaximized?.(maximized)
   }
 
   private wire(win: WindowLike): void {
@@ -224,9 +363,23 @@ export class Dashboard {
     const origin = new URL(this.deps.link).origin
     win.on('page-title-updated', (event: NavigationEvent) => event.preventDefault()) // the title is ours
     win.on('resize', () => {
+      // A maximized window that is minimized sends a resize and says it is not maximized (Electron 45 on Windows): nothing
+      // changes until it is restored, so that the page, the map views and the Board's arrangement stay as they are.
+      if (win.isMinimized()) return
       this.applyZoom(win) // a maximize, a restore and any change of the window's width arrive as resizes
-      if (this.window === win) for (const cb of this.resizedCallbacks) cb() // not a window that is closing
+      if (this.window !== win) return // a window that is closing
+      for (const cb of this.resizedCallbacks) cb()
+      this.report(win)
     })
+    // A maximized window and one that is not have a page size each, and the Board an arrangement each: whichever comes
+    // first, the resize or these, the page takes the size of the state the window is in, and the core hears of it.
+    const changedState = (): void => {
+      if (this.window !== win || win.isMinimized()) return
+      this.rezoom()
+      this.report(win)
+    }
+    win.on('maximize', changedState)
+    win.on('unmaximize', changedState)
     win.on('close', (event: NavigationEvent) => {
       if (this.ending) return
       if (!this.hides) {
@@ -247,6 +400,20 @@ export class Dashboard {
     })
     // Chromium keeps a zoom with the page it has loaded, so a page loaded again may have dropped it: each load asks again.
     contents.on('did-finish-load', () => this.applyZoom(win))
+    // Ctrl and + or -, and Ctrl and 0, step the page size, and the page never sees the press. Ctrl and the mouse wheel only
+    // ask for a zoom (Electron zooms nothing itself): they step it too.
+    contents.on('before-input-event', (event: NavigationEvent, input: KeyInput) => {
+      const step = pageStepOf(input)
+      if (step === null) return
+      event.preventDefault()
+      this.step(win, step)
+    })
+    contents.on('zoom-changed', (_event: unknown, direction: string) => {
+      const now = performance.now() // never goes back, as the clock can when it is set
+      if (now - this.wheeled < WHEEL_TURN_MS) return
+      this.wheeled = now
+      this.step(win, direction === 'in' ? 'in' : 'out')
+    })
     const kept = (event: NavigationEvent, url?: string): void => {
       if (!sameOrigin(url ?? event.url ?? '', origin)) event.preventDefault()
     }
@@ -270,12 +437,17 @@ export class Dashboard {
     contents.on('did-navigate-in-page', fragment)
   }
 
-  /** Zooms the page to the window's width when it is not at that zoom already: the page is asked, not a note kept. */
-  private applyZoom(win: WindowLike): void {
-    if (win.isDestroyed()) return
-    const factor = zoomFor(win.getContentSize()[0])
+  /**
+   * Zooms the page to the window's width and the page size when it is not at that zoom already: the page is asked, not a
+   * note kept.
+   */
+  private applyZoom(win: WindowLike): boolean {
+    if (win.isDestroyed() || win.isMinimized()) return false // the restore applies it
+    const factor = zoomFor(win.getContentSize()[0], this.sizeOf(win))
     // The engine gives a factor back with a rounding error in its last digit.
-    if (Math.abs(win.webContents.getZoomFactor() - factor) > 1e-6) win.webContents.setZoomFactor(factor)
+    if (Math.abs(win.webContents.getZoomFactor() - factor) <= 1e-6) return false
+    win.webContents.setZoomFactor(factor)
+    return true
   }
 
   private savePlacement(win: WindowLike): void {

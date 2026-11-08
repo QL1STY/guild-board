@@ -1,4 +1,21 @@
 {
+  "2.0.1": [
+    {
+      "kind": "new",
+      "title": "Page size",
+      "text": "Make everything in the window smaller or larger, from 70% to 130%, in Settings or with Ctrl and + or −, or Ctrl and the mouse wheel. A maximized window keeps a size of its own, so a full screen can be smaller than the usual window. Ctrl and 0 goes back to 100%."
+    },
+    {
+      "kind": "new",
+      "title": "A Board for a full screen",
+      "text": "A maximized window keeps its own arrangement of the Board, so its extra columns can be used: arrange it with Edit while the window is maximized. The widgets, their settings and your notes are the same in both."
+    },
+    {
+      "kind": "better",
+      "title": "Updates from the code's own page",
+      "text": "Guild Board now looks for updates in the releases of github.com/QL1STY/guild-board, beside its code, where each installer is built by GitHub from its commit. The old releases page stays as it is."
+    }
+  ],
   "2.0.0": [
     {
       "kind": "better",

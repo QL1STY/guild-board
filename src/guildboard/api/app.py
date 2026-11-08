@@ -1244,6 +1244,18 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         core.wake_login_refresh()
         return JSONResponse({"woken": True})
 
+    @app.post("/api/demo/window")
+    async def demo_window(body: dict[str, Any] = Body(...)) -> Response:
+        """Demo mode only: say whether the window is maximized, as the shell does, so that a page without the window shows
+        the Board's arrangement for a maximized one."""
+        if not core.demo:
+            return _error(404, "Not found.")
+        maximized = body.get("maximized")
+        if not isinstance(maximized, bool):
+            return _error(422, "Give maximized as true or false.")
+        core.window_state(maximized)
+        return JSONResponse({"maximized": maximized})
+
     @app.post("/api/demo/clock")
     async def demo_clock(body: dict[str, Any] = Body(...)) -> Response:
         """Demo mode only: move the demo clock forward."""

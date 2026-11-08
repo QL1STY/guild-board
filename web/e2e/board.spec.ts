@@ -95,6 +95,22 @@ test('a pinned timer shows at the first free place', async ({ page, api }) => {
   expect(await cellOf(page, 'notes-a')).toEqual({ x: 4, y: 0 })
 })
 
+test("Add a widget's list is as wide as the Board, in more columns on a wider one, and a widget's settings keep 1,440", async ({ page }) => {
+  await page.setViewportSize({ width: 2560, height: 1440 })
+  await expect(widgetById(page, 'start-notes')).toBeVisible()
+  await edit(page)
+  await page.getByRole('button', { name: 'Add a widget' }).click()
+  const sheet = page.getByRole('region', { name: 'Add a widget' })
+  const [sheetBox, board] = await Promise.all([sheet.boundingBox(), page.getByTestId('board').boundingBox()])
+  expect(Math.abs(sheetBox!.x + sheetBox!.width - (board!.x + board!.width))).toBeLessThan(1) // to the Board's right edge
+  const columns = await sheet.locator('.board-types').evaluate((list) => getComputedStyle(list).gridTemplateColumns.split(' ').length)
+  expect(columns).toBeGreaterThan(4) // 1,440 pixels held four
+  await page.keyboard.press('Escape')
+  await widgetById(page, 'start-clock').getByRole('button', { name: 'Settings of Clock' }).click()
+  const settings = await page.locator('.board-sheet').boundingBox()
+  expect(settings!.width).toBeLessThanOrEqual(1440)
+})
+
 test('the Board uses the whole width at 2,560 pixels, with more widgets side by side', async ({ page }) => {
   await page.setViewportSize({ width: 2560, height: 1440 })
   await expect(widgetById(page, 'start-notes')).toBeVisible()
@@ -225,6 +241,33 @@ test('in Edit, the arrow keys move a widget and Shift with them resizes it, and 
   await expect(widgetById(page, 'clock-a')).toBeVisible()
   expect((await layoutOf(api)).widgets[0]).toMatchObject({ x: 2, y: 0, w: 2, h: 2 })
   expect(await cellOf(page, 'clock-a')).toEqual({ x: 2, y: 0 })
+})
+
+test("a maximized window keeps an arrangement of its own, and Done there leaves the window's as it was", async ({ page, api }) => {
+  await setBoard(api, page, [{ ...clockWidget('clock-a'), x: 0, y: 0 }, { ...clockWidget('clock-b'), x: 2, y: 0 }])
+  // The shell says the window is maximized; until that window is arranged, it shows the window's arrangement.
+  await expect(page.getByTestId('board')).toHaveAttribute('data-arrangement', 'window')
+  await api.post('/api/demo/window', { maximized: true })
+  await expect(page.getByTestId('board')).toHaveAttribute('data-arrangement', 'maximized')
+  expect(await cellOf(page, 'clock-b')).toEqual({ x: 2, y: 0 })
+  await edit(page)
+  await widgetById(page, 'clock-b').focus()
+  await page.keyboard.press('ArrowRight')
+  await page.keyboard.press('ArrowRight')
+  await expect(said(page)).toHaveText('Clock, column 5, row 1.')
+  await done(page)
+  await expect(page.getByRole('button', { name: 'Edit', exact: true })).toBeVisible()
+  const saved = (await layoutOf(api)).widgets
+  expect(saved.find((one) => one.id === 'clock-b')).toMatchObject({ x: 2, y: 0, w: 2, h: 1, full: { x: 4, y: 0, w: 2, h: 1 } })
+  expect(saved.find((one) => one.id === 'clock-a')).toMatchObject({ x: 0, y: 0, full: { x: 0, y: 0, w: 2, h: 1 } })
+  await expect.poll(() => cellOf(page, 'clock-b')).toEqual({ x: 4, y: 0 })
+  // Restored, the window shows its own arrangement again, and maximized once more, the other.
+  await api.post('/api/demo/window', { maximized: false })
+  await expect(page.getByTestId('board')).toHaveAttribute('data-arrangement', 'window')
+  await expect.poll(() => cellOf(page, 'clock-b')).toEqual({ x: 2, y: 0 })
+  await api.post('/api/demo/window', { maximized: true })
+  await expect(page.getByTestId('board')).toHaveAttribute('data-arrangement', 'maximized')
+  await expect.poll(() => cellOf(page, 'clock-b')).toEqual({ x: 4, y: 0 })
 })
 
 test('a widget moved onto another pushes it down, and the move is read out', async ({ page, api }) => {

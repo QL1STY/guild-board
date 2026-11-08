@@ -17,7 +17,7 @@ SITE = ROOT / "site"
 HTML = (SITE / "index.html").read_text(encoding="utf-8")
 CSS = (SITE / "site.css").read_text(encoding="utf-8")
 JS = (SITE / "site.js").read_text(encoding="utf-8")
-RELEASES = "https://github.com/QL1STY/guild-board-releases/releases/latest"
+RELEASES = "https://github.com/QL1STY/guild-board/releases/latest"
 SOURCE = "https://github.com/QL1STY/guild-board"
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="needs Node")
 
@@ -124,8 +124,10 @@ def test_the_download_buttons_point_to_the_latest_release():
     page = _page()
     release_links = [attrs["href"] for tag, attrs in page.tags if tag == "a" and "data-release-link" in attrs]
     assert len(release_links) == 3 and set(release_links) == {RELEASES}
-    # Every other address to the downloads is the same page.
-    assert set(re.findall(r"https://github\.com/QL1STY/guild-board-releases[^\"'<> ]*", HTML)) == {RELEASES}
+    # Every other address to the downloads is the same page, and none is the old releases repository's (2.0.1 moved the
+    # releases into the code's repository).
+    assert set(re.findall(r"https://github\.com/QL1STY/guild-board/releases[^\"'<> ]*", HTML)) == {RELEASES}
+    assert "guild-board-releases" not in HTML + JS
 
 
 def test_no_number_of_the_mockup_is_written_into_the_page():

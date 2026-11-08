@@ -9,6 +9,8 @@ export interface Settings {
   overlay_size: number
   overlay_full_screen: boolean
   overlay_pinned: boolean
+  page_size: number
+  page_size_maximized: number
   start_with_windows: boolean
   sync_paused: boolean
   notifications: boolean
@@ -58,6 +60,7 @@ export type CallName =
   | 'map_failed'
   | 'game_running'
   | 'overlay_shell'
+  | 'window_state'
   | 'offer_invite'
   | 'log'
   | 'shutdown'

@@ -91,6 +91,20 @@ def test_a_value_the_overlay_settings_do_not_accept_leaves_the_setting_as_it_was
         assert {key: saved[key] for key in chosen} == chosen, refused
 
 
+def test_the_page_sizes_are_saved_and_a_size_that_is_not_a_step_leaves_them(client, core):
+    for name in ("page_size", "page_size_maximized"):
+        assert client.get("/api/settings").json()[name] == 100
+    assert client.put("/api/settings", json={"page_size_maximized": 80}).json()["page_size_maximized"] == 80
+    assert client.put("/api/settings", json={"page_size": 110}).json()["page_size"] == 110
+    kept = load_settings(core.paths.settings_path)
+    assert (kept.page_size, kept.page_size_maximized) == (110, 80)
+    for refused in (85, "90", 0, None, True):
+        saved = client.put("/api/settings", json={"page_size": refused, "page_size_maximized": refused}).json()
+        assert (saved["page_size"], saved["page_size_maximized"]) == (110, 80), refused
+    # The window's size is about this PC: it never leaves a line for sync.
+    assert [row for row in core.store.sync_outbox(1000) if row.kind == "settings"] == []
+
+
 def test_the_spending_settings_are_saved_and_a_bad_price_list_leaves_them(client, core):
     answer = client.put("/api/settings", json={"spending_currency": "EUR", "spending_prices": {"EUR": {"c60": 1.09}}})
     assert answer.status_code == 200

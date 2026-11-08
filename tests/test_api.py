@@ -547,12 +547,25 @@ def test_demo_clock_moves_past_the_cooldown(tmp_path):
     core.store.close()
 
 
+def test_the_demo_can_say_the_window_is_maximized_as_the_shell_would(tmp_path):
+    core = Core(AppPaths(tmp_path / "data"), demo=True, demo_now=START, process_lister=lambda: set())
+    with TestClient(create_app(core, PORT), base_url=BASE) as client:
+        client.get("/launch", params={"k": core.launch_secret}, follow_redirects=False)
+        assert client.get("/api/status").json()["window_maximized"] is False
+        assert client.post("/api/demo/window", json={"maximized": True}).json() == {"maximized": True}
+        assert client.get("/api/status").json()["window_maximized"] is True
+        for bad in ({"maximized": "yes"}, {"maximized": 1}, {}):
+            assert client.post("/api/demo/window", json=bad).status_code == 422, bad
+    core.store.close()
+
+
 def test_demo_tools_do_not_exist_in_live_mode(tmp_path, clock):
     core = _core(tmp_path, clock, demo=False)
     with TestClient(create_app(core, PORT), base_url=BASE) as client:
         client.get("/launch", params={"k": core.launch_secret}, follow_redirects=False)
         assert client.post("/api/demo/clock", json={"advance_seconds": 60}).status_code == 404
         assert client.post("/api/demo/fault", json={"kind": "offline"}).status_code == 404
+        assert client.post("/api/demo/window", json={"maximized": True}).status_code == 404
     core.store.close()
 
 

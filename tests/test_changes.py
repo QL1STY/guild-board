@@ -42,9 +42,19 @@ def test_every_shipped_item_is_valid():
     assert ChangeItem  # the type is public
 
 
-def test_the_next_release_tells_of_the_new_stats_and_of_the_pictures_from_outside_hoyoverse():
+def test_the_next_release_tells_of_the_page_size():
     notes = load_changes()
-    newest = next(iter(notes))
+    assert next(iter(notes)) == "2.0.1"
+    assert [(item["kind"], item["title"]) for item in notes["2.0.1"]] == [
+        ("new", "Page size"), ("new", "A Board for a full screen"), ("better", "Updates from the code's own page"),
+    ]
+    assert "Ctrl" in notes["2.0.1"][0]["text"]
+    assert "github.com/QL1STY/guild-board" in notes["2.0.1"][2]["text"]
+
+
+def test_2_0_0_tells_of_the_new_stats_and_of_the_pictures_from_outside_hoyoverse():
+    notes = load_changes()
+    newest = "2.0.0"
     titles = [item["title"] for item in notes[newest]]
     # The window comes first, as the headline of 2.0.0; the earlier, unreleased entry's five follow it in their order.
     assert titles[0] == "A smoother window"

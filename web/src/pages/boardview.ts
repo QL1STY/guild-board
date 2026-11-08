@@ -372,6 +372,59 @@ export function sizeTag(size: Size, asked: Size, range: Range, grip: Grip): stri
   return `${sizeLabel(size)}${largest ? ', largest' : smallest ? ', smallest' : ''}`
 }
 
+/*
+ * The Board's arrangement in a maximized window. A full screen at a smaller page size has more columns than the usual
+ * window, so the Board keeps a second arrangement for it: each widget's place and size there is its `full`, beside its
+ * place and size in a window. The widgets themselves, their settings and their data are the same in both.
+ */
+
+/** Cells with a size, as a widget's `full` holds them: its place and size in a maximized window. */
+function fullOf(widget: Widget): Rect | null {
+  const full = widget.full as Partial<Rect> | undefined
+  const whole = (value: unknown) => Number.isInteger(value) && (value as number) >= 0
+  if (full === undefined || full === null || typeof full !== 'object') return null
+  return [full.x, full.y, full.w, full.h].every(whole) ? (full as Rect) : null
+}
+
+/** A widget without its place and size, and without its `full`. */
+function unplaced(widget: Widget): Widget {
+  const { x: _x, y: _y, w: _w, h: _h, full: _full, ...rest } = widget
+  return rest as Widget
+}
+
+/**
+ * The widgets as the maximized window arranges them, each at its place and size there, and its place and size in a
+ * window kept in `full` meanwhile: arrange and Edit work on them as they do on a window's, and fromFull puts both back.
+ * While the maximized window was never arranged, no widget has a place there, and each shows at its place in a window.
+ * Once it was, a widget without one, added in a window since, has no place there and goes to the first free one.
+ */
+export function toFull(widgets: readonly Widget[]): Widget[] {
+  const arranged = widgets.some((one) => fullOf(one) !== null)
+  return widgets.map((widget) => {
+    const { x, y, w, h } = widget
+    const inWindow = { ...(x === undefined ? {} : { x }), ...(y === undefined ? {} : { y }), w, h }
+    const own = fullOf(widget)
+    if (own !== null) return { ...unplaced(widget), ...own, full: inWindow }
+    if (!arranged) return { ...unplaced(widget), ...inWindow, full: inWindow }
+    return { ...unplaced(widget), w, h, full: inWindow }
+  })
+}
+
+/**
+ * The widgets toFull gave, as they are saved: each at its place and size in a window, kept in `full` meanwhile, with the
+ * place and size it has now as its `full`. A widget added in the maximized window has no place in a window yet, which
+ * puts it at its first free place there, at the size it has now.
+ */
+export function fromFull(widgets: readonly Widget[]): Widget[] {
+  return widgets.map((widget) => {
+    const kept = widget.full as Partial<Rect> | undefined
+    const inWindow = kept !== undefined && kept !== null && typeof kept === 'object' ? kept : { w: widget.w, h: widget.h }
+    const placed = savedPlace(widget)
+    const full = placed === null ? {} : { full: { x: placed.x, y: placed.y, w: widget.w, h: widget.h } }
+    return { ...unplaced(widget), ...inWindow, ...full } as Widget
+  })
+}
+
 /** The widgets with the places and sizes of an arrangement, in their own order, with every other key kept. */
 export function withPlaces(widgets: readonly Widget[], placed: readonly Placed[]): Widget[] {
   const at = new Map(placed.map((one) => [one.id, one]))

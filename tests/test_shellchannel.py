@@ -269,6 +269,18 @@ async def test_the_overlay_report_is_taken(channel, core, lines):
     assert "error" in json.loads(lines[-1])
 
 
+async def test_whether_the_window_is_maximized_is_taken_and_the_pages_hear_of_it(channel, core, lines):
+    assert core.status()["window_maximized"] is False  # until the shell says
+    heard = core.bus.subscribe()
+    await channel.answer(json.dumps({"id": 1, "call": "window_state", "args": {"maximized": True}}))
+    assert json.loads(lines[-1]) == {"id": 1, "result": None}
+    assert core.status()["window_maximized"] is True
+    assert [heard.get_nowait()["type"] for _ in range(heard.qsize())] == ["window_changed"]
+    await channel.answer(json.dumps({"id": 2, "call": "window_state", "args": {"maximized": "yes"}}))
+    assert "error" in json.loads(lines[-1])
+    assert core.status()["window_maximized"] is True
+
+
 async def test_a_shell_log_line_goes_to_the_core_log(channel, lines, caplog):
     await channel.answer('{"id": 2, "call": "log", "args": {"level": "warning", "text": "A refused switch."}}')
     assert json.loads(lines[-1]) == {"id": 2, "result": None}
@@ -280,7 +292,7 @@ def test_the_calls_are_the_channels_table():
         "hello", "login", "login_text", "sync_now", "set_paused", "update_settings", "backup_file_name",
         "export_backup", "picture_offer", "save_picture", "drop_picture", "verify_cookies", "verification_done",
         "map_snapshot", "map_session", "map_role", "map_seen", "map_failed", "game_running", "overlay_shell",
-        "offer_invite", "log", "shutdown",
+        "offer_invite", "log", "shutdown", "window_state",
     }
 
 

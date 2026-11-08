@@ -357,6 +357,7 @@ async function main(): Promise<void> {
           applyStartWithWindows(settings.start_with_windows, standardFolder, startupDeps)
         }
         overlay?.applySettings(settings)
+        dashboard?.pageSizeChanged()
         return undefined
       }
       case 'ready':
@@ -468,6 +469,12 @@ async function main(): Promise<void> {
       openExternal: (url) => void shell.openExternal(url),
       onEnded: () => void quit(0),
       warn,
+      pageSize: (maximized) => (maximized ? settings?.page_size_maximized : settings?.page_size) ?? 100,
+      choosePageSize: (size, maximized) =>
+        call('update_settings', { changes: { [maximized ? 'page_size_maximized' : 'page_size']: size } }),
+      reportMaximized: (maximized) => {
+        call('window_state', { maximized }).catch(() => warn('Whether the window is maximized could not be told to the core.'))
+      },
     })
     mapHost = new MapHost({
       call,

@@ -17,6 +17,9 @@ APP_DIR_NAME = "GuildBoard"
 ALLOWED_INTERVALS = (0, 30, 60)
 OVERLAY_OPACITY = (50, 100)  # percent: the least and the most of a pinned widget that shows
 OVERLAY_SIZES = (100, 125, 150, 175, 200)  # percent; the Board's size, 100, unless the player chooses larger
+# Percent of the size the window's page grows to with the window: 100 fills it as before the setting. The shell steps through
+# these with Ctrl and + or -, and with Ctrl and the mouse wheel (PAGE_SIZES in shell/src/dashboard.ts).
+PAGE_SIZES = (70, 80, 90, 100, 110, 120, 130)
 MAX_DISPLAY_CHARS = 64  # the longest name a display is kept under
 REGIONS = ("mondstadt", "liyue", "inazuma", "sumeru", "fontaine", "natlan")  # the daily commissions' regions
 REGION_NAMES = {
@@ -103,6 +106,10 @@ class Settings:
     # The game runs in full screen, which minimizes it whenever it loses the focus: the open overlay then takes the
     # clicks but never the focus. Off, it takes both, as a game in a window or borderless allows.
     overlay_full_screen: bool = False
+    # How large the window's page draws, in percent of its size for the window: one of PAGE_SIZES. One size for a window and
+    # one for a maximized window, so that a full screen can draw smaller than the usual window.
+    page_size: int = 100
+    page_size_maximized: int = 100
     last_seen_version: str = ""  # the version whose "What's new" card the player has seen; "" before any
     codes_login_done: bool = False  # a login has finished: HoYoverse's first code of an account needs a fresh one
     gallery_enabled: bool = False  # the screenshot gallery (the ledger design, section 7): off, nothing of it is read
@@ -186,6 +193,8 @@ def _coerce(name: str, value: Any, default: Any) -> Any:
         return value if is_int and OVERLAY_OPACITY[0] <= value <= OVERLAY_OPACITY[1] else default
     if name == "overlay_size":
         return value if is_int and value in OVERLAY_SIZES else default
+    if name in ("page_size", "page_size_maximized"):
+        return value if is_int and value in PAGE_SIZES else default
     return value if is_int else default
 
 

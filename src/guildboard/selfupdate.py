@@ -42,7 +42,7 @@ NOTE_LINE = re.compile(r"\s*[-*]\s+(?:\[(New|Better|Fixed)\]\s*)?(.+)")  # the r
 PUBLISHED = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
 
 # The release key's public half: ECDSA on the curve P-256, as its uncompressed point (04, then x and y) in hex. The player
-# made the key once with tools/make-release-key.ps1, keeps its private half off GitHub, and release.ps1 signs every
+# made the key once with tools/make-release-key.ps1, keeps its private half off GitHub, and tools/sign-release.ps1 signs every
 # release with it; tests/test_handsoff.py pins this line. While it is empty, no release is offered.
 RELEASE_KEY = "044d6934e90d6bf5628c147472250a93be80b6dc69af5476df335a7b9380acc6b101d92a01f0eb46b3dee516ebcae864ff3c8cab86b3ab56574d2474821fc124ba"
 SIGNATURE_BYTES = 64  # IEEE P1363: r, then s, 32 bytes each
@@ -61,7 +61,7 @@ def parse_version(text: str) -> tuple[int, int, int] | None:
 
 
 def parse_notes(body: Any) -> tuple[dict[str, Any], ...]:
-    """The items of a release's notes, from its body as release.ps1 writes it: one bullet per item, `- [New] Title: text`
+    """The items of a release's notes, from its body as tools/release-signing.ps1 writes it: one bullet per item, `- [New] Title: text`
     (or Better, Fixed), and `- Title` for an item without a kind. Anything that is not a bullet is skipped, and so is a
     body that is missing, so that a release written by hand still installs."""
     if not isinstance(body, str):
@@ -94,7 +94,7 @@ class Release:
 
 
 def release_text(tag: str, name: str, size: int, sha256: str) -> bytes:
-    """What the release key signs for a release (release.ps1, through tools/release-signing.ps1): the release's tag and
+    """What the release key signs for a release (tools/sign-release.ps1, through tools/release-signing.ps1): the release's tag and
     its installer's name, size and SHA-256 in lower-case hex, as GitHub's API gives them, one to a line, with no line's
     end after the last."""
     return f"{tag}\n{name}\n{size}\n{sha256}".encode("utf-8")

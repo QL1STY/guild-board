@@ -63,4 +63,6 @@ def hotkey_problem(text: str) -> str | None:
         return "A hotkey needs Ctrl, Alt or Win, so that typing does not open the overlay."
     if {"Ctrl", "Alt"} <= hotkey.modifiers and hotkey.key in ALTGR_LETTERS:
         return f"{hotkey.text} types a letter on your keyboard. Choose another key."
+    if hotkey.modifiers == {"Ctrl"} and hotkey.key == "0":  # Guild Board's window takes it (shell/src/dashboard.ts)
+        return "Ctrl+0 sets the page size back to 100%. Choose another key."
     return None

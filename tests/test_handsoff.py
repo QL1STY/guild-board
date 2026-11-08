@@ -337,11 +337,11 @@ def test_the_only_addresses_outside_hoyoverse_are_the_list_the_updates_the_cloud
     assert netpolicy.ALLOWED_URLS == (
         "https://raw.githubusercontent.com/MadeBaruna/paimon-moe/main/src/data/achievement/en.json",
     )
-    # The installed copy's updates (the player's choice, 2026-10-25): the player's own releases repository, its newest
+    # The installed copy's updates (the player's choice, 2026-10-25): the player's own code repository's releases, its newest
     # release and its installers' assets, and GitHub's download host for those alone.
-    assert netpolicy.LATEST_RELEASE_URL == "https://api.github.com/repos/QL1STY/guild-board-releases/releases/latest"
+    assert netpolicy.LATEST_RELEASE_URL == "https://api.github.com/repos/QL1STY/guild-board/releases/latest"
     assert netpolicy.INSTALLER_ASSET.pattern == (
-        r"https://api\.github\.com/repos/QL1STY/guild\-board\-releases/releases/assets/[0-9]+"
+        r"https://api\.github\.com/repos/QL1STY/guild\-board/releases/assets/[0-9]+"
     )
     assert netpolicy.DOWNLOAD_HOSTS == ("release-assets.githubusercontent.com", "objects.githubusercontent.com")
     # The online features (the online design, section 3): one exact host, the player's Supabase project, and of it the
@@ -360,7 +360,7 @@ def test_the_only_addresses_outside_hoyoverse_are_the_list_the_updates_the_cloud
 # H4 (the audit of 2026-11-01): an installed Guild Board offers an update only when its installer comes with a signature
 # by the player's release key, whose public half the app pins. The key is made once with tools/make-release-key.ps1,
 # which prints the line for both places, and it changes only on purpose, here and in selfupdate.py together. While it is
-# empty no update is offered, and release.ps1 publishes nothing.
+# empty no update is offered, and tools/sign-release.ps1 publishes nothing.
 RELEASE_KEY = "044d6934e90d6bf5628c147472250a93be80b6dc69af5476df335a7b9380acc6b101d92a01f0eb46b3dee516ebcae864ff3c8cab86b3ab56574d2474821fc124ba"
 
 

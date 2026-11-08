@@ -3,7 +3,7 @@
    for the latest release, whose version, size and SHA-256 it shows. The read sends nothing of the visitor's. */
 'use strict';
 
-var RELEASES = 'QL1STY/guild-board-releases';
+var RELEASES = 'QL1STY/guild-board'; // the code's own repository holds the releases since 2.0.1
 var SOURCE = 'QL1STY/guild-board';
 var SETUP = /^Guild[ .]Board[ .]Setup(?:[ .](.*))?\.exe$/i;
 

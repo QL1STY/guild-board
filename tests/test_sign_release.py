@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from guildboard.selfupdate import Release, newer_release
+from guildboard.selfupdate import Release, newer_release, release_text, signed
 from test_release_script import _make_key
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +34,8 @@ $ErrorActionPreference = 'Stop'
 $cfg = [IO.File]::ReadAllText($env:GH_FAKE) | ConvertFrom-Json
 $state = $cfg.state
 $line = $args -join ' '
+$at = [array]::IndexOf($args, '--repo')
+$args_repo = if ($at -ge 0) { $args[$at + 1] } else { '' }
 Add-Content -LiteralPath (Join-Path $state 'calls.log') -Value $line -Encoding UTF8
 $releaseFile = Join-Path $state 'release.json'
 function Save($release) {
@@ -41,9 +43,10 @@ function Save($release) {
 }
 function Load { [IO.File]::ReadAllText($releaseFile) | ConvertFrom-Json }
 function Asset($path, $id) {
+    $repo = $args_repo
     [pscustomobject]@{
         name = ((Split-Path -Leaf $path) -replace ' ', '.')
-        url = "https://api.github.com/repos/QL1STY/guild-board-releases/releases/assets/$id"
+        url = "https://api.github.com/repos/$repo/releases/assets/$id"
         size = (Get-Item -LiteralPath $path).Length
         digest = 'sha256:' + (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
     }
@@ -70,7 +73,7 @@ switch -Wildcard ($line) {
         if ($cfg.create_exit) { exit 1 }
         Copy-Item -LiteralPath $args[[array]::IndexOf($args, '--notes-file') + 1] -Destination (Join-Path $state 'notes.md')
         Save ([pscustomobject]@{ id = 7; tag_name = $args[2]; draft = $true; prerelease = $false; body = ''; assets = @(Asset $args[3] 1) })
-        'https://github.com/QL1STY/guild-board-releases/releases/tag/draft'
+        "https://github.com/$args_repo/releases/tag/draft"
         exit 0
     }
     'api repos/*/releases?per_page=30' { ConvertTo-Json -InputObject @(Load) -Depth 6; exit 0 }
@@ -186,8 +189,13 @@ def test_a_good_release_is_signed_as_the_app_checks_and_published_last(world):
     assert list(positions.values()) == sorted(positions.values())
     assert not any(call.startswith("attestation") for call in calls)  # -NoAttestation, on a private repository
     assert "--draft" in world.made("create")[0] and "--draft=false" in world.made("edit")[0]
+    # It is released in the repository that built it, which installed copies look in, on the tag that is there already:
+    # GitHub makes no tag of its own on whatever its main holds.
+    for verb in ("create", "upload", "edit"):
+        assert " --repo QL1STY/guild-board " in world.made(verb)[0] + " ", verb
+    assert world.made("create")[0].endswith(" --verify-tag")
     assert calls[-1] == world.made("edit")[0]  # the publication is the last call...
-    assert calls[-2] == "api repos/QL1STY/guild-board-releases/releases/7"  # ...after the draft was read back with its signature
+    assert calls[-2] == "api repos/QL1STY/guild-board/releases/7"  # ...after the draft was read back with its signature
     assert calls.index(world.made("upload")[0]) < len(calls) - 2
     release = json.loads((world.state / "release.json").read_text(encoding="utf-8"))
     assert release["draft"] is False and [each["name"] for each in release["assets"]] == [GITHUB_NAME, GITHUB_NAME + ".sig"]
@@ -204,6 +212,30 @@ def test_a_good_release_is_signed_as_the_app_checks_and_published_last(world):
     assert newer_release(json.dumps(release).encode(), "0.8.0", signature=lambda *asset: signature, key=world.other_public) is None
     # The folder the installer was downloaded to is outside the repository and gone.
     assert list(world.temp.glob("guildboard-release-*")) == []
+
+
+@windows_powershell
+def test_the_bridge_releases_the_same_installer_in_the_old_releases_repository_for_the_copies_that_look_there(world):
+    # 2.0.0 and earlier look in QL1STY/guild-board-releases: 2.0.1 goes there as well, signed as they check, so that it
+    # brings them to the code's repository. The installer is still the one the code's repository built and attested.
+    done = world.run("-Tag", TAG, "-Bridge", private="false")
+    assert done.returncode == 0, _said(done) + "\n".join(world.calls())
+    calls = world.calls()
+    [verify] = [call for call in calls if call.startswith("attestation verify ")]
+    assert verify.endswith(" --repo QL1STY/guild-board")
+    assert any(call.startswith("run list --repo QL1STY/guild-board ") for call in calls)
+    assert any(call.startswith("release view v1.0.0 --repo QL1STY/guild-board-releases ") for call in calls)
+    for verb in ("create", "upload", "edit"):
+        assert " --repo QL1STY/guild-board-releases " in world.made(verb)[0] + " ", verb
+    assert "--verify-tag" not in world.made("create")[0]  # the old repository holds none of the code's tags
+    release = json.loads((world.state / "release.json").read_text(encoding="utf-8"))
+    assert release["draft"] is False
+    assert all(each["url"].startswith("https://api.github.com/repos/QL1STY/guild-board-releases/") for each in release["assets"])
+    # The signature is the one those copies check: the text names the tag and the installer, not the repository.
+    installer = release["assets"][0]
+    text = release_text(TAG, installer["name"], installer["size"], installer["digest"].removeprefix("sha256:"))
+    assert signed(text, (world.state / "signature.sig").read_bytes(), world.public)
+    assert "QL1STY/guild-board-releases" in _said(done)
 
 
 @windows_powershell

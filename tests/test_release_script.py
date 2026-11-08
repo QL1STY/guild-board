@@ -17,8 +17,10 @@ from guildboard.selfupdate import Release, newer_release
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
 RELEASE = ROOT / "release.ps1"
-ASSET = "https://api.github.com/repos/QL1STY/guild-board-releases/releases/assets/123"
-SIGNATURE_ASSET = "https://api.github.com/repos/QL1STY/guild-board-releases/releases/assets/124"
+ASSET = "https://api.github.com/repos/QL1STY/guild-board/releases/assets/123"
+SIGNATURE_ASSET = "https://api.github.com/repos/QL1STY/guild-board/releases/assets/124"
+# Where 2.0.0 and earlier look, and the bridge release 2.0.1 reached them.
+OLD_ASSET = "https://api.github.com/repos/QL1STY/guild-board-releases/releases/assets/123"
 NAME = "Guild.Board.Setup.0.2.0.exe"  # as GitHub names the uploaded "Guild Board Setup 0.2.0.exe"
 
 windows_powershell = pytest.mark.skipif(shutil.which("powershell") is None, reason="needs Windows PowerShell")
@@ -140,6 +142,12 @@ def test_the_release_script_signs_only_what_github_shows_and_only_with_the_key_t
         refused = _sign(tmp_path, answer, installer, key, public)
         assert refused.returncode != 0 and said in refused.stdout + refused.stderr, asset
     assert netpolicy.INSTALLER_ASSET.fullmatch(ASSET)  # the address the drafts give is the app's own pattern
+    # The old releases repository's, for the bridge release, is signed too: the copies that look there check it.
+    installer, answer = _draft(tmp_path, url=OLD_ASSET)
+    bridged = _sign(tmp_path, answer, installer, key, public)
+    assert bridged.returncode == 0, bridged.stdout + bridged.stderr
+    for made in (tmp_path / "out").iterdir():
+        made.unlink()
     assert f"-gt {selfupdate.MAX_INSTALLER_BYTES})" in (TOOLS / "release-signing.ps1").read_text(encoding="utf-8")
     assert list((tmp_path / "out").iterdir()) == []
 
@@ -239,16 +247,10 @@ def _in_order(text: str, *steps: str) -> list[int]:
     return places
 
 
-@private_build
 def test_a_release_is_published_only_once_its_signature_checks():
-    script = _code(RELEASE)
     signing = _code(TOOLS / "release-signing.ps1")
-    # The key comes first, before anything is changed or built; then the installer goes up as a draft, which installed
-    # copies do not see, is signed as GitHub shows it, and is published only once GitHub shows the signature beside it.
-    _in_order(
-        script, "Assert-GhAccount", "Get-ReleaseKeyFile", "Assert-ReleaseKeyTrusted", "build-installer.ps1",
-        "New-DraftRelease", "Publish-SignedDraft",
-    )
+    # The installer goes up as a draft, which installed copies do not see, is signed as GitHub shows it, and is published
+    # only once GitHub shows the signature beside it.
     _in_order(
         signing, "function Publish-SignedDraft", "Read-Draft", "New-ReleaseSignatureFile", "gh release upload",
         "Test-SignedRelease", "gh release edit",
@@ -258,24 +260,36 @@ def test_a_release_is_published_only_once_its_signature_checks():
     [publish] = re.findall(r"^\s*gh release edit .*$", signing, flags=re.MULTILINE)
     assert "--draft=false" in publish
     assert "GUILDBOARD_RELEASE_KEY" in signing and "Read-ReleaseKey" in signing
-    # Every release needs the key, and the script says so at its top, and which script is for what.
-    top = RELEASE.read_text(encoding="utf-8").split("param(")[0]
-    assert "Every release needs the release key" in top
-    assert "release.ps1 (this one)" in top and "sign-release.ps1" in top and "release.yml" in top
 
 
 @private_build
-def test_release_refuses_a_dirty_tree_and_runs_the_tests_before_publishing():
-    # L32: what is released is what is committed and tested. The tree is checked before anything is changed; the lock
-    # file takes the new version; the Python and the interface's tests run before the build, each step stopping the
-    # release when it fails; the version is committed before the build and tagged once it is published.
+def test_release_prepares_a_version_and_leaves_the_build_and_the_publication_to_the_public_way():
+    # Releases are built by GitHub from a tag of the code's repository and signed by tools/sign-release.ps1 (the player's
+    # choice, 2026-11-08): an installer built here and put in that public repository could not be tied to its commit.
+    script = _code(RELEASE)
+    for publishing in ("New-DraftRelease", "Publish-SignedDraft", "build-installer.ps1", "GUILDBOARD_RELEASE_KEY"):
+        assert publishing not in script, publishing
+    # It runs neither gh nor a tag nor a push, which it only names in the steps it says at its end.
+    run = [line for line in script.splitlines() if not line.lstrip().startswith(("Write-Output", "Stop-With", '"', "'"))]
+    assert not [line for line in run if re.search(r"(^|[\s;{(&])(gh|git tag|git push)\s", line)], run
+    # Its top says which script is for what, and its end says the steps that follow.
+    top = RELEASE.read_text(encoding="utf-8").split("param(")[0]
+    assert "release.ps1 (this one)" in top and "sign-release.ps1" in top and "release.yml" in top
+    _in_order(script, "git commit", "public-tree.ps1", "git tag -a v$Version", "release.yml", "tools\\sign-release.ps1 -Tag v$Version")
+
+
+@private_build
+def test_release_refuses_a_dirty_tree_or_a_version_without_notes_and_runs_the_tests_before_it_commits():
+    # L32: what is released is what is committed and tested. The tree is checked before anything is changed; the
+    # version must have its notes in changes.json, which the release takes its notes from; the lock file takes the new
+    # version; the Python and the interface's tests run before the version is committed, each step stopping when it fails.
     script = _code(RELEASE)
     # The untracked files count whatever git's configuration says, and a tag of this version on another commit stops
     # the run before anything is changed.
     _in_order(
         script, "git status --porcelain --untracked-files=normal", 'Get-TaggedCommit "v$Version"',
-        "Stop-With $onAnother", "Set the version", "uv lock", "pytest", "npm ci --prefix web", "npm test --prefix web",
-        "git commit", "build-installer.ps1", "New-DraftRelease", "Publish-SignedDraft", "git tag",
+        "Stop-With $onAnother", "changes.json", "Set the version", "uv lock", "pytest", "npm ci --prefix web",
+        "npm test --prefix web", "git commit",
     )
     # Nothing but the files the script changes itself may differ from the last commit: the version in the Python package's
     # two places and in the shell's package, and the lock files, which hold it too.
@@ -291,7 +305,7 @@ def test_release_refuses_a_dirty_tree_and_runs_the_tests_before_publishing():
         [line] = [line for line in script.splitlines() if step in line]
         assert line.startswith("Step '"), line
     assert "$env:UV_PROJECT_ENVIRONMENT = '.venv-package'" in script.split("pytest")[0]
-    # The build installs exactly the locked packages.
+    # The build, on GitHub, installs exactly the locked packages.
     build = _code(ROOT / "build-installer.ps1")
     assert "uv sync --locked --no-dev --group package" in build
     assert all("--locked" in line for line in build.splitlines() if re.search(r"\buv (?:sync|run)\b", line))

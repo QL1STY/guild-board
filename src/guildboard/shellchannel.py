@@ -166,6 +166,7 @@ CALLS: dict[str, Callable[[Core, dict[str, Any]], Any]] = {
         _argument(args, "displays", list), _argument(args, "hotkey_state", str)
     ),
     "offer_invite": lambda core, args: core.online.offer_invite(_argument(args, "code", str)),
+    "window_state": lambda core, args: core.window_state(_argument(args, "maximized", bool)),
     "log": _log,
     "shutdown": _shutdown,
 }

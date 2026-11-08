@@ -17,8 +17,9 @@ import { rangeOf, WIDGET_TYPES, widgetType } from '../widgets/registry.ts'
 import { type Head, HeadContext, type WidgetContext, type WidgetType } from '../widgets/widget.ts'
 import { WidgetBoundary } from '../widgets/WidgetBoundary.tsx'
 import {
-  addWidget, type Arrow, arrange, columnsFor, columnsUsed, dropCell, freeCells, type Grip, gridColumns, gripSize, moveTo,
-  newWidgetId, pitchOf, type Placed, removeWidget, resizeTo, rowsFor, setSettings, sizeTag, stepWith, withPlaces,
+  addWidget, type Arrow, arrange, columnsFor, columnsUsed, dropCell, freeCells, fromFull, type Grip, gridColumns, gripSize,
+  moveTo, newWidgetId, pitchOf, type Placed, removeWidget, resizeTo, rowsFor, setSettings, sizeTag, stepWith, toFull,
+  withPlaces,
 } from './boardview.ts'
 
 /*
@@ -307,7 +308,7 @@ function useCells(ref: RefObject<HTMLElement | null>, bounded: boolean): { colum
  */
 function AddSheet({ add, close, week }: { add: (type: WidgetType) => void; close: () => void; week: boolean }) {
   return (
-    <section className="gb-panel board-sheet" aria-label="Add a widget" onKeyDown={closesOnEscape(close)}>
+    <section className="gb-panel board-sheet board-add" aria-label="Add a widget" onKeyDown={closesOnEscape(close)}>
       <ul className="board-types">
         {offered(WIDGET_TYPES, week).map((type) => (
           <li key={type.id}>
@@ -352,8 +353,9 @@ export function useArrangement(
   const minutes = useTick(MINUTE_MS)
   const layout = useModel<Layout>(`/api/layouts/${place}`, version + reads)
   const board = useModel<BoardModel>('/api/board', version + minutes)
-  // Edit's copy, kept while Edit is set aside; Edit and everything it draws follow `draft`, which is the copy in Edit.
-  const [kept, setDraft] = useState<{ revision: number; widgets: Widget[] } | null>(null)
+  // Edit's copy, kept while Edit is set aside; Edit and everything it draws follow `draft`, which is the copy in Edit. It
+  // is of the arrangement Edit began on, a window's or a maximized window's (`full`), whatever the window does meanwhile.
+  const [kept, setDraft] = useState<{ revision: number; widgets: Widget[]; full: boolean } | null>(null)
   const draft = editable ? kept : null
   // Ctrl+Z on the Board only: not in its Edit, which works on a draft, and not over the game.
   useUndoKey(undo, place === 'board' && draft === null)
@@ -385,7 +387,13 @@ export function useArrangement(
   const ctx: WidgetContext = { live, version, board: board.data, change }
 
   const current = saved !== null && (layout.data === null || saved.revision > layout.data.revision) ? saved : layout.data
-  const widgets = draft?.widgets ?? current?.widgets
+  // The Board in a maximized window shows its arrangement for it (boardview.ts, toFull); the overlay has one alone.
+  const full = draft?.full ?? (place === 'board' && live.status?.window_maximized === true)
+  const viewed = useMemo(
+    () => (current === null ? undefined : full ? toFull(current.widgets) : current.widgets),
+    [current, full],
+  )
+  const widgets = draft?.widgets ?? viewed
   // A place with a last row shows a widget saved below it on the display (Task 14).
   const arranged = useMemo(
     () => (widgets === undefined ? [] : arrange(widgets, columns, rangeOf, rows)),
@@ -587,12 +595,12 @@ export function useArrangement(
     setAdded(id)
   }
   const startEdit = () => {
-    if (current === null) return
+    if (current === null || viewed === undefined) return
     // Edit works on the arrangement this window shows, every widget at its place there (spec 10.3): a widget saved
     // outside its type's range is within it (spec 8.2), a widget that goes leaves its room free, and one saved below a
-    // last row is where the place shows it, so that Done saves that.
-    const shownPlaces = arrange(current.widgets, columns, rangeOf, rows)
-    setDraft({ revision: current.revision, widgets: withPlaces(current.widgets, shownPlaces) })
+    // last row is where the place shows it, so that Done saves that. In a maximized window, that is its arrangement.
+    const shownPlaces = arrange(viewed, columns, rangeOf, rows)
+    setDraft({ revision: current.revision, widgets: withPlaces(viewed, shownPlaces), full })
     setSaveRefusal(null)
   }
   const stopEdit = () => {
@@ -612,7 +620,9 @@ export function useArrangement(
     if (draft === null || saving) return
     setSaving(true)
     try {
-      const widgets = withPlaces(draft.widgets, placed)
+      const arranged = withPlaces(draft.widgets, placed)
+      // A maximized window's arrangement is saved as each widget's `full`, beside its place in a window.
+      const widgets = draft.full ? fromFull(arranged) : arranged
       setSaved(await api.put<Layout>(`/api/layouts/${place}`, { revision: draft.revision, widgets }))
       stopEdit()
     } catch (error) {
@@ -640,10 +650,12 @@ export function useArrangement(
     widgets,
     ctx,
     columns,
+    /** The Board shows its arrangement for a maximized window. */
+    full,
     /** The place's last row, as a count of rows: Infinity, but on a place with a last row. */
     rows,
     /** The columns the layout shown uses, which can be more than the window has. */
-    used: current === null ? 0 : columnsUsed(current.widgets),
+    used: viewed === undefined ? 0 : columnsUsed(viewed),
     /** Each widget's cells, as the grid shows them while a gesture lasts. */
     placed,
     /** Edit's copy of the layout, which Done saves, and whether there is one. */
@@ -713,7 +725,7 @@ export function ArrangementGrid({
   opacity?: number
 }) {
   const { place, helpId, widgets, draft, sheet, setSheet, closeSheet, add, edit, ctx, editor } = arrangement
-  const { columns, rows, placed } = arrangement
+  const { columns, rows, placed, full } = arrangement
   const { grid, sheetRef, byId, drawn, landing, lifted, shown, added, glint } = arrangement.drawing
   if (widgets === undefined) return null
   const settingsOpen = draft?.widgets.find((one) => one.id === sheet)
@@ -752,6 +764,7 @@ export function ArrangementGrid({
         ref={grid}
         className="board-grid"
         data-testid={place}
+        data-arrangement={full ? 'maximized' : 'window'}
         style={{ gridTemplateColumns: gridColumns(place, columns) }}
       >
         {draft !== null && (

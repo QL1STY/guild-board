@@ -3,8 +3,8 @@ import type { Widget } from '../types.ts'
 import type { WidgetType } from '../widgets/widget.ts'
 import {
   addWidget, arrange, boardPitch, columnsFor, columnsUsed, columnWidth, dropCell, FIXED_PITCH, firstFree, freeCells,
-  gridColumns, gripSize, moveTo, newWidgetId, pitchOf, type Placed, pushDown, removeWidget, resizeTo, rowsFor,
-  setSettings, sizeLabel, sizeTag, sizeWithin, stepWith, withPlaces,
+  fromFull, gridColumns, gripSize, moveTo, newWidgetId, pitchOf, type Placed, pushDown, removeWidget, resizeTo, rowsFor,
+  setSettings, sizeLabel, sizeTag, sizeWithin, stepWith, toFull, withPlaces,
 } from './boardview.ts'
 
 const clockType: WidgetType = {
@@ -427,5 +427,47 @@ describe("the widgets' places (look pass spec 10)", () => {
     const step = stepWith(shown, 'n', 'ArrowRight', false, 'Notes', undefined, 5, nameOf, 4)
     expect(step.said).toBe('Notes, column 2, row 1.')
     expect(at(arrange(withPlaces(widgets, step.placed), 5, range, 4))).toEqual(['n 1,0 3×5', 'c 4,3 1×1'])
+  })
+})
+
+describe("the Board's arrangement in a maximized window", () => {
+  const range = () => ({ min: { w: 1, h: 1 }, max: { w: 6, h: 6 } })
+  const at = (placed: readonly Placed[]) => placed.map(({ id, x, y, w, h }) => `${id} ${x},${y} ${w}×${h}`)
+
+  it('shows each widget at its place in a window while the maximized window was never arranged', () => {
+    const widgets = [widget('a', { x: 0, y: 0 }), widget('b', { x: 2, y: 0, w: 3 })]
+    expect(at(arrange(toFull(widgets), 9, range))).toEqual(['a 0,0 2×1', 'b 2,0 3×1'])
+  })
+
+  it('shows each widget at its own place there, and one without, added in a window since, at the first free place', () => {
+    const widgets = [
+      widget('a', { x: 0, y: 0, full: { x: 6, y: 0, w: 3, h: 2 } }),
+      widget('b', { x: 2, y: 0, full: { x: 0, y: 0, w: 2, h: 1 } }),
+      widget('c', { x: 0, y: 1 }), // added in a window: (0, 1) is free there too, but it has no place here
+    ]
+    expect(at(arrange(toFull(widgets), 9, range))).toEqual(['b 0,0 2×1', 'c 2,0 2×1', 'a 6,0 3×2'])
+  })
+
+  it('saves what Edit arranged there into `full`, and leaves the places and sizes in a window as they were', () => {
+    const widgets = [widget('a', { x: 0, y: 0, settings: { seconds: true } }), widget('b', { x: 2, y: 0, w: 3 })]
+    const shown = toFull(widgets)
+    const edited = withPlaces(shown, moveTo(arrange(shown, 9, range), 'b', 6, 0, 9))
+    expect(fromFull(edited)).toEqual([
+      widget('a', { x: 0, y: 0, settings: { seconds: true }, full: { x: 0, y: 0, w: 2, h: 1 } }),
+      widget('b', { x: 2, y: 0, w: 3, full: { x: 6, y: 0, w: 3, h: 1 } }),
+    ])
+  })
+
+  it('gives a widget added there its size in a window and no place in it: the window puts it at its first free place', () => {
+    const shown = toFull([widget('a', { x: 0, y: 0 })])
+    const added = addWidget(shown, clockType, 'd', arrange(shown, 9, range), 9)
+    const saved = fromFull(withPlaces(added, arrange(added, 9, range)))
+    expect(saved[1]).toEqual({ id: 'd', type: 'clock', w: 2, h: 1, settings: { seconds: false }, full: { x: 2, y: 0, w: 2, h: 1 } })
+    expect(at(arrange(saved, 7, range))).toEqual(['a 0,0 2×1', 'd 2,0 2×1'])
+  })
+
+  it('gives back what it was given, for widgets Edit did not touch', () => {
+    const widgets = [widget('a', { x: 1, y: 2, full: { x: 4, y: 0, w: 2, h: 2 } }), widget('b')]
+    expect(fromFull(toFull(widgets))).toEqual(widgets)
   })
 })

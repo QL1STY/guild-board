@@ -741,6 +741,45 @@ function OverlaySettings({ live, settings, id }: { live: Live; settings: Setting
 }
 
 /**
+ * How large Guild Board's window draws its page, in percent of the size it grows to with the window (PAGE_SIZES in
+ * src/guildboard/config.py and shell/src/dashboard.ts): one size while the window is not maximized, and one while it is,
+ * so that a full screen can draw smaller than the usual window. The window steps the size of its state with Ctrl and + or
+ * -, and with Ctrl and the mouse wheel, and saves the step, which shows here too.
+ */
+const PAGE_SIZES = ['70', '80', '90', '100', '110', '120', '130'].map((value) => ({ value, label: `${value}%` }))
+
+function PageSizeChoice({ label, value, choose }: { label: string; value: number; choose: (value: number) => void }) {
+  // A recording made before the settings has none: the window then draws at 100%.
+  const shown = PAGE_SIZES.some((each) => each.value === String(value)) ? String(value) : '100'
+  return (
+    <span className="set-equal">
+      <Segmented label={label} options={PAGE_SIZES} value={shown} onChange={(chosen) => choose(Number(chosen))} />
+    </span>
+  )
+}
+
+function PageSizes({ live, status, settings }: { live: Live; status: Status; settings: SettingsModel }) {
+  const { notice, run } = useAction(live)
+  const [inWindow, chooseInWindow] = useSetting(live, settings, 'page_size', run)
+  const [maximized, chooseMaximized] = useSetting(live, settings, 'page_size_maximized', run)
+  return (
+    <>
+      <Row name="Page size in a window" sentence="How large everything is drawn while the window is not maximized.">
+        <PageSizeChoice label="Page size in a window" value={inWindow} choose={chooseInWindow} />
+      </Row>
+      <Row name="Page size when maximized" sentence="While the window fills the screen.">
+        <PageSizeChoice label="Page size when maximized" value={maximized} choose={chooseMaximized} />
+      </Row>
+      <p className="set-aside">
+        Ctrl with + or −, or with the mouse wheel, changes the size of the window as it is, and Ctrl with 0 sets it back to
+        100%.{!status.has_shell && " These take effect in Guild Board's own window."}
+      </p>
+      <Notice text={notice} />
+    </>
+  )
+}
+
+/**
  * How large the Characters pages' big pictures are fetched (the Characters design, 11.7): a plain choice of three. The faces
  * and the small icons are the same in all of them; the picture of a character's card is the one that changes.
  */
@@ -1350,6 +1389,7 @@ export function Settings({ live }: { live: Live }) {
           <Group name="Guild Board" sign="star">
             <StartWithWindows live={live} status={status} settings={settings} />
             <Notifications live={live} settings={settings} />
+            <PageSizes live={live} status={status} settings={settings} />
             <PictureQualityRow live={live} settings={settings} />
             <Overlay live={live} settings={settings} />
           </Group>

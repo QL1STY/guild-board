@@ -31,8 +31,14 @@ def test_the_setup_script_quits_installs_builds_and_makes_the_shortcut_in_that_o
 
 
 def _listed_step(out: str, name: str) -> str:
-    """What a dry run prints for one step: its code, up to the next step."""
-    return out.split(f"- {name}\n", 1)[1].split("\n- ", 1)[0]
+    """What a dry run prints for one step: its code, indented under its name, up to the first line that is not. A line
+    said between the steps, as the reminder to quit a Guild Board run from this folder's .venv, is no step's code."""
+    lines = []
+    for line in out.split(f"- {name}\n", 1)[1].splitlines():
+        if line.strip() and not line[0].isspace():
+            break
+        lines.append(line)
+    return "\n".join(lines)
 
 
 def test_the_desktop_shortcut_starts_the_copy_of_electron_named_for_guild_board_on_the_shell_folder():
@@ -173,6 +179,10 @@ def test_a_checkout_with_a_venv_but_no_electron_program_says_to_quit_a_running_c
     out = _dry_run_in(tmp_path)
     assert "If Guild Board is running from this folder, quit it from its tray icon first." in out
     assert out.index("quit it from its tray") < out.index("- Install the Python packages")
+    # The reminder is said between the steps, and is no step's code: as on GitHub's runner, which has a .venv and, until
+    # the shell's packages are installed, no Electron program, the quit steps list their code alone.
+    assert _listed_step(out, "Quit Guild Board, if it is running").strip() == "if ($quitter) { Invoke-Shell @('shell', '--quit') }"
+    assert _listed_step(out, "Quit the demo, if it is running").strip() == "if ($quitter) { Invoke-Shell @('shell', '--demo', '--quit') }"
 
 
 def test_the_switch_from_qt_waits_for_the_player_before_the_sync_and_never_in_a_dry_run(tmp_path):

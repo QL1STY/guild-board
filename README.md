@@ -6,12 +6,12 @@
 
 Resin, commissions, achievements, wishes, primogems and your characters' plans, in one Windows app that keeps it all on your PC and never touches the game.
 
-[![Latest release](https://img.shields.io/github/v/release/QL1STY/guild-board-releases?style=for-the-badge&color=a6751f&labelColor=3b4255&label=latest)](https://github.com/QL1STY/guild-board-releases/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/QL1STY/guild-board-releases/total?style=for-the-badge&color=a6751f&labelColor=3b4255)](https://github.com/QL1STY/guild-board-releases/releases)
+[![Latest release](https://img.shields.io/github/v/release/QL1STY/guild-board?style=for-the-badge&color=a6751f&labelColor=3b4255&label=latest)](https://github.com/QL1STY/guild-board/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/QL1STY/guild-board/total?style=for-the-badge&color=a6751f&labelColor=3b4255)](https://github.com/QL1STY/guild-board/releases)
 [![MIT licence](https://img.shields.io/badge/licence-MIT-a6751f?style=for-the-badge&labelColor=3b4255)](LICENSE)
 ![Windows 10 and 11](https://img.shields.io/badge/Windows-10%20%7C%2011-a6751f?style=for-the-badge&labelColor=3b4255)
 
-### [⬇ Download for Windows](https://github.com/QL1STY/guild-board-releases/releases/latest) · [▶ Try it in your browser](https://ql1sty.github.io/guild-board/demo/) · [Website](https://ql1sty.github.io/guild-board/)
+### [⬇ Download for Windows](https://github.com/QL1STY/guild-board/releases/latest) · [▶ Try it in your browser](https://ql1sty.github.io/guild-board/demo/) · [Website](https://ql1sty.github.io/guild-board/)
 
 <sub>Free and open source · no ads, no account needed · about 130 MB · no administrator rights · updates itself</sub>
 
@@ -77,7 +77,7 @@ Press **Ctrl+Alt+G** and a panel of your widgets appears over the game: timers, 
 
 ## Download
 
-Windows 10 or 11. Get the installer from the [latest release](https://github.com/QL1STY/guild-board-releases/releases/latest). It needs no administrator rights, and an update or an uninstall leaves your data where it is. An installed copy checks the same page for a newer version and offers it.
+Windows 10 or 11. Get the installer from the [latest release](https://github.com/QL1STY/guild-board/releases/latest). It needs no administrator rights, and an update or an uninstall leaves your data where it is. An installed copy checks the same page for a newer version and offers it.
 
 An installed copy updates only to an installer that carries a signature by the release key pinned in `src/guildboard/selfupdate.py`.
 

@@ -103,7 +103,7 @@ EDITABLE_SETTINGS = (
     "characters_notice_weekly", "characters_notice_domain", "characters_notice_ready",
     "overlay_hotkey", "overlay_display", "overlay_opacity", "overlay_pinned", "overlay_lines", "overlay_size",
     "overlay_full_screen", "gallery_enabled", "gallery_folder", "spending_currency", "spending_prices", "picture_quality",
-    "sync_my_data",
+    "sync_my_data", "page_size", "page_size_maximized",
 )
 # The shell holds the overlay's hotkey, or another program does, or there is no hotkey to hold.
 PAUSE_SECONDS = 5.5  # between two gift codes sent, which HoYoverse asks for
@@ -366,6 +366,9 @@ class Core:
         # What the shell reported about the overlay, by overlay_shell: its displays and the state of its hotkey. None
         # while there is no shell.
         self._overlay_report: tuple[list[dict[str, Any]], str] | None = None
+        # Whether Guild Board's window is maximized, as the shell reports it (window_state): the Board then shows its
+        # arrangement for a maximized window. False while there is no shell.
+        self._window_maximized = False
         self._watch_task: asyncio.Task[None] | None = None
         if demo and self.store.first_game_day() is None:
             seed_history(self.store, self.clock.now())
@@ -729,6 +732,7 @@ class Core:
             "version": __version__,
             "mode": "demo" if self.demo else "live",
             "has_shell": self.window_requests is not None,
+            "window_maximized": self._window_maximized,
             "has_tray": self.has_tray,
             "now": iso(self.clock.now()),
             "data_dir": str(self.paths.data_dir),
@@ -1770,6 +1774,12 @@ class Core:
             raise ValueError(f"The hotkey's state is {', '.join(HOTKEY_STATES[:-1])} or {HOTKEY_STATES[-1]}.")
         self._overlay_report = ([dict(display) for display in displays], hotkey_state)
         self.bus.publish("overlay_changed")
+
+    def window_state(self, maximized: bool) -> None:
+        """Whether Guild Board's window is maximized, as the shell reports it each time it changes: the Board shows its
+        arrangement for that window, so the pages are told."""
+        self._window_maximized = maximized
+        self.bus.publish("window_changed")
 
     def overlay_status(self) -> dict[str, Any]:
         """What the Overlay settings show: whether there is a shell with an overlay, the hotkey and whether the shell

@@ -28,3 +28,7 @@ def test_problems_are_said_plainly():
     assert hotkey_problem("Shift+G") == "A hotkey needs Ctrl, Alt or Win, so that typing does not open the overlay."
     assert hotkey_problem("ctrl+alt+e") == "Ctrl+Alt+E types a letter on your keyboard. Choose another key."
     assert hotkey_problem("Ctrl+Alt+Shift+Z") == "Ctrl+Alt+Shift+Z types a letter on your keyboard. Choose another key."
+    # Ctrl+0 sets the window's page size back to 100% (shell/src/dashboard.ts); with Shift or Alt it is free.
+    assert hotkey_problem("ctrl+0") == "Ctrl+0 sets the page size back to 100%. Choose another key."
+    assert hotkey_problem("Ctrl+Shift+0") is None
+    assert hotkey_problem("Ctrl+Alt+0") is None

@@ -80,9 +80,10 @@ function Test-TrustedKey([string]$Key) {
 }
 
 function Test-AssetUrl([string]$Url) {
-    # Whether an asset's address is one installed copies download from: the releases repository's (INSTALLER_ASSET in
-    # netpolicy.py).
-    return $Url -cmatch '^https://api\.github\.com/repos/QL1STY/guild-board-releases/releases/assets/[0-9]+\z'
+    # Whether an asset's address is one installed copies download from (INSTALLER_ASSET in netpolicy.py): the code's
+    # repository's, where 2.0.1 and later look, or the old releases repository's, where 2.0.0 and earlier look and which
+    # the bridge release 2.0.1 reached them in.
+    return $Url -cmatch '^https://api\.github\.com/repos/QL1STY/guild-board(-releases)?/releases/assets/[0-9]+\z'
 }
 
 function Get-ReleaseText([string]$Tag, [string]$Name, [long]$Size, [string]$Sha256) {
@@ -270,13 +271,17 @@ function Get-ReleaseNotes([string]$Version, [string]$ChangesJson) {
     return $bullets -join "`n"
 }
 
-function New-DraftRelease([string]$Tag, [string]$Version, [string]$Installer, [string]$Notes, [string]$Repo) {
+function New-DraftRelease([string]$Tag, [string]$Version, [string]$Installer, [string]$Notes, [string]$Repo,
+    [switch]$VerifyTag) {
     # Uploads the installer to a draft release of $Repo, which installed copies do not see. The notes go through a file:
     # PowerShell 5.1 splits an argument that holds double quotes into pieces, and gh would take the pieces for files to
-    # attach. The file has no byte order mark, which the notes' reader would not skip. True when the draft was made.
+    # attach. The file has no byte order mark, which the notes' reader would not skip. With -VerifyTag the tag must be
+    # in $Repo already, as in the repository that built the installer: GitHub would otherwise make it on its main. True
+    # when the draft was made.
     $notesFile = Join-Path ([IO.Path]::GetTempPath()) "guildboard-notes-$Version.md"
     [IO.File]::WriteAllText($notesFile, $Notes, (New-Object Text.UTF8Encoding $false))
-    gh release create $Tag $Installer --repo $Repo --title "Guild Board $Version" --notes-file $notesFile --draft | Out-Host
+    $verify = @(if ($VerifyTag) { '--verify-tag' })
+    gh release create $Tag $Installer --repo $Repo --title "Guild Board $Version" --notes-file $notesFile --draft @verify | Out-Host
     $drafted = $LASTEXITCODE -eq 0
     Remove-Item -LiteralPath $notesFile -ErrorAction SilentlyContinue
     return $drafted

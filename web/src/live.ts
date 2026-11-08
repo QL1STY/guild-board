@@ -14,7 +14,7 @@ import type { PullsImportEvent, Settings, Status } from './types.ts'
 export const EVENTS = [
   'sync_started', 'sync_finished', 'state_changed', 'game_started', 'game_stopped', 'achievements_changed',
   'timers_changed', 'layout_changed', 'settings_changed', 'overlay_changed', 'pulls_changed', 'update_changed', 'map_changed', 'codes_changed',
-  'characters_changed', 'online_changed', 'checkin_changed', 'stats_changed',
+  'characters_changed', 'online_changed', 'checkin_changed', 'stats_changed', 'window_changed',
 ]
 const REFRESH_EVERY_MS = 30_000
 
@@ -63,7 +63,8 @@ export function liveOrder(): {
  * nothing yet.
  */
 export function readsAgain(event: string): boolean {
-  return event !== 'sync_started' && event !== 'update_changed' // an update's progress changes no page's data
+  // An update's progress changes no page's data, nor does the window that is maximized or restored, which the status says.
+  return event !== 'sync_started' && event !== 'update_changed' && event !== 'window_changed'
 }
 
 /** How long the page gathers the core's events before it acts on them: one sync sends several in a moment (audit L23). */

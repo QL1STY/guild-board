@@ -5,11 +5,17 @@ import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 import {
   Dashboard,
   type DashboardDeps,
+  type KeyInput,
+  PAGE_SIZES,
+  pageSizeOf,
+  pageStepOf,
   placeUrl,
   RELEASE_AFTER_MS,
   REFERENCE_WIDTH,
+  steppedSize,
   type WebContentsLike,
   type WindowLike,
+  WHEEL_TURN_MS,
   type WindowOptions,
   zoomFor,
 } from '../src/dashboard.js'
@@ -30,6 +36,56 @@ test('the page zooms with the window’s width, from 1,640 up to twice', () => {
   expect(zoomFor(2460)).toBe(1.5)
   expect(zoomFor(4000)).toBe(2)
   expect(zoomFor(1200)).toBe(1)
+})
+
+test('the page size scales that zoom: 100 is the size for the window, as before the setting', () => {
+  expect(PAGE_SIZES).toEqual([70, 80, 90, 100, 110, 120, 130]) // PAGE_SIZES in src/guildboard/config.py
+  expect(zoomFor(2460, 100)).toBe(1.5)
+  expect(zoomFor(2460, 80)).toBeCloseTo(1.2, 12)
+  expect(zoomFor(2560, 90)).toBeCloseTo((2560 / 1640) * 0.9, 12)
+  expect(zoomFor(1640, 70)).toBeCloseTo(0.7, 12) // the usual window draws smaller too
+  expect(zoomFor(1200, 120)).toBeCloseTo(1.2, 12)
+  expect(zoomFor(4000, 130)).toBeCloseTo(2.6, 12)
+})
+
+test('a page size the shell does not know is taken as 100', () => {
+  for (const size of PAGE_SIZES) expect(pageSizeOf(size)).toBe(size)
+  for (const odd of [0, 75, 140, '90', null, undefined, Number.NaN]) expect(pageSizeOf(odd)).toBe(100)
+})
+
+test('a step goes to the next size, stays at the ends, and reset goes back to 100', () => {
+  expect(steppedSize(100, 'out')).toBe(90)
+  expect(steppedSize(100, 'in')).toBe(110)
+  expect(steppedSize(70, 'out')).toBe(70)
+  expect(steppedSize(130, 'in')).toBe(130)
+  expect(steppedSize(80, 'reset')).toBe(100)
+  expect(steppedSize(75, 'in')).toBe(100) // not a size: back to 100
+})
+
+/** A key press as Electron reports it before the page sees it. */
+function press(key: string, code: string, more: Partial<KeyInput> = {}): KeyInput {
+  return { type: 'keyDown', key, code, control: true, alt: false, meta: false, shift: false, ...more }
+}
+
+test('Ctrl with + or -, also on the number pad, steps the size, and Ctrl with 0 resets it', () => {
+  expect(pageStepOf(press('=', 'Equal'))).toBe('in')
+  expect(pageStepOf(press('+', 'Equal', { shift: true }))).toBe('in')
+  expect(pageStepOf(press('+', 'NumpadAdd'))).toBe('in')
+  expect(pageStepOf(press('-', 'Minus'))).toBe('out')
+  expect(pageStepOf(press('-', 'NumpadSubtract'))).toBe('out')
+  expect(pageStepOf(press('0', 'Digit0'))).toBe('reset')
+  expect(pageStepOf(press('0', 'Numpad0'))).toBe('reset')
+})
+
+test('anything else is no step: a key let go, no Ctrl, AltGr (Ctrl and Alt), the Windows key, another key', () => {
+  expect(pageStepOf(press('-', 'Minus', { type: 'keyUp' }))).toBeNull()
+  expect(pageStepOf(press('-', 'Minus', { control: false }))).toBeNull()
+  expect(pageStepOf(press('-', 'Minus', { alt: true }))).toBeNull()
+  expect(pageStepOf(press('-', 'Minus', { meta: true }))).toBeNull()
+  expect(pageStepOf(press('a', 'KeyA'))).toBeNull()
+  expect(pageStepOf(press('9', 'Digit9'))).toBeNull()
+  // The number pad's 0 with Num Lock off is Insert, and Ctrl+Insert copies.
+  expect(pageStepOf(press('Insert', 'Numpad0'))).toBeNull()
 })
 
 test('placeUrl: the launch link, with the place; on a shown window, the origin and a fragment', () => {
@@ -296,6 +352,278 @@ test('onResized is called after the zoom is applied', () => {
   windows[0].width = 3280
   windows[0].emit('resize')
   expect(seen).toEqual([2])
+})
+
+/** Lets the promises that are due run: the page size's saves. */
+async function settle(): Promise<void> {
+  for (let i = 0; i < 10; i += 1) await Promise.resolve()
+}
+
+const FULL = 2560 / 1640 // the zoom of the first-run window, maximized and 2,560 wide, at 100
+
+/**
+ * A dashboard whose saved page sizes are `saved.window` and `saved.maximized`, and whose saves are kept in `saves` to answer.
+ * The first-run window is maximized: its steps are the maximized size's.
+ */
+function sized(window = 100, maximized = 100) {
+  const saved = { window, maximized }
+  const saves: { size: number; maximized: boolean; done: () => void; fail: () => void }[] = []
+  const warnings: string[] = []
+  const dashboard = make({
+    pageSize: (whenMaximized) => (whenMaximized ? saved.maximized : saved.window),
+    choosePageSize: (chosen, whenMaximized) =>
+      new Promise<void>((resolve, reject) => {
+        saves.push({ size: chosen, maximized: whenMaximized, done: resolve, fail: () => reject(new Error('refused')) })
+      }),
+    warn: (text) => warnings.push(text),
+  })
+  return { dashboard, saved, saves, warnings }
+}
+
+/** The window is restored to the usual window, 1,640 wide. */
+function restore(win: FakeWindow): void {
+  win.maximized = false
+  win.width = 1640
+  win.emit('unmaximize')
+  win.emit('resize')
+}
+
+/** The window is maximized again on its 2,560 display. */
+function maximizeAgain(win: FakeWindow): void {
+  win.maximized = true
+  win.width = 2560
+  win.emit('maximize')
+  win.emit('resize')
+}
+
+test('a window and a maximized window each draw at their own saved size', () => {
+  const { dashboard } = sized(100, 80)
+  dashboard.open()
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 0.8, 12)
+  expect(dashboard.zoom()).toBeCloseTo(FULL * 0.8, 12)
+  restore(windows[0])
+  expect(windows[0].webContents.zoomNow).toBe(1) // the usual window keeps its size
+  maximizeAgain(windows[0])
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 0.8, 12)
+})
+
+test('the core hears whether the window is maximized: when it is made, and each time that changes', () => {
+  const told: boolean[] = []
+  const dashboard = make({ reportMaximized: (maximized) => told.push(maximized) })
+  dashboard.open()
+  expect(told).toEqual([true]) // the first run's window is maximized
+  windows[0].emit('resize') // no change
+  restore(windows[0])
+  expect(told).toEqual([true, false])
+  windows[0].emit('resize')
+  maximizeAgain(windows[0])
+  expect(told).toEqual([true, false, true])
+  dashboard.close()
+  vi.advanceTimersByTime(RELEASE_AFTER_MS)
+  dashboard.open() // a window made again is told again, whatever was told before
+  expect(told).toEqual([true, false, true, true])
+})
+
+test('a maximized window that is minimized changes nothing: no zoom, no report, no move of the map views', () => {
+  const told: boolean[] = []
+  const resized: number[] = []
+  const dashboard = make({ reportMaximized: (maximized) => told.push(maximized), pageSize: (maximized) => (maximized ? 80 : 100) })
+  dashboard.onResized(() => resized.push(dashboard.zoom()))
+  dashboard.open()
+  const win = windows[0]
+  const zoom = win.webContents.zoomNow
+  expect(told).toEqual([true])
+  // As Electron 45 has it on Windows: a resize and a minimize, the window saying it is not maximized.
+  win.minimized = true
+  win.maximized = false
+  win.width = 0
+  win.emit('resize')
+  win.emit('minimize')
+  win.emit('unmaximize')
+  expect(win.webContents.zoomNow).toBe(zoom)
+  expect(told).toEqual([true])
+  expect(resized).toEqual([])
+  win.webContents.zoomNow = 1 // a load while minimized takes no zoom either
+  win.webContents.emit('did-finish-load')
+  expect(win.webContents.zoomNow).toBe(1)
+  // Restored, maximized as before.
+  win.minimized = false
+  win.maximized = true
+  win.width = 2560
+  win.emit('resize')
+  win.emit('restore')
+  win.emit('maximize')
+  expect(win.webContents.zoomNow).toBeCloseTo(FULL * 0.8, 12)
+  expect(told).toEqual([true])
+})
+
+test('a maximize alone, before any resize, takes the other size', () => {
+  const { dashboard } = sized(110, 80)
+  dashboard.open()
+  windows[0].maximized = false
+  windows[0].emit('unmaximize')
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 1.1, 12)
+  windows[0].maximized = true
+  windows[0].emit('maximize')
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 0.8, 12)
+})
+
+test('Ctrl and - in the window makes the page a step smaller at once, keeps the press from the page, and saves it', async () => {
+  const { dashboard, saves } = sized()
+  const seen: number[] = []
+  dashboard.onResized(() => seen.push(dashboard.zoom()))
+  dashboard.open()
+  const event = { preventDefault: vi.fn() }
+  windows[0].webContents.emit('before-input-event', event, press('-', 'Minus'))
+  expect(event.preventDefault).toHaveBeenCalledOnce()
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 0.9, 12)
+  expect(seen).toHaveLength(1) // the map views follow the new zoom
+  expect(seen[0]).toBeCloseTo(FULL * 0.9, 12)
+  await settle()
+  expect(saves.map(({ size, maximized }) => [size, maximized])).toEqual([[90, true]])
+})
+
+test('a step changes the size of the state the window is in, and leaves the other', async () => {
+  const { dashboard, saved, saves } = sized()
+  dashboard.open()
+  const contents = windows[0].webContents
+  contents.emit('before-input-event', { preventDefault: vi.fn() }, press('-', 'Minus')) // maximized: 90
+  await settle()
+  saved.maximized = 90 // the core keeps it, and then answers
+  saves[0].done()
+  await settle()
+  restore(windows[0])
+  expect(contents.zoomNow).toBe(1) // the window's own size is still 100
+  contents.emit('before-input-event', { preventDefault: vi.fn() }, press('+', 'Equal', { shift: true })) // a window: 110
+  expect(contents.zoomNow).toBeCloseTo(1.1, 12)
+  await settle()
+  expect(saves.map(({ size, maximized }) => [size, maximized])).toEqual([
+    [90, true],
+    [110, false],
+  ])
+  saved.window = 110
+  saves[1].done()
+  await settle()
+  maximizeAgain(windows[0])
+  expect(contents.zoomNow).toBeCloseTo(FULL * 0.9, 12)
+})
+
+test('another key reaches the page untouched', () => {
+  const { dashboard, saves } = sized()
+  dashboard.open()
+  const event = { preventDefault: vi.fn() }
+  windows[0].webContents.emit('before-input-event', event, press('a', 'KeyA'))
+  expect(event.preventDefault).not.toHaveBeenCalled()
+  expect(saves).toEqual([])
+})
+
+test('Ctrl and the mouse wheel step the size as + and - do', async () => {
+  const { dashboard, saves } = sized()
+  dashboard.open()
+  windows[0].webContents.emit('zoom-changed', {}, 'in')
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 1.1, 12)
+  await settle()
+  expect(saves.map((save) => save.size)).toEqual([110])
+})
+
+test('one turn of the wheel is one step, though the engine asks twice for it at once', async () => {
+  const { dashboard, saves } = sized()
+  dashboard.open()
+  const contents = windows[0].webContents
+  contents.emit('zoom-changed', {}, 'out')
+  contents.emit('zoom-changed', {}, 'out') // the same turn, a fraction of a millisecond later
+  expect(contents.zoomNow).toBeCloseTo(FULL * 0.9, 12)
+  vi.advanceTimersByTime(WHEEL_TURN_MS)
+  contents.emit('zoom-changed', {}, 'out') // the next turn
+  expect(contents.zoomNow).toBeCloseTo(FULL * 0.8, 12)
+  contents.emit('before-input-event', { preventDefault: vi.fn() }, press('-', 'Minus')) // keys are never held back
+  expect(contents.zoomNow).toBeCloseTo(FULL * 0.7, 12)
+  await settle()
+  expect(saves.map((save) => save.size)).toEqual([90])
+})
+
+test('a step that goes nowhere saves nothing: Ctrl and 0 at 100, Ctrl and - at the smallest', async () => {
+  const { dashboard, saves } = sized()
+  dashboard.open()
+  windows[0].webContents.emit('before-input-event', { preventDefault: vi.fn() }, press('0', 'Digit0'))
+  const small = sized(100, 70)
+  small.dashboard.open()
+  windows[1].webContents.emit('before-input-event', { preventDefault: vi.fn() }, press('-', 'Minus'))
+  await settle()
+  expect(saves).toEqual([])
+  expect(small.saves).toEqual([])
+})
+
+test('the saves go one after another, and an older saved size does not take the page back meanwhile', async () => {
+  const { dashboard, saved, saves } = sized()
+  dashboard.open()
+  const contents = windows[0].webContents
+  contents.emit('before-input-event', { preventDefault: vi.fn() }, press('-', 'Minus'))
+  contents.emit('before-input-event', { preventDefault: vi.fn() }, press('-', 'Minus'))
+  await settle()
+  expect(saves.map((save) => save.size)).toEqual([90]) // the second waits for the first
+  expect(contents.zoomNow).toBeCloseTo(FULL * 0.8, 12)
+  saved.maximized = 90 // the core says what the first save made it
+  dashboard.pageSizeChanged()
+  expect(contents.zoomNow).toBeCloseTo(FULL * 0.8, 12) // the player's latest choice stays
+  saves[0].done()
+  await settle()
+  expect(saves.map((save) => save.size)).toEqual([90, 80])
+  saves[1].done()
+  saved.maximized = 80
+  await settle()
+  dashboard.pageSizeChanged()
+  expect(contents.zoomNow).toBeCloseTo(FULL * 0.8, 12)
+  saved.maximized = 120 // chosen in Settings
+  dashboard.pageSizeChanged()
+  expect(contents.zoomNow).toBeCloseTo(FULL * 1.2, 12)
+})
+
+test('a size chosen in Settings takes the open window there, and the map views follow', () => {
+  const { dashboard, saved } = sized()
+  const seen: number[] = []
+  dashboard.onResized(() => seen.push(dashboard.zoom()))
+  dashboard.open()
+  saved.window = 70 // the other state's: nothing moves
+  dashboard.pageSizeChanged()
+  expect(seen).toHaveLength(0)
+  saved.maximized = 70
+  dashboard.pageSizeChanged()
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 0.7, 12)
+  expect(seen).toHaveLength(1)
+  dashboard.pageSizeChanged() // the same sizes again: nothing moves
+  expect(seen).toHaveLength(1)
+})
+
+test('a size chosen while the window is closed is the one it opens at', () => {
+  const { dashboard, saved } = sized()
+  saved.maximized = 110
+  dashboard.pageSizeChanged()
+  dashboard.open()
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 1.1, 12)
+})
+
+test('a save that fails is told in the log, and the page goes back to the saved size', async () => {
+  const { dashboard, saves, warnings } = sized()
+  dashboard.open()
+  windows[0].webContents.emit('before-input-event', { preventDefault: vi.fn() }, press('+', 'NumpadAdd'))
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL * 1.1, 12)
+  await settle()
+  saves[0].fail()
+  await settle()
+  expect(warnings).toEqual(['The page size could not be saved.'])
+  expect(windows[0].webContents.zoomNow).toBeCloseTo(FULL, 12)
+})
+
+test('a closing window takes no step', async () => {
+  const { dashboard, saves } = sized()
+  dashboard.open()
+  const old = windows[0]
+  dashboard.close()
+  old.webContents.emit('before-input-event', { preventDefault: vi.fn() }, press('-', 'Minus'))
+  old.webContents.emit('zoom-changed', {}, 'out')
+  await settle()
+  expect(saves).toEqual([])
 })
 
 test('onFragment reports the fragment after a navigation and an in-page navigation', () => {

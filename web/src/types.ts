@@ -36,6 +36,11 @@ export type Status = {
   online: OnlineView
   mode: 'demo' | 'live'
   has_shell: boolean
+  /**
+   * Guild Board's window is maximized, as its shell reports it: the Board shows its arrangement for a maximized window.
+   * Left out by a recording made before it.
+   */
+  window_maximized?: boolean
   /** A tray icon keeps Guild Board running after its window closes. */
   has_tray: boolean
   /** The core's time. Everything "ago" is measured against this. */
@@ -116,6 +121,13 @@ export type Settings = {
   overlay_size: number
   /** The game runs in full screen: the open overlay takes the clicks but never the focus, so the game is not minimized. */
   overlay_full_screen: boolean
+  /**
+   * How large Guild Board's window draws its page, in percent of the size it grows to with the window: 70 to 130 in steps
+   * of 10, 100 by default. One size while the window is not maximized, and one while it is. The window steps the size of
+   * its state with Ctrl and + or -, and with Ctrl and the mouse wheel.
+   */
+  page_size: number
+  page_size_maximized: number
   /** The screenshot gallery (the ledger design, section 7): off by default; while off, nothing of the game's is read. */
   gallery_enabled: boolean
   /** The game's ScreenShot folder, found or pasted; "" before either. */

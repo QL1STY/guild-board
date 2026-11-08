@@ -102,6 +102,13 @@ test("the pages hear when the settings change, or the overlay's status, as the o
   expect(readsAgain('overlay_changed')).toBe(true)
 })
 
+test('the pages hear when the window is maximized or restored, which changes the status alone', () => {
+  // The Board shows its arrangement for a maximized window from the status; no page's data changed.
+  expect(EVENTS).toContain('window_changed')
+  expect(readsAgain('window_changed')).toBe(false)
+  expect(askedBy(['window_changed', 'timers_changed']).pages).toBe(true)
+})
+
 test('an overlay_line event adds a line that goes after six seconds, at most three', () => {
   vi.useFakeTimers()
   try {

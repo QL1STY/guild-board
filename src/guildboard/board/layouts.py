@@ -98,6 +98,21 @@ def _place_ok(item: dict[str, Any]) -> bool:
     )
 
 
+FULL_KEYS = {"x", "y", "w", "h"}
+
+
+def _full_ok(item: dict[str, Any]) -> bool:
+    """Whether a widget's place in a maximized window, the key `full` where it has it, is its column and row, whole
+    cells from 0, and its size, as its place and size in a window are. The Board's maximized window keeps an arrangement
+    of its own, a full screen having more columns; a widget without it shows there as it does in a window."""
+    if "full" not in item:
+        return True
+    full = item["full"]
+    if not isinstance(full, dict) or set(full) != FULL_KEYS or not all(_whole(full[key]) for key in FULL_KEYS):
+        return False
+    return 0 <= full["x"] <= MAX_COLUMN and 0 <= full["y"] <= MAX_ROW and 1 <= full["w"] <= MAX_CELLS and 1 <= full["h"] <= MAX_CELLS
+
+
 def _valid(value: Any) -> Any:
     """`value` with every text made writable as UTF-8 (store.valid_text), in dicts and lists too."""
     if isinstance(value, str):
@@ -127,6 +142,7 @@ def _is_widget(item: object) -> bool:
         and isinstance(widget_type, str) and NAME.fullmatch(widget_type) is not None
         and _whole(w) and 1 <= w <= MAX_CELLS and _whole(h) and 1 <= h <= MAX_CELLS
         and _place_ok(item)
+        and _full_ok(item)
         and isinstance(item.get("pinned", False), bool)
         and isinstance(item.get("settings"), dict)
         and dumped is not None and len(dumped) <= MAX_WIDGET_CHARS

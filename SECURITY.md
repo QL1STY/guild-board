@@ -16,7 +16,7 @@ Anything that could expose a HoYoLAB login, a wish or Feedback key, or the onlin
 
 Two checks cover two things. The attestation says GitHub built this exact file from a commit of this repository. The signature says the maintainer, who alone holds the release key, published it.
 
-1. Download the installer from the [releases page](https://github.com/QL1STY/guild-board-releases/releases/latest).
+1. Download the installer from the [releases page](https://github.com/QL1STY/guild-board/releases/latest).
 2. Install the [GitHub CLI](https://cli.github.com/) and run, in the folder that holds the file:
 
    ```powershell

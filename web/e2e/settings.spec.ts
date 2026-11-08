@@ -559,6 +559,47 @@ test('the picture quality is a plain choice of three, High until chosen, and it 
   await expect.poll(async () => (await api.get<Settings>('/api/settings')).picture_quality).toBe('high')
 })
 
+test('the page sizes, of a window and of a maximized one, are sizes in percent, 100% until chosen, and saved apart', async ({ page, api }) => {
+  const box = guildBoard(page)
+  const inWindow = box.locator('.set-row', { hasText: 'Page size in a window' })
+  const maximized = box.locator('.set-row', { hasText: 'Page size when maximized' })
+  await expect(inWindow).toContainText('How large everything is drawn while the window is not maximized.')
+  await expect(maximized).toContainText('While the window fills the screen.')
+  await expect(box).toContainText(
+    'Ctrl with + or −, or with the mouse wheel, changes the size of the window as it is, and Ctrl with 0 sets it back to 100%.',
+  )
+  // The browser tests' cores run without Guild Board's window, which is where the sizes are taken.
+  await expect(box).toContainText("These take effect in Guild Board's own window.")
+  const windowChoice = inWindow.getByRole('radiogroup', { name: 'Page size in a window' })
+  const maximizedChoice = maximized.getByRole('radiogroup', { name: 'Page size when maximized' })
+  for (const choice of [windowChoice, maximizedChoice]) {
+    await expect(choice.getByRole('radio')).toHaveText(['70%', '80%', '90%', '100%', '110%', '120%', '130%'])
+    await expect(choice.getByRole('radio', { name: '100%' })).toHaveAttribute('aria-checked', 'true')
+    const widths = await choice.getByRole('radio').evaluateAll((buttons) => buttons.map((button) => Math.round(button.getBoundingClientRect().width)))
+    expect(new Set(widths).size, 'the seven buttons are the same size').toBe(1)
+  }
+  const lefts = await Promise.all([windowChoice, maximizedChoice].map(async (choice) => Math.round((await choice.boundingBox())!.x)))
+  expect(lefts[0], 'the two choices line up').toBe(lefts[1])
+  await maximizedChoice.getByRole('radio', { name: '80%' }).click()
+  await expect(maximizedChoice.getByRole('radio', { name: '80%' })).toHaveAttribute('aria-checked', 'true')
+  await expect.poll(async () => (await api.get<Settings>('/api/settings')).page_size_maximized).toBe(80)
+  expect((await api.get<Settings>('/api/settings')).page_size).toBe(100) // the window's is left as it was
+  await windowChoice.getByRole('radio', { name: '110%' }).click()
+  await expect.poll(async () => (await api.get<Settings>('/api/settings')).page_size).toBe(110)
+  await page.reload()
+  await expect(maximizedChoice.getByRole('radio', { name: '80%' })).toHaveAttribute('aria-checked', 'true')
+  await expect(windowChoice.getByRole('radio', { name: '110%' })).toHaveAttribute('aria-checked', 'true')
+  // A step taken in the window, with Ctrl and + there, shows here too.
+  await api.put('/api/settings', { page_size_maximized: 90 })
+  await expect(maximizedChoice.getByRole('radio', { name: '90%' })).toHaveAttribute('aria-checked', 'true')
+  await windowChoice.getByRole('radio', { name: '100%' }).click()
+  await maximizedChoice.getByRole('radio', { name: '100%' }).click()
+  await expect.poll(async () => {
+    const settings = await api.get<Settings>('/api/settings')
+    return [settings.page_size, settings.page_size_maximized]
+  }).toEqual([100, 100])
+})
+
 test('Settings has no Smooth animations row any more: the window draws at the monitor rate', async ({ page, api }) => {
   await expect(guildBoard(page).locator('.set-row', { hasText: 'Picture quality' })).toBeVisible() // the page has drawn
   await expect(guildBoard(page).locator('.set-row', { hasText: 'Smooth animations' })).toHaveCount(0)

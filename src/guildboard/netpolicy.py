@@ -43,8 +43,9 @@ PUBLIC_PICTURE_HOSTS: tuple[str, ...] = tuple(
 # The installed copy's updates (the player's choice, 2026-10-25): the newest release's facts, from the one public
 # repository the player publishes installers to, and that release's installer, asked for by its asset's address. GitHub
 # sends the installer from its download host, the one redirect such a request follows. Neither carries anything of
-# the player's.
-RELEASES_REPO = "QL1STY/guild-board-releases"
+# the player's. Since 2.0.1 the releases are those of the code's own repository (the player's choice, 2026-11-08):
+# 2.0.0 and earlier look in QL1STY/guild-board-releases, which got 2.0.1 too, to bring them here.
+RELEASES_REPO = "QL1STY/guild-board"
 LATEST_RELEASE_URL = f"https://api.github.com/repos/{RELEASES_REPO}/releases/latest"
 INSTALLER_ASSET = re.compile(rf"https://api\.github\.com/repos/{re.escape(RELEASES_REPO)}/releases/assets/[0-9]+")
 DOWNLOAD_HOSTS = ("release-assets.githubusercontent.com", "objects.githubusercontent.com")
