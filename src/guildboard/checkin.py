@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from datetime import date, datetime, timedelta, timezone
-from typing import Any, Callable, Protocol
+from typing import Any, Awaitable, Callable, Protocol
 
 log = logging.getLogger(__name__)
 
@@ -47,8 +47,12 @@ def next_reset(now: datetime) -> datetime:
 
 
 class CheckIn:
-    def __init__(self, source: Any, clock: Clock, changed: Callable[[], None], *, ready: Callable[[], bool]) -> None:
+    def __init__(
+        self, source: Any, clock: Clock, changed: Callable[[], None], *, ready: Callable[[], bool],
+        before_use: Callable[[], Awaitable[None]] | None = None,
+    ) -> None:
         self._source = source
+        self._before_use = before_use  # awaited before the source is first asked for anything (see Core._source_ready)
         self._clock = clock
         self._changed = changed
         self._ready = ready  # the login and the first run's consent: nothing is asked of HoYoverse before them
@@ -123,6 +127,8 @@ class CheckIn:
         claims = self._claims_done
         failed_before = self._read_failed
         try:
+            if self._before_use is not None:
+                await self._before_use()
             status = await self._source.checkin_status()
         except asyncio.CancelledError:
             raise
@@ -150,6 +156,8 @@ class CheckIn:
         self._changed()
         try:
             try:
+                if self._before_use is not None:
+                    await self._before_use()
                 result = await self._source.claim_checkin()
             except asyncio.CancelledError:
                 raise

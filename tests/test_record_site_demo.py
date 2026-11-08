@@ -43,6 +43,8 @@ def test_the_routes_that_depend_on_an_answer_are_made_from_it(tool):
         "/api/characters": {"entries": [{"key": "sandrone"}]},
         "/api/friends": {"friends": [{"user_id": "u1", "compare": True}, {"user_id": "u2", "compare": False}]},
         "/api/map": {"tabs": [{"id": 1}]},
+        "/api/stats/month": {"months": [{"ym": "2026-09"}, {"ym": "2026-10"}]},
+        "/api/stats/year": {"years": [2025, 2026], "year": {}},
     }
     get = answers.__getitem__
     achievements = tool.routes_of("achievements", get)
@@ -50,13 +52,20 @@ def test_the_routes_that_depend_on_an_answer_are_made_from_it(tool):
         for route in (f"/api/achievements?view={view}", f"/api/achievements?view={view}&pinned=true",
                       f"/api/achievements?view={view}&category=0", f"/api/achievements?view={view}&category=1"):
             assert route in achievements
+        # Pinned keeps the category the page is on (modelPath in web/src/pages/achievementsview.ts), and the page always is on one
+        # once it has opened, so Pinned is asked for with each category.
+        for route in (f"/api/achievements?view={view}&category=0&pinned=true", f"/api/achievements?view={view}&category=1&pinned=true"):
+            assert route in achievements
     assert "/api/commissions?region=natlan" in achievements and "/api/status" in achievements
     assert "/api/widgets/start-notes/data" in tool.routes_of("board", get)
     assert "/api/widgets/start-ov-clock/data" in tool.routes_of("overlay", get)
     assert tool.routes_of("characters", get)[-2:] == ["/api/characters/sandrone", "/api/characters/sandrone/plan"]
     assert tool.routes_of("friends", get)[-3:] == ["/api/friends/u1", "/api/friends/u1/compare", "/api/friends/u2"]
     assert "/api/map/tabs/1" in tool.routes_of("map", get)
-    assert len(tool.routes_of("stats", get)) == len(set(tool.routes_of("stats", get)))
+    stats = tool.routes_of("stats", get)
+    assert len(stats) == len(set(stats))
+    assert "/api/stats/month?ym=2026-09" in stats and "/api/stats/month?ym=2026-10" in stats and "/api/stats/month" in stats
+    assert "/api/stats/year" in stats and "/api/stats/year?year=2025" in stats and "/api/stats/year?year=2026" in stats
 
 
 def test_your_week_and_the_endgame_are_recorded_only_while_the_core_shows_them(tool):
@@ -165,6 +174,9 @@ def test_a_recording_holds_every_route_of_every_page_and_nothing_of_this_machine
     assert status["mode"] == "demo" and status["now"].startswith("2026-10-13T08:")
     settings = json.loads((out / f"{tool.recording_key('/api/settings')}.json").read_text(encoding="utf-8"))
     assert settings["risk_acknowledged"] is True
+    # Pinned, as the Achievements page asks for it once it is on a category, holds the pinned achievements.
+    pinned = json.loads((out / f"{tool.recording_key('/api/achievements?view=left&category=0&pinned=true')}.json").read_text(encoding="utf-8"))
+    assert pinned["query"]["pinned"] is True and pinned["pinned"] == len(pinned["groups"]) > 0
     everything = "\n".join(path.read_text(encoding="utf-8") for path in out.glob("*.json"))
     assert "guildboard-site-demo-" not in everything, "the temp data folder's path is in the recording"
     for private in (str(Path.home()), str(tmp_path), str(ROOT)):

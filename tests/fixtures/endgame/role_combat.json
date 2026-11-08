@@ -1,0 +1,131 @@
+{
+ "data": [
+  {
+   "detail": {
+    "rounds_data": [
+     {
+      "avatars": [
+       {"avatar_id": 10000030, "level": 90, "rarity": 5},
+       {"avatar_id": 10000121, "level": 90, "rarity": 4},
+       {"avatar_id": 10000060, "level": 90, "rarity": 5},
+       {"avatar_id": 10000020, "level": 90, "rarity": 4}
+      ],
+      "buffs": [], "choice_cards": [], "is_get_medal": true, "round_id": 1, "finish_time": "1793692231", "enemies": [],
+      "is_tarot": false, "tarot_serial_no": -1
+     }
+    ],
+    "detail_stat": {
+     "difficulty_id": 5, "max_round_id": 10, "heraldry": 5, "get_medal_round_list": [1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1],
+     "medal_num": 7, "coin_num": 0, "avatar_bonus_num": 0, "rent_cnt": 0, "tarot_finished_cnt": 2
+    },
+    "lineup_link": "",
+    "backup_avatars": [],
+    "fight_statisic": {
+     "max_defeat_avatar": {
+      "avatar_id": 10000052,
+      "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/ecc17cb83ca92fc24f7a39d7605364e3.png",
+      "value": "11", "rarity": 5
+     },
+     "max_damage_avatar": {
+      "avatar_id": 10000120,
+      "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/68c0b1bb/71e19bba003e1ec9c7e7832a28c6a0da.png",
+      "value": "943229", "rarity": 5
+     },
+     "max_take_damage_avatar": {
+      "avatar_id": 10000087,
+      "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/5ff8490c210ffaf5953efed4c8672962.png",
+      "value": "68942", "rarity": 5
+     },
+     "total_coin_consumed": {"avatar_id": 0, "avatar_icon": "", "value": "1285", "rarity": 0},
+     "shortest_avatar_list": [
+      {
+       "avatar_id": 10000120,
+       "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/68c0b1bb/71e19bba003e1ec9c7e7832a28c6a0da.png",
+       "value": "", "rarity": 5
+      }
+     ],
+     "total_use_time": 1002,
+     "is_show_battle_stats": true
+    }
+   },
+   "stat": {
+    "difficulty_id": 5, "max_round_id": 10, "heraldry": 5, "get_medal_round_list": [1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1],
+    "medal_num": 6, "coin_num": 1285, "avatar_bonus_num": 2, "rent_cnt": 1, "tarot_finished_cnt": 2
+   },
+   "schedule": {
+    "start_time": "1793502000", "end_time": "1796093999", "schedule_type": 1, "schedule_id": 31,
+    "start_date_time": {"year": 2026, "month": 11, "day": 1, "hour": 4, "minute": 0, "second": 0},
+    "end_date_time": {"year": 2026, "month": 12, "day": 1, "hour": 3, "minute": 59, "second": 59}
+   },
+   "has_data": true,
+   "has_detail_data": true
+  },
+  {
+   "detail": {
+    "rounds_data": [
+     {
+      "avatars": [
+       {"avatar_id": 10000026, "level": 90, "rarity": 5},
+       {"avatar_id": 10000132, "level": 90, "rarity": 4},
+       {"avatar_id": 10000015, "level": 90, "rarity": 4},
+       {"avatar_id": 10000014, "level": 90, "rarity": 4}
+      ],
+      "buffs": [], "choice_cards": [], "is_get_medal": true, "round_id": 1, "finish_time": "1790845713", "enemies": [],
+      "is_tarot": false, "tarot_serial_no": -1
+     }
+    ],
+    "detail_stat": {
+     "difficulty_id": 4, "max_round_id": 10, "heraldry": 4, "get_medal_round_list": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     "medal_num": 10, "coin_num": 0, "avatar_bonus_num": 0, "rent_cnt": 0, "tarot_finished_cnt": 0
+    },
+    "lineup_link": "",
+    "backup_avatars": [],
+    "fight_statisic": {
+     "max_defeat_avatar": {
+      "avatar_id": 10000075,
+      "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/bdc192bd3c11a969e8be5e6831be4590.png",
+      "value": "20", "rarity": 5
+     },
+     "max_damage_avatar": {
+      "avatar_id": 10000133,
+      "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6a4458ea/fa05b88a6c300212d427cda810d52b94.png",
+      "value": "825629", "rarity": 5
+     },
+     "max_take_damage_avatar": {
+      "avatar_id": 10000026,
+      "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/3e0dcded148a669083fab4d52f82c831.png",
+      "value": "15976", "rarity": 5
+     },
+     "total_coin_consumed": {"avatar_id": 0, "avatar_icon": "", "value": "1180", "rarity": 0},
+     "shortest_avatar_list": [
+      {
+       "avatar_id": 10000058,
+       "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/6e026d98563b484fc040f10026da5d58.png",
+       "value": "", "rarity": 5
+      }
+     ],
+     "total_use_time": 544,
+     "is_show_battle_stats": true
+    }
+   },
+   "stat": {
+    "difficulty_id": 4, "max_round_id": 10, "heraldry": 4, "get_medal_round_list": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    "medal_num": 10, "coin_num": 1180, "avatar_bonus_num": 0, "rent_cnt": 2, "tarot_finished_cnt": 0
+   },
+   "schedule": {
+    "start_time": "1790823600", "end_time": "1793501999", "schedule_type": 2, "schedule_id": 30,
+    "start_date_time": {"year": 2026, "month": 10, "day": 1, "hour": 4, "minute": 0, "second": 0},
+    "end_date_time": {"year": 2026, "month": 11, "day": 1, "hour": 3, "minute": 59, "second": 59}
+   },
+   "has_data": true,
+   "has_detail_data": true
+  }
+ ],
+ "is_unlock": true,
+ "links": {
+  "lineup_link": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html",
+  "lineup_link_pc": "https://act.hoyolab.com/ys/event/bbs-lineup-ys-sea/index.html",
+  "strategy_link": "", "lineup_publish_link": "", "lineup_publish_link_pc": ""
+ },
+ "tarot_card_state": {"total_num": 22, "curr_num": 2, "list": [{"icon": "", "name": "The Magician", "is_unlock": false, "unlock_num": 0}]}
+}

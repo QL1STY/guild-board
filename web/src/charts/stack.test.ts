@@ -3,7 +3,7 @@ import type { Group, PrimogemColumn, PrimogemColumns } from '../ledgertypes.ts'
 import charts from '../styles/charts.css?raw'
 import { contrast, tokenValues } from '../styles/contrast.ts'
 import tokens from '../styles/tokens.css?raw'
-import { ESTIMATE, GROUP_COLOURS, columnTip, columnsTable, segmentsOf, stacked, stripeOf, type Stack } from './stack.ts'
+import { GROUP_COLOURS, RECORD_WORDS, columnTip, columnsTable, segmentsOf, stacked, stripeOf, type Stack } from './stack.ts'
 
 const ORDER: Group[] = ['commissions', 'welkin', 'events', 'endgame', 'other']
 const LABELS: Record<Group, string> = {
@@ -25,7 +25,10 @@ const busyDay: PrimogemColumn = {
   label: '2026-10-21', value: 1015, no_data: false, after_gap: false,
   groups: groups({ commissions: 60, welkin: 90, events: 420, endgame: 400, other: 45 }),
 }
-const diaryDay: PrimogemColumn = { label: '2026-09-25', value: 120, no_data: false, after_gap: false, estimate: true }
+const unrecorded: PrimogemColumn = { label: '2026-09-25', value: 0, no_data: true, after_gap: false }
+const partWeek: PrimogemColumn = {
+  label: '2026-09-21', value: 300, no_data: false, after_gap: true, groups: groups({ commissions: 300 }),
+}
 const gapDay: PrimogemColumn = { label: '2026-09-20', value: 120, no_data: false, after_gap: true }
 const unsynced: PrimogemColumn = { label: '2026-09-19', value: 0, no_data: true, after_gap: false }
 
@@ -43,35 +46,28 @@ test('stacked segments sum to the column, in the order, from the bottom, leaving
     { group: 'commissions', value: 60, share: 0.4 },
     { group: 'welkin', value: 90, share: 0.6 },
   ])
-  // A day before the ledger, and a day with nothing, have none.
-  expect(segmentsOf(diaryDay, ORDER)).toEqual([])
+  // A day without a record, and a day with nothing, have none.
+  expect(segmentsOf(unrecorded, ORDER)).toEqual([])
   expect(segmentsOf({ ...welkinDay, value: 0, groups: groups({}) }, ORDER)).toEqual([])
 })
 
-test('estimate and after_gap stripes differ', () => {
-  expect(stripeOf(diaryDay)).toBe('est')
+test('only a partial column is striped; nothing is drawn as an estimate', () => {
   expect(stripeOf(gapDay)).toBe('gap')
+  expect(stripeOf(partWeek)).toBe('gap')
   expect(stripeOf(welkinDay)).toBeNull()
-  // A diary day after a gap is drawn as the estimate, which it is first.
-  expect(stripeOf({ ...diaryDay, after_gap: true })).toBe('est')
-  const plain = charts.replace(/\/\*[\s\S]*?\*\//g, '')
-  const background = (selector: string) =>
-    new RegExp(`${selector.replace(/[.]/g, '\\.')}[^{]*\\{[^}]*background:\\s*([^;]+);`).exec(plain)?.[1]
-  expect(background('.col-item i.est')).toBeDefined()
-  expect(background('.col-item i.gap')).toBeDefined()
-  expect(background('.col-item i.est')).not.toBe(background('.col-item i.gap'))
+  expect(stripeOf(unrecorded)).toBeNull()
+  expect(charts).not.toMatch(/\.est\b/)
 })
 
-test('the table lists each group, with the note of an estimate', () => {
-  const table = columnsTable(data([unsynced, gapDay, diaryDay, welkinDay]), 'Primogems', STACK)
+test('the table lists each group, with the note of a day without a record', () => {
+  const table = columnsTable(data([unrecorded, partWeek, welkinDay]), 'Primogems', STACK, RECORD_WORDS)
   expect(table.head).toEqual([
     'Day', 'Primogems', 'Daily commissions', 'Blessing of the Welkin Moon', 'Events', 'Spiral Abyss and Theater', 'Other',
     'Note',
   ])
   expect(table.rows).toEqual([
-    ['Sat 19 Sep', '–', '–', '–', '–', '–', '–', 'No sync'],
-    ['Sun 20 Sep', '120', '–', '–', '–', '–', '–', 'Includes days without a sync'],
-    ['Fri 25 Sep', '120', '–', '–', '–', '–', '–', ESTIMATE],
+    ['Fri 25 Sep', '–', '–', '–', '–', '–', '–', 'No record'],
+    ['Mon 21 Sep', '300', '300', '0', '0', '0', '0', 'Includes days without a record'],
     ['Tue 20 Oct', '150', '60', '90', '0', '0', '0', ''],
   ])
   expect(table.numeric).toEqual([1, 2, 3, 4, 5, 6])
@@ -89,17 +85,22 @@ test("a stacked column's tip names the day and total, then each group it holds",
     'Daily commissions 60',
     'Blessing of the Welkin Moon 90',
   ])
-  expect(columnTip(diaryDay, 'day', 'Primogems', STACK)).toEqual(['Fri 25 Sep · 120 primogems', ESTIMATE])
-  expect(columnTip(unsynced, 'day', 'Primogems', STACK)).toEqual(['Sat 19 Sep: no sync'])
+  expect(columnTip(unrecorded, 'day', 'Primogems', STACK, RECORD_WORDS)).toEqual(['Fri 25 Sep: no record'])
+  expect(columnTip(partWeek, 'week', 'Primogems', STACK, RECORD_WORDS)).toEqual([
+    'Week of 21 Sep · 300 primogems',
+    'Daily commissions 300',
+    'Includes days without a record',
+  ])
+  expect(columnTip(unsynced, 'day', 'Chests')).toEqual(['Sat 19 Sep: no sync'])
   // Without a stack, the tip is as it was.
   expect(columnTip(gapDay, 'day', 'Chests')).toEqual(['Sun 20 Sep: 120, includes days without a sync'])
   expect(columnTip({ ...welkinDay, groups: undefined }, 'week', 'Chests')).toEqual(['Week of 20 Oct: 150'])
 })
 
 test('stacked is true only when the core sends groups', () => {
-  expect(stacked(data([welkinDay, diaryDay]))).toBe(true)
+  expect(stacked(data([welkinDay, unrecorded]))).toBe(true)
   expect(stacked({ ...data([gapDay]), groups_order: undefined })).toBe(false)
-  expect(stacked(data([gapDay, diaryDay]))).toBe(false)
+  expect(stacked(data([gapDay, unrecorded]))).toBe(false)
 })
 
 test('the groups have the plan\'s colours, and Other its own token', () => {

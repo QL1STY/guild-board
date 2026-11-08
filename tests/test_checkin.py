@@ -3,8 +3,10 @@ background, the one claim on the player's press, its results, and the routes."""
 from __future__ import annotations
 
 import asyncio
+import re
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 
 import genshin
 import pytest
@@ -333,6 +335,7 @@ def test_a_picture_of_no_reward_is_404(tmp_path):
 
 
 def test_the_web_page_of_the_check_in_may_open_outside():
-    from guildboard.shell.dashboard import opens_outside
-
-    assert opens_outside(WEBSITE)
+    # The shell opens a link in the player's own browser only when it starts with one of links.ts' EXTERNAL_LINKS.
+    links = (Path(__file__).resolve().parents[1] / "shell" / "src" / "links.ts").read_text(encoding="utf-8")
+    listed = re.search(r"export const EXTERNAL_LINKS[^=]*=\s*\[(.*?)\n\]", links, re.S).group(1)
+    assert any(WEBSITE.startswith(prefix) for prefix in re.findall(r"'(https://[^']+)'", listed))

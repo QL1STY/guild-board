@@ -29,20 +29,21 @@ ARTS, FACES = 12, 160
 
 
 def _picture(path: Path, side: int, seed: int) -> None:
-    from PySide6.QtGui import QColor, QImage, QLinearGradient, QPainter
+    from PIL import Image, ImageDraw
 
-    image = QImage(side, side, QImage.Format.Format_ARGB32)
-    image.fill(0)  # see-through
-    painter = QPainter(image)
     margin = side // 10
-    gradient = QLinearGradient(0, 0, side, side)
-    gradient.setColorAt(0, QColor((seed * 53) % 256, (seed * 97) % 256, 200, 255))
-    gradient.setColorAt(1, QColor(250, (seed * 31) % 256, (seed * 17) % 256, 255))
-    painter.fillRect(margin, margin, side - 2 * margin, side - 2 * margin, gradient)
+    inner = side - 2 * margin
+    # A gradient between two colours, built from a one-pixel-high strip stretched to the square (cheap at 2048).
+    first, last = ((seed * 53) % 256, (seed * 97) % 256, 200), (250, (seed * 31) % 256, (seed * 17) % 256)
+    strip = Image.new("RGB", (inner, 1))
+    strip.putdata([tuple(round(a + (b - a) * x / max(inner - 1, 1)) for a, b in zip(first, last)) for x in range(inner)])
+    image = Image.new("RGBA", (side, side), (0, 0, 0, 0))  # see-through
+    image.paste(strip.resize((inner, inner)), (margin, margin))
+    detail = ImageDraw.Draw(image, "RGBA")
     for step in range(40):  # some detail, so that nothing compresses to nothing
-        painter.fillRect((step * 97 + seed * 13) % side, (step * 61 + seed * 7) % side, side // 9, side // 9, QColor(step * 6, 40, 255 - step * 6, 140))
-    painter.end()
-    image.save(str(path), "PNG")
+        left, top = (step * 97 + seed * 13) % side, (step * 61 + seed * 7) % side
+        detail.rectangle((left, top, left + side // 9, top + side // 9), fill=(step * 6, 40, 255 - step * 6, 140))
+    image.save(path, "PNG")
 
 
 def main() -> None:

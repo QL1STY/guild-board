@@ -49,7 +49,7 @@ def test_log_file_never_contains_a_secret(tmp_path):
 
 
 def test_an_exception_nothing_caught_goes_into_the_log(tmp_path, monkeypatch):
-    # Under pythonw nothing shows an exception that nothing caught, one raised in a Qt slot among them: Python hands it
+    # Under pythonw nothing shows an exception that nothing caught: Python hands it
     # to sys.excepthook.
     passed_on: list[type] = []
     monkeypatch.setattr(sys, "excepthook", lambda kind, value, traceback: passed_on.append(kind))
@@ -66,28 +66,6 @@ def test_an_exception_nothing_caught_goes_into_the_log(tmp_path, monkeypatch):
     assert "Traceback" in text and "RuntimeError: close_overlay failed, near [redacted]" in text
     assert SECRET not in text
     assert passed_on == [RuntimeError]  # and Python's own handling of it goes on, once
-
-
-@pytest.mark.qt_no_exception_capture  # the hook is what this tests, not pytest-qt's own
-def test_an_exception_raised_in_a_qt_slot_goes_into_the_log(qtbot, tmp_path, monkeypatch):
-    from PySide6.QtCore import QObject, Signal
-
-    class Source(QObject):
-        fired = Signal()
-
-    def close_overlay() -> None:
-        raise RuntimeError("the overlay could not close")
-
-    passed_on: list[type] = []
-    monkeypatch.setattr(sys, "excepthook", lambda kind, value, traceback: passed_on.append(kind))
-    setup_logging(tmp_path)
-    source = Source()
-    source.fired.connect(close_overlay)
-    source.fired.emit()  # PySide hands what the slot raised to sys.excepthook
-    shutdown_logging()
-    text = (tmp_path / "guildboard.log").read_text(encoding="utf-8")
-    assert "an exception was not caught" in text and "RuntimeError: the overlay could not close" in text
-    assert passed_on == [RuntimeError]
 
 
 def test_setup_is_repeatable(tmp_path):

@@ -109,7 +109,7 @@ def shutdown_logging() -> None:
 
 
 def _log_uncaught_exceptions() -> None:
-    """An exception that nothing caught, one raised in a Qt slot among them, goes into the log with its traceback:
+    """An exception that nothing caught goes into the log with its traceback:
     under pythonw nothing else would show it. Python's own handling of it then goes on as before."""
     previous = sys.excepthook
     if getattr(previous, "guildboard", False):

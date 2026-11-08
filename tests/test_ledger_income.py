@@ -1,5 +1,5 @@
-"""Exact primogems from the game's own history, then the diary's detail, then the diary's total (the ledger design,
-section 0; the plan's Review Focus 1 and 2)."""
+"""Exact primogems from the game's own history, then the diary's detail; a day of neither is empty, never estimated
+from the diary's running total (the ledger design, section 0; the plan's Review Focus 1 and 2)."""
 from datetime import date, datetime, timedelta, timezone
 
 from guildboard.gameday import game_day_start
@@ -88,18 +88,16 @@ def test_the_day_before_the_first_month_of_diary_detail_is_not_exact(store):
 def test_a_month_of_exact_days_is_split_by_group_and_adds_up_to_its_value(store):
     keep(store, OLDEST, ("2026-10-03 10:00:00", 150, "Daily Commission reward"),
          ("2026-10-04 10:00:00", 400, "Event reward"), ("2026-10-04 11:00:00", 90, "Blessing of the Welkin Moon daily reward"))
-    # The diary's running total rises 300 on 1 October, a day the game's log does not cover whole.
+    # The diary's running total rises 300 on 1 October, a day the game's log does not cover whole: no estimate of it.
     for day, value in ((date(2026, 9, 30), 1000), (date(2026, 10, 1), 1300)):
         store.add_points(None, game_day_start(day, SERVER) + timedelta(hours=20), day, [Point(EARNED_KEY, value)])
-    history = History(store)
     today = date(2026, 10, 4)
-    months = dict(income.month_values(store, history, UID, SERVER, {"2026-10": 2508}, today, 6))
-    sources = income.month_sources(store, history, UID, SERVER, "2026-10", today)
-    assert sources == [
-        ("Events", 400), ("Daily commissions", 150), ("Blessing of the Welkin Moon", 90), ("Not split by source", 300),
-    ]
-    assert sum(amount for _, amount in sources) == months["2026-10"] == 940
-    assert income.month_sources(store, history, UID, SERVER, "2026-08", today) is None
+    months = dict(income.month_values(store, UID, SERVER, {"2026-10": 2508, "2026-08": 1800}, today, 6))
+    sources = income.month_sources(store, UID, SERVER, "2026-10", today)
+    assert sources == [("Events", 400), ("Daily commissions", 150), ("Blessing of the Welkin Moon", 90)]
+    assert sum(amount for _, amount in sources) == months["2026-10"] == 640
+    assert months["2026-08"] == 1800  # a month without exact days keeps the diary's own total
+    assert income.month_sources(store, UID, SERVER, "2026-08", today) is None
 
 
 def test_stats_month_sources_follow_the_months_value_not_the_diarys(store):
@@ -122,14 +120,25 @@ def test_stats_month_sources_follow_the_months_value_not_the_diarys(store):
     assert alone["sources"] == [{"name": "Daily Activity", "amount": 2508}]
 
 
-def test_columns_before_coverage_are_diary_estimates(store):
+def test_days_without_an_exact_record_are_empty_never_estimated(store):
     keep(store, OLDEST, ("2026-10-03 10:00:00", 150, "Daily Commission reward"))
     for day, value in ((date(2026, 9, 29), 1000), (date(2026, 9, 30), 1100), (date(2026, 10, 1), 1300)):
         store.add_points(None, game_day_start(day, SERVER) + timedelta(hours=20), day, [Point(EARNED_KEY, value)])
-    days = income.earned_days(store, History(store), UID, SERVER, date(2026, 9, 30), date(2026, 10, 3))
-    assert [(d.day.day, d.value, d.estimate, d.groups is not None) for d in days] == [
-        (30, 100, True, False), (1, 200, True, False), (2, 0, False, True), (3, 150, False, True),
+    # 4 October: the diary's total may have risen, but the game's log has not reached it yet.
+    days = income.earned_days(store, UID, SERVER, date(2026, 9, 30), date(2026, 10, 4))
+    assert [(d.day.day, d.value, d.no_data, d.groups is not None) for d in days] == [
+        (30, 0, True, False), (1, 0, True, False), (2, 0, False, True), (3, 150, False, True), (4, 0, True, False),
     ]
+
+
+def test_pace_counts_only_the_exact_days(store):
+    keep(store, OLDEST, ("2026-10-03 10:00:00", 150, "Daily Commission reward"),
+         ("2026-10-04 10:00:00", 50, "Daily Commission reward"))
+    for day, value in ((date(2026, 9, 29), 1000), (date(2026, 10, 5), 9000)):
+        store.add_points(None, game_day_start(day, SERVER) + timedelta(hours=20), day, [Point(EARNED_KEY, value)])
+    # 2, 3 and 4 October are covered: 0, 150 and 50. The diary's rise is never counted.
+    assert income.pace(store, UID, SERVER, date(2026, 10, 5)) == 200 / 3
+    assert income.pace(store, None, SERVER, date(2026, 10, 5)) is None
 
 
 def test_net_since_counts_in_and_out_and_the_fates_bought(store):
@@ -201,3 +210,16 @@ def test_savings_without_coverage_keeps_todays_rule():
     assert balance_now(balance, 150, 4) == balance_now(balance, 150, 4, fates_bought=None)
     estimate = balance_now(balance, 150, 4)
     assert (estimate.primogems, estimate.fates) == (1150 - 320, 0)
+
+
+def test_a_week_with_days_without_a_record_is_marked_and_an_empty_one_is_no_data():
+    from guildboard.views.stats import _primogem_column
+
+    full = {"commissions": 60, "welkin": 0, "events": 0, "endgame": 0, "other": 0}
+    monday = date(2026, 10, 5)
+    some = [income.EarnedDay(monday, 60, full, False), income.EarnedDay(monday + timedelta(days=1), 0, None, True)]
+    column = _primogem_column(monday, some)
+    assert (column["value"], column["no_data"], column["after_gap"], column["groups"]["commissions"]) == (60, False, True, 60)
+    assert "estimate" not in column
+    none = [income.EarnedDay(monday, 0, None, True)]
+    assert (_primogem_column(monday, none)["no_data"], _primogem_column(monday, none)["after_gap"]) == (True, False)

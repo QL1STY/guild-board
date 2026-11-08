@@ -138,6 +138,34 @@ def test_raw_responses_round_trip(store):
     assert store.raw_bodies("notes") == []
 
 
+def test_raw_bodies_of_one_endpoint_come_oldest_first_with_their_times(store):
+    run = store.start_run("manual", NOW)
+    store.add_raw(run, "endgame", "spiralAbyss", NOW, {"read": 1})
+    store.add_raw(run, "endgame", "role_combat", NOW, {"theater": True})
+    store.add_raw(run, "endgame", "spiralAbyss", NOW + timedelta(hours=3), {"read": 2})
+    store.add_raw(run, "notes", "spiralAbyss", NOW, {"another": "group"})
+    assert store.raw_bodies_of("endgame", "spiralAbyss") == [(NOW, {"read": 1}), (NOW + timedelta(hours=3), {"read": 2})]
+    assert store.raw_bodies_of("endgame", "spiralAbyss", limit=1) == [(NOW + timedelta(hours=3), {"read": 2})]
+    assert store.raw_bodies_of("endgame", "hard_challenge") == []
+
+
+def test_endgame_cycles_are_kept_by_mode_and_cycle_and_come_in_the_order_they_end(store):
+    from guildboard.store import EndgameCycleRow
+
+    october = EndgameCycleRow("theater", "30", "2026-10-01T03:00:00+00:00", "2026-11-01T02:59:59+00:00", {"acts": 10}, NOW)
+    abyss = EndgameCycleRow("abyss", "124", "2026-10-16T03:00:00+00:00", "2026-11-16T02:59:59+00:00", {"stars": 36}, NOW)
+    november = EndgameCycleRow("theater", "31", "2026-11-01T03:00:00+00:00", "2026-12-01T02:59:59+00:00", {"acts": 8}, NOW)
+    for row in (november, abyss, october):
+        store.put_endgame_cycle(row)
+    assert store.endgame_cycles() == [october, abyss, november]
+    assert store.endgame_cycles("theater") == [october, november] and store.endgame_cycles("stygian") == []
+    later = replace(november, detail={"acts": 10, "medals": [True, False]}, read_at=NOW + timedelta(days=1))
+    store.put_endgame_cycle(later)  # the same mode and cycle: the row is replaced
+    assert store.endgame_cycles("theater") == [october, later]
+    tables = {row[0] for row in store._conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
+    assert "endgame_cycles" in tables
+
+
 def test_points_latest_and_prefix(store):
     day = date(2026, 10, 13)
     store.add_points(None, NOW, day, [Point("stats.days_active", 1700), Point("stats.daysXactive", 1), Point("stats.chests.common", 5)])
@@ -945,8 +973,9 @@ CHARACTERS_TABLES = {
 def test_a_version_10_database_gains_the_characters_tables_after_a_backup(tmp_path):
     # The Characters tables are the 11th migration: the plan called them schema 8, before the gift codes, the gallery
     # and the ledger took 8 to 10. Sync is the 12th (the online plan, Task C2), its outbox's numbered lines the 13th, and the
-    # database moves on to them. The 14th only deletes rows.
-    assert len(MIGRATIONS) == 14
+    # database moves on to them. The 14th only deletes rows, the 15th keeps the endgame's cycles (the Stats design, 3.5),
+    # and the 16th lets the wiki's table hold the Tutorial entries (the Stats design, 3.2).
+    assert len(MIGRATIONS) == 16
     path = tmp_path / "guildboard.db"
     old = sqlite3.connect(path)
     old.executescript("".join(MIGRATIONS[:10]))
@@ -1101,6 +1130,37 @@ def test_a_point_older_than_the_newest_row_is_kept_though_its_value_is_the_same(
     store.add_points(None, NOW + timedelta(hours=1), day, [Point("k", 5)])
     store.add_points(None, NOW, day, [Point("k", 5)])
     assert [r[1][11:16] for r in _point_rows(store)] == ["08:00", "09:00"]
+
+
+def test_the_upgrade_to_schema_16_keeps_the_wikis_entries_and_takes_its_tutorial_entries(tmp_path):
+    # The Endgame card (the Stats design, 3.2) reads three of the wiki's Tutorial entries, a kind the table did not hold.
+    path = tmp_path / "guildboard.db"
+    conn = sqlite3.connect(path)
+    for script in MIGRATIONS[:15]:
+        conn.executescript(script)
+    conn.execute("PRAGMA user_version = 15")
+    conn.execute(
+        "INSERT INTO wiki_entries (entry_page_id, kind, name, data, version, read_at) VALUES ('10920', 'character', "
+        "'Sandrone', '{\"element\": \"Cryo\"}', '7.1', ?)", (NOW.isoformat(),),
+    )
+    with pytest.raises(sqlite3.IntegrityError):
+        conn.execute(
+            "INSERT INTO wiki_entries (entry_page_id, kind, name, data, version, read_at) VALUES ('7786', 'tutorial', "
+            "'Stygian Onslaught', '{}', '7.1', ?)", (NOW.isoformat(),),
+        )
+    conn.commit()
+    conn.close()
+    store = Store.open(path, tmp_path / "backups", NOW)
+    try:
+        kept = store_module.WikiEntryRow("10920", "character", "Sandrone", {"element": "Cryo"}, "7.1", NOW)
+        assert store.wiki_entries("character") == {"10920": kept}
+        tutorial = store_module.WikiEntryRow("7786", "tutorial", "Stygian Onslaught", {"pictures": []}, "7.1", NOW)
+        store.put_wiki_entry(tutorial)
+        assert store.wiki_entry("7786") == tutorial and store.wiki_entries("tutorial") == {"7786": tutorial}
+        with pytest.raises(sqlite3.IntegrityError):
+            store.put_wiki_entry(replace(tutorial, entry_page_id="1", kind="monster"))
+    finally:
+        store.close()
 
 
 def test_the_upgrade_to_schema_14_gives_the_freed_room_back(tmp_path):

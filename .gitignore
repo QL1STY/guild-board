@@ -33,5 +33,10 @@ web/playwright-report/
 # Installer build
 .venv-package/
 build/
+# ...except the shell's packaging script (shell/build/package.mjs)
+!/shell/build/
 dist-installer/
 web/memory-results/
+
+# setup.ps1's copy of Electron's program named for Guild Board (shell/scripts/make-app-dev.mjs)
+/shell/app-dev/

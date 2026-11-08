@@ -20,7 +20,6 @@ import { Stats } from './pages/Stats.tsx'
 import { YourProfile } from './pages/YourProfile.tsx'
 import { hashOf, type Page, pageOf, routeOf } from './route.ts'
 import { placeWhileHidden, weekShown } from './pages/characters/hidden.ts'
-import { collectEveryMinute, collectSoon } from './ui/collect.ts'
 import { closeNote } from './ui/note.tsx'
 import { PageBoundary } from './ui/PageBoundary.tsx'
 
@@ -40,9 +39,6 @@ export default function App() {
   const live = useLive()
   // A page that opens shows no note (undo design, section 6): the one a page left goes with it.
   useEffect(() => closeNote(), [page])
-  // The page left behind is collected once this one has settled, and a page that stays open every minute (ui/collect.ts).
-  useEffect(() => collectSoon(), [hash])
-  useEffect(() => collectEveryMinute(), [])
   // The Gallery is there only while the player has it turned on: its address otherwise opens Settings, where it is.
   const galleryOff = page === 'gallery' && live.settings !== null && !live.settings.gallery_enabled
   useEffect(() => {
@@ -87,7 +83,10 @@ export default function App() {
 /** The page the address names, in the frame of the rail. */
 function pageShown(page: Page, hash: string, live: Live, galleryOff: boolean, hiddenPlace: string | null): ReactNode {
   if (page === 'achievements') return <Achievements live={live} />
-  if (page === 'stats') return <Stats live={live} />
+  if (page === 'stats') {
+    const stats = routeOf(hash)
+    return stats.page === 'stats' ? <Stats live={live} route={stats} /> : null
+  }
   if (page === 'settings' || galleryOff) return <Settings live={live} />
   if (page === 'gallery') return <Gallery live={live} />
   if (page === 'backlog') return <Backlog live={live} />

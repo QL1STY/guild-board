@@ -44,8 +44,9 @@ a.gb-nav:hover { color: var(--rail-text); }
    12.1): 1,912 pixels, the Achievements page's 300 + 12 + 1,600, inside the padding. Left-aligned. In a window 1,440
    pixels wide the main area has 1,250, so the cap binds only on wider screens. */
 .gb-main { min-width: 0; max-width: 1952px; padding: 16px 20px 20px; }
-/* The Board shows more widgets side by side in a wider window, never wider ones (spec 13.2): it takes the whole width,
-   and only its own content does. The top bar, the banners and the tray hint keep the frame's 1,912 pixels. */
+/* The Board shows more widgets side by side in a wider window, its columns sharing what is left over (spec 13.2,
+   board.css): it takes the whole width, and only its own content does. The top bar, the banners and the tray hint keep
+   the frame's 1,912 pixels. */
 .gb-main.wide { max-width: none; }
 .gb-main.wide > :not(.board) { max-width: 1912px; }
 /* A page change (look pass spec 14.2): the page's content fades in once, over 160 ms, and then its own opening motion

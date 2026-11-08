@@ -4,7 +4,7 @@ web/screens/stars.spec.ts, then tools/research/stars_check.py).
 The demo downloads no picture and bundles only its own, so its chart says nothing about the charts of any size. This starts the
 same demo core with each chart of a folder in its list of pictures, as `chart<key>` (the key without its hyphens), copied into
 the core's own data folder. The measuring page gives Sandrone's card each chart and its stars in turn. Pictures asked for at a
-size go through the same code as the live window's (`ArtCache.get`, Qt's copies). It prints the launch link as `guildboard
+size go through the same code as the live window's (`ArtCache.get`, Pillow's copies). It prints the launch link as `guildboard
 --no-shell` does, and is never run on the player's data folder: the folder must be new or empty.
 
     uv run python tools/stars_core.py --data-dir DIR --demo-now 2026-10-25T08:00:00+00:00 --charts FOLDER

@@ -37,8 +37,10 @@ _kernel32.LocalFree.restype = ctypes.c_void_p
 _ENTROPY = b"GuildBoard token v1"
 _UI_FORBIDDEN = 0x1
 
-# The cookies a HoYoLAB login is made of, as the login window and a pasted login hand them over (shell/cookies.py), and
+# The cookies a HoYoLAB login is made of, as the login window and a pasted login hand them over (shell/src/login.ts), and
 # the older names of a login pasted from before HoYoLAB's v2 cookies.
+# What a redeem or a history key needs of the login: the cookie token.
+REDEEM_TOKEN = "cookie_token_v2"
 SESSION_COOKIES = ("ltoken_v2", "ltuid_v2", "ltmid_v2", "cookie_token_v2", "account_id_v2", "account_mid_v2")
 OLDER_SESSION_COOKIES = ("ltoken", "ltuid", "cookie_token", "account_id")
 # What the stored login keeps of the cookies HoYoLAB sets later: those, and lrsag, which the mint of history keys takes

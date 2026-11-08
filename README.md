@@ -13,7 +13,7 @@ Resin, commissions, achievements, wishes, primogems and your characters' plans, 
 
 ### [⬇ Download for Windows](https://github.com/QL1STY/guild-board-releases/releases/latest) · [▶ Try it in your browser](https://ql1sty.github.io/guild-board/demo/) · [Website](https://ql1sty.github.io/guild-board/)
 
-<sub>Free and open source · no ads, no account needed · about 160 MB · no administrator rights · updates itself</sub>
+<sub>Free and open source · no ads, no account needed · about 130 MB · no administrator rights · updates itself</sub>
 
 <br>
 
@@ -52,6 +52,10 @@ The full list with progress counters, stages and **pins** for the ones you are w
 Chests, achievements, play time, days played and primogems, each against the period before: a **play-time calendar**, **when you play** by the hour, and **primogems by source** each day and month. The Ledger keeps the game's own history of primogems, crystals, resin and artifacts. Every chart can be shown as a table.
 
 <p align="center"><img src="https://ql1sty.github.io/guild-board/shots/stats.png" alt="The Stats page: summary tiles, a play-time calendar and charts of primogems and play time" width="860"></p>
+
+The **Year** tab shows your year as Wrapped, which you can save as a picture to share.
+
+<p align="center"><img src="https://ql1sty.github.io/guild-board/shots/year.png" alt="The Year page: your year as Wrapped, with the character of the year and cards of your numbers" width="860"></p>
 
 ### 🗡 Characters
 
@@ -101,13 +105,13 @@ Everything stays in one folder on your PC, `%LOCALAPPDATA%\GuildBoard`. Nothing 
 - It never opens the game's process, reads or writes its memory, or hooks into it. All it learns about the game is whether it is running.
 - It never sends keys or clicks to the game and never captures its screen.
 - Your HoYoLAB login is kept only on this PC, encrypted for your Windows user. It is never written to a log and never sent anywhere but to HoYoverse. A wish-history link's key is kept in memory only, never on disk: for the import, and for up to a day after it to fetch new wishes.
-- It talks only to HoYoverse's own sites: hoyolab.com, hoyoverse.com and mihoyo.com. The exceptions are Paimon.moe's public achievement list on GitHub, downloaded only when you ask to check for new achievements, the check for a new version of Guild Board on GitHub, and, only after you sign in to an online account, Guild Board's own server.
+- It talks to HoYoverse's own sites: hoyolab.com, hoyoverse.com and mihoyo.com. Beyond them, it downloads Paimon.moe's public achievement list from GitHub only when you ask to check for new achievements, checks GitHub for a new version of Guild Board, and talks to Guild Board's own server only after you sign in to an online account. It may also download public pictures from other sites, such as the Endgame headers, and sends nothing of yours with them.
 - It only reads your account, except to redeem a gift code that you typed, pasted or clicked to redeem, and to claim the daily check-in reward when you press Claim. It never posts, claims or changes anything else for you.
 - It never changes anything else on your HoYoLAB account, not even the calculator's sync setting.
 - It reads your wish history and your game's own history pages (primogems, crystals, resin, artifacts) with a read-only key HoYoverse gives your HoYoLAB login, kept in memory only (or, without a login, the link the game writes when you open Feedback), and only reads.
 - With the gallery on, it looks at the pictures in the game's ScreenShot folder and never moves, changes or deletes one.
 
-`tests/test_handsoff.py` checks these rules against the code, and it may only be tightened.
+`tests/test_handsoff.py` checks these rules against the code. It is only ever tightened, except when the maintainer changes a rule in `CLAUDE.md`, as on 2026-11-06 to allow public pictures from outside HoYoverse.
 
 ## The risk
 
@@ -133,10 +137,10 @@ cd guild-board
 powershell -ExecutionPolicy Bypass -File setup.ps1
 ```
 
-`setup.ps1` installs the Python packages and the interface's, builds the interface and puts a shortcut on your desktop. Then:
+`setup.ps1` installs the Python packages and the packages of the interface and of the shell, builds both and puts a shortcut on your desktop. The window is an Electron shell in `shell/`, written in TypeScript; it starts the Python core and shows the interface. Then:
 
-- `uv run guildboard --demo` runs Guild Board with its window on made-up data. Add `--no-shell` to run the core alone and get a link for your browser.
-- `uv run pytest -n auto` runs the Python tests on every core. In `web/`, `npm test` runs the interface's unit tests and `npm run e2e` its browser tests.
+- `npm start --prefix shell -- --demo` runs Guild Board with its window on made-up data. The shell starts the core from `.venv`. `uv run guildboard --demo --no-shell` runs the core alone and prints a link for your browser.
+- `uv run pytest -n auto` runs the Python tests on every core. In `web/`, `npm test` runs the interface's unit tests and `npm run e2e` its browser tests. In `shell/`, `npm test` runs the shell's unit tests and `npm run e2e` its browser tests.
 - `powershell -ExecutionPolicy Bypass -File build-installer.ps1` makes the installer. It refuses to build until a release key is pinned in `src/guildboard/selfupdate.py`; `-WithoutReleaseKey` builds an installer that never updates.
 
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) says how the parts fit together, and [`CONTRIBUTING.md`](CONTRIBUTING.md) how to help.

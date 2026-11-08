@@ -8,7 +8,7 @@
     "build:site-demo": "tsc -b && vite build --mode site-demo",
     "test": "vitest run",
     "e2e": "npm run build && playwright test",
-    "screens": "npm run build && playwright test -c playwright.screens.config.ts --grep-invert \"@1b|@look|@overlay|@scaling|@pulls|@topbar|@readme|@ledger|@characters|@friends|@memory|@stars|@site\"",
+    "screens": "npm run build && playwright test -c playwright.screens.config.ts --grep-invert \"@1b|@look|@overlay|@scaling|@pulls|@topbar|@readme|@ledger|@characters|@friends|@memory|@stars|@site|@stats|@demoframe\"",
     "screens:1b": "npm run build && playwright test -c playwright.screens.config.ts --grep @1b",
     "screens:look": "npm run build && playwright test -c playwright.screens.config.ts --grep @look",
     "screens:overlay": "npm run build && playwright test -c playwright.screens.config.ts --grep @overlay",
@@ -18,10 +18,12 @@
     "screens:ledger": "npm run build && playwright test -c playwright.screens.config.ts --grep @ledger",
     "screens:characters": "npm run build && playwright test -c playwright.screens.config.ts --grep @characters",
     "screens:friends": "npm run build && playwright test -c playwright.screens.config.ts --grep @friends",
+    "screens:stats": "npm run build && playwright test -c playwright.screens.config.ts --grep @stats",
     "memory:characters": "npm run build && playwright test -c playwright.screens.config.ts --grep @memory",
     "proof:stars": "npm run build && playwright test -c playwright.screens.config.ts --grep @stars",
     "screens:readme":"npm run build && playwright test -c playwright.screens.config.ts --grep @readme",
-    "screens:site": "npm run build && playwright test -c playwright.screens.config.ts --grep @site"
+    "screens:site": "npm run build && playwright test -c playwright.screens.config.ts --grep @site",
+    "test:site-demo": "npm run build:site-demo && playwright test -c playwright.screens.config.ts --grep @demoframe"
   },
   "dependencies": {
     "@fontsource/alegreya-sans": "5.3.0",

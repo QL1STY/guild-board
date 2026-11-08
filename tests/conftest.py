@@ -6,15 +6,10 @@ import re
 import sys
 from datetime import datetime, timezone
 
-# The shell's tests draw no window on the screen. Qt WebEngine has to be loaded before Qt starts.
-os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-import PySide6.QtWebEngineWidgets  # noqa: E402, F401
+import pytest
 
-import pytest  # noqa: E402
-
-from guildboard import netpolicy  # noqa: E402
-from guildboard.shell import app as shell_app, startup as shell_startup  # noqa: E402
-from support import SOCKET_HOSTS, FakeClock, beyond_this_pc  # noqa: E402
+from guildboard import netpolicy
+from support import SOCKET_HOSTS, FakeClock, beyond_this_pc
 
 DEAD_PROXY = "http://127.0.0.1:9"  # nothing listens on port 9 of this PC, so a request sent there fails at once
 
@@ -92,24 +87,18 @@ def no_game_files_of_the_player(tmp_path):
 @pytest.fixture(autouse=True)
 def away_from_the_players_files(tmp_path):
     """Every test runs with APPDATA, LOCALAPPDATA and USERPROFILE in its own folder, so that no test finds the player's
-    Guild Board folder or the game's log, and with the Startup folder and the desktop there too: Qt finds
-    those through the profile folder, and Windows keeps the answer it first gave for the rest of a process, so the
-    functions that ask Qt are replaced where they are used. A start with no --data-dir, here or in a process the test
-    starts, uses a folder of the test's own, which is never the one the Startup shortcut starts, whatever
-    GUILDBOARD_DATA_DIR the player has. A test that needs a real value sets it itself.
+    Guild Board folder or the game's log. A start with no --data-dir, here or in a process the test starts, uses a
+    folder of the test's own, whatever GUILDBOARD_DATA_DIR the player has. A test that needs a real value sets it
+    itself.
 
     All of this is held by a patch of this fixture's own, apart from the test's `monkeypatch`: a test that calls
     undo() undoes what it patched, and never gives the player's folders back. A process the test starts inherits the
-    variables, so that a core started there finds none of the player's files either, and what Windows names for it
-    (Qt's places, the Startup folder) is in the test's folder too."""
+    variables, so that a core started there finds none of the player's files either."""
     folders = pytest.MonkeyPatch()
     folders.setenv("APPDATA", str(tmp_path / "Roaming"))
     folders.setenv("LOCALAPPDATA", str(tmp_path / "Local"))
     folders.setenv("USERPROFILE", str(tmp_path / "Profile"))
     folders.setenv("GUILDBOARD_DATA_DIR", str(tmp_path / "default-data"))
-    for module in (shell_startup, shell_app):
-        folders.setattr(module, "startup_folder", lambda: tmp_path / "Startup")
-    folders.setattr(shell_startup, "desktop_folder", lambda: tmp_path / "Desktop")
     try:
         yield
     finally:

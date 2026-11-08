@@ -42,7 +42,7 @@ from guildboard.records import (
     VerificationNeeded,
 )
 from guildboard.sources import hoyolab_normalize as norm
-from guildboard.tokenstore import StoredToken, TokenStore
+from guildboard.tokenstore import REDEEM_TOKEN, StoredToken, TokenStore
 
 log = logging.getLogger(__name__)
 
@@ -76,7 +76,7 @@ LIVESTREAM_URL = "https://bbs-api-os.hoyolab.com/community/painter/wapi/circle/c
 LIVESTREAM_HEADERS = {"x-rpc-app_version": "4.0.0", "x-rpc-client_type": "4", "x-rpc-language": "en-us"}
 COOLDOWN_WAIT = 6.0  # seconds before the one retry after HoYoverse says codes are being sent too fast
 # What a redeem needs: the cookie token, and one of the two ids that name the account.
-_REDEEM_TOKEN = "cookie_token_v2"
+_REDEEM_TOKEN = REDEEM_TOKEN
 _REDEEM_IDS = ("account_id_v2", "account_mid_v2")
 # The history keys from the login: the two kinds of key HoYoverse gives, the wish history's and the game's own history
 # logs', and the answer codes that say the login itself is refused.

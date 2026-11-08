@@ -75,7 +75,7 @@ test('each Characters address names its view, and the character it is about', ()
   expect(routeOf('#characters/lan-yan')).toEqual({ page: 'characters', view: 'profile', key: 'lan-yan' })
   expect(routeOf('#/characters/sandrone?pane=story')).toEqual({ page: 'characters', view: 'profile', key: 'sandrone' })
   expect(routeOf('#/week')).toEqual({ page: 'week' })
-  expect(routeOf('#/stats')).toEqual({ page: 'stats' })
+  expect(routeOf('#/stats')).toEqual({ page: 'stats', view: 'overview' })
   expect(routeOf('')).toEqual({ page: 'board' })
 })
 
@@ -93,6 +93,11 @@ test('every route round-trips through its address, and a page still has the addr
     { page: 'characters', view: 'profile', key: 'sandrone' },
     { page: 'characters', view: 'plan', key: 'lan-yan' },
     { page: 'week' },
+    { page: 'stats', view: 'overview' },
+    { page: 'stats', view: 'months', ym: null },
+    { page: 'stats', view: 'months', ym: '2026-10' },
+    { page: 'stats', view: 'year', year: null },
+    { page: 'stats', view: 'year', year: 2026 },
     { page: 'board' },
     { page: 'ledger' },
   ]
@@ -150,4 +155,23 @@ test('every route of Friends round-trips through its address', () => {
   expect(hashOf({ page: 'friends', view: 'me' })).toBe('#/friends/me')
   expect(hashOf({ page: 'friends', view: 'friend', user: RILEY })).toBe(`#/friends/${RILEY}`)
   expect(hashOf({ page: 'friends', view: 'compare', user: RILEY })).toBe(`#/friends/${RILEY}/compare`)
+})
+
+test('stats routes', () => {
+  expect(routeOf('#/stats')).toEqual({ page: 'stats', view: 'overview' })
+  expect(routeOf('#/stats?range=7')).toEqual({ page: 'stats', view: 'overview' })
+  expect(routeOf('#/stats/months')).toEqual({ page: 'stats', view: 'months', ym: null })
+  expect(routeOf('#/stats/months/2026-10')).toEqual({ page: 'stats', view: 'months', ym: '2026-10' })
+  expect(routeOf('#/stats/months/2026-13')).toEqual({ page: 'stats', view: 'months', ym: null })
+  expect(routeOf('#/stats/months/2026-1')).toEqual({ page: 'stats', view: 'months', ym: null })
+  expect(routeOf('#/stats/year')).toEqual({ page: 'stats', view: 'year', year: null })
+  expect(routeOf('#/stats/year/2026')).toEqual({ page: 'stats', view: 'year', year: 2026 })
+  expect(routeOf('#/stats/year/26')).toEqual({ page: 'stats', view: 'year', year: null })
+  expect(routeOf('#/stats/nope')).toEqual({ page: 'stats', view: 'overview' })
+  expect(routeOf('#/stats/months/2026-10/more')).toEqual({ page: 'stats', view: 'overview' })
+  expect(hashOf({ page: 'stats', view: 'overview' })).toBe('#/stats')
+  expect(hashOf({ page: 'stats', view: 'months', ym: null })).toBe('#/stats/months')
+  expect(hashOf({ page: 'stats', view: 'months', ym: '2026-10' })).toBe('#/stats/months/2026-10')
+  expect(hashOf({ page: 'stats', view: 'year', year: null })).toBe('#/stats/year')
+  expect(hashOf({ page: 'stats', view: 'year', year: 2026 })).toBe('#/stats/year/2026')
 })

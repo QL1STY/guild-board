@@ -1,0 +1,84 @@
+/* Guild Board's own dialog pages: the interface's parchment (web/src/styles/tokens.css), plainly. */
+:root {
+  --page-dark: #E6DDCA;
+  --surface: #F7F2E7;
+  --border: #D9CDB0;
+  --ink: #3B4255;
+  --ink2: #5E6272;
+  --button: #4A5366;
+  --button-text: #F1EADB;
+  --gold-ink: #8E661B;
+  --warn-soft: #F6E3C4;
+  --warn-line: #E0BE8A;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--page-dark);
+  color: var(--ink);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+}
+
+body { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+
+p { margin: 0; }
+.steps { white-space: pre-line; color: var(--ink2); }
+.fill { flex: 1; min-height: 0; }
+
+textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  padding: 10px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: 13px/1.4 Consolas, "Cascadia Mono", monospace;
+}
+
+.list { display: flex; flex-direction: column; gap: 6px; overflow: auto; }
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.row:has(input:checked) { border-color: var(--gold-ink); }
+
+.buttons { display: flex; gap: 8px; justify-content: flex-end; }
+button {
+  min-width: 120px;
+  padding: 7px 14px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+}
+button.primary { color: var(--button-text); background: var(--button); border-color: var(--button); }
+button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: 2px; }
+
+/* The bar under the login and verification windows' pages. */
+body.bar { padding: 8px 14px; gap: 6px; justify-content: center; }
+.message {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--warn-soft);
+  border: 1px solid var(--warn-line);
+  border-radius: 6px;
+}
+.message p { flex: 1; }
+.service { display: flex; gap: 12px; align-items: center; color: var(--ink2); }
+.service p { flex: 1; }

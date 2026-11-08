@@ -12,7 +12,9 @@ If you never sign in with Discord, nothing about you reaches the developer. Ever
 - what HoYoLAB and the game's history pages return, your wishes, your ledger, your notes and your settings.
 
 Guild Board talks to HoYoverse's sites to read your account. It talks to GitHub only to look for a new version, and for Paimon.moe's
-achievement list when you ask. GitHub and HoYoverse see your IP address when that happens, as with any request.
+achievement list when you ask. It may also download public pictures from other sites, such as the Endgame headers from the
+Genshin Impact wiki on Fandom and from Reddit, and sends nothing of yours with them. GitHub, HoYoverse and those sites see your IP
+address when that happens, as with any request.
 
 ## With the online features
 

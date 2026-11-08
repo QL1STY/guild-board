@@ -26,7 +26,7 @@ A fork for other people needs its own project. It takes about 15 minutes in the 
 6. **The database.** Apply the files in `migrations/` in order, `0001` first, each once, as `postgres`: with the Supabase tools, or in the project's SQL editor.
 7. **The invite link.** Deploy `functions/invite` with `verify_jwt` off. A link is opened by a browser, which has no session to show.
 8. **The two constants.** Put the project's host in `CLOUD_HOST` in `src/guildboard/netpolicy.py`, and its publishable key in `CLOUD_KEY` in `src/guildboard/cloud/__init__.py`. They are constants and not settings, because a settings file that could redirect the session would be a hole.
-9. **Pin the host.** Put the same host in `test_the_only_addresses_outside_hoyoverse_are_the_list_the_updates_and_the_cloud`, in `tests/test_handsoff.py`.
+9. **Pin the host.** Put the same host in `test_the_only_addresses_outside_hoyoverse_are_the_list_the_updates_the_cloud_and_the_public_pictures`, in `tests/test_handsoff.py`.
 
 Then run every file in `tests/` on the project.
 

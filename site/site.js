@@ -34,7 +34,21 @@ function releaseFacts(release) {
   };
 }
 
-if (typeof module !== 'undefined' && module.exports) module.exports = { releaseFacts: releaseFacts };
+/**
+ * The item the rail marks, by its place in the rail from 0: the last section whose top has passed a line a third of the way
+ * down the window; the first while the page is at its very top, and the last once the page cannot scroll any further, where
+ * the last section is too short for its top to reach the line. `tops` are the sections' tops from the top of the window, in
+ * the rail's order; `scrolled` is how far the page is scrolled, `view` the window's height and `page` the page's.
+ */
+function markedSection(tops, scrolled, view, page) {
+  if (scrolled < 1) return 0;
+  if (scrolled + view >= page - 2) return tops.length - 1;
+  var at = 0;
+  for (var i = 0; i < tops.length; i += 1) if (tops[i] <= view / 3) at = i;
+  return at;
+}
+
+if (typeof module !== 'undefined' && module.exports) module.exports = { releaseFacts: releaseFacts, markedSection: markedSection };
 
 if (typeof document !== 'undefined') (function () {
   function all(selector) { return Array.prototype.slice.call(document.querySelectorAll(selector)); }
@@ -91,13 +105,18 @@ if (typeof document !== 'undefined') (function () {
     else icon.addEventListener('error', gone);
   });
 
-  // The hero's Board: a made-up month of check-ins, and commissions to tick.
+  // The hero's Board: a made-up month of check-ins, the whole month as the app shows it, with the rewards of the app's demo
+  // (a primogem's 20, mora's 5,000 and so on, in turn), and commissions to tick.
+  var AMOUNTS = ['20', '5,000', '3', '3', '20', '5', '10,000'];
   var days = document.getElementById('days');
+  var tile = document.getElementById('day').content.firstElementChild;
   var count = 11;
-  for (var i = 1; i <= 21; i += 1) {
-    var d = document.createElement('span');
-    d.className = 'day' + (i <= count ? ' got' : i === count + 1 ? ' now' : '');
-    d.textContent = i <= count ? '✓' : i;
+  for (var i = 1; i <= 30; i += 1) {
+    var d = tile.cloneNode(true);
+    if (i <= count) d.classList.add('got');
+    else if (i === count + 1) d.classList.add('now');
+    d.querySelector('.day-n').textContent = i;
+    d.querySelector('.day-x').textContent = '×' + AMOUNTS[(i - 1) % AMOUNTS.length];
     days.appendChild(d);
   }
   var check = document.getElementById('check');
@@ -107,9 +126,7 @@ if (typeof document !== 'undefined') (function () {
     document.getElementById('claim-note').hidden = false;
     check.classList.add('claimed', 'fresh');
     document.getElementById('check-count').textContent = '12 of 30';
-    var today = days.children[count];
-    today.className = 'day got';
-    today.textContent = '✓';
+    days.children[count].className = 'day got';
     for (var k = 0; k < 12; k += 1) {
       var s = document.createElement('i');
       s.className = 'spark';
@@ -207,18 +224,42 @@ if (typeof document !== 'undefined') (function () {
   window.addEventListener('hashchange', openAnswer);
   openAnswer();
 
-  // The rail marks the section on screen.
+  // The rail marks the section on screen (markedSection), looked at once a frame at most while the page scrolls. A click
+  // marks its item at once, and the item stays marked while the page scrolls to it: Get it, say, on a screen tall enough
+  // to show Questions as well. The visitor's next scroll moves the mark again.
   var links = all('.rail nav a');
-  if ('IntersectionObserver' in window) {
-    var seen = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        links.forEach(function (a) {
-          if (a.getAttribute('href') === '#' + e.target.id) a.setAttribute('aria-current', 'true');
-          else a.removeAttribute('aria-current');
-        });
-      });
-    }, { rootMargin: '-30% 0px -60% 0px' });
-    ['top', 'pages', 'reads', 'get', 'faq'].forEach(function (id) { seen.observe(document.getElementById(id)); });
+  var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  function mark(at) {
+    links.forEach(function (a, i) {
+      if (i === at) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
   }
+  var queued = false;
+  function look() {
+    queued = false;
+    var tops = sections.map(function (section) { return section.getBoundingClientRect().top; });
+    // The window's height as it is now: on a phone whose toolbar folds away while the page scrolls, the height the page
+    // reports for itself stays the smaller one, and the bottom would never be reached.
+    mark(markedSection(tops, window.scrollY, window.innerHeight, document.documentElement.scrollHeight));
+  }
+  var hold = null; // while a click's own scroll runs: the timer that lets go once the page has been still a moment
+  function holdOn() {
+    clearTimeout(hold);
+    hold = setTimeout(function () { hold = null; }, 200);
+  }
+  window.addEventListener('scroll', function () {
+    if (hold !== null) holdOn();
+    else if (!queued) {
+      queued = true;
+      requestAnimationFrame(look);
+    }
+  }, { passive: true });
+  links.forEach(function (a, at) {
+    a.addEventListener('click', function () {
+      mark(at);
+      holdOn();
+    });
+  });
+  look();
 })();

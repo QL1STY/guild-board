@@ -122,8 +122,6 @@ export type Settings = {
   gallery_folder: string
   /** How large the Characters pages' big pictures are fetched (the Characters design, 11.7): the originals, at most 1,536 pixels, at most 1,024. */
   picture_quality: 'high' | 'medium' | 'low'
-  /** The window's frame limit goes, from the next start: off by default. */
-  smooth_animations: boolean
   /** The currency of the Ledger's "Spent on Genshin": 'USD' (the default), 'EUR' or 'PLN'. */
   spending_currency: 'PLN' | 'EUR' | 'USD'
   /** The player's corrections to the price list, by currency and then pack id; a pack left out keeps the default. */
@@ -199,7 +197,7 @@ export type Stats = {
   chests: Columns
   /** The primogems earned, in the shape of `chests` (by the same rules), stacked by source where the ledger reaches. */
   primogem_days: PrimogemColumns
-  calendar: { weeks: number; first_day: string; cells: { day: string; minutes: number | null; level: number | null }[] }
+  calendar: { weeks: number; first_day: string; cells: { day: string; minutes: number | null; level: number | null }[]; run: { current: number; best: number } }
   /**
    * Play by weekday (Monday first) and hour on this PC's clock. A cell is the minutes of that weekday's hour on an
    * average day of the weekday, or null where the part of the period Guild Board tracked holds no such weekday; a level
@@ -856,3 +854,157 @@ export type Endgame = {
   clear: { key: string; icon: string | null; title: string; text: string; action: 'planner' | 'focus'; target: string }[]
   sync: CharSync
 }
+
+/** GET /api/stats/endgame: the Overview's Endgame card (the Stats months and Wrapped design, section 3). */
+export type EndgameHeader = {
+  /** The mode's icon and its header picture, as `/api/art/<key>` addresses; null where the art cache has none. */
+  icon: string | null
+  picture: string | null
+  /** The part of the picture to show, as fractions (x, y, width, height) of it; null shows all of it. */
+  crop: [number, number, number, number] | null
+}
+export type EndgameRank = {
+  kind: string
+  label: string
+  value: number
+  face: string | null
+  name: string | null
+  element: Element | null
+}
+export type EndgameFoe = { name: string; level: number; icon: string | null }
+export type EndgameFoeGroup = { chamber: string; half: number; foes: EndgameFoe[] }
+export type EndgameBoss = { name: string; short: string; icon: string | null; seconds: number | null }
+type EndgameBase = {
+  label: string
+  header: EndgameHeader
+  period: string
+  /** The latest result as the table says it, and the best so far. */
+  result: string
+  best: string
+  played: boolean
+  /** The header's line, ready to show. */
+  line: string
+}
+/*
+ * A null among the fields below is a field the endgame detail kept does not carry: one kept by 1.0.1, until the next sync reads
+ * the endgame again. The card shows nothing for it, never a 0; a 0 or an empty list is a real one.
+ */
+export type EndgameAbyss = EndgameBase & {
+  mode: 'abyss'
+  stars: number
+  battles: number | null
+  wins: number | null
+  chambers: { name: string; stars: number }[] | null
+  floor_shown: number
+  foes: EndgameFoeGroup[]
+  ranks: EndgameRank[] | null
+}
+export type EndgameTheater = EndgameBase & {
+  mode: 'theater'
+  month: string
+  difficulty: string
+  /** The season shown has ended: last month's, on the 1st before the new season's first try. */
+  ended: boolean
+  act: number
+  medals: boolean[] | null
+  medal_count: number | null
+  ranks: EndgameRank[] | null
+  flowers: number | null
+  seconds: number | null
+}
+export type EndgameStygian = EndgameBase & {
+  mode: 'stygian'
+  season: string
+  ended: boolean
+  difficulty: number | null
+  medal: string | null
+  seconds: number | null
+  bosses: EndgameBoss[]
+  next: { name: string; starts: string } | null
+  next_started: boolean
+  dimmed: boolean
+}
+export type EndgameMode = EndgameAbyss | EndgameTheater | EndgameStygian
+export type EndgameCardModel = { modes: EndgameMode[] }
+
+/** One month of the strip: `GET /api/stats/month` (the Months and Wrapped design, section 5). `thin` is a month with little data. */
+export type MonthChip = { ym: string; label: string; year: number; thin: boolean; current: boolean }
+export type MonthFace = { name: string; icon: string | null }
+export type MonthTile = {
+  id: 'time' | 'days' | 'primogems' | 'wishes' | 'achievements'
+  label: string
+  value: number
+  /** "minutes" for the time; the rest count what their id says. */
+  unit: string
+  /** Against the month before (the same days of it, for the month so far); null when it cannot be compared. */
+  delta: number | null
+  /** The 5-stars of the month, on the Wishes tile only. */
+  faces?: MonthFace[]
+}
+export type MonthRecord = {
+  id: 'longest_session' | 'best_primogem_day' | 'longest_run' | 'luckiest'
+  label: string
+  value: number
+  unit: string
+  when: string
+  /** The luckiest 5-star's name and picture. */
+  name?: string
+  icon?: string | null
+}
+export type MonthDay = { day: string; minutes: number | null; level: number | null }
+export type MonthAmount = { name: string; amount: number }
+export type MonthEndgame = { mode: string; label: string; result: string }
+export type MonthFive = { name: string; icon: string | null; pool: string; pity: number | null; result: FiveResult }
+export type MonthBanner = { label: string; /** The pool's own name: character, weapon, standard, chronicled or novice. */ kind: string; wishes: number }
+/** A quiet note on a part kept from a day on: its name, the day with its year, and the sentence the page shows. */
+export type MonthSince = { part: string; since: string; text: string }
+export type MonthModel = {
+  ym: string
+  label: string
+  so_far: boolean
+  compare_label: string
+  tiles: MonthTile[]
+  records: MonthRecord[]
+  /** The month's days in the Playtime calendar's levels; null where no time is kept for the month. */
+  days: MonthDay[] | null
+  sources: MonthAmount[]
+  resin: MonthAmount[]
+  endgame: MonthEndgame[]
+  pulls: { banners: MonthBanner[]; fives: MonthFive[] } | null
+  /** Quiet notes on parts that begin inside or after the month. */
+  since: MonthSince[]
+}
+export type MonthsModel = { months: MonthChip[]; month: MonthModel | null }
+
+/** One card of the Year tab: `GET /api/stats/year` (the Months and Wrapped design, section 6). `numbers` are the figures the card is made of. */
+export type YearCard = {
+  kind: string
+  /** Plain label; "· since 19 Oct" is in it where the card covers part of the year. */
+  heading: string
+  big: string
+  line: string
+  /** Addresses of the art cache or the icon cache. */
+  faces: string[]
+  numbers: Record<string, unknown>
+}
+export type YearCounter = { label: string; value: number; since: string | null }
+/**
+ * What the Wrapped picture says (spec 6.4): the player by in-game name, AR and server alone, never the UID; the character of the
+ * year; and 6 numbers, or 4 in a thin year, each with "since Apr" where it covers part of the year.
+ */
+export type YearPoster = {
+  name: string
+  ar: number | null
+  server: string
+  character: { name: string; picture: string | null } | null
+  numbers: { label: string; value: string; since: string | null }[]
+}
+export type YearModel = {
+  year: number
+  so_far: boolean
+  hero: { line: string; counters: YearCounter[]; character: { name: string; picture: string | null } | null }
+  cards: YearCard[]
+  poster: YearPoster
+}
+/** The years that have enough to tell, and the chosen one; both empty while there is nothing. */
+export type YearAnswer = { years: number[]; /** The core's own year, the one still going. */ current_year: number; year: YearModel | null }

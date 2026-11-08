@@ -117,9 +117,9 @@ test("the page shows the demo's banners, cards, savings, planner and history", a
 
   // The history: 100 rows, newest first.
   const history = page.getByTestId('pulls-history')
-  await expect(history).toContainText('History · 387 pulls kept')
+  await expect(history).toContainText('History · 445 pulls kept')
   // Over the rows, the luck tiles and the graph of the wishes each month, which have tests of their own.
-  await expect(history.getByTestId('luck-kept').getByTestId('tile-value')).toHaveText('387')
+  await expect(history.getByTestId('luck-kept').getByTestId('tile-value')).toHaveText('445')
   await expect(history.getByTestId('pulls-months')).toBeVisible()
   const rows = history.getByTestId('history-row')
   await expect(rows).toHaveCount(100)
@@ -163,7 +163,7 @@ test('Import runs on the demo and says what it found', async ({ page, api }) => 
   )
   expect((await lines()).filter((text) => /wish wish/.test(text))).toEqual([])
   // The three new wishes are kept, newest first: the history counts them.
-  await expect(page.getByTestId('pulls-history')).toContainText('History · 390 pulls kept')
+  await expect(page.getByTestId('pulls-history')).toContainText('History · 448 pulls kept')
   await expect(page.getByTestId('history-row').first()).toContainText('13 Oct')
   // The same press reads the four history logs after the wishes (the ledger design, section 0), with the login, and is running
   // until they are read.
@@ -171,7 +171,7 @@ test('Import runs on the demo and says what it found', async ({ page, api }) => 
   // A second press finds nothing more.
   await page.getByRole('button', { name: 'Import', exact: true }).click()
   await expect(line).toHaveAttribute('aria-label', withLogin('Nothing new. The history is up to date.'))
-  await expect(page.getByTestId('pulls-history')).toContainText('History · 390 pulls kept')
+  await expect(page.getByTestId('pulls-history')).toContainText('History · 448 pulls kept')
   // The page read again, as Guild Board's window is opened again, keeps what this session's import ended with, and the
   // sentence it ended with.
   await page.reload()
@@ -251,7 +251,7 @@ test('the history updates itself with the HoYoLAB login, reading no file of the 
   await expect(line).toHaveAttribute('aria-label', /^Updated automatically with your HoYoLAB login · last /)
   await api.post('/api/demo/refresh')
   await expect(line).toHaveAttribute('aria-label', 'Imported 3 new wishes. Updates automatically with your HoYoLAB login.')
-  await expect(page.getByTestId('pulls-history')).toContainText('History · 390 pulls kept')
+  await expect(page.getByTestId('pulls-history')).toContainText('History · 448 pulls kept')
   await expect.poll(async () => (await api.get<Ledger>('/api/ledger')).import.ledger.state).toBe('done')
   // Import stays; with the login a press reads with it first, and the ring says the history updates by itself.
   await page.getByRole('button', { name: 'Import', exact: true }).click()
@@ -826,7 +826,7 @@ test('a history with nothing to show yet says so in its tiles and its graph', as
   await expect(tiles.getByTestId('luck-fifty').getByTestId('tile-note')).toHaveText('No 50/50 yet.')
   await expect(tiles.getByTestId('luck-fifty').getByTestId('tile-value')).toHaveCount(0)
   await expect(tiles.getByTestId('luck-kept').getByTestId('tile-note')).toHaveText('No 5★ yet.')
-  await expect(tiles.getByTestId('luck-kept').getByTestId('tile-value')).toHaveText('387') // the wishes are still kept
+  await expect(tiles.getByTestId('luck-kept').getByTestId('tile-value')).toHaveText('445') // the wishes are still kept
   const months = page.getByTestId('pulls-months')
   await expect(months).toContainText('No wishes kept yet.')
   await expect(months.getByRole('button', { name: 'Show as a table' })).toHaveCount(0)
@@ -1059,7 +1059,7 @@ test('a row without an icon shows the sign', async ({ page }) => {
 test('Show more appends older rows', async ({ page }) => {
   const rows = page.getByTestId('history-row')
   await expect(rows).toHaveCount(100)
-  const read = page.waitForRequest((request) => request.url().includes('/api/pulls/history?before=1700000000000000288'))
+  const read = page.waitForRequest((request) => request.url().includes('/api/pulls/history?before=1700000000000000346'))
   await page.getByRole('button', { name: 'Show more' }).click()
   await read
   await expect(rows).toHaveCount(300)
@@ -1071,9 +1071,9 @@ test('Show more appends older rows', async ({ page }) => {
   await expect(qiqi).toHaveAttribute('data-rank', '5')
   await expect(qiqi).toContainText('pity 81')
   await expect(qiqi).toContainText('lost the 50/50')
-  // 387 kept: 87 are left, and the next read ends the list. Show more goes with it, and the last row takes the focus.
+  // 445 kept: 145 are left, and the next read ends the list. Show more goes with it, and the last row takes the focus.
   await page.getByRole('button', { name: 'Show more' }).click()
-  await expect(rows).toHaveCount(387)
+  await expect(rows).toHaveCount(445)
   await expect(page.getByRole('button', { name: 'Show more' })).toHaveCount(0)
   await expect(rows.last()).toBeFocused()
 })

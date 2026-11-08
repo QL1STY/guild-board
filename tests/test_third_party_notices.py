@@ -85,12 +85,36 @@ def test_the_interface_packages_are_the_ones_the_built_interface_uses():
 @pytest.mark.skipif(not (ROOT / "web" / "node_modules").is_dir(), reason="needs npm ci in web/")
 def test_what_the_tools_miss_is_written_by_hand():
     text = tool().render() if (ROOT / "web" / "node_modules").is_dir() else tool().manual_sections()
-    assert "GNU LESSER GENERAL PUBLIC LICENSE" in text and "Version 3, 29 June 2007" in text
-    assert "https://code.qt.io/cgit/pyside/pyside-setup.git/" in text  # where the shipped version's source is
+    assert "== Electron (with Chromium and Node.js) 45.2.3 ==" in text  # the version shell/package.json pins
+    assert "LICENSES.chromium.html" in text and "https://github.com/electron/electron" in text
     assert "bootloader" in text and "exception" in text
     assert "SIL OPEN FONT LICENSE Version 1.1" in text
     assert "Made Baruna" in text  # Paimon.moe's data
-    assert "LicenseRef-Qt-Commercial" not in text  # the wheel's note for those who bought Qt does not apply here
+    assert "PySide6" not in text and "Qt WebEngine" not in text  # Qt is not shipped any more
+    # Electron's ffmpeg.dll is LGPL-2.1-or-later: it is named with its licence, the source's place at the Chromium version
+    # Electron is built on, and the written offer of the source, as the Qt section made it.
+    module = tool()
+    chromium = module.chromium_version()
+    assert re.fullmatch(r"[0-9]+(\.[0-9]+){3}", chromium)
+    assert f"== ffmpeg (inside Electron) {chromium} ==" in text
+    assert "Licence: LGPL-2.1-or-later" in text and "ffmpeg.dll" in text
+    assert "https://chromium.googlesource.com/chromium/third_party/ffmpeg" in text and f"tags/{chromium}" in text
+    # Electron patches Chromium's FFmpeg before it builds ffmpeg.dll, so the patches are named as well.
+    electron = module.electron_version()
+    assert "Electron's build of Chromium's copy of FFmpeg, with Electron's patches" in " ".join(text.split("\n"))
+    assert f"https://github.com/electron/electron/tree/v{electron}/patches/ffmpeg (the patches Electron applies to it, in the order of the file .patches)" in text
+    assert ("If you cannot get the source from there, ask in an issue at https://github.com/QL1STY/guild-board/issues and the "
+            "source of the version you have will be given to you, for as long as that version is offered") in " ".join(text.split("\n"))
+    # LGPL-2.1 section 6(c) asks for an offer valid for at least three years: the ffmpeg one says so.
+    ffmpeg = " ".join(text.split("== ffmpeg (inside Electron)", 1)[1].split("== PyInstaller", 1)[0].split())
+    assert "for as long as that version is offered, and for at least three years from the release that shipped that copy." in ffmpeg
+
+
+def test_the_chromium_version_is_known_for_the_electron_that_is_pinned():
+    # Chromium's version is written beside Electron's in the tool: a new Electron without its Chromium stops the build here.
+    module = tool()
+    assert module.electron_version() in module.CHROMIUM_OF
+    assert module.chromium_version() == module.CHROMIUM_OF[module.electron_version()]
 
 
 def test_the_notices_name_no_real_person_and_no_private_notes():
@@ -104,4 +128,4 @@ def test_the_build_stops_when_the_notices_are_out_of_date():
     [line] = [line for line in build.splitlines() if "third-party-notices.py" in line and "--check" in line]
     assert "uv run --locked --no-dev --group package python" in line
     # Checked after the interface's packages are installed, before anything is packed.
-    assert build.index("npm ci --prefix web") < build.index("third-party-notices.py") < build.index("Pack Guild Board")
+    assert build.index("npm ci --prefix web") < build.index("third-party-notices.py") < build.index("Pack the core")

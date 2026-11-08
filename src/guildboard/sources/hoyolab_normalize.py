@@ -6,6 +6,7 @@ ValueError; the caller then keeps the raw response and reports the group as unre
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import replace
 from datetime import date, datetime, timedelta, timezone, tzinfo
 from typing import Any, Mapping, Sequence
@@ -29,6 +30,7 @@ from guildboard.records import (
     EndgameDetailRecord,
     EndgameMode,
     EndgameRecord,
+    EnemyRecord,
     Expedition,
     GameAccount,
     NotesRecord,
@@ -36,6 +38,7 @@ from guildboard.records import (
     OverviewRecord,
     PieceRecord,
     PropRecord,
+    RankRecord,
     Region,
     SkillRecord,
     StygianBossRecord,
@@ -506,11 +509,17 @@ def _theater(raw: Mapping[str, Any]) -> EndgameMode:
     )
 
 
+def _stygian_seasons(raw: Any) -> list[Mapping[str, Any]]:
+    """The Stygian Onslaught's seasons: the library hands over their list, and the raw archive keeps the whole answer,
+    with the list under "data"."""
+    return _items(raw.get("data") if isinstance(raw, Mapping) else raw)
+
+
 def _latest_stygian(seasons: Any) -> Mapping[str, Any] | None:
     """The newest season of the Stygian Onslaught in which the player has a record."""
     played = [
         season
-        for season in _items(seasons)
+        for season in _stygian_seasons(seasons)
         if _map(season.get("schedule")).get("is_valid", True)
         and _map(season.get("single")).get("has_data")
         and _map(_map(season.get("single")).get("best"))
@@ -554,6 +563,41 @@ _SPRITE_ELEMENTS = {
     "{SPRITE_PRESET#11007}": "Dendro",
 }
 _ADVANTAGE, _DISADVANTAGE = 1, 0  # the tag types (HardChallengeTagType)
+# The Abyss's highlights, each a list whose first item is the character it is of: HoYoLAB's key, and the kind kept.
+_ABYSS_RANKS = (
+    ("damage_rank", "strike"),
+    ("defeat_rank", "defeats"),
+    ("take_damage_rank", "taken"),
+    ("energy_skill_rank", "bursts"),
+    ("normal_skill_rank", "skills"),
+    ("reveal_rank", "played"),
+)
+# The Theater's battle statistics, each one character.
+_THEATER_RANKS = (("max_damage_avatar", "damage"), ("max_defeat_avatar", "defeats"), ("max_take_damage_avatar", "taken"))
+_SPIRE_FIRST_FLOOR = 9  # the Abyssal Moon Spire's first floor: HoYoLAB's answer holds floors 9 to 12
+_CHAMBER = re.compile(r"(\d+)-(\d+)")
+
+
+def _enemy(raw: Mapping[str, Any]) -> EnemyRecord:
+    return EnemyRecord(name=_text(raw.get("name", "")), level=_int(raw.get("level")), icon=_text(raw.get("icon") or ""))
+
+
+def _rank(kind: str, raw: Mapping[str, Any]) -> RankRecord | None:
+    """A highlight, or None when HoYoLAB names no character for it."""
+    avatar = _int(raw.get("avatar_id"))
+    if avatar <= 0:
+        return None
+    return RankRecord(kind=kind, value=_int(raw.get("value")), avatar_id=avatar, icon=_text(raw.get("avatar_icon") or ""))
+
+
+def _first(value: Any) -> Mapping[str, Any]:
+    items = _items(value)
+    return items[0] if items else {}
+
+
+def _ranks(pairs: Sequence[tuple[str, Mapping[str, Any]]]) -> tuple[RankRecord, ...]:
+    found = (_rank(kind, raw) for kind, raw in pairs)
+    return tuple(rank for rank in found if rank is not None)
 
 
 def _abyss_halves(raw: Mapping[str, Any]) -> tuple[AbyssHalfRecord, ...]:
@@ -566,16 +610,35 @@ def _abyss_halves(raw: Mapping[str, Any]) -> tuple[AbyssHalfRecord, ...]:
                 if half not in (1, 2):
                     continue
                 enemies = _items(chamber.get("top_half_floor_monster" if half == 1 else "bottom_half_floor_monster"))
+                foes = tuple(_enemy(enemy) for enemy in enemies)
                 halves.append(
                     AbyssHalfRecord(
                         chamber=name,
                         half=half,
                         stars=_int(chamber.get("star")),
                         characters=tuple(_int(avatar.get("id")) for avatar in _items(battle.get("avatars"))),
-                        enemies=tuple(_text(enemy.get("name", "")) for enemy in enemies),
+                        enemies=tuple(foe.name for foe in foes),
+                        foes=foes,
                     )
                 )
     return tuple(halves)
+
+
+def _abyss_chambers(raw: Mapping[str, Any]) -> tuple[tuple[str, int], ...]:
+    """Each chamber's stars, floor by floor. A chamber the player skipped to ("skipped_floor", such as "10-3") is not in
+    the answer's floors, and the answer's total counts its three stars: it is given those."""
+    stars: dict[tuple[int, int], int] = {}
+    for floor in _items(raw.get("floors")):
+        for chamber in _items(floor.get("levels")):
+            stars[(_int(floor.get("index")), _int(chamber.get("index")))] = _int(chamber.get("star"))
+    skipped = _CHAMBER.fullmatch(str(raw.get("skipped_floor") or "").strip())
+    if skipped:
+        last = (int(skipped.group(1)), int(skipped.group(2)))
+        for floor in range(_SPIRE_FIRST_FLOOR, last[0] + 1):
+            for chamber in (1, 2, 3):
+                if (floor, chamber) <= last:
+                    stars.setdefault((floor, chamber), 3)
+    return tuple((f"{floor}-{chamber}", count) for (floor, chamber), count in sorted(stars.items()))
 
 
 def _tag_elements(tags: Sequence[Mapping[str, Any]], kind: int) -> tuple[str, ...]:
@@ -603,30 +666,105 @@ def _stygian_boss(challenge: Mapping[str, Any]) -> StygianBossRecord:
         disadvantage=_tag_elements(tags, _DISADVANTAGE),
         team=tuple(_int(member.get("avatar_id")) for member in _items(challenge.get("teams"))),
         seconds=seconds if seconds and seconds > 0 else None,
+        icon=_text(monster.get("icon") or ""),
+        level=_int(monster.get("level")),
     )
 
 
+def _next_stygian(seasons: Any, played: Mapping[str, Any] | None) -> tuple[str, str] | None:
+    """The newest season after the one played (or any, when none was) in which the player has no record yet, as (name,
+    starts): HoYoLAB gives a season's bosses only after the first try. None when there is none."""
+    after = _season_start(played) if played is not None else -math.inf
+    waiting = [
+        season
+        for season in _stygian_seasons(seasons)
+        if _map(season.get("schedule")).get("is_valid", True)
+        and not _map(season.get("single")).get("has_data")
+        and _season_start(season) > after
+    ]
+    newest = max(waiting, key=_season_start, default=None)
+    schedule = _map(newest.get("schedule")) if newest is not None else {}
+    name, starts = _text(schedule.get("name", "")), _timestamp(schedule.get("start_time"))
+    return (name, starts) if name and starts else None
+
+
 def normalize_endgame_detail(abyss_raw: Any, theater_raw: Any, stygian_raw: Any) -> EndgameDetailRecord:
-    """What the Characters pages need of the three endgame modes beyond their summaries: the Abyss's halves with their
-    stars, teams and enemies; the Theater's difficulty, acts and end; the Stygian bosses with the elements they are weak
-    and strong to. A mode with nothing played gives empty details."""
+    """What the pages need of the three endgame modes beyond their summaries. For the Characters pages: the Abyss's
+    halves with their stars, teams and enemies; the Theater's difficulty, acts and end; the Stygian bosses with the
+    elements they are weak and strong to. For the Stats page (its design, 3.4): the Abyss's start, battles, wins,
+    chambers, enemies' levels and pictures and its highlights; the Theater's start, medals, Fantasia Flowers, time in
+    battle and highlights; the Stygian season's name, start, best time and medal, its bosses' pictures and levels, and
+    the next season when it has no record yet. A mode with nothing played gives empty details. The Stygian Onslaught's
+    answer may be the library's list of seasons or the whole answer the archive keeps."""
     abyss = _map(abyss_raw)
     abyss_played = bool(abyss.get("is_unlock")) and _int(abyss.get("total_battle_times")) > 0
     theater = _latest_theater(_map(theater_raw))
+    stat = _map(theater.get("stat")) if theater else {}
+    fights = _map(_map(theater.get("detail")).get("fight_statisic")) if theater else {}
+    medals = stat.get("get_medal_round_list")
     stygian = _latest_stygian(stygian_raw)
     single = _map(stygian.get("single")) if stygian else {}
-    difficulty = _int(_map(theater.get("stat")).get("difficulty_id")) if theater else 0
+    best = _map(single.get("best"))
+    schedule = _map(stygian.get("schedule")) if stygian else {}
+    best_seconds = _optional_int(best.get("second"))
+    difficulty = _int(stat.get("difficulty_id")) if theater else 0
     return EndgameDetailRecord(
         abyss_stars=_int(abyss.get("total_star")) if abyss_played else None,
         abyss_halves=_abyss_halves(abyss) if abyss_played else (),
         abyss_ends=_timestamp(abyss.get("end_time")) if abyss_played else None,
         theater_difficulty=_THEATER_DIFFICULTIES.get(difficulty) if theater else None,
-        theater_acts=_int(_map(theater.get("stat")).get("max_round_id")) if theater else None,
+        theater_acts=_int(stat.get("max_round_id")) if theater else None,
         theater_ends=_timestamp(_map(theater.get("schedule")).get("end_time")) if theater else None,
-        stygian_difficulty=_optional_int(_map(single.get("best")).get("difficulty")) if stygian else None,
+        stygian_difficulty=_optional_int(best.get("difficulty")) if stygian else None,
         stygian_bosses=tuple(_stygian_boss(challenge) for challenge in _items(single.get("challenge"))),
-        stygian_ends=_timestamp(_map(stygian.get("schedule")).get("end_time")) if stygian else None,
+        stygian_ends=_timestamp(schedule.get("end_time")) if stygian else None,
+        abyss_starts=_timestamp(abyss.get("start_time")) if abyss_played else None,
+        abyss_battles=_int(abyss.get("total_battle_times")) if abyss_played else 0,
+        abyss_wins=_int(abyss.get("total_win_times")) if abyss_played else 0,
+        abyss_chambers=_abyss_chambers(abyss) if abyss_played else (),
+        abyss_ranks=_ranks([(kind, _first(abyss.get(key))) for key, kind in _ABYSS_RANKS]) if abyss_played else (),
+        theater_starts=_timestamp(_map(theater.get("schedule")).get("start_time")) if theater else None,
+        theater_medals=tuple(bool(_int(medal)) for medal in medals) if isinstance(medals, list) else (),
+        theater_medal_count=_int(stat.get("medal_num")),
+        theater_flowers=_int(stat.get("coin_num")),
+        theater_seconds=_int(fights.get("total_use_time")),
+        theater_ranks=_ranks([(kind, _map(fights.get(key))) for key, kind in _THEATER_RANKS]),
+        stygian_season=_text(schedule.get("name", "")),
+        stygian_starts=_timestamp(schedule.get("start_time")) if stygian else None,
+        stygian_seconds=best_seconds if best_seconds and best_seconds > 0 else None,
+        stygian_medal=_text(best.get("icon") or ""),
+        stygian_next=_next_stygian(stygian_raw, stygian),
     )
+
+
+def _cycle_id(value: Any) -> str | None:
+    number = _optional_int(value)
+    return str(number) if number is not None and number > 0 else None
+
+
+def normalize_endgame_cycles(
+    abyss_raw: Any, theater_raw: Any, stygian_raw: Any,
+) -> list[tuple[str, str, EndgameDetailRecord]]:
+    """Every cycle the three answers hold in which the player has a record, each as (mode, the schedule's id, the detail
+    of that cycle alone): the Abyss's, and each Theater and Stygian season, the older ones too. A season with no record
+    is no cycle, nor is one without an id or an end."""
+    cycles: list[tuple[str, str, EndgameDetailRecord]] = []
+    abyss = _map(abyss_raw)
+    detail = normalize_endgame_detail(abyss, None, None)
+    ident = _cycle_id(abyss.get("schedule_id"))
+    if ident is not None and detail.abyss_ends is not None:
+        cycles.append(("abyss", ident, detail))
+    for season in _items(_map(theater_raw).get("data")):
+        detail = normalize_endgame_detail(None, {"data": [season]}, None)
+        ident = _cycle_id(_map(season.get("schedule")).get("schedule_id"))
+        if ident is not None and detail.theater_ends is not None:
+            cycles.append(("theater", ident, detail))
+    for season in _stygian_seasons(stygian_raw):
+        detail = normalize_endgame_detail(None, None, [season])
+        ident = _cycle_id(_map(season.get("schedule")).get("schedule_id"))
+        if ident is not None and detail.stygian_ends is not None:
+            cycles.append(("stygian", ident, detail))
+    return cycles
 
 
 DIARY_TIME = "%Y-%m-%d %H:%M:%S"

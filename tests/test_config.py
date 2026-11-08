@@ -84,6 +84,22 @@ def test_an_old_settings_file_with_astras_key_still_loads(tmp_path):
     assert load_settings(path) == Settings()
 
 
+def test_settings_written_by_the_qt_build_still_load(tmp_path):
+    # The Qt build kept "smooth_animations" in settings.json. The Electron build has no such setting: the key is ignored,
+    # what the file holds besides it keeps its values, and the next save leaves the key out.
+    path = tmp_path / "settings.json"
+    path.write_text(
+        json.dumps({"smooth_animations": True, "in_session_interval_min": 60, "overlay_opacity": 70, "overlay_lines": False}),
+        encoding="utf-8",
+    )
+    loaded = load_settings(path)
+    assert (loaded.in_session_interval_min, loaded.overlay_opacity, loaded.overlay_lines) == (60, 70, False)
+    assert not hasattr(loaded, "smooth_animations")
+    assert "smooth_animations" not in loaded.to_dict()
+    save_settings(path, loaded)
+    assert "smooth_animations" not in json.loads(path.read_text(encoding="utf-8"))
+
+
 def test_overlay_settings_have_their_defaults():
     settings = Settings()
     assert settings.overlay_hotkey == "Ctrl+Alt+G"

@@ -21,10 +21,11 @@ if (window.location.hash.startsWith('#/overlay')) document.documentElement.class
 
 async function start(): Promise<void> {
   // The site's browser demo (VITE_SITE_DEMO, `npm run build:site-demo`) has no core: its answers are a recording. In every other
-  // build this is false at build time, and the demo's code and data are not in the bundle.
+  // build this is false at build time, and the demo's code and data are not in the bundle. On a wide screen the page a visitor
+  // opened draws the interface in a frame that zooms with the window (sitedemo.ts), and nothing itself.
   if (import.meta.env.VITE_SITE_DEMO === '1') {
     const { startSiteDemo } = await import('./sitedemo.ts')
-    await startSiteDemo()
+    if (!(await startSiteDemo())) return
   }
   createRoot(document.getElementById('root')!).render(
     <StrictMode>

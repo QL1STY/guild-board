@@ -16,11 +16,11 @@ import { expect, test, type Core } from '../e2e/fixtures.ts'
  * 2,560 / 1,640 device pixels to a pixel). Each window has a browser of its own, since a GPU process never gives back what it took
  * for the window before, and each run starts from an empty page, Board and Stats, which show what any page costs.
  *
- * What the numbers are not: the player's window is Qt WebEngine, where the GPU work is done inside Guild Board's own process and
- * no spare renderer waits (about 40 MB of the renderers here). Here the GPU process's size is mostly the graphics driver's own
- * memory, and moves within 30 MB between two runs of the same page: what a page does in CSS does not show in it. The measure forces
- * a collection, which Edge does by itself and Qt WebEngine 140 does not, so the growth of the real window with each page change
- * never shows here. Numbers that decide anything about the window are read from Qt WebEngine (the Characters design, 11.7).
+ * What the numbers are not: the player's window is the Electron shell's (shell/), not this Edge. Here the GPU process's size is
+ * mostly the graphics driver's own memory, and moves within 30 MB between two runs of the same page: what a page does in CSS
+ * does not show in it. The measure forces a collection, which a window that runs for hours may not get, so the growth of the real
+ * window with each page change may not show here. Numbers that decide anything about the window are read from the Electron
+ * window itself (shell/measure/; the Characters design, 11.7, was written for the Qt window).
  */
 const TAG = '@memory'
 test.use({ demoNow: '2026-10-25T08:00:00+00:00', bigArt: true, weekAndEndgame: false })

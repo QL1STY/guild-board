@@ -17,8 +17,8 @@ import { rangeOf, WIDGET_TYPES, widgetType } from '../widgets/registry.ts'
 import { type Head, HeadContext, type WidgetContext, type WidgetType } from '../widgets/widget.ts'
 import { WidgetBoundary } from '../widgets/WidgetBoundary.tsx'
 import {
-  addWidget, type Arrow, arrange, columnsFor, columnsUsed, dropCell, freeCells, type Grip, gripSize, moveTo,
-  newWidgetId, type Placed, removeWidget, resizeTo, rowsFor, setSettings, sizeTag, stepWith, withPlaces,
+  addWidget, type Arrow, arrange, columnsFor, columnsUsed, dropCell, freeCells, type Grip, gridColumns, gripSize, moveTo,
+  newWidgetId, pitchOf, type Placed, removeWidget, resizeTo, rowsFor, setSettings, sizeTag, stepWith, withPlaces,
 } from './boardview.ts'
 
 /*
@@ -275,11 +275,13 @@ function WidgetFrame({
 }
 
 /**
- * The cells a place has (spec 10.2): as many columns of 168 pixels with 12-pixel gaps as its width holds, kept as the
- * window changes, and for a place with a last row (`bounded`) as many rows of 96 pixels as its height holds: the
- * overlay keeps its widgets on its display, where the Board grows downward without end. `ref` is an element as wide as
- * the place's grid, and as tall as its room, that is there from the start, so the cells are known before the layout is
- * read. A widget wider than the columns shows as wide as they are (spec 8.2).
+ * The cells a place has (spec 10.2): as many columns as its width holds at 168 pixels and a 12-pixel gap each, kept as
+ * the window changes, and for a place with a last row (`bounded`) as many rows of 96 pixels as its height holds: the
+ * overlay keeps its widgets on its display, where the Board grows downward without end. A wider window shows more
+ * columns, and on the Board the columns share what is left over, less than one more column, so that the last ends at
+ * its right edge; the overlay's stay 168 pixels wide (gridColumns). `ref` is an element as wide as the place's grid, and
+ * as tall as its room, that is there from the start, so the cells are known before the layout is read. A widget wider
+ * than the columns shows as wide as they are (spec 8.2).
  */
 function useCells(ref: RefObject<HTMLElement | null>, bounded: boolean): { columns: number; rows: number } {
   const [cells, setCells] = useState({ columns: 1, rows: Infinity })
@@ -482,6 +484,9 @@ export function useArrangement(
             const element = event.currentTarget
             const pointer = event.pointerId
             const pressed = { x: event.clientX + window.scrollX, y: event.clientY + window.scrollY }
+            // How far apart the cells are, as the grid draws them at each move: the Board's columns share its width, which
+            // a scroll bar that comes or goes on the way changes.
+            const pitch = () => pitchOf(place, grid.current!.getBoundingClientRect().width, columns)
             let client = { x: event.clientX, y: event.clientY }
             let shownFor = '' // the cell or the size last shown, so that the grid is drawn again only when it changes
             let frame = 0
@@ -492,7 +497,7 @@ export function useArrangement(
               const dy = client.y + window.scrollY - pressed.y
               if (grip !== null) {
                 if (range === undefined) return
-                const asked = gripSize(from, grip, dx, dy)
+                const asked = gripSize(from, grip, dx, dy, pitch())
                 if (`${asked.w} ${asked.h}` === shownFor) return
                 shownFor = `${asked.w} ${asked.h}`
                 g.placed = resizeTo(start, id, asked, range, columns, rows)
@@ -501,9 +506,9 @@ export function useArrangement(
                 return
               }
               if (!g.lifted && Math.hypot(dx, dy) < DRAG_PX) return // a click moves nothing
+              const cell = dropCell(from, dx, dy, pitch()) // the grid is measured before the widget's translation is set
               g.lifted = true
               element.style.translate = `${dx}px ${dy}px`
-              const cell = dropCell(from, dx, dy)
               if (`${cell.x} ${cell.y}` === shownFor) return
               shownFor = `${cell.x} ${cell.y}`
               g.placed = moveTo(start, id, cell.x, cell.y, columns, rows)
@@ -684,10 +689,11 @@ export function useArrangement(
 export type Arrangement = ReturnType<typeof useArrangement>
 
 /**
- * An arrangement's grid of fixed cells (spec 10.2), each widget at its place, listed in reading order for the keyboard
- * and screen readers; a widget whose place changes glides there. In Edit it draws the grid's free cells and where a
- * dragged widget will land, and above the grid the sheets: Add a widget, and a widget's Settings, which Escape closes.
- * Nothing is drawn until the layout is read. The grid's test id is the place's name.
+ * An arrangement's grid of cells (spec 10.2), each widget at its place, listed in reading order for the keyboard and
+ * screen readers; a widget whose place changes glides there. The Board's columns share its width, and the overlay's are
+ * 168 pixels (gridColumns). In Edit it draws the grid's free cells and where a dragged widget will land, and above the
+ * grid the sheets: Add a widget, and a widget's Settings, which Escape closes. Nothing is drawn until the layout is read.
+ * The grid's test id is the place's name.
  *
  * `show` leaves out the widgets it refuses, `extraTools` gives each widget's heading more buttons in Edit, before its
  * own, `headMark` puts a mark after a widget's name, and `opacity` fades every frame: the closed overlay shows only its
@@ -746,7 +752,7 @@ export function ArrangementGrid({
         ref={grid}
         className="board-grid"
         data-testid={place}
-        style={{ gridTemplateColumns: `repeat(${columns}, 168px)` }}
+        style={{ gridTemplateColumns: gridColumns(place, columns) }}
       >
         {draft !== null && (
           <div className="board-cells">

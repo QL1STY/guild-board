@@ -9,7 +9,7 @@ turned on, Guild Board reads two kinds of the game's files, each read-only and n
   read when its thumbnail is made or the player opens it. No subfolder is looked into.
 
 Each picture is opened through gamecache.open_shared: with the right to read alone, shared with the game, and announced
-to the audit hook the tests watch with. Qt never opens a file of the game's: it is given the bytes read here, and decodes
+to the audit hook the tests watch with. Pillow never opens a file of the game's: it is given the bytes read here, and decodes
 them only as the PNG or JPEG their first bytes say, never as a format it guesses. Nothing in the game's folders is ever
 written, moved, renamed or deleted. Thumbnails go into Guild Board's own data folder,
 gallery-thumbs, and a picture's id from the browser maps only to a file of the current listing. "Show in folder" starts
@@ -18,6 +18,7 @@ Explorer with that file selected, and that is the only program the gallery start
 from __future__ import annotations
 
 import contextlib
+import io
 import logging
 import os
 import re
@@ -46,8 +47,8 @@ THUMB_QUALITY = 82
 THUMBS_FOLDER = "gallery-thumbs"
 PARTIAL_SECONDS = 60  # a thumbnail's partial file older than this was left by a write cut short; one is written in moments
 MEDIA_TYPES = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
-# The first bytes of the two kinds of picture the game writes, and the format Qt decodes each as. Nothing else is decoded.
-SIGNATURES = ((b"\x89PNG\r\n\x1a\n", b"png"), (b"\xff\xd8\xff", b"jpeg"))
+# The first bytes of the two kinds of picture the game writes, and the format Pillow decodes each as. Nothing else is decoded.
+SIGNATURES = ((b"\x89PNG\r\n\x1a\n", "PNG"), (b"\xff\xd8\xff", "JPEG"))
 
 
 @dataclass(frozen=True)
@@ -165,8 +166,8 @@ def thumb_name(picture: Picture) -> str:
     return f"{picture.name}-{picture.bytes}-{picture.modified_ns}.jpg"
 
 
-def _format(data: bytes) -> bytes:
-    """The format Qt is to decode a picture's bytes as, by their first bytes; PictureMissing for anything but PNG or JPEG."""
+def _format(data: bytes) -> str:
+    """The format Pillow is to decode a picture's bytes as, by their first bytes; PictureMissing for anything but PNG or JPEG."""
     for signature, kind in SIGNATURES:
         if data.startswith(signature):
             return kind
@@ -174,29 +175,30 @@ def _format(data: bytes) -> bytes:
 
 
 def _jpeg(data: bytes) -> bytes:
-    """A thumbnail of the picture's bytes, THUMB_WIDTH wide, as JPEG bytes. Qt is given bytes, never a path, and the one
-    format the bytes start as: given none, Qt would guess one from the bytes, and its SVG reader then reads the files an
-    SVG names, which could be the game's or a file on another computer."""
-    from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QSize
-    from PySide6.QtGui import QImage, QImageReader
+    """A thumbnail of the picture's bytes, THUMB_WIDTH wide, as JPEG bytes. Pillow is given bytes, never a path, and the
+    one format the bytes start as: it is never left to guess one from the bytes."""
+    from PIL import Image  # not at the top: a start does not wait for it
 
-    source = QBuffer()
-    source.setData(QByteArray(data))
-    source.open(QIODevice.OpenModeFlag.ReadOnly)
-    reader = QImageReader(source, _format(data))
-    reader.setAutoDetectImageFormat(False)
-    found = reader.size()  # from the header; a JPEG is then decoded at about the thumbnail's size, not whole
-    if found.isValid() and found.width() > THUMB_WIDTH:
-        reader.setScaledSize(QSize(THUMB_WIDTH, max(1, round(found.height() * THUMB_WIDTH / found.width()))))
-    image = reader.read()
-    if image.isNull():
-        raise PictureMissing("not a picture Qt reads")
-    written = QByteArray()
-    buffer = QBuffer(written)
-    buffer.open(QIODevice.OpenModeFlag.WriteOnly)
-    if not image.convertToFormat(QImage.Format.Format_RGB32).save(buffer, "JPG", THUMB_QUALITY):
-        raise PictureMissing("the thumbnail could not be made")
-    return bytes(written.data())
+    kind = _format(data)
+    try:
+        with Image.open(io.BytesIO(data), formats=[kind]) as image:
+            width, height = image.size  # from the header; a JPEG is then decoded at about the thumbnail's size, not whole
+            target = None
+            if width > THUMB_WIDTH:
+                target = (THUMB_WIDTH, max(1, round(height * THUMB_WIDTH / width)))
+                if kind == "JPEG":
+                    image.draft("RGB", target)
+            image = image.convert("RGB")  # a thumbnail has no see-through parts
+            if target is not None:
+                image = image.resize(target, Image.Resampling.LANCZOS)
+    except Exception as problem:  # cut short, garbled (Pillow raises SyntaxError for a bad PNG chunk), or too large to be safe
+        raise PictureMissing("not a picture Pillow reads") from problem
+    written = io.BytesIO()
+    try:
+        image.save(written, "JPEG", quality=THUMB_QUALITY)
+    except Exception as problem:
+        raise PictureMissing("the thumbnail could not be made") from problem
+    return written.getvalue()
 
 
 def thumbnail(folder: Path, picture: Picture, thumbs: Path) -> Path:
@@ -414,38 +416,62 @@ DEMO_SCENES = (
 )
 
 
-def _demo_picture(index: int, width: int, height: int, kind: str) -> bytes:
-    from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QPointF, Qt
-    from PySide6.QtGui import QColor, QImage, QLinearGradient, QPainter, QPolygonF
+def _rgb(colour: str) -> tuple[int, int, int]:
+    return int(colour[1:3], 16), int(colour[3:5], 16), int(colour[5:7], 16)
 
-    sky, horizon, ground = DEMO_SCENES[index % len(DEMO_SCENES)]
-    image = QImage(width, height, QImage.Format.Format_RGB32)
-    painter = QPainter(image)
-    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    gradient = QLinearGradient(0, 0, width * 0.35, height)
-    gradient.setColorAt(0, QColor(sky))
-    gradient.setColorAt(0.55, QColor(horizon))
-    gradient.setColorAt(1, QColor(ground))
-    painter.fillRect(image.rect(), gradient)
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(255, 244, 214, 190))
+
+def _mix(one: tuple[int, int, int], other: tuple[int, int, int], at: float) -> tuple[int, int, int]:
+    return (round(one[0] + (other[0] - one[0]) * at), round(one[1] + (other[1] - one[1]) * at),
+            round(one[2] + (other[2] - one[2]) * at))
+
+
+def _demo_picture(index: int, width: int, height: int, kind: str) -> bytes:
+    """One made-up screenshot: a sky that fades to a horizon and a ground along a slanted line, a pale sun and a dark ridge."""
+    from PIL import Image, ImageDraw
+
+    sky, horizon, ground = (_rgb(colour) for colour in DEMO_SCENES[index % len(DEMO_SCENES)])
+    # The slanted gradient: a strip of the three colours (position 0 to 1 along the line, then the ground beyond it) sheared
+    # onto the picture, which draws it in one pass instead of pixel by pixel.
+    steps = 2048
+    strip = Image.new("RGB", (steps, 4))
+    pen = ImageDraw.Draw(strip)
+    for column in range(steps):
+        at = column / (steps / 2)
+        colour = _mix(sky, horizon, at / 0.55) if at < 0.55 else _mix(horizon, ground, (at - 0.55) / 0.45) if at < 1 else ground
+        pen.line([(column, 0), (column, 3)], fill=colour)
+    along_x, along_y = width * 0.35, height  # the line runs from the top left towards (0.35 width, height)
+    scale = (steps / 2) / (along_x * along_x + along_y * along_y)
+    image = strip.transform((width, height), Image.Transform.AFFINE, (along_x * scale, along_y * scale, 1, 0, 0, 2),
+                            Image.Resampling.BILINEAR)
+
+    def shape(colour: tuple[int, int, int], alpha: int, draw: Callable[[ImageDraw.ImageDraw, int], None]) -> None:
+        # Drawn twice as large and shrunk, so that the edges are smooth.
+        mask = Image.new("L", (width * 2, height * 2), 0)
+        draw(ImageDraw.Draw(mask), 2)
+        image.paste(colour, mask=mask.reduce(2).point(lambda value: value * alpha // 255))
+
     sun = 0.2 + 0.6 * ((index * 37) % 100) / 100
-    painter.drawEllipse(QPointF(width * sun, height * 0.28), height * 0.08, height * 0.08)
-    shade = QColor(ground).darker(140)
-    shade.setAlpha(225)
-    painter.setBrush(shade)
+    radius = height * 0.08
+
+    def draw_sun(pen: ImageDraw.ImageDraw, zoom: int) -> None:
+        centre = (width * sun * zoom, height * 0.28 * zoom)
+        pen.ellipse([centre[0] - radius * zoom, centre[1] - radius * zoom, centre[0] + radius * zoom, centre[1] + radius * zoom],
+                    fill=255)
+
     lift = ((index * 13) % 20) / 100
-    painter.drawPolygon(QPolygonF([
-        QPointF(0, height), QPointF(0, height * (0.72 - lift)), QPointF(width * 0.28, height * (0.58 + lift / 2)),
-        QPointF(width * 0.55, height * 0.74), QPointF(width * 0.8, height * (0.6 - lift / 2)),
-        QPointF(width, height * 0.7), QPointF(width, height),
-    ]))
-    painter.end()
-    written = QByteArray()
-    buffer = QBuffer(written)
-    buffer.open(QIODevice.OpenModeFlag.WriteOnly)
-    image.save(buffer, kind, 88)
-    return bytes(written.data())
+    ridge = (
+        (0, height), (0, height * (0.72 - lift)), (width * 0.28, height * (0.58 + lift / 2)), (width * 0.55, height * 0.74),
+        (width * 0.8, height * (0.6 - lift / 2)), (width, height * 0.7), (width, height),
+    )
+
+    def draw_ridge(pen: ImageDraw.ImageDraw, zoom: int) -> None:
+        pen.polygon([(x * zoom, y * zoom) for x, y in ridge], fill=255)
+
+    shape((255, 244, 214), 190, draw_sun)
+    shape(tuple(round(part / 1.4) for part in ground), 225, draw_ridge)  # the ground, a shade darker
+    written = io.BytesIO()
+    image.save(written, "JPEG" if kind == "JPG" else kind, quality=88)
+    return written.getvalue()
 
 
 def fill_demo_folder(folder: Path, now: datetime) -> None:

@@ -133,20 +133,22 @@ const TYPES: readonly Kind[] = [
   },
 ]
 
-/** The Board's cells are 168 pixels wide and 96 tall, with 12-pixel gaps. */
-const CELL = { w: 168, h: 96 }
-const GAP = 12
-
-/** The pixels that a size takes: a widget's frame is exactly that. */
-function pixels([w, h]: Cells): { width: number; height: number } {
-  return { width: w * CELL.w + (w - 1) * GAP, height: h * CELL.h + (h - 1) * GAP }
-}
-
-/** A frame's size in pixels, rounded. */
-async function sizeOf(frame: Locator): Promise<{ width: number; height: number }> {
-  const box = await frame.boundingBox()
-  if (box === null) throw new Error('The widget is not on the screen.')
-  return { width: Math.round(box.width), height: Math.round(box.height) }
+/**
+ * The size a frame shows at, in cells: the Board's cells are 96 pixels tall, and its columns share its width, 168
+ * pixels or a little more, with 12-pixel gaps. A frame is exactly the pixels of its cells, to half a pixel; one that is
+ * not is said in pixels.
+ */
+async function sizeOf(frame: Locator): Promise<readonly number[] | string> {
+  return frame.evaluate((section) => {
+    const grid = section.closest('[data-testid="board"]')
+    if (grid === null) return 'not on the Board'
+    const column = parseFloat(getComputedStyle(grid).gridTemplateColumns)
+    const { width, height } = section.getBoundingClientRect()
+    const w = Math.round((width + 12) / (column + 12))
+    const h = Math.round((height + 12) / 108)
+    const whole = Math.abs(width - (w * column + (w - 1) * 12)) <= 0.5 && Math.abs(height - (h * 96 + (h - 1) * 12)) <= 0.5
+    return whole ? [w, h] : `${width} × ${height} pixels, not whole cells of ${column} × 96`
+  })
 }
 
 const PROBE = 'probe'
@@ -245,7 +247,7 @@ test.describe('every widget type at its smallest and largest size keeps its cont
         await page.evaluate(async () => {
           await document.fonts.ready // the measure is of the type as it is set, not of the one it falls back to
         })
-        expect(await sizeOf(frame), `${label} size`).toEqual(pixels(size))
+        expect(await sizeOf(frame), `${label} size`).toEqual(size)
         expect(await spill(frame), label).toEqual([])
         // Every type is rebuilt on the frame: its content fits its body without scrolling, and its visual centre is drawn.
         await expect(frame.locator('[data-centre]'), `${label} visual centre`).toBeVisible()
@@ -274,7 +276,7 @@ test('Playtime with the game running keeps its content inside its frame at its s
     await page.evaluate(async () => {
       await document.fonts.ready
     })
-    expect(await sizeOf(frame), `${label} size`).toEqual(pixels(size))
+    expect(await sizeOf(frame), `${label} size`).toEqual(size)
     expect(await spill(frame), label).toEqual([])
     await expect(frame.locator('[data-centre]'), `${label} visual centre`).toBeVisible()
     expect(await misfit(frame), label).toEqual([])
@@ -303,7 +305,7 @@ test('a One timer with a count to change fits its body at every size from 2 × 2
       await page.evaluate(async () => {
         await document.fonts.ready // the measure is of the type as it is set, not of the one it falls back to
       })
-      expect(await sizeOf(frame), `${label}: size`).toEqual(pixels(size))
+      expect(await sizeOf(frame), `${label}: size`).toEqual(size)
       expect(await spill(frame), label).toEqual([])
       await expect(frame.locator('[data-centre]'), `${label}: visual centre`).toBeVisible()
       expect(await misfit(frame), label).toEqual([])
@@ -341,7 +343,7 @@ test('Pinned achievements and Commissions to look for keep a very long name, cou
       await page.evaluate(async () => {
         await document.fonts.ready
       })
-      expect(await sizeOf(frame), `${type} ${label} size`).toEqual(pixels(size))
+      expect(await sizeOf(frame), `${type} ${label} size`).toEqual(size)
       expect(await spill(frame), `${type} ${label}`).toEqual([])
       expect(await misfit(frame), `${type} ${label}`).toEqual([])
     }
@@ -445,7 +447,7 @@ test('a widget is added at the size its type starts at', async ({ page, api }) =
   for (const kind of TYPES) {
     const added = ids.filter((id) => id.startsWith(`${kind.id}-`))
     expect(added, kind.name).toHaveLength(1)
-    expect(await sizeOf(widgetById(page, added[0])), kind.name).toEqual(pixels(kind.start))
+    expect(await sizeOf(widgetById(page, added[0])), kind.name).toEqual(kind.start)
   }
 })
 
@@ -461,8 +463,8 @@ test("a saved size outside its type's range shows at the nearest size inside it"
   )
   for (const kind of TYPES) {
     await expect(widgetById(page, `${kind.id}-above`)).toBeVisible()
-    expect(await sizeOf(widgetById(page, `${kind.id}-below`)), `${kind.name} below`).toEqual(pixels(kind.min))
-    expect(await sizeOf(widgetById(page, `${kind.id}-above`)), `${kind.name} above`).toEqual(pixels(kind.max))
+    expect(await sizeOf(widgetById(page, `${kind.id}-below`)), `${kind.name} below`).toEqual(kind.min)
+    expect(await sizeOf(widgetById(page, `${kind.id}-above`)), `${kind.name} above`).toEqual(kind.max)
   }
 })
 
@@ -472,7 +474,7 @@ test("Done saves the size inside the range for a widget that was saved outside i
 }) => {
   const later = { id: 'map-1', type: 'map', w: 6, h: 4, settings: { tab: 'fishing' } }
   await setBoard(api, page, [{ id: 'clock-a', type: 'clock', w: 4, h: 3, settings: {} }, later])
-  expect(await sizeOf(widgetById(page, 'clock-a'))).toEqual(pixels([3, 2]))
+  expect(await sizeOf(widgetById(page, 'clock-a'))).toEqual([3, 2])
   await page.getByRole('button', { name: 'Edit', exact: true }).click()
   await expect(widgetById(page, 'clock-a')).toHaveAccessibleName('Clock, 3 by 2, column 1, row 1')
   await page.getByRole('button', { name: 'Done' }).click()
@@ -504,7 +506,7 @@ test('in Edit, Shift with the arrow keys goes through every size from the smalle
     await page.keyboard.press(key)
     await expect(said, key).toHaveText(sentence)
   }
-  expect(await sizeOf(clock)).toEqual(pixels([3, 1]))
+  expect(await sizeOf(clock)).toEqual([3, 1])
 })
 
 test('a widget wider than the window has columns shows as wide as the window, and wide again when the window is', async ({
@@ -520,12 +522,12 @@ test('a widget wider than the window has columns shows as wide as the window, an
     page.getByTestId('board').evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(' ').length)
   const narrow = await columns()
   expect(narrow).toBe(4) // the narrowest window has four columns
-  await expect.poll(() => sizeOf(widgetById(page, 'timers-1'))).toEqual(pixels([narrow, 5]))
-  expect(await sizeOf(widgetById(page, 'map-1'))).toEqual(pixels([narrow, 2])) // a type it does not know too
+  await expect.poll(() => sizeOf(widgetById(page, 'timers-1'))).toEqual([narrow, 5])
+  expect(await sizeOf(widgetById(page, 'map-1'))).toEqual([narrow, 2]) // a type it does not know too
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
   await page.setViewportSize({ width: 2560, height: 1440 })
-  await expect.poll(() => sizeOf(widgetById(page, 'timers-1'))).toEqual(pixels([6, 5]))
-  expect(await sizeOf(widgetById(page, 'map-1'))).toEqual(pixels([7, 2]))
+  await expect.poll(() => sizeOf(widgetById(page, 'timers-1'))).toEqual([6, 5])
+  expect(await sizeOf(widgetById(page, 'map-1'))).toEqual([7, 2])
 })
 
 test('the frame is drawn with the widget roles, so that the dark panel can set them again', async ({ page }) => {

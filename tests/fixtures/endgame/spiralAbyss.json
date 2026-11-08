@@ -1,0 +1,137 @@
+{
+ "schedule_id": 124,
+ "start_time": "1792119600",
+ "end_time": "1794797999",
+ "total_battle_times": 6,
+ "total_win_times": 6,
+ "max_floor": "12-3",
+ "reveal_rank": [
+  {"avatar_id": 10000058, "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f6c8/54f9f46e282f81dc06c45d2783e0206a.png", "value": 6, "rarity": 5},
+  {"avatar_id": 10000150, "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6a7ba976/38c83cb1b5c605921b3d773d9e5dffc2.png", "value": 6, "rarity": 5}
+ ],
+ "defeat_rank": [
+  {"avatar_id": 10000133, "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6a4458ea/fa05b88a6c300212d427cda810d52b94.png", "value": 22, "rarity": 5}
+ ],
+ "damage_rank": [
+  {"avatar_id": 10000133, "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6a4458ea/fa05b88a6c300212d427cda810d52b94.png", "value": 1352944, "rarity": 5}
+ ],
+ "take_damage_rank": [
+  {"avatar_id": 10000133, "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6a4458ea/fa05b88a6c300212d427cda810d52b94.png", "value": 14583, "rarity": 5}
+ ],
+ "normal_skill_rank": [
+  {"avatar_id": 10000107, "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/59c16c70d2cfc9e939a7835dff00be7e.png", "value": 21, "rarity": 5}
+ ],
+ "energy_skill_rank": [
+  {"avatar_id": 10000107, "avatar_icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f727/59c16c70d2cfc9e939a7835dff00be7e.png", "value": 13, "rarity": 5}
+ ],
+ "floors": [
+  {
+   "index": 11, "icon": "", "is_unlock": true, "settle_time": "0", "star": 9, "max_star": 9,
+   "levels": [
+    {
+     "index": 1, "star": 3, "max_star": 3,
+     "battles": [
+      {"index": 1, "timestamp": "1792151011", "avatars": [{"id": 10000125, "level": 90, "rarity": 5}, {"id": 10000116, "level": 90, "rarity": 5}, {"id": 10000043, "level": 90, "rarity": 4}, {"id": 10000120, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 43, "second": 31}},
+      {"index": 2, "timestamp": "1792151050", "avatars": [{"id": 10000058, "level": 90, "rarity": 5}, {"id": 10000150, "level": 90, "rarity": 5}, {"id": 10000035, "level": 90, "rarity": 5}, {"id": 10000133, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 44, "second": 10}}
+     ],
+     "top_half_floor_monster": [
+      {"name": "Oprichniki Grenadier", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/68c0b204/c169a6cb2bd58add11a86c78590a7500.png", "level": 88},
+      {"name": "Oprichniki Line Trooper", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/d8475567f09bb0ec647154a2787858b0.png", "level": 88},
+      {"name": "Close Combat Storm Landcruiser", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/20e7390df90bd72f52d8f77559628939.png", "level": 88}
+     ],
+     "bottom_half_floor_monster": [
+      {"name": "Large Hydro Slime", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f76f/c4d379e3822321f896b46cacca9843dc.png", "level": 88}
+     ]
+    },
+    {
+     "index": 2, "star": 3, "max_star": 3,
+     "battles": [
+      {"index": 1, "timestamp": "1792151076", "avatars": [{"id": 10000125, "level": 90, "rarity": 5}, {"id": 10000116, "level": 90, "rarity": 5}, {"id": 10000043, "level": 90, "rarity": 4}, {"id": 10000120, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 44, "second": 36}},
+      {"index": 2, "timestamp": "1792151103", "avatars": [{"id": 10000058, "level": 90, "rarity": 5}, {"id": 10000150, "level": 90, "rarity": 5}, {"id": 10000035, "level": 90, "rarity": 5}, {"id": 10000133, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 45, "second": 3}}
+     ],
+     "top_half_floor_monster": [
+      {"name": "Hydro Hilichurl Rogue", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f76f/2301a6acc69e02d84086e140ceba4216.png", "level": 90},
+      {"name": "Radiant Bladehorn", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/e0520ef2353f4d72d5935956e6ed023a.png", "level": 90}
+     ],
+     "bottom_half_floor_monster": [
+      {"name": "Rockfond Rifthound", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f76f/b92162efef5cc3d8bbb64c684306d614.png", "level": 90},
+      {"name": "Thundercraven Rifthound", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f76f/1beba9f0001bd7227851f506092c6772.png", "level": 90}
+     ]
+    },
+    {
+     "index": 3, "star": 3, "max_star": 3,
+     "battles": [
+      {"index": 1, "timestamp": "1792151125", "avatars": [{"id": 10000125, "level": 90, "rarity": 5}, {"id": 10000116, "level": 90, "rarity": 5}, {"id": 10000043, "level": 90, "rarity": 4}, {"id": 10000120, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 45, "second": 25}},
+      {"index": 2, "timestamp": "1792151162", "avatars": [{"id": 10000058, "level": 90, "rarity": 5}, {"id": 10000150, "level": 90, "rarity": 5}, {"id": 10000035, "level": 90, "rarity": 5}, {"id": 10000133, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 46, "second": 2}}
+     ],
+     "top_half_floor_monster": [
+      {"name": "Oprichniki Thunderblitz Gvardiya", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/6cc165ad3e726547573460a3a2e8d1e5.png", "level": 92},
+      {"name": "Oprichniki Fireblade Shock Trooper", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/18532a5ab719c13ef7f9567be2ee41d8.png", "level": 92},
+      {"name": "Radiant Antelope", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/0e80c87c71338cf281e5deffab2f4938.png", "level": 92}
+     ],
+     "bottom_half_floor_monster": [
+      {"name": "Millennial Pearl Seahorse", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/1622cdd35de224aa53b34dfab5479f3f.png", "level": 92}
+     ]
+    }
+   ],
+   "settle_date_time": null,
+   "ley_line_disorder": ["All party members gain a 60% Anemo DMG Bonus."],
+   "ley_line_disorder_upper": [],
+   "ley_line_disorder_lower": []
+  },
+  {
+   "index": 12, "icon": "", "is_unlock": true, "settle_time": "0", "star": 9, "max_star": 9,
+   "levels": [
+    {
+     "index": 1, "star": 3, "max_star": 3,
+     "battles": [
+      {"index": 1, "timestamp": "1792151267", "avatars": [{"id": 10000058, "level": 90, "rarity": 5}, {"id": 10000150, "level": 90, "rarity": 5}, {"id": 10000035, "level": 90, "rarity": 5}, {"id": 10000133, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 47, "second": 47}},
+      {"index": 2, "timestamp": "1792151299", "avatars": [{"id": 10000032, "level": 90, "rarity": 4}, {"id": 10000103, "level": 90, "rarity": 5}, {"id": 10000107, "level": 90, "rarity": 5}, {"id": 10000106, "level": 95, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 48, "second": 19}}
+     ],
+     "top_half_floor_monster": [
+      {"name": "Battle-Hardened Chimeric Volkodlak Archer", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6a7ba996/570db6743b51aeee32a6cacbe09f56c2.png", "level": 95}
+     ],
+     "bottom_half_floor_monster": [
+      {"name": "Iniquitous Baptist - Caller of Flood, Flame, and Fulmination", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f76f/d84a5a0f70d0bb3d8fec053909be9d0a.png", "level": 95},
+      {"name": "Shadowy Husk: Standard Bearer", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f76f/f91fc32d3800cb418429c8a7f7c57818.png", "level": 95},
+      {"name": "Shadowy Husk: Defender", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/67c7f76f/c2bbe6b3b87e24209ca16f1c94656934.png", "level": 95}
+     ]
+    },
+    {
+     "index": 2, "star": 3, "max_star": 3,
+     "battles": [
+      {"index": 1, "timestamp": "1792151436", "avatars": [{"id": 10000058, "level": 90, "rarity": 5}, {"id": 10000150, "level": 90, "rarity": 5}, {"id": 10000035, "level": 90, "rarity": 5}, {"id": 10000133, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 50, "second": 36}},
+      {"index": 2, "timestamp": "1792151458", "avatars": [{"id": 10000032, "level": 90, "rarity": 4}, {"id": 10000103, "level": 90, "rarity": 5}, {"id": 10000107, "level": 90, "rarity": 5}, {"id": 10000106, "level": 95, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 50, "second": 58}}
+     ],
+     "top_half_floor_monster": [
+      {"name": "Radiant Moonfly", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/699e34d9/3250eafb413adfd45738b67b4af2d86a.png", "level": 98}
+     ],
+     "bottom_half_floor_monster": [
+      {"name": "Battle-Hardened Elite Treasure Hoarder", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6966dd46/1191d2f9ca63f1227d0ae7fe4f8c1698.png", "level": 98}
+     ]
+    },
+    {
+     "index": 3, "star": 3, "max_star": 3,
+     "battles": [
+      {"index": 1, "timestamp": "1792151562", "avatars": [{"id": 10000058, "level": 90, "rarity": 5}, {"id": 10000150, "level": 90, "rarity": 5}, {"id": 10000035, "level": 90, "rarity": 5}, {"id": 10000133, "level": 90, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 52, "second": 42}},
+      {"index": 2, "timestamp": "1792151589", "avatars": [{"id": 10000032, "level": 90, "rarity": 4}, {"id": 10000103, "level": 90, "rarity": 5}, {"id": 10000107, "level": 90, "rarity": 5}, {"id": 10000106, "level": 95, "rarity": 5}], "settle_date_time": {"year": 2026, "month": 10, "day": 16, "hour": 12, "minute": 53, "second": 9}}
+     ],
+     "top_half_floor_monster": [
+      {"name": "Chimeric Winged Lion", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6a7ba996/a86ac231d1918c379ddaed88253fb99f.png", "level": 100}
+     ],
+     "bottom_half_floor_monster": [
+      {"name": "Secret Source Automaton: Overseer Device", "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/681a94fd/72c0f71bae51917eda9cef6be0a54baa.png", "level": 100}
+     ]
+    }
+   ],
+   "settle_date_time": null,
+   "ley_line_disorder": [],
+   "ley_line_disorder_upper": ["Characters' Stellar Glimmer reaction DMG increased by 75%."],
+   "ley_line_disorder_lower": ["All party members gain a 75% Cryo DMG Bonus."]
+  }
+ ],
+ "total_star": 36,
+ "is_unlock": true,
+ "is_just_skipped_floor": false,
+ "skipped_floor": "10-3"
+}

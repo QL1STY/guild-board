@@ -8,12 +8,13 @@ import type { PullsImportEvent, Settings, Status } from './types.ts'
  * hears of a change to its settings from elsewhere, and of the shell's report of its hotkey (plan 2A-4). The Pulls page
  * hears of a change to what it shows, an import's end included (the Pulls plan). The Characters pages hear of a change to
  * the focus, a plan, a tick, a card, a typed amount, the Theater's pick, or what HoYoLAB or the wiki gave (the Characters plan).
- * Settings hears of a sign-in that ended in the system browser (the online plan).
+ * Settings hears of a sign-in that ended in the system browser (the online plan). Stats' Endgame card hears that its modes'
+ * wiki entries or header pictures were kept (the Stats design, 3.2).
  */
 export const EVENTS = [
   'sync_started', 'sync_finished', 'state_changed', 'game_started', 'game_stopped', 'achievements_changed',
   'timers_changed', 'layout_changed', 'settings_changed', 'overlay_changed', 'pulls_changed', 'update_changed', 'map_changed', 'codes_changed',
-  'characters_changed', 'online_changed', 'checkin_changed',
+  'characters_changed', 'online_changed', 'checkin_changed', 'stats_changed',
 ]
 const REFRESH_EVERY_MS = 30_000
 

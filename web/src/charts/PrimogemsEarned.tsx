@@ -6,7 +6,7 @@ import type { Stats } from '../types.ts'
 import { useRoving } from '../ui/roving.ts'
 import { ChartCard } from './ChartCard.tsx'
 import { ColumnsChart } from './ColumnsChart.tsx'
-import { GROUP_COLOURS, stacked } from './stack.ts'
+import { GROUP_COLOURS, RECORD_WORDS, stacked } from './stack.ts'
 
 type Month = Stats['primogems']['months'][number]
 
@@ -16,8 +16,8 @@ const nameOf = (month: Month) => (month.current ? `${month.label} so far` : mont
 
 /**
  * Primogems earned per day, or per week over a long period. Where the game's own primogem history or the diary's detail
- * reaches, the core splits each column by source and they are stacked (the ledger plan, Task 7); days before are the
- * rises of the diary's running total, striped as estimates. A core without the ledger sends no groups: the columns stay
+ * reaches, the core splits each column by source and they are stacked (the ledger plan, Task 7); a day neither records
+ * is empty, never estimated from the diary's running total. A core without the ledger sends no groups: the columns stay
  * one colour, as they were.
  */
 export function PrimogemsPerDay({ stats }: { stats: Stats }) {
@@ -34,6 +34,7 @@ export function PrimogemsPerDay({ stats }: { stats: Stats }) {
       data={data}
       scope={stats}
       stack={stack}
+      words={RECORD_WORDS}
       subtitle={
         stack === undefined
           ? undefined
@@ -72,6 +73,7 @@ export function PrimogemsEarned({ stats }: { stats: Stats }) {
     <ChartCard
       title={TITLE}
       subtitle={SUBTITLE}
+      className="pm-card"
       tables={[
         {
           caption: 'Per month',
@@ -88,7 +90,7 @@ export function PrimogemsEarned({ stats }: { stats: Stats }) {
       ]}
     >
       <div className="pm">
-        <div>
+        <div className="pm-chart">
           <div className="pm-cols">
             {months.map((month, index) => {
               const label = `${nameOf(month)}: ${num(month.value)}`

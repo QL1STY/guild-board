@@ -5,14 +5,15 @@ import { periodTitle, type Scope } from '../pages/statsview.ts'
 import { useRoving } from '../ui/roving.ts'
 import { ChartCard } from './ChartCard.tsx'
 import { axis, labelEvery } from './scale.ts'
-import { AFTER_GAP, ESTIMATE, NO_SYNC, columnTip, columnsTable, segmentsOf, stripeOf, type Stack } from './stack.ts'
+import { SYNC_WORDS, columnTip, columnsTable, segmentsOf, stripeOf, type Stack, type Words } from './stack.ts'
 
 /**
  * A count per day, or per week over a long period, as columns: the chests opened and the primogems earned have one
  * chart. `title` is the card's, which says the unit ("Chests opened per day"); `noun` names what is counted in the
  * table ("Chests"); `scope` is what the Stats answer says of its period, for the subtitle. Only the highest column
  * carries its number. With a `stack`, each column is split by source (the ledger plan, Task 7), its legend above the
- * columns, and its tip and table list the sources; `subtitle` and `note` then say where the numbers come from.
+ * columns, and its tip and table list the sources; `subtitle` and `note` then say where the numbers come from. `words`
+ * name an empty column and a partial one: days without a sync, or for the primogems days without a record.
  */
 export function ColumnsChart({
   title,
@@ -22,6 +23,7 @@ export function ColumnsChart({
   stack,
   subtitle,
   note,
+  words = SYNC_WORDS,
 }: {
   title: string
   noun: string
@@ -30,24 +32,24 @@ export function ColumnsChart({
   stack?: Stack
   subtitle?: string
   note?: string
+  words?: Words
 }) {
   const { unit, columns, total, max_index: highest } = data
   const roving = useRoving(columns.length)
   const scale = axis(Math.max(0, ...columns.map((column) => column.value)))
   const every = labelEvery(columns.length, unit)
   const height = (value: number) => `${(value / scale.top) * 100}%`
-  const tip = (column: PrimogemColumns['columns'][number]) => columnTip(column, unit, noun, stack)
+  const tip = (column: PrimogemColumns['columns'][number]) => columnTip(column, unit, noun, stack, words)
   // A tooltip near an edge opens towards the middle, so that it stays inside the card.
   const edge = (index: number) =>
     index < columns.length / 4 ? ' tip-start' : index >= (columns.length * 3) / 4 ? ' tip-end' : ''
   const missing = columns.some((column) => column.no_data)
   const caughtUp = columns.some((column) => stripeOf(column) === 'gap')
-  const estimated = columns.some((column) => stripeOf(column) === 'est')
   return (
     <ChartCard
       title={title}
       subtitle={subtitle ?? `${periodTitle(scope)} · ${num(total)} in total`}
-      tables={[columnsTable(data, noun, stack)]}
+      tables={[columnsTable(data, noun, stack, words)]}
     >
       {stack !== undefined && (
         <div className="lg col-groups">
@@ -114,24 +116,18 @@ export function ColumnsChart({
           ))}
         </div>
       </div>
-      {(missing || caughtUp || estimated) && (
+      {(missing || caughtUp) && (
         <div className="lg col-lg">
           {missing && (
             <span>
               <i className="nd" />
-              {NO_SYNC}
+              {words.none}
             </span>
           )}
           {caughtUp && (
             <span>
               <i className="gap" />
-              {AFTER_GAP}
-            </span>
-          )}
-          {estimated && (
-            <span>
-              <i className="est" />
-              {ESTIMATE}
+              {words.partial}
             </span>
           )}
         </div>

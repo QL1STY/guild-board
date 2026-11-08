@@ -367,6 +367,25 @@ MIGRATIONS: tuple[str, ...] = (
         ) WHERE value = before_value AND game_day = before_day
     );
     """,
+    # Each cycle of the three endgame modes, as last read (the Stats design, 3.5): one row a mode and a schedule, with its
+    # start and end and the details of that cycle as JSON, which the Months and the Year read. It stays on this PC and is
+    # no sync kind: it is made of HoYoLAB's responses, and none of those ever goes to the online project (CLAUDE.md).
+    """
+    CREATE TABLE endgame_cycles (mode TEXT NOT NULL, cycle TEXT NOT NULL, starts TEXT NOT NULL, ends TEXT NOT NULL,
+        detail TEXT NOT NULL, read_at TEXT NOT NULL, PRIMARY KEY (mode, cycle));
+    """,
+    # The wiki's table holds the Tutorial entries of the three endgame modes as well (the Stats design, 3.2): their icons,
+    # the headers' fallback pictures and the Stygian difficulties' medals. SQLite cannot change a CHECK, so the table is made
+    # again with the new kind and the entries kept are copied into it. It has no trigger: the wiki is read by each PC.
+    """
+    CREATE TABLE wiki_entries_new (entry_page_id TEXT PRIMARY KEY,
+        kind TEXT NOT NULL CHECK (kind IN ('character', 'weapon', 'set', 'material', 'tutorial')),
+        name TEXT NOT NULL, data TEXT NOT NULL, version TEXT NOT NULL, read_at TEXT NOT NULL) WITHOUT ROWID;
+    INSERT INTO wiki_entries_new (entry_page_id, kind, name, data, version, read_at)
+        SELECT entry_page_id, kind, name, data, version, read_at FROM wiki_entries;
+    DROP TABLE wiki_entries;
+    ALTER TABLE wiki_entries_new RENAME TO wiki_entries;
+    """,
 )
 
 POINTS_TRIMMED_AT = 14  # the schema whose upgrade deletes most of `points`: the upgrade to it gives the room back (Store._compact)
@@ -615,7 +634,7 @@ class WikiEntryRow:
     """A wiki entry as read (its modules, as JSON), kept by the game version it was read at."""
 
     entry_page_id: str
-    kind: str         # "character", "weapon", "set" or "material"
+    kind: str         # "character", "weapon", "set", "material" or "tutorial" (an endgame mode's, for the Stats page)
     name: str
     data: dict[str, Any]
     version: str
@@ -630,6 +649,20 @@ class ArtRow:
     url: str
     file: str
     bytes: int
+    read_at: datetime
+
+
+@dataclass(frozen=True)
+class EndgameCycleRow:
+    """One cycle of an endgame mode as last read (the Stats design, 3.5), kept by its mode ("abyss", "theater" or
+    "stygian") and its cycle, the schedule's id: its start and end as UTC ISO text, the mode's details of that cycle as
+    JSON (the endgame detail's fields of the mode, without the mode's prefix), and when it was read."""
+
+    mode: str
+    cycle: str
+    starts: str
+    ends: str
+    detail: dict[str, Any]
     read_at: datetime
 
 
@@ -1226,6 +1259,33 @@ class Store:
         ).fetchall()
         return [json.loads(zlib.decompress(row[0]).decode("utf-8")) for row in rows]
 
+    def raw_bodies_of(self, grp: str, endpoint: str, limit: int | None = None) -> list[tuple[datetime, Any]]:
+        """One endpoint's raw bodies with the times they were read, oldest first: every one the archive keeps, or only
+        the newest `limit`."""
+        rows = self._conn.execute(
+            "SELECT fetched_at, body FROM raw_responses WHERE grp = ? AND endpoint = ? ORDER BY fetched_at DESC, id DESC "
+            "LIMIT ?",
+            (grp, endpoint, -1 if limit is None else limit),
+        ).fetchall()
+        return [(parse_iso(row[0]), json.loads(zlib.decompress(row[1]).decode("utf-8"))) for row in reversed(rows)]
+
+    # ------------------------------------------------------------------ endgame cycles
+    def put_endgame_cycle(self, row: EndgameCycleRow) -> None:
+        """Keep a cycle under its mode and cycle, replacing the one kept."""
+        with self._commit():
+            self._conn.execute(
+                "INSERT OR REPLACE INTO endgame_cycles (mode, cycle, starts, ends, detail, read_at) VALUES (?, ?, ?, ?, ?, ?)",
+                (row.mode, row.cycle, row.starts, row.ends, json.dumps(row.detail), iso(row.read_at)),
+            )
+
+    def endgame_cycles(self, mode: str | None = None) -> list[EndgameCycleRow]:
+        """The cycles kept, of one mode or of all, in the order they end."""
+        where, params = ("WHERE mode = ? ", (mode,)) if mode is not None else ("", ())
+        rows = self._conn.execute(
+            f"SELECT mode, cycle, starts, ends, detail, read_at FROM endgame_cycles {where}ORDER BY ends, mode, cycle", params
+        ).fetchall()
+        return [EndgameCycleRow(r[0], r[1], r[2], r[3], json.loads(r[4]), parse_iso(r[5])) for r in rows]
+
     # ------------------------------------------------------------------ points
     def add_points(self, run_id: int | None, taken_at: datetime, game_day: date, points: Iterable[Point]) -> None:
         """Keep the points that are news: a key's value that is the one its newest row holds, on the same game day, is
@@ -1397,6 +1457,12 @@ class Store:
             (iso(start), iso(end)),
         ).fetchall()
         return [SessionRow(r[0], parse_iso(r[1]), parse_iso(r[2]), bool(r[3])) for r in rows]
+
+    def first_session(self) -> SessionRow | None:
+        row = self._conn.execute(
+            "SELECT id, started_at, ended_at, started_before_tool FROM sessions ORDER BY started_at, id LIMIT 1"
+        ).fetchone()
+        return SessionRow(row[0], parse_iso(row[1]), parse_iso(row[2]), bool(row[3])) if row else None
 
     def last_session(self) -> SessionRow | None:
         row = self._conn.execute(

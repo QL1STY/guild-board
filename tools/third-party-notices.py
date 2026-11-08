@@ -7,7 +7,7 @@ Run it from the repository, with the Python packages synced (uv sync) and the in
 
 The Python packages are those uv.lock locks for Guild Board itself (its dependencies and theirs, not the dev or package
 groups), read from the installed copies with importlib.metadata. The interface's are the packages of web/package-lock.json that
-are not dev dependencies, read from web/node_modules. What those cannot say (Qt, Chromium, PyInstaller's bootloader, Paimon.moe's
+are not dev dependencies, read from web/node_modules. What those cannot say (Electron and Chromium, PyInstaller's bootloader, Paimon.moe's
 data) is written below in `manual_sections`. The output depends on nothing else, so it is the same on any PC."""
 from __future__ import annotations
 
@@ -24,12 +24,9 @@ ROOT = Path(__file__).resolve().parents[1]
 LOCK = ROOT / "uv.lock"
 WEB = ROOT / "web"
 OUT = ROOT / "THIRD-PARTY-NOTICES.txt"
-LICENCES = ROOT / "packaging" / "licenses"
+SHELL = ROOT / "shell"
 PAIMON = ROOT / "src" / "guildboard" / "reference" / "LICENSE-paimon-moe.txt"
 
-# Qt for Python's four wheels. Their own licence file says only what a buyer of a commercial Qt licence may do, which is
-# not how Guild Board uses them; they are described in `manual_sections` instead.
-QT_PACKAGES = ("pyside6", "pyside6-essentials", "pyside6-addons", "shiboken6")
 LICENCE_FILE = re.compile(r"(?i)^(licen[cs]es?|copying|notice)([._-].*)?$")
 RULE = "=" * 78
 
@@ -92,8 +89,7 @@ def python_entry(name: str) -> Entry:
 
 
 def python_entries() -> list[Entry]:
-    names = [name for name in locked_runtime_packages() if _same(name) not in QT_PACKAGES]
-    return [python_entry(name) for name in names]
+    return [python_entry(name) for name in locked_runtime_packages()]
 
 
 def node_entries(web: Path = WEB) -> list[Entry]:
@@ -113,60 +109,59 @@ def node_entries(web: Path = WEB) -> list[Entry]:
     return sorted(found, key=lambda entry: entry.name.lower())
 
 
-def _installed(name: str) -> str:
-    return metadata.version(name)
+def electron_version() -> str:
+    """The Electron that shell/package.json pins, which the installed copy carries."""
+    return json.loads((SHELL / "package.json").read_text("utf-8"))["devDependencies"]["electron"]
+
+
+# The Chromium that each Electron is built on (process.versions.chrome of that Electron), written out so that the file depends
+# on nothing installed. A new Electron needs its line, and the build stops here until it has one.
+CHROMIUM_OF = {"45.2.3": "156.0.8078.80"}
+
+
+def chromium_version() -> str:
+    electron = electron_version()
+    if electron not in CHROMIUM_OF:
+        raise SystemExit(f"Electron {electron} is not in CHROMIUM_OF of tools/third-party-notices.py. Add the Chromium it is built on.")
+    return CHROMIUM_OF[electron]
 
 
 def manual_sections() -> str:
     """What the package metadata cannot say. Each part opens as the generated ones do: `== name version ==`."""
-    qt = _installed("pyside6")
-    tag = f"v{qt}"
-    lgpl = _clean((LICENCES / "LGPL-3.0.txt").read_text("utf-8"))
-    gpl = _clean((LICENCES / "GPL-3.0.txt").read_text("utf-8"))
-    qt_heads = "\n".join(f"== {name} {_installed(name)} ==" for name in ("PySide6", "PySide6-Essentials", "PySide6-Addons", "shiboken6"))
     parts = [
-        f"""{qt_heads}
-Licence: LGPL-3.0-only (the packages are offered under LGPL-3.0, GPL-2.0 or GPL-3.0; Guild Board uses them under LGPL-3.0)
+        f"""== Electron (with Chromium and Node.js) {electron_version()} ==
+Licence: MIT, with the licences of the code that Chromium and Node.js contain
 
-Qt for Python (PySide6 and shiboken6) and the Qt libraries inside them, version {qt}, are free software under the GNU Lesser
-General Public License, version 3. Guild Board uses them unchanged. The installed copy keeps them as separate files, the
-DLLs and Python modules in the program's own folder (the "_internal" folder beside guildboard-app.exe), so that you can
-replace them with another build of the same libraries.
+Guild Board's window is Electron, used unchanged. Electron is under the MIT licence: Copyright (c) Electron contributors,
+Copyright (c) 2013-2020 GitHub Inc. It is built on Chromium and Node.js, which contain third-party code under many licences.
+Electron carries those licences with it: the files "LICENSE" and "LICENSES.chromium.html" lie in the installed copy's own
+folder, beside guildboard-app.exe, and are kept there. The source of the version shipped:
+  https://github.com/electron/electron (the tag v{electron_version()})
+Chromium itself is under the BSD 3-clause licence: Copyright 2015 The Chromium Authors. Its text is in the Chromium source at
+https://chromium.googlesource.com/chromium/src/+/main/LICENSE""",
+        f"""== ffmpeg (inside Electron) {chromium_version()} ==
+Licence: LGPL-2.1-or-later
 
-The exact source of the version shipped:
-  PySide6 and shiboken6 {qt}:  https://code.qt.io/cgit/pyside/pyside-setup.git/ (the tag {tag})
-  Qt, the libraries inside the wheels:  https://download.qt.io/official_releases/qt/ (the Qt release that the wheels' version
-  matches), and https://code.qt.io/cgit/qt/ for the repositories
+Electron carries the media library ffmpeg as the file ffmpeg.dll, beside guildboard-app.exe in the installed copy's own folder.
+It is Electron's build of Chromium's copy of FFmpeg, with Electron's patches, free software under the GNU Lesser General Public
+License, version 2.1 or later. Guild Board uses it unchanged, as a separate file, so that you can replace it with another build
+of the same library.
+
+The exact source of the version shipped is Chromium's copy of FFmpeg, at the Chromium that Electron {electron_version()} is built on, {chromium_version()},
+with the patches that Electron applies to it:
+  https://chromium.googlesource.com/chromium/third_party/ffmpeg (the commit that Chromium's file DEPS names, below)
+  https://chromium.googlesource.com/chromium/src/+/refs/tags/{chromium_version()}/DEPS (the DEPS of Chromium {chromium_version()})
+  https://github.com/electron/electron/tree/v{electron_version()}/patches/ffmpeg (the patches Electron applies to it, in the order of the file .patches)
+  https://ffmpeg.org/ for FFmpeg itself
 If you cannot get the source from there, ask in an issue at https://github.com/QL1STY/guild-board/issues and the source of the
-version you have will be given to you, for as long as that version is offered.
+version you have will be given to you, for as long as that version is offered, and for at least three years from the release
+that shipped that copy.
 
-Qt is a trademark of The Qt Company Ltd. The Qt wheels also carry a note for holders of a commercial Qt licence. It does not
-apply to Guild Board.
-
-The licence's text follows, and the text of the GNU General Public License, version 3, which it refers to.
-
-{lgpl}
-
-{RULE}
-GNU General Public License, version 3 (referred to by the GNU Lesser General Public License above)
-{RULE}
-
-{gpl}""",
-        f"""== Qt WebEngine (inside PySide6-Addons) {_installed("pyside6-addons")} ==
-Licence: LGPL-3.0-only, with the licences of the third-party code that Chromium contains
-
-Guild Board's window shows its interface with Qt WebEngine, which is built on Chromium. It is used unchanged and kept as
-separate files, as described above for Qt. The wheel does not carry a file of Chromium's own notices, so they are not repeated
-here. The notices for the Chromium code in Qt WebEngine, and for the third-party code in it, are in the Qt source and in
-Qt's documentation:
-  https://doc.qt.io/qt-6/qtwebengine-licensing.html
-  https://code.qt.io/cgit/qt/qtwebengine-chromium.git/ (the files "LICENSE" and the "third_party" folders)
-Chromium itself is under the BSD 3-clause licence: Copyright 2015 The Chromium Authors. The licence's text is in the Chromium
-source at https://chromium.googlesource.com/chromium/src/+/main/LICENSE""",
+The licence's text is in the FFmpeg source (COPYING.LGPLv2.1) and in the file LICENSES.chromium.html beside guildboard-app.exe.""",
         """== PyInstaller (bootloader) ==
 Licence: GPL-2.0-or-later, with an exception for programs it bundles
 
-The installed copy is packed with PyInstaller, which puts its bootloader into guildboard-app.exe and guildboard-tray.exe. The
+The installed copy packs its core with PyInstaller, which puts its bootloader into guildboard-core.exe. The
 bootloader is under the GNU General Public License, version 2 or later, with a special exception: it may be used to bundle and
 distribute a program under any licence, and the bundled program is not changed by it. Guild Board is such a program, so the
 GPL does not reach it. PyInstaller's licence is at https://github.com/pyinstaller/pyinstaller/blob/develop/COPYING.txt""",
@@ -201,7 +196,7 @@ the version, the licence and the licence's text. This file is written by tools/t
 Guild Board is an unofficial, fan-made tool. It is not affiliated with or endorsed by HoYoverse or COGNOSPHERE. Genshin
 Impact is a trademark of its owner.
 
-Part 1: Qt, Chromium, PyInstaller, Paimon.moe's data and the typeface
+Part 1: Electron, Chromium, PyInstaller, Paimon.moe's data and the typeface
 Part 2: Python packages
 Part 3: the interface's packages
 """
@@ -209,7 +204,7 @@ Part 3: the interface's packages
     part3 = ("\n\n" + RULE + "\n").join(_block(entry) for entry in node_entries())
     sections = [
         intro.rstrip("\n"),
-        "PART 1: QT, CHROMIUM, PYINSTALLER, PAIMON.MOE AND THE TYPEFACE\n\n" + manual_sections(),
+        "PART 1: ELECTRON, CHROMIUM, PYINSTALLER, PAIMON.MOE AND THE TYPEFACE\n\n" + manual_sections(),
         "PART 2: PYTHON PACKAGES\n\n" + part2,
         "PART 3: THE INTERFACE'S PACKAGES\n\n" + part3,
     ]

@@ -277,10 +277,14 @@ def test_release_refuses_a_dirty_tree_and_runs_the_tests_before_publishing():
         "Stop-With $onAnother", "Set the version", "uv lock", "pytest", "npm ci --prefix web", "npm test --prefix web",
         "git commit", "build-installer.ps1", "New-DraftRelease", "Publish-SignedDraft", "git tag",
     )
-    # Nothing but the files the script changes itself may differ from the last commit: the version in its two places,
-    # and the lock file, which holds it too.
+    # Nothing but the files the script changes itself may differ from the last commit: the version in the Python package's
+    # two places and in the shell's package, and the lock files, which hold it too.
     [allowed] = re.findall(r"^\$versionFiles = @\((.*)\)$", script, flags=re.MULTILINE)
-    assert sorted(re.findall(r"'([^']+)'", allowed)) == ["pyproject.toml", "src/guildboard/__init__.py", "uv.lock"]
+    assert sorted(re.findall(r"'([^']+)'", allowed)) == [
+        "pyproject.toml", "shell/package-lock.json", "shell/package.json", "src/guildboard/__init__.py", "uv.lock",
+    ]
+    # The shell's version is set with the others, so that a later release does not ship a shell that says 2.0.0.
+    assert "shell\\package.json" in script and "shell\\package-lock.json" in script
     # The tests run as steps that stop the release, in the build's own environment, never in the .venv a running Guild
     # Board may use.
     for step in ("pytest", "npm test --prefix web"):

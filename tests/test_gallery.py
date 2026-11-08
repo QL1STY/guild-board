@@ -1,6 +1,7 @@
 """The screenshot gallery (the ledger design, section 7; the plan's Task 10)."""
 from __future__ import annotations
 
+import io
 import os
 import sys
 from datetime import datetime
@@ -8,6 +9,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
 
 from guildboard import gallery
 from guildboard.api.app import create_app
@@ -159,10 +161,8 @@ def test_thumbnails_go_to_the_data_folder_and_are_reused(tmp_path, monkeypatch):
     monkeypatch.setattr(gamecache, "open_shared", lambda path: opened.append(path) or real(path))
     made = thumbnail(folder, picture, thumbs)
     assert made.parent == thumbs and made.suffix == ".jpg"
-    from PySide6.QtGui import QImage
-
-    small = QImage.fromData(made.read_bytes())
-    assert (small.width(), small.height()) == (480, 270)
+    with Image.open(made) as small:
+        assert small.format == "JPEG" and small.size == (480, 270)
     assert thumbnail(folder, picture, thumbs) == made
     assert opened == [folder / picture.name]  # made once, then reused
     # A picture that is gone loses its thumbnail; the folder of pictures is not touched.
@@ -212,7 +212,7 @@ def test_a_failed_thumbnail_write_leaves_no_partial_file(tmp_path, monkeypatch):
 
 
 def svg_drawing(picture: Path) -> bytes:
-    """An SVG whose one element draws the picture at `picture`: Qt's SVG reader follows the link and reads that file."""
+    """An SVG whose one element draws the picture at `picture`: an SVG reader follows the link and reads that file."""
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="640" height="360">'
         f'<image width="640" height="360" xlink:href="{picture.as_posix()}"/></svg>'
@@ -220,7 +220,7 @@ def svg_drawing(picture: Path) -> bytes:
 
 
 def minimal_pdf() -> bytes:
-    """A PDF of one empty page, which Qt's PDF reader decodes as a picture."""
+    """A PDF of one empty page, which a PDF reader decodes as a picture."""
     objects = (
         b"<< /Type /Catalog /Pages 2 0 R >>", b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
         b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 100] >>",
@@ -238,7 +238,7 @@ def minimal_pdf() -> bytes:
 
 
 def test_a_picture_that_is_not_png_or_jpeg_is_never_decoded(tmp_path):
-    # A file named like a screenshot can hold anything. Given no format, Qt guesses one from the bytes: its SVG reader
+    # A file named like a screenshot can hold anything. Given no format, a decoder may guess one from the bytes (Qt's did): an SVG reader
     # then reads the files the SVG names (a picture elsewhere here; one of the game's files, or a file on another
     # computer, which opens a connection to it), and its PDF reader decodes a PDF. Only PNG and JPEG bytes are decoded,
     # each as what its first bytes say, whatever the file's name.
@@ -257,11 +257,35 @@ def test_a_picture_that_is_not_png_or_jpeg_is_never_decoded(tmp_path):
         with pytest.raises(PictureMissing):
             thumbnail(folder, listing[name], thumbs)
     assert not thumbs.exists() or list(thumbs.iterdir()) == []  # nothing was written for them
-    from PySide6.QtGui import QImage
-
     for name in ("20261012211405.png", "20261012211406.png"):
-        small = QImage.fromData(thumbnail(folder, listing[name], thumbs).read_bytes())
-        assert (small.width(), small.height()) == (480, 270)
+        with Image.open(thumbnail(folder, listing[name], thumbs)) as small:
+            assert small.format == "JPEG" and small.size == (480, 270)
+
+
+def test_a_picture_cut_short_or_garbled_is_a_missing_picture_not_a_crash(tmp_path):
+    # A crash leaves zeros after the data of a screenshot, or the header of the chunk that follows it garbled. Pillow raises
+    # a SyntaxError for the second ("broken PNG file"), and the route must answer as for any other picture it cannot read.
+    folder = tmp_path / "home" / "game" / "ScreenShot"
+    folder.mkdir(parents=True)
+    noise = Image.frombytes("RGB", (800, 450), os.urandom(800 * 450 * 3))  # a PNG of several data chunks
+    written = io.BytesIO()
+    noise.save(written, "PNG")
+    whole = written.getvalue()
+    second = whole.index(b"IDAT", whole.index(b"IDAT") + 4)  # the second data chunk's type: its header is garbled
+    garbled = whole[:second - 4] + b"\x00\xff\x00\xff\xff\x01\x02\x03" + whole[second + 4:]
+    cut = whole[:len(whole) // 2]
+    zeros = whole[:len(whole) // 2] + b"\x00" * (len(whole) // 2)
+    jpeg = picture_bytes("JPG", 1280, 720)
+    for name, data in (("20261012211401.png", garbled), ("20261012211402.png", cut), ("20261012211403.png", zeros),
+                       ("20261012211404.jpg", jpeg[:len(jpeg) // 2] + b"\x00" * 40)):
+        (folder / name).write_bytes(data)
+    thumbs = tmp_path / "data" / "gallery-thumbs"
+    listing = {picture.id: picture for picture in list_pictures(folder)}
+    assert len(listing) == 4
+    for name in listing:
+        with pytest.raises(PictureMissing):
+            thumbnail(folder, listing[name], thumbs)
+    assert not thumbs.exists() or list(thumbs.iterdir()) == []
 
 
 def test_folder_found_next_to_the_data_folder(tmp_path, monkeypatch):

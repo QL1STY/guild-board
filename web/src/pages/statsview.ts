@@ -71,7 +71,7 @@ function trendOf(values: number[], text: (amount: number) => string): TileView['
   return { values, tip: `Lowest ${text(Math.min(...values))}, highest ${text(Math.max(...values))}` }
 }
 
-function hoursAndMinutes(minutes: number): TileView['figure'] {
+export function hoursAndMinutes(minutes: number): TileView['figure'] {
   const total = Math.max(0, Math.round(minutes))
   const rest = total % 60
   if (total < 60) return [{ text: String(rest) }, { text: 'min', small: true }]

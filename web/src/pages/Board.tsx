@@ -7,9 +7,9 @@ import { ArrangementGrid, HELP, useArrangement } from './Arrangement.tsx'
 
 /**
  * The Board (spec 12.4 and 13), the page Guild Board opens on: the widgets the player chose, each at its place in a
- * grid of fixed cells over the window's whole width (look pass spec 10.2), listed in reading order for the keyboard and
- * screen readers. A widget whose place changes glides there. Its changes to progress and timers go through the same
- * undo history as the Achievements page's, and the note names the newest of them with Undo.
+ * grid of cells over the window's whole width, its columns sharing the width (look pass spec 10.2), listed in reading
+ * order for the keyboard and screen readers. A widget whose place changes glides there. Its changes to progress and
+ * timers go through the same undo history as the Achievements page's, and the note names the newest of them with Undo.
  *
  * Its arrangement and Edit are the Board's place (Arrangement.tsx): Edit works on a copy of the arrangement this window
  * shows, Done saves it and Cancel drops it.

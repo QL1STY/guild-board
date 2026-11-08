@@ -1,4 +1,4 @@
-import type { Widget } from '../types.ts'
+import type { Place, Widget } from '../types.ts'
 import type { Size, SizeRange, WidgetType } from '../widgets/widget.ts'
 
 /*
@@ -8,7 +8,10 @@ import type { Size, SizeRange, WidgetType } from '../widgets/widget.ts'
 
 /** The core keeps at most this many cells a side (layouts.py), which holds a type this version does not know. */
 const MAX_CELLS = 8
-/** The Board's grid, as board.css draws it: cells 168 pixels wide and 96 tall, with gaps of 12. */
+/**
+ * The grid of the Board and the overlay, as board.css and gridColumns draw it: cells 96 pixels tall with gaps of 12, in
+ * columns 168 pixels wide on the overlay and at least that on the Board, whose columns share its width (columnWidth).
+ */
 const CELL_WIDTH = 168
 const CELL_HEIGHT = 96
 const GAP = 12
@@ -64,9 +67,49 @@ export function sizeWithin(range: SizeRange | undefined, size: Size, columns: nu
   return { w: Math.max(1, Math.min(w, columns)), h: Math.max(1, h) }
 }
 
-/** How many columns a Board `width` pixels wide has: as many cells of 168 pixels with 12-pixel gaps as fit, at least one. */
+/**
+ * How many columns a place `width` pixels wide has: as many cells of 168 pixels with 12-pixel gaps as fit, at least one.
+ * On the Board they then share what is left over (columnWidth); on the overlay it stays at the right.
+ */
 export function columnsFor(width: number): number {
   return Math.max(1, Math.floor((width + GAP) / (CELL_WIDTH + GAP)))
+}
+
+/**
+ * How wide each column of a Board `width` pixels wide is: its `columns`, as many as columnsFor gives unless the count it
+ * is drawn with is given, share the width, the gaps aside, so that the last column ends at the Board's right edge, where
+ * the top bar ends. A wider window shows more columns, and what is left over, less than one more column, goes to the
+ * columns: each is at least 168 pixels wide, and less than 168 + 180 / columns.
+ */
+export function columnWidth(width: number, columns = columnsFor(width)): number {
+  return (width - (columns - 1) * GAP) / columns
+}
+
+/** How far apart neighbouring cells are, across and down: a column's width and a row's height, each with its gap. */
+export type Pitch = { x: number; y: number }
+
+/** The overlay's cells (stage 2A spec 14): 168 pixels wide and 96 tall, with gaps of 12, however wide the overlay is. */
+export const FIXED_PITCH: Pitch = { x: CELL_WIDTH + GAP, y: CELL_HEIGHT + GAP }
+
+/** How far apart the cells of a Board `width` pixels wide are: its columns share its width (columnWidth), and rows are 96. */
+export function boardPitch(width: number, columns = columnsFor(width)): Pitch {
+  return { x: columnWidth(width, columns) + GAP, y: CELL_HEIGHT + GAP }
+}
+
+/**
+ * A place's columns, as its grid draws them (grid-template-columns): the Board's share its width, so they fill it to
+ * its right edge, and the overlay's are 168 pixels each, its widgets the same size on any display (spec 14).
+ */
+export function gridColumns(place: Place, columns: number): string {
+  return place === 'board' ? `repeat(${columns}, minmax(0, 1fr))` : `repeat(${columns}, ${CELL_WIDTH}px)`
+}
+
+/**
+ * How far apart a place's cells are, when its grid is `width` pixels wide and drawn with `columns` columns: what a drag
+ * or a grip turns the pointer's pixels into cells with (dropCell, gripSize).
+ */
+export function pitchOf(place: Place, width: number, columns: number): Pitch {
+  return place === 'board' ? boardPitch(width, columns) : FIXED_PITCH
 }
 
 /**
@@ -297,21 +340,22 @@ export function stepWith(
 
 /**
  * Where a widget that started at `from` lands when the pointer has taken it `dx` and `dy` pixels (spec 10.5): the cell
- * nearest its top-left corner, which keeps its place under the pointer. moveTo keeps it inside the Board.
+ * nearest its top-left corner, which keeps its place under the pointer, by the place's own `pitch` (pitchOf). moveTo
+ * keeps it inside the Board.
  */
-export function dropCell(from: { x: number; y: number }, dx: number, dy: number): { x: number; y: number } {
-  return { x: from.x + Math.round(dx / (CELL_WIDTH + GAP)), y: from.y + Math.round(dy / (CELL_HEIGHT + GAP)) }
+export function dropCell(from: { x: number; y: number }, dx: number, dy: number, pitch: Pitch): { x: number; y: number } {
+  return { x: from.x + Math.round(dx / pitch.x), y: from.y + Math.round(dy / pitch.y) }
 }
 
 /**
  * The size a grip asks for when the pointer has gone `dx` and `dy` pixels from where it pressed (spec 10.6): a cell
- * wider or taller for each cell the pointer went in the grip's directions, from the size at the press. resizeTo keeps
- * it within the type and the columns.
+ * wider or taller for each cell the pointer went in the grip's directions, by the place's own `pitch` (pitchOf), from
+ * the size at the press. resizeTo keeps it within the type and the columns.
  */
-export function gripSize(size: Size, grip: Grip, dx: number, dy: number): Size {
+export function gripSize(size: Size, grip: Grip, dx: number, dy: number, pitch: Pitch): Size {
   return {
-    w: size.w + (grip === 's' ? 0 : Math.round(dx / (CELL_WIDTH + GAP))),
-    h: size.h + (grip === 'e' ? 0 : Math.round(dy / (CELL_HEIGHT + GAP))),
+    w: size.w + (grip === 's' ? 0 : Math.round(dx / pitch.x)),
+    h: size.h + (grip === 'e' ? 0 : Math.round(dy / pitch.y)),
   }
 }
 

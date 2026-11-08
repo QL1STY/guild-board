@@ -108,7 +108,6 @@ class Settings:
     gallery_enabled: bool = False  # the screenshot gallery (the ledger design, section 7): off, nothing of it is read
     gallery_folder: str = ""  # the game's ScreenShot folder, found or pasted; "" before either
     picture_quality: str = "high"  # how large the Characters pages' big pictures are fetched: one of PICTURE_QUALITIES (the Characters design, 11.7)
-    smooth_animations: bool = False  # the window's frame limit goes, from the next start (configure_qt)
     spending_currency: str = "USD"  # the Ledger's prices: one of CURRENCIES
     # The player's corrections to the price list, by currency and then pack id (the ledger design, section 6).
     spending_prices: dict[str, dict[str, float]] = field(default_factory=dict)

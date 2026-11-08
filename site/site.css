@@ -17,6 +17,7 @@
   --ink: #3B4255; --ink2: #5E6272; --muted: #6A6659; --fill: #A6751F; --gold-ink: #8E661B; --track: #DDD3BB;
   --done: #5F9550; --good: #2E6B1F; --resin: #4F78B8; --button: #4A5366; --button-text: #F1EADB;
   --warn-soft: #F6E3C4; --warn-line: #E0BE8A; --spent: #9A4A2A; --focus: #4470B4;
+  --icon: #B8923F; --outline: #8A806B; --five-wash: rgba(232, 190, 100, .28); --good-soft: #E3EBD6;
   --sans: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
   --mono: Consolas, 'Cascadia Mono', ui-monospace, monospace;
   --rail-w: 188px;
@@ -51,68 +52,117 @@ code { padding: 1px 5px; border-radius: 4px; background: var(--tint); font: 500 
 /* The hero: words on the left, a working Board on the right. */
 .hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 44px; align-items: center; }
 .hero h1 { font-size: clamp(40px, 5.4vw, 66px); line-height: 1.02; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
-.hero p { margin-top: 18px; max-width: 34em; color: var(--ink2); font-size: 19px; }
-.acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.pitch { container: pitch / inline-size; }
+.pitch p { margin-top: 18px; max-width: 34em; color: var(--ink2); font-size: 19px; }
+/* A row of buttons of one size, as wide as the widest and as tall as the tallest; where the words have no room for the row,
+   one under the other. */
+.acts { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; grid-auto-rows: 1fr; gap: 10px; width: fit-content; max-width: 100%; margin-top: 26px; }
+@container pitch (max-width: 30em) { .acts { grid-auto-flow: row; } }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 24px; border: 1px solid var(--button); border-radius: 999px; background: var(--button); color: var(--button-text); font: 700 17px var(--sans); text-decoration: none; cursor: pointer; }
 .btn.quiet { border-color: #8A806B; background: transparent; color: var(--ink); }
+/* The demo's buttons, in the app's gold: a small screen beside the words, and a line under them. */
+.btn.gold { flex-direction: column; gap: 3px; min-height: 52px; border-color: #B89A5E; background: var(--gold); color: #2E3344; line-height: 1.1; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .12); }
+.btn.gold > span { display: flex; align-items: center; gap: 8px; }
+.btn.gold small { color: #3B4255; font-size: 12.5px; font-weight: 500; line-height: 1; }
+.ico { flex: none; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .btn:active { transform: scale(.97); }
 .facts { margin-top: 14px; color: var(--muted); font-size: 14.5px; }
 
-/* The Board. */
-.board { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
-.w { position: relative; display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; }
-.w::after { content: ''; position: absolute; inset: 3px; border: 1px solid var(--hairline); border-radius: 9px; pointer-events: none; }
-.w-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; height: 26px; margin: 5px 5px 0; padding: 0 9px; border-radius: 7px 7px 3px 3px; background: var(--tint); color: var(--ink2); font-size: 13.5px; font-weight: 700; }
-.w-head span:last-child { font-weight: 500; font-variant-numeric: tabular-nums; }
-.w-body { flex: 1; padding: 12px 14px 14px; }
-.span-6 { grid-column: span 6; } .span-3 { grid-column: span 3; }
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 12px; }
+.board .wide { grid-column: 1 / -1; }
 
-.checkin { display: flex; align-items: center; gap: 16px; }
-.prize { position: relative; flex: none; display: grid; place-items: center; width: 84px; height: 84px; border: 2px solid var(--fill); border-radius: 50%; background: rgba(232, 190, 100, .28); }
-.prize svg { width: 44px; height: 44px; fill: var(--fill); }
+/* The Board's widgets, drawn as the app draws them (web/src/styles/widgets.css, checkin.css and marks.css): a card with an
+   inner hairline, a heading plate with the widget's sign, its name and a short meta, and its body. */
+.w { position: relative; display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; container-type: inline-size; }
+.w::after { content: ''; position: absolute; inset: 3px; border: 1px solid var(--hairline); border-radius: 9px; pointer-events: none; }
+.w-head { display: flex; align-items: center; gap: 6px; height: 24px; margin: 5px 5px 0; padding: 0 8px 0 7px; border-radius: 7px 7px 3px 3px; background: var(--tint); color: var(--ink2); font-size: 12.5px; font-weight: 700; line-height: 1.35; }
+.w-head .sign { flex: none; width: 15px; height: 15px; color: var(--icon); }
+.w-meta { margin-left: auto; padding-left: 6px; color: var(--muted); font-size: 11.5px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.w-body { flex: 1; padding: 7px 11px 10px; font-size: 14px; line-height: 1.35; }
+.wid-line { color: var(--ink2); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.w .btn { min-width: 118px; min-height: 38px; padding: 0 22px; font-size: 14px; }
+/* The app's signs: line drawings on a square of 20, in the colour of the words around them. */
+.sign { display: block; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* The daily check-in: today's reward large with its Claim, and the month, seven days to a row. From a width of 500 the month
+   stands beside today's reward, as in the app; narrower, under it. A day too narrow to hold its reward's amount leaves it out. */
+.checkin { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.checkin-today { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.checkin-words { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.checkin-name { font-size: 13.5px; }
+.checkin-name b { color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.prize { position: relative; flex: none; display: grid; place-items: center; width: 84px; height: 84px; border: 2px solid var(--fill); border-radius: 50%; background: var(--five-wash); }
+.prize .game-icon { width: 62px; height: 62px; object-fit: contain; }
 /* The game's own icons, read from HoYoverse; where one does not load, its drawn sign shows instead (site.js). */
-.prize .game-icon { width: 56px; height: 56px; object-fit: contain; }
-.prize .sign, .no-icon > .game-icon { display: none; }
-.prize.no-icon .sign { display: block; }
-.ring-wrap { position: relative; width: 66px; height: 66px; flex: none; }
-.ring-wrap .game-icon { position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; object-fit: contain; transform: translate(-50%, -50%); }
+.prize > .sign { display: none; width: 62px; height: 62px; }
+.no-icon > .game-icon { display: none; }
+.prize.no-icon > .sign, .ring-in.no-icon > .sign { display: block; }
 .claimed .prize { border-color: var(--done); background: var(--tint); }
-.stamp { position: absolute; right: -4px; bottom: -4px; display: none; place-items: center; width: 30px; height: 30px; border: 2px solid var(--surface); border-radius: 50%; background: var(--done); color: #fff; font-weight: 800; }
+.stamp { position: absolute; right: -4px; bottom: -4px; display: none; place-items: center; width: 30px; height: 30px; border: 2px solid var(--surface); border-radius: 50%; background: var(--done); color: var(--button-text); }
+.stamp .sign { width: 17px; height: 17px; }
 .claimed .stamp { display: grid; }
 .fresh .prize { animation: land 800ms linear(0, 1.14 42%, .97 70%, 1); }
 .fresh .stamp { animation: stamp 260ms linear(0, 1.14 42%, .97 70%, 1) 260ms backwards; }
 .spark { position: absolute; top: 50%; left: 50%; width: 16px; height: 16px; margin: -8px; background: var(--fill); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); animation: spark 1100ms cubic-bezier(.45, 0, .2, 1) both; pointer-events: none; }
 .gain { position: absolute; top: -8px; left: 50%; color: var(--gold-ink); font-size: 19px; font-weight: 800; animation: gain 1400ms cubic-bezier(.22, .8, .24, 1) both; pointer-events: none; }
-.days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; flex: 1; min-width: 0; }
-.day { display: grid; place-items: center; aspect-ratio: 1.15; border: 1px solid var(--hairline); border-radius: 6px; background: var(--tint); color: var(--muted); font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.day.got { color: var(--done); }
-.day.now { border: 2px solid var(--fill); background: rgba(232, 190, 100, .28); color: var(--gold-ink); }
-.claim-line { display: grid; gap: 7px; min-width: 112px; }
-.claim-line b { color: var(--gold-ink); }
-.w .btn { min-height: 36px; padding: 0 18px; font-size: 15px; }
+.days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-auto-rows: 32px; gap: 4px; min-width: 0; container: month / inline-size; }
+.day { position: relative; display: grid; place-items: center; min-width: 0; overflow: hidden; border: 1px solid var(--hairline); border-radius: 6px; background: var(--tint); }
+.day > .sign { width: 18px; height: 18px; }
+.day-n, .day-x { position: absolute; font-size: 9.5px; font-weight: 700; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.day-n { top: 1px; left: 3px; color: var(--muted); }
+.day-x { right: 3px; bottom: 0; color: var(--ink2); }
+.day.now { border: 2px solid var(--fill); background: var(--five-wash); }
+.day.got > .sign { opacity: .42; }
+.day > .day-tick { position: absolute; inset: 0; display: none; margin: auto; color: var(--done); }
+.day.got > .day-tick { display: block; opacity: 1; }
+@container month (max-width: 280px) { .day-x { display: none; } }
+@container (min-width: 500px) {
+  .checkin { grid-template-columns: minmax(150px, 190px) minmax(0, 1fr); }
+  .checkin-today { flex-direction: column; justify-content: center; gap: 10px; text-align: center; }
+  .checkin-words { align-items: center; width: 100%; }
+}
 
+/* Resin: the ring of ten parts of 20 in the progress gold, from the top, with the picture and the figure inside it, and how
+   long until it is full beside it. The ring shrinks with a narrow card, on a small phone or two cards to a row, so that the
+   time stays whole. */
 .resin { display: flex; align-items: center; gap: 14px; }
-.ring { width: 66px; height: 66px; flex: none; }
-.big { font-size: 26px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.big small { color: var(--muted); font-size: 16px; font-weight: 500; }
-.note { color: var(--muted); font-size: 14px; }
+.ring-wrap { position: relative; flex: none; width: min(116px, 40cqi); height: min(116px, 40cqi); }
+.ring { display: block; width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 9; }
+.ring .r-track { stroke: var(--track); }
+.ring .r-fill { stroke: var(--fill); }
+.ring .r-gaps { stroke: var(--surface); stroke-width: 11; }
+.ring-in { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 1px; }
+.ring-in .game-icon { width: 36px; height: 36px; object-fit: contain; }
+.ring-in > .sign { display: none; width: 34px; height: 34px; color: var(--icon); }
+.ring-in b { font-size: 22px; font-weight: 800; line-height: 1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.ring-in small { color: var(--muted); font-size: 11.5px; font-weight: 700; line-height: 1; }
+.resin-left { display: grid; justify-items: start; gap: 4px; min-width: 0; }
+.resin-lead { color: var(--muted); font-size: 12.5px; }
+.resin-big { font-size: 21px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-.tasks { display: grid; gap: 4px; }
-.task { display: flex; align-items: center; gap: 9px; padding: 3px 0; border: 0; background: none; color: var(--ink); font: 500 15.5px var(--sans); text-align: left; cursor: pointer; }
-.box { display: grid; place-items: center; width: 18px; height: 18px; flex: none; border: 1.5px solid #8A806B; border-radius: 5px; color: transparent; font-size: 13px; font-weight: 800; line-height: 1; }
+/* Commissions: a row each to tick, on a hairline rule, with the app's own box. */
+.tasks { display: flex; flex-direction: column; }
+.task { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 0; border: 0; background: none; color: var(--ink); font: 500 13.5px/1.35 var(--sans); text-align: left; cursor: pointer; }
+.task + .task { border-top: 1px solid var(--hairline); }
+.box { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border: 1.5px solid var(--outline); border-radius: 6px; background: var(--surface); }
+.box .sign { width: 15px; height: 15px; color: var(--surface); stroke-width: 2.4; opacity: 0; }
 .task[aria-pressed='true'] { color: var(--muted); }
-.task[aria-pressed='true'] .box { border-color: var(--done); background: var(--done); color: #fff; animation: stamp 200ms linear(0, 1.14 42%, .97 70%, 1); }
+.task[aria-pressed='true'] .box { border-color: var(--done); background: var(--done); }
+.task[aria-pressed='true'] .box .sign { opacity: 1; }
 
 /* The pages, in a window with the app's own frame. */
 h2 { font-size: 34px; line-height: 1.1; font-weight: 800; text-wrap: balance; }
 .lead { margin-top: 8px; max-width: 38em; color: var(--ink2); font-size: 18px; }
-.shots { display: grid; gap: 14px; margin-top: 22px; }
+.shots { display: grid; gap: 14px; margin-top: 22px; container: shots / inline-size; }
 .shots .acts { margin-top: 4px; }
 .shots .facts { margin-top: 0; }
-.tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.tab { padding: 9px 10px; border: 0; border-bottom: 3px solid transparent; background: none; color: var(--ink2); font: 500 16.5px var(--sans); text-align: left; cursor: pointer; }
+/* The six tabs in one row while each has room for its name and a line or two under it; narrower, two even rows of three. */
+.tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+@container shots (max-width: 1100px) { .tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.tab { display: grid; align-content: start; padding: 9px 10px; border: 0; border-bottom: 3px solid transparent; background: none; color: var(--ink2); font: 500 16.5px var(--sans); text-align: left; cursor: pointer; }
 .tab[aria-selected='true'] { border-bottom-color: var(--fill); color: var(--ink); font-weight: 800; }
-.tab small { display: block; color: var(--muted); font-size: 14px; font-weight: 400; }
+.tab small { display: block; color: var(--muted); font-size: 14px; font-weight: 400; text-wrap: balance; }
 .window { border: 1px solid var(--border); border-radius: 12px; background: var(--rail); padding: 6px; box-shadow: 0 18px 40px -26px #3B4255; }
 .window img { display: block; width: 100%; height: auto; border-radius: 8px; }
 .shots > * { min-width: 0; }
@@ -131,12 +181,22 @@ dialog::backdrop { background: rgba(26, 30, 42, .84); }
 .dialog-pane { flex: 1; min-height: 0; overflow: auto; padding: 0 8px 8px; overscroll-behavior: contain; }
 .dialog-pane img { display: block; width: 1640px; max-width: none; height: auto; border-radius: 8px; }
 
-.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; margin-top: 22px; }
-.two h3 { font-size: 21px; font-weight: 800; }
-.list { display: grid; gap: 9px; margin-top: 10px; }
-.list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 9px; color: var(--ink2); font-size: 16.5px; line-height: 1.4; }
-.list li::before { content: '\2726'; color: var(--fill); font-size: 13px; line-height: 1.8; }
-.never li::before { content: '\2715'; color: var(--spent); }
+/* What it reads and what it never does: two cards in the style of the app's widgets, each line with its round mark, a tick
+   on a pale green disc or a cross on a pale warm one. */
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+.card { position: relative; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.card::after { content: ''; position: absolute; inset: 3px; border: 1px solid var(--hairline); border-radius: 9px; pointer-events: none; }
+.card.never { border-color: var(--warn-line); }
+.card-head { display: flex; align-items: center; height: 30px; margin: 5px 5px 0; padding: 0 10px; border-radius: 7px 7px 3px 3px; background: var(--tint); color: var(--ink2); font-size: 14px; font-weight: 800; }
+.never .card-head { background: var(--warn-soft); color: var(--spent); }
+.list { display: grid; padding: 8px 12px 12px; }
+.list li { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 10px; padding: 7px 4px; color: var(--ink2); font-size: 16px; line-height: 1.35; }
+.list li + li { border-top: 1px solid var(--hairline); }
+.dot { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--good-soft); color: var(--good); }
+.never .dot { background: var(--warn-soft); color: var(--spent); }
+.dot svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.never .dot svg { width: 13px; height: 13px; }
+.two + .lead { margin-top: 16px; }
 
 .risk { padding: 18px 22px; border: 1px solid var(--warn-line); border-radius: 12px; background: var(--warn-soft); }
 .risk h2 { font-size: 24px; }
@@ -179,7 +239,7 @@ dialog::backdrop { background: rgba(26, 30, 42, .84); }
 .login .go { display: grid; place-items: center; height: 36px; border-radius: 999px; background: var(--gold); color: #2E3344; font-weight: 800; }
 .login small { color: var(--rail-muted); font-size: 14px; }
 
-#get .acts { justify-content: center; }
+#get .acts { margin-inline: auto; }
 #get .facts { text-align: center; }
 #support { padding: 18px 22px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
 #support h2 { font-size: 24px; }
@@ -198,7 +258,7 @@ dialog::backdrop { background: rgba(26, 30, 42, .84); }
 @media (max-width: 1200px) {
   .tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; overscroll-behavior-x: contain; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { flex: none; min-height: 44px; padding: 0 18px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 16.5px; white-space: nowrap; }
+  .tab { flex: none; align-content: center; min-height: 44px; padding: 0 18px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 16.5px; white-space: nowrap; }
   .tab[aria-selected='true'] { border-color: var(--button); background: var(--button); color: var(--button-text); }
   .tab small { display: none; }
   .tab-note { display: block; margin-top: -4px; color: var(--muted); font-size: 15px; }
@@ -222,24 +282,15 @@ dialog::backdrop { background: rgba(26, 30, 42, .84); }
   .hero, .two { grid-template-columns: minmax(0, 1fr); }
   .hero { gap: 26px; }
   .hero h1 { font-size: 40px; line-height: 1.04; }
-  .hero p { margin-top: 14px; font-size: 17.5px; }
-  .acts { margin-top: 20px; }
-  .acts .btn { flex: 1 1 100%; }
-  #get .acts .btn { flex: 1 1 100%; }
+  .pitch p { margin-top: 14px; font-size: 17.5px; }
+  .acts { grid-auto-flow: row; width: auto; margin-top: 20px; }
   .facts { font-size: 14px; }
   .board { gap: 10px; }
-  .span-3 { grid-column: span 6; }
-  .checkin { flex-wrap: wrap; gap: 14px; }
-  .days { flex-basis: 100%; }
   .w .btn { min-height: 44px; }
-  .task { min-height: 44px; padding: 6px 0; font-size: 16.5px; }
-  .box { width: 22px; height: 22px; }
+  .task { min-height: 44px; padding: 6px 0; font-size: 15px; }
   h2 { font-size: 26px; }
   .lead { font-size: 17px; }
   .two { gap: 14px; margin-top: 18px; }
-  .two > div { padding: 16px 18px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
-  .two > div:last-child { border-color: var(--warn-line); }
-  .two + .lead { margin-top: 18px; }
   .risk { padding: 16px 18px; }
   .risk h2 { font-size: 22px; }
   .faq summary { min-height: 52px; padding: 8px 0; font-size: 17.5px; }

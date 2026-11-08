@@ -28,10 +28,12 @@ class Downloads:
     def __init__(self, pictures: dict[str, bytes] | None = None) -> None:
         self.pictures = {URL: PNG} if pictures is None else pictures
         self.asked: list[tuple[str, int | None]] = []
+        self.hosts: list = []  # the hosts each download was held to
         self.fail: Exception | None = None
 
     def __call__(self, url: str, *, max_bytes: int | None = None, hosts=None) -> bytes:
         self.asked.append((url, max_bytes))
+        self.hosts.append(hosts)
         if self.fail is not None:
             raise self.fail
         return self.pictures[url]
@@ -230,6 +232,88 @@ async def test_only_the_allowed_hosts_are_fetched(store, paths, clock):
         assert art.address(f"https://{host}/a.png") is not None
     # A key that was never given an address is no picture.
     assert await art.get("0" * 32) is None and downloads.asked == []
+
+
+async def test_the_art_cache_takes_a_public_picture_and_no_other_outside_address(store, paths, clock):
+    # The Stats design, section 1: the Endgame headers' public pictures enter the cache only from netpolicy's table, by
+    # their place in it (public_address), never as an address given to the cache: a URL taken from a HoYoLAB or wiki
+    # answer is never sent outside HoYoverse's hosts, not even one that is written as a table entry is. Each download is
+    # held to the five hosts and the table's, at 8 MB.
+    picture = netpolicy.PUBLIC_PICTURE_URLS[0]
+    downloads = Downloads({picture: PNG})
+    art = _cache(store, paths, clock, downloads)
+    key = art.key_for(picture)
+    for url in (
+        *netpolicy.PUBLIC_PICTURE_URLS,  # as an address from an answer, the table's own entries are refused too
+        "https://static.wikia.nocookie.net/other.png",
+        "https://i.redd.it/other.jpg",
+        netpolicy.PUBLIC_PICTURE_URLS[1] + "?x=1",
+        "http://i.redd.it/n427epuvp0bd1.jpg",
+    ):
+        assert art.address(url) is None and not art.usable(url), url
+        assert await art.get(art.key_for(url)) is None
+    assert downloads.asked == [] and store.art(key) is None
+    # The table's entries, by their place, and nothing outside it.
+    for index, url in enumerate(netpolicy.PUBLIC_PICTURE_URLS):
+        assert art.public_address(index) == f"/api/art/{art.key_for(url)}"
+    for index in (-1, len(netpolicy.PUBLIC_PICTURE_URLS), True):
+        assert art.public_address(index) is None, index
+    assert await art.get(key) == (PNG, "image/png")
+    assert downloads.asked == [(picture, ArtCache.CAP)]  # sent as it is written, with the 8 MB limit
+    assert downloads.hosts == [ART_HOSTS + netpolicy.PUBLIC_PICTURE_HOSTS]
+    assert store.art(key).url == picture
+    # A new run serves it from the disk, and fetches it again from the table's address if the file is gone.
+    again_downloads = Downloads({picture: PNG})
+    again = _cache(store, paths, clock, again_downloads)
+    assert await again.get(key) == (PNG, "image/png") and again_downloads.asked == []
+    (paths.data_dir / "art" / store.art(key).file).unlink()
+    assert await again.get(key) == (PNG, "image/png") and again_downloads.asked == [(picture, ArtCache.CAP)]
+
+
+async def test_the_public_pictures_are_fetched_ahead_once_and_kept_tells_what_is_on_disk(store, paths, clock):
+    # The Endgame headers (the Stats design, 3.2): the core fetches the table's pictures ahead, by their place, one at a
+    # time, never while the game runs; `kept` tells the card which are on disk, so a header never waits on a download.
+    pictures = {url: PNG for url in netpolicy.PUBLIC_PICTURE_URLS}
+    downloads = Downloads(pictures)
+    art = _cache(store, paths, clock, downloads)
+    art.warm_pause = 0
+    addresses = [art.public_address(index) for index in range(3)]
+    assert not any(art.kept(address) for address in addresses)
+    running = iter([True, True, False])
+    rests: list[float] = []
+
+    async def rest(seconds: float) -> None:
+        rests.append(seconds)
+
+    art.sleep = rest
+    assert await art.warm_public([0, 2, 7], paused=lambda: next(running, False)) == 2  # 7 is no place in the table
+    assert rests[:2] == [art.game_pause, art.game_pause]  # it waited for the game to close first
+    assert [url for url, _ in downloads.asked] == [netpolicy.PUBLIC_PICTURE_URLS[0], netpolicy.PUBLIC_PICTURE_URLS[2]]
+    assert downloads.hosts == [ART_HOSTS + netpolicy.PUBLIC_PICTURE_HOSTS] * 2
+    assert [art.kept(address) for address in addresses] == [True, False, True]
+    assert await art.warm_public([0, 1, 2]) == 1 and len(downloads.asked) == 3  # what is kept is not fetched again
+    for address in (None, "", "/api/art/zz", "/api/art/" + "0" * 32, "https://act-webstatic.hoyoverse.com/a.png"):
+        assert not art.kept(address), address
+    # A picture that could not be had is asked for again the next time, and is not kept.
+    failing = Downloads(pictures)
+    failing.fail = ConnectionError("no network")
+    other = _cache(store, AppPaths(paths.data_dir.parent / "other"), clock, failing)
+    assert await other.warm_public([1]) == 0 and not other.kept(other.public_address(1))
+
+
+async def test_the_demo_fetches_no_public_picture_ahead(store, paths, clock, tmp_path):
+    downloads = Downloads({url: PNG for url in netpolicy.PUBLIC_PICTURE_URLS})
+    art = _cache(store, paths, clock, downloads, demo=True)
+    art.demo_dir = tmp_path / "nothing-here"
+    assert await art.warm_public([0, 1, 2]) == 0 and downloads.asked == []
+    assert not art.kept(art.public_address(0))
+
+
+def test_the_demo_has_no_public_picture_without_a_bundle(store, paths, clock, tmp_path):
+    downloads = Downloads({netpolicy.PUBLIC_PICTURE_URLS[0]: PNG})
+    art = _cache(store, paths, clock, downloads, demo=True)
+    art.demo_dir = tmp_path / "nothing-here"
+    assert art.public_address(0) is None and downloads.asked == [] and store.art(art.key_for(netpolicy.PUBLIC_PICTURE_URLS[0])) is None
 
 
 async def test_an_address_is_sent_with_its_spaces_and_letters_encoded(store, paths, clock):

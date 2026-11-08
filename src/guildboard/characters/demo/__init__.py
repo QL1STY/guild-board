@@ -9,19 +9,20 @@ from __future__ import annotations
 
 import dataclasses
 import json
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 from guildboard.characters import bridge, needs, reference
 from guildboard.characters.models import Card
+from guildboard.endgame_cycles import cycle_row
 from guildboard.gameday import game_day, game_day_start, server_tz
 from guildboard.records import (
     AbyssHalfRecord, BuildRecord, BuildsRecord, CalcItemRecord, CalculatorRecord, CalendarDetailRecord, EndgameDetailRecord,
-    PieceRecord, PropRecord, SkillRecord, StygianBossRecord, SubRecord, WeaponRecord,
+    EnemyRecord, PieceRecord, PropRecord, RankRecord, SkillRecord, StygianBossRecord, SubRecord, WeaponRecord,
 )
-from guildboard.store import Store, WikiEntryRow
+from guildboard.store import EndgameCycleRow, Store, WikiEntryRow, iso, parse_iso
 
 FOLDER = Path(__file__).parent
 
@@ -107,25 +108,153 @@ def demo_calculator() -> CalculatorRecord:
     return CalculatorRecord(has_user_info=True, items=items, targets={ids[key]: {"level": 90} for key in FOCUS})
 
 
-def demo_endgame_detail(now: datetime, server: str) -> EndgameDetailRecord:
-    """This month's endgame: 33 of 36 stars with the one lost in 12-3's second half, and three Stygian bosses."""
+def demo_endgame_detail(now: datetime, server: str, anchor: datetime | None = None) -> EndgameDetailRecord:
+    """The endgame of the cycles that hold `now`. Those that hold `anchor`, the core's now (`now` itself when None), are this
+    month's of the mockup: 33 of 36 stars with the one lost in 12-3's second half, and three Stygian bosses."""
+    return _endgame_detail(now, server, 0, anchor)
+
+
+# The demo's endgame cycles (the Stats design, 3.5): made up, with every icon empty, for the demo has no pictures. The
+# Abyss's cycles run from the 16th, the Theater's and the Stygian Onslaught's from the 1st, as the demo's summaries do.
+FIRST_HALF = ("nefer", "dahlia", "lauma", "columbina")
+FLOOR_12 = {  # each chamber's enemies, the first half's and the second's, as (name, level)
+    "12-1": (
+        (("Battle-Hardened Chimeric Volkodlak Archer", 95),),
+        (("Shadowy Husk: Standard Bearer", 95), ("Shadowy Husk: Defender", 95)),
+    ),
+    "12-2": ((("Radiant Moonfly", 98),), (("Battle-Hardened Elite Treasure Hoarder", 98),)),
+    "12-3": ((("Chimeric Winged Lion", 100),), (("Secret Source Automaton: Overseer Device", 100),)),
+}
+# The three kinds of cycle. The current one, that holds the core's now, is kind 0, the mockup's, and the earlier ones count back
+# from it, 1, 2, 0, 1 and so on (`_endgame_detail`), so that the best of the history is a cycle of its own, not today's.
+# The stars lost in each kind of Abyss cycle, by chamber: 33, 36 and 34 of 36. A second half is the one that lost them.
+ABYSS_LOST = ({"10-2": 1, "11-3": 1, "12-3": 1}, {}, {"12-2": 1, "12-3": 1})
+# The strongest strike of each kind of Abyss cycle: the current one's is Sandrone's, as the Characters pages show; in the cycle of
+# 36 stars Nefer struck harder, so that the year's strongest hit is someone's other than the character of the year's.
+ABYSS_STRIKES = ((1_352_944, "sandrone"), (1_428_310, "nefer"), (1_270_944, "sandrone"))
+# The Stygian Onslaught's seasons, by the month they run in.
+STYGIAN_NAMES = (
+    "Winter's Hollow Vigil", "Moonlit Frostfall", "Spring of Quiet Embers", "The Verdant Reckoning", "Blossom and Blade",
+    "Tides of the Old Court", "Summer's Gilded Siege", "Storm over the Salt Road", "Harvest of Echoes",
+    "The Silent Lantern Trial", "Ashes of the Last Bridge", "Starfall Gauntlet",
+)
+BOSSES = (  # name, the elements it is weak to and strong against, and a clear time
+    ("Guardian Blade of Drifting Snow", ("Pyro",), ("Cryo",), 96),
+    ("Fae of Crystalline Flesh", ("Cryo", "Hydro"), ("Dendro",), 88),
+    ("Chimeric Winged Lion", ("Dendro",), ("Hydro",), 96),
+)
+THEATER_MEDALS = (  # each act's medal, this month first: the Arcana Challenge's twelve, then two months of ten
+    (True, False, True, True, False, True, True, False, False, True, False, True), (True,) * 10, (True,) * 8 + (False,) * 2,
+)
+
+
+def _month_start(today: date, server: str, back: int, day: int) -> datetime:
+    """04:00 on `day` of the month `back` months before the one of the game day `today` (after it, when `back` is below 0),
+    in the server's zone."""
+    index = today.year * 12 + today.month - 1 - back
+    return datetime(index // 12, index % 12 + 1, day, 4, tzinfo=server_tz(server))
+
+
+def _periods(now: datetime, server: str, back: int) -> tuple[datetime, datetime, datetime, datetime]:
+    """When the Abyss's cycle `back` cycles before this one starts and the next starts, and the same of the month's. The
+    cycles turn at the game day's reset, 04:00, so the first of the month still belongs to the month before until then."""
+    today = game_day(now, server)
+    abyss_back = back + (1 if today.day < 16 else 0)
+    return (
+        _month_start(today, server, abyss_back, 16), _month_start(today, server, abyss_back - 1, 16),
+        _month_start(today, server, back, 1), _month_start(today, server, back - 1, 1),
+    )
+
+
+def _last_second(start_of_next: datetime) -> str:
+    return iso(start_of_next - timedelta(seconds=1))
+
+
+def _endgame_detail(now: datetime, server: str, back: int, anchor: datetime | None = None) -> EndgameDetailRecord:
+    """The endgame of the cycle `back` cycles before the one that holds `now`, in each mode. What a cycle holds follows how
+    many cycles it is before the one that holds `anchor`, the core's now (`now` itself when None): that one is the mockup's,
+    as the Characters pages show it, 33 stars with the one lost in 12-3's second half and the three bosses with their
+    elements, on any day the demo is started. The history the demo starts with is read with the same anchor, so that every
+    sync of the demo, then or now, reads a cycle the same."""
     ids = _ids()
-    local = now.astimezone(server_tz(server))
-    ends = (local.replace(day=1, hour=4, minute=0, second=0, microsecond=0) + timedelta(days=32)).replace(day=1)
-    stamp = (ends - timedelta(seconds=1)).isoformat(timespec="seconds")
-    halves = (
-        AbyssHalfRecord("12-3", 1, 3, tuple(ids[key] for key in ("nefer", "dahlia", "lauma", "columbina")), ()),
-        AbyssHalfRecord("12-3", 2, 2, tuple(ids[key] for key in SECOND_HALF), ()),
+    abyss_from, abyss_to, month_from, month_to = _periods(now, server, back)
+    current_abyss, _, current_month, _ = _periods(anchor or now, server, 0)
+    kind = (_months(current_abyss) - _months(abyss_from)) % 3  # of the Abyss cycle
+    month = (_months(current_month) - _months(month_from)) % 3  # of the month's cycles, the Theater's and the Stygian's
+    lost = ABYSS_LOST[kind]
+    halves = []
+    for chamber, foes in FLOOR_12.items():
+        for half, (team, enemies) in enumerate(zip((FIRST_HALF, SECOND_HALF), foes), start=1):
+            stars = 3 - (lost.get(chamber, 0) if half == 2 else 0)
+            records = tuple(EnemyRecord(name, level, "") for name, level in enemies)
+            halves.append(AbyssHalfRecord(
+                chamber, half, stars, tuple(ids[key] for key in team), tuple(foe.name for foe in records), records,
+            ))
+    chambers = tuple((f"{floor}-{room}", 3 - lost.get(f"{floor}-{room}", 0)) for floor in range(9, 13) for room in (1, 2, 3))
+    medals = THEATER_MEDALS[month]
+    bosses = tuple(
+        StygianBossRecord(name, well, badly, (), seconds, "", 105) for name, well, badly, seconds in BOSSES
     )
-    bosses = (
-        StygianBossRecord("Guardian Blade of Drifting Snow", ("Pyro",), ("Cryo",), (), None),
-        StygianBossRecord("Fae of Crystalline Flesh", ("Cryo", "Hydro"), ("Dendro",), (), None),
-        StygianBossRecord("Chimeric Winged Lion", ("Dendro",), ("Hydro",), (), None),
-    )
+    rank = lambda kind, value, key: RankRecord(kind, value, ids[key], "")   # noqa: E731
     return EndgameDetailRecord(
-        abyss_stars=33, abyss_halves=halves, abyss_ends=stamp, theater_difficulty="Arcana Challenge", theater_acts=10,
-        theater_ends=stamp, stygian_difficulty=5, stygian_bosses=bosses, stygian_ends=stamp,
+        abyss_stars=sum(stars for _, stars in chambers),
+        abyss_halves=tuple(halves),
+        abyss_ends=_last_second(abyss_to),
+        theater_difficulty="Arcana Challenge" if len(medals) == 12 else "Visionary",
+        theater_acts=10 if month < 2 else 8,
+        theater_ends=_last_second(month_to),
+        stygian_difficulty=5 if month < 2 else 4,
+        stygian_bosses=bosses,
+        stygian_ends=_last_second(month_to),
+        abyss_starts=iso(abyss_from),
+        abyss_battles=6 + kind,
+        abyss_wins=6,
+        abyss_chambers=chambers,
+        abyss_ranks=(
+            rank("strike", *ABYSS_STRIKES[kind]), rank("defeats", 22 + kind, "nefer"),
+            rank("taken", 14_583, "lan-yan"), rank("bursts", 13, "columbina"), rank("skills", 21, "lauma"),
+            rank("played", 6, "jahoda"),
+        ),
+        theater_starts=iso(month_from),
+        theater_medals=medals,
+        theater_medal_count=sum(medals[:10]),
+        theater_flowers=1285 - 105 * month,
+        theater_seconds=1002 - 150 * month,
+        theater_ranks=(
+            rank("damage", 943_229 - 60_000 * month, "sandrone"), rank("defeats", 11 + month, "ineffa"),
+            rank("taken", 68_942, "dahlia"),
+        ),
+        stygian_season=STYGIAN_NAMES[month_from.month - 1],
+        # The season after the current one is announced and has not started: the card says when it opens.
+        stygian_next=(STYGIAN_NAMES[month_to.month - 1], iso(month_to)) if back == 0 else None,
+        stygian_starts=iso(month_from),
+        stygian_seconds=sum(seconds for *_, seconds in BOSSES),
+        stygian_medal=f"UI_LeyLineChallenge_Medal_{5 if month < 2 else 4}",
     )
+
+
+def _months(moment: datetime) -> int:
+    return moment.year * 12 + moment.month - 1
+
+
+def demo_endgame_cycles(now: datetime, server: str) -> list[EndgameCycleRow]:
+    """The current cycle of each mode and the two before, as the table of cycles keeps them: each as last read while it
+    was open, and numbered as HoYoLAB numbers them (the Abyss of 16 October 2026 is 124, November's Theater 31)."""
+    rows = []
+    for back in range(3):
+        record = _endgame_detail(now, server, back)
+        abyss_from, _, month_from, _ = _periods(now, server, back)
+        ids = {
+            "abyss": 124 + _months(abyss_from) - (2026 * 12 + 9),
+            "theater": 31 + _months(month_from) - (2026 * 12 + 10),
+            "stygian": 5269013 + _months(month_from) - (2026 * 12 + 10),
+        }
+        for mode, number in ids.items():
+            ends = getattr(record, f"{mode}_ends")
+            row = cycle_row(mode, str(number), record, min(now, parse_iso(ends)))
+            if row is not None:
+                rows.append(row)
+    return rows
 
 
 def demo_calendar_detail(now: datetime, server: str) -> CalendarDetailRecord:

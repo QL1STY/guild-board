@@ -1,7 +1,8 @@
 """Primogems earned by game day, as exact as can be had (the ledger design, section 0, the hybrid).
 
 For a game day: the game's own primogem log where it covers the day; else the HoYoLAB diary's detail entries of that
-day; else nothing here, and the views fall back to the diary's old running total, marked as an estimate. The game's log
+day; else nothing: the day is empty, never estimated from the diary's running total, whose rises land on the day of a
+sync rather than the day the primogems were earned and so mislead (removed after 1.0.1). The game's log
 covers the days from the day after its oldest entry's game day (that day is cut part-way, as the log starts mid-day) to
 its newest entry's game day. Game days start at 04:00 server time (`gameday.game_day`). Bought primogems and spending
 are never earned.
@@ -13,13 +14,10 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
 from guildboard.gameday import days_inclusive, game_day, game_day_start
-from guildboard.history import History
 from guildboard.ledger.reasons import BOUGHT, GROUP_LABELS, GROUPS, fates_bought, group_of
-from guildboard.metrics import EARNED_KEY
 from guildboard.store import Store
 
 PRIMOGEM = "primogem"
-NOT_SPLIT = "Not split by source"  # a month's days from the diary's running total, which has no sources
 _SECOND = timedelta(seconds=1)
 
 
@@ -91,97 +89,65 @@ class EarnedDay:
     day: date
     value: int
     groups: dict[str, int] | None  # by group, for a day of the game's log or the diary's detail
-    estimate: bool  # from the diary's old running total
-    no_data: bool
-    after_gap: bool
+    no_data: bool  # neither covers the day: it is empty, not 0 earned
 
 
-def earned_days(
-    store: Store, history: History, uid: int | None, server: str, first: date, last: date
-) -> list[EarnedDay]:
-    """Every game day from `first` to `last`: exact where it can be, else the diary's total's rise, an estimate."""
+def earned_days(store: Store, uid: int | None, server: str, first: date, last: date) -> list[EarnedDay]:
+    """Every game day from `first` to `last`: exact where the game's log or the diary's detail covers it, else empty."""
     exact = earned_by_day(store, uid, server, first, last) if uid is not None else {}
     out = []
-    for change in history.daily_change([EARNED_KEY], first, last):
-        groups = exact.get(change.day)
+    for day in days_inclusive(first, last):
+        groups = exact.get(day)
         if groups is not None:
-            out.append(EarnedDay(change.day, sum(groups.values()), groups, False, False, False))
+            out.append(EarnedDay(day, sum(groups.values()), groups, False))
         else:
-            out.append(EarnedDay(
-                change.day, int(change.delta), None, change.has_data, not change.has_data, change.after_gap,
-            ))
+            out.append(EarnedDay(day, 0, None, True))
     return out
 
 
-def pace(store: Store, history: History, uid: int | None, server: str, today: date, days: int = 30) -> float | None:
-    """Primogems earned a day over the last `days`: the exact days and the diary's, over the days known."""
-    first = today - timedelta(days=days - 1)
-    since = history.tracking_since()
-    known = [
-        day for day in earned_days(store, history, uid, server, first, today)
-        if day.groups is not None or (since is not None and day.day >= since)
-    ]
+def pace(store: Store, uid: int | None, server: str, today: date, days: int = 30) -> float | None:
+    """Primogems earned a day over the last `days`, over the exact days among them; None without one."""
+    known = [day for day in earned_days(store, uid, server, today - timedelta(days=days - 1), today) if not day.no_data]
     if not known:
         return None
     return sum(day.value for day in known) / len(known)
 
 
 def month_values(
-    store: Store, history: History, uid: int | None, server: str, diary_months: dict[str, int], today: date,
-    shown: int,
+    store: Store, uid: int | None, server: str, diary_months: dict[str, int], today: date, shown: int
 ) -> list[tuple[str, int]]:
-    """The primogems earned by month, the newest `shown`: a month with exact days is those days plus the diary's rise
-    on its other days; a month without is the diary's own total."""
+    """The primogems earned by month, the newest `shown`: a month with exact days is the sum of those days; a month
+    without is the diary's own total."""
     first = date(today.year, today.month, 1)
     for _ in range(shown - 1):
         first = (first - timedelta(days=1)).replace(day=1)
     exact = earned_by_day(store, uid, server, first, today) if uid is not None else {}
     months = dict(diary_months)
-    exact_months = {f"{day.year:04d}-{day.month:02d}" for day in exact}
-    for ym in exact_months:
-        groups, rest = _month_split(history, exact, ym, today)
-        months[ym] = sum(groups.values()) + rest
+    for ym, groups in _by_month(exact).items():
+        months[ym] = sum(groups.values())
     return sorted(months.items())[-shown:]
 
 
-def _month_span(ym: str, today: date) -> tuple[date, date]:
-    start = date(int(ym[:4]), int(ym[5:7]), 1)
-    return start, min(today, (start + timedelta(days=32)).replace(day=1) - timedelta(days=1))
+def _by_month(exact: dict[date, dict[str, int]]) -> dict[str, dict[str, int]]:
+    """The exact days summed by group, for each month that has some."""
+    out: dict[str, dict[str, int]] = defaultdict(_empty)
+    for day, groups in exact.items():
+        month = out[f"{day.year:04d}-{day.month:02d}"]
+        for group, amount in groups.items():
+            month[group] += amount
+    return dict(out)
 
 
-def _month_split(
-    history: History, exact: dict[date, dict[str, int]], ym: str, today: date
-) -> tuple[dict[str, int], int]:
-    """A month's exact days summed by group, and the diary's rise on its other days, which has no groups."""
-    start, end = _month_span(ym, today)
-    groups = _empty()
-    rest = 0
-    for change in history.daily_change([EARNED_KEY], start, end):
-        day = exact.get(change.day)
-        if day is not None:
-            for group, amount in day.items():
-                groups[group] += amount
-        else:
-            rest += int(change.delta)
-    return groups, rest
-
-
-def month_sources(
-    store: Store, history: History, uid: int | None, server: str, ym: str, today: date
-) -> list[tuple[str, int]] | None:
+def month_sources(store: Store, uid: int | None, server: str, ym: str, today: date) -> list[tuple[str, int]] | None:
     """A month's primogems by group where it has exact days, so that they add up to its value in `month_values`: each
-    group with some, the largest first, then the diary's rise on its other days, "Not split by source". None when no
-    day of the month is exact: the diary's own sources say it then."""
+    group with some, the largest first. None when no day of the month is exact: the diary's own sources say it then."""
     if uid is None:
         return None
-    start, end = _month_span(ym, today)
-    exact = earned_by_day(store, uid, server, start, end)
-    if not exact:
+    start = date(int(ym[:4]), int(ym[5:7]), 1)
+    end = min(today, (start + timedelta(days=32)).replace(day=1) - timedelta(days=1))
+    groups = _by_month(earned_by_day(store, uid, server, start, end)).get(ym)
+    if groups is None:
         return None
-    groups, rest = _month_split(history, exact, ym, today)
-    out = sorted(
+    return sorted(
         ((GROUP_LABELS[group], amount) for group, amount in groups.items() if amount > 0), key=lambda item: -item[1]
     )
-    if rest > 0:
-        out.append((NOT_SPLIT, rest))
-    return out

@@ -536,11 +536,13 @@ def _database_of_kind(path: Path, kind: str) -> None:
 
 
 def _database_that_says_it_is_older(path: Path) -> None:
-    """A database with the tables of today's schema that says it is at the one before the last that changes tables (the
-    schema 14 only deletes rows): the upgrade then makes tables it has."""
+    """A database with the tables of today's schema that says it is at the schema before the one that makes the endgame's
+    cycles' table: the upgrade then makes a table it has. (The last upgrade makes the wiki's table again under another name
+    first, which would run twice without a failure.)"""
     _database_of_kind(path, "live")
+    makes = next(number for number, script in enumerate(MIGRATIONS) if "CREATE TABLE endgame_cycles" in script)
     with closing(sqlite3.connect(path)) as conn:
-        conn.execute(f"PRAGMA user_version = {len(MIGRATIONS) - 2}")
+        conn.execute(f"PRAGMA user_version = {makes}")
 
 
 # Each passes SQLite's own check and holds nothing a Guild Board starts on: the first two have no tables (the start then

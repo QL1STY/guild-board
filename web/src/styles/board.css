@@ -1,6 +1,8 @@
-/* The Board (spec 12.4 and 13): a grid of fixed cells, 168 pixels wide and 96 tall with 12-pixel gaps, over the
-   window's whole width (frame.css, .gb-main.wide). A wider window shows more columns, never wider widgets. The page
-   sets the columns the window holds (grid-template-columns) and puts each widget at its place (look pass spec 10.2). */
+/* The Board (spec 12.4 and 13): a grid of cells 96 pixels tall with 12-pixel gaps, over the window's whole width
+   (frame.css, .gb-main.wide). A wider window shows more columns, one for each 168 pixels and a gap it holds, and the
+   columns share what is left over, less than one more column, so that the last ends at the right edge, where the top bar
+   ends. The page sets the columns (grid-template-columns, boardview.ts gridColumns) and puts each widget at its place
+   (look pass spec 10.2). The overlay's grid, drawn with these rules too, keeps its cells 168 pixels wide. */
 .board-grid {
   display: grid;
   grid-auto-rows: 96px;

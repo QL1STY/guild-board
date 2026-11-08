@@ -46,6 +46,21 @@ async def test_a_clean_run_stores_everything(runner, store, clock):
         assert store.raw_bodies(group) == [{"group": group}]
 
 
+async def test_what_follows_a_stored_group_is_told_of_it_and_never_costs_it(source, store, clock, sleep):
+    # The endgame's cycles are made after its group is stored (the Stats design, 3.5): a failure there is logged only.
+    told: list[tuple[str, object]] = []
+
+    def after(group, at):
+        told.append((group, at))
+        raise RuntimeError("made up")
+
+    source.will("notes", DataSwitchOff("Switched off."))
+    runner = SyncRunner(source, store, clock, lambda: "os_euro", sleep, after_group=after)
+    result = await runner.run("manual", ("overview", "notes", "endgame"))
+    assert result.groups_ok == ("overview", "endgame")
+    assert told == [("overview", clock.now()), ("endgame", clock.now())]  # never a group that failed
+
+
 async def test_only_the_requested_groups_are_fetched(runner, source):
     result = await runner.run("manual", ("overview", "notes"))
     assert [call[0] for call in source.calls] == ["overview", "notes"]

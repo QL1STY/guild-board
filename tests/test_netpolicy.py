@@ -322,6 +322,74 @@ def test_fetch_bytes_with_hosts_refuses_a_first_request_to_another_host(monkeypa
     assert fetch_bytes("https://sg-public-api.hoyoverse.com/a.png") == b"png"  # without hosts, as before
 
 
+# ---------------------------------------------------------------- public pictures from outside HoYoverse (the Stats
+# design, section 1): exact addresses in one table, a plain GET with Guild Board's user agent, never redirected
+
+def test_a_public_picture_is_exactly_one_of_the_table():
+    assert netpolicy.PUBLIC_PICTURE_HOSTS == ("static.wikia.nocookie.net", "i.redd.it")
+    for url in netpolicy.PUBLIC_PICTURE_URLS:
+        assert netpolicy.is_public_picture(url) and is_allowed(url), url
+    assert netpolicy.is_public_picture(netpolicy.PUBLIC_PICTURE_URLS[1])
+    assert not netpolicy.is_public_picture("https://i.redd.it/other.jpg")
+    assert not netpolicy.is_public_picture(netpolicy.PUBLIC_PICTURE_URLS[1] + "?x=1")
+    assert not netpolicy.is_public_picture("http://i.redd.it/n427epuvp0bd1.jpg")
+    for url in (
+        netpolicy.PUBLIC_PICTURE_URLS[1] + "#top",
+        "https://user@i.redd.it/n427epuvp0bd1.jpg",
+        "https://i.redd.it:8443/n427epuvp0bd1.jpg",
+        "https://static.wikia.nocookie.net/gensin-impact/images/c/ca/Domain_Spiral_Abyss_Abyssal_Moon_Spire.png",
+        "https://static.wikia.nocookie.net/other.png",
+        "https://i.redd.it.evil.example/n427epuvp0bd1.jpg",
+        netpolicy.ACHIEVEMENT_LIST_URL,
+        "https://act-webstatic.hoyoverse.com/a.png",
+        "",
+    ):
+        assert not netpolicy.is_public_picture(url), url
+    for url in ("https://i.redd.it/other.jpg", "https://static.wikia.nocookie.net/other.png", "https://i.redd.it/"):
+        assert not is_allowed(url), url
+    # The HoYoverse checks, which guard the HoYoLAB client and the reads of HoYoverse's pages, leave them out.
+    assert not any(netpolicy.is_hoyoverse(url) for url in netpolicy.PUBLIC_PICTURE_URLS)
+
+
+def test_a_public_picture_is_fetched_with_the_user_agent_alone_and_no_redirect(monkeypatch):
+    picture = netpolicy.PUBLIC_PICTURE_URLS[1]
+    seen = []
+
+    def fake_open(request, timeout):
+        seen.append((request.get_method(), request.full_url, request.data, dict(request.header_items())))
+        return _Response(b"\xff\xd8\xffJPEG")
+
+    monkeypatch.setattr(netpolicy, "_open", fake_open)
+    assert fetch_bytes(picture, max_bytes=8 * 1024 * 1024) == b"\xff\xd8\xffJPEG"
+    # A plain GET, with no body, and of the headers Guild Board's user agent alone: no cookie, no token, no key.
+    assert seen == [("GET", picture, None, {"User-agent": "GuildBoard"})]
+    # Its answer is held to the size the caller allows.
+    monkeypatch.setattr(netpolicy, "_open", lambda request, timeout: _Response(b"x" * 11))
+    with pytest.raises(netpolicy.ResponseTooLarge):
+        fetch_bytes(picture, max_bytes=10)
+    # It follows no redirect: not to another host, not on its own host, and not to another address of the table.
+    for elsewhere in ("https://evil.example/x.jpg", "https://i.redd.it/other.jpg", netpolicy.PUBLIC_PICTURE_URLS[0],
+                      "https://act-webstatic.hoyoverse.com/a.png"):
+        def redirecting(request, timeout):  # what urllib does with a 302: it asks the redirect handler
+            netpolicy._CheckedRedirects().redirect_request(request, None, 302, "Found", {}, elsewhere)
+            raise AssertionError("a redirect was followed")
+
+        monkeypatch.setattr(netpolicy, "_open", redirecting)
+        with pytest.raises(HostNotAllowed):
+            fetch_bytes(picture, max_bytes=8 * 1024 * 1024)
+    # The art cache's hosts now name the public pictures' too, and still no picture of HoYoverse's is redirected there.
+    request = _picture_request()
+    request.hosts = frozenset(ART_HOSTS + netpolicy.PUBLIC_PICTURE_HOSTS)
+    with pytest.raises(HostNotAllowed):
+        netpolicy._CheckedRedirects().redirect_request(request, None, 302, "Found", {}, picture)
+    # And HoYoverse's reads never take one.
+    opened = []
+    monkeypatch.setattr(netpolicy, "_open", lambda request, timeout: opened.append(request.full_url))
+    with pytest.raises(HostNotAllowed):
+        netpolicy.fetch_hoyoverse(picture)
+    assert opened == []
+
+
 def test_the_frozen_build_verifies_through_the_windows_store(monkeypatch):
     # The Windows store is read through Windows' own chain building, which fetches a root the PC does not hold yet; OpenSSL's
     # own reading of the store does not. The entry points call truststore once, before any request is made.
@@ -337,8 +405,8 @@ def test_the_frozen_build_verifies_through_the_windows_store(monkeypatch):
     calls = []
     monkeypatch.setattr(truststore, "inject_into_ssl", lambda: calls.append(1))
     monkeypatch.setattr(entry, "_TLS_READY", False)
-    assert entry.main(["--no-shell", "--hidden"]) == 2  # refused before anything starts, and after the call
-    assert entry.main(["--no-shell", "--hidden"]) == 2
+    assert entry.main([]) == 2  # refused before anything starts (no switch for a shell), and after the call
+    assert entry.main([]) == 2
     assert calls == [1]
 
 

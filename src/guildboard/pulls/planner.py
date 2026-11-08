@@ -25,7 +25,7 @@ from guildboard.clock import Clock
 from guildboard.gameday import game_day, game_day_start
 from guildboard.history import History
 from guildboard.ledger import income
-from guildboard.metrics import EARNED_KEY, diary_sources
+from guildboard.metrics import diary_sources
 from guildboard.characters.reference import load_inventory
 from guildboard.pulls import ALL_POOLS, POOLS, nextversion
 from guildboard.pulls.choices import load_upcoming, wish_choices
@@ -258,9 +258,10 @@ class Planner:
     def _estimate(
         self, account: PullsAccountRow | None, wishes: Mapping[str, list[Wish]], server: str, today: date
     ) -> Estimate | None:
-        """The balance moved on (the plan's call 8): the diary's rise from the day after the day it was set, and the
-        event wishes imported after it. What the diary shows for the day itself was earned before the balance was typed,
-        so the balance holds it already (ruling R16): counted again, it would overstate the savings and the chances."""
+        """The balance moved on (the plan's call 8): what was earned from the day after the day it was set, by the
+        game's log or the diary's detail (never the diary's running total, which is not by day), and the event wishes
+        imported after it. What was earned on the day itself was earned before the balance was typed, so the balance
+        holds it already (ruling R16): counted again, it would overstate the savings and the chances."""
         if account is None or None in (account.balance_primogems, account.balance_fates, account.balance_set_at):
             return None
         set_at = account.balance_set_at
@@ -271,23 +272,21 @@ class Planner:
         if span is not None and span[1] >= first:
             # The game's own primogem log (the ledger design, section 5): every entry since, in and out, so wishes
             # bought and resin refilled are taken off, and Fates bought are not charged again. Days before its
-            # coverage keep the diary's rise, and the days after its newest entry the earned of each day.
+            # coverage, and the days after its newest entry, count the earned of each day.
             start = max(first, span[0])
             since = set_at if start == first else game_day_start(start, server) - timedelta(seconds=1)
             net, fates = income.net_since(self._store, account.uid, since)
-            before = self._history.change([EARNED_KEY], first, start - timedelta(days=1)) if first < start else None
-            after = income.earned_days(
-                self._store, self._history, account.uid, server, span[1] + timedelta(days=1), today
-            )
-            total = net + int(before or 0) + sum(day.value for day in after)
+            before = income.earned_days(self._store, account.uid, server, first, start - timedelta(days=1))
+            after = income.earned_days(self._store, account.uid, server, span[1] + timedelta(days=1), today)
+            total = net + sum(day.value for day in [*before, *after])
             newest = self._store.newest_ledger_entry(account.uid, income.PRIMOGEM)
             late = sum(
                 1 for pool in EVENT_POOLS for wish in wishes.get(pool, [])
                 if wish.at > set_at and newest is not None and wish.at > newest.at
             )
             return balance_now(balance, total, spent, fates_bought=fates, wishes_after_log=late)
-        rise = self._history.change([EARNED_KEY], first, today) if first <= today else None
-        return balance_now(balance, int(rise or 0), spent)
+        earned = income.earned_days(self._store, account.uid, server, first, today)
+        return balance_now(balance, sum(day.value for day in earned), spent)
 
     def balance_estimate(self) -> Estimate | None:
         """The balance moved on to now for the account shown, as `model` works it out, without building the page. None
@@ -325,8 +324,8 @@ class Planner:
                 if (correction := _correction(account, pool, windows[pool])) is not None
             }
         rows = self._store.wishes_before(uid, None, HISTORY_PAGE + 1) if uid is not None else []
-        # The last 30 days' earned: exact days and the diary's, over the days known (the ledger design, section 5).
-        per_day = income.pace(self._store, self._history, uid, server, today)
+        # The last 30 days' earned, over the exact days among them (the ledger design, section 5).
+        per_day = income.pace(self._store, uid, server, today)
         # The next version: the diary's events and quests of the account logged in, and the shown account's switches.
         next_version = nextversion.next_version(
             today, banners, diary_sources(self._store),

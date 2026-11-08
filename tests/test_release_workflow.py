@@ -109,6 +109,8 @@ def test_the_build_runs_on_windows_and_goes_through_the_steps_in_order():
         "Inno Setup",
         "uv sync --frozen",
         "npm ci --prefix web",
+        "npm ci --prefix shell",
+        "npm test --prefix shell",
         "uv run --frozen python -m pytest -q -p no:cacheprovider",
         "npx vitest run",
         "build-installer.ps1",

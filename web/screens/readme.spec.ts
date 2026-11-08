@@ -1,5 +1,7 @@
 import type { Page } from '@playwright/test'
+import { readFileSync } from 'node:fs'
 import path from 'node:path'
+import { tidyOverlay } from './overlay-layout.ts'
 import { SCREENS_OUT } from './out.ts'
 import { expect, test } from '../e2e/fixtures.ts'
 
@@ -58,7 +60,26 @@ test('readme: Pulls', { tag: README }, async ({ page, core }) => {
 test('readme: Stats', { tag: README }, async ({ page, core }) => {
   await page.goto(`${core.origin}/#/stats`)
   await expect(page.getByText('Exploration gained')).toBeVisible()
+  // The whole page at the usual width: from the title, the tabs and the tiles down to the whole Endgame card. The page is
+  // scrolled to its foot first, so that the card has come into view and played its motion; then the window is made as tall
+  // as the page, so that the rail runs its whole height, and the picture is the window's.
+  const endgame = page.getByRole('region', { name: 'Endgame' })
+  await expect(endgame.getByTestId('ec-stygian')).toBeVisible()
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+  await settled(page)
+  const height = await page.evaluate(() => document.documentElement.scrollHeight)
+  await page.setViewportSize({ width: SIZE.width, height })
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight)).toBe(true)
   await take(page, 'stats')
+})
+
+test('readme: the Year', { tag: README }, async ({ page, core }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' }) // Wrapped at rest: its counters at their values
+  await page.goto(`${core.origin}/#/stats/year`)
+  await expect(page.getByTestId('year-hero')).toBeVisible()
+  await expect(page.getByTestId('year-card').first()).toBeVisible()
+  await take(page, 'year')
 })
 
 test('readme: Backlog', { tag: README }, async ({ page, core }) => {
@@ -73,12 +94,24 @@ test('readme: gift codes', { tag: README }, async ({ page, core }) => {
   await take(page, 'codes', { x: 580, y: 70, width: 630, height: 430 })
 })
 
-test('readme: the overlay over a stand-in for the game', { tag: README }, async ({ page, core }) => {
+/*
+ * The overlay, laid out tidily for the picture alone (overlay-layout.ts, on this test's own core), over the maintainer's photograph
+ * from the game when GB_OVERLAY_BACKGROUND names it, as the site's picture is, else over a gradient. The photograph is never kept
+ * in this repository.
+ */
+test('readme: the overlay over the game', { tag: README }, async ({ page, core, api }) => {
+  await tidyOverlay(api)
   await page.setViewportSize({ width: 1640, height: 680 })
   await page.goto(`${core.origin}/#/overlay/open`)
-  await expect(page.locator('[data-widget="start-ov-timers"] li.tm-row').first()).toBeVisible()
-  await page.evaluate(() => {
-    document.documentElement.style.background = 'linear-gradient(135deg, #0B1020 0%, #1E2A3A 55%, #26331F 100%) fixed'
-  })
+  await expect(page.locator('[data-widget="pic-timers"] li.tm-row').first()).toBeVisible()
+  await expect(page.locator('[data-widget="pic-commissions"] li')).not.toHaveCount(0)
+  const photograph = process.env.GB_OVERLAY_BACKGROUND
+  const background =
+    photograph === undefined || photograph === ''
+      ? 'linear-gradient(135deg, #0B1020 0%, #1E2A3A 55%, #26331F 100%) fixed'
+      : `url(data:image/png;base64,${readFileSync(photograph).toString('base64')}) -230px 0 / 2000px 1125px no-repeat fixed`
+  await page.evaluate((value) => {
+    document.documentElement.style.background = value
+  }, background)
   await take(page, 'overlay')
 })

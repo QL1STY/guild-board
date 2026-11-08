@@ -2,8 +2,9 @@ import { describe, expect, it, test } from 'vitest'
 import type { Widget } from '../types.ts'
 import type { WidgetType } from '../widgets/widget.ts'
 import {
-  addWidget, arrange, columnsFor, columnsUsed, dropCell, firstFree, freeCells, gripSize, moveTo, newWidgetId, type Placed,
-  pushDown, removeWidget, resizeTo, rowsFor, setSettings, sizeLabel, sizeTag, sizeWithin, stepWith, withPlaces,
+  addWidget, arrange, boardPitch, columnsFor, columnsUsed, columnWidth, dropCell, FIXED_PITCH, firstFree, freeCells,
+  gridColumns, gripSize, moveTo, newWidgetId, pitchOf, type Placed, pushDown, removeWidget, resizeTo, rowsFor,
+  setSettings, sizeLabel, sizeTag, sizeWithin, stepWith, withPlaces,
 } from './boardview.ts'
 
 const clockType: WidgetType = {
@@ -84,6 +85,22 @@ describe("a widget's size (spec 8.2)", () => {
     expect(columnsFor(2328)).toBe(13)
     expect(columnsFor(2370)).toBe(13)
     expect(columnsFor(0)).toBe(1) // never none
+  })
+
+  it("shares the Board's width among its columns, so that the last one ends at the Board's right edge", () => {
+    // The Board beside the rail in a window of 1,040 pixels (the narrowest), 1,366, 1,440, 1,640, 1,920 and 2,560.
+    for (const width of [850, 1176, 1250, 1450, 1730, 2370]) {
+      const columns = columnsFor(width)
+      const column = columnWidth(width)
+      expect(columns * column + (columns - 1) * 12, `${width}`).toBeCloseTo(width, 9) // to the right edge, exactly
+      expect(column, `${width}`).toBeGreaterThanOrEqual(168)
+      expect(column, `${width}`).toBeLessThan(168 + 180 / columns) // what is left over is less than one more column
+    }
+    expect(columnWidth(1176)).toBe(186) // six columns share the 108 pixels that a seventh does not fit in
+    expect(columnWidth(1450)).toBe(170.75) // eight share 22
+    expect(columnWidth(1248)).toBe(168) // seven fit exactly
+    expect(columnWidth(1247)).toBeCloseTo(197.83, 2) // a pixel short of seven: six share 179
+    expect(columnWidth(1176, 6)).toBe(186) // the columns the grid is drawn with, given
   })
 
   it("counts the rows a height holds as cells of 96 pixels with 12-pixel gaps, as the overlay's display holds them", () => {
@@ -228,18 +245,58 @@ describe("the widgets' places (look pass spec 10)", () => {
   })
 
   test("a drag lands on the cell nearest the widget's top-left corner, wherever the pointer took it", () => {
-    expect(dropCell({ x: 2, y: 1 }, 0, 0)).toEqual({ x: 2, y: 1 })
-    expect(dropCell({ x: 2, y: 1 }, 89, 53)).toEqual({ x: 2, y: 1 }) // under half a cell: it stays
-    expect(dropCell({ x: 2, y: 1 }, 91, 55)).toEqual({ x: 3, y: 2 })
-    expect(dropCell({ x: 2, y: 1 }, -380, -230)).toEqual({ x: 0, y: -1 }) // moveTo keeps it inside the Board
+    // The overlay's cells, 180 pixels apart across and 108 down.
+    expect(dropCell({ x: 2, y: 1 }, 0, 0, FIXED_PITCH)).toEqual({ x: 2, y: 1 })
+    expect(dropCell({ x: 2, y: 1 }, 89, 53, FIXED_PITCH)).toEqual({ x: 2, y: 1 }) // under half a cell: it stays
+    expect(dropCell({ x: 2, y: 1 }, 91, 55, FIXED_PITCH)).toEqual({ x: 3, y: 2 })
+    expect(dropCell({ x: 2, y: 1 }, -380, -230, FIXED_PITCH)).toEqual({ x: 0, y: -1 }) // moveTo keeps it inside the Board
+  })
+
+  test("a drag lands on the cell under the pointer by the Board's own columns, at any width", () => {
+    // The 1,366-pixel window, six columns of 186; the 1,640, eight of 170.75; a pixel short of seven columns, six of
+    // 197.83; and seven columns exactly, of 168.
+    for (const width of [1176, 1450, 1247, 1248]) {
+      const pitch = boardPitch(width)
+      expect(pitch).toEqual({ x: columnWidth(width) + 12, y: 108 })
+      for (let column = 0; column < columnsFor(width); column += 1) {
+        // The widget's corner taken a little short of the column's corner, onto it, and a little past it.
+        for (const off of [-0.45, 0, 0.45]) {
+          expect(dropCell({ x: 0, y: 0 }, (column + off) * pitch.x, (2 + off) * pitch.y, pitch), `${width}: ${column} ${off}`)
+            .toEqual({ x: column, y: 2 })
+        }
+      }
+    }
+    // Six columns of 197.83 are 209.83 pixels apart: the overlay's 180 would put the widget a column too far.
+    const wide = boardPitch(1247)
+    expect(dropCell({ x: 0, y: 0 }, 5 * wide.x, 0, wide)).toEqual({ x: 5, y: 0 })
+    expect(dropCell({ x: 0, y: 0 }, 5 * wide.x, 0, FIXED_PITCH)).toEqual({ x: 6, y: 0 })
   })
 
   test('a grip asks for a cell more or less for each cell the pointer went, in its own directions', () => {
     const size = { w: 2, h: 1 }
-    expect(gripSize(size, 'e', 200, 300)).toEqual({ w: 3, h: 1 })
-    expect(gripSize(size, 's', 200, 300)).toEqual({ w: 2, h: 4 })
-    expect(gripSize(size, 'se', 360, 108)).toEqual({ w: 4, h: 2 })
-    expect(gripSize(size, 'se', -400, -60)).toEqual({ w: 0, h: 0 }) // resizeTo keeps it within the type
+    expect(gripSize(size, 'e', 200, 300, FIXED_PITCH)).toEqual({ w: 3, h: 1 })
+    expect(gripSize(size, 's', 200, 300, FIXED_PITCH)).toEqual({ w: 2, h: 4 })
+    expect(gripSize(size, 'se', 360, 108, FIXED_PITCH)).toEqual({ w: 4, h: 2 })
+    expect(gripSize(size, 'se', -400, -60, FIXED_PITCH)).toEqual({ w: 0, h: 0 }) // resizeTo keeps it within the type
+  })
+
+  test("a grip asks for a cell more or less for each of the Board's own columns the pointer went", () => {
+    const wide = boardPitch(1247) // six columns of 197.83, 209.83 pixels apart
+    expect(gripSize({ w: 2, h: 1 }, 'e', 4 * wide.x, 0, wide)).toEqual({ w: 6, h: 1 })
+    expect(gripSize({ w: 2, h: 1 }, 'e', 4 * wide.x, 0, FIXED_PITCH)).toEqual({ w: 7, h: 1 }) // a column too many
+    expect(gripSize({ w: 6, h: 1 }, 'se', -2.4 * wide.x, 1.4 * wide.y, wide)).toEqual({ w: 4, h: 2 })
+  })
+
+  test("the overlay's cells keep 168 pixels whatever its width leaves over, and the Board's columns share its width", () => {
+    // The overlay on the 1,440-pixel stand-in for the display: 1,408 pixels hold seven cells, and the 160 left over stay
+    // at the right.
+    expect(gridColumns('overlay', 7)).toBe('repeat(7, 168px)')
+    expect(pitchOf('overlay', 1408, 7)).toEqual({ x: 180, y: 108 })
+    expect(FIXED_PITCH).toEqual({ x: 180, y: 108 })
+    // The Board beside the rail of a 1,440-pixel window: seven columns of 168.29.
+    expect(gridColumns('board', 7)).toBe('repeat(7, minmax(0, 1fr))')
+    expect(pitchOf('board', 1250, 7)).toEqual(boardPitch(1250))
+    expect(pitchOf('board', 1250, 7).x).toBeCloseTo(180.29, 2)
   })
 
   test('the size tag says the size, and where the pointer asks for more or less than the type allows, the limit', () => {

@@ -146,14 +146,14 @@ test('the other widgets show the savings, the wishlist, the last pulls and the l
   await expect(wishes.nth(0)).toContainText('Citlali · about 11 Nov, certain')
   await expect(wishes.locator('.wl-face.r5')).toHaveCount(1)
   await expect(widgetById(page, 'wishlist')).not.toContainText('Skirk')
-  // The newest twelve as faces, newest first, each titled; the demo's newest 5★, Qiqi, is older than the rows read.
+  // The newest twelve as faces, newest first, each titled; the demo's newest 5★, Diluc, is among them.
   const last = widgetById(page, 'last')
-  await expect(last.locator('.w-meta')).toHaveText('387 kept')
+  await expect(last.locator('.w-meta')).toHaveText('445 kept')
   const faces = last.locator('.lp-face')
   await expect(faces).toHaveCount(12)
   await expect(faces.first()).toHaveAttribute('title', model.history.rows[0].name)
   await expect(last.locator('.lp-face.r4').first()).toHaveAttribute('title', /^.+, pity \d+$/)
-  await expect(last).toContainText('Qiqi at 81')
+  await expect(last).toContainText('Diluc at 34')
   // The figure is the first tile's, the character event's average, and is named so.
   const luck = widgetById(page, 'luck')
   expect(model.history.average_pity).not.toBeNull()

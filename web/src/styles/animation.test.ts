@@ -43,6 +43,13 @@ function endlessOf(css: string, names: ReadonlySet<string>): string[] {
   return endless
 }
 
+/**
+ * The endless animations that may move something else, named one by one with the reason: the sheen across the digits of the year on the
+ * Year tab is a gradient clipped to the text (the accepted mockup's own way), so it can move only by its background position. It paints
+ * a patch of about 230 by 106 pixels, not a page.
+ */
+const EXCEPTIONS = new Set(['./year.css: yr-sheen moves background-position'])
+
 /** Each endless animation of the sheets that moves something the compositor does not move alone, as "sheet: name moves property". */
 function repaintingForEver(sheets: Record<string, string>): string[] {
   const frames = new Map<string, Set<string>>()
@@ -52,7 +59,7 @@ function repaintingForEver(sheets: Record<string, string>): string[] {
   for (const [sheet, css] of Object.entries(sheets)) {
     for (const name of endlessOf(css, names)) {
       for (const property of frames.get(name) ?? []) {
-        if (!COMPOSITED.has(property)) found.push(`${sheet}: ${name} moves ${property}`)
+        if (!COMPOSITED.has(property) && !EXCEPTIONS.has(`${sheet}: ${name} moves ${property}`)) found.push(`${sheet}: ${name} moves ${property}`)
       }
     }
   }
@@ -82,4 +89,14 @@ test('the check finds an endless animation of box-shadow, by the shorthand or by
 
 test('no animation that runs for ever moves anything but opacity or transform, so none paints the page at every frame', () => {
   expect(repaintingForEver(SHEETS)).toEqual([])
+})
+
+test('the one exception is the sheen of the year, and it is still there and still endless', () => {
+  expect([...EXCEPTIONS]).toEqual(['./year.css: yr-sheen moves background-position'])
+  const css = SHEETS['./year.css']
+  expect(css).toBeDefined()
+  expect(keyframesOf(css).get('yr-sheen')).toEqual(new Set(['background-position']))
+  expect(endlessOf(css, new Set(['yr-sheen']))).toEqual(['yr-sheen'])
+  // The name is the exception, not the sheet: the same animation anywhere else, or a second one in the sheet, is found.
+  expect(repaintingForEver({ './other.css': css })).toEqual(['./other.css: yr-sheen moves background-position'])
 })

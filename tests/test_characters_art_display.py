@@ -1,16 +1,18 @@
 """The art cache serves a picture at the size it is shown (the Characters design, 11.7): when the page asks for a size, it gets a
-downscaled copy, made once from the kept original the way the gallery makes its thumbnails (Qt, given bytes, never a path) and
+downscaled copy, made once from the kept original the way the gallery makes its thumbnails (Pillow, given bytes, never a path) and
 kept beside it, so that a 2048-pixel picture is not what a 56-pixel face or a 900-pixel stage decodes. Nothing here reaches the
 internet: the download is a fake."""
 from __future__ import annotations
 
 import asyncio
+import io
 import json
 import threading
 from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image, ImageDraw
 
 from guildboard.api.app import UNEXPECTED_REQUEST, create_app
 from guildboard.characters import art as art_module
@@ -26,34 +28,24 @@ SMALL_URL = "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/202
 
 def picture(width: int, height: int, *, see_through: bool = True) -> bytes:
     """A PNG of this size with a gradient and, by default, a see-through border."""
-    from PySide6.QtCore import QBuffer, QIODevice
-    from PySide6.QtGui import QColor, QImage, QPainter
-
-    image = QImage(width, height, QImage.Format.Format_ARGB32)
-    image.fill(0 if see_through else 0xFF000000)
-    painter = QPainter(image)
-    painter.fillRect(width // 10, height // 10, width * 4 // 5, height * 4 // 5, QColor(200, 90, 40, 255))
-    painter.fillRect(width // 3, height // 3, width // 3, height // 3, QColor(20, 120, 220, 255))
-    painter.end()
-    buffer = QBuffer()
-    buffer.open(QIODevice.OpenModeFlag.WriteOnly)
-    assert image.save(buffer, "PNG")
-    return bytes(buffer.data())
+    image = Image.new("RGBA", (width, height), (0, 0, 0, 0 if see_through else 255))
+    pen = ImageDraw.Draw(image)
+    pen.rectangle([width // 10, height // 10, width // 10 + width * 4 // 5 - 1, height // 10 + height * 4 // 5 - 1],
+                  fill=(200, 90, 40, 255))
+    pen.rectangle([width // 3, height // 3, width // 3 + width // 3 - 1, height // 3 + height // 3 - 1], fill=(20, 120, 220, 255))
+    written = io.BytesIO()
+    image.save(written, "PNG")
+    return written.getvalue()
 
 
 def size_of(data: bytes) -> tuple[int, int]:
-    from PySide6.QtGui import QImage
-
-    image = QImage.fromData(data)
-    assert not image.isNull()
-    return image.width(), image.height()
+    with Image.open(io.BytesIO(data)) as image:
+        return image.size
 
 
 def has_see_through(data: bytes) -> bool:
-    from PySide6.QtGui import QImage
-
-    image = QImage.fromData(data)
-    return image.hasAlphaChannel() and image.pixelColor(1, 1).alpha() == 0
+    with Image.open(io.BytesIO(data)) as image:
+        return "A" in image.getbands() and image.convert("RGBA").getpixel((1, 1))[3] == 0
 
 
 def test_a_copy_for_display_is_kept_at_quality_92_and_the_sizes_are_the_five():
@@ -139,7 +131,7 @@ async def test_a_size_is_snapped_to_a_bucket_and_never_made_larger_than_the_pict
     assert exact == whole
 
 
-async def test_a_picture_that_cannot_be_read_by_qt_is_served_as_it_is(store, paths, clock):
+async def test_a_picture_that_cannot_be_read_by_pillow_is_served_as_it_is(store, paths, clock):
     junk = b"\x89PNG\r\n\x1a\n" + b"not really" * 20
     art, _ = _cache(store, paths, clock, {URL: junk})
     key = art.key_for(URL)

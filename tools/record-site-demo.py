@@ -50,7 +50,7 @@ PAGES: dict[str, tuple[str, ...]] = {
     "achievements": ("/api/timers", "/api/commissions"),
     "backlog": tuple(f"/api/backlog?sort={sort}" for sort in ("least", "closest", "game")),
     "map": ("/api/map",),
-    "stats": tuple(f"/api/stats?range={span}" for span in ("7", "30", "90", "all")),
+    "stats": tuple(f"/api/stats?range={span}" for span in ("7", "30", "90", "all")) + ("/api/stats/endgame", "/api/stats/month", "/api/stats/year"),
     "pulls": ("/api/pulls", "/api/pulls/choices"),
     "ledger": ("/api/ledger",) + tuple(f"/api/ledger/history?kind={kind}&limit=50" for kind in ("primogem", "crystal", "resin", "artifact")),
     "friends": ("/api/friends", "/api/friends?fresh=1", "/api/profile"),
@@ -67,13 +67,16 @@ PAGES: dict[str, tuple[str, ...]] = {
 
 
 def _achievements(get: Get) -> list[str]:
-    """Each of the three views, whole, as Pinned, and in each category (a category is its position in the list)."""
+    """Each of the three views, whole, as Pinned, and in each category (a category is its position in the list). Pinned keeps the
+    category the page is on (modelPath in web/src/pages/achievementsview.ts), and the page is on one once it has opened, so Pinned
+    is also recorded with each category."""
     categories = get("/api/achievements?view=left")["categories"]
     routes = []
     for view in ("left", "done", "all"):
         routes.append(f"/api/achievements?view={view}")
         routes.append(f"/api/achievements?view={view}&pinned=true")
         routes.extend(f"/api/achievements?view={view}&category={number}" for number in range(len(categories)))
+        routes.extend(f"/api/achievements?view={view}&category={number}&pinned=true" for number in range(len(categories)))
     return routes
 
 
@@ -97,6 +100,15 @@ def _characters(get: Get) -> list[str]:
     return routes
 
 
+def _years(get: Get) -> list[str]:
+    """Each year of the Year tab's switch, which the tab asks for by its address when it is chosen."""
+    return [f"/api/stats/year?year={year}" for year in get("/api/stats/year")["years"]]
+
+
+def _stats(get: Get) -> list[str]:
+    return _months(get) + _years(get)
+
+
 def _friends(get: Get) -> list[str]:
     model = get("/api/friends")
     routes = []
@@ -109,6 +121,11 @@ def _friends(get: Get) -> list[str]:
 
 def _map(get: Get) -> list[str]:
     return [f"/api/map/tabs/{tab['id']}" for tab in get("/api/map")["tabs"]]
+
+
+def _months(get: Get) -> list[str]:
+    """Each month of the Months tab's strip, which the tab asks for by its address when it is chosen."""
+    return [f"/api/stats/month?ym={month['ym']}" for month in get("/api/stats/month")["months"]]
 
 
 # The routes of Your week and the Endgame tab, which the core answers (and the interface asks for) only while the switch that shows
@@ -125,6 +142,7 @@ EXPANDERS: dict[str, Callable[[Get], list[str]]] = {
     "friends": _friends,
     "map": _map,
     "overlay": _widgets,
+    "stats": _stats,
 }
 
 # What the interface asks of the core that is not a model to record, by the address it starts with, and why.

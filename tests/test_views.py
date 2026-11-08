@@ -5,11 +5,12 @@ import pytest
 from guildboard.history import History
 from guildboard.metrics import Point
 from guildboard.records import GROUPS, Area, FetchResult, OverviewRecord, Region
-from guildboard.sources.demo import DEMO_SERVER, seed_history
+from guildboard.ledger.demo import seed_ledger
+from guildboard.sources.demo import DEMO_ACCOUNT, DEMO_SERVER, seed_history
 from guildboard.sync.apply import apply_result
 from guildboard.views.backlog import build_backlog
 from guildboard.views.reference import oculi_totals
-from guildboard.views.stats import CHEST_KEYS, build_stats, hour_level, longest_run, play_level, trend
+from guildboard.views.stats import CHEST_KEYS, build_stats, current_run, hour_level, longest_run, play_level, trend
 from support import ok_result
 
 UTC = timezone.utc
@@ -51,7 +52,7 @@ def test_reference_totals():
 
 def test_backlog_counters(seeded):
     model = build_backlog(seeded, History(seeded), TODAY)
-    assert model["tracking_since"] == "2026-07-15"
+    assert model["tracking_since"] == "2026-03-02"
     assert [counter["id"] for counter in model["counters"]] == ["chests", "oculi", "achievements", "waypoints", "archon"]
     chests = model["counters"][0]
     counters = seeded.latest_doc("overview")[1]["counters"]
@@ -184,10 +185,11 @@ def test_helpers():
 
 def test_stats_thirty_days(seeded):
     history = History(seeded)
-    model = build_stats(seeded, history, TODAY, DEMO_SERVER, "30")
+    seed_ledger(seeded, DEMO_ACCOUNT.uid, DEMO_SERVER, NOW)
+    model = build_stats(seeded, history, TODAY, DEMO_SERVER, "30", uid=DEMO_ACCOUNT.uid)
     assert model["period"] == {"first": "2026-09-14", "last": "2026-10-13", "days": 30}
     assert model["coverage"] == {
-        "tracking_since": "2026-07-15", "tracked_days": 30, "full": True, "partial": False, "compare": True,
+        "tracking_since": "2026-03-02", "tracked_days": 30, "full": True, "partial": False, "compare": True,
     }
     assert [tile["id"] for tile in model["tiles"]] == ["chests", "achievements", "playtime", "days", "primogems"]
     chests, achievements, playtime, days, primogems = model["tiles"]
@@ -221,6 +223,23 @@ def test_stats_exploration_and_chest_columns(seeded):
     assert chests["columns"][chests["max_index"]]["value"] == max(column["value"] for column in chests["columns"])
 
 
+def every_month_gains_something(history) -> list[str]:
+    """What stays flat over a stretch of 30 days of the demo's history, from its first day: each stretch must gain chests,
+    exploration and achievements. Empty when every stretch gains all three."""
+    first = date(2026, 3, 2)
+    kinds = {
+        "chests": list(CHEST_KEYS),
+        "exploration": [f"explore.{region}.pct" for region in range(1, 14)],
+        "achievements": ["stats.achievements"],
+    }
+    flat = []
+    for start in (first + timedelta(days=30 * month) for month in range(7)):
+        for name, keys in kinds.items():
+            if not history.change(keys, start, start + timedelta(days=29)):
+                flat.append(f"{name} from {start}")
+    return flat
+
+
 def test_stats_other_ranges(seeded):
     history = History(seeded)
     week = build_stats(seeded, history, TODAY, DEMO_SERVER, "7")
@@ -230,12 +249,15 @@ def test_stats_other_ranges(seeded):
     quarter = build_stats(seeded, history, TODAY, DEMO_SERVER, "90")
     assert quarter["period"]["first"] == "2026-07-16"
     assert quarter["coverage"]["full"] is True
-    assert quarter["coverage"]["compare"] is False  # the 90 days before that were not tracked
-    assert quarter["tiles"][0]["delta"] is None
+    assert quarter["coverage"]["compare"] is True  # the 90 days before that were tracked too
+    chests = quarter["tiles"][0]
+    # The 90 days before were played and gained chests: a real comparison, never against a flat period of nothing.
+    assert chests["delta"] not in (None, 0) and chests["value"] - chests["delta"] > 100
+    assert every_month_gains_something(history) == []
     assert quarter["chests"]["unit"] == "week"
     assert 13 <= len(quarter["chests"]["columns"]) <= 14
     everything = build_stats(seeded, history, TODAY, DEMO_SERVER, "all")
-    assert everything["period"] == {"first": "2026-07-15", "last": "2026-10-13", "days": 91}
+    assert everything["period"] == {"first": "2026-03-02", "last": "2026-10-13", "days": 226}
     assert everything["coverage"]["partial"] is False
     assert everything["coverage"]["compare"] is False
     with pytest.raises(ValueError):
@@ -245,7 +267,7 @@ def test_stats_other_ranges(seeded):
 def test_stats_calendar_months_and_endgame(seeded):
     model = build_stats(seeded, History(seeded), TODAY, DEMO_SERVER, "30")
     calendar = model["calendar"]
-    assert (calendar["weeks"], calendar["first_day"], len(calendar["cells"])) == (12, "2026-07-27", 84)
+    assert (calendar["weeks"], calendar["first_day"], len(calendar["cells"])) == (53, "2025-10-13", 371)
     future = [cell for cell in calendar["cells"] if cell["level"] is None]
     assert [cell["day"] for cell in future] == [f"2026-10-{day}" for day in range(14, 19)]
     assert all(cell["level"] in (0, 1, 2, 3, 4) for cell in calendar["cells"] if cell["level"] is not None)
@@ -262,7 +284,33 @@ def test_stats_calendar_months_and_endgame(seeded):
     assert endgame["abyss"]["best"].endswith(" stars")
     assert endgame["theater"]["period"] == "1 Oct to 31 Oct"
     assert endgame["theater"]["best"].startswith("Act ")
-    assert endgame["stygian"]["period"] == "Season 10"
+    assert endgame["stygian"]["period"] == "The Silent Lantern Trial"
+
+
+def test_current_run_counts_to_today_or_yesterday():
+    assert current_run([True, True, False, True, True, True]) == 3
+    assert current_run([True, True, True, False]) == 3  # today is not played yet: yesterday's run still counts
+    assert current_run([True, False, False]) == 0
+    assert current_run([]) == 0
+    assert current_run([False]) == 0
+
+
+def test_the_calendar_sends_a_year_of_weeks_and_the_run(seeded):
+    history = History(seeded)
+    model = build_stats(seeded, history, TODAY, DEMO_SERVER, "30")["calendar"]
+    assert model["weeks"] == 53 and len(model["cells"]) == 53 * 7
+    minutes = history.playtime_minutes(history.tracking_since(), TODAY, DEMO_SERVER)
+    flags = [minutes[day] > 0 for day in sorted(minutes)]
+    assert model["run"] == {"current": current_run(flags), "best": longest_run(flags)}
+    assert 0 < model["run"]["best"] <= len(flags) and model["run"]["current"] <= model["run"]["best"]
+
+
+def test_the_run_counts_game_days_from_tracking_start(store):
+    tracking_began(store, date(2026, 10, 8))
+    for day in (8, 9, 11, 12):  # a gap on the 10th; today (the 13th) is not played yet
+        played(store, datetime(2026, 10, day, 12, tzinfo=UTC), datetime(2026, 10, day, 13, tzinfo=UTC))
+    model = build_stats(store, History(store), TODAY, "os_euro", "30")["calendar"]
+    assert model["run"] == {"current": 2, "best": 2}
 
 
 def test_stats_just_after_tracking_began(store):
@@ -283,7 +331,8 @@ def test_stats_on_an_empty_store(store):
     assert model["chests"]["total"] == 0
     assert model["chests"]["max_index"] is None
     assert all(column["no_data"] for column in model["chests"]["columns"])
-    assert len(model["calendar"]["cells"]) == 84
+    assert len(model["calendar"]["cells"]) == 53 * 7
+    assert model["calendar"]["run"] == {"current": 0, "best": 0}
     assert model["primogems"] == {"months": [], "sources": []}
     assert model["endgame"] == []
     assert model["primogem_days"]["total"] == 0
@@ -298,23 +347,25 @@ def test_stats_on_an_empty_store(store):
 
 def test_primogems_per_day_follow_the_chests_rules(seeded):
     history = History(seeded)
-    month = build_stats(seeded, history, TODAY, DEMO_SERVER, "30")
+    # Without the game's log or the diary's detail, every day is empty: the diary's running total is never an estimate.
+    alone = build_stats(seeded, history, TODAY, DEMO_SERVER, "30")["primogem_days"]
+    assert alone["total"] == 0 and all(column["no_data"] for column in alone["columns"])
+    seed_ledger(seeded, DEMO_ACCOUNT.uid, DEMO_SERVER, NOW)
+    month = build_stats(seeded, history, TODAY, DEMO_SERVER, "30", uid=DEMO_ACCOUNT.uid)
     days = month["primogem_days"]
     assert set(days) == set(month["chests"]) | {"groups_order", "group_labels", "exact", "last_import"}  # the chests' shape and the groups
     assert (days["unit"], len(days["columns"])) == ("day", 30)
     assert days["total"] == month["tiles"][4]["value"]  # the Primogems earned tile's figure
     assert days["total"] > 0
-    assert days["columns"] != month["chests"]["columns"]  # primogems' own rises, not the chests'
-    by_day = {column["label"]: column for column in days["columns"]}
-    assert by_day["2026-09-19"]["no_data"] is True  # the demo account did not sync that day
-    assert by_day["2026-09-20"]["after_gap"] is True
+    assert days["columns"] != month["chests"]["columns"]  # primogems' own, not the chests'
+    assert all("estimate" not in column for column in days["columns"])
+    assert all(column["no_data"] or "groups" in column for column in days["columns"])
     assert days["columns"][days["max_index"]]["value"] == max(column["value"] for column in days["columns"])
-    quarter = build_stats(seeded, history, TODAY, DEMO_SERVER, "90")
+    quarter = build_stats(seeded, history, TODAY, DEMO_SERVER, "90", uid=DEMO_ACCOUNT.uid)
     weeks = quarter["primogem_days"]
     assert weeks["unit"] == "week"  # past 45 days, a column a week
     assert 13 <= len(weeks["columns"]) <= 14
     assert weeks["total"] == quarter["tiles"][4]["value"]
-    assert any(column["after_gap"] for column in weeks["columns"])
 
 
 def test_play_by_the_hour_is_the_minutes_on_an_average_day_of_each_weekday(store, history):

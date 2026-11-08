@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import logging
+import os
 import socket
 import sys
 from datetime import datetime
@@ -23,13 +24,16 @@ from guildboard.store import StoreError
 
 
 _TLS_READY = False
+NO_SHELL_TEXT = (
+    "Guild Board's window is its shell. Start it with guildboard-app.exe, or with npm start --prefix shell in a checkout."
+)
 
 
 def use_the_windows_store() -> None:
     """Have every TLS connection of this process verified through Windows' own chain building, once, before any request. The
     certificates OpenSSL reads from the store are those the PC holds already; Windows fetches a root it lacks on the way, and a
-    fresh PC could not reach HoYoverse until another program had made it fetch one. The frozen build calls this too: it is
-    the one entry (main_app and main_tray come through main). Where truststore cannot, the default roots stay."""
+    fresh PC could not reach HoYoverse until another program had made it fetch one. The frozen core calls this too: it is
+    the one entry (packaging/core_entry.py runs main). Where truststore cannot, the default roots stay."""
     global _TLS_READY
     if _TLS_READY:
         return
@@ -111,39 +115,59 @@ async def serve(
         listener.close()
 
 
+def _run_for_shell(paths: AppPaths, *, demo: bool, demo_now: datetime | None) -> int:
+    """The core for a shell that started it (shellchannel). The channel writes to a copy of the standard output handle,
+    with UTF-8 and a newline alone whatever Windows does to a console's output. The program's own `sys.stdout` is never
+    written to, so that a shell that has gone, with a broken pipe, cannot make the flush at Python's exit fail."""
+    from guildboard.shellchannel import run_core_for_shell
+
+    setup_logging(paths.logs_dir)
+    channel_out = open(os.dup(sys.stdout.fileno()), "w", encoding="utf-8", newline="\n")
+    try:
+        return asyncio.run(run_core_for_shell(
+            paths, demo=demo, demo_now=demo_now, stdin=sys.stdin.buffer, stdout=channel_out,
+        ))
+    finally:
+        try:
+            channel_out.close()
+        except (OSError, ValueError):  # the pipe is broken: what was left to write has nowhere to go
+            pass
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     use_the_windows_store()
     parser = argparse.ArgumentParser(prog="guildboard", description="Guild Board")
     parser.add_argument("link", nargs="?", default=None, help="an invite link, which Windows hands over when one is opened")
     parser.add_argument("--demo", action="store_true", help="run on a synthetic account, with no network access")
     parser.add_argument("--no-shell", action="store_true", help="run the core alone and print a launch link")
+    parser.add_argument(
+        "--shell", action="store_true",
+        help="run the core for a shell that starts it: JSON lines on standard input and output, and no window",
+    )
     parser.add_argument("--port", type=int, default=0, help="port to listen on (default: any free port)")
     parser.add_argument("--data-dir", type=Path, default=None, help="folder for the database, settings and logs")
     parser.add_argument(
         "--demo-now", default=None,
         help="with --demo: the instant the demo clock starts at, for example 2026-10-13T08:00:00+00:00",
     )
-    parser.add_argument("--hidden", action="store_true", help="start in the tray, without opening the window")
-    parser.add_argument("--quit", action="store_true", help="ask the running Guild Board to quit, and wait until it has")
-    parser.add_argument(
-        "--acknowledged", action="store_true", help="with --demo: the first-run statement has been read already"
-    )
     parser.add_argument(
         "--week-and-endgame", action="store_true",
         help="with --demo: show Your week and Endgame, which are hidden (the browser tests run with them shown)",
     )
     args = parser.parse_args(argv)
+    if args.shell and args.no_shell:
+        print("--shell and --no-shell cannot be used together.")
+        return 2
+    if not args.shell and not args.no_shell:
+        # The window is the Electron shell's, and it starts the core itself with --shell. A start with neither switch has
+        # no window to show, and makes nothing: not even the data folder.
+        print(NO_SHELL_TEXT)
+        return 2
     if args.week_and_endgame and not args.demo:
         print("--week-and-endgame needs --demo.")
         return 2
     if args.week_and_endgame:
         characters.WEEK_AND_ENDGAME = True
-    if args.acknowledged and not args.demo:
-        print("--acknowledged needs --demo.")
-        return 2
-    if args.no_shell and (args.hidden or args.quit):
-        print("--hidden and --quit are for Guild Board with its window. Leave out --no-shell.")
-        return 2
     demo_now = None
     if args.demo_now is not None:
         if not args.demo:
@@ -161,15 +185,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     paths = AppPaths(args.data_dir or default_data_dir(demo=args.demo))
     paths.ensure()
     try:
-        if not args.no_shell:
-            # Qt is loaded only for Guild Board with its window. The shell opens the log itself, once it knows
-            # that this start is the one that runs.
-            from guildboard.shell import app as shell_app
-
-            return shell_app.run_shell(
-                paths, demo=args.demo, hidden=args.hidden, acknowledged=args.acknowledged, quit=args.quit,
-                demo_now=demo_now, invite=invite,
-            )
+        if args.shell:
+            return _run_for_shell(paths, demo=args.demo, demo_now=demo_now)
         setup_logging(paths.logs_dir)
         return asyncio.run(run_headless(paths, demo=args.demo, port=args.port, demo_now=demo_now, invite=invite))
     except KeyboardInterrupt:
@@ -184,17 +201,6 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise
     finally:
         shutdown_logging()
-
-
-def main_app() -> int:
-    """Guild Board with its window, and no console."""
-    return main(sys.argv[1:])
-
-
-def main_tray() -> int:
-    """Guild Board in the tray. A shortcut made by Qt carries no arguments, so starting hidden needs a program
-    of its own."""
-    return main(["--hidden", *sys.argv[1:]])
 
 
 if __name__ == "__main__":

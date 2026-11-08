@@ -35,7 +35,7 @@ def test_demo_core_seeds_history_and_reports_status(tmp_path, clock):
     core = _core(tmp_path, clock, demo=True)
     status = core.status()
     assert (status["version"], status["mode"], status["has_shell"]) == (__version__, "demo", False)
-    assert status["tracking_since"] == "2026-07-15"
+    assert status["tracking_since"] == "2026-03-02"
     assert status["sync"]["state"] == "ok"
     assert status["sync"]["last_ok_at"] is not None
     assert status["sync"]["next_at"] is None
@@ -59,7 +59,7 @@ def test_demo_data_is_not_reseeded(tmp_path, clock):
     seeded = (first.store.timers(), first.store.timer_events(), first.store.appearances())
     first.store.close()
     second = _core(tmp_path, clock, demo=True)
-    assert len(second.store.recent_runs(limit=500)) == runs == 85
+    assert len(second.store.recent_runs(limit=500)) == runs == 211
     assert (second.store.timers(), second.store.timer_events(), second.store.appearances()) == seeded
     second.store.close()
 
@@ -213,7 +213,7 @@ def test_demo_core_can_start_at_a_chosen_instant_and_move_on(tmp_path):
     core = Core(AppPaths(tmp_path / "data"), demo=True, demo_now=start, process_lister=lambda: set())
     status = core.status()
     assert status["now"].startswith("2026-10-13T08:00")
-    assert status["tracking_since"] == "2026-07-15"
+    assert status["tracking_since"] == "2026-03-02"
     moved = core.advance_demo_clock(6 * 60)
     assert 355 < (moved - start).total_seconds() < 370
     assert core.status()["now"].startswith("2026-10-13T08:06")

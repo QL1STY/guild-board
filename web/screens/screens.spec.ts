@@ -150,7 +150,7 @@ test('backlog', { tag: STAGE_1B }, async ({ page, core }) => {
 
 test('stats', { tag: STAGE_1B }, async ({ page, core }) => {
   await page.goto(`${core.origin}/#/stats`)
-  await expect(page.getByRole('region', { name: 'Endgame' }).getByRole('row')).toHaveCount(4)
+  await expect(page.getByRole('region', { name: 'Endgame' }).getByTestId('ec-abyss')).toBeVisible()
   await shoot(page, 'stats')
 })
 
@@ -289,7 +289,7 @@ test('backlog at 2560', async ({ page, core }) => {
 
 test('stats at 2560', async ({ page, core }) => {
   await page.goto(`${core.origin}/#/stats`)
-  await expect(page.getByRole('region', { name: 'Endgame' }).getByRole('row')).toHaveCount(4)
+  await expect(page.getByRole('region', { name: 'Endgame' }).getByTestId('ec-abyss')).toBeVisible()
   await shoot(page, 'stats-2560', 2560, FOLDER_2A)
 })
 
@@ -314,15 +314,17 @@ test('look: board edit, a widget dragged', { tag: LOOK }, async ({ page, core })
   // lifted under the pointer, the gold outline shows the cell where it would land, and the Clock has slid down out of
   // its way.
   const resets = page.locator('[data-widget="start-resets"]')
-  const [box, head, board] = await Promise.all([
+  const [box, head, board, column] = await Promise.all([
     resets.boundingBox(),
     resets.locator('.w-head').boundingBox(),
     page.getByTestId('board').boundingBox(),
+    // The Board's columns share its width: a column and its gap are a little over 180 pixels.
+    page.getByTestId('board').evaluate((grid) => parseFloat(getComputedStyle(grid).gridTemplateColumns)),
   ])
   const grab = { x: head!.x + 12, y: head!.y + head!.height / 2 }
   await page.mouse.move(grab.x, grab.y)
   await page.mouse.down()
-  await page.mouse.move(board!.x + 2 * 180 + grab.x - box!.x + 64, board!.y + 6 * 108 + grab.y - box!.y + 34, { steps: 8 })
+  await page.mouse.move(board!.x + 2 * (column + 12) + grab.x - box!.x + 64, board!.y + 6 * 108 + grab.y - box!.y + 34, { steps: 8 })
   await expect(resets).toContainClass('lifted')
   await expect(page.getByTestId('board').locator('.board-landing')).toBeVisible()
   await picture(page, 'board-edit-drag-1440', FOLDER_LOOK)
@@ -363,7 +365,7 @@ test('look: commissions at 2560', { tag: LOOK }, async ({ page, core }) => {
 
 test('look: stats at 2560', { tag: LOOK }, async ({ page, core }) => {
   await page.goto(`${core.origin}/#/stats`)
-  await expect(page.getByRole('region', { name: 'Endgame' }).getByRole('row')).toHaveCount(4)
+  await expect(page.getByRole('region', { name: 'Endgame' }).getByTestId('ec-abyss')).toBeVisible()
   await shoot(page, 'stats-2560', 2560, FOLDER_LOOK)
 })
 
@@ -501,7 +503,7 @@ const SCALED_PAGES: [name: string, open: (page: Page, origin: string) => Promise
     'stats',
     async (page, origin) => {
       await page.goto(`${origin}/#/stats`)
-      await expect(page.getByRole('region', { name: 'Endgame' }).getByRole('row')).toHaveCount(4)
+      await expect(page.getByRole('region', { name: 'Endgame' }).getByTestId('ec-abyss')).toBeVisible()
     },
   ],
   [

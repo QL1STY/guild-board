@@ -258,12 +258,34 @@ class CalculatorRecord:
 
 
 @dataclass(frozen=True)
+class EnemyRecord:
+    """An enemy of a Spiral Abyss half: its name, level and picture (an address on HoYoverse's picture hosts, or "")."""
+
+    name: str
+    level: int
+    icon: str
+
+
+@dataclass(frozen=True)
+class RankRecord:
+    """One of an endgame mode's highlights, with the character it is of and that character's face. `kind` is "strike",
+    "defeats", "taken", "bursts", "skills" or "played" in the Spiral Abyss, and "damage", "defeats" or "taken" in the
+    Imaginarium Theater."""
+
+    kind: str
+    value: int
+    avatar_id: int
+    icon: str
+
+
+@dataclass(frozen=True)
 class AbyssHalfRecord:
     chamber: str  # "12-3"
     half: int
     stars: int
     characters: tuple[int, ...]
     enemies: tuple[str, ...]
+    foes: tuple[EnemyRecord, ...] = ()  # the same enemies, with their levels and pictures (the Stats design, 3.4)
 
 
 @dataclass(frozen=True)
@@ -273,11 +295,14 @@ class StygianBossRecord:
     disadvantage: tuple[str, ...]
     team: tuple[int, ...]
     seconds: int | None
+    icon: str = ""
+    level: int = 0
 
 
 @dataclass(frozen=True)
 class EndgameDetailRecord:
-    """Group "endgame"."""
+    """Group "endgame". The fields after the first nine are the Stats page's (its design, 3.4), each with a default, so
+    that what the Characters pages read is as it was. Times are UTC ISO text."""
 
     abyss_stars: int | None
     abyss_halves: tuple[AbyssHalfRecord, ...]
@@ -288,6 +313,22 @@ class EndgameDetailRecord:
     stygian_difficulty: int | None
     stygian_bosses: tuple[StygianBossRecord, ...]
     stygian_ends: str | None
+    abyss_starts: str | None = None
+    abyss_battles: int = 0
+    abyss_wins: int = 0
+    abyss_chambers: tuple[tuple[str, int], ...] = ()  # ("9-1", stars), floor by floor
+    abyss_ranks: tuple[RankRecord, ...] = ()
+    theater_starts: str | None = None
+    theater_medals: tuple[bool, ...] = ()  # one for each act of the season, True where its medal was won
+    theater_medal_count: int = 0  # the medals HoYoLAB counts: those of the season's own acts
+    theater_flowers: int = 0  # Fantasia Flowers used
+    theater_seconds: int = 0  # time in battle
+    theater_ranks: tuple[RankRecord, ...] = ()
+    stygian_season: str = ""
+    stygian_starts: str | None = None
+    stygian_seconds: int | None = None  # the best's total time
+    stygian_medal: str = ""  # the best's medal, by the name of its picture, such as UI_LeyLineChallenge_Medal_5
+    stygian_next: tuple[str, str] | None = None  # (name, starts) of a newer season with no data yet
 
 
 @dataclass(frozen=True)

@@ -70,6 +70,12 @@ def test_the_launch_link_can_open_the_timers_category(core):
             assert (response.status_code, response.headers["location"]) == (303, location), place
 
 
+def test_the_launch_link_can_open_gift_codes(core):
+    response = TestClient(create_app(core, PORT), base_url=BASE).get(
+        "/launch", params={"k": core.launch_secret, "to": "codes"}, follow_redirects=False)
+    assert (response.status_code, response.headers["location"]) == (303, "/#/codes")
+
+
 def test_wrong_launch_secret_is_refused(core):
     with TestClient(create_app(core, PORT), base_url=BASE) as anonymous:
         response = anonymous.get("/launch", params={"k": "guess"}, follow_redirects=False)
@@ -106,7 +112,7 @@ def test_status(client):
     assert status["sync"]["state"] == "ok"
     assert status["account"]["nickname"] == "Traveler"
     assert status["game"]["running"] is False
-    assert status["tracking_since"] == "2026-07-15"
+    assert status["tracking_since"] == "2026-03-02"
 
 
 def test_backlog_and_its_sorts(client):
@@ -120,13 +126,26 @@ def test_backlog_and_its_sorts(client):
 
 
 def test_stats_and_its_ranges(client):
-    for key, days in (("7", 7), ("30", 30), ("90", 90), ("all", 91)):
+    for key, days in (("7", 7), ("30", 30), ("90", 90), ("all", 226)):
         model = client.get("/api/stats", params={"range": key}).json()
         assert (model["range"], model["period"]["days"]) == (key, days)
     assert client.get("/api/stats").json()["range"] == "30"
     response = client.get("/api/stats", params={"range": "365"})
     assert response.status_code == 422
     assert response.json() == {"error": "Unknown range. Use 7, 30, 90 or all."}
+
+
+def test_the_endgame_card_has_its_own_model(client):
+    # The Stats design, 3.1: the Overview's Endgame card, a column for each mode.
+    client.post("/api/sync")
+    _wait_until_idle(client)
+    model = client.get("/api/stats/endgame").json()
+    assert [column["mode"] for column in model["modes"]] == ["abyss", "theater", "stygian"]
+    abyss, theater, stygian = model["modes"]
+    assert abyss["played"] and abyss["floor_shown"] == 12 and len(abyss["chambers"]) == 12
+    assert theater["played"] and theater["medals"] and stygian["played"] and len(stygian["bosses"]) == 3
+    # The demo has no pictures: every header is plain, with no icon (the Stats design, section 7).
+    assert all(column["header"] == {"icon": None, "picture": None, "crop": None} for column in model["modes"])
 
 
 def test_manual_sync_runs_and_then_cools_down(client):
@@ -148,7 +167,7 @@ def test_sync_log_rows(client):
     assert set(rows[0]) == {"id", "started_at", "finished_at", "trigger", "outcome", "error_kind", "message"}
     assert rows[0]["id"] > rows[1]["id"]
     assert len(client.get("/api/synclog", params={"limit": 3}).json()) == 3
-    assert len(client.get("/api/synclog", params={"limit": 100000}).json()) == 85
+    assert len(client.get("/api/synclog", params={"limit": 100000}).json()) == 211
 
 
 def test_pause_and_resume(client, core):

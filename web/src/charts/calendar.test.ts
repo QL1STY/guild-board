@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { type Cell, cellTip, monthMarks, weekRows } from './calendar.ts'
+import { type Cell, cellSize, cellTip, lastWeeks, monthMarks, runText, weekRows, weeksThatFit } from './calendar.ts'
 
 /** `count` days from `first`, each with the minutes that `minutes` gives for its position. */
 function days(first: string, count: number, minutes: (index: number) => number | null = () => 0): Cell[] {
@@ -32,4 +32,28 @@ test('the table has one row per week', () => {
     ['5 Oct', '28 min', '2 h 17 min', '–', '–', '–', '–', '–'],
     ['12 Oct', '–', '–', '', '', '', '', ''],
   ])
+})
+
+test('weeksThatFit never cuts a column', () => {
+  expect(weeksThatFit(520, 17, 3, 34)).toBe(24) // (520 - 34 + 3) / 20 = 24.45
+  expect(weeksThatFit(100, 17, 3, 34)).toBe(4) // never fewer than 4
+})
+
+test('cellSize grows to fill the height, within bounds', () => {
+  expect(cellSize(220, 3, 14, 17, 24)).toBe(24)
+  expect(cellSize(120, 3, 14, 17, 24)).toBe(17)
+  expect(cellSize(160, 3, 14, 17, 24)).toBe(18) // (160 - 14 - 18) / 7 = 18.28
+})
+
+test('lastWeeks keeps the newest weeks', () => {
+  const cells = days('2026-10-05', 21)
+  expect(lastWeeks(cells, 2)).toEqual(cells.slice(7))
+  expect(lastWeeks(cells, 9)).toEqual(cells)
+})
+
+test('runText', () => {
+  expect(runText({ current: 6, best: 9 })).toBe('6 days in a row · Best 9 days')
+  expect(runText({ current: 0, best: 9 })).toBe('Best 9 days')
+  expect(runText({ current: 1, best: 1 })).toBe('1 day in a row · Best 1 day')
+  expect(runText({ current: 0, best: 0 })).toBe('')
 })

@@ -1,0 +1,111 @@
+{
+ "data": [
+  {
+   "schedule": {
+    "schedule_id": "5269013",
+    "start_time": "1794387600",
+    "end_time": "1797303599",
+    "start_date_time": {"year": 2026, "month": 11, "day": 11, "hour": 10, "minute": 0, "second": 0},
+    "end_date_time": {"year": 2026, "month": 12, "day": 15, "hour": 3, "minute": 59, "second": 59},
+    "is_valid": true,
+    "name": "Battle Amid the Great Waves"
+   },
+   "single": {"best": null, "challenge": [], "has_data": false},
+   "mp": {"best": null, "challenge": [], "has_data": false},
+   "blings": []
+  },
+  {
+   "schedule": {
+    "schedule_id": "5269012",
+    "start_time": "1790758800",
+    "end_time": "1793674799",
+    "start_date_time": {"year": 2026, "month": 9, "day": 30, "hour": 10, "minute": 0, "second": 0},
+    "end_date_time": {"year": 2026, "month": 11, "day": 3, "hour": 3, "minute": 59, "second": 59},
+    "is_valid": true,
+    "name": "Luminous Battlefront"
+   },
+   "single": {
+    "best": {"difficulty": 5, "second": 280, "icon": "UI_LeyLineChallenge_Medal_5"},
+    "challenge": [
+     {
+      "name": "Battle-Hardened Domovoy Sculptor: Gale Hewing",
+      "second": 119,
+      "teams": [
+       {"avatar_id": 10000150, "level": 90, "rarity": 5},
+       {"avatar_id": 10000047, "level": 90, "rarity": 5},
+       {"avatar_id": 10000043, "level": 90, "rarity": 4},
+       {"avatar_id": 10000005, "level": 90, "rarity": 5}
+      ],
+      "best_avatar": [
+       {"avatar_id": 10000150, "dps": "323940", "type": 1},
+       {"avatar_id": 10000150, "dps": "3522928", "type": 2}
+      ],
+      "monster": {
+       "name": "Battle-Hardened Domovoy Sculptor: Gale Hewing",
+       "level": 105,
+       "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6ab316b1/1598e1a769a940aa4f33a19742922ae2.png",
+       "desc": [
+        "When battle begins, the Nemesis will attempt to create a Prime Ice sculpture. Once completed, it will transform into a Big-Mouthed Jack Frost that continuously launches snowballs."
+       ],
+       "tags": [],
+       "monster_id": 1012061
+      }
+     },
+     {
+      "name": "Secret Source Automaton: Overseer Device - Obliterator Panoply",
+      "second": 42,
+      "teams": [
+       {"avatar_id": 10000058, "level": 90, "rarity": 5},
+       {"avatar_id": 10000024, "level": 90, "rarity": 4},
+       {"avatar_id": 10000039, "level": 90, "rarity": 4},
+       {"avatar_id": 10000133, "level": 90, "rarity": 5}
+      ],
+      "best_avatar": [
+       {"avatar_id": 10000133, "dps": "599850", "type": 1},
+       {"avatar_id": 10000133, "dps": "6022817", "type": 2}
+      ],
+      "monster": {
+       "name": "Secret Source Automaton: Overseer Device - Obliterator Panoply",
+       "level": 105,
+       "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6851f427/79730aad9e298a2d28da12ad0d643e0b.png",
+       "desc": [
+        "Will immediately enter Sweeper Mode when combat starts: <color=#FFD780FF>All RES is greatly increased</color>, and it will perform rotating attacks while generating Flow Momentum."
+       ],
+       "tags": [],
+       "monster_id": 1001063
+      }
+     },
+     {
+      "name": "Guardian Blade of Drifting Snow: Endless Reverberation",
+      "second": 119,
+      "teams": [
+       {"avatar_id": 10000096, "level": 90, "rarity": 5},
+       {"avatar_id": 10000123, "level": 90, "rarity": 5},
+       {"avatar_id": 10000031, "level": 90, "rarity": 4},
+       {"avatar_id": 10000090, "level": 90, "rarity": 4}
+      ],
+      "best_avatar": [
+       {"avatar_id": 10000096, "dps": "168104", "type": 1},
+       {"avatar_id": 10000096, "dps": "5037561", "type": 2}
+      ],
+      "monster": {
+       "name": "Guardian Blade of Drifting Snow: Endless Reverberation",
+       "level": 105,
+       "icon": "https://act-webstatic.hoyoverse.com/hk4e/e20200928calculate/item_icon/6ab316b1/54bf2575fdb586d36911c0102861c516.png",
+       "desc": [
+        "When its HP falls below a certain threshold, the Nemesis will create a <color=#FFD780FF>Cryo Ward</color> to protect itself."
+       ],
+       "tags": [],
+       "monster_id": 1012063
+      }
+     }
+    ],
+    "has_data": true
+   },
+   "mp": {"best": null, "challenge": [], "has_data": false},
+   "blings": []
+  }
+ ],
+ "is_unlock": true,
+ "links": {"lineup_link": "", "play_link": ""}
+}

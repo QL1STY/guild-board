@@ -22,12 +22,13 @@ describe('HANDS_OFF', () => {
     )
   })
 
-  it('names every address it talks to, the online account only after a sign-in', () => {
+  it('names every address it talks to, the online account only after a sign-in, and the public pictures from other sites', () => {
     expect(HANDS_OFF[4]).toBe(
-      "It talks only to HoYoverse's own sites: hoyolab.com, hoyoverse.com and mihoyo.com. The exceptions are " +
-        "Paimon.moe's public achievement list on GitHub, downloaded only when you ask to check for new achievements, " +
-        "the check for a new version of Guild Board on GitHub, and, only after you sign in to an online account, " +
-        "Guild Board's own server.",
+      "It talks to HoYoverse's own sites: hoyolab.com, hoyoverse.com and mihoyo.com. Beyond them, it downloads " +
+        "Paimon.moe's public achievement list from GitHub only when you ask to check for new achievements, checks " +
+        "GitHub for a new version of Guild Board, and talks to Guild Board's own server only after you sign in to an " +
+        'online account. It may also download public pictures from other sites, such as the Endgame headers, and ' +
+        'sends nothing of yours with them.',
     )
   })
 

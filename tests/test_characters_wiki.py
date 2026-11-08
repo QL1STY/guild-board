@@ -7,6 +7,7 @@ import json
 import logging
 import urllib.error
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 
@@ -277,6 +278,63 @@ async def test_an_entry_of_another_kind_is_not_taken_for_this_one(wiki):
     await characters.entry("10920", "character")
     assert await characters.entry("10920", "weapon") is not None  # read again as the kind asked for
     assert fetch.entries == ["10920", "10920"]
+
+
+# ------------------------------------------------------------------------------------------------ the Tutorial entries
+
+# The wiki's answer for entry 7786, Stygian Onslaught, read on 2026-11-06 and trimmed by cutting: the modules Rewards and
+# Related Enemies and the end of the Overview are left out, nothing else is changed.
+TUTORIAL_7786 = Path(__file__).parent / "fixtures" / "wiki" / "tutorial_7786.json"
+UPLOAD = "https://act-upload.hoyoverse.com/event-ugc-hoyowiki"
+
+
+async def test_the_tutorial_kind_keeps_the_icon_and_pictures_in_order(store, clock):
+    # The Stats design, 3.2: an endgame mode's Tutorial entry gives the header its icon, and its first picture after the
+    # icon is the fallback for the header's picture. Each picture is kept once, in the page's order, with the words just
+    # above it, which name a Stygian difficulty's medal.
+    asked: list[str] = []
+
+    def fetch(url: str, *, headers=None, body=None) -> bytes:
+        asked.append(url)
+        assert body is None and headers == HEADERS
+        return TUTORIAL_7786.read_bytes()
+
+    row = await CharacterWiki(store, clock, fetch, lambda: "7.1").entry("7786", "tutorial")
+    assert asked == [ENTRY_URL + "7786"]
+    assert (row.entry_page_id, row.kind, row.name, row.version) == ("7786", "tutorial", "Stygian Onslaught", "7.1")
+    data = row.data
+    assert (data["name"], data["icon"]) == (
+        "Stygian Onslaught", f"{UPLOAD}/2025/07/14/41133912/b6287b34deb1f4d12e0be0599584cc70_855379148837321239.png"
+    )
+    overview = f"{UPLOAD}/2025/07/23/41133912/"
+    assert data["pictures"] == [
+        f"{UPLOAD}/2026/01/30/25567199/70a89ddfb1ce4f96097fe934d923d687_2389902169693064604.jpg",  # the Gallery's, first
+        f"{UPLOAD}/2026/01/30/25567199/daf058c7d4ab792558c99f91ab3bbedc_3113761511016516642.png",
+        overview + "f8abc3e1ec100f3a2c8c80e2d205ca93_8875746011065674858.png",
+        overview + "e862cfec7efed999c7cf4ad5755574d1_702640988389072184.png",
+        overview + "80e5b11046f84abb01acd2fd0e38e9b0_4167175063572630128.png",  # the six difficulties' medals
+        overview + "7a1a0db6f23b38270f6ecb58f3cf6863_4514836907885697061.png",
+        overview + "43583b6e5304c0404cf11e140a10e775_4713130635203883466.png",
+        overview + "dada88645a8dcdfae24441ab6853f49d_904676794084008519.png",
+        overview + "a95ba67de542cddc2d97e68089ff04c5_7557421508391672161.png",
+        overview + "c79a52782ddfc45aff557d754c9943f9_5586370517712107127.png",
+        overview + "6d4ef9a3e7cb13b65710ef159e426225_4958481545842792178.png",
+        f"{UPLOAD}/2025/07/21/41133912/8405aeb81ab4830ade9bc9d9df93149d_6943665321489032823.png",  # Related Media's
+        f"{UPLOAD}/2025/07/21/41133912/8cc966dfcee163e2a087f9cdd870fa8b_1496609040620149003.png",
+        f"{UPLOAD}/2025/07/21/41133912/eb89fe3715de5eb7691a1d71a47fff4f_7024763339642523300.png",
+    ]
+    assert data["icon"] not in data["pictures"]
+    # The words above each picture: a Gallery picture's name, and the end of the text since the picture before it.
+    captions = data["captions"]
+    assert len(captions) == len(data["pictures"])
+    assert captions[:3] == ["Stygian Onslaught", "Old Stygian Onslaught", ""]
+    assert [caption.rsplit("Challenge: ", 1)[-1] for caption in captions[4:10]] == [
+        "Normal", "Advancing", "Hard", "Menacing", "Fearless", "Dire",
+    ]
+    assert captions[10] == "Complete Challenge Objective"
+    assert all(len(caption) <= characters_wiki.CAPTION_CHARS for caption in captions)
+    # Kept by the game's version, as every entry is: asked again only when it moves.
+    assert await CharacterWiki(store, clock, fetch, lambda: "7.1").entry("7786", "tutorial") == row and len(asked) == 1
 
 
 def test_nothing_of_the_wiki_goes_anywhere_but_the_seam():

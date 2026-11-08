@@ -25,3 +25,9 @@
 .cg { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 12px; margin-bottom: 12px; }
 /* A row whose narrower card comes first: When you play, which needs about 440 pixels, beside the wide chests chart. */
 .cg.flip { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+
+/* The tabs under the Stats title: the same pills as the Characters tabs. */
+.st-tabs { display: inline-flex; align-self: center; overflow: hidden; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 13px; }
+.st-tabs a { padding: 4px 16px; color: var(--ink2); text-decoration: none; }
+.st-tabs a.on { background: var(--button); color: var(--button-text); font-weight: 700; }
+.st-tabs a:focus-visible { outline-offset: -2px; }

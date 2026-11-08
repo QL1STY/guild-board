@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 
 import pytest
 
-from guildboard.__main__ import default_web_dir, main, main_app, main_tray, run_headless
+from guildboard.__main__ import NO_SHELL_TEXT, default_web_dir, main, run_headless
 from guildboard.config import AppPaths
 from guildboard.logging_setup import setup_logging, shutdown_logging
 
@@ -41,52 +41,56 @@ async def _http(port: int, path: str, cookie: str | None = None) -> tuple[int, d
     return int(head.split()[1]), headers, body
 
 
-def test_without_no_shell_guild_board_starts_with_its_windows(tmp_path, monkeypatch):
+def test_a_start_with_neither_switch_says_where_the_window_is(tmp_path, monkeypatch, capsys):
+    # The window is the Electron shell's. The core starts only for it (--shell) or alone (--no-shell); with neither, nothing
+    # starts, not even the log or the data folder.
+    monkeypatch.setattr("guildboard.__main__.setup_logging", lambda folder: pytest.fail("the log was opened"))
+    monkeypatch.setattr("guildboard.__main__.run_headless", lambda *args, **kwargs: pytest.fail("the core started"))
+    assert main(["--demo", "--data-dir", str(tmp_path / "data")]) == 2
+    printed = capsys.readouterr().out
+    assert printed.strip() == (
+        "Guild Board's window is its shell. Start it with guildboard-app.exe, or with npm start --prefix shell in a checkout."
+    )
+    assert printed.strip() == NO_SHELL_TEXT
+    assert not (tmp_path / "data").exists()
+    assert main([]) == 2
+    assert main(["guildboard://invite/abcDEF0123456789_-abcdef"]) == 2  # a link alone has no shell to answer it
+
+
+def test_the_installers_command_hands_the_link_over_to_the_core_alone(tmp_path, monkeypatch):
     seen: dict = {}
 
-    def run_shell(paths, **options):  # noqa: ANN001, ANN003, ANN202
-        seen.update(options, data_dir=paths.data_dir)
+    async def run_headless(paths, **options):  # noqa: ANN001, ANN003, ANN202
+        seen.update(options)
         return 0
 
-    monkeypatch.setattr("guildboard.shell.app.run_shell", run_shell)
-    assert main(["--demo", "--hidden", "--acknowledged", "--data-dir", str(tmp_path / "data")]) == 0
-    assert seen == {
-        "demo": True, "hidden": True, "acknowledged": True, "quit": False, "demo_now": None, "invite": None,
-        "data_dir": tmp_path / "data",
-    }
-
-
-def test_main_takes_the_link_as_its_argument(tmp_path, monkeypatch):
-    seen: dict = {}
-    monkeypatch.setattr("guildboard.shell.app.run_shell", lambda paths, **options: seen.update(options) or 0)
+    monkeypatch.setattr("guildboard.__main__.run_headless", run_headless)
+    monkeypatch.setattr("guildboard.__main__.setup_logging", lambda folder: None)
     code = "abcDEF0123456789_-abcdef"
-    assert main([f"guildboard://invite/{code}", "--data-dir", str(tmp_path / "data")]) == 0
-    assert seen["invite"] == code
-
-
-def test_the_installers_command_hands_the_link_over(tmp_path, monkeypatch):
-    seen: dict = {}
-    monkeypatch.setattr("guildboard.shell.app.run_shell", lambda paths, **options: seen.update(options) or 0)
-    monkeypatch.setattr("guildboard.__main__.default_data_dir", lambda demo: tmp_path / "data")
-    code = "abcDEF0123456789_-abcdef"
-    assert main(["--", f"guildboard://invite/{code}"]) == 0
+    assert main(["--no-shell", "--data-dir", str(tmp_path / "data"), "--", f"guildboard://invite/{code}"]) == 0
     assert seen["invite"] == code
 
 
 def test_a_link_brings_no_options_of_its_own(tmp_path, monkeypatch):
     # A quotation mark in a link would end the argument Windows quoted for it. What follows it comes after the installer's
     # `--`, where it can't be an option, and Guild Board doesn't start.
-    monkeypatch.setattr("guildboard.shell.app.run_shell", lambda paths, **options: pytest.fail("Guild Board started"))
+    monkeypatch.setattr("guildboard.__main__.run_headless", lambda *args, **kwargs: pytest.fail("Guild Board started"))
     with pytest.raises(SystemExit):
-        main(["--", "guildboard://invite/abcDEF0123456789_-abcdef", "--data-dir", str(tmp_path / "data")])
+        main(["--no-shell", "--", "guildboard://invite/abcDEF0123456789_-abcdef", "--data-dir", str(tmp_path / "data")])
     assert not (tmp_path / "data").exists()
 
 
 @pytest.mark.parametrize("link", ["guildboard://invite/../x", "https://evil.example/", "guildboard://invite/short"])
 def test_anything_else_in_its_place_is_ignored_and_guild_board_starts(tmp_path, monkeypatch, link):
     seen: dict = {}
-    monkeypatch.setattr("guildboard.shell.app.run_shell", lambda paths, **options: seen.update(options) or 0)
-    assert main([link, "--data-dir", str(tmp_path / "data")]) == 0
+
+    async def run_headless(paths, **options):  # noqa: ANN001, ANN003, ANN202
+        seen.update(options)
+        return 0
+
+    monkeypatch.setattr("guildboard.__main__.run_headless", run_headless)
+    monkeypatch.setattr("guildboard.__main__.setup_logging", lambda folder: None)
+    assert main(["--no-shell", link, "--data-dir", str(tmp_path / "data")]) == 0
     assert seen["invite"] is None
 
 
@@ -104,30 +108,12 @@ def test_the_core_alone_takes_a_link_too(tmp_path, monkeypatch):
     assert seen["invite"] == code
 
 
-def test_with_windows_the_log_is_opened_by_the_shell_and_not_before(tmp_path, monkeypatch):
-    opened: list = []
-    monkeypatch.setattr("guildboard.__main__.setup_logging", lambda folder: opened.append(folder))
-    monkeypatch.setattr("guildboard.shell.app.run_shell", lambda paths, **options: 0)
-    assert main(["--data-dir", str(tmp_path / "data")]) == 0
-    assert opened == []
-
-
-def test_the_window_options_are_checked(capsys):
-    assert main(["--acknowledged"]) == 2
-    assert "--acknowledged needs --demo." in capsys.readouterr().out
-    assert main(["--no-shell", "--hidden"]) == 2
-    assert "Leave out --no-shell." in capsys.readouterr().out
-    assert main(["--no-shell", "--quit"]) == 2
-    assert "Leave out --no-shell." in capsys.readouterr().out
-
-
-def test_the_launchers_open_the_window_or_start_in_the_tray(monkeypatch):
-    calls: list = []
-    monkeypatch.setattr("guildboard.__main__.main", lambda argv=None: calls.append(argv) or 0)
-    monkeypatch.setattr(sys, "argv", ["guildboard-app.exe"])
-    assert main_app() == 0
-    assert main_tray() == 0
-    assert calls == [[], ["--hidden"]]
+def test_the_window_options_moved_to_the_shell(tmp_path):
+    # --hidden, --quit and --acknowledged are the shell's (shell/src/args.ts); the core knows none of them.
+    for option in ("--hidden", "--quit", "--acknowledged"):
+        with pytest.raises(SystemExit):
+            main(["--demo", "--no-shell", option, "--data-dir", str(tmp_path / "data")])
+    assert not (tmp_path / "data").exists()
 
 
 def test_an_error_nothing_expected_at_the_start_reaches_the_log_file(tmp_path, monkeypatch):

@@ -3,9 +3,11 @@ from datetime import date, datetime, timezone
 
 import pytest
 
+import endgame_samples
 import hoyolab_samples as samples
 from guildboard.records import ArchonChapter, Area, CalcTarget, DiarySource, Expedition, GameAccount, Offering
 from guildboard.sources import hoyolab_normalize as norm
+from guildboard.store import iso
 
 UTC = timezone.utc
 NOW = datetime(2026, 10, 13, 8, 0, tzinfo=UTC)
@@ -408,3 +410,105 @@ def test_the_calendar_has_no_theater_text_when_its_entry_has_none():
 def test_the_summaries_are_unchanged_by_the_details():
     assert norm.normalize_endgame(samples.SPIRAL_ABYSS_FLOORS, samples.ROLE_COMBAT, samples.HARD_CHALLENGE_BOSSES).modes[0].score == 36.0
     assert norm.normalize_calendar(samples.ACT_CALENDAR_DETAIL).banners == 3  # the pools of every kind, as before
+
+
+# ---------------------------------------------------------------- the Stats design, 3.4: what the Endgame card needs
+
+def _stamp(seconds: int) -> str:
+    return iso(datetime.fromtimestamp(seconds, timezone.utc))
+
+
+def _real_detail():
+    return norm.normalize_endgame_detail(endgame_samples.abyss(), endgame_samples.theater(), endgame_samples.stygian())
+
+
+def test_the_abyss_keeps_each_enemys_icon_and_level():
+    detail = _real_detail()
+    half = next(h for h in detail.abyss_halves if h.chamber == "12-1" and h.half == 2)
+    assert [f.name for f in half.foes][:1] == ["Iniquitous Baptist - Caller of Flood, Flame, and Fulmination"]
+    assert half.foes[0].level == 95 and half.foes[0].icon.startswith("https://act-webstatic.hoyoverse.com/")
+    assert half.enemies == tuple(f.name for f in half.foes)          # the Characters pages' field is unchanged
+    assert (detail.abyss_battles, detail.abyss_wins) == (6, 6)
+    assert next(r for r in detail.abyss_ranks if r.kind == "strike").value == 1352944
+
+
+def test_the_abyss_keeps_its_start_its_chambers_and_each_rank_with_its_face():
+    detail = _real_detail()
+    assert (detail.abyss_starts, detail.abyss_ends) == (_stamp(1792119600), _stamp(1794797999))
+    # Floors 9 and 10 were skipped up to 10-3: the answer has no floor for them, and the total counts their stars in full.
+    assert detail.abyss_chambers == tuple(
+        (f"{floor}-{chamber}", 3) for floor in (9, 10, 11, 12) for chamber in (1, 2, 3)
+    )
+    ranks = {rank.kind: rank for rank in detail.abyss_ranks}
+    assert list(ranks) == ["strike", "defeats", "taken", "bursts", "skills", "played"]
+    assert (ranks["strike"].avatar_id, ranks["defeats"].value, ranks["taken"].value) == (10000133, 22, 14583)
+    assert (ranks["bursts"].value, ranks["skills"].value, ranks["played"].value) == (13, 21, 6)
+    assert ranks["played"].avatar_id == 10000058  # the first of the most played
+    assert all(rank.icon.startswith("https://act-webstatic.hoyoverse.com/") for rank in ranks.values())
+
+
+def test_the_theater_keeps_medals_flowers_and_ranks():
+    detail = _real_detail()
+    assert detail.theater_medals[:4] == (True, False, True, True) and detail.theater_flowers == 1285
+    assert detail.theater_seconds == 1002
+    assert {r.kind for r in detail.theater_ranks} == {"damage", "defeats", "taken"}
+
+
+def test_the_theater_keeps_the_seasons_start_its_medal_count_and_each_face():
+    detail = _real_detail()
+    assert (detail.theater_starts, detail.theater_ends) == (_stamp(1793502000), _stamp(1796093999))
+    assert len(detail.theater_medals) == 12 and detail.theater_medal_count == 6  # the Arcana acts' medals are not counted
+    damage, defeats, taken = detail.theater_ranks
+    assert (damage.kind, damage.value, damage.avatar_id) == ("damage", 943229, 10000120)  # HoYoLAB sends these as text
+    assert (defeats.value, taken.value) == (11, 68942)
+    assert damage.icon.startswith("https://act-webstatic.hoyoverse.com/")
+    assert (detail.theater_difficulty, detail.theater_acts) == ("Arcana Challenge", 10)  # as the Characters pages read them
+
+
+def test_the_stygian_keeps_icons_and_the_next_season():
+    detail = _real_detail()
+    assert detail.stygian_season == "Luminous Battlefront" and detail.stygian_seconds == 280
+    assert detail.stygian_bosses[0].icon.endswith(".png")
+    assert detail.stygian_next == ("Battle Amid the Great Waves", iso(datetime.fromtimestamp(1794387600, timezone.utc)))
+
+
+def test_the_stygian_keeps_the_seasons_dates_its_medal_and_each_bosss_level():
+    detail = _real_detail()
+    assert (detail.stygian_starts, detail.stygian_ends) == (_stamp(1790758800), _stamp(1793674799))
+    assert detail.stygian_medal == "UI_LeyLineChallenge_Medal_5" and detail.stygian_difficulty == 5
+    assert [(boss.level, boss.seconds) for boss in detail.stygian_bosses] == [(105, 119), (105, 42), (105, 119)]
+
+
+def test_the_stygian_answer_reads_the_same_as_the_library_gives_it_and_as_the_archive_keeps_it():
+    # The library hands over the list of seasons; the raw archive keeps the whole answer, with the list under "data".
+    kept = endgame_samples.stygian()
+    assert norm.normalize_endgame_detail(None, {}, kept) == norm.normalize_endgame_detail(None, {}, kept["data"])
+
+
+def test_only_a_season_newer_than_the_one_played_is_the_next():
+    seasons = endgame_samples.stygian()["data"]
+    older = copy.deepcopy(seasons[0])
+    older["schedule"].update(schedule_id="5269011", name="An Older Season", start_time="1780000000", end_time="1782000000")
+    assert norm.normalize_endgame_detail(None, {}, [seasons[1], older]).stygian_next is None  # skipped long ago, not next
+    assert norm.normalize_endgame_detail(None, {}, [older, *seasons]).stygian_next[0] == "Battle Amid the Great Waves"
+    assert norm.normalize_endgame_detail(None, {}, [seasons[0]]).stygian_next[0] == "Battle Amid the Great Waves"
+
+
+def test_an_endgame_without_data_gives_the_new_fields_their_defaults():
+    detail = norm.normalize_endgame_detail(None, {}, [])
+    assert (detail.abyss_starts, detail.abyss_battles, detail.abyss_wins, detail.abyss_chambers, detail.abyss_ranks) == (
+        None, 0, 0, (), ()
+    )
+    assert (detail.theater_starts, detail.theater_medals, detail.theater_medal_count) == (None, (), 0)
+    assert (detail.theater_flowers, detail.theater_seconds, detail.theater_ranks) == (0, 0, ())
+    assert (detail.stygian_season, detail.stygian_starts, detail.stygian_seconds, detail.stygian_medal) == ("", None, None, "")
+    assert detail.stygian_next is None
+    # A boss or an enemy given by its name alone keeps an empty icon and a level of 0.
+    season = copy.deepcopy(samples.HARD_CHALLENGE_BOSSES[0])
+    season["single"]["challenge"] = [{"name": "Boss Three"}]
+    boss = norm.normalize_endgame_detail(None, {}, [season]).stygian_bosses[0]
+    assert (boss.name, boss.icon, boss.level) == ("Boss Three", "", 0)
+    abyss = copy.deepcopy(samples.SPIRAL_ABYSS_FLOORS)
+    abyss["floors"][0]["levels"][0]["top_half_floor_monster"] = [{"name": "Thunder Manifestation"}]
+    foe = norm.normalize_endgame_detail(abyss, {}, []).abyss_halves[0].foes[0]
+    assert (foe.name, foe.level, foe.icon) == ("Thunder Manifestation", 0, "")

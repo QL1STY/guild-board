@@ -1,0 +1,69 @@
+{
+ "retcode": 0,
+ "message": "OK",
+ "data": {
+  "page": {
+   "id": "7786",
+   "name": "Stygian Onslaught",
+   "icon_url": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/14/41133912/b6287b34deb1f4d12e0be0599584cc70_855379148837321239.png",
+   "menu_id": "14",
+   "menu_name": "Tutorial",
+   "modules": [
+    {
+     "name": "Attributes",
+     "components": [
+      {
+       "component_id": "baseInfo",
+       "data": "{\"list\":[{\"key\":\"Name\",\"value\":[\"<p>Stygian Onslaught</p>\"],\"id\":\"baseInfo80838\"},{\"key\":\"Type\",\"value\":[\"<p>Permanent Combat Event</p>\"],\"id\":\"baseInfo53371\"},{\"key\":\"Prerequisite Quest\",\"value\":[\"$[{\\\"ep_id\\\":7872,\\\"icon\\\":\\\"\\\",\\\"amount\\\":0,\\\"name\\\":\\\"Tumult Subduer\\\",\\\"menuId\\\":\\\"\\\",\\\"_menuId\\\":\\\"\\\"}]$\"],\"id\":\"baseInfo12559\",\"isMaterial\":true},{\"key\":\"Version Released\",\"value\":[\"<p>5.7</p>\"],\"id\":\"baseInfo87919\"}]}"
+      }
+     ]
+    },
+    {
+     "name": "Gallery",
+     "components": [
+      {
+       "component_id": "gallery_character",
+       "data": "{\"pic\":\"\",\"list\":[{\"key\":\"Stygian Onslaught\",\"img\":\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/30/25567199/70a89ddfb1ce4f96097fe934d923d687_2389902169693064604.jpg\",\"imgDesc\":\"\",\"id\":\"gallery_character43205\"},{\"key\":\"Old Stygian Onslaught\",\"img\":\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2026/01/30/25567199/daf058c7d4ab792558c99f91ab3bbedc_3113761511016516642.png\",\"imgDesc\":\"<p>Stygian Onslaught design from versions 5.7 to Luna I.</p>\",\"id\":\"gallery_character52920\"}]}"
+      }
+     ]
+    },
+    {
+     "name": "Timeline",
+     "components": [
+      {
+       "component_id": "timeline",
+       "data": ""
+      }
+     ]
+    },
+    {
+     "name": "Overview",
+     "components": [
+      {
+       "component_id": "customize",
+       "data": "{\"data\": \"<table><tbody><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/f8abc3e1ec100f3a2c8c80e2d205ca93_8875746011065674858.png\\\" align=\\\"left\\\"></custom-image>Stygian Onslaught is a permanent combat event that will begin 8 days after each update and will be available for 5 weeks per phase. During the event, there will be 6 difficulty levels available: Normal, Advancing, Hard, Menacing, Fearless and Dire. On each difficulty, players will face powerful foes on 3 separate battlefields.</p><p></p><p><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/e862cfec7efed999c7cf4ad5755574d1_702640988389072184.png\\\" align=\\\"left\\\"></custom-image>Players can also compete in the challenge via the Co-Op Mode up to Menacing Difficulty and obtain rewards. Other players can also be invited in the party to take on Fearless V and Dire VI challenges.</p><p></p><p>Disturbance Outbreak will be available after the event begins and players who reached Adventure Rank 45 and cleared Hard Difficulty can participate in it in Single Player Mode or Co-Op Mode.</p></td></tr></tbody></table><p></p><h3><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Eligibility</span></strong></h3><table><tbody><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Base Requirement</span></strong></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><ul><li><p>Reach Adventure Rank 20</p></li><li><p>Complete Archon Quest &#34;Song of the Dragon and Freedom&#34;</p></li></ul></td></tr><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Best Experience</span></strong></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><custom-entry amount=\\\"0\\\" epid=\\\"6502\\\" icon=\\\"\\\" name=\\\"Perilous Trail\\\" displaystyle=\\\"text\\\" menuid=\\\"\\\"></custom-entry></p></td></tr></tbody></table><p></p><h3><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Difficulty Levels</span></strong></h3><table><tbody><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Difficulty</span></strong></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Details</span></strong></p></td></tr><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><span style=\\\"color: rgb(255, 255, 255)\\\">Normal Challenge: Normal</span></p><p style=\\\"text-align: center\\\"></p><p style=\\\"text-align: center\\\"><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/80e5b11046f84abb01acd2fd0e38e9b0_4167175063572630128.png\\\" align=\\\"center\\\"></custom-image></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><span style=\\\"color: rgb(255, 255, 255)\\\">Unlock Criteria: </span>Automatically unlocked</p><p><span style=\\\"color: rgb(255, 255, 255)\\\">Co-Op Mode:</span> Available</p><p>Characters can be deployed multiple times.</p><p></p></td></tr><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><span style=\\\"color: rgb(255, 255, 255)\\\">Normal Challenge: Advancing</span></p><p style=\\\"text-align: center\\\"></p><p style=\\\"text-align: center\\\"><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/7a1a0db6f23b38270f6ecb58f3cf6863_4514836907885697061.png\\\" align=\\\"center\\\"></custom-image></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><span style=\\\"color: rgb(255, 255, 255)\\\">Unlock Criteria:</span> Automatically unlocked</p><p><span style=\\\"color: rgb(255, 255, 255)\\\">Co-Op Mode: </span>Available</p><p>Characters can be deployed multiple times.</p></td></tr><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><span style=\\\"color: rgb(255, 255, 255)\\\">Normal Challenge: Hard</span></p><p style=\\\"text-align: center\\\"></p><p style=\\\"text-align: center\\\"><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/43583b6e5304c0404cf11e140a10e775_4713130635203883466.png\\\" align=\\\"center\\\"></custom-image></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><span style=\\\"color: rgb(255, 255, 255)\\\">Unlock Criteria:</span> Automatically unlocked</p><p><span style=\\\"color: rgb(255, 255, 255)\\\">Co-Op Mode: </span>Available</p><p>Characters can be deployed multiple times.</p></td></tr><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><span style=\\\"color: rgb(255, 255, 255)\\\">Normal Challenge: Menacing</span></p><p style=\\\"text-align: center\\\"></p><p style=\\\"text-align: center\\\"><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/dada88645a8dcdfae24441ab6853f49d_904676794084008519.png\\\" align=\\\"center\\\"></custom-image></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><span style=\\\"color: rgb(255, 255, 255)\\\">Unlock Criteria: </span>Clear previous difficulty within time limit</p><p><span style=\\\"color: rgb(255, 255, 255)\\\">Co-Op Mode: </span>Available</p><p>Characters cannot be be deployed multiple times.</p></td></tr><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><span style=\\\"color: rgb(255, 255, 255)\\\">Normal Challenge: Fearless</span></p><p style=\\\"text-align: center\\\"></p><p style=\\\"text-align: center\\\"><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/a95ba67de542cddc2d97e68089ff04c5_7557421508391672161.png\\\" align=\\\"center\\\"></custom-image></p></td><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><span style=\\\"color: rgb(255, 255, 255)\\\">Unlock Criteria: </span>Clear previous difficulty within time limit</p><p><span style=\\\"color: rgb(255, 255, 255)\\\">Co-Op Mode: </span>Available but rewards cannot be claimed</p><p>Characters cannot be be deployed multiple times.</p><p>Opponents are affected by the Ley Line Disturbance and are greatly enhanced.</p></td></tr><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p style=\\\"text-align: center\\\"><span style=\\\"color: rgb(255, 172, 255)\\\">Perilous Challenge: Dire</span></p><p style=\\\"text-align: center\\\"></p><p style=\\\"text-align: center\\\"><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/c79a52782ddfc45aff557d754c9943f9_5586370517712107127.png\\\" align=\\\"center\\\"></custom-image> Complete Challenge Objective</p><p style=\\\"text-align: center\\\"></p><p style=\\\"text-align: center\\\"><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/23/41133912/6d4ef9a3e7cb13b65710ef159e426225_4958481545842792178.png\\\" align=\\\"center\\\"></custom-image></p></td></tr></tbody></table>\"}"
+      }
+     ]
+    },
+    {
+     "name": "Related Media",
+     "components": [
+      {
+       "component_id": "customize",
+       "data": "{\"data\":\"<table><tbody><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><h1 style=\\\"text-align: center\\\"><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Notices</span></strong></h1></td></tr></tbody></table><p></p><h3><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Permanent Combat Event &#34;Stygian Onslaught&#34;: Defeat Powerful Foes and Uncover Hidden Treasures!</span></strong></h3><table><tbody><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/21/41133912/8405aeb81ab4830ade9bc9d9df93149d_6943665321489032823.png\\\" align=\\\"left\\\"></custom-image><strong><span style=\\\"color: rgb(255, 215, 128)\\\">June 18, 2025</span></strong><br><br>Greetings Traveler! Version 5.7 introduces the new permanent combat event &#34;Stygian Onslaught.&#34; </p><custom-post posts=\\\"39387781\\\"></custom-post></td></tr></tbody></table><p></p><h3><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Stygian Onslaught Event: Disturbance-affected Ley Line challenges</span></strong></h3><table><tbody><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/21/41133912/8cc966dfcee163e2a087f9cdd870fa8b_1496609040620149003.png\\\" align=\\\"left\\\"></custom-image><strong><span style=\\\"color: rgb(255, 215, 128)\\\">June 23, 2025</span></strong><br><br></p><custom-post posts=\\\"39580848\\\"></custom-post></td></tr></tbody></table><p></p><h3><strong><span style=\\\"color: rgb(255, 255, 255)\\\">Permanent Combat Event &#34;Stygian Onslaught&#34; Is Now Available! Here Are Some Tips for You~</span></strong></h3><table><tbody><tr><td colspan=\\\"1\\\" rowspan=\\\"1\\\"><p><custom-image url=\\\"https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/21/41133912/eb89fe3715de5eb7691a1d71a47fff4f_7024763339642523300.png\\\" align=\\\"left\\\"></custom-image><strong><span style=\\\"color: rgb(255, 215, 128)\\\">June 25, 2025</span></strong><br><br>Greetings, Traveler! The new permanent combat event &#34;Stygian Onslaught&#34; is now available. In the event details released previously, we&#39;ve introduced the basic rules, obtainable rewards, and event schedule.<br><br>We&#39;ve compiled a few tips here based on your experience and feedback during the test period. Let&#39;s check it out together~</p><custom-post posts=\\\"39626327\\\"></custom-post></td></tr></tbody></table>\"}\n"
+      }
+     ]
+    },
+    {
+     "name": "",
+     "components": [
+      {
+       "component_id": "customize",
+       "data": "{\"data\":\"\"}\n"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

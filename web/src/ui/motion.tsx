@@ -162,6 +162,11 @@ export function glideFrom(element: HTMLElement, dx: number, dy: number): void {
  * the elements apart. An element that has just appeared stays where it is, and so does everything in a container that
  * has just appeared. An element that is still gliding when it moves again goes on from where it is seen. With reduced
  * motion everything jumps to its place.
+ *
+ * The container can change its size with no change of `version`, and its elements move with it: a scroll bar that comes
+ * or goes beside the Board narrows or widens its columns, which share its width. Each element's place is then taken
+ * again, with no glide, so that the next change glides only the elements it moves; one that is gliding is taken once
+ * its glide is over, where it then stays.
  */
 export function useGlide(container: RefObject<HTMLElement | null>, attribute: string, version: unknown): void {
   const drawn = useRef<{ root: HTMLElement; places: Map<string, Place> } | null>(null)
@@ -189,6 +194,28 @@ export function useGlide(container: RefObject<HTMLElement | null>, attribute: st
     }
     drawn.current = { root, places: current }
     for (const { element, dx, dy } of moves) glideFrom(element, dx, dy)
+  }, [container, attribute, version])
+  // Watched again after each change of `version`, as the container may only have appeared with it.
+  useEffect(() => {
+    const root = container.current
+    if (root === null || typeof ResizeObserver === 'undefined') return undefined
+    const retake = (element: HTMLElement) => {
+      const places = drawn.current?.root === root ? drawn.current.places : null
+      const key = element.getAttribute(attribute) ?? ''
+      if (places === null || !places.has(key) || !root.contains(element)) return
+      const running = element.getAnimations().filter((animation) => animation.id === 'glide')
+      if (running.length === 0) {
+        places.set(key, placeIn(root, element))
+        return
+      }
+      // A glide that a later change cuts short is cancelled: that change takes the element's place itself.
+      for (const animation of running) animation.finished.then(() => retake(element), () => undefined)
+    }
+    const observer = new ResizeObserver(() => {
+      for (const element of root.querySelectorAll<HTMLElement>(`[${attribute}]`)) retake(element)
+    })
+    observer.observe(root)
+    return () => observer.disconnect()
   }, [container, attribute, version])
 }
 

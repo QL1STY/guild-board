@@ -401,6 +401,18 @@ test("the grid reaches the display's edges: nineteen columns on 3,440 pixels, th
   expect(lowest).toBe(13)
 })
 
+test("the overlay's cells stay 168 pixels wide where its width leaves room over, as the Board's columns do not", async ({ page, core, api }) => {
+  // The 1,440-pixel stand-in: 1,408 pixels between the 16 at each side hold seven cells, and 160 are left over, which
+  // stay at the right. The Board shares what it has left over among its columns; the overlay does not.
+  await setOverlay(api, [clockAt('clock-a', 0, 0, true), clockAt('clock-b', 5, 1, true)])
+  await showOpen(page, core.origin)
+  await expect(widgetById(page, 'clock-b')).toBeVisible()
+  const tracks = await page.getByTestId('overlay').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' '))
+  expect(tracks).toEqual(Array(7).fill('168px'))
+  for (const id of ['clock-a', 'clock-b']) expect((await widgetById(page, id).boundingBox())!.width, id).toBe(2 * 168 + 12)
+  expect(await cellOf(page, 'clock-b')).toEqual({ x: 5, y: 1 })
+})
+
 test('larger, the overlay shows a widget saved below its last row on the display, and Done saves the place shown', async ({ page, core, api }) => {
   // A page of 2,580 × 1,080 CSS pixels, as on a smaller display or at a larger size (the shell zooms the view): fourteen
   // columns and nine rows. The layout was made on a taller one, with a clock at row 11.

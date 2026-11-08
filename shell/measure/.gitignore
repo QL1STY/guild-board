@@ -1,0 +1,5 @@
+# The harness's own output: the runs' data folders, the reports, and the crops of Guild Board's own window.
+runs/
+shots/
+report-*.json
+__pycache__/

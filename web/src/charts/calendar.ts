@@ -33,3 +33,28 @@ export function weekRows(cells: Cell[]): string[][] {
   }
   return rows
 }
+
+/** The fewest weeks the calendar shows, in however narrow a card. */
+export const MIN_WEEKS = 4
+
+/** How many week columns fit `width`, with `labels` pixels taken by the weekday labels: whole columns only. */
+export function weeksThatFit(width: number, cell: number, gap: number, labels: number): number {
+  return Math.max(MIN_WEEKS, Math.floor((width - labels + gap) / (cell + gap)))
+}
+
+/** The cell size at which seven rows fill `height`, under `labelsAbove` pixels of month names, within `min` and `max`. */
+export function cellSize(height: number, gap: number, labelsAbove: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, Math.floor((height - labelsAbove - 6 * gap) / 7)))
+}
+
+/** The newest `weeks` weeks of `cells`, which come in whole weeks, the newest last. */
+export function lastWeeks(cells: Cell[], weeks: number): Cell[] {
+  return cells.slice(Math.max(0, cells.length - weeks * 7))
+}
+
+/** The run of days played, as the legend row says it: the run now, if any, and the best. */
+export function runText(run: { current: number; best: number }): string {
+  const days = (count: number) => `${count} ${count === 1 ? 'day' : 'days'}`
+  if (run.best === 0) return ''
+  return run.current > 0 ? `${days(run.current)} in a row · Best ${days(run.best)}` : `Best ${days(run.best)}`
+}

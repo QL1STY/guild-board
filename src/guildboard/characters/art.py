@@ -1,13 +1,15 @@
 """The art cache for the Characters pages (the Characters design, section 4.5): the pictures of characters, weapons, sets,
 materials and constellations, kept on disk and served at /api/art/<key>.
 
-A picture is downloaded once, through the injected `fetch_bytes`, from one of five hosts of HoYoverse's, up to 8 MB; it is
-kept under the data folder's `art/`, and the cache holds at most 1 GB, dropping the pictures read longest ago first, so that the art of the
-player's characters stays on disk and is not fetched twice. The
-demo ships no picture and downloads nothing: its pages show the drawn signs.
+A picture is downloaded once, through the injected `fetch_bytes`, from one of five hosts of HoYoverse's, or, given out by
+`public_address` alone, from one of netpolicy's public pictures (the Endgame headers; the Stats design, section 1), up to
+8 MB; it is kept under the data folder's `art/`, and the cache holds at most 1 GB, dropping the pictures read longest ago
+first, so that the art of the player's characters stays on disk and is not fetched twice. The
+demo ships no picture and downloads nothing: its pages show the drawn signs. The core fetches the public pictures ahead
+(`warm_public`), and `kept` tells the Endgame card which of them are on disk, so that it shows its fallback until then.
 
 A page that asks for a picture at a size (`get(key, size)`) is given a downscaled copy of it, WebP, made once from the original
-the way the gallery makes its thumbnails (Qt, given bytes) and kept under `art-display/` beside the original: the 2048-pixel
+the way the gallery makes its thumbnails (Pillow, given bytes) and kept under `art-display/` beside the original: the 2048-pixel
 original of a character's art is not what a 56-pixel face or a 900-pixel stage has to decode. The size is one of a few
 (`DISPLAY_SIZES`), the longest side in pixels; a picture no larger than the size is served as it is. A copy goes when its
 original is dropped, and the copies count in the 1 GB. Copies are made one at a time: each decodes its original into the core's
@@ -17,6 +19,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import io
 import json
 import logging
 import os
@@ -48,8 +51,8 @@ ART_HOSTS = (
 _KINDS = {
     ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif",
 }
-# The format Qt decodes each kind as. It is never left to guess one from the bytes (see _shrunk).
-_QT_FORMATS = {".png": b"png", ".jpg": b"jpeg", ".webp": b"webp", ".gif": b"gif"}
+# The format Pillow decodes each kind as. It is never left to guess one from the bytes (see _shrunk).
+_PILLOW_FORMATS = {".png": "PNG", ".jpg": "JPEG", ".webp": "WEBP", ".gif": "GIF"}
 # A key, as key_for makes them: the start of the address's SHA-256, in hex.
 _KEY = re.compile(r"[0-9a-f]{32}")
 
@@ -88,31 +91,27 @@ def display_size(wanted: int) -> int:
 
 def _shrunk(data: bytes, size: int) -> bytes | None:
     """The picture's bytes made so that its longest side is `size` pixels, as WebP with its see-through parts; None where the
-    picture is no larger than that already, or Qt cannot read it. Qt is given bytes, never a path, as the gallery's thumbnails are,
-    and the one format the bytes start as: given none, Qt would guess one, and its SVG reader reads the files an SVG names."""
-    from PySide6.QtCore import QBuffer, QByteArray, QIODevice, Qt
-    from PySide6.QtGui import QImageReader
+    picture is no larger than that already, or Pillow cannot read it. Pillow is given bytes, never a path, as the gallery's
+    thumbnails are, and the one format the bytes start as: it is never left to guess one."""
+    from PIL import Image  # not at the top: a start does not wait for it
 
-    kind = _QT_FORMATS.get(_extension(data) or "")
+    kind = _PILLOW_FORMATS.get(_extension(data) or "")
     if kind is None:
         return None
-    source = QBuffer()
-    source.setData(QByteArray(data))
-    source.open(QIODevice.OpenModeFlag.ReadOnly)
-    reader = QImageReader(source, kind)
-    reader.setAutoDetectImageFormat(False)
-    found = reader.size()  # from the header: the picture is not decoded to learn how large it is
-    if not found.isValid() or max(found.width(), found.height()) <= size:
-        return None
-    image = reader.read()
-    if image.isNull():
-        return None
-    image = image.scaled(size, size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-    target = QBuffer()
-    target.open(QIODevice.OpenModeFlag.WriteOnly)
-    if not image.save(target, "WEBP", DISPLAY_QUALITY):
-        return None
-    return bytes(target.data())
+    with Image.open(io.BytesIO(data), formats=[kind]) as image:
+        width, height = image.size  # from the header: the picture is not decoded to learn how large it is
+        if max(width, height) <= size:
+            return None
+        scale = size / max(width, height)
+        target = (max(1, round(width * scale)), max(1, round(height * scale)))
+        if kind == "JPEG":
+            image.draft("RGB", target)  # a JPEG is decoded at about the size wanted, not whole
+        see_through = image.mode in ("RGBA", "LA", "PA") or "transparency" in image.info
+        image = image.convert("RGBA" if see_through else "RGB")
+        image = image.resize(target, Image.Resampling.LANCZOS)
+    target_bytes = io.BytesIO()
+    image.save(target_bytes, "WEBP", quality=DISPLAY_QUALITY)
+    return target_bytes.getvalue()
 
 
 _FULL = object()  # what a download that would not fit says to the warm-up
@@ -131,7 +130,8 @@ def _sendable(url: str) -> str:
 
 
 def live_download() -> FetchBytes:
-    """The download the live app gives the cache: netpolicy's, which refuses any host outside HoYoverse's."""
+    """The download the live app gives the cache: netpolicy's, which refuses any host outside HoYoverse's but for the
+    exact addresses of its tables."""
     return _download
 
 
@@ -156,7 +156,7 @@ class ArtCache:
         self.demo_dir = self.DEMO_DIR
         self._urls: dict[str, str] = {}  # the address each key was given for, in this run
         self._refused: set[str] = set()  # the keys of pictures that were too large or no picture, in this run
-        self._whole_is_enough: set[tuple[str, int]] = set()  # the (key, size) pairs where the picture is no larger, or Qt cannot read it
+        self._whole_is_enough: set[tuple[str, int]] = set()  # the (key, size) pairs where the picture is no larger, or Pillow cannot read it
         self._copy_bytes: dict[str, int] | None = None  # what the copies of each picture take on disk, read once a run
         self._shrinking = asyncio.Lock()  # one copy made at a time
         self._bundle: dict[str, dict[str, str]] | None = None
@@ -175,7 +175,8 @@ class ArtCache:
     def address(self, url: str | None) -> str | None:
         """The address the page asks for a picture at, "/api/art/<key>"; None when there is no picture: no address, one
         outside the five hosts, or (in the demo) one the demo has no picture for. The address is remembered, so that the
-        key can be served."""
+        key can be served. Its addresses come from HoYoLAB's and the wiki's answers, so it never takes one outside the five
+        hosts, not even one written as a public picture's: those come from `public_address` alone."""
         if not url:
             return None
         key = self.key_for(url)
@@ -183,11 +184,42 @@ class ArtCache:
             return f"/api/art/{key}" if key in self._pictures() else None
         if not self._allowed(url):
             return None
+        return self._remember(key, url)
+
+    def public_address(self, index: int) -> str | None:
+        """The address the page asks for one of netpolicy's public pictures at (the Stats design, section 1): the entry of
+        PUBLIC_PICTURE_URLS at `index`, as "/api/art/<key>"; None for a place outside the table and, in the demo, for one
+        the demo has no picture for. A public picture enters the cache here alone, taken from the table itself, so no
+        address from a HoYoLAB answer is ever sent outside HoYoverse's hosts."""
+        table = netpolicy.PUBLIC_PICTURE_URLS
+        if isinstance(index, bool) or not isinstance(index, int) or not 0 <= index < len(table):
+            return None
+        url = table[index]
+        key = self.key_for(url)
+        if self._demo:
+            return f"/api/art/{key}" if key in self._pictures() else None
+        return self._remember(key, url)
+
+    def _remember(self, key: str, url: str) -> str:
+        """Remember the address a key was given for, in this run and in the art table, and give the page's address."""
         if key not in self._urls:
             self._urls[key] = url
             if self._store.art(key) is None:
                 self._store.put_art(ArtRow(key, url, "", 0, self._clock.now()))
         return f"/api/art/{key}"
+
+    def kept(self, address: str | None) -> bool:
+        """Whether the picture a page asks for at this address ("/api/art/<key>") is on disk now, so that it is served
+        without a download; in the demo, whether the demo has it. No request is made and nothing is remembered."""
+        prefix = "/api/art/"
+        key = address[len(prefix):] if isinstance(address, str) and address.startswith(prefix) else ""
+        if not _KEY.fullmatch(key):
+            return False
+        if self._demo:
+            return key in self._pictures()
+        row = self._store.art(key)
+        path = self._path(row) if row is not None else None
+        return path is not None and path.is_file()
 
     def usable(self, url: str | None) -> bool:
         """Whether `address` would give this address a picture: no request and nothing remembered, only the question."""
@@ -199,11 +231,18 @@ class ArtCache:
 
     @staticmethod
     def _allowed(url: str) -> bool:
+        """One of the five hosts' pictures: the only addresses `address`, `usable` and the warm-up take."""
         try:
             parts = urlsplit(url)
             return parts.scheme == "https" and (parts.hostname or "").lower() in ART_HOSTS and parts.port is None
         except ValueError:
             return False
+
+    @staticmethod
+    def _fetchable(url: str) -> bool:
+        """Whether a remembered address may be downloaded: one of the five hosts' pictures, or one of netpolicy's public
+        pictures, whose addresses only `public_address` remembers."""
+        return ArtCache._allowed(url) or netpolicy.is_public_picture(url)
 
     # ---------------------------------------------------------------------------------------------- pictures
     async def get(self, key: str, size: int | None = None) -> tuple[bytes, str] | None:
@@ -286,7 +325,7 @@ class ArtCache:
             return None
         try:
             return _shrunk(data, size)
-        except Exception as error:  # a picture Qt cannot read is served as it is
+        except Exception as error:  # a picture Pillow cannot read is served as it is
             log.info("A picture could not be made smaller (%s).", type(error).__name__)
             return None
 
@@ -317,7 +356,7 @@ class ArtCache:
                 self._note_read(row)
                 return kept
         url = row.url if row is not None else self._urls.get(key)
-        if url is None or not self._allowed(url) or key in self._refused or self._fetch_bytes is None:
+        if url is None or not self._fetchable(url) or key in self._refused or self._fetch_bytes is None:
             return None
         async with self._lock:
             row = self._store.art(key)
@@ -376,10 +415,10 @@ class ArtCache:
         """Fetch the pictures of these addresses that are not kept yet, in the order given, one at a time with a rest between
         them, so that a page does not wait for them the first time. It stops when the cache is full: a picture that would not
         fit is not kept, and nothing the player looked at is dropped to make room; what it keeps counts as never looked at, so a
-        page that needs room drops it first. It asks for nothing in the demo, for an address outside the five hosts, or for
-        one that was refused; once the cache is full it asks for nothing more in this run. While `paused` says so (the game
-        runs) it waits before each picture and goes on after, so that it never takes the network or the disk from the game.
-        Returns how many it kept."""
+        page that needs room drops it first. It asks for nothing in the demo, for an address outside the five hosts (a
+        public picture among them), or for one that was refused; once the cache is full it asks for nothing more in this run.
+        While `paused` says so (the game runs) it waits before each picture and goes on after, so that it never takes the
+        network or the disk from the game. Returns how many it kept."""
         if self._demo or self._fetch_bytes is None or self._full:
             return 0
         kept = 0
@@ -407,11 +446,35 @@ class ArtCache:
                 await self.sleep(self.warm_pause)
         return kept
 
+    async def warm_public(self, indexes: Sequence[int], *, paused: Callable[[], bool] = lambda: False) -> int:
+        """Fetch the public pictures at these places of netpolicy's table (the Endgame headers; the Stats design, 3.2) that
+        are not kept yet, one at a time with a rest between them, each as a page's request would fetch it: held to 8 MB and
+        kept like any other picture. While `paused` says so (the game runs) it waits before each one. It asks for nothing in
+        the demo, for a place outside the table, or for a picture that was refused in this run. Returns how many it kept."""
+        if self._demo or self._fetch_bytes is None:
+            return 0
+        kept = 0
+        for index in indexes:
+            address = self.public_address(index)
+            if address is None or self.kept(address):
+                continue
+            key = address[len("/api/art/"):]
+            if key in self._refused:
+                continue
+            while paused():
+                await self.sleep(self.game_pause)
+            if await self._whole(key) is not None:
+                kept += 1
+                await self.sleep(self.warm_pause)
+        return kept
+
     async def _download(self, key: str, url: str, *, fit: bool = False) -> tuple[bytes, str] | None:
         if not _KEY.fullmatch(key):  # the kept file is named by the key, so a key is never anything else
             return None
         try:
-            data = await asyncio.to_thread(self._fetch_bytes, _sendable(url), max_bytes=self.CAP, hosts=ART_HOSTS)
+            data = await asyncio.to_thread(
+                self._fetch_bytes, _sendable(url), max_bytes=self.CAP, hosts=ART_HOSTS + netpolicy.PUBLIC_PICTURE_HOSTS
+            )
         except netpolicy.ResponseTooLarge:
             self._refused.add(key)
             log.info("A picture was larger than %d MB and was not kept.", self.CAP // (1024 * 1024))

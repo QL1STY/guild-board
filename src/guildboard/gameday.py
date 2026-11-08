@@ -13,6 +13,11 @@ SERVER_UTC_OFFSET_HOURS = {
     "cn_gf01": 8,
     "cn_qd01": 8,
 }
+# The servers as the player knows them, the same names as the Settings page: the login window and the Wrapped poster.
+SERVER_NAMES = {
+    "os_euro": "Europe", "os_usa": "America", "os_asia": "Asia", "os_cht": "TW, HK, MO",
+    "cn_gf01": "China", "cn_qd01": "China",
+}
 
 
 def server_tz(server: str) -> timezone:

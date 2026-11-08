@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test'
 import type { TimersModel, Widget } from '../src/types.ts'
-import { cellOf, clockWidget, dragGrip, dragTo, layoutOf, setBoard, widgetById, widgetIds } from './board.ts'
+import { cellOf, clockWidget, dragGrip, dragTo, layoutOf, pitchOf, setBoard, widgetById, widgetIds } from './board.ts'
 import { expect, test } from './fixtures.ts'
 
 /** A Notes widget, which can be any size from 2 × 1 to 6 × 6, at a saved place or without one. */
@@ -98,11 +98,42 @@ test('a pinned timer shows at the first free place', async ({ page, api }) => {
 test('the Board uses the whole width at 2,560 pixels, with more widgets side by side', async ({ page }) => {
   await page.setViewportSize({ width: 2560, height: 1440 })
   await expect(widgetById(page, 'start-notes')).toBeVisible()
-  // Thirteen columns of 168 pixels and 12-pixel gaps fit the 2,370 pixels beside the rail.
-  const columns = await page.getByTestId('board').evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(' ').length)
-  expect(columns).toBe(13)
+  // Thirteen columns of 168 pixels and 12-pixel gaps fit the 2,370 pixels beside the rail, and they share the 42 left
+  // over, so that the last ends at the Board's right edge.
+  const grid = page.getByTestId('board')
+  const [tracks, box] = await Promise.all([
+    grid.evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').map(parseFloat)),
+    grid.boundingBox(),
+  ])
+  expect(tracks).toHaveLength(13)
+  for (const track of tracks) {
+    expect(track).toBeCloseTo((box!.width - 12 * 12) / 13, 1)
+    expect(track).toBeGreaterThanOrEqual(168)
+    expect(track).toBeLessThan(168 + 180 / 13) // what is left over is less than a fourteenth column
+  }
+  // Each widget is as wide as its columns and the gaps between them.
   const widths = await page.locator('[data-widget]').evaluateAll((all) => all.map((one) => one.getBoundingClientRect().width))
-  expect(Math.max(...widths)).toBeLessThanOrEqual(4 * 168 + 3 * 12) // no widget stretches
+  for (const width of widths) {
+    const columns = (width + 12) / (tracks[0] + 12)
+    expect(Math.abs(columns - Math.round(columns)), `${width}`).toBeLessThan(0.01)
+  }
+})
+
+test('the last column of the Board ends where the top bar ends, in a window of any width', async ({ page, api }) => {
+  // The 1,366-pixel window has six columns sharing 108 pixels left over, the 1,640 eight sharing 22, and the 1,920 nine
+  // sharing 122. Guild Board's own window lays its page out at 1,640 pixels from there up, zoomed to the window.
+  for (const width of [1366, 1640, 1920]) {
+    await page.setViewportSize({ width, height: 900 })
+    const columns = await page.getByTestId('board').evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(' ').length)
+    await setBoard(api, page, [{ ...clockWidget('clock-right'), x: columns - 2, y: 0 }])
+    await expect(widgetById(page, 'clock-right')).toBeVisible()
+    expect(await cellOf(page, 'clock-right'), `${width}`).toEqual({ x: columns - 2, y: 0 })
+    const [right, plate] = await Promise.all([
+      widgetById(page, 'clock-right').evaluate((one) => one.getBoundingClientRect().right),
+      page.getByTestId('plate').evaluate((one) => one.getBoundingClientRect().right),
+    ])
+    expect(Math.abs(right - plate), `${width}: the clock ends at ${right}, the plate at ${plate}`).toBeLessThanOrEqual(0.5)
+  }
 })
 
 test('the Board shows no note on load, and a change made there shows one whose Undo takes it back', async ({ page, api }) => {
@@ -250,8 +281,8 @@ test('the Edit grid shows its empty cells, and they are hidden from screen reade
   for (const hidden of await cells.evaluateAll((all) => all.map((one) => one.closest('[aria-hidden="true"]') !== null))) {
     expect(hidden).toBe(true)
   }
-  const [first, board] = [(await cells.first().boundingBox())!, (await page.getByTestId('board').boundingBox())!]
-  expect([Math.round((first.x - board.x) / 180), Math.round((first.y - board.y) / 108)]).toEqual([2, 0]) // right of the clock
+  const [first, board, pitch] = [(await cells.first().boundingBox())!, (await page.getByTestId('board').boundingBox())!, await pitchOf(page)]
+  expect([Math.round((first.x - board.x) / pitch.x), Math.round((first.y - board.y) / pitch.y)]).toEqual([2, 0]) // right of the clock
   expect(board.height).toBe(3 * 96 + 2 * 12)
   await page.getByRole('button', { name: 'Cancel' }).click()
   await expect(cells).toHaveCount(0)
@@ -328,8 +359,8 @@ test('Cancel puts the Board back as it was', async ({ page, api }) => {
 
 /** The size a widget shows at, in cells, from its frame's pixels. */
 const cellsOf = async (page: Page, id: string) => {
-  const box = (await widgetById(page, id).boundingBox())!
-  return { w: Math.round((box.width + 12) / 180), h: Math.round((box.height + 12) / 108) }
+  const [box, pitch] = await Promise.all([widgetById(page, id).boundingBox(), pitchOf(page)])
+  return { w: Math.round((box!.width + 12) / pitch.x), h: Math.round((box!.height + 12) / pitch.y) }
 }
 
 test('dragging a widget to a cell puts it there, and a widget in the way slides down', async ({ page, api }) => {
@@ -342,6 +373,63 @@ test('dragging a widget to a cell puts it there, and a widget in the way slides 
   await done(page)
   await expect(page.getByRole('button', { name: 'Edit', exact: true })).toBeVisible()
   expect((await layoutOf(api)).widgets).toMatchObject([{ id: 'clock-a', x: 3, y: 1 }, { id: 'clock-b', x: 3, y: 2 }])
+})
+
+test('a widget dragged lands in the cell under the pointer however wide the columns are', async ({ page, api }) => {
+  // A window of 1,437 pixels has six columns of 197.83, a pixel short of seven, and one of 1,920 nine of 181.56: counted
+  // in cells of 168 pixels, the pointer would be a column further on.
+  for (const [width, column] of [[1437, 4], [1920, 7]] as const) {
+    await page.setViewportSize({ width, height: 900 })
+    await setBoard(api, page, [{ ...clockWidget('clock-a'), w: 1, h: 1, x: 0, y: 0 }])
+    await edit(page)
+    await dragTo(page, 'clock-a', { x: column, y: 2 })
+    await expect.poll(() => cellOf(page, 'clock-a'), `${width}`).toEqual({ x: column, y: 2 })
+    await expect(widgetById(page, 'clock-a')).toHaveAccessibleName(`Clock, 1 by 1, column ${column + 1}, row 3`)
+    await page.getByRole('button', { name: 'Cancel' }).click()
+  }
+})
+
+/** The width the Board's grid is drawn at. */
+const boardWidth = (page: Page) => page.getByTestId('board').evaluate((grid) => grid.getBoundingClientRect().width)
+
+test('a drag takes the pointer over the columns as they are when the Board changes its width on the way', async ({ page, api }) => {
+  // Seven columns of 168.29 at 1,440 pixels as the drag begins, and the same seven of 191.14 at 1,600 as it ends, as a
+  // scroll bar that comes or goes changes them, by less. By the columns of the press, the pointer would be a column on.
+  await setBoard(api, page, [{ ...clockWidget('clock-a'), w: 1, h: 1, x: 0, y: 2 }])
+  await edit(page)
+  const clock = widgetById(page, 'clock-a')
+  const [box, head] = [(await clock.boundingBox())!, (await clock.locator('.w-head').boundingBox())!]
+  const grab = { x: head.x + 12, y: head.y + head.height / 2 }
+  await page.mouse.move(grab.x, grab.y)
+  await page.mouse.down()
+  await page.mouse.move(grab.x + 30, grab.y, { steps: 3 })
+  await expect(clock).toContainClass('lifted')
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await expect.poll(() => boardWidth(page)).toBe(1410)
+  const [board, pitch] = [(await page.getByTestId('board').boundingBox())!, await pitchOf(page)]
+  await page.mouse.move(board.x + 5 * pitch.x + grab.x - box.x, board.y + 2 * pitch.y + grab.y - box.y, { steps: 4 })
+  await page.mouse.up()
+  await expect.poll(() => cellOf(page, 'clock-a')).toEqual({ x: 5, y: 2 })
+  await expect(clock).toHaveAccessibleName('Clock, 1 by 1, column 6, row 3')
+})
+
+test('after the Board changes its width, a step glides only the widget it moved', async ({ page, api }) => {
+  // The same seven columns, wider, with nothing moved among the cells: each widget's place moves with its column, and
+  // the next change glides only what it moves, not the widgets that were only taken along by the width.
+  await setBoard(api, page, [{ ...clockWidget('clock-a'), x: 0, y: 0 }, { ...clockWidget('clock-b'), x: 4, y: 0 }])
+  await edit(page)
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await expect.poll(() => boardWidth(page)).toBe(1410)
+  await page.evaluate(() => document.documentElement.style.setProperty('--t-move', '4s')) // a glide long enough to look at
+  await widgetById(page, 'clock-a').focus()
+  await page.keyboard.press('ArrowDown')
+  await expect(said(page)).toHaveText('Clock, column 1, row 2.')
+  const gliding = await page.getByTestId('board').evaluate((grid) =>
+    [...grid.querySelectorAll('[data-widget]')]
+      .filter((one) => one.getAnimations().some((animation) => animation.id === 'glide'))
+      .map((one) => one.getAttribute('data-widget')),
+  )
+  expect(gliding).toEqual(['clock-a'])
 })
 
 test('a widget dragged later in the reading order keeps the focus, and so does one resized', async ({ page, api }) => {
@@ -364,11 +452,11 @@ test('Escape during a drag puts every widget back', async ({ page, api }) => {
   await expect(widgetById(page, 'clock-a')).toContainClass('lifted')
   const landing = page.getByTestId('board').locator('.board-landing')
   await expect(landing).toBeVisible()
-  const [outline, board] = [(await landing.boundingBox())!, (await page.getByTestId('board').boundingBox())!]
-  expect([Math.round((outline.x - board.x) / 180), Math.round((outline.y - board.y) / 108)]).toEqual([3, 1])
+  const [outline, board, pitch] = [(await landing.boundingBox())!, (await page.getByTestId('board').boundingBox())!, await pitchOf(page)]
+  expect([Math.round((outline.x - board.x) / pitch.x), Math.round((outline.y - board.y) / pitch.y)]).toEqual([3, 1])
   const held = (await widgetById(page, 'clock-a').boundingBox())!
-  expect(Math.abs(held.x - (board.x + 3 * 180))).toBeLessThan(6) // under the pointer, a little larger as it is lifted
-  expect(Math.abs(held.y - (board.y + 108))).toBeLessThan(6)
+  expect(Math.abs(held.x - (board.x + 3 * pitch.x))).toBeLessThan(6) // under the pointer, a little larger as it is lifted
+  expect(Math.abs(held.y - (board.y + pitch.y))).toBeLessThan(6)
   await expect.poll(() => cellOf(page, 'clock-b')).toEqual({ x: 3, y: 2 })
   await page.keyboard.press('Escape')
   await page.mouse.up()

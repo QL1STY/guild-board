@@ -1,0 +1,202 @@
+/*
+ * The Overview's Endgame card (the Stats months and Wrapped design, section 3; mockups endgame-card.html and
+ * endgame-headers.html). Three equal columns on the card's parchment; each mode's colour is an accent only: the header's
+ * bottom line, the cleared acts and the badge. The motion plays once each time the card is mounted: every keyframe gives
+ * only its first frame, so an element ends on its own style, and nothing plays under reduced motion.
+ */
+.ec-modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ec-mode {
+  --mode: var(--mode-abyss);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--hairline);
+  border-radius: 7px;
+  background: var(--ledger-light);
+}
+.ec-mode.theater { --mode: var(--mode-theater); }
+.ec-mode.stygian { --mode: var(--mode-stygian); }
+
+/* The header: icon, name and line on parchment; the picture fills the right two-thirds and fades toward the left. */
+.ec-band {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 104px;
+  padding: 10px 14px;
+  overflow: hidden;
+  border-radius: 6px 6px 0 0;
+  border-bottom: 2px solid var(--mode);
+  background: var(--surface);
+}
+.ec-bg { position: absolute; top: 0; right: 0; width: 68%; height: 100%; background-repeat: no-repeat; }
+.ec-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--surface) 0%, var(--surface) 32%, color-mix(in srgb, var(--surface) 75%, transparent) 48%, transparent 72%);
+}
+/* One glint crosses the header. At rest it is out of the way, to the right. */
+.ec-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / .55) 50%, transparent 70%);
+  transform: translateX(120%);
+  pointer-events: none;
+  animation: ec-glint var(--t-glint) var(--ease-move) var(--t-enter) backwards;
+}
+.ec-ico { position: relative; width: 56px; height: 56px; filter: drop-shadow(0 2px 3px rgb(0 0 0 / .25)); }
+.ec-ico img { object-fit: contain; }
+.ec-ico .sign { padding: 8px; color: var(--mode); }
+.ec-title { position: relative; min-width: 0; text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface); }
+.ec-title b { display: block; font-size: 16px; }
+.ec-title span { display: block; font-size: 11.5px; color: var(--muted); }
+
+.ec-body { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: 10px 12px 12px; font-size: 12px; }
+.ec-none { margin: 0; color: var(--muted); }
+
+.ec-big { display: flex; align-items: baseline; gap: 6px; }
+.ec-big > b { font-size: 26px; line-height: 1; }
+.ec-big > span { font-size: 12px; color: var(--muted); }
+.ec-best { margin-left: auto; white-space: nowrap; }
+.ec-best b { color: var(--ink); }
+.ec-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+/* The Abyss: the stars of floors 9 to 12 light one after another. */
+/* One grid for the four floors, so that the labels share a column and the stars of a chamber stand under one another. */
+.ec-floors { display: grid; grid-template-columns: 54px repeat(3, 1fr); align-items: center; gap: 3px 8px; }
+.ec-floor { display: contents; }
+.ec-fl { font-size: 11px; color: var(--muted); }
+.ec-stars { display: flex; gap: 1px; }
+.ec-star {
+  font-size: 13px;
+  line-height: 1;
+  color: var(--fill);
+  animation: ec-pop var(--t-open) var(--ease-out) calc(var(--t-hover) + var(--i) * var(--stagger)) backwards;
+}
+.ec-star.off { color: var(--track); animation: none; }
+
+/* The enemies and the bosses rise in. */
+.ec-foes { display: grid; gap: 4px; }
+.ec-foe-row { display: grid; grid-template-columns: 34px 1fr 1fr; align-items: center; gap: 8px; }
+.ec-k { font-size: 11px; color: var(--muted); }
+.ec-icons { display: flex; flex-wrap: wrap; gap: 3px; }
+.ec-ic {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--r0);
+  animation: ec-rise var(--t-open) var(--ease-out) calc(var(--t-enter) + var(--i) * var(--stagger)) backwards;
+}
+.ec-pic { width: 100%; height: 100%; border-radius: inherit; }
+.ec-pic img { object-fit: cover; }
+.ec-pic .sign { padding: 16%; color: var(--ink2); }
+
+/* A character's mark: the face, what it is for, her name and the figure. */
+/* The last part of a column takes what the tallest column leaves it, so that the three bodies end level with no blank between. */
+.ec-stats { display: grid; flex: 1; grid-auto-rows: 1fr; }
+.ec-stat { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-top: 1px solid var(--hairline); }
+.ec-stat:first-child { border-top: 0; }
+.ec-face { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 50%; background: var(--r0); }
+.ec-face img { object-fit: cover; }
+.ec-face .sign { padding: 18%; color: var(--ink2); }
+.ec-what { min-width: 0; }
+.ec-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--muted); }
+.ec-v { margin-left: auto; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ec-glyph { display: grid; flex: none; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: var(--surface); }
+.ec-glyph .sign { width: 16px; height: 16px; }
+.ec-glyph.flower { background: var(--medal); color: var(--medal-ink); }
+.ec-glyph.clock { background: var(--muted); }
+
+/* The Theater: the season's acts as circles that light in order. */
+.ec-acts { display: grid; grid-template-columns: repeat(var(--acts, 12), minmax(0, 1fr)); gap: 3px; }
+.ec-act {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--track);
+  animation: ec-pop var(--t-open) var(--ease-out) calc(var(--t-hover) + var(--i) * var(--stagger) * 2) backwards;
+}
+.ec-act.done { color: white; background: var(--mode-theater); }
+.ec-act.medal {
+  color: var(--medal-ink);
+  background: radial-gradient(circle at 35% 30%, var(--medal-light), var(--medal));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mode-theater) 18%, var(--surface));
+}
+.ec-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--muted); }
+.ec-legend i { display: inline-block; width: 9px; height: 9px; margin-right: 4px; border-radius: 50%; vertical-align: -1px; }
+.ec-legend i.medal { background: radial-gradient(circle at 35% 30%, var(--medal-light), var(--medal)); }
+.ec-legend i.done { background: var(--mode-theater); }
+.ec-legend i.off { background: var(--track); }
+
+/* The Stygian Onslaught: the badge lands like a stamp, the bosses rise in. */
+.ec-big-badge { align-items: center; gap: 12px; }
+.ec-level b { display: block; font-size: 20px; line-height: 1.15; }
+.ec-level span { font-size: 12px; color: var(--muted); }
+.ec-badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin: 4px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--mode-stygian) 55%, white), var(--mode-stygian));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mode-stygian) 16%, var(--surface));
+  transform: rotate(45deg);
+  animation: ec-stamp var(--t-enter) var(--ease-stamp) var(--t-move) backwards;
+}
+.ec-badge span { transform: rotate(-45deg); font-size: 17px; font-weight: 800; color: white; }
+.ec-medal { flex: none; width: 52px; height: 52px; object-fit: contain; animation: ec-land var(--t-enter) var(--ease-stamp) var(--t-move) backwards; }
+.ec-bosses { display: grid; flex: 1; grid-auto-rows: 1fr; }
+.ec-bosses.dimmed { opacity: .6; }
+/* A boss is a row, as the Theater's highlights are: the icon, the short name cut to two lines, and the clear time. The slack the
+   tallest column leaves is spread between the rows. The whole name is the row's tip, on hover and on keyboard focus. */
+.ec-boss { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 4px 0; border-top: 1px solid var(--hairline); }
+.ec-boss:first-child { border-top: 0; }
+.ec-boss .ec-ic { flex: none; width: 48px; height: 48px; border-radius: 8px; animation-delay: calc(var(--t-open) + var(--i) * var(--stagger) * 3); }
+.ec-n {
+  display: -webkit-box;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 12px;
+  line-height: 1.2;
+}
+.ec-t { margin-left: auto; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+/* A long name's tip wraps. */
+.ec-boss[data-tip]:hover::after,
+.ec-boss[data-tip]:focus-visible::after { white-space: normal; width: max-content; max-width: 240px; text-align: left; }
+.ec-next {
+  margin-top: auto;
+  padding: 6px 9px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--mode-stygian) 14%, var(--surface));
+}
+
+@keyframes ec-pop { from { opacity: 0; transform: scale(.3); } }
+@keyframes ec-rise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes ec-stamp { from { opacity: 0; transform: rotate(45deg) scale(2.2); } }
+@keyframes ec-land { from { opacity: 0; transform: scale(2.2); } }
+@keyframes ec-glint { from { transform: translateX(-120%); } }
+
+/* With "reduce motion" nothing plays, and everything shows at once. */
+@media (prefers-reduced-motion: reduce) {
+  .ec-band::after,
+  .ec-star,
+  .ec-ic,
+  .ec-act,
+  .ec-badge,
+  .ec-medal { animation: none; }
+}

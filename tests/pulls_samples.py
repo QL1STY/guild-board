@@ -66,17 +66,14 @@ def made_up_game(home: Path, *keys: str) -> tuple[Path, Path]:
 
 
 def picture_bytes(kind: str = "PNG", width: int = 320, height: int = 180, colour: str = "#9fc3e6") -> bytes:
-    """A small made-up picture's bytes, as Qt writes one."""
-    from PySide6.QtCore import QBuffer, QByteArray, QIODevice
-    from PySide6.QtGui import QColor, QImage
+    """A small made-up picture's bytes, as Pillow writes one."""
+    import io
 
-    image = QImage(width, height, QImage.Format.Format_RGB32)
-    image.fill(QColor(colour))
-    written = QByteArray()
-    buffer = QBuffer(written)
-    buffer.open(QIODevice.OpenModeFlag.WriteOnly)
-    assert image.save(buffer, kind)
-    return bytes(written.data())
+    from PIL import Image
+
+    written = io.BytesIO()
+    Image.new("RGB", (width, height), colour).save(written, "JPEG" if kind == "JPG" else kind)
+    return written.getvalue()
 
 
 def made_up_screenshots(home: Path) -> Path:

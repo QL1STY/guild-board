@@ -1,6 +1,7 @@
 """The HoYoLAB wiki for the Characters pages (the Characters design, section 4.3): the lists of characters, weapons and
 artifact sets, and each entry read once for a game version, with the pages the Characters service shows made from the
-entries.
+entries. The Stats page's Endgame card reads three Tutorial entries the same way (the Stats design, 3.2): of those, the
+icon and the pictures in the page's order are kept.
 
 Every request is a read of the wiki (a GET of one entry, or the POST that asks for a list and changes nothing), made
 through the injected `fetch` on a thread, one at a time. Nothing is sent but the headers of `pulls/wiki.py`, and a failure
@@ -47,6 +48,13 @@ _KEPT_MODULES = {"Attributes", "Ascend", "Gallery", "Talents", "Constellation", 
 _TALENT_DROPPED = ("attributes", "talent_img", "talent_imgs", "points")
 # The entries whose costs are materials, which are named in the entry itself, not always in English.
 _WITH_COSTS = ("character", "weapon")
+# An endgame mode's Tutorial entry (the Stats design, 3.2), of which the icon and the pictures are kept.
+TUTORIAL = "tutorial"
+# A picture in a Tutorial entry's text: the wiki's own tag for one, or an img; its address is the tag's url or src.
+_PICTURE_TAG = re.compile(r"<(?:custom-image|img)\b[^<>]{0,2000}>", flags=re.IGNORECASE)  # bounded: no scan to the end
+_PICTURE_ADDRESS = re.compile(r"""\b(?:url|src)\s*=\s*["']([^"']+)["']""", flags=re.IGNORECASE)
+# The most of the words above a picture that is kept: enough for "Normal Challenge: Fearless" and what comes before it.
+CAPTION_CHARS = 80
 
 _WEEKDAYS = {"monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3, "friday": 4, "saturday": 5, "sunday": 6}
 _POSITIONS = {
@@ -228,7 +236,7 @@ class CharacterWiki:
             return kept
         try:
             body = await asyncio.to_thread(self._fetch, ENTRY_URL + entry_page_id, headers=HEADERS)
-            data = self._parse_entry(body, entry_page_id)
+            data = self._parse_entry(body, entry_page_id, kind)
         except Exception as error:
             log.warning(
                 "The HoYoLAB wiki's %s entry could not be read (%s). What was kept stays.", kind, netpolicy.what_failed(error)
@@ -245,9 +253,10 @@ class CharacterWiki:
         return row
 
     @staticmethod
-    def _parse_entry(body: bytes, entry_page_id: str) -> dict[str, Any] | None:
+    def _parse_entry(body: bytes, entry_page_id: str, kind: str = "") -> dict[str, Any] | None:
         """What Guild Board keeps of an entry's answer: its name and picture, its filters, and the parsed components of the
-        modules it reads. None when the wiki says it has no such entry; ValueError when the answer is not an entry's."""
+        modules it reads; of a Tutorial entry, its name, icon and pictures (`_tutorial`). None when the wiki says it has no
+        such entry; ValueError when the answer is not an entry's."""
         answer = json.loads(body)
         if not isinstance(answer, dict):
             raise ValueError("the wiki's entry cannot be read")
@@ -257,6 +266,8 @@ class CharacterWiki:
         page = data.get("page") if isinstance(data, dict) else None
         if answer.get("retcode") != 0 or not isinstance(page, dict) or not page.get("name"):
             raise ValueError("the wiki's entry cannot be read")
+        if kind == TUTORIAL:
+            return _tutorial(page, entry_page_id)
         modules: dict[str, dict[str, Any]] = {}
         for module in page.get("modules") or []:
             if not isinstance(module, dict) or module.get("name") not in _KEPT_MODULES:
@@ -517,6 +528,54 @@ def materials_of(row: WikiEntryRow) -> dict[str, tuple[str, str | None, str]]:
                 if name and item.get("ep_id") is not None:
                     found.setdefault(slug(name), (name, str(item.get("icon") or item.get("img") or "") or None, ident))
     return found
+
+
+_TEXT_KEPT = 1024 * 1024  # the most of a Tutorial module's text that is looked through for pictures
+_WORDS_LOOKED_AT = 4000  # the most of the text above a picture that is read for its caption
+
+
+def _tutorial(page: Mapping[str, Any], entry_page_id: str) -> dict[str, Any]:
+    """A Tutorial entry as the Endgame card reads it: its name, its icon, and each picture of its modules once, in the page's
+    order (a Gallery's, then those in each module's text), never the icon itself, each with the words just above it: a Gallery
+    picture's name, or the end of the text since the picture before it ("Normal Challenge: Fearless" names a Stygian
+    difficulty's medal)."""
+    icon = str(page.get("icon_url") or "").strip()
+    pictures: list[str] = []
+    captions: list[str] = []
+
+    def add(address: Any, words: str) -> None:
+        url = html.unescape(str(address or "")).strip()
+        if url.startswith("https://") and url != icon and url not in pictures:
+            pictures.append(url)
+            captions.append(words[-CAPTION_CHARS:].strip())
+
+    for module in page.get("modules") or []:
+        if not isinstance(module, dict):
+            continue
+        for component in module.get("components") or []:
+            try:
+                value = json.loads(component["data"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if not isinstance(value, dict):
+                continue
+            listed = value.get("list")
+            for item in listed if isinstance(listed, list) else []:  # a Gallery: each picture with its name
+                if isinstance(item, dict):
+                    add(item.get("img"), plain(item.get("key")))
+            text = value.get("data")
+            if not isinstance(text, str):
+                continue
+            text, after = text[:_TEXT_KEPT], 0
+            for tag in _PICTURE_TAG.finditer(text):
+                found = _PICTURE_ADDRESS.search(tag.group(0))
+                if found:
+                    add(found.group(1), plain(text[max(after, tag.start() - _WORDS_LOOKED_AT):tag.start()]))
+                after = tag.end()
+    return {
+        "id": str(page.get("id") or entry_page_id), "name": str(page["name"]).strip(), "icon": icon,
+        "pictures": pictures, "captions": captions,
+    }
 
 
 def _talents(data: Mapping[str, Any]) -> tuple[tuple[str, str, str | None, str], ...]:

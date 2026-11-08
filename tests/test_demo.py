@@ -145,16 +145,20 @@ async def test_fault_is_raised():
         await source.fetch("overview", now=NOW)
 
 
-def test_seed_history_fills_ninety_days(store):
+def test_seed_history_fills_over_six_months(store):
     seed_history(store, NOW)
     history = History(store)
-    assert history.tracking_since() == date(2026, 7, 15)
-    assert store.runs_since(datetime(2026, 1, 1, tzinfo=UTC)) == 85
+    assert history.tracking_since() == date(2026, 3, 2)  # 225 game days before today, the second of its month
+    assert (date(2026, 10, 13) - history.tracking_since()).days >= 200
+    assert store.runs_since(datetime(2026, 1, 1, tzinfo=UTC)) == 211
     assert store.value_at_or_before("stats.achievements", date(2026, 10, 12)) is not None
     assert store.day_values(["stats.achievements"], date(2026, 10, 13), date(2026, 10, 13)) == {"stats.achievements": {}}
     days = history.daily_change(["stats.days_active"], date(2026, 7, 15), date(2026, 10, 12))
     gaps = [day.day.isoformat() for day in days if not day.has_data]
     assert gaps == ["2026-07-17", "2026-07-28", "2026-07-29", "2026-08-22", "2026-09-19"]
+    # A run of days is played up to yesterday, for the Stats page's run of days.
+    playtime_days = history.playtime_minutes(date(2026, 10, 5), date(2026, 10, 12), DEMO_SERVER)
+    assert all(minutes > 0 for minutes in playtime_days.values()) and len(playtime_days) == 8
     assert set(store.group_states()) == set(GROUPS)
     assert all(not state.needs_retry for state in store.group_states().values())
     playtime = history.playtime_minutes(date(2026, 9, 13), date(2026, 10, 12), DEMO_SERVER)
@@ -200,11 +204,11 @@ def test_an_interrupted_seed_leaves_nothing(store, monkeypatch):
     calls = {"count": 0}
     real_build = demo.build
 
-    def failing_build(group, now, first_time=False):
+    def failing_build(group, now, first_time=False, anchor=None):
         calls["count"] += 1
         if calls["count"] == 40:
             raise RuntimeError("interrupted")
-        return real_build(group, now, first_time)
+        return real_build(group, now, first_time, anchor)
 
     monkeypatch.setattr(demo, "build", failing_build)
     with pytest.raises(RuntimeError):
@@ -297,18 +301,21 @@ def test_the_demo_history_is_the_same_every_time_and_once(store):
     uid = DEMO_ACCOUNT.uid
     seed_wishes(store, NOW)
     rows = store.wishes(uid)
-    assert len(rows) == 387
-    assert Counter(row.pool for row in rows) == {"character": 219, "weapon": 23, "standard": 120, "chronicled": 5, "novice": 20}
+    assert len(rows) == 445
+    assert Counter(row.pool for row in rows) == {"character": 219, "weapon": 23, "standard": 178, "chronicled": 5, "novice": 20}
     assert sum(1 for row in rows if row.gacha_type == "400") == 21  # every tenth of the character event's
-    assert [row.id for row in rows] == [1_700_000_000_000_000_000 + n for n in range(1, 388)]
+    assert [row.id for row in rows] == [1_700_000_000_000_000_000 + n for n in range(1, 446)]
     assert [row.at for row in rows] == sorted(row.at for row in rows)  # the ids grow with the times
-    assert (_server_day(rows[0].at), _server_day(rows[-1].at)) == (date(2026, 5, 16), date(2026, 10, 12))
+    assert (_server_day(rows[0].at), _server_day(rows[-1].at)) == (date(2026, 1, 11), date(2026, 10, 12))
     assert all(row.time == row.at.astimezone(server_tz(DEMO_SERVER)).strftime("%Y-%m-%d %H:%M:%S") for row in rows)
     fives = [(row.pool, row.name, _server_day(row.at)) for row in rows if row.rank == 5]
+    # Jean in February, the thin month's one 5★, and two on 15 August, so that the Year has a day of two five-stars.
     assert fives == [
+        ("standard", "Jean", date(2026, 2, 12)),
         ("character", "Skirk", date(2026, 6, 24)),
         ("standard", "Wolf's Gravestone", date(2026, 8, 15)),
-        ("character", "Qiqi", date(2026, 9, 2)),
+        ("character", "Qiqi", date(2026, 8, 15)),
+        ("standard", "Diluc", date(2026, 10, 5)),
     ]
     character = store.wishes(uid, "character")
     assert [n for n, row in enumerate(character, start=1) if row.rank == 5] == [77, 158]
@@ -318,23 +325,26 @@ def test_the_demo_history_is_the_same_every_time_and_once(store):
     weapon = store.wishes(uid, "weapon")
     assert [n for n, row in enumerate(weapon, start=1) if row.rank >= 4] == [10, 20]
     assert _server_day(weapon[0].at) == date(2026, 10, 1)
-    assert _server_day(store.wishes(uid, "standard")[0].at) == date(2026, 5, 20)
+    assert _server_day(store.wishes(uid, "standard")[0].at) == date(2026, 1, 11)  # before Guild Board ran: an earlier import kept it
     assert {_server_day(row.at) for row in store.wishes(uid, "chronicled")} == {date(2026, 7, 2)}
     novice = store.wishes(uid, "novice")
     assert ({_server_day(row.at) for row in novice}, novice[9].name, novice[9].rank) == ({date(2026, 5, 16)}, "Noelle", 4)
 
     [run] = store.wish_imports()
-    assert (run.outcome, run.uid, run.found, run.pages, run.pools, run.started_at) == ("ok", uid, 387, 20, ALL_POOLS, NOW)
+    assert (run.outcome, run.uid, run.found, run.pages, run.pools, run.started_at) == ("ok", uid, 445, 20, ALL_POOLS, NOW)
     account = store.pulls_account(uid)
-    window = iso(NOW - timedelta(days=180))  # the window the seeded run gives, which the corrections are for
-    assert account.corrections == {pool: {"pity": 0, "guaranteed": False, "from": window} for pool in ALL_POOLS}
+    # The window the seeded run gives, which the corrections are for: 180 days before it, and for the standard wish, which has
+    # wishes older than that, the oldest of them.
+    window = {pool: iso(NOW - timedelta(days=180)) for pool in ALL_POOLS}
+    window["standard"] = iso(store.wishes(uid, "standard")[0].at)
+    assert account.corrections == {pool: {"pity": 0, "guaranteed": False, "from": window[pool]} for pool in ALL_POOLS}
     assert (account.charted_weapon, account.chronicled_path) == ("Azurelight", "")
     assert (account.balance_primogems, account.balance_fates, account.balance_set_at) == (9840, 14, NOW)
     [entry] = store.wishlist(uid)
     assert (entry.name, entry.kind, entry.about, entry.copies) == ("Citlali", "character", date(2026, 11, 11), 1)
 
     seed_wishes(store, NOW + timedelta(days=1))  # a later start seeds nothing
-    assert (store.wish_count(uid), len(store.wish_imports()), len(store.wishlist(uid))) == (387, 1, 1)
+    assert (store.wish_count(uid), len(store.wish_imports()), len(store.wishlist(uid))) == (445, 1, 1)
     other = Store.in_memory()
     seed_wishes(other, NOW)
     assert other.wishes(uid) == rows
@@ -351,7 +361,7 @@ def test_the_demo_s_dates_follow_the_seed_s_now(store):
         seed_wishes(into, now)
         seed_banners(into, now)
     first, second = store.wishes(uid), other.wishes(uid)
-    assert [b.at - a.at for a, b in zip(first, second)] == [shift] * 387
+    assert [b.at - a.at for a, b in zip(first, second)] == [shift] * 445
     assert [(a.id, a.name, a.rank, a.gacha_type) for a in first] == [(b.id, b.name, b.rank, b.gacha_type) for b in second]
     assert all(row.time == row.at.astimezone(server_tz(DEMO_SERVER)).strftime("%Y-%m-%d %H:%M:%S") for row in second)
     assert [(b.starts_at - a.starts_at, b.ends_at - a.ends_at) for a, b in zip(store.banners(), other.banners())] == [
@@ -384,11 +394,11 @@ def test_the_demo_cards_read_as_the_mockup(tmp_path, clock):
         character, weapon, standard, chronicled = model["pity"]
         assert (character["pity"], character["known"], character["guarantee"], character["four"]) == (61, True, "guaranteed", 7)
         assert (weapon["pity"], weapon["known"], weapon["path"]) == (23, True, {"item": "Azurelight", "points": 0, "max": 1})
-        assert (standard["pity"], standard["known"]) == (44, True)
+        assert (standard["pity"], standard["known"]) == (10, True)
         assert (chronicled["pity"], chronicled["path"]) == (5, {"item": "", "points": 0, "max": 1})
         history = model["history"]
-        # Three 5★ in all; the average reads the character event's two, Skirk at 77 and Qiqi at 81.
-        assert (history["count"], history["fives"], history["average_pity"], history["won"], history["lost"]) == (387, 3, 79, 1, 1)
+        # Five 5★ in all; the average reads the character event's two, Skirk at 77 and Qiqi at 81.
+        assert (history["count"], history["fives"], history["average_pity"], history["won"], history["lost"]) == (445, 5, 79, 1, 1)
         assert model["savings"]["pulls"] == 75
         assert [entry["name"] for entry in model["wishlist"]] == ["Citlali"]
         assert [entry["banner"]["name"] for entry in model["planner"]] == [
@@ -447,3 +457,198 @@ def test_the_demo_banners_end_ten_days_after_the_demo_start(store):
         assert store.label(f"banner.{banner.ann_id}").icon_url == banner.art_url
     seed_banners(store, NOW + timedelta(days=1))  # a later start keeps them as they are
     assert store.banners() == banners
+
+
+# ---------------------------------------------------------------------------------------------- Stats: Months, the Year, the Endgame card
+@pytest.fixture
+def demo_core(tmp_path, clock):
+    core = Core(AppPaths(tmp_path / "data"), demo=True, clock=clock, sleep=FakeSleep(clock), process_lister=lambda: set())
+    try:
+        yield core
+    finally:
+        core.store.close()
+
+
+def test_the_demo_has_a_year_for_wrapped(demo_core):
+    year = demo_core.stats_year(None)["year"]
+    assert len(year["cards"]) >= 6 and year["hero"]["character"] is not None
+
+
+def test_the_demo_has_a_thin_month_and_a_full_one(demo_core):
+    months = demo_core.stats_month(None)["months"]
+    assert any(month["thin"] for month in months) and any(not month["thin"] for month in months)
+    assert months[-1]["ym"] == "2026-10" and months[-1]["current"] and not months[-1]["thin"]
+
+
+def test_no_month_of_the_demo_reads_a_made_up_zero(demo_core):
+    for entry in demo_core.stats_month(None)["months"]:
+        tiles = {tile["id"]: tile for tile in demo_core.stats_month(entry["ym"])["month"]["tiles"]}
+        if "primogems" in tiles:
+            assert tiles["primogems"]["value"] > 0, entry["ym"]
+            assert tiles["primogems"].get("delta") != tiles["primogems"]["value"], entry["ym"]  # never "up from 0"
+
+
+def test_the_demo_has_achievements_ticked_in_most_of_its_months(demo_core):
+    counts = {}
+    for entry in demo_core.stats_month(None)["months"]:
+        tiles = {tile["id"]: tile for tile in demo_core.stats_month(entry["ym"])["month"]["tiles"]}
+        if "achievements" in tiles:
+            counts[entry["ym"]] = tiles["achievements"]["value"]
+    assert len([month for month, count in counts.items() if count > 0]) >= 4, counts
+    assert sum(counts.values()) == sum(1 for row in demo_core.store.progress().values() if row.source == "player" and row.status == "done")
+    assert _year_data(demo_core).achievements == sum(counts.values())  # the Year reads the same ticks
+
+
+def test_the_demo_ticks_are_the_players_and_the_rest_are_not(demo_core):
+    rows = demo_core.store.progress().values()
+    done = [row for row in rows if row.status == "done"]
+    ticked = [row for row in done if row.source == "player"]
+    assert 20 <= len(ticked) < len(done) / 4  # a few were ticked one by one; the rest came as an import would bring them
+    assert all(row.done_at is not None and row.done_at < NOW for row in ticked)
+
+
+def test_the_demo_names_the_next_stygian_season_and_it_has_not_started(demo_core):
+    stygian = next(mode for mode in demo_core.stats_endgame()["modes"] if mode["mode"] == "stygian")
+    assert stygian["next"] is not None and stygian["next"]["name"]
+    assert stygian["next_started"] is False
+
+
+def test_the_demo_s_endgame_summary_agrees_with_its_detail():
+    record = build("endgame", NOW)
+    stars = next(mode for mode in record.modes if mode.mode == "abyss")
+    assert stars.score == record.detail.abyss_stars == sum(stars for _, stars in record.detail.abyss_chambers)
+    theater = next(mode for mode in record.modes if mode.mode == "theater")
+    stygian = next(mode for mode in record.modes if mode.mode == "stygian")
+    assert theater.score == record.detail.theater_acts and stygian.score == record.detail.stygian_difficulty
+
+
+def test_the_demo_s_month_cycles_change_at_the_reset_on_the_first():
+    from guildboard.characters import demo as characters_demo
+
+    # 02:00 on 1 November at the server (UTC+1) is still 31 October's game day: October's Theater is still on.
+    early = datetime(2026, 11, 1, 1, 0, tzinfo=UTC)
+    late = datetime(2026, 11, 1, 3, 30, tzinfo=UTC)
+    assert characters_demo.demo_endgame_detail(early, DEMO_SERVER).theater_starts.startswith("2026-10-01")
+    assert characters_demo.demo_endgame_detail(late, DEMO_SERVER).theater_starts.startswith("2026-11-01")
+
+
+def _year_data(core, year=2026):
+    from guildboard.views import wrapped
+
+    uid = core.ledger_uid()
+    return wrapped.year_data(
+        core.store, core.history, uid, core.server(), year, core.today(), core.pulls.states(uid), core.clock.now(),
+        wrapped.Profile("Traveler", 60, "Europe"), core.art.address, tz=None,
+    )
+
+
+def test_the_demo_year_has_data_for_every_kind_of_fact(demo_core):
+    from guildboard.views import wrapped
+
+    facts = {fact.kind: fact for fact in wrapped.year_facts(_year_data(demo_core))}
+    # Every kind the Year can choose from is computed for the demo's year (the Months and Wrapped design, section 7).
+    assert set(wrapped.FACTS) - set(facts) == set()
+    assert len(wrapped.FACTS) == 21
+    # The four the demo lacked before: two 5-stars in one day, Condensed Resin, a region finished in the year and a
+    # strongest hit by someone other than the character of the year.
+    assert facts["five_in_a_day"].numbers == {"count": 2, "day": "2026-08-15"}
+    assert facts["condensed"].numbers["made"] > 0
+    assert facts["regions"].numbers["names"] == ["Fontaine"]
+    assert facts["strike"].numbers["name"] == "Nefer" and facts["character"].numbers["name"] == "Sandrone"
+    year = demo_core.stats_year(None)["year"]
+    assert len(year["cards"]) >= 8 and year["hero"]["character"] is not None
+    assert len({card["kind"] for card in year["cards"]}) == len(year["cards"])
+
+
+def test_the_year_s_primogems_are_the_sum_of_the_months(demo_core):
+    counters = {counter["label"]: counter for counter in demo_core.stats_year(None)["year"]["hero"]["counters"]}
+    months = demo_core.stats_month(None)["months"]
+    tiles = [{t["id"]: t for t in demo_core.stats_month(m["ym"])["month"]["tiles"]}["primogems"]["value"] for m in months]
+    assert counters["primogems earned"]["value"] == sum(tiles) > 0
+    assert counters["wishes"]["value"] == demo_core.store.wish_count(demo_core.ledger_uid())
+
+
+def test_the_overview_s_primogems_by_month_are_the_months_tiles(demo_core):
+    shown = demo_core.stats("30")["primogems"]["months"]
+    assert len(shown) >= 6
+    for month in shown:
+        tiles = {t["id"]: t for t in demo_core.stats_month(month["ym"])["month"]["tiles"]}
+        assert tiles["primogems"]["value"] == month["value"], month["ym"]
+
+
+def test_the_demo_s_best_abyss_is_the_best_of_its_cycles(demo_core):
+    from guildboard.views.stats import endgame_best
+
+    stars = {row.cycle: row.detail["stars"] for row in demo_core.store.endgame_cycles() if row.mode == "abyss"}
+    assert len(stars) == 3 and min(stars.values()) < max(stars.values()) == 36
+    assert endgame_best(demo_core.store, "abyss") == "36 stars"
+    # The card, a month that closed and the Year tell it the same.
+    card = next(mode for mode in demo_core.stats_endgame()["modes"] if mode["mode"] == "abyss")
+    assert card["stars"] == 33 and card["best"] == "36 stars"
+    august = demo_core.stats_month("2026-08")["month"]
+    assert {row["mode"]: row["result"] for row in august["endgame"]}["abyss"] == "34 of 36 stars"
+    year = {c["kind"]: c for c in demo_core.stats_year(None)["year"]["cards"]}
+    assert year["abyss"]["numbers"]["stars"] == 36
+
+
+def test_the_demo_has_a_five_star_in_its_newest_month_and_two_thin_months_with_wishes(demo_core):
+    october = demo_core.stats_month("2026-10")["month"]
+    assert [five["name"] for five in october["pulls"]["fives"]] == ["Diluc"]
+    assert any(record["id"] == "luckiest" and record["name"] == "Diluc" for record in october["records"])
+    months = {entry["ym"]: entry for entry in demo_core.stats_month(None)["months"]}
+    for ym in ("2026-01", "2026-02"):
+        tiles = [tile["id"] for tile in demo_core.stats_month(ym)["month"]["tiles"]]
+        assert months[ym]["thin"] and tiles == ["primogems", "wishes"], (ym, tiles)
+    # February is a player's usual month before tracking: wishes only, with one 5★, Jean, its one record.
+    february = demo_core.stats_month("2026-02")["month"]
+    assert [f["name"] for f in february["pulls"]["fives"]] == ["Jean"]
+    assert [(record["id"], record["name"]) for record in february["records"]] == [("luckiest", "Jean")]
+    assert demo_core.stats_month("2026-03")["month"]["pulls"]["fives"] == []
+
+
+def test_the_demo_s_current_cycle_reads_as_the_mockup_on_any_day(tmp_path):
+    """On the real clock (7 November 2026 here) the current cycles show what the mockup shows, as they do at the tests'
+    instant, and the earlier cycles count back from them; the card, Months and the Year agree."""
+    from support import FakeClock
+    from guildboard.characters import demo as characters_demo
+    from guildboard.views import wrapped
+    from guildboard.views.stats import endgame_best
+
+    november = datetime(2026, 11, 7, 10, 0, tzinfo=UTC)
+    detail = characters_demo.demo_endgame_detail(november, DEMO_SERVER)
+    at_the_tests = characters_demo.demo_endgame_detail(NOW, DEMO_SERVER)
+    for record in (detail, at_the_tests):
+        assert record.abyss_stars == 33
+        assert (record.theater_difficulty, record.theater_acts) == ("Arcana Challenge", 10)
+        assert record.theater_medals == characters_demo.THEATER_MEDALS[0]
+        assert record.stygian_difficulty == 5
+    assert detail.abyss_starts.startswith("2026-10-16") and detail.theater_starts.startswith("2026-11-01")
+    clock = FakeClock(november)
+    core = Core(AppPaths(tmp_path / "data"), demo=True, clock=clock, sleep=FakeSleep(clock), process_lister=lambda: set())
+    try:
+        stars = {row.cycle: row.detail["stars"] for row in core.store.endgame_cycles() if row.mode == "abyss"}
+        assert sorted(stars.values()) == [33, 34, 36]
+        card = next(mode for mode in core.stats_endgame()["modes"] if mode["mode"] == "abyss")
+        assert card["stars"] == 33 and card["best"] == "36 stars" == endgame_best(core.store, "abyss")
+        # The cycle of 16 September, the one before the current, ended on 15 October: October shows it.
+        october = core.stats_month("2026-10")["month"]
+        assert {row["mode"]: row["result"] for row in october["endgame"]}["abyss"] == "36 of 36 stars"
+        # The Year's Abyss fact, whether or not it is among the cards chosen that day.
+        facts = {fact.kind: fact for fact in wrapped.year_facts(_year_data(core))}
+        assert facts["abyss"].numbers["stars"] == 36
+    finally:
+        core.store.close()
+
+
+def test_the_months_endgame_note_and_the_year_s_abyss_card_tell_one_story(demo_core):
+    # The Year counts the Abyss from the start of its first kept cycle; Months counts each cycle in the month it ends. Both are
+    # said, so that "since 16 Jul" and the first cycle's end in August do not contradict each other.
+    from guildboard.views import wrapped
+
+    facts = {fact.kind: fact for fact in wrapped.year_facts(_year_data(demo_core))}
+    assert facts["abyss"].heading == "Spiral Abyss · since 16 Jul"
+    note = "Endgame cycles count in the month they end. The first one kept ran from 16 Jul to 15 Aug 2026."
+    for ym in ("2026-02", "2026-07", "2026-08"):
+        assert note in [entry["text"] for entry in demo_core.stats_month(ym)["month"]["since"]], ym
+    assert not any("Endgame" in entry["text"] for entry in demo_core.stats_month("2026-09")["month"]["since"])
+

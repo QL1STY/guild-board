@@ -60,11 +60,6 @@
 .col-item i { position: relative; display: block; width: clamp(2px, 60%, 24px); border-radius: 4px 4px 0 0; background: var(--series); animation: grow-h var(--t-enter) var(--ease-out) backwards; transition: height var(--t-enter) var(--ease-out); }
 .col-item i.gap,
 .lg i.gap { background: repeating-linear-gradient(135deg, var(--series) 0 3px, var(--series-light) 3px 6px); }
-/* A day of the old diary total, before the game's own history and the diary's detail (the ledger plan, Task 7): an
-   estimate, striped the other way and in the tans, so it never reads as a day after a gap. */
-.col-item i.est,
-.lg i.est { background: repeating-linear-gradient(45deg, var(--deemph) 0 3px, var(--track) 3px 6px); }
-.lg i.est { border-radius: 2px; }
 /* A day by source: its parts stacked from the bottom, the top one rounded; the bar itself draws nothing. */
 .col-item i.stk { display: flex; flex-direction: column-reverse; background: none; }
 .col-item i.stk > span { display: block; flex: none; background: var(--c); }
@@ -83,10 +78,18 @@
 .lg i.gap { border-radius: 2px; }
 
 /* Playtime calendar: weeks as columns, five levels. */
-.hm { display: grid; grid-template-columns: 28px auto; gap: 6px; width: max-content; }
-.hm-m { grid-column: 2; display: grid; gap: 3px; font-size: 11px; color: var(--muted); }
-.hm-d { display: grid; grid-template-rows: repeat(7, 17px); gap: 3px; font-size: 11px; line-height: 17px; color: var(--muted); }
-.hm-g { display: grid; grid-template-rows: repeat(7, 17px); grid-auto-flow: column; grid-auto-columns: 17px; gap: 3px; }
+/*
+ * The card is a column, and the grid's box takes the height that the card is given under the title and above the legend:
+ * the interface measures it, and sets --cell (17 to 30 pixels) and the number of weeks that fit. The grid is drawn over
+ * the box, at its right edge, and adds nothing to its height, which is at least what the smallest cells need: 14 pixels of month names, seven
+ * rows of 17 and six gaps of 3.
+ */
+.hm-card { display: flex; flex-direction: column; }
+.hm-box { position: relative; flex: 1 1 auto; min-height: 151px; }
+.hm { --cell: 17px; position: absolute; top: 0; right: 0; display: grid; grid-template-columns: 28px auto; gap: 3px 6px; width: max-content; }
+.hm-m { grid-column: 2; display: grid; gap: 3px; height: 11px; font-size: 11px; line-height: 11px; color: var(--muted); }
+.hm-d { display: grid; grid-template-rows: repeat(7, var(--cell)); gap: 3px; font-size: 11px; line-height: var(--cell); color: var(--muted); }
+.hm-g { display: grid; grid-template-rows: repeat(7, var(--cell)); grid-auto-flow: column; grid-auto-columns: var(--cell); gap: 3px; }
 .hm-g i,
 .hm-lg i { border-radius: 3px; background: var(--r0); }
 .hm-g i.l1,
@@ -103,18 +106,27 @@
  * sibling index of a cell, less one, in sevens. The days that have not come are not drawn and do not appear.
  */
 .hm-g i:not(.lx) { animation: fade-in var(--t-open) var(--ease-out) backwards; animation-delay: calc(round(down, (sibling-index() - 1) / 7, 1) * var(--stagger)); }
-.hm-lg { display: flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 11.5px; color: var(--ink2); }
+.hm-lg { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 10px; font-size: 11.5px; color: var(--ink2); }
+.hm-key { display: inline-flex; align-items: center; gap: 5px; }
 .hm-lg i { display: inline-block; width: 13px; height: 13px; }
+/* The run of days played, at the right of the legend row: its dot is the accent. */
+.hm-run { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-variant-numeric: tabular-nums; }
+.hm-run b { color: var(--ink); font-weight: 800; }
+.hm-dot { flex: none; width: 13px; height: 13px; border-radius: 50%; background: var(--accent); font-size: 0; }
 
 /*
  * When you play: the week by the hour, a column for each hour and a row for each weekday, in the calendar's ramp. The
- * cells are 14 pixels and shrink to 8 in a narrow card, and the labels over them follow the same columns.
+ * 24 columns share the card's width, so that the cells reach its edge, and a row is as tall as the card allows,
+ * at most one and a half times a cell's width; the interface measures the card's box and sets --row. The labels over the cells
+ * follow the same columns. The box is as tall as the card allows and the grid is drawn over it.
  */
-.wy { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 4px 6px; }
-.wy-h { grid-column: 2; display: grid; grid-template-columns: repeat(24, minmax(8px, 14px)); gap: 3px; font-size: 11px; line-height: 1.2; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wy-card { display: flex; flex-direction: column; }
+.wy-box { position: relative; flex: 1 1 auto; min-height: 90px; }
+.wy { --row: 14px; position: absolute; inset: 0 0 auto 0; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 4px 6px; }
+.wy-h { grid-column: 2; display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); gap: 3px; height: 12px; font-size: 11px; line-height: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .wy-h span { white-space: nowrap; }
-.wy-d { display: grid; grid-template-rows: repeat(7, 14px); gap: 3px; font-size: 11px; line-height: 14px; color: var(--muted); }
-.wy-g { display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; grid-auto-columns: minmax(8px, 14px); gap: 3px; }
+.wy-d { display: grid; grid-template-rows: repeat(7, var(--row)); gap: 3px; font-size: 11px; line-height: var(--row); color: var(--muted); }
+.wy-g { display: grid; grid-template-rows: repeat(7, var(--row)); grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; }
 .wy-g i,
 .wy-lg i { border-radius: 3px; background: var(--r0); }
 /*
@@ -143,7 +155,13 @@
 
 /* Primogems: a column per month with its number on top, and this month's sources as bars. */
 .pm { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; }
-.pm-cols { display: flex; height: 120px; padding-top: 18px; border-bottom: 1px solid var(--axis); }
+.pm-cols { display: flex; flex: 1 1 120px; min-height: 120px; padding-top: 18px; border-bottom: 1px solid var(--axis); }
+/* The card fills the row it shares with the taller per-day chart: the columns grow with it, and the bars share the height. */
+.pm-card { display: flex; flex-direction: column; }
+.pm-card .pm { flex: 1 1 auto; }
+.pm-chart { display: flex; flex-direction: column; }
+.pm-sources { display: flex; flex-direction: column; }
+.pm-sources .hb { flex: 1 1 22px; height: auto; min-height: 22px; max-height: 44px; }
 .pm-col { flex: 1; min-width: 42px; display: flex; align-items: flex-end; justify-content: center; }
 /* The columns and the bars grow from their baseline when they appear, and move to their new lengths. */
 .pm-col i { position: relative; display: block; width: 22px; border-radius: 4px 4px 0 0; background: var(--series); animation: grow-h var(--t-enter) var(--ease-out) backwards; transition: height var(--t-enter) var(--ease-out); }
@@ -158,5 +176,5 @@
 .hb .b i { display: block; width: calc((100% - 56px) * var(--w)); min-width: 2px; height: 10px; border-radius: 0 4px 4px 0; background: var(--accent); animation: grow-w var(--t-enter) var(--ease-out) backwards; transition: width var(--t-enter) var(--ease-out); }
 .hb .b b { font-weight: 700; font-variant-numeric: tabular-nums; }
 @media (max-width: 1400px) {
-  .pm { grid-template-columns: minmax(0, 1fr); }
+  .pm { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
 }

@@ -30,61 +30,71 @@
   <main class="main">
     <div class="wrap">
       <section class="hero" id="top">
-        <div>
+        <div class="pitch">
           <h1>Your Genshin day on one board</h1>
           <p>Resin, commissions, achievements, wishes, primogems and your characters' plans, in one Windows app that keeps it all on your PC.</p>
           <div class="acts">
             <a class="btn" href="https://github.com/QL1STY/guild-board-releases/releases/latest" data-release-link>Download for Windows</a>
-            <a class="btn quiet" href="#pages">Try it in your browser</a>
+            <a class="btn gold" href="demo/"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Try the live demo</span> <small>In your browser, nothing to install</small></a>
           </div>
           <p class="facts">Free and open source. No ads and no account needed.</p>
         </div>
 
-        <div class="board" aria-label="A working sample of the Board, on a made-up account">
-          <section class="w span-6" id="check">
-            <div class="w-head"><span>Daily check-in</span><span id="check-count">11 of 30</span></div>
+        <!-- A working sample of the Board, on a made-up account. Its widgets are the app's own, drawn as the app draws them
+             (web/src/styles/widgets.css, checkin.css and marks.css). -->
+        <div class="board" role="group" aria-label="A working sample of the Board, on a made-up account">
+          <section class="w wide" id="check">
+            <div class="w-head"><svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.2 9.3V8.2A4.6 4.6 0 0 1 7.8 3.6h4.4a4.6 4.6 0 0 1 4.6 4.6v1.1M3.2 9.3h13.6v6.3a1.6 1.6 0 0 1-1.6 1.6H4.8a1.6 1.6 0 0 1-1.6-1.6zM8.5 9.3v2.1a1.5 1.5 0 0 0 3 0V9.3"/></svg><span>Daily check-in</span><span class="w-meta" id="check-count">11 of 30</span></div>
             <div class="w-body checkin">
-              <div class="prize" id="prize">
-                <img class="game-icon" src="https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/19/194600931/8902272b2dbb45cce8fbd6f596c6904b_3502391192719350131.png" alt="" referrerpolicy="no-referrer" width="56" height="56">
-                <svg class="sign" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 14.6 9.4 23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg>
-                <span class="stamp" aria-hidden="true">&#10003;</span>
+              <div class="checkin-today">
+                <div class="prize" id="prize">
+                  <img class="game-icon" src="https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/19/194600931/8902272b2dbb45cce8fbd6f596c6904b_3502391192719350131.png" alt="" referrerpolicy="no-referrer" width="62" height="62">
+                  <svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.2c.8 4.3 3.4 6.9 7.8 7.8-4.4.9-7 3.5-7.8 7.8-.8-4.3-3.4-6.9-7.8-7.8 4.4-.9 7-3.5 7.8-7.8zM10 6v8M6 10h8"/></svg>
+                  <span class="stamp" aria-hidden="true"><svg class="sign" viewBox="0 0 20 20"><path d="M4.6 10.4l3.6 3.6 7.2-7.8"/></svg></span>
+                </div>
+                <div class="checkin-words">
+                  <p class="checkin-name">Primogem <b>&times;20</b></p>
+                  <button class="btn" id="claim" type="button">Claim</button>
+                  <p class="wid-line" id="claim-note" role="status" hidden>Next reward in 7 h 59 min</p>
+                </div>
               </div>
-              <div class="claim-line">
-                <span>Primogem <b>&times;20</b></span>
-                <button class="btn" id="claim" type="button">Claim</button>
-                <span class="note" id="claim-note" role="status" hidden>Next reward in 7 h 59 min</span>
-              </div>
-              <div class="days" id="days" aria-hidden="true"></div>
+              <ol class="days" id="days" aria-hidden="true"></ol>
+              <template id="day"><li class="day"><span class="day-n"></span><svg class="sign" viewBox="0 0 20 20"><path d="M10 2.2c.8 4.3 3.4 6.9 7.8 7.8-4.4.9-7 3.5-7.8 7.8-.8-4.3-3.4-6.9-7.8-7.8 4.4-.9 7-3.5 7.8-7.8zM10 6v8M6 10h8"/></svg><span class="day-x"></span><svg class="sign day-tick" viewBox="0 0 20 20"><path d="M4.6 10.4l3.6 3.6 7.2-7.8"/></svg></li></template>
             </div>
           </section>
 
-          <section class="w span-3">
-            <div class="w-head"><span>Resin</span><span>Read at 13:16</span></div>
+          <section class="w">
+            <div class="w-head"><svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.6 2.8a7.4 7.4 0 1 0 4.6 10 6 6 0 0 1-4.6-10zM14.5 4.8l1.6-1.6"/></svg><span>Resin</span><span class="w-meta">Read at 13:16</span></div>
             <div class="w-body resin">
               <div class="ring-wrap">
-                <svg class="ring" viewBox="0 0 36 36" role="img" aria-label="Resin ring">
-                  <circle cx="18" cy="18" r="15" fill="none" stroke="#DDD3BB" stroke-width="4"/>
-                  <circle id="ring" cx="18" cy="18" r="15" fill="none" stroke="#4F78B8" stroke-width="4" pathLength="100" stroke-dasharray="39 100" transform="rotate(-90 18 18)"/>
+                <svg class="ring" viewBox="0 0 100 100" role="img" aria-label="Resin ring">
+                  <circle class="r-track" cx="50" cy="50" r="42" pathLength="200"/>
+                  <circle class="r-fill" cx="50" cy="50" r="42" pathLength="200" stroke-dasharray="77 200"/>
+                  <circle class="r-gaps" cx="50" cy="50" r="42" pathLength="200" stroke-dasharray="1.6 18.4" stroke-dashoffset="0.8"/>
                 </svg>
-                <img class="game-icon" src="https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/03/237301566/4328202cd795d7c4a7d5cd54e331c43b_1224981524026882289.png" alt="" referrerpolicy="no-referrer" width="36" height="36">
+                <div class="ring-in">
+                  <img class="game-icon" src="https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/03/237301566/4328202cd795d7c4a7d5cd54e331c43b_1224981524026882289.png" alt="" referrerpolicy="no-referrer" width="36" height="36">
+                  <svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.6 2.8a7.4 7.4 0 1 0 4.6 10 6 6 0 0 1-4.6-10zM14.5 4.8l1.6-1.6"/></svg>
+                  <b>77</b><small>of 200</small>
+                </div>
               </div>
-              <div><div class="big"><span id="resin">77</span><small> / 200</small></div><div class="note">Full in 16 h 23 min</div></div>
+              <div class="resin-left"><p class="resin-lead">Full in</p><p class="resin-big">16 h 23 min</p></div>
             </div>
           </section>
 
-          <section class="w span-3">
-            <div class="w-head"><span>Commissions</span><span id="done" role="status">1 of 3 today</span></div>
+          <section class="w">
+            <div class="w-head"><svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.2c.7 4.1 3.7 7.1 7.8 7.8-4.1.7-7.1 3.7-7.8 7.8-.7-4.1-3.7-7.1-7.8-7.8 4.1-.7 7.1-3.7 7.8-7.8z"/></svg><span>Commissions</span><span class="w-meta" id="done" role="status">1 of 3 today</span></div>
             <div class="w-body tasks">
-              <button class="task" type="button" aria-pressed="true"><span class="box">&#10003;</span>For Old Time's Sake</button>
-              <button class="task" type="button" aria-pressed="false"><span class="box">&#10003;</span>Tianqiu Treasure Trove</button>
-              <button class="task" type="button" aria-pressed="false"><span class="box">&#10003;</span>Knocking on the Door</button>
+              <button class="task" type="button" aria-pressed="true"><span class="box"><svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M4.6 10.4l3.6 3.6 7.2-7.8"/></svg></span>For Old Time's Sake</button>
+              <button class="task" type="button" aria-pressed="false"><span class="box"><svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M4.6 10.4l3.6 3.6 7.2-7.8"/></svg></span>Tianqiu Treasure Trove</button>
+              <button class="task" type="button" aria-pressed="false"><span class="box"><svg class="sign" viewBox="0 0 20 20" aria-hidden="true"><path d="M4.6 10.4l3.6 3.6 7.2-7.8"/></svg></span>Knocking on the Door</button>
             </div>
           </section>
         </div>
       </section>
 
       <section id="pages">
-        <h2>Everything you check in five tabs, in one window</h2>
+        <h2>Everything you check in six tabs, in one window</h2>
         <p class="lead">It reads your HoYoLAB account and the game's own history pages, and keeps what it finds. These pictures use a made-up account.</p>
         <div class="shots">
           <div class="tabs" role="tablist" aria-label="Pages of the app">
@@ -92,6 +102,7 @@
             <button class="tab" role="tab" id="tab-achievements" aria-controls="shot-panel" aria-selected="false" tabindex="-1" data-src="shots/achievements.png" data-alt="The Achievements page">Achievements<small>Tick them off, find what's left</small></button>
             <button class="tab" role="tab" id="tab-pulls" aria-controls="shot-panel" aria-selected="false" tabindex="-1" data-src="shots/pulls.png" data-alt="The Pulls page">Pulls<small>Pity, luck and what you can afford</small></button>
             <button class="tab" role="tab" id="tab-stats" aria-controls="shot-panel" aria-selected="false" tabindex="-1" data-src="shots/stats.png" data-alt="The Stats page">Stats<small>Primogems and play time over time</small></button>
+            <button class="tab" role="tab" id="tab-year" aria-controls="shot-panel" aria-selected="false" tabindex="-1" data-src="shots/year.png" data-alt="The Year page: Wrapped">Year<small>Your Wrapped, saved as a picture</small></button>
             <button class="tab" role="tab" id="tab-overlay" aria-controls="shot-panel" aria-selected="false" tabindex="-1" data-src="shots/overlay.png" data-alt="The overlay over the game">Overlay<small>Timers over the game</small></button>
           </div>
           <p class="tab-note" id="tab-note">Your day at a glance</p>
@@ -100,7 +111,7 @@
           </div>
           <p class="swipe"><span class="swipe-touch">Swipe the picture sideways to see all of it. </span>Press it to open it at full size.</p>
           <div class="acts">
-            <a class="btn" href="demo/">Open the full demo</a>
+            <a class="btn gold" href="demo/"><span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Open the full demo</span> <small>In your browser, nothing to install</small></a>
           </div>
           <p class="facts">The demo is the real interface running on a recording of a made-up account. Nothing in it changes, and nothing you do leaves your browser.</p>
         </div>
@@ -109,22 +120,22 @@
       <section id="reads">
         <h2>It reads your account and stays out of your game</h2>
         <div class="two">
-          <div>
-            <h3>What it reads</h3>
+          <div class="card">
+            <h3 class="card-head">What it reads</h3>
             <ul class="list">
-              <li>Your account summary, exploration, resin and Real-Time Notes</li>
-              <li>Your characters, builds, materials and endgame results</li>
-              <li>Your wishes and primogem history, with a read-only key</li>
-              <li>The current banners, events and your check-in month</li>
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>Your account summary, exploration, resin and Real-Time Notes</li>
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>Your characters, builds, materials and endgame results</li>
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>Your wishes and primogem history, with a read-only key</li>
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>The current banners, events and your check-in month</li>
             </ul>
           </div>
-          <div>
-            <h3>What it never does</h3>
-            <ul class="list never">
-              <li>Open the game's process, read its memory or hook into it</li>
-              <li>Send keys or clicks to the game, or capture its screen</li>
-              <li>Change anything in the game's folder</li>
-              <li>Send your HoYoLAB login anywhere but HoYoverse</li>
+          <div class="card never">
+            <h3 class="card-head">What it never does</h3>
+            <ul class="list">
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Open the game's process, read its memory or hook into it</li>
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Send keys or clicks to the game, or capture its screen</li>
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Change anything in the game's folder</li>
+              <li><span class="dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span>Send your HoYoLAB login anywhere but HoYoverse</li>
             </ul>
           </div>
         </div>
@@ -194,7 +205,7 @@
         <div class="faq">
           <details open><summary>Will I get banned?</summary><p>Guild Board never touches the running game, which is what anti-cheat looks for. It reads your account much as the HoYoLAB site does. Still, that is against the spirit of the terms and nobody can promise anything.</p></details>
           <details><summary>Where does my login go?</summary><p>It stays on your PC, encrypted for your Windows user, and goes only to HoYoverse. It never goes online with your friends' features, and never into a log.</p></details>
-          <details><summary>What goes online?</summary><p>Nothing, unless you sign in with Discord for friends or sync. Then your name, UID and what you switch on go to the project's database in the EU. Discord is not asked for your e-mail address. You can delete all of it in Settings.</p></details>
+          <details><summary>What goes online?</summary><p>Nothing, unless you sign in with Discord for friends or sync. Then your name, UID and what you switch on go to the project's database in the EU. Discord is not asked for your e-mail address. You can delete all of it in Settings. Guild Board may also download public pictures from other sites, such as the Endgame headers, and sends nothing of yours with them.</p></details>
           <details id="verify"><summary>How do I know the download is what the source says?</summary>
             <p>Each installer is built on GitHub from a public commit, with an attestation. With the <a href="https://cli.github.com/">GitHub command line</a> installed, run <code data-release="verify">gh attestation verify PATH-TO-THE-INSTALLER -R QL1STY/guild-board</code> to check it.</p>
             <p data-release="hash" hidden>Its SHA-256 is <code data-release="sha"></code>. In PowerShell, <code>Get-FileHash PATH-TO-THE-INSTALLER</code> shows the same value for the file you downloaded.</p>

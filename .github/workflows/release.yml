@@ -53,7 +53,9 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: web/package-lock.json
+          cache-dependency-path: |
+            web/package-lock.json
+            shell/package-lock.json
 
       - name: Install Inno Setup if the image lacks it
         # The places build-installer.ps1 looks in (Find-Iscc).
@@ -76,8 +78,15 @@ jobs:
       - name: Install the packages of the interface
         run: npm ci --prefix web
 
+      - name: Install the packages of the shell
+        run: npm ci --prefix shell
+
+      - name: Run the shell's tests
+        run: npm test --prefix shell
+
       - name: Run the Python tests
-        # They start Guild Board off-screen (tests/test_handsoff.py), so they run here as on the maintainer's PC. Windows
+        # They start the core and check that it writes only inside its data folder (tests/test_handsoff.py), so they run here
+        # as on the maintainer's PC; the window's own check is the shell's end-to-end test, run before a release. Windows
         # PowerShell, as the release scripts' tests start it: from PowerShell 7 it would inherit a module path it cannot use.
         shell: powershell
         run: uv run --frozen python -m pytest -q -p no:cacheprovider

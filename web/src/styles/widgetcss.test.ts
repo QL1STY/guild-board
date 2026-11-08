@@ -1,4 +1,8 @@
 import { expect, test } from 'vitest'
+import { columnsFor, columnWidth } from '../pages/boardview.ts'
+import { rangeOf } from '../widgets/registry.ts'
+import { ONE_CELL_ACROSS } from '../widgets/widget.ts'
+import checkin from './checkin.css?raw'
 import marks from './marks.css?raw'
 import pulls from './pulls.css?raw'
 import tokens from './tokens.css?raw'
@@ -185,4 +189,91 @@ test('the scroll with a fade at its bottom edge is written once, as the w-scroll
   expect(rules.filter((one) => one.selector === '.w-scroll').map((one) => one.name).sort()).toEqual([
     'mask-image', 'overflow', 'padding-bottom', 'scroll-padding-bottom', 'scrollbar-width',
   ])
+})
+
+/*
+ * What a widget shows at its size is chosen by container queries on its frame (widgets.css). The overlay's cells are 168
+ * pixels wide, and the Board's columns share its width (boardview.ts, columnWidth), so a frame of a size is a little
+ * wider on the Board, by how much depending on the window. A query on the width tells the sizes apart all the same: it
+ * splits between whole cells, never inside the widths that one size takes.
+ */
+
+type WidthQuery = { feature: 'min-width' | 'max-width'; px: number }
+
+/** Each `min-width` and `max-width` of a stylesheet's @container rules, in pixels. */
+function widthQueries(css: string): WidthQuery[] {
+  const found: WidthQuery[] = []
+  for (const [prelude] of css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/@container[^{]*/g)) {
+    for (const [, feature, px] of prelude.matchAll(/\((min-width|max-width):\s*([\d.]+)px\)/g)) {
+      found.push({ feature: feature as WidthQuery['feature'], px: Number(px) })
+    }
+  }
+  return found
+}
+
+/**
+ * The widths that a frame `cells` columns wide takes, its 1-pixel border aside, as a query measures it: first on the
+ * overlay, of columns 168 pixels wide, then on the Board at every width from its narrowest, 850 pixels in a window of
+ * 1,040, up to 4,000, in quarters of a pixel.
+ */
+function frameWidths(cells: number): number[] {
+  const widths = [cells * 168 + (cells - 1) * 12 - 2]
+  for (let board = 850; board <= 4000; board += 0.25) {
+    const columns = columnsFor(board)
+    if (columns >= cells) widths.push(cells * columnWidth(board, columns) + (cells - 1) * 12 - 2)
+  }
+  return widths
+}
+
+test("a query on a widget's width tells its sizes apart however wide the Board's columns are, as one cell across does", () => {
+  const queries = [...widthQueries(widgets), ...widthQueries(checkin)]
+  expect(queries.length).toBeGreaterThan(10) // the stylesheets' queries are found
+  expect(Math.max(...frameWidths(1))).toBeGreaterThan(210) // one cell is up to 213 pixels wide on the Board
+  // useOneCell's `narrow`, a frame's width without its border at most ONE_CELL_ACROSS, splits as a max-width does.
+  for (const { feature, px } of [...queries, { feature: 'max-width' as const, px: ONE_CELL_ACROSS }]) {
+    const holds = (width: number) => (feature === 'min-width' ? width >= px : width <= px)
+    for (let cells = 1; cells <= 6; cells += 1) {
+      const widths = frameWidths(cells)
+      const atOverlay = holds(widths[0])
+      const differ = widths.find((width) => holds(width) !== atOverlay)
+      expect(differ, `(${feature}: ${px}px) on a frame ${cells} cells across, ${differ?.toFixed(2)} pixels wide`).toBeUndefined()
+    }
+  }
+})
+
+/** Each `min-aspect-ratio` of a stylesheet's @container rules, as it is written and as a width over a height. */
+function shapeQueries(css: string): { text: string; ratio: number }[] {
+  const found: { text: string; ratio: number }[] = []
+  for (const [prelude] of css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/@container[^{]*/g)) {
+    expect(prelude, 'a query on a shape is written as min-aspect-ratio').not.toMatch(/max-aspect-ratio|[^-]aspect-ratio\s*[<>=]/)
+    for (const [text, width, height] of prelude.matchAll(/min-aspect-ratio:\s*([\d.]+)\s*\/\s*([\d.]+)/g)) {
+      found.push({ text, ratio: Number(width) / Number(height) })
+    }
+  }
+  return found
+}
+
+/** The queries on a frame's shape, each with the widget it is written for, over whose sizes it is swept. */
+const SHAPES: readonly { text: string; type: string }[] = [
+  { text: 'min-aspect-ratio: 12 / 5', type: 'clock' }, // the dial beside the time, from three cells across
+  { text: 'min-aspect-ratio: 8 / 5', type: 'quick-timer' }, // the running dial beside the time and the button
+]
+
+test("a query on a widget's shape tells the widget's sizes apart however wide the Board's columns are", () => {
+  const found = [...shapeQueries(widgets), ...shapeQueries(checkin)]
+  expect(found.map(({ text }) => text).sort()).toEqual(SHAPES.map(({ text }) => text).sort()) // each one is swept below
+  for (const { text, type } of SHAPES) {
+    const { ratio } = found.find((one) => one.text === text)!
+    const range = rangeOf(type)!
+    expect(range, type).toBeDefined()
+    for (let w = range.min.w; w <= range.max.w; w += 1) {
+      for (let h = range.min.h; h <= range.max.h; h += 1) {
+        const height = h * 96 + (h - 1) * 12 - 2 // the rows are 96 pixels on both places
+        const widths = frameWidths(w)
+        const atOverlay = widths[0] / height >= ratio
+        const differ = widths.find((width) => width / height >= ratio !== atOverlay)
+        expect(differ, `(${text}) on a ${type} of ${w} × ${h}, ${differ?.toFixed(2)} pixels wide`).toBeUndefined()
+      }
+    }
+  }
 })

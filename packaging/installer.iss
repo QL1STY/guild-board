@@ -1,5 +1,5 @@
 ; Inno Setup recipe for Guild Board's installer. Run by build-installer.ps1 with /DAppVersion=<version>, after
-; PyInstaller has filled build\package\dist\Guild Board.
+; shell\build\package.mjs has packed the Electron shell, and the core in its resources, into shell\out\Guild Board-win32-x64.
 ;
 ; It installs for the one Windows user who runs it, with no administrator rights, into
 ; %LOCALAPPDATA%\Programs\Guild Board, and adds Guild Board to the Start menu and, if wanted, the desktop.
@@ -9,7 +9,7 @@
   #define AppVersion "0.0.0"
 #endif
 #define Root ".."
-#define Built Root + "\build\package\dist\Guild Board"
+#define Built Root + "\shell\out\Guild Board-win32-x64"
 
 [Setup]
 AppId={{6E0D3B2A-8C1F-4F5E-9B7A-3D2C1E0F9A84}
@@ -27,7 +27,7 @@ PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0
-SetupIconFile={#Root}\build\package\guildboard.ico
+SetupIconFile={#Root}\shell\assets\icon.ico
 UninstallDisplayIcon={app}\guildboard-app.exe
 UninstallDisplayName=Guild Board
 OutputDir={#Root}\dist-installer
@@ -42,14 +42,20 @@ Name: "desktop"; Description: "Put a Guild Board shortcut on the desktop"
 
 [Files]
 Source: "{#Built}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-; The licence, the notices of the software inside it and the privacy notice, where the player can find them beside the program.
-Source: "{#Root}\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
+; The packed folder already carries Electron's own LICENSE and LICENSES.chromium.html beside the program, and they stay (the
+; notices say so). Guild Board's licence therefore goes beside them under another name, with the notices of the software inside
+; it and the privacy notice, where the player can find them.
+Source: "{#Root}\LICENSE"; DestDir: "{app}"; DestName: "LICENSE-GuildBoard.txt"; Flags: ignoreversion
 Source: "{#Root}\THIRD-PARTY-NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#Root}\PRIVACY.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [InstallDelete]
 ; An update replaces the whole program, so files an older version had and this one has not do not linger.
 Type: filesandordirs; Name: "{app}\_internal"
+Type: files; Name: "{app}\guildboard-tray.exe"
+; The core's folder is the installer's own, and a new version's core replaces it whole (app.asar is replaced by [Files]). Only
+; this one folder is named: resources is too common a name to delete, if the program is installed into a shared folder.
+Type: filesandordirs; Name: "{app}\resources\core"
 
 [Icons]
 Name: "{userprograms}\Guild Board"; Filename: "{app}\guildboard-app.exe"

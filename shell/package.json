@@ -1,0 +1,24 @@
+{
+  "name": "guild-board-shell",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Guild Board's Electron shell",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "node scripts/clean-dist.mjs && tsc -p . && node scripts/copy-pages.mjs",
+    "test": "vitest run",
+    "start": "npm run build && electron .",
+    "e2e": "npm run build && playwright test"
+  },
+  "devDependencies": {
+    "@electron/fuses": "2.1.3",
+    "@electron/packager": "20.3.0",
+    "@playwright/test": "1.64.0",
+    "@types/node": "24.19.2",
+    "electron": "45.2.3",
+    "resedit": "2.0.3",
+    "typescript": "6.0.3",
+    "vite": "8.3.4",
+    "vitest": "5.0.4"
+  }
+}

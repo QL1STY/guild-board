@@ -6,17 +6,19 @@ import contextlib
 import hashlib
 import logging
 import math
+import os
 import re
 import secrets
 import sqlite3
 import sys
 import tempfile
+import threading
 import webbrowser
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Awaitable, Callable, Coroutine, Mapping
 
-from guildboard import __version__, characters, netpolicy
+from guildboard import __version__, characters, endgame_cycles, netpolicy
 from guildboard.achievements import importers
 from guildboard.achievements.catalog import bundled_raw
 from guildboard.achievements.commissions import Commissions
@@ -46,7 +48,7 @@ from guildboard.config import AppPaths, Settings, load_settings, save_settings, 
 from guildboard.events import EventBus
 from guildboard.freshness import history_notice
 from guildboard.gallery import DEMO_FOLDER, THUMBS_FOLDER, Gallery, demo_locator, find_folder
-from guildboard.gameday import game_day
+from guildboard.gameday import SERVER_NAMES, game_day
 from guildboard.gamewatch import GameWatch, SessionTracker, list_process_names
 from guildboard.history import History
 from guildboard.hotkeys import hotkey_problem, parse_hotkey
@@ -58,7 +60,7 @@ from guildboard.ledger.demo import demo_history_links, demo_ledger_pages, demo_l
 from guildboard.characters import demo as characters_demo
 from guildboard.characters.art import ArtCache, live_download
 from guildboard.characters.service import Characters
-from guildboard.characters.wiki import CharacterWiki
+from guildboard.characters.wiki import TUTORIAL, CharacterWiki
 from guildboard.pulls import gamecache, nextversion, wishapi
 from guildboard.pulls.banners import Banners
 from guildboard.pulls.importer import (
@@ -66,7 +68,7 @@ from guildboard.pulls.importer import (
 )
 from guildboard.pulls.planner import Planner
 from guildboard.pulls.wiki import WikiIcons, wanted_names
-from guildboard.records import LoginNeeded
+from guildboard.records import LoginNeeded, SourceError
 from guildboard.selfupdate import Release, Updater, parse_version
 from guildboard.sources.demo import (
     DEMO_ACCOUNT, DEMO_SERVER, DemoSource, seed_achievements, seed_appearances, seed_banners, seed_board, seed_codes, seed_history,
@@ -76,7 +78,7 @@ from guildboard.store import Store, StoreError, iso, valid_text
 from guildboard.sync.policy import DAILY_CAP, MIN_GAP
 from guildboard.sync.runner import SyncRunner
 from guildboard.sync.scheduler import SyncScheduler
-from guildboard.tokenstore import StoredToken, TokenStore
+from guildboard.tokenstore import REDEEM_TOKEN, StoredToken, TokenStore
 from guildboard.timers.presets import load_presets
 from guildboard.timers.quick import QuickTimers
 from guildboard.timers.reminders import Reminders
@@ -87,7 +89,9 @@ from guildboard.views.timers import build_timers, count_ready
 from guildboard.views.commissions import build_commissions, count_left
 from guildboard.views.backlog import build_backlog
 from guildboard.views.ledger import build_history, build_ledger
+from guildboard.views import months, wrapped
 from guildboard.views.stats import build_stats
+from guildboard.views.endgame_card import MODE_ART, build_endgame_card
 
 log = logging.getLogger(__name__)
 
@@ -98,7 +102,7 @@ EDITABLE_SETTINGS = (
     "commission_region", "fishing_rule", "notifications",
     "characters_notice_weekly", "characters_notice_domain", "characters_notice_ready",
     "overlay_hotkey", "overlay_display", "overlay_opacity", "overlay_pinned", "overlay_lines", "overlay_size",
-    "overlay_full_screen", "gallery_enabled", "gallery_folder", "spending_currency", "spending_prices", "picture_quality", "smooth_animations",
+    "overlay_full_screen", "gallery_enabled", "gallery_folder", "spending_currency", "spending_prices", "picture_quality",
     "sync_my_data",
 )
 # The shell holds the overlay's hotkey, or another program does, or there is no hotkey to hold.
@@ -106,9 +110,23 @@ PAUSE_SECONDS = 5.5  # between two gift codes sent, which HoYoverse asks for
 LIVE_EVERY = 3600  # seconds between two looks at the livestream codes
 DAILY_CHECK_EVERY = 600  # seconds between two looks at whether the date changed, which the daily copy follows
 LIVE_GAP = 60  # a page that asks again within this many seconds is told what the last look found
+# The Wrapped poster saved as a picture (the Stats design, 6.4): the PNG the page made is held in memory alone, one at
+# most, until the window's Save dialog has a place for it, and for ten minutes at most. Its name is the one the dialog
+# offers, and no other is taken.
+PICTURE_HELD = timedelta(minutes=10)
+PICTURE_NAME = re.compile(r"Guild Board Wrapped [0-9]{4} (?:Story|Wide)\.png")
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+NOT_A_PICTURE = "This is not a picture of Guild Board's Wrapped."
+SOURCE_BUILD_FAILED = "Guild Board could not load its HoYoLAB library. See the log file."
+NO_PICTURE = "There is no picture to save. Press Save as picture again."
+PICTURE_GAME_FOLDER = "A picture cannot be saved in the game's folders. Choose another place."
+PICTURE_REPLACED = "This picture was not saved: a newer one took its place, and it has a Save dialog of its own."
 HOTKEY_STATES = ("held", "taken", "none")
 HISTORY_TOLD = "history_told_for"  # the last read a notification said had run out (Core.tell_of_old_history)
 RESIN_SECONDS = 8 * 60  # the game adds one original resin every 8 minutes, up to the maximum
+# The Endgame card's entries and pictures are read ahead at most this often, when the card is asked for (the Stats design,
+# 3.2): each is read once and then kept, and one that failed is asked for again no sooner than this.
+ENDGAME_ART_EVERY = timedelta(hours=1)
 # The icon beside each reward on the Achievements page, served at /api/icon/static.primogem.
 PRIMOGEM_ICON = Label(
     "static.primogem", "Primogem", "static", None,
@@ -171,6 +189,22 @@ def _hoyolab_source_class(cache_dir: Path) -> Any:
     finally:
         tempfile.tempdir = previous
     return HoyolabSource
+
+
+class SourceBuildFailed(SourceError):
+    """The live source could not be made (the HoYoLAB library would not load). It says so every time, and the cause is
+    logged once, when it happened."""
+
+
+class _CoreSource:
+    """What the sync and the check-in hold in a live start: the core's source, looked up at each use, because making the
+    live source is left to its first use (Core.source) and they are made before it."""
+
+    def __init__(self, core: "Core") -> None:
+        self._core = core
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._core.source, name)
 
 
 def _demo_download(*_: Any, **__: Any) -> None:
@@ -242,13 +276,19 @@ class Core:
             except (OSError, sqlite3.Error, StoreError):
                 log.warning("The daily backup could not be made", exc_info=True)
         self.tokens = TokenStore(paths.token_path)
+        self._source: Any = None
+        self._make_source: Callable[[], Any] | None = None  # the live source's maker, until it is made
+        self._source_lock = threading.Lock()
+        self._source_failed = False
+        self._warm_task: asyncio.Task[None] | None = None
         if source is not None:
             self.source = source
         elif demo:
             self.source = DemoSource()
         else:
             # The batch calculator is asked about the focus the Characters service names (late-bound: it is made below).
-            self.source = _hoyolab_source_class(paths.data_dir / "cache" / "library")(
+            # The source, and the library it needs, are made when it is first used, and a start warms it up (see `source`).
+            self._make_source = lambda: _hoyolab_source_class(paths.data_dir / "cache" / "library")(
                 self.tokens, calculator_targets=lambda: self.characters.calculator_targets()
             )
         token = None if demo else self.tokens.load()
@@ -257,7 +297,10 @@ class Core:
                 register_secret(value)
         self.history = History(self.store)
         self._sleep = sleep
-        self.runner = SyncRunner(self.source, self.store, self.clock, self.server, self._retry_pause)
+        self.runner = SyncRunner(
+            self._holder(), self.store, self.clock, self.server, self._retry_pause, after_group=self._group_stored,
+            before_fetch=self._source_ready,
+        )
         self.scheduler = SyncScheduler(
             self.runner,
             self.store,
@@ -284,15 +327,16 @@ class Core:
         self.gamewatch = GameWatch(self.tracker, lister=process_lister or list_process_names, sleep=sleep)
         self.auth = None if demo else Auth(
             self.tokens,
-            self.source.list_accounts,
+            self._list_accounts,
             on_change=self._auth_changed,
             account_uid=self._account_uid,
             remember_account=lambda uid: self.store.set_meta("account_uid", str(uid)),
         )
         self.icons = IconCache(paths.icons_dir, _no_download) if demo else IconCache(paths.icons_dir)
         self.checkin = CheckIn(
-            self.source, self.clock, lambda: self.bus.publish("checkin_changed"),
+            self._holder(), self.clock, lambda: self.bus.publish("checkin_changed"),
             ready=lambda: self.demo or (self.settings.risk_acknowledged and self.has_token()),
+            before_use=self._source_ready,
         )
         self.launch_secret = secrets.token_urlsafe(32)
         self.session_token = secrets.token_urlsafe(32)
@@ -301,6 +345,11 @@ class Core:
         register_secret(self.launch_secret, lasting=True)
         register_secret(self.session_token, lasting=True)
         self.window_requests: Callable[[str], bool] | None = None
+        # The Wrapped picture waiting for the Save dialog (its number, name, PNG and when it came), the timer that lets it
+        # go, and the number the last one held was given.
+        self._picture: tuple[int, str, bytes, datetime] | None = None
+        self._picture_timer: asyncio.TimerHandle | None = None
+        self._pictures_held = 0
         # set by the shell when its tray icon keeps Guild Board running after the window closes
         self.has_tray = False
         # Set by the shell: shows a notification from the tray icon, a reminder or a test, with its text.
@@ -423,6 +472,8 @@ class Core:
         self.characters_wiki = CharacterWiki(self.store, self.clock, hoyoverse, self._game_version)
         self.art = ArtCache(self.store, paths, self.clock, None if demo else live_download(), demo)
         self._characters_task: asyncio.Task[None] | None = None
+        self._endgame_art_task: asyncio.Task[None] | None = None  # the Endgame card's entries and pictures, read ahead
+        self._endgame_art_at: datetime | None = None  # when that read last began
         self._daily_task: asyncio.Task[None] | None = None
         self.characters = Characters(
             self.store, self.clock, self.bus, self.characters_wiki, self.art, self.pulls, self.server,
@@ -434,6 +485,7 @@ class Core:
         )
         if demo:
             characters_demo.seed(self.store, DEMO_ACCOUNT.uid, self.clock.now())
+        self._endgame_cycles_at_start()
         self._banners_task: asyncio.Task[None] | None = None
         self._icons_task: asyncio.Task[None] | None = None
         # The importer's updates with the link it kept (the second pass design, 3.5): while the game runs, one task asks
@@ -477,6 +529,75 @@ class Core:
         )
         self._online_task: asyncio.Task[None] | None = None
 
+    # ------------------------------------------------------------------ the endgame's cycles (the Stats design, 3.5)
+    def _endgame_cycles_at_start(self) -> None:
+        """A live core fills the table of cycles from the raw archive, once for a database; the demo keeps its own made-up
+        cycles, up to date with its clock. Neither ever stops a start."""
+        try:
+            if self.demo:
+                self._demo_cycles(self.clock.now())
+            else:
+                endgame_cycles.backfill_once(self.store, self.clock.now())
+        except Exception:  # a failure of the reading as well as of the database
+            log.warning("The endgame's cycles could not be filled", exc_info=True)
+
+    def _demo_cycles(self, now: datetime) -> None:
+        with self.store.transaction():
+            for row in characters_demo.demo_endgame_cycles(now, self.server()):
+                self.store.put_endgame_cycle(row)
+
+    def _group_stored(self, group: str, at: datetime) -> None:
+        """After a sync stored a group: the endgame's cycles are kept from what it read. The demo reads none of HoYoLAB's
+        answers, and keeps its own cycles."""
+        if group != "endgame":
+            return
+        if self.demo:
+            self._demo_cycles(at)
+        else:
+            endgame_cycles.record_latest(self.store, at)
+
+    # ------------------------------------------------------------------ the Endgame card (the Stats design, 3.1 and 3.2)
+    def stats_endgame(self) -> dict[str, Any]:
+        """The Overview's Endgame card: the newest endgame detail, the art cache's pictures and the Tutorial entries kept."""
+        rows = {mode: self.store.wiki_entry(spec.wiki_entry) for mode, spec in MODE_ART.items()}
+        return build_endgame_card(self.store, self.art, rows, self.clock.now(), self.server())
+
+    def endgame_art_wanted(self) -> None:
+        """The card was asked for: its entries and pictures are read ahead (read_endgame_art) in a task of its own, at most
+        once in ENDGAME_ART_EVERY, as the Characters pages' entries are read when a page asks. Only after the first run's
+        consent, never in the demo."""
+        if self.demo or not self.settings.risk_acknowledged:
+            return
+        if self._endgame_art_task is not None and not self._endgame_art_task.done():
+            return
+        now = self.clock.now()
+        last = self._endgame_art_at
+        if last is not None and 0 <= (now - last).total_seconds() < ENDGAME_ART_EVERY.total_seconds():
+            return
+        self._endgame_art_at = now
+        self._endgame_art_task = self._spawn(self.read_endgame_art())
+
+    async def read_endgame_art(self) -> None:
+        """The three modes' Tutorial entries in the HoYoLAB wiki, each read once for a game version, then their icons and the
+        three public header pictures, each fetched once into the art cache, one at a time and never while the game runs; the
+        pages are told when something new was kept. Nothing is asked before the first run's consent, and the demo asks for
+        nothing. A failure leaves what was kept, and the card shows its fallbacks."""
+        if self.demo or not self.settings.risk_acknowledged:
+            return
+        try:
+            before = [self.store.wiki_entry(spec.wiki_entry) for spec in MODE_ART.values()]
+            rows = [await self.characters_wiki.entry(spec.wiki_entry, TUTORIAL) for spec in MODE_ART.values()]
+            icons = [str(row.data["icon"]) for row in rows if row is not None and row.kind == TUTORIAL and row.data.get("icon")]
+            running = lambda: self.tracker.running  # noqa: E731
+            kept = await self.art.warm(icons, paused=running)
+            kept += await self.art.warm_public([spec.picture_index for spec in MODE_ART.values()], paused=running)
+            if kept or rows != before:
+                self.bus.publish("stats_changed")
+        except asyncio.CancelledError:
+            raise
+        except Exception:  # pictures are decoration: the card shows its fallbacks
+            log.warning("The Endgame card's entries and pictures could not be read ahead.", exc_info=True)
+
     # ------------------------------------------------------------------ facts
     def server(self) -> str:
         if self.demo:
@@ -517,6 +638,34 @@ class Core:
         # is about the player's day.
         return build_stats(
             self.store, self.history, self.today(), self.server(), range_key, tz=None, uid=self.ledger_uid()
+        )
+
+    def stats_month(self, ym: str | None = None) -> dict[str, Any]:
+        """The Months tab: the list of months and the month `ym`, the newest when it is not in the list. The pity of each
+        5-star is the Pulls page's own, with its corrections and windows."""
+        uid = self.ledger_uid()
+        states = self.pulls.states(uid) if uid is not None else {}
+        return months.stats_month(
+            self.store, self.history, uid, self.server(), ym, self.today(), states, self.clock.now()
+        )
+
+    def stats_year(self, year: int | None = None) -> dict[str, Any]:
+        """The Year tab (the Stats design, section 6): the years listed and the year `year`, the newest when it is not
+        listed. The pity of each 5-star is the Pulls page's own; the hours are read on this PC's clock, as the
+        Overview's; the poster's player is the name, AR and server alone, never the UID."""
+        uid = self.ledger_uid()
+        states = self.pulls.states(uid) if uid is not None else {}
+        account = self._account() or {}
+        server = self.server()
+        rank = account.get("adventure_rank")
+        profile = wrapped.Profile(
+            name=str(account.get("nickname") or ""),
+            ar=rank if isinstance(rank, int) and not isinstance(rank, bool) else None,
+            server=SERVER_NAMES.get(server, server),
+        )
+        return wrapped.stats_year(
+            self.store, self.history, uid, server, year, self.today(), states, self.clock.now(), profile,
+            self.art.address, tz=None,
         )
 
     def ledger_uid(self) -> int | None:
@@ -863,6 +1012,73 @@ class Core:
         await asyncio.to_thread(write)
         return target.name
 
+    # ---- the Wrapped picture (the Stats design, 6.4)
+
+    def hold_picture(self, name: str, data: bytes) -> None:
+        """Keep the Wrapped poster the page made until the window's Save dialog has a place for it: in memory alone, one
+        at most (a new one takes the place of the last), let go once saved or after ten minutes. ValueError for a name
+        that is not the poster's, which the dialog offers, or for bytes that are not a PNG."""
+        if PICTURE_NAME.fullmatch(name) is None or not data.startswith(PNG_SIGNATURE):
+            raise ValueError(NOT_A_PICTURE)
+        self.drop_picture()
+        self._pictures_held += 1
+        self._picture = (self._pictures_held, name, data, self.clock.now())
+        with contextlib.suppress(RuntimeError):  # with no loop running, its age alone lets it go (_held_picture)
+            self._picture_timer = asyncio.get_running_loop().call_later(PICTURE_HELD.total_seconds(), self.drop_picture)
+
+    def picture_offer(self) -> tuple[int, str] | None:
+        """The picture held as the Save dialog offers it: its number, which the save and a cancel name so that they are
+        about this picture and no newer one, and its file name. None when none is held."""
+        held = self._held_picture()
+        return (held[0], held[1]) if held is not None else None
+
+    def picture_name(self) -> str | None:
+        """The name of the picture held, which the Save dialog offers; None when none is."""
+        offer = self.picture_offer()
+        return offer[1] if offer is not None else None
+
+    def drop_picture(self, number: int | None = None) -> None:
+        """Let the picture held go: the dialog was cancelled, the page found no window, or its time is up. With `number`,
+        only when it is that picture: a newer one waits for a dialog of its own."""
+        if number is not None and (self._picture is None or self._picture[0] != number):
+            return
+        if self._picture_timer is not None:
+            self._picture_timer.cancel()
+        self._picture, self._picture_timer = None, None
+
+    def _held_picture(self) -> tuple[int, str, bytes, datetime] | None:
+        if self._picture is not None and self.clock.now() - self._picture[3] >= PICTURE_HELD:
+            self.drop_picture()
+        return self._picture
+
+    def save_picture(self, target: Path, number: int | None = None) -> str:
+        """Write the picture held to the file the player chose; the file's name. With `number`, that picture only: one
+        that a newer one took the place of while its dialog was open is not saved under its name (PICTURE_REPLACED), and
+        the newer one stays for its own dialog. Refused in the game's folders by the backup export's own check
+        (backups.export_target), in words of its own, and no folder is made for it. It is written under the name with .tmp
+        and renamed when whole, so that an earlier file of that name stays until then. Saved, refused or failed, the
+        picture is then let go: nothing could use it again. Nothing else is written."""
+        held = self._held_picture()
+        if held is None:
+            raise BackupRefused(NO_PICTURE)
+        if number is not None and held[0] != number:
+            raise BackupRefused(PICTURE_REPLACED)
+        try:
+            try:
+                place = export_target(target, self._game_folders())
+            except BackupRefused:
+                raise BackupRefused(PICTURE_GAME_FOLDER) from None
+            partial = place.with_name(place.name + ".tmp")
+            try:
+                partial.write_bytes(held[2])
+                os.replace(partial, place)
+            except BaseException:
+                partial.unlink(missing_ok=True)  # a picture cut short is no picture
+                raise
+        finally:
+            self.drop_picture(held[0])
+        return target.name
+
     def _game_folders(self) -> list[Path]:
         """The game's folders Guild Board knows without reading anything of the game's: the folder of its log, and the
         ScreenShot folder the gallery has, found through the log or pasted. Its install folder is not among them: the
@@ -1145,6 +1361,7 @@ class Core:
                     if wait > 0:
                         await self._sleep(wait)
                 self._step(index, "sending", "Sending")
+                await self._source_ready()
                 result = await self.source.redeem(code)
                 self._last_sent_at = self.clock.now()
                 if result in KEPT_RESULTS:
@@ -1178,9 +1395,15 @@ class Core:
         now = self.clock.now()
         if not force and self._live_checked_at is not None and (now - self._live_checked_at).total_seconds() < LIVE_GAP:
             return
-        look = getattr(self.source, "livestream_codes", None)
-        if look is None or not (self.demo or self.settings.risk_acknowledged):
+        if not (self.demo or self.settings.risk_acknowledged):
             return  # nothing is asked of HoYoverse before the player's first-run consent (rulings R15 and R21)
+        try:
+            await self._source_ready()
+            look = getattr(self.source, "livestream_codes", None)
+        except SourceBuildFailed:
+            return
+        if look is None:
+            return
         self._live_checked_at = now
         try:
             live = await look()
@@ -1323,13 +1546,67 @@ class Core:
         except Exception:  # an update that broke must not end the next ones
             log.exception("the update of the wish history with the kept link failed")
 
+    # ------------------------------------------------------------------ the source
+    @property
+    def source(self) -> Any:
+        """The source the sync, the check-in and the codes read from. The live one is made the first time this is read: the
+        HoYoLAB library takes about a second to load, which a start must not wait for. A start makes it in a thread
+        (`start`), and what uses it awaits `_source_ready` first. SourceBuildFailed when it could not be made."""
+        if self._source is None and self._make_source is not None:
+            return self._build_source()
+        return self._source
+
+    @source.setter
+    def source(self, value: Any) -> None:
+        self._source, self._make_source = value, None
+
+    def _build_source(self) -> Any:
+        with self._source_lock:  # two first uses at once make one source
+            if self._source is None:
+                if self._source_failed:
+                    raise SourceBuildFailed(SOURCE_BUILD_FAILED)
+                try:
+                    self._source = self._make_source()  # type: ignore[misc]
+                except Exception as error:
+                    log.exception("The HoYoLAB library could not be loaded")
+                    self._source_failed = True
+                    raise SourceBuildFailed(SOURCE_BUILD_FAILED) from error
+            return self._source
+
+    def _holder(self) -> Any:
+        """What is given to the parts made before the live source is: the source itself, or a stand-in that finds it."""
+        return _CoreSource(self) if self._make_source is not None else self._source
+
+    async def _source_ready(self) -> None:
+        """Wait, off the loop, until the live source is made. What uses the source first awaits this: nothing but the
+        warm-up of a start then waits for the library, and no page does. SourceBuildFailed when it could not be made."""
+        if self._source is None and self._make_source is not None:
+            await asyncio.to_thread(self._build_source)
+
+    async def _warm_source(self) -> None:
+        with contextlib.suppress(SourceBuildFailed):  # said in the log, and by each use
+            await self._source_ready()
+
+    async def _list_accounts(self, cookies: Mapping[str, str]) -> Any:
+        await self._source_ready()
+        return await self.source.list_accounts(cookies)
+
     # ------------------------------------------------------------------ Pulls and Ledger: updates with the login
     def _login_refresh_ready(self) -> bool:
         """Whether the histories can update themselves with keys HoYoverse gives the HoYoLAB login: a source that can ask
         for them, a login that holds the cookie token (the demo's stand-in always does), and the first run's consent. The
-        token store keeps the login it read, so this decrypts nothing."""
-        can_mint = getattr(self.source, "can_mint", None)
-        return can_mint is not None and (self.demo or self.settings.risk_acknowledged) and bool(can_mint())
+        token store keeps the login it read, so this decrypts nothing. Until the live source is made it is answered from
+        the stored login, by the rule the source has (HoyolabSource.can_mint), so that no page waits for the library."""
+        if not (self.demo or self.settings.risk_acknowledged):
+            return False
+        if self._source is None and self._make_source is not None:
+            token = self.tokens.load()
+            return token is not None and REDEEM_TOKEN in token.cookies
+        try:
+            can_mint = getattr(self.source, "can_mint", None)
+        except SourceBuildFailed:
+            return False
+        return can_mint is not None and bool(can_mint())
 
     def _login_refresh_on(self) -> bool:
         """Whether they do now: ready, with no refusal of the login since it was made, and the sync not paused."""
@@ -1360,6 +1637,10 @@ class Core:
         A refusal of the login stops these updates alone, until a new login, without asking again, and the pages say so;
         the sync goes on with the login as it can. A key asked for while the login changed is not kept."""
         if not self._login_refresh_on():
+            return False
+        try:
+            await self._source_ready()
+        except SourceBuildFailed:
             return False
         session = self._login_session
         try:
@@ -1518,6 +1799,8 @@ class Core:
         self._online_task = asyncio.create_task(self.online.run())
         self.scheduler.start()
         self._refresh_task = asyncio.create_task(self._login_refreshes())  # after the start's sync is asked for
+        if self._make_source is not None:  # the live source loads in a thread, and its first users wait for that
+            self._warm_task = asyncio.create_task(self._warm_source())
         if not self.demo:
             self._daily_task = asyncio.create_task(self._daily_backups())
 
@@ -1526,7 +1809,7 @@ class Core:
             self._watch_task, self._reminders_task, self._banners_task, self._icons_task, self._auto_task,
             self._last_auto_task, self._update_task, self._codes_watch, self._codes_send,
             self._live_look, self._refresh_task, self._characters_task, self._online_task, self._daily_task,
-            self._import_task,
+            self._import_task, self._endgame_art_task, self._warm_task,
         )
         for task in tasks:
             if task is not None:
@@ -1535,6 +1818,7 @@ class Core:
         self._watch_task = self._reminders_task = self._banners_task = self._icons_task = None
         self._auto_task = self._last_auto_task = self._update_task = self._codes_watch = self._codes_send = self._live_look = None
         self._refresh_task = self._characters_task = self._online_task = self._daily_task = self._import_task = None
+        self._endgame_art_task = self._warm_task = None
         await self.checkin.stop()
         await self.online.stop()
         await self.characters.stop()

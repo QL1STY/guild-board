@@ -1,22 +1,21 @@
-# PyInstaller recipe for the installed copy of Guild Board. Run by build-installer.ps1, which first builds the
-# interface and draws the icon into build/package/guildboard.ico.
+# PyInstaller recipe for the core of the installed copy of Guild Board. Run by build-installer.ps1, which first builds the
+# interface (web/dist) and writes build/package/version.txt.
 #
-# One folder, two programs that share it, named as the shortcuts in startup.py expect them:
-#   guildboard-app.exe   opens the window (the Start menu and desktop shortcuts)
-#   guildboard-tray.exe  starts in the tray (the Start with Windows shortcut, which carries no arguments)
+# One folder, named core, with one program in it: guildboard-core.exe. The Electron shell starts it hidden, with the channel
+# on its standard input and output, so it is a console program. shell/build/package.mjs puts the folder into the shell's
+# resources, at resources\core\guildboard-core.exe, where the shell looks (shell/src/paths.ts).
 from pathlib import Path
 
 from PyInstaller.utils.hooks import collect_all
 
 ROOT = Path(SPECPATH).parent
-ICON = str(ROOT / "build" / "package" / "guildboard.ico")
+ICON = str(ROOT / "shell" / "assets" / "icon.ico")
 SRC = ROOT / "src" / "guildboard"
 
 datas = [
     (str(ROOT / "web" / "dist"), "web/dist"),
     (str(SRC / "reference"), "guildboard/reference"),
     (str(SRC / "characters" / "demo"), "guildboard/characters/demo"),
-    (str(SRC / "shell" / "icon.svg"), "guildboard/shell"),
     # Settings, About shows the notices from here (notices.py); the licence and the privacy notice go with them.
     (str(ROOT / "LICENSE"), "."),
     (str(ROOT / "THIRD-PARTY-NOTICES.txt"), "."),
@@ -30,41 +29,29 @@ for package in ("genshin", "guildboard"):
     binaries += found[1]
     hiddenimports += found[2]
 
-
-def analysis(script):
-    return Analysis(
-        [str(Path(SPECPATH) / script)],
-        pathex=[str(ROOT / "src")],
-        datas=datas,
-        binaries=binaries,
-        hiddenimports=hiddenimports,
-        excludes=["tkinter", "pytest"],
-    )
-
-
-app = analysis("app_entry.py")
-tray = analysis("tray_entry.py")
-
-
-def program(found, name):
-    return EXE(
-        PYZ(found.pure),
-        found.scripts,
-        [],
-        exclude_binaries=True,
-        name=name,
-        icon=ICON,
-        version=str(ROOT / "build" / "package" / "version.txt"),
-        console=False,
-        upx=False,
-    )
-
+core = Analysis(
+    [str(Path(SPECPATH) / "core_entry.py")],
+    pathex=[str(ROOT / "src")],
+    datas=datas,
+    binaries=binaries,
+    hiddenimports=hiddenimports,
+    excludes=["tkinter", "pytest", "PySide6", "shiboken6"],
+)
 
 COLLECT(
-    program(app, "guildboard-app"),
-    program(tray, "guildboard-tray"),
-    app.binaries + tray.binaries,
-    app.datas + tray.datas,
+    EXE(
+        PYZ(core.pure),
+        core.scripts,
+        [],
+        exclude_binaries=True,
+        name="guildboard-core",
+        icon=ICON,
+        version=str(ROOT / "build" / "package" / "version.txt"),
+        console=True,
+        upx=False,
+    ),
+    core.binaries,
+    core.datas,
     upx=False,
-    name="Guild Board",
+    name="core",
 )

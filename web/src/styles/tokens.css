@@ -74,6 +74,17 @@
   --other: #B9AD92;
   /* The Ledger's spent amounts, a brown beside the earned ones' --good (the ledger design, section 6). */
   --spent: #9A4A2A;
+  /*
+   * The Endgame card's three modes (the Stats months and Wrapped design, section 3.1): accents only, for a header's bottom
+   * line, the cleared acts and the badge. Each reaches 3:1 on the card, and the white of a mark on it 4.5:1. The medal is
+   * the gold of an act that earned one, with its number in the dark ink.
+   */
+  --mode-abyss: #3E5A9E;
+  --mode-theater: #9C3B52;
+  --mode-stygian: #2D6E6A;
+  --medal-light: #F6D98A;
+  --medal: #C8962F;
+  --medal-ink: #3E2A08;
   /* Ready text: 5.81:1, and 4.84:1 on the ready seal's tint. */
   --good: #2E6B1F;
   /* The focus ring: 4.45:1, and 3.69:1 on the page. The dark panel sets it again. */

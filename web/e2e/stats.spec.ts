@@ -1,8 +1,30 @@
 import type { Locator, Page } from '@playwright/test'
-import type { Stats } from '../src/types.ts'
+import { readFileSync } from 'node:fs'
+import type { EndgameCardModel, Stats, YearAnswer } from '../src/types.ts'
 import { changeAnswer, holding } from './answers.ts'
 import { counted } from './board.ts'
 import { expect, test } from './fixtures.ts'
+
+/** The images of a card that are shown and have not loaded: the browser would draw its broken-image mark for them. */
+const shownBroken = (card: Locator): Promise<string[]> =>
+  card
+    .locator('img:not([hidden])')
+    .evaluateAll((all) => (all as HTMLImageElement[]).filter((image) => image.complete && image.naturalWidth === 0).map((image) => image.src))
+
+/** The demo's card as a live app would give it once the art is kept: every picture an address of the art cache. */
+function pictured(data: EndgameCardModel): void {
+  let at = 0
+  const art = () => `/api/art/${String((at += 1)).padStart(32, '0')}`
+  for (const mode of data.modes) {
+    mode.header = { icon: art(), picture: art(), crop: mode.mode === 'stygian' ? [0, 0, 0.48, 0.84] : null }
+    if ('ranks' in mode) for (const rank of mode.ranks ?? []) rank.face = art()
+    if (mode.mode === 'abyss') for (const group of mode.foes) for (const foe of group.foes) foe.icon = art()
+    if (mode.mode === 'stygian') {
+      mode.medal = art()
+      for (const boss of mode.bosses) boss.icon = art()
+    }
+  }
+}
 
 test.beforeEach(async ({ page, core }) => {
   await page.goto(`${core.origin}/#/stats`)
@@ -31,9 +53,9 @@ test('the period switch scopes the tiles', async ({ page }) => {
   await expect(page.getByTestId('period')).toHaveText('7 Oct – 13 Oct')
   await expect(page.getByTestId('tile-chests')).toContainText('▼ 8 vs previous 7 days')
   await page.getByRole('radio', { name: 'All' }).click()
-  await expect(page.getByTestId('period')).toHaveText('15 Jul – 13 Oct')
-  await expect(page.getByTestId('tile-chests')).toContainText('579')
-  await expect(page.getByTestId('tile-chests')).toContainText('Since 15 Jul')
+  await expect(page.getByTestId('period')).toHaveText('2 Mar – 13 Oct')
+  await expect(page.getByTestId('tile-chests')).toContainText('1,421')
+  await expect(page.getByTestId('tile-chests')).toContainText('Since 2 Mar')
   await expect(page.getByText('vs previous')).toHaveCount(0)
 })
 
@@ -170,26 +192,66 @@ test('a long region name does not push the chart apart', async ({ page }) => {
   expect(widths.page).toBeLessThanOrEqual(widths.window)
 })
 
-test('the playtime calendar covers twelve weeks', async ({ page }) => {
+/** The number of weeks the calendar's subtitle names. */
+const weeksShown = async (card: Locator): Promise<number> =>
+  Number(/last (\d+) weeks/.exec((await card.locator('.cs').textContent()) ?? '')?.[1])
+
+test('the playtime calendar shows the weeks that fit, the newest at the right', async ({ page }) => {
   const card = page.getByRole('region', { name: 'Playtime calendar' })
-  await expect(card).toContainText('Time in game per day, last 12 weeks')
-  await expect(card.getByRole('img')).toHaveCount(79) // 84 days, of which 5 have not come yet
+  await expect(card).toContainText(/Time in game per day, last \d+ weeks/)
+  const weeks = await weeksShown(card)
+  expect(weeks).toBeGreaterThan(12)
+  await expect(card.getByRole('img')).toHaveCount(weeks * 7 - 5) // 5 days of the last week have not come yet
   await expect(card.getByRole('img', { name: 'Mon 12 Oct: 1 h 33 min' })).toHaveClass(/l3/)
   await expect(card.getByRole('img', { name: 'Tue 13 Oct: none recorded' })).toBeVisible()
-  await expect(card.locator('.hm-m span').filter({ hasText: /\S/ })).toHaveText(['Aug', 'Sep', 'Oct'])
+  expect(await card.locator('.hm-m span').filter({ hasText: /\S/ }).allTextContents()).toContain('Oct')
   await expect(card.locator('.hm-d span').filter({ hasText: /\S/ })).toHaveText(['Mon', 'Wed', 'Fri', 'Sun'])
+  await expect(card.locator('.hm-run')).toHaveText(/^(●\d+ days? in a row · )?Best \d+ days?$/)
+})
+
+test("the calendar and the hour grid reach their cards' right edge at 1640 and 2560", async ({ page }) => {
+  for (const [width, height] of [[1640, 1100], [2560, 1400]]) {
+    await page.setViewportSize({ width, height })
+    for (const [name, box, cell] of [['Playtime calendar', '.hm-box', '.hm-g i'], ['When you play', '.wy-box', '.wy-g i']]) {
+      const card = page.getByRole('region', { name })
+      await expect(card.locator(cell).first()).toBeVisible()
+      // The newest cell is within one column step of the box's right edge, and no cell lies beyond it.
+      await expect.poll(async () => {
+        const frame = (await card.locator(box).boundingBox())!
+        const first = (await card.locator(cell).first().boundingBox())!
+        const right = frame.x + frame.width
+        const rights = await card.locator(cell).evaluateAll((cells) => cells.map((one) => one.getBoundingClientRect().right))
+        return { gap: right - Math.max(...rights) < first.width + 3 + 0.5, beyond: Math.max(...rights) > right + 0.5 }
+      }, { message: `${name} at ${width}` }).toEqual({ gap: true, beyond: false })
+    }
+  }
+})
+
+test('the calendar refits when the window is resized', async ({ page }) => {
+  const card = page.getByRole('region', { name: 'Playtime calendar' })
+  await page.setViewportSize({ width: 1640, height: 1100 })
+  await expect(card).toContainText(/last \d+ weeks/)
+  const wide = await weeksShown(card)
+  await page.setViewportSize({ width: 1200, height: 1100 })
+  await expect.poll(() => weeksShown(card)).toBeLessThan(wide)
+  const frame = (await card.locator('.hm-box').boundingBox())!
+  const rights = await card.locator('.hm-g i').evaluateAll((cells) => cells.map((one) => one.getBoundingClientRect().right))
+  expect(Math.max(...rights)).toBeLessThanOrEqual(frame.x + frame.width + 0.5)
+  await expect(card.getByRole('img')).toHaveCount((await weeksShown(card)) * 7 - 5)
 })
 
 test('the arrow keys walk the calendar by day and by week', async ({ page }) => {
   const cells = page.getByRole('region', { name: 'Playtime calendar' }).getByRole('img')
+  await expect(cells.first()).toBeVisible()
+  const count = await cells.count()
   await cells.nth(0).focus()
   await page.keyboard.press('ArrowDown')
   await expect(cells.nth(1)).toBeFocused()
   await page.keyboard.press('ArrowRight')
   await expect(cells.nth(8)).toBeFocused()
-  await expect(cells.nth(8)).toHaveAttribute('aria-label', 'Tue 4 Aug: 2 h 01 min')
+  await expect(cells.nth(8)).toHaveAttribute('aria-label', /^Tue \d+ \w+: /) // a week on, the same weekday as the first cell's Monday plus one
   await page.keyboard.press('End')
-  await expect(cells.nth(78)).toBeFocused()
+  await expect(cells.nth(count - 1)).toBeFocused()
 })
 
 test('primogems are shown per month and by source', async ({ page }) => {
@@ -211,20 +273,212 @@ test('primogems are shown per month and by source', async ({ page }) => {
   await expect(card.getByRole('row', { name: /Events/ })).toContainText('580')
 })
 
-test('endgame lists the latest and the best result per mode', async ({ page }) => {
+test('endgame shows the three modes, each under its header, with the table behind a switch', async ({ page }) => {
   const card = page.getByRole('region', { name: 'Endgame' })
+  await expect(card.getByTestId('ec-abyss')).toContainText('Spiral Abyss')
+  await expect(card.getByTestId('ec-theater')).toContainText('Imaginarium Theater')
+  await expect(card.getByTestId('ec-stygian')).toContainText('Stygian Onslaught')
+  await expect(card.getByText('This cycle in each mode, with the best so far')).toBeVisible()
+  await expect(card.getByTestId('ec-abyss')).toContainText('16 Sep to 15 Oct')
+  await expect(card.getByTestId('ec-abyss')).toContainText('Best 36 stars')
+  await expect(card.getByTestId('ec-theater')).toContainText('Act 10')
+  await expect(card.getByTestId('ec-stygian')).toContainText('Difficulty 5')
+  await card.getByRole('button', { name: 'Show as table' }).click()
   await expect(card.getByRole('columnheader')).toHaveText(['Mode', 'Latest result', 'Period', 'Best so far'])
   await expect(card.getByRole('row')).toHaveCount(4)
-  await expect(card.getByRole('row').nth(1)).toHaveText(/Spiral Abyss\s*34 of 36 stars\s*16 Sep to 15 Oct\s*36 stars/)
-  await expect(card.getByRole('button', { name: 'Show as table' })).toHaveCount(0) // it is a table already
+  await expect(card.getByRole('row').nth(1)).toHaveText(/Spiral Abyss\s*33 of 36 stars\s*16 Sep to 15 Oct\s*36 stars/)
+  await card.getByRole('button', { name: 'Show the chart' }).click()
+  await expect(card.getByTestId('ec-abyss')).toBeVisible()
+})
+
+test('the three modes stand level: equal columns whose bodies end at the same height', async ({ page }) => {
+  for (const [width, height] of [
+    [1640, 1100],
+    [2560, 1400],
+  ]) {
+    await page.setViewportSize({ width, height })
+    const boxes = await Promise.all(
+      ['abyss', 'theater', 'stygian'].map(async (mode) => {
+        const column = page.getByTestId(`ec-${mode}`)
+        await column.scrollIntoViewIfNeeded()
+        return {
+          column: (await column.boundingBox())!,
+          band: (await column.locator('.ec-band').boundingBox())!,
+          body: (await column.locator('.ec-body').boundingBox())!,
+        }
+      }),
+    )
+    for (const one of boxes) {
+      expect(Math.abs(one.column.width - boxes[0].column.width), `width at ${width}`).toBeLessThan(1.5)
+      expect(Math.abs(one.band.height - boxes[0].band.height), `header at ${width}`).toBeLessThan(1)
+      const bottom = (box: { y: number; height: number }) => box.y + box.height
+      expect(Math.abs(bottom(one.body) - bottom(boxes[0].body)), `bottom at ${width}`).toBeLessThan(1.5)
+    }
+  }
+})
+
+test('an art address that answers 404 leaves parchment and signs, never a broken image', async ({ page }) => {
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', pictured)
+  await page.route('**/api/art/**', (route) => route.fulfill({ status: 404, body: 'not here' }))
+  await page.reload()
+  const card = page.getByRole('region', { name: 'Endgame' })
+  await expect(card.getByTestId('ec-stygian')).toContainText('Difficulty 5')
+  // The headers: a picture that fails is a background that draws nothing, with the veil and the parchment under it.
+  await expect(card.locator('.ec-bg')).toHaveCount(3)
+  await expect.poll(() => shownBroken(card), { message: 'every image that is shown has loaded' }).toEqual([])
+  await expect(card.locator('.ec-medal')).toHaveCount(0) // the medal failed, so the drawn badge is there
+  await expect(card.locator('.ec-badge')).toHaveCount(1)
+  await expect(card.locator('.ec-ico .sign:visible')).toHaveCount(3)
+  await expect(card.locator('.ec-pic .sign:visible').first()).toBeVisible()
+})
+
+test('a mode never played keeps its header, one with no tries this cycle keeps its best; none read at all says so', async ({ page }) => {
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', (data) => {
+    // The Theater never played; the Abyss on the 16th, a new cycle with no battle in it yet.
+    Object.assign(data.modes[1], { played: false, best: '', ranks: [], medals: [], medal_count: 0, act: 0, flowers: 0, seconds: 0 })
+    Object.assign(data.modes[0], { played: false })
+  })
+  await page.reload()
+  const card = page.getByRole('region', { name: 'Endgame' })
+  await expect(card.getByTestId('ec-theater').locator('.ec-band')).toContainText('Imaginarium Theater')
+  await expect(card.getByTestId('ec-theater').locator('.ec-body')).toHaveText('Not played yet')
+  const abyss = card.getByTestId('ec-abyss').locator('.ec-body')
+  await expect(abyss.locator('.ec-none')).toHaveText('No tries this cycle yet')
+  await expect(abyss.locator('.ec-best')).toHaveText(/^Best \d+ stars$/)
+  await expect(card.getByTestId('ec-stygian')).not.toContainText(/Not played yet|No tries/)
+  await page.unroute('**/api/stats/endgame*')
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', (data) => {
+    data.modes = []
+  })
+  await page.reload()
+  await expect(card.getByText('No endgame results have been read yet.')).toBeVisible()
+})
+
+test('a boss row tells the whole name on hover and on keyboard focus, and nothing clips the tip', async ({ page }) => {
+  const row = page.getByTestId('ec-stygian').locator('.ec-boss').first()
+  await expect(row).toHaveAttribute('aria-label', /^Guardian Blade of Drifting Snow, \d+:\d\d$/)
+  const tip = () => row.evaluate((element) => getComputedStyle(element, '::after').content)
+  expect(await tip()).toBe('none')
+  await row.hover()
+  expect(await tip()).toBe('"Guardian Blade of Drifting Snow"')
+  // The tip sits in its row, so no box between the row and the card may cut it.
+  const clipped = await row.evaluate((element) => {
+    const cut: string[] = []
+    for (let one = element as HTMLElement | null; one !== null && !one.classList.contains('ec-mode'); one = one.parentElement) {
+      if (getComputedStyle(one).overflow !== 'visible') cut.push(one.className)
+    }
+    return cut
+  })
+  expect(clipped).toEqual([])
+  await page.mouse.move(0, 0)
+  await row.focus()
+  await page.keyboard.press('Shift')
+  expect(await tip()).toBe('"Guardian Blade of Drifting Snow"')
+})
+
+test('the Stygian bosses are rows with no framed box, and the acts follow the season length', async ({ page }) => {
+  const rows = page.getByTestId('ec-stygian').locator('.ec-boss')
+  await expect(rows).toHaveCount(3)
+  const looks = await rows.evaluateAll((all) => all.map((one) => getComputedStyle(one).borderLeftWidth + getComputedStyle(one).borderRadius))
+  expect(looks).toEqual(['0px0px', '0px0px', '0px0px'])
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', (data) => {
+    const theater = data.modes[1]
+    if (theater.mode === 'theater') theater.medals = (theater.medals ?? []).slice(0, 8)
+  })
+  await page.reload()
+  await expect(page.getByTestId('ec-theater').locator('.ec-act')).toHaveCount(8)
+  const columns = await page.getByTestId('ec-theater').locator('.ec-acts').evaluate((one) => getComputedStyle(one).gridTemplateColumns.split(' ').length)
+  expect(columns).toBe(8)
+})
+
+test('the star grid shares one column of labels', async ({ page }) => {
+  const lefts = await page.getByTestId('ec-abyss').locator('.ec-stars').evaluateAll((all) => all.slice(0, 12).map((one) => Math.round(one.getBoundingClientRect().left)))
+  for (let at = 0; at < 3; at += 1) expect(new Set([0, 1, 2, 3].map((floor) => lefts[floor * 3 + at])).size).toBe(1)
+})
+
+test('a season that has not started yet is dimmed with a note, and the note says when it is on', async ({ page }) => {
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', (data) => {
+    const stygian = data.modes[2]
+    if (stygian.mode !== 'stygian') return
+    Object.assign(stygian, { dimmed: true, next: { name: 'Battle Amid the Great Waves', starts: '11 Nov' }, next_started: false })
+  })
+  await page.reload()
+  const column = page.getByTestId('ec-stygian')
+  await expect(column.locator('.ec-next')).toHaveText(
+    'Next season Battle Amid the Great Waves opens 11 Nov. Its bosses show here after your first try.',
+  )
+  await expect(column.locator('.ec-bosses')).toHaveClass(/dimmed/)
+  expect(await column.locator('.ec-bosses').evaluate((one) => getComputedStyle(one).opacity)).toBe('0.6')
+  await page.unroute('**/api/stats/endgame*')
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', (data) => {
+    const stygian = data.modes[2]
+    if (stygian.mode !== 'stygian') return
+    Object.assign(stygian, { dimmed: true, next: { name: 'Battle Amid the Great Waves', starts: '11 Nov' }, next_started: true })
+  })
+  await page.reload()
+  await expect(column.locator('.ec-next')).toHaveText('Season Battle Amid the Great Waves is on now. Its bosses show here after your first try.')
+})
+
+test('the card plays its motion and comes to rest', async ({ page }) => {
+  const card = page.getByRole('region', { name: 'Endgame' })
+  await expect(card.getByTestId('ec-abyss')).toBeVisible()
+  await expect.poll(() => card.evaluate((element) => element.getAnimations({ subtree: true }).length), { timeout: 8000 }).toBe(0)
+})
+
+test('under reduced motion nothing of the card moves', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.reload()
+  const card = page.getByRole('region', { name: 'Endgame' })
+  await expect(card.getByTestId('ec-stygian')).toContainText('Difficulty 5')
+  expect(await card.evaluate((element) => element.getAnimations({ subtree: true }).length)).toBe(0)
+  // And everything is there at once: none of it is held at its first frame.
+  const hidden = await card
+    .locator('.ec-star:not(.off), .ec-act, .ec-ic, .ec-badge')
+    .evaluateAll((all) => all.filter((element) => getComputedStyle(element).opacity !== '1').length)
+  expect(hidden).toBe(0)
+})
+
+test('the pictures of the card show where the core has them: headers, the Stygian crop, faces and enemies', async ({ page }) => {
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', pictured)
+  await page.route('**/api/art/**', (route) =>
+    route.fulfill({
+      contentType: 'image/svg+xml',
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="#6d8fb5"/><circle cx="90" cy="100" r="60" fill="#e9c46a"/></svg>',
+    }),
+  )
+  await page.reload()
+  const card = page.getByRole('region', { name: 'Endgame' })
+  await expect(card.locator('.ec-bg')).toHaveCount(3)
+  const asked = await card.locator('.ec-bg').evaluateAll((all) => all.map((one) => getComputedStyle(one).backgroundImage))
+  expect(asked[1]).toContain('size=1536') // the Theater's 4K picture is asked for at 1,536 pixels
+  const size = await card.locator('.ec-bg').nth(2).evaluate((one) => getComputedStyle(one).backgroundSize)
+  expect(parseFloat(size)).toBeGreaterThan(190) // the Stygian banner shows its left part: about 100 / 0.48 per cent wide
+  await expect(card.locator('.ec-face img:not([hidden])').first()).toBeVisible()
+  const first = card.getByTestId('ec-abyss').locator('.ec-ic').first()
+  await expect(first).toHaveAttribute('data-tip', /Lv\. \d+/)
+  await expect.poll(() => card.evaluate((element) => element.getAnimations({ subtree: true }).length), { timeout: 8000 }).toBe(0)
+  // The card as the player sees it, in the usual window and full screen on the big one (the pictures to compare by eye).
+  for (const [width, height] of [
+    [1640, 1100],
+    [2560, 1400],
+  ]) {
+    await page.setViewportSize({ width, height })
+    await card.scrollIntoViewIfNeeded()
+    await page.screenshot({ path: test.info().outputPath(`endgame-page-${width}.png`) })
+    await card.screenshot({ path: test.info().outputPath(`endgame-card-${width}.png`) })
+  }
+  await first.hover()
+  await card.screenshot({ path: test.info().outputPath('endgame-card-tip.png') })
+  expect(await shownBroken(card)).toEqual([])
 })
 
 test('the cards with a fixed scope do not follow the period switch', async ({ page }) => {
   await page.getByRole('radio', { name: '7 days' }).click()
   await expect(page.getByRole('region', { name: 'Chests opened per day' }).getByRole('img')).toHaveCount(7)
-  await expect(page.getByRole('region', { name: 'Playtime calendar' }).getByRole('img')).toHaveCount(79)
+  const weeks = await weeksShown(page.getByRole('region', { name: 'Playtime calendar' }))
+  await expect(page.getByRole('region', { name: 'Playtime calendar' }).getByRole('img')).toHaveCount(weeks * 7 - 5)
   await expect(page.getByRole('region', { name: 'Primogems by month' }).locator('.pm-cols').getByRole('img')).toHaveCount(6)
-  await expect(page.getByRole('region', { name: 'Endgame' }).getByRole('row')).toHaveCount(4)
+  await expect(page.getByRole('region', { name: 'Endgame' }).getByTestId('ec-abyss')).toContainText('16 Sep to 15 Oct')
 })
 
 test('exploration that has not been read is not called unchanged', async ({ page }) => {
@@ -336,7 +590,8 @@ test('When you play shows the week by the hour, and its table', async ({ page, a
 })
 
 test("a table's row headers look as the row's other cells do", async ({ page }) => {
-  const card = page.getByRole('region', { name: 'Endgame' }) // a table from the start
+  const card = page.getByRole('region', { name: 'Endgame' })
+  await card.getByRole('button', { name: 'Show as table' }).click()
   await expect(card.getByRole('rowheader')).toHaveText(['Spiral Abyss', 'Imaginarium Theater', 'Stygian Onslaught'])
   const look = (cell: Locator) =>
     cell.evaluate((one) => {
@@ -433,12 +688,15 @@ test('a weekday Guild Board was not tracking is not tracked, which is not none',
   await expect(card.getByRole('row').nth(1).getByRole('cell').nth(20)).toHaveText('') // Monday's 20:00
 })
 
-test('the cells of When you play are 14 pixels, shrink in a narrow window and stay inside their card', async ({ page }) => {
+test("the cells of When you play reach the card's edge, are never taller than one and a half widths, shrink in a narrow window and stay inside their card", async ({ page }) => {
   const card = page.getByRole('region', { name: 'When you play' })
   const cells = card.getByRole('img')
   const box = async (locator: typeof cells) => (await locator.boundingBox())!
+  await expect(cells.first()).toBeVisible()
   const first = await box(cells.first())
-  expect([first.width, first.height]).toEqual([14, 14])
+  expect(first.width).toBeGreaterThan(14)
+  expect(first.height).toBeGreaterThanOrEqual(8)
+  expect(first.height).toBeLessThanOrEqual(1.5 * first.width + 0.5)
   // An hour's label is over the column of its cell: hour 3 is the fourth column, from the 22nd cell on.
   expect(Math.abs((await box(card.locator('.wy-h span').nth(3))).x - (await box(cells.nth(21))).x)).toBeLessThan(1)
   const inside = async () => {
@@ -450,9 +708,29 @@ test('the cells of When you play are 14 pixels, shrink in a narrow window and st
   }
   await inside()
   await page.setViewportSize({ width: 1040, height: 900 }) // the narrowest window
-  await expect.poll(async () => (await box(cells.first())).width).toBeLessThan(14)
+  await expect.poll(async () => (await box(cells.first())).width).toBeLessThan(first.width)
   expect((await box(cells.first())).width).toBeGreaterThanOrEqual(8)
   await inside()
+})
+
+test('the hour grid fills the height its card is given, at 1640 and 1300', async ({ page }) => {
+  for (const [width, height] of [[1640, 1100], [1300, 1000]]) {
+    await page.setViewportSize({ width, height })
+    const card = page.getByRole('region', { name: 'When you play' })
+    await expect(card.locator('.wy-g i').first()).toBeVisible()
+    // The grid's bottom is within one row step of the box's bottom: no blank band under it.
+    await expect
+      .poll(
+        async () => {
+          const frame = (await card.locator('.wy-box').boundingBox())!
+          const cells = (await card.locator('.wy-g i').first().boundingBox())!
+          const rows = await card.locator('.wy-g i').evaluateAll((all) => all.map((one) => one.getBoundingClientRect().bottom))
+          return frame.y + frame.height - Math.max(...rows) < cells.height + 3 + 0.5
+        },
+        { message: `at ${width}` },
+      )
+      .toBe(true)
+  }
 })
 
 test('the cards come in the order of the spec', async ({ page }) => {
@@ -569,13 +847,18 @@ test('the page opens with its lines drawing, its meter and columns growing, its 
         'grow-w in Primogems by month',
       ]),
     )
-  // The Endgame table is still, and everything that began ends: nothing loops.
-  expect((await seen()).filter((name) => name.endsWith('in Endgame'))).toEqual([])
+  // The Endgame card lights its stars, rises its enemies, stamps its badge and glints its headers, once each.
+  await expect
+    .poll(async () => [...new Set((await seen()).filter((name) => name.endsWith('in Endgame')))].sort())
+    .toEqual(['ec-glint in Endgame', 'ec-pop in Endgame', 'ec-rise in Endgame', 'ec-stamp in Endgame'])
+  expect((await seen()).filter((name) => name === 'ec-glint in Endgame')).toHaveLength(3)
+  // Everything that began ends: nothing loops.
   await expect.poll(() => page.evaluate(() => document.getAnimations().length)).toBe(0)
-  // Each runs once: the cells of a card come in one after another (the calendar's 79 days, the week's 168 hours), and
+  // Each runs once: the cells of a card come in one after another (the calendar's days, the week's 168 hours), and
   // the dots of the six regions slide out once each.
   const all = await seen()
-  expect(all.filter((name) => name === 'fade-in in Playtime calendar')).toHaveLength(79)
+  const days = await page.getByRole('region', { name: 'Playtime calendar' }).getByRole('img').count()
+  expect(all.filter((name) => name === 'fade-in in Playtime calendar')).toHaveLength(days)
   expect(all.filter((name) => name === 'fade-in in When you play')).toHaveLength(168)
   expect(all.filter((name) => name === 'slide-out in Exploration gained')).toHaveLength(6)
   expect(all.filter((name) => name === 'sweep in tile-chests')).toHaveLength(1)
@@ -634,19 +917,20 @@ test('a change of period moves the columns to their new heights', async ({ page,
 })
 
 // The ledger plan, Task 7. A core with the ledger splits the days the game's history reaches by source; the days before
-// are the diary's estimates. The answer is shaped here as such a core gives it, so the test does not hang on the demo's
-// history: a Welkin day of 150 and diary days before it.
-test('stats shows a stacked primogem day of 150, and the days before as estimates', async ({ page }) => {
+// have no record and are empty, never estimated. The answer is shaped here as such a core gives it, so the test does not
+// hang on the demo's history: a Welkin day of 150 and days without a record before it.
+test('stats shows a stacked primogem day of 150, and the days before without a record', async ({ page }) => {
   await changeAnswer<Stats>(page, '/api/stats', (data) => {
     const days = data.primogem_days
     const empty = { commissions: 0, welkin: 0, events: 0, endgame: 0, other: 0 }
     days.groups_order = ['commissions', 'welkin', 'events', 'endgame', 'other']
     days.columns.forEach((column, index) => {
-      if (column.no_data) return
       if (index < 10) {
-        delete column.groups // a day of the old diary total, as the core sends it: no split, an estimate
-        column.estimate = true
-      } else column.groups = { ...empty, commissions: Math.min(60, column.value), other: Math.max(0, column.value - 60) }
+        delete column.groups // a day of neither the game's log nor the diary's detail, as the core sends it: empty
+        column.value = 0
+        column.no_data = true
+        column.after_gap = false
+      } else if (!column.no_data) column.groups = { ...empty, commissions: Math.min(60, column.value), other: Math.max(0, column.value - 60) }
     })
     const last = days.columns[days.columns.length - 1]
     last.value = 150
@@ -665,8 +949,9 @@ test('stats shows a stacked primogem day of 150, and the days before as estimate
   })
   await expect(day).toBeVisible()
   await expect(day.locator('span[data-group]')).toHaveCount(2)
-  await expect(card.locator('.col-bars i.est').first()).toBeVisible()
-  await expect(card.locator('.col-lg')).toContainText('From the HoYoLAB diary, an estimate')
+  await expect(card.locator('.col-bars i.nd').first()).toBeVisible()
+  await expect(card.locator('.col-lg')).toContainText('No record')
+  await expect(card.locator('.col-lg')).not.toContainText('estimate')
   await expect(card).toContainText('Spent primogems are not taken off here. They are on the Ledger page.')
   await card.getByRole('button', { name: 'Show as table' }).click()
   await expect(card.getByRole('columnheader')).toHaveText([
@@ -675,3 +960,574 @@ test('stats shows a stacked primogem day of 150, and the days before as estimate
   ])
   await expect(card.getByRole('row').last()).toHaveText(/Tue 13 Oct\s*150\s*60\s*90\s*0\s*0\s*0/)
 })
+
+test('the tabs open Months and Year, and the period switch and chip show on Overview alone', async ({ page, core }) => {
+  const tabs = page.getByRole('navigation', { name: 'Stats pages' })
+  await expect(tabs.getByRole('link', { name: 'Overview' })).toHaveAttribute('aria-current', 'page')
+  await expect(page.getByRole('radio', { name: '30 days' })).toBeVisible()
+  await expect(page.getByTestId('period')).toBeVisible()
+  await tabs.getByRole('link', { name: 'Months' }).click()
+  await expect(page).toHaveURL(`${core.origin}/#/stats/months`)
+  await expect(tabs.getByRole('link', { name: 'Months' })).toHaveAttribute('aria-current', 'page')
+  await expect(page.getByRole('radio', { name: '30 days' })).toHaveCount(0)
+  await expect(page.getByTestId('period')).toHaveCount(0)
+  await tabs.getByRole('link', { name: 'Year' }).click()
+  await expect(page).toHaveURL(`${core.origin}/#/stats/year`)
+  await expect(tabs.getByRole('link', { name: 'Year' })).toHaveAttribute('aria-current', 'page')
+  await expect(page.getByRole('radio', { name: '30 days' })).toHaveCount(0)
+  await tabs.getByRole('link', { name: 'Overview' }).click()
+  await expect(page.getByRole('radio', { name: '30 days' })).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByTestId('period')).toBeVisible()
+})
+
+// ---------- The Months tab (the Months and Wrapped design, section 5) ----------
+
+/**
+ * The month's parts as the page lays them out: each part's top and bottom, the bottom of the row it sits in (the lowest
+ * bottom among the parts whose tops are alike), its left and right edges and width, whether it is alone in its row, and
+ * the grid's edges.
+ */
+type PartBox = {
+  part: string
+  top: number
+  bottom: number
+  left: number
+  right: number
+  width: number
+  alone: boolean
+  rowBottom: number
+  gridLeft: number
+  gridRight: number
+}
+async function rowsOf(page: Page): Promise<PartBox[]> {
+  return page.locator('.mo-grid').evaluate((grid) => {
+    const box = grid.getBoundingClientRect()
+    const parts = [...grid.querySelectorAll<HTMLElement>('.mo-row > .mo-part')].map((part) => {
+      const at = part.getBoundingClientRect()
+      const alone = part.parentElement!.children.length === 1
+      return { part: part.dataset.part ?? '', top: Math.round(at.top), bottom: at.bottom, left: at.left, right: at.right, width: at.width, alone }
+    })
+    return parts.map((part) => ({
+      ...part,
+      rowBottom: Math.max(...parts.filter((other) => Math.abs(other.top - part.top) < 4).map((other) => other.bottom)),
+      gridLeft: box.left,
+      gridRight: box.right,
+    }))
+  })
+}
+
+/** The width of two of three columns of the grid with the gap between them: the most a part alone in its row may take. */
+function twoColumns(row: PartBox): number {
+  return ((row.gridRight - row.gridLeft - 24) * 2) / 3 + 12
+}
+
+/** Each day cell of the month's calendar as its height over its width. */
+async function cellRatios(page: Page): Promise<number[]> {
+  return page.locator('.mo-cal i:not(.pad)').evaluateAll((cells) =>
+    cells.map((cell) => {
+      const box = cell.getBoundingClientRect()
+      return box.height / box.width
+    }),
+  )
+}
+
+test('the Months tab shows a month: five tiles, records, the calendar and where the primogems came from', async ({ page, core }) => {
+  await page.goto(`${core.origin}/#/stats/months/2026-10`)
+  for (const id of ['time', 'days', 'primogems', 'wishes', 'achievements']) await expect(page.getByTestId(`month-tile-${id}`)).toBeVisible()
+  await expect(page.locator('[data-testid^="month-tile-"]')).toHaveCount(5)
+  await expect(page.getByTestId('month-tile-time')).toContainText('14 h 44 min')
+  await expect(page.getByTestId('month-tile-time')).toContainText('▲ 1 h 44 min vs 1–13 Sep')
+  await expect(page.getByTestId('month-tile-days')).toContainText('11 of 13')
+  await expect(page.getByTestId('month-tile-days')).toContainText('No change vs 1–13 Sep')
+  await expect(page.getByTestId('month-tile-primogems')).toContainText('▲ 171 vs 1–13 Sep')
+  await expect(page.getByTestId('month-records')).toContainText('Longest session')
+  await expect(page.getByTestId('record-best_primogem_day')).toContainText('960 · 2 Oct')
+  await expect(page.getByTestId('month-calendar').locator('[role="img"]')).toHaveCount(13)
+  await expect(page.getByTestId('month-flow')).toContainText('Spiral Abyss and Theater')
+  await expect(page.getByTestId('month-flow')).toContainText('Revitalized Petrified Tree (Domain)')
+  const strip = page.getByTestId('month-strip')
+  await expect(strip.getByRole('link', { name: 'Oct 2026 so far' })).toHaveAttribute('aria-current', 'page')
+  await expect(strip.getByRole('link', { name: 'Feb 2026, little data' })).toBeVisible()
+})
+
+test('choosing a month in the strip opens it at its own address', async ({ page, core }) => {
+  await page.goto(`${core.origin}/#/stats/months`)
+  await expect(page.getByTestId('month-strip').getByRole('link', { name: 'Oct 2026 so far' })).toHaveAttribute('aria-current', 'page')
+  await page.getByTestId('month-strip').getByRole('link', { name: 'Aug 2026' }).click()
+  await expect(page).toHaveURL(`${core.origin}/#/stats/months/2026-08`)
+  await expect(page.getByTestId('month-strip').getByRole('link', { name: 'Aug 2026' })).toHaveAttribute('aria-current', 'page')
+  await expect(page.getByTestId('month-tile-days')).toContainText('28 of 31')
+  await expect(page.getByTestId('month-endgame')).toContainText('34 of 36 stars')
+  await expect(page.getByTestId('month-pulls')).toContainText('Wolf')
+  await expect(page.getByTestId('record-luckiest')).toContainText('76 pulls · 15 Aug')
+  await expect(page.getByText('Endgame cycles count in the month they end. The first one kept ran from 16 Jul to 15 Aug 2026.')).toBeVisible()
+})
+
+/**
+ * What is blank inside the month's cards and tiles, in words, one for each fault. A card's own box stretches to the row it
+ * sits in, so the gap is measured inside it: from the bottom of its last row (a record, a bar, a 5-star, the calendar's
+ * legend) to the bottom of the card without its padding, and, for a card of bar lists, from the right edge of its last
+ * list to the card's. No row grows past a size at which it would read as a gap between rows. A tile's last line is
+ * measured the same way.
+ */
+async function blanksOf(page: Page): Promise<string[]> {
+  return page.evaluate(() => {
+    const faults: string[] = []
+    const inner = (element: Element) => {
+      const box = element.getBoundingClientRect()
+      const style = getComputedStyle(element)
+      return {
+        bottom: box.bottom - parseFloat(style.paddingBottom) - parseFloat(style.borderBottomWidth),
+        right: box.right - parseFloat(style.paddingRight) - parseFloat(style.borderRightWidth),
+      }
+    }
+    const lowest = (elements: Element[]) => Math.max(...elements.map((element) => element.getBoundingClientRect().bottom))
+    for (const card of document.querySelectorAll<HTMLElement>('.mo-part > *')) {
+      const name = card.closest<HTMLElement>('.mo-part')!.dataset.part
+      const edge = inner(card)
+      const rows = [...card.querySelectorAll('.mo-rec, .hb, .mo-five, .hm-lg, .mo-cal')]
+      const under = edge.bottom - lowest(rows)
+      if (under > 12) faults.push(`${name}: ${Math.round(under)} px blank under its last row`)
+      for (const list of card.querySelectorAll('.mo-list')) {
+        // A list with another under it (one column) is not the card's last: only the lists that end the card are measured.
+        const own = [...list.querySelectorAll('.hb, .mo-five')]
+        const gap = edge.bottom - lowest(own)
+        if (list.getBoundingClientRect().bottom >= edge.bottom - 2 && gap > 12) faults.push(`${name}: a list has ${Math.round(gap)} px blank under it`)
+        // Its longest bar reaches the end of its row (the number after it takes up to 56 px of the end).
+        const rowsOfBars = [...list.querySelectorAll('.hb')]
+        if (rowsOfBars.length > 0) {
+          const short = Math.min(...rowsOfBars.map((row) => row.getBoundingClientRect().right - row.querySelector('.b b')!.getBoundingClientRect().right))
+          if (short > 60) faults.push(`${name}: the bars stop ${Math.round(short)} px short of the right edge`)
+        }
+      }
+      // The rows themselves, not the boxes that hold them, reach the card's right edge: a list of three bars in a wide card
+      // spreads over the card instead of standing in its left part.
+      const listed = [...card.querySelectorAll('.hb, .mo-five, .mo-rec')]
+      if (listed.length > 0) {
+        const short = edge.right - Math.max(...listed.map((row) => row.getBoundingClientRect().right))
+        if (short > 12) faults.push(`${name}: its rows end ${Math.round(short)} px short of the card's right edge`)
+      }
+      const lists = [...card.querySelectorAll('.mo-list')]
+      if (lists.length > 0) {
+        const side = edge.right - Math.max(...lists.map((list) => list.getBoundingClientRect().right))
+        if (side > 12) faults.push(`${name}: ${Math.round(side)} px blank at the right of its lists`)
+      }
+      for (const row of card.querySelectorAll<HTMLElement>('.mo-rec, .mo-five')) {
+        if (row.getBoundingClientRect().height > 76) faults.push(`${name}: a row is ${Math.round(row.getBoundingClientRect().height)} px tall`)
+      }
+      for (const row of card.querySelectorAll<HTMLElement>('.hb')) {
+        if (row.getBoundingClientRect().height > 48) faults.push(`${name}: a bar row is ${Math.round(row.getBoundingClientRect().height)} px tall`)
+      }
+    }
+    for (const tile of document.querySelectorAll<HTMLElement>('.mo-tiles > .st')) {
+      const last = [...tile.children].at(-1)!
+      const under = inner(tile).bottom - last.getBoundingClientRect().bottom
+      if (under > 12) faults.push(`${tile.dataset.testid}: ${Math.round(under)} px blank under its last line`)
+    }
+    return faults
+  })
+}
+
+/** Every month of the demo: two thin ones before tracking (January with its wishes alone, February with one 5★), then full ones. */
+const DEMO_MONTHS = ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10']
+
+for (const [width, height] of [[1640, 1100], [2560, 1400]] as const) {
+  for (const ym of DEMO_MONTHS) {
+    test(`the parts of ${ym} leave no gap at ${width} wide`, async ({ page, core }) => {
+      await page.setViewportSize({ width, height })
+      await page.goto(`${core.origin}/#/stats/months/${ym}`)
+      await expect(page.getByTestId('month-strip').locator('[aria-current="page"]')).toBeVisible()
+      await expect(page.locator('.mo-part').first()).toBeVisible()
+      await page.waitForTimeout(600) // the bars and cells have appeared
+      const rows = await rowsOf(page)
+      expect(rows.length).toBeGreaterThan(0)
+      // No part ends more than 12 pixels above the bottom of its row, and every row of two parts or more reaches the right
+      // edge of the grid.
+      for (const row of rows) expect(row.rowBottom - row.bottom, `${row.part} bottom`).toBeLessThanOrEqual(12)
+      const reach = new Map<number, number>()
+      for (const row of rows.filter((one) => !one.alone)) reach.set(row.top, Math.max(reach.get(row.top) ?? 0, row.right))
+      for (const right of reach.values()) expect(rows[0].gridRight - right).toBeLessThanOrEqual(2)
+      // A part alone in its row (or in its month) stands at the left at a card's width, two columns of three at most: never
+      // across the whole page.
+      for (const row of rows.filter((one) => one.alone)) {
+        expect(Math.abs(row.left - row.gridLeft), `${row.part} left`).toBeLessThanOrEqual(1)
+        expect(row.width, `${row.part} width`).toBeLessThanOrEqual(twoColumns(row) + 1)
+      }
+      // The calendar keeps real cells: each day as tall as wide, within a quarter or a third either way.
+      const ratios = await cellRatios(page)
+      if (ym >= '2026-03') expect(ratios.length).toBeGreaterThan(0)
+      for (const ratio of ratios) {
+        expect(ratio, 'a day cell, height over width').toBeGreaterThanOrEqual(0.75)
+        expect(ratio, 'a day cell, height over width').toBeLessThanOrEqual(1.33)
+      }
+      // Nothing is blank inside a card or a tile, and nothing is cut off: no card's content runs past its card.
+      expect(await blanksOf(page)).toEqual([])
+      const cut = await page.locator('.mo-part > *').evaluateAll(
+        (cards) => cards.filter((card) => card.scrollHeight > card.clientHeight + 1 || card.scrollWidth > card.clientWidth + 1).length,
+      )
+      expect(cut).toBe(0)
+    })
+  }
+}
+
+test('a thin month has fewer parts than a full one, and the rest close up', async ({ page, core }) => {
+  await page.goto(`${core.origin}/#/stats/months/2026-08`)
+  await expect(page.locator('.mo-part')).toHaveCount(5)
+  // February is known by its primogems and its wishes alone (the diary reaches back three months, an earlier import kept the
+  // wishes), with one 5★: two tiles, its one record beside the Pulls, notes.
+  await page.goto(`${core.origin}/#/stats/months/2026-02`)
+  await expect(page.getByTestId('month-tile-primogems')).toBeVisible()
+  await expect(page.locator('[data-testid^="month-tile-"]')).toHaveCount(2)
+  await expect(page.getByTestId('month-pulls')).toContainText('Jean')
+  await expect(page.getByTestId('record-luckiest')).toContainText('Jean · 58 pulls · 12 Feb')
+  await expect(page.locator('.mo-part')).toHaveCount(2)
+  await expect(page.locator('.mo-row')).toHaveCount(1)
+  await expect(page.getByTestId('month-flow')).toHaveCount(0)
+  await expect(page.getByTestId('month-calendar')).toHaveCount(0)
+})
+
+for (const [width, height] of [[1640, 1100], [2560, 1400]] as const) {
+  test(`a part alone in its month keeps a card's width at ${width} wide`, async ({ page, core }) => {
+    // January has its wishes alone: the Pulls card, at the left, one column of three wide as it is in a full month.
+    await page.setViewportSize({ width, height })
+    await page.goto(`${core.origin}/#/stats/months/2026-01`)
+    await expect(page.getByTestId('month-pulls')).toBeVisible()
+    const [pulls] = await rowsOf(page)
+    expect(pulls.alone).toBe(true)
+    expect(Math.abs(pulls.left - pulls.gridLeft)).toBeLessThanOrEqual(1)
+    expect(pulls.width).toBeLessThanOrEqual((pulls.gridRight - pulls.gridLeft - 24) / 3 + 1)
+    const bar = await page.getByTestId('month-pulls').locator('.hb .b').first().evaluate((one) => one.getBoundingClientRect().width)
+    expect(bar).toBeLessThan(500)
+  })
+}
+
+test('the strip opens scrolled to the chosen month when there are more months than it can show', async ({ page, core }) => {
+  await changeAnswer<{ months: { ym: string; label: string; year: number; thin: boolean; current: boolean }[] }>(
+    page,
+    '/api/stats/month',
+    (data) => {
+      const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      data.months = []
+      for (let at = 0; at < 60; at += 1) {
+        const total = 2021 * 12 + 10 + at // from Nov 2021 to Oct 2026
+        const year = Math.floor(total / 12)
+        const month = total % 12
+        const ym = `${year}-${String(month + 1).padStart(2, '0')}`
+        data.months.push({ ym, label: names[month], year, thin: at < 40, current: at === 59 })
+      }
+    },
+  )
+  await page.setViewportSize({ width: 1200, height: 900 })
+  await page.goto(`${core.origin}/#/stats/months/2026-10`)
+  const strip = page.getByTestId('month-strip')
+  await expect(strip.locator('[aria-current="page"]')).toBeVisible()
+  expect(await strip.evaluate((element) => element.scrollLeft)).toBeGreaterThan(300)
+  const inside = await page.evaluate(() => {
+    const box = document.querySelector('[data-testid="month-strip"]')!.getBoundingClientRect()
+    const on = document.querySelector('[data-testid="month-strip"] [aria-current="page"]')!.getBoundingClientRect()
+    return on.left >= box.left - 1 && on.right <= box.right + 1
+  })
+  expect(inside).toBe(true)
+})
+
+// ---------- The Year tab (the Months and Wrapped design, section 6) ----------
+
+type YearAnswerOf = {
+  years: number[]
+  current_year: number
+  year: {
+    year: number
+    so_far: boolean
+    hero: { character: { name: string; picture: string | null } | null }
+    cards: { faces: string[]; kind: string }[]
+    poster: { character: { name: string; picture: string | null } | null }
+  } | null
+}
+
+test('the Year tab shows the hero, the cards and the two Save buttons', async ({ page, core }) => {
+  await page.goto(`${core.origin}/#/stats/year`)
+  await expect(page.getByTestId('year-hero')).toBeVisible()
+  await expect(page.getByTestId('year-hero').getByRole('heading')).toHaveText(/^2026\s*so far$/)
+  await expect(page.getByTestId('year-line')).not.toHaveText('')
+  await expect(page.getByTestId('year-counter')).toHaveCount(3)
+  expect(await page.getByTestId('year-card').count()).toBeGreaterThanOrEqual(3)
+  await expect(page.getByTestId('year-save-story')).toHaveText('Save as picture · Story')
+  await expect(page.getByTestId('year-save-wide')).toHaveText('Save as picture · Wide')
+  // One year only: no switch.
+  await expect(page.getByTestId('year-switch')).toHaveCount(0)
+})
+
+test('the year switch shows for more than one year and its choice is in the address', async ({ page, core }) => {
+  await changeAnswer<YearAnswerOf>(page, '/api/stats/year', (data) => {
+    data.years = [2025, 2026]
+  })
+  await page.goto(`${core.origin}/#/stats/year`)
+  const switchBox = page.getByTestId('year-switch')
+  await expect(switchBox.getByRole('link')).toHaveText(['2025', '2026 so far'])
+  await expect(switchBox.getByRole('link', { name: '2026 so far' })).toHaveAttribute('aria-current', 'page')
+  await switchBox.getByRole('link', { name: '2025' }).click()
+  await expect(page).toHaveURL(`${core.origin}/#/stats/year/2025`)
+})
+
+test('a chosen year is asked for, from the address and from the switch, and its hero shows', async ({ page, core }) => {
+  const asked: string[] = []
+  await page.route('**/api/stats/year*', async (route) => {
+    const response = await route.fetch()
+    const data = (await response.json()) as YearAnswerOf & { year: { hero: { line: string } } }
+    const year = new URL(route.request().url()).searchParams.get('year')
+    asked.push(year ?? '')
+    data.years = [2025, 2026]
+    if (year !== null) {
+      data.year.year = Number(year)
+      data.year.so_far = Number(year) === data.current_year
+      data.year.hero.line = `The line of ${year}.`
+    }
+    await route.fulfill({ response, json: data })
+  })
+  await page.goto(`${core.origin}/#/stats/year/2025`)
+  await expect(page.getByTestId('year-line')).toHaveText('The line of 2025.')
+  await expect(page.getByTestId('year-hero').getByRole('heading')).toHaveText('2025')
+  expect(asked).toContain('2025')
+  const switchBox = page.getByTestId('year-switch')
+  await expect(switchBox.getByRole('link', { name: '2025' })).toHaveAttribute('aria-current', 'page')
+  await switchBox.getByRole('link', { name: '2026 so far' }).click()
+  await expect(page).toHaveURL(`${core.origin}/#/stats/year/2026`)
+  await expect(page.getByTestId('year-line')).toHaveText('The line of 2026.')
+  await expect(page.getByTestId('year-hero').getByRole('heading')).toHaveText(/^2026\s*so far$/)
+  expect(asked).toContain('2026')
+})
+
+test('a read that changes a counter counts on from the number shown, never from nothing again', async ({ page, core, api }) => {
+  let more = 0
+  await page.route('**/api/stats/year*', async (route) => {
+    const response = await route.fetch()
+    const data = (await response.json()) as YearAnswer
+    for (const counter of data.year?.hero.counters ?? []) counter.value += more
+    await route.fulfill({ response, json: data })
+  })
+  await page.goto(`${core.origin}/#/stats/year`)
+  const shown = page.getByTestId('year-counter').first().locator('b')
+  const value = page.getByTestId('year-counter').first().locator('.sr-only')
+  await expect.poll(async () => (await shown.textContent()) === (await value.textContent())?.trim(), { timeout: 8000 }).toBe(true)
+  const before = Number((await shown.textContent())?.replace(/,/g, ''))
+  expect(before).toBeGreaterThan(0)
+  // Every number the counter shows from now on is kept.
+  await shown.evaluate((element) => {
+    const seen: string[] = ((window as unknown as { seen: string[] }).seen = [])
+    new MutationObserver(() => seen.push(element.textContent ?? '')).observe(element, { childList: true, characterData: true, subtree: true })
+  })
+  more = 97
+  await api.put('/api/settings', { risk_acknowledged: true }) // the core tells the pages of a change, and they read again
+  const after = (before + 97).toLocaleString('en-US')
+  await expect(value).toHaveText(after) // read again
+  await expect(shown).toHaveText(after, { timeout: 8000 })
+  const seen = (await page.evaluate(() => (window as unknown as { seen: string[] }).seen)).map((text) => Number(text.replace(/,/g, '')))
+  expect(seen.length).toBeGreaterThan(0)
+  expect(Math.min(...seen), `the numbers shown: ${seen.join(', ')}`).toBeGreaterThanOrEqual(before)
+})
+
+test('a picture that cannot be had leaves a sign, never a broken image', async ({ page, core }) => {
+  await changeAnswer<YearAnswerOf>(page, '/api/stats/year', (data) => {
+    const at = `/api/art/${'0'.repeat(32)}`
+    data.year!.hero.character = { name: data.year!.hero.character?.name ?? 'Sandrone', picture: at }
+    for (const card of data.year!.cards) card.faces = [at, '/api/icon/nothing-here.png']
+  })
+  await page.goto(`${core.origin}/#/stats/year`)
+  await expect(page.getByTestId('year-card').first()).toBeVisible()
+  await page.waitForTimeout(800) // the pictures have been asked for and have failed
+  expect(await shownBroken(page.getByTestId('year-stage'))).toEqual([])
+  await expect(page.getByTestId('year-portrait').locator('.sign')).toBeVisible()
+  await expect(page.getByTestId('year-card').first().locator('.yr-face .sign').first()).toBeVisible()
+})
+
+test('the dust and the animations run while the tab is open and stop when the document is hidden', async ({ page, core }) => {
+  await page.goto(`${core.origin}/#/stats/year`)
+  const dust = page.getByTestId('year-dust')
+  await expect(dust).toHaveAttribute('data-running', 'true')
+  const running = () =>
+    page.getByTestId('year-stage').evaluate((stage) => stage.getAnimations({ subtree: true }).filter((one) => one.playState === 'running').length)
+  expect(await running()).toBeGreaterThan(3)
+  const hide = (hidden: boolean) =>
+    page.evaluate((value) => {
+      Object.defineProperty(document, 'hidden', { configurable: true, get: () => value })
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => (value ? 'hidden' : 'visible') })
+      document.dispatchEvent(new Event('visibilitychange'))
+    }, hidden)
+  await hide(true)
+  await expect(dust).toHaveAttribute('data-running', 'false')
+  await expect(page.getByTestId('year-stage')).toHaveAttribute('data-paused', '')
+  expect(await running()).toBe(0)
+  await hide(false)
+  await expect(dust).toHaveAttribute('data-running', 'true')
+  await expect(page.getByTestId('year-stage')).not.toHaveAttribute('data-paused', '')
+  expect(await running()).toBeGreaterThan(3)
+  // Leaving the tab ends the dust for good.
+  await page.getByRole('navigation', { name: 'Stats pages' }).getByRole('link', { name: 'Overview' }).click()
+  await expect(page.getByTestId('year-stage')).toHaveCount(0)
+})
+
+test('with reduce motion on nothing moves and everything shows at once', async ({ page, core }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto(`${core.origin}/#/stats/year`)
+  const stage = page.getByTestId('year-stage')
+  await expect(stage).toBeVisible()
+  await page.waitForTimeout(400) // the page's own fade-in has ended
+  expect(await stage.evaluate((element) => element.getAnimations({ subtree: true }).filter((one) => one.playState === 'running').length)).toBe(0)
+  await expect(page.getByTestId('year-dust')).toHaveAttribute('data-running', 'false')
+  // Every card shows, even those below the fold, and the counters hold their numbers.
+  const dim = await page.getByTestId('year-card').evaluateAll((cards) => cards.filter((card) => getComputedStyle(card).opacity !== '1').length)
+  expect(dim).toBe(0)
+  const counters = await page.getByTestId('year-counter').locator('b').allTextContents()
+  expect(counters.every((text) => text !== '0')).toBe(true)
+})
+
+// ---------- The Wrapped picture (the Months and Wrapped design, 6.4)
+
+/** A PNG's width and height, as its header gives them; null for bytes that are no PNG. */
+function pngSize(bytes: Buffer): [number, number] | null {
+  if (!bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return null
+  return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)]
+}
+
+test('with no window, each Save button downloads the poster as a PNG of its size, named for the year', async ({ page, core }) => {
+  // The browser tests' core has no window (--no-shell): it answers 409, and the page downloads the picture itself.
+  await page.goto(`${core.origin}/#/stats/year`)
+  for (const [button, name, size] of [
+    ['year-save-story', 'Guild Board Wrapped 2026 Story.png', [1080, 1920]],
+    ['year-save-wide', 'Guild Board Wrapped 2026 Wide.png', [2560, 1440]],
+  ] as const) {
+    const coming = page.waitForEvent('download')
+    await page.getByTestId(button).click()
+    const download = await coming
+    expect(download.suggestedFilename()).toBe(name)
+    expect(pngSize(readFileSync(await download.path()))).toEqual(size)
+  }
+  await expect(page.getByTestId('year-save-note')).toHaveText('')
+})
+
+test('with a window, the PNG goes to the core under its name and the page says where to choose the place', async ({ page, core }) => {
+  const sent: { type: string | null; name: string | null; size: [number, number] | null }[] = []
+  await page.route('**/api/stats/year/picture*', async (route) => {
+    const request = route.request()
+    sent.push({
+      type: await request.headerValue('content-type'),
+      name: new URL(request.url()).searchParams.get('name'),
+      size: pngSize(request.postDataBuffer() ?? Buffer.alloc(0)),
+    })
+    await route.fulfill({ json: { opened: true } })
+  })
+  let downloads = 0
+  page.on('download', () => {
+    downloads += 1
+  })
+  await page.goto(`${core.origin}/#/stats/year`)
+  await page.getByTestId('year-save-wide').click()
+  await expect(page.getByTestId('year-save-note')).toHaveText('Choose where to save the picture in the Guild Board window.')
+  expect(sent).toEqual([{ type: 'image/png', name: 'Guild Board Wrapped 2026 Wide.png', size: [2560, 1440] }])
+  expect(downloads).toBe(0)
+})
+
+test('a picture the core refuses says why, and nothing downloads', async ({ page, core }) => {
+  await page.route('**/api/stats/year/picture*', (route) => route.fulfill({ status: 413, json: { error: 'This picture is too large to save.' } }))
+  let downloads = 0
+  page.on('download', () => {
+    downloads += 1
+  })
+  await page.goto(`${core.origin}/#/stats/year`)
+  await page.getByTestId('year-save-story').click()
+  await expect(page.getByTestId('year-save-note')).toHaveText('This picture is too large to save.')
+  expect(downloads).toBe(0)
+})
+
+test('the poster draws the character of the year from the art cache, and the sign where the picture cannot be had', async ({ page, core }) => {
+  const art = `/api/art/${'0'.repeat(32)}`
+  await changeAnswer<YearAnswerOf>(page, '/api/stats/year', (data) => {
+    data.year!.poster.character = { name: 'Sandrone', picture: art }
+  })
+  const asked: string[] = []
+  let shown = true
+  const tall = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAIAAAAW4yFwAAAAEElEQVR4nGP4z8DAwMAAAAQAAf/qPnqGAAAAAElFTkSuQmCC'
+  await page.route('**/api/art/**', (route) => {
+    asked.push(new URL(route.request().url()).pathname)
+    return shown
+      ? route.fulfill({ contentType: 'image/png', body: Buffer.from(tall, 'base64') })
+      : route.fulfill({ status: 404, body: 'not here' })
+  })
+  await page.goto(`${core.origin}/#/stats/year`)
+  const saved = async (): Promise<Buffer> => {
+    const coming = page.waitForEvent('download')
+    await page.getByTestId('year-save-story').click()
+    return readFileSync(await (await coming).path())
+  }
+  // Drawn from the core's own address, so the canvas is not tainted and the PNG is made.
+  const withPicture = await saved()
+  expect(pngSize(withPicture)).toEqual([1080, 1920])
+  expect(asked).toEqual([art])
+  shown = false
+  await page.reload() // a page keeps a picture it has had: a new one asks again
+  const withSign = await saved()
+  expect(asked).toEqual([art, art])
+  expect(pngSize(withSign)).toEqual([1080, 1920])
+  expect(withSign.equals(withPicture)).toBe(false)
+  await expect(page.getByTestId('year-save-note')).toHaveText('')
+})
+
+test('the numbers count up as they come into view and end on their value', async ({ page, core }) => {
+  await page.goto(`${core.origin}/#/stats/year`)
+  const first = page.getByTestId('year-counter').first()
+  const value = (await first.locator('.sr-only').textContent())!.trim()
+  await expect(first.locator('b')).toHaveText(value, { timeout: 4000 })
+})
+
+for (const [width, height] of [[1640, 1100], [2560, 1400]] as const) {
+  test(`the cards of the Year tab leave no gap at ${width} wide`, async ({ page, core }) => {
+    await page.setViewportSize({ width, height })
+    await page.goto(`${core.origin}/#/stats/year`)
+    await expect(page.getByTestId('year-card').first()).toBeVisible()
+    await page.waitForTimeout(1500)
+    const faults = await page.getByTestId('year-cards').evaluate((grid) => {
+      const faults: string[] = []
+      const box = grid.getBoundingClientRect()
+      const cards = [...grid.children] as HTMLElement[]
+      const rows = new Map<number, HTMLElement[]>()
+      for (const card of cards) {
+        const top = Math.round(card.getBoundingClientRect().top)
+        const key = [...rows.keys()].find((other) => Math.abs(other - top) < 4) ?? top
+        rows.set(key, [...(rows.get(key) ?? []), card])
+      }
+      for (const [, row] of rows) {
+        const right = Math.max(...row.map((card) => card.getBoundingClientRect().right))
+        if (box.right - right > 2) faults.push(`a row stops ${Math.round(box.right - right)} px short of the right edge of the grid`)
+        const left = Math.min(...row.map((card) => card.getBoundingClientRect().left))
+        if (left - box.left > 2) faults.push('a row starts after the left edge of the grid')
+        const placed = row.slice().sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left)
+        for (let at = 1; at < placed.length; at += 1) {
+          const between = placed[at].getBoundingClientRect().left - placed[at - 1].getBoundingClientRect().right
+          if (between > 14) faults.push(`${Math.round(between)} px between two cards of a row`)
+        }
+        if (row.length === 1 && cards.length > 1) faults.push(`the card ${row[0].dataset.kind} stands alone in its row`)
+      }
+      // Nothing is blank at the foot of a card or around its words, and nothing runs past its card.
+      for (const card of cards) {
+        const style = getComputedStyle(card)
+        const inner = card.getBoundingClientRect().bottom - parseFloat(style.paddingBottom) - parseFloat(style.borderBottomWidth)
+        const lowest = Math.max(...[...card.children].map((child) => child.getBoundingClientRect().bottom))
+        if (inner - lowest > 14) faults.push(`${card.dataset.kind}: ${Math.round(inner - lowest)} px blank at its foot`)
+        const main = card.querySelector('.yr-main')!.getBoundingClientRect()
+        const text = [...card.querySelectorAll('.yr-big, .yr-say')].map((one) => one.getBoundingClientRect())
+        const free = main.height - (Math.max(...text.map((rect) => rect.bottom)) - Math.min(...text.map((rect) => rect.top)))
+        if (free > 40) faults.push(`${card.dataset.kind}: ${Math.round(free)} px blank around its words`)
+        if (card.scrollHeight > card.clientHeight + 1 || card.scrollWidth > card.clientWidth + 1) faults.push(`${card.dataset.kind}: its content runs past it`)
+      }
+      return faults
+    })
+    expect(faults).toEqual([])
+    // Nothing in the tab can be scrolled but the page: the night does not slide off its cards when one is brought into view.
+    const scrolled = await page.getByTestId('year-stage').evaluate((stage) => {
+      for (const card of stage.querySelectorAll('.yr-card')) card.scrollIntoView()
+      stage.querySelector('.yr-save')!.scrollIntoView()
+      return [stage.scrollTop, ...[...stage.querySelectorAll<HTMLElement>('.yr-hero, .yr-card')].map((one) => one.scrollTop)].filter((top) => top !== 0)
+    })
+    expect(scrolled).toEqual([])
+  })
+}

@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Awaitable, Callable, Sequence
 
 from guildboard.clock import Clock
@@ -56,12 +57,19 @@ class SyncRunner:
         clock: Clock,
         server: Callable[[], str],
         sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
+        *,
+        after_group: Callable[[str, datetime], None] | None = None,
+        before_fetch: Callable[[], Awaitable[None]] | None = None,
     ) -> None:
         self._source = source
+        # Awaited before the source is first asked for anything: a live source is made in a thread at the start.
+        self._before_fetch = before_fetch
         self._store = store
         self._clock = clock
         self._server = server
         self._sleep = sleep
+        # Told each group that was read and stored, with the time it was read: what is made of a group's answers follows.
+        self._after_group = after_group
 
     async def run(self, trigger: str, groups: Sequence[str]) -> RunResult:
         run_id = self._store.start_run(trigger, self._clock.now())
@@ -109,6 +117,7 @@ class SyncRunner:
                 else:
                     ok.append(group)
                     self._store.mark_group_ok(group, result.fetched_at)
+                    self._stored(group, result.fetched_at)
             if not failed:
                 outcome, state, kind, message = "ok", "ok", None, None
             else:
@@ -123,12 +132,23 @@ class SyncRunner:
             self._store.finish_run(run_id, self._clock.now(), outcome, kind, message)
         return RunResult(run_id, outcome, state, message, tuple(ok), tuple(failed))
 
+    def _stored(self, group: str, at: datetime) -> None:
+        """What follows a group that was stored. It never costs the group: a failure is logged, and the run goes on."""
+        if self._after_group is None:
+            return
+        try:
+            self._after_group(group, at)
+        except Exception:
+            log.exception("what follows the %s data could not be done", group)
+
     async def _fetch(self, group: str) -> FetchResult:
         # The diary asks for its history (three months) until it holds its primogems by source: on the first sync, and
         # once more for a database kept before the sources were, so that the next version's events estimate has the
         # last full months at once.
         first_time = group == "diary" and not self._store.latest_values(SOURCE_PREFIX)
         attempt = 0
+        if self._before_fetch is not None:
+            await self._before_fetch()
         while True:
             try:
                 return await self._source.fetch(group, now=self._clock.now(), first_time=first_time)

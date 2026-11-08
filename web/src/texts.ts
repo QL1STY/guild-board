@@ -22,7 +22,7 @@ export const HANDS_OFF = [
   "It never opens the game's process, reads or writes its memory, or hooks into it. All it learns about the game is whether it is running.",
   'It never sends keys or clicks to the game and never captures its screen.',
   "Your HoYoLAB login is kept only on this PC, encrypted for your Windows user. It is never written to a log and never sent anywhere but to HoYoverse. A wish-history link's key is kept in memory only, never on disk: for the import, and for up to a day after it to fetch new wishes.",
-  "It talks only to HoYoverse's own sites: hoyolab.com, hoyoverse.com and mihoyo.com. The exceptions are Paimon.moe's public achievement list on GitHub, downloaded only when you ask to check for new achievements, the check for a new version of Guild Board on GitHub, and, only after you sign in to an online account, Guild Board's own server.",
+  "It talks to HoYoverse's own sites: hoyolab.com, hoyoverse.com and mihoyo.com. Beyond them, it downloads Paimon.moe's public achievement list from GitHub only when you ask to check for new achievements, checks GitHub for a new version of Guild Board, and talks to Guild Board's own server only after you sign in to an online account. It may also download public pictures from other sites, such as the Endgame headers, and sends nothing of yours with them.",
   'It only reads your account, except to redeem a gift code that you typed, pasted or clicked to redeem, and to claim the daily check-in reward when you press Claim. It never posts, claims or changes anything else for you.',
   "It never changes anything else on your HoYoLAB account, not even the calculator's sync setting.",
 ]

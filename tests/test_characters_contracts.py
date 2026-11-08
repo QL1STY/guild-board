@@ -123,11 +123,15 @@ FIELDS = {
     records.BuildsRecord: ["builds", "prop_names"],
     records.CalcItemRecord: ["id", "name", "icon", "amount", "lacking"],
     records.CalculatorRecord: ["has_user_info", "items", "targets"],
-    records.AbyssHalfRecord: ["chamber", "half", "stars", "characters", "enemies"],
-    records.StygianBossRecord: ["name", "advantage", "disadvantage", "team", "seconds"],
+    # The Characters plan's fields first, as they were; the Stats design's (3.4) follow, each with a default.
+    records.AbyssHalfRecord: ["chamber", "half", "stars", "characters", "enemies", "foes"],
+    records.StygianBossRecord: ["name", "advantage", "disadvantage", "team", "seconds", "icon", "level"],
     records.EndgameDetailRecord: [
         "abyss_stars", "abyss_halves", "abyss_ends", "theater_difficulty", "theater_acts", "theater_ends",
         "stygian_difficulty", "stygian_bosses", "stygian_ends",
+        "abyss_starts", "abyss_battles", "abyss_wins", "abyss_chambers", "abyss_ranks", "theater_starts", "theater_medals",
+        "theater_medal_count", "theater_flowers", "theater_seconds", "theater_ranks", "stygian_season", "stygian_starts",
+        "stygian_seconds", "stygian_medal", "stygian_next",
     ],
     records.CalendarDetailRecord: ["theater_text", "banners"],
     records.CalcTarget: ["character_id", "level", "weapon", "talents"],

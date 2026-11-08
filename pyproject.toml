@@ -1,33 +1,27 @@
 [project]
 name = "guildboard"
-version = "1.0.1"
+version = "2.0.0"
 description = "Personal Genshin Impact companion: backlog, stats, goals and pull planning."
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "genshin==1.7.31",
     "fastapi>=0.143,<0.144",
     "uvicorn>=0.54,<0.55",
-    "PySide6==6.11.2",
     "truststore>=0.10.5,<0.11",
+    "pillow>=11",
 ]
 
 [project.scripts]
 guildboard = "guildboard.__main__:main"
-
-[project.gui-scripts]
-guildboard-app = "guildboard.__main__:main_app"
-guildboard-tray = "guildboard.__main__:main_tray"
 
 [dependency-groups]
 dev = [
     "pytest>=9.1,<10",
     "pytest-asyncio>=1.4,<2",
     "httpx2>=2.13,<3",
-    "pytest-qt==4.5.0",
     "pytest-xdist>=3.6,<4",
 ]
 package = [
-    "pillow>=11",
     "pyinstaller>=6.16",
 ]
 

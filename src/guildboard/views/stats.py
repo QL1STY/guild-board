@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, timedelta, tzinfo
-from typing import Any, Sequence
+from typing import Any, Mapping, Sequence
 
 from guildboard.gameday import days_inclusive, game_day, week_start
 from guildboard.history import History
@@ -18,7 +18,7 @@ CHEST_KEYS = tuple(
     f"stats.chests.{rarity}" for rarity in ("common", "exquisite", "precious", "luxurious", "remarkable")
 )
 DAILY_COLUMNS_UP_TO = 45
-CALENDAR_WEEKS = 12
+CALENDAR_WEEKS = 53
 MONTHS_SHOWN = 6
 MONTH_NAMES = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 _PLAY_LIMITS = (30.0, 60.0, 120.0)
@@ -62,6 +62,16 @@ def longest_run(flags: Sequence[bool]) -> int:
         current = current + 1 if flag else 0
         best = max(best, current)
     return best
+
+
+def current_run(flags: Sequence[bool]) -> int:
+    """The run of played days that ends at the last flag, or at the one before it while the last day (today) is not
+    played yet."""
+    end = len(flags) - 1 if flags and flags[-1] else len(flags) - 2
+    run = 0
+    while end - run >= 0 and flags[end - run]:
+        run += 1
+    return run
 
 
 def _exploration(store: Store, first: date, today: date) -> dict[str, Any]:
@@ -118,7 +128,8 @@ def _columns(history: History, keys: Sequence[str], first: date, today: date) ->
 
 def _primogem_columns(days: Sequence[EarnedDay], last_import: str | None) -> dict[str, Any]:
     """Primogems earned, one column per game day, or per week past 45 days (the ledger design, section 5). An exact
-    column carries its groups; a column from the diary's old total is an estimate, apart from `after_gap`."""
+    column carries its groups; a day of neither the game's log nor the diary's detail is empty, and a week with some
+    such days is `after_gap`. Nothing is estimated from the diary's running total."""
     if len(days) <= DAILY_COLUMNS_UP_TO:
         unit = "day"
         columns = [_primogem_column(day.day, [day]) for day in days]
@@ -143,17 +154,16 @@ def _primogem_columns(days: Sequence[EarnedDay], last_import: str | None) -> dic
 
 
 def _primogem_column(start: date, days: Sequence[EarnedDay]) -> dict[str, Any]:
+    empty = [day.no_data for day in days]
     column: dict[str, Any] = {
         "label": start.isoformat(),
         "value": sum(day.value for day in days),
-        "no_data": all(day.no_data for day in days),
-        "after_gap": any(day.after_gap for day in days),
+        "no_data": all(empty),
+        "after_gap": any(empty) and not all(empty),  # some of the week's days have no record
     }
     exact = [day.groups for day in days if day.groups is not None]
     if exact:
         column["groups"] = {group: sum(groups[group] for groups in exact) for group in GROUPS}
-    if any(day.estimate for day in days):
-        column["estimate"] = True
     return column
 
 
@@ -168,7 +178,18 @@ def _calendar(history: History, today: date, server: str) -> dict[str, Any]:
         else:
             played = minutes.get(day, 0.0)
             cells.append({"day": day.isoformat(), "minutes": round(played), "level": play_level(played)})
-    return {"weeks": CALENDAR_WEEKS, "first_day": first.isoformat(), "cells": cells}
+    return {"weeks": CALENDAR_WEEKS, "first_day": first.isoformat(), "cells": cells, "run": _run(history, today, server)}
+
+
+def _run(history: History, today: date, server: str) -> dict[str, int]:
+    """The days played in a row up to today, and the longest run, over every game day from when tracking began. A day
+    is played when its minutes are above 0, as the calendar's cells count it."""
+    since = history.tracking_since()
+    if since is None or since > today:
+        return {"current": 0, "best": 0}
+    minutes = history.playtime_minutes(since, today, server)
+    flags = [minutes.get(day, 0.0) > 0 for day in days_inclusive(since, today)]
+    return {"current": current_run(flags), "best": longest_run(flags)}
 
 
 def _play_hours(history: History, first: date, today: date, tz: tzinfo | None) -> dict[str, Any]:
@@ -195,11 +216,11 @@ def _play_hours(history: History, first: date, today: date, tz: tzinfo | None) -
 def _primogems(store: Store, history: History, uid: int | None, server: str, today: date) -> dict[str, Any]:
     values = store.latest_values(MONTH_PREFIX)
     diary = {key[len(MONTH_PREFIX):]: int(value) for key, value in values.items()}
-    months = income.month_values(store, history, uid, server, diary, today, MONTHS_SHOWN)
+    months = income.month_values(store, uid, server, diary, today, MONTHS_SHOWN)
     current = months[-1][0] if months else None
     sources: list[dict[str, Any]] = []
     diary = store.latest_doc("diary")
-    exact = income.month_sources(store, history, uid, server, current, today) if current is not None else None
+    exact = income.month_sources(store, uid, server, current, today) if current is not None else None
     if exact is not None:
         # The month's value is the game's own log and the diary's detail on their days: its sources are the same days'
         # groups, so that they add up to it (the diary's own sources are of its own total).
@@ -217,35 +238,42 @@ def _primogems(store: Store, history: History, uid: int | None, server: str, tod
     }
 
 
-def _day_text(iso_text: str, server: str) -> str:
+def day_text(iso_text: str, server: str) -> str:
+    """The game day of a moment, as "16 Oct"."""
     day = game_day(parse_iso(iso_text), server)
     return f"{day.day} {MONTH_NAMES[day.month - 1]}"
+
+
+def endgame_period(mode: Mapping[str, Any], server: str) -> str:
+    """An endgame mode's period, from its summary: the season's name, else its game days ("16 Sep to 15 Oct")."""
+    if mode.get("period_label"):
+        return str(mode["period_label"])
+    if mode.get("period_start") and mode.get("period_end"):
+        return f"{day_text(mode['period_start'], server)} to {day_text(mode['period_end'], server)}"
+    return ""
+
+
+def endgame_best(store: Store, mode: str) -> str:
+    """The best a mode was ever read at, from the points history ("36 stars"); "" when it never was."""
+    key = ENDGAME_KEYS.get(mode)
+    best = store.max_value(key) if key else None
+    return _BEST_TEXT[mode].format(int(best)) if best is not None and mode in _BEST_TEXT else ""
 
 
 def _endgame(store: Store, server: str) -> list[dict[str, Any]]:
     doc = store.latest_doc("endgame")
     if doc is None:
         return []
-    rows = []
-    for mode in doc[1]["modes"]:
-        if mode["period_label"]:
-            period = mode["period_label"]
-        elif mode["period_start"] and mode["period_end"]:
-            period = f"{_day_text(mode['period_start'], server)} to {_day_text(mode['period_end'], server)}"
-        else:
-            period = ""
-        key = ENDGAME_KEYS.get(mode["mode"])
-        best = store.max_value(key) if key else None
-        rows.append(
-            {
-                "mode": mode["mode"],
-                "label": mode["label"],
-                "result": mode["result_text"],
-                "period": period,
-                "best": _BEST_TEXT[mode["mode"]].format(int(best)) if best is not None else "",
-            }
-        )
-    return rows
+    return [
+        {
+            "mode": mode["mode"],
+            "label": mode["label"],
+            "result": mode["result_text"],
+            "period": endgame_period(mode, server),
+            "best": endgame_best(store, mode["mode"]),
+        }
+        for mode in doc[1]["modes"]
+    ]
 
 
 def build_stats(
@@ -288,9 +316,9 @@ def build_stats(
     )
     active = history.daily_change(["stats.days_active"], first, today)
     played = [day.delta > 0 or minutes.get(day.day, 0.0) > 0 for day in active]
-    earned = income.earned_days(store, history, uid, server, first, today)
+    earned = income.earned_days(store, uid, server, first, today)
     earned_before = (
-        sum(day.value for day in income.earned_days(store, history, uid, server, previous_first, previous_last))
+        sum(day.value for day in income.earned_days(store, uid, server, previous_first, previous_last))
         if compare else None
     )
     earned_total = sum(day.value for day in earned)

@@ -40,3 +40,18 @@ def test_every_shipped_item_is_valid():
     for items in json.loads(text).values():
         read_items(items)
     assert ChangeItem  # the type is public
+
+
+def test_the_next_release_tells_of_the_new_stats_and_of_the_pictures_from_outside_hoyoverse():
+    notes = load_changes()
+    newest = next(iter(notes))
+    titles = [item["title"] for item in notes[newest]]
+    # The window comes first, as the headline of 2.0.0; the earlier, unreleased entry's five follow it in their order.
+    assert titles[0] == "A smoother window"
+    assert titles[1:6] == ["A fuller Overview", "The Endgame card", "Months", "The Year", "Public pictures"]
+    # The one-time note of the Stats design, section 1, word for word.
+    picture = next(item for item in notes[newest] if item["title"] == "Public pictures")
+    assert picture["text"] == (
+        "Guild Board now also downloads public pictures from outside HoYoverse, such as the Endgame headers. "
+        "Nothing of yours is sent with them."
+    )

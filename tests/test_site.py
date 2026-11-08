@@ -37,6 +37,42 @@ def _page() -> Page:
     return page
 
 
+class Links(HTMLParser):
+    """Each link of the page with its words, and every control or link found inside a link."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.links: list[dict[str, str]] = []
+        self.inside: list[str] = []
+        self._open: dict[str, str] | None = None
+
+    def handle_starttag(self, tag, attrs):
+        if self._open is not None and tag in {"a", "button", "input", "select", "textarea", "summary"}:
+            self.inside.append(tag)
+        if tag == "a":
+            named = dict(attrs)
+            self._open = {"href": named.get("href") or "", "class": named.get("class") or "", "text": ""}
+            self.links.append(self._open)
+
+    def handle_endtag(self, tag):
+        if tag == "a":
+            self._open = None
+
+    def handle_data(self, data):
+        if self._open is not None:
+            self._open["text"] += data
+
+
+def _links() -> Links:
+    links = Links()
+    links.feed(HTML)
+    return links
+
+
+def _words(html: str) -> str:
+    return " ".join(re.sub(r"<[^>]+>", " ", html).split())
+
+
 def test_the_site_is_three_files_and_holds_no_picture():
     assert sorted(path.name for path in SITE.iterdir()) == ["index.html", "site.css", "site.js"]
 
@@ -126,11 +162,104 @@ def test_the_footer_links_go_to_real_files_of_the_source_repository():
     assert f"{SOURCE}/blob/main/tests/test_handsoff.py" in HTML and (ROOT / "tests" / "test_handsoff.py").is_file()
 
 
-def test_the_page_names_each_screenshot_the_tabs_read_and_the_demo():
+def test_the_page_names_each_screenshot_the_tabs_read():
     page = _page()
     sources = [attrs["data-src"] for tag, attrs in page.tags if tag == "button" and "data-src" in attrs]
-    assert sources == [f"shots/{name}.png" for name in ("board", "achievements", "pulls", "stats", "overlay")]
-    assert ("a", {"class": "btn", "href": "demo/"}) in page.tags
+    assert sources == [f"shots/{name}.png" for name in ("board", "achievements", "pulls", "stats", "year", "overlay")]
+
+
+def test_the_tabs_fill_one_row_and_wrap_only_into_even_rows():
+    tabs = len(re.findall(r'<button class="tab" role="tab"', HTML))
+    assert tabs == 6
+    # Six equal columns where the row has room for them, and narrower an even split of them, so that no tab is left alone on
+    # a row of its own. Narrower still, the tabs are one row of chips that scrolls (the test of a narrow screen, below).
+    columns = [int(count) for count in re.findall(r"\.tabs \{[^}]*grid-template-columns: repeat\((\d+), minmax\(0, 1fr\)\)", CSS)]
+    assert columns[0] == tabs and len(columns) > 1
+    assert all(tabs % count == 0 for count in columns), columns
+
+
+SCREEN = (
+    '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/>'
+    '<path d="M8 21h8M12 17v4"/></svg>'
+)
+
+
+def test_the_demo_opens_from_two_gold_buttons_of_one_look():
+    links = _links()
+    to_demo = [(link["class"], " ".join(link["text"].split())) for link in links.links if link["href"] == "demo/"]
+    assert to_demo == [
+        ("btn gold", "Try the live demo In your browser, nothing to install"),
+        ("btn gold", "Open the full demo In your browser, nothing to install"),
+    ]
+    # The widgets stay controls of their own: no link holds a button or another link.
+    assert links.inside == []
+    # Each has the small screen, which does not move, and the hero's stands beside Download for Windows.
+    assert HTML.count(SCREEN) == 2
+    assert not re.search(r"\.(ico|gold)\b[^{}]*\{[^}]*(animation|transition)", CSS)
+    pitch = HTML.split('<div class="pitch">', 1)[1].split('<div class="board"', 1)[0]
+    assert re.search(r'<div class="acts">\s*<a class="btn" href="[^"]+" data-release-link>Download for Windows</a>\s*<a class="btn gold" href="demo/">', pitch)
+
+
+def test_the_heros_board_is_the_apps_own_widgets_with_no_window_around_them():
+    hero = HTML.split('<section class="hero" id="top">', 1)[1].split('<section id="pages">', 1)[0]
+    assert not re.search(r'class="(demo|demo-bar|demo-body|demo-rail|strip)"', HTML), "no window frame and no strip"
+    assert not re.search(r"\.(demo|strip)\b", CSS)
+    board = hero.split('<div class="board" role="group" aria-label="A working sample of the Board, on a made-up account">', 1)[1]
+    # Headed as the app heads a widget: its sign, its name and its meta.
+    heads = [_words(head) for head in re.findall(r'<div class="w-head">(.*?)</div>', board, flags=re.S)]
+    assert heads == ["Daily check-in 11 of 30", "Resin Read at 13:16", "Commissions 1 of 3 today"]
+    assert board.count('<div class="w-head"><svg class="sign"') == 3
+    # Resin's ring as the app draws it: 77 of 200 from the top, cut into ten parts of 20.
+    ring = re.search(r'<svg class="ring"[^>]*>(.*?)</svg>', board, flags=re.S).group(1)
+    assert ring.count('pathLength="200"') == 3 and 'stroke-dasharray="77 200"' in ring and 'stroke-dasharray="1.6 18.4"' in ring
+    # The month's days come from one tile, the check-in claims with one button, and the commissions tick.
+    assert re.search(r'<template id="day"><li class="day">', HTML)
+    assert re.search(r'<button class="btn" id="claim" type="button">Claim</button>', board)
+    assert re.findall(r'<button class="task" type="button" aria-pressed="(true|false)">', board) == ["true", "false", "false"]
+    assert "for (var i = 1; i <= 30; i += 1)" in JS, "the whole month, as the app shows it"
+
+
+def test_the_check_in_lays_itself_out_as_the_app_and_keeps_its_words_whole_on_a_small_phone():
+    # The month stands beside today's reward from a check-in 500 wide, the app's own threshold (web/src/styles/checkin.css).
+    assert re.search(r"@container \(min-width: 500px\) \{\s*\.checkin \{", CSS) and "420" not in CSS
+    # Resin's ring shrinks with a narrow card, on a small phone or two cards to a row, so that how long until full fits beside
+    # it, and a day's reward is left out of a tile too narrow to hold it.
+    assert re.search(r"\n\.ring-wrap \{[^}]*width: min\(116px, 40cqi\)", CSS)
+    assert re.search(r"\.days \{[^}]*container: month / inline-size", CSS)
+    assert re.search(r"@container month \(max-width: \d+px\) \{ \.day-x \{ display: none; \} \}", CSS)
+
+
+def test_buttons_in_a_row_are_one_size():
+    acts = re.search(r"\n\.acts \{([^}]*)\}", CSS).group(1)
+    assert "display: grid" in acts and "grid-auto-flow: column" in acts
+    assert "grid-auto-columns: 1fr" in acts and "grid-auto-rows: 1fr" in acts, "one width and one height, in a row or stacked"
+
+
+READS = [
+    "Your account summary, exploration, resin and Real-Time Notes",
+    "Your characters, builds, materials and endgame results",
+    "Your wishes and primogem history, with a read-only key",
+    "The current banners, events and your check-in month",
+]
+NEVER = [
+    "Open the game's process, read its memory or hook into it",
+    "Send keys or clicks to the game, or capture its screen",
+    "Change anything in the game's folder",
+    "Send your HoYoLAB login anywhere but HoYoverse",
+]
+
+
+def test_what_it_reads_and_never_does_are_two_cards_with_their_words_as_they_were():
+    reads = re.search(r'<section id="reads">(.*?)</section>', HTML, flags=re.S).group(1)
+    cards = re.findall(r'<div class="card( never)?">\s*<h3 class="card-head">(.*?)</h3>(.*?)</ul>', reads, flags=re.S)
+    assert [(never, head) for never, head, _ in cards] == [("", "What it reads"), (" never", "What it never does")]
+    for (_, _, body), words in zip(cards, (READS, NEVER)):
+        items = re.findall(r"<li>(.*?)</li>", body, flags=re.S)
+        assert [_words(item) for item in items] == words
+        assert all(item.startswith('<span class="dot" aria-hidden="true"><svg') for item in items)
+    assert re.search(r'</div>\s*</div>\s*<p class="lead">A test in the source code fails if any of this stops being true\.', reads)
+    phone = _block(CSS, "@media (max-width: 860px) {")
+    assert re.search(r"(^|\s)[^{}]*\.two[^{}]*\{ grid-template-columns: minmax\(0, 1fr\);", phone), "the cards stack on a phone"
 
 
 def _block(css: str, opening: str) -> str:
@@ -220,6 +349,56 @@ def test_a_release_without_an_installer_gives_nothing(release):
     assert _facts(release) is None
 
 
+# ------------------------------------------------------------------------------------------------- the rail's marker
+# The rail's items, in its order: Board (#top), What it does, What it reads, Get it and Questions (#faq). Each case gives
+# the sections' tops from the top of the window, how far the page is scrolled, the window's height and the page's.
+def _marked(*cases: tuple[list[float], float, float, float]) -> list[int]:
+    program = (
+        "const s = require(process.argv[1]);"
+        "console.log(JSON.stringify(JSON.parse(process.argv[2]).map((c) => s.markedSection(c[0], c[1], c[2], c[3]))))"
+    )
+    done = subprocess.run(["node", "-e", program, str(SITE / "site.js"), json.dumps(cases)], capture_output=True, text=True, timeout=60)
+    assert done.returncode == 0, done.stderr
+    return json.loads(done.stdout)
+
+
+@needs_node
+def test_the_rail_marks_board_at_the_very_top_and_questions_at_the_very_bottom():
+    assert _marked(
+        # A tall window at the top of the page: the second section's top is above the line a third of the way down (466 of
+        # 1,400) already, and Board is marked all the same.
+        ([40, 450, 1500, 2400, 3300], 0, 1400, 4400),
+        # A page that does not scroll at all is at its top.
+        ([40, 300, 500, 700, 900], 0, 1400, 1300),
+        # At the bottom the last section is too short for its top to reach the line, and it is marked all the same, also
+        # where the page stops a fraction short of its end, as a zoomed page does.
+        ([-2960, -2550, -1500, -600, 300], 3000, 1400, 4400),
+        ([-2959.5, -2549.5, -1499.5, -599.5, 300.5], 2999.5, 1400, 4400),
+    ) == [0, 0, 4, 4]
+
+
+@needs_node
+def test_in_between_the_rail_marks_the_last_section_whose_top_has_passed_a_third_of_the_window():
+    assert _marked(
+        ([-500, 380, 1400, 2300, 3200], 540, 1100, 5000),  # the line is at 366: only Board's top has passed it
+        ([-900, 300, 1000, 1900, 2800], 940, 1100, 5000),
+        ([-900, -500, 366, 1300, 2200], 1500, 1100, 5000),  # a top on the line has passed it
+        ([-3000, -2600, -1700, -800, 400], 3600, 1100, 5000),  # Questions has not reached the line yet
+    ) == [0, 1, 2, 3]
+
+
+def test_the_rail_follows_the_page_with_one_scroll_handler_and_marks_a_clicked_item_at_once():
+    nav = re.search(r'<nav aria-label="Sections">(.*?)</nav>', HTML, flags=re.S).group(1)
+    assert re.findall(r'href="#([\w-]+)"', nav) == ["top", "pages", "reads", "get", "faq"]
+    ids = [attrs.get("id") for _, attrs in _page().tags]
+    assert all(ids.count(section) == 1 for section in ("top", "pages", "reads", "get", "faq"))
+    assert '<a href="#top" aria-current="true">Board</a>' in nav, "marked before the script runs"
+    assert "IntersectionObserver" not in JS
+    assert "requestAnimationFrame(look)" in JS and "addEventListener('scroll'" in JS and "aria-current" in JS
+    # The window's height as it is now: where a phone's toolbar folds away while the page scrolls, the bottom is still found.
+    assert "window.innerHeight" in JS and "clientHeight" not in JS
+
+
 def test_the_assembled_site_holds_the_page_and_the_fonts_and_refuses_a_folder_that_holds_files(tmp_path):
     spec = importlib.util.spec_from_file_location("assemble_site", ROOT / "tools" / "assemble-site.py")
     tool = importlib.util.module_from_spec(spec)
@@ -247,8 +426,9 @@ def test_the_screenshots_are_taken_from_the_real_interface_at_one_size_and_kept_
     spec = SPEC.read_text(encoding="utf-8")
     package = json.loads((ROOT / "web" / "package.json").read_text(encoding="utf-8"))["scripts"]
     assert package["screens:site"].endswith("--grep @site") and "@site" in package["screens"].split("--grep-invert")[1]
-    assert "{ width: 1640, height: 1000 }" in spec and spec.count("setViewportSize") == 1
-    assert re.findall(r"take\(page, '(\w+)'\)", spec) == ["board", "achievements", "pulls", "stats", "overlay"]
+    assert "{ width: 1640, height: 1000 }" in spec and spec.count("setViewportSize") == 2
+    assert "{ width: 1640, height: 680 }" in spec  # the overlay's own: the frame it keeps its widgets in
+    assert re.findall(r"take\(page, '(\w+)'\)", spec) == ["board", "achievements", "pulls", "stats", "year", "overlay"]
     assert "from './out.ts'" in spec and "path.join(SCREENS_OUT, 'site')" in spec
     # The pictures of the demo's lists (the art cache's, and the icon cache's by the recording's icons.json) are read from the official
     # addresses by the test alone.

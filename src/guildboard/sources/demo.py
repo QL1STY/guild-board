@@ -48,7 +48,8 @@ from guildboard.timers.timers import Timers
 
 DEMO_SERVER = "os_euro"
 DEMO_ACCOUNT = GameAccount(uid=700000001, nickname="Traveler", server=DEMO_SERVER, level=60)
-EPOCH = date(2026, 6, 1)
+EPOCH = date(2026, 1, 1)  # the counters move from here on, so that every day of the demo's history moves them
+LEGACY_EPOCH = date(2026, 6, 1)  # where the counters' bases below were set: a counter's value from then on is what it was
 SNEZHNAYA_OPENS = date(2026, 8, 12)
 ACTIVE_BY = 0.6  # the fraction of a game day by which that day's activity is complete
 _SEED = 7100
@@ -90,7 +91,8 @@ _REGIONS = (
     (7, 6, "Enkanomiya", 100.0, 0.0, "", 0, ()),
     (8, 0, "Sumeru", 91.8, 0.012, "Tree of Dreams", 50,
      (("Girdle of the Sands", -4.6), ("Desert of Hadramaveth", 3.6), ("Gavireh Lajavard", 8.2), ("Rainforest", 8.2))),
-    (9, 0, "Fontaine", 100.0, 0.0, "Fountain of Lucine", 50, (("Morte Region", 0.0), ("Belleau Region", 0.0))),
+    # Fontaine was finished in early May (its percent at the epoch is over 100 and capped): the Year's region at 100%.
+    (9, 0, "Fontaine", 100.5, 0.02, "Fountain of Lucine", 50, (("Morte Region", 0.0), ("Belleau Region", 0.0))),
     (10, 9, "Sea of Bygone Eras", 100.0, 0.0, "", 0, ()),
     (11, 0, "Natlan", 73.0, 0.05, "Reputation", 7,
      (("Ochkanatlan", -13.0), ("Atocpan", 3.0), ("Tezcatepetonco Range", 12.0), ("Ancient Sacred Mountain", 20.0))),
@@ -170,12 +172,17 @@ def _share(now: datetime, day: date) -> float:
 
 
 def _snapshot(now: datetime) -> tuple[date, dict[str, float]]:
+    """The day and what the account gained since LEGACY_EPOCH (before it, minus what it gained from the day to then), which
+    the counters' bases are added to: their values from June on are what they always were, and the months before move too."""
     day = game_day(now, DEMO_SERVER)
     if day < EPOCH:
-        return EPOCH, dict(_ZERO)
-    totals = dict(_totals_before(day))
-    _add(totals, day, _share(now, day))
-    return day, totals
+        day = EPOCH
+        totals = dict(_ZERO)
+    else:
+        totals = dict(_totals_before(day))
+        _add(totals, day, _share(now, day))
+    legacy = dict(_totals_before(LEGACY_EPOCH))
+    return day, {name: value - legacy[name] for name, value in totals.items()}
 
 
 def _regions(day: date, totals: Mapping[str, float]) -> list[Region]:
@@ -205,7 +212,7 @@ def _overview(now: datetime) -> OverviewRecord:
         "characters": 96,
         "waypoints": 498 + int(totals["explore_new"] * 0.4),
         "domains": 68 + (2 if day >= SNEZHNAYA_OPENS else 0),
-        "friendship10": 56 + (day - EPOCH).days // 20,
+        "friendship10": 56 + (day - LEGACY_EPOCH).days // 20,
         "chests.common": 2100 + totals["c0"],
         "chests.exquisite": 1500 + totals["c1"],
         "chests.precious": 520 + totals["c2"],
@@ -274,7 +281,7 @@ def _characters(now: datetime) -> CharactersRecord:
     day = max(EPOCH, game_day(now, DEMO_SERVER))
     # The Characters pages' own: fifteen owned characters as the mockups have them, and what the calculator says for the focus.
     return CharactersRecord(
-        owned=96, level90=40 + (day - EPOCH).days // 30, builds=characters_demo.demo_builds(),
+        owned=96, level90=40 + (day - LEGACY_EPOCH).days // 30, builds=characters_demo.demo_builds(),
         calculator=characters_demo.demo_calculator(),
     )
 
@@ -284,47 +291,35 @@ def _shift_month(year: int, month: int, delta: int) -> tuple[int, int]:
     return index // 12, index % 12 + 1
 
 
-def _utc_text(moment: datetime) -> str:
-    return moment.astimezone(timezone.utc).isoformat(timespec="seconds")
-
-
-def _endgame(now: datetime) -> EndgameRecord:
-    tz = server_tz(DEMO_SERVER)
-    local = now.astimezone(tz)
-    # Spiral Abyss periods run from the 16th to the 15th.
-    year, month = (local.year, local.month) if local.day >= 16 else _shift_month(local.year, local.month, -1)
-    abyss_start = datetime(year, month, 16, 4, tzinfo=tz)
-    end_year, end_month = _shift_month(year, month, 1)
-    abyss_end = datetime(end_year, end_month, 16, 4, tzinfo=tz) - timedelta(seconds=1)
-    stars = 33 + (year * 12 + month) % 4
-    month_start = datetime(local.year, local.month, 1, 4, tzinfo=tz)
-    next_year, next_month = _shift_month(local.year, local.month, 1)
-    month_end = datetime(next_year, next_month, 1, 4, tzinfo=tz) - timedelta(seconds=1)
-    act = 8 + (local.year * 12 + local.month) % 3
-    difficulty = 4 + local.month % 2
+def _endgame(now: datetime, anchor: datetime | None = None) -> EndgameRecord:
+    """The three modes' summaries, which say what the detail says: the stars, the act and the difficulty are the detail's own,
+    and the cycles turn at the game day's reset (04:00 on the 16th for the Abyss, on the 1st for the others). `anchor` is the
+    core's now, whose cycles are the mockup's (characters/demo, `_endgame_detail`); `now` itself when None."""
+    detail = characters_demo.demo_endgame_detail(now, DEMO_SERVER, anchor)
     return EndgameRecord(
         (
             EndgameMode(
-                "abyss", "Spiral Abyss", True, f"{stars} of 36 stars", float(stars),
-                _utc_text(abyss_start), _utc_text(abyss_end), "",
+                "abyss", "Spiral Abyss", True, f"{detail.abyss_stars} of 36 stars", float(detail.abyss_stars),
+                detail.abyss_starts or "", detail.abyss_ends or "", "",
             ),
             EndgameMode(
-                "theater", "Imaginarium Theater", True, f"Act {act} reached", float(act),
-                _utc_text(month_start), _utc_text(month_end), "",
+                "theater", "Imaginarium Theater", True, f"Act {detail.theater_acts} reached", float(detail.theater_acts),
+                detail.theater_starts or "", detail.theater_ends or "", "",
             ),
             EndgameMode(
-                "stygian", "Stygian Onslaught", True, f"Difficulty {difficulty} cleared", float(difficulty),
-                _utc_text(month_start), _utc_text(month_end), f"Season {local.month}",
+                "stygian", "Stygian Onslaught", True, f"Difficulty {detail.stygian_difficulty} cleared",
+                float(detail.stygian_difficulty or 0), detail.stygian_starts or "", detail.stygian_ends or "",
+                detail.stygian_season,
             ),
         ),
-        detail=characters_demo.demo_endgame_detail(now, DEMO_SERVER),
+        detail=detail,
     )
 
 
 def _month_primogems(year: int, month: int, now: datetime) -> int:
     today = game_day(now, DEMO_SERVER)
     next_year, next_month = _shift_month(year, month, 1)
-    first = max(date(year, month, 1), EPOCH)
+    first = date(year, month, 1)
     last = min(date(next_year, next_month, 1) - timedelta(days=1), today)
     total = 0
     for day in days_inclusive(first, last):
@@ -355,7 +350,9 @@ def _diary(now: datetime, first_time: bool) -> DiaryRecord:
     return DiaryRecord(tuple(months), entries, DEMO_ACCOUNT.uid)
 
 
-def build(group: str, now: datetime, first_time: bool = False) -> Record:
+def build(group: str, now: datetime, first_time: bool = False, anchor: datetime | None = None) -> Record:
+    """The record a sync of `group` reads at `now`. `anchor` is the core's now when the record is of a past sync (the history
+    the demo starts with): the endgame's cycles are told from the one that holds it."""
     if group == "overview":
         return _overview(now)
     if group == "notes":
@@ -363,7 +360,7 @@ def build(group: str, now: datetime, first_time: bool = False) -> Record:
     if group == "characters":
         return _characters(now)
     if group == "endgame":
-        return _endgame(now)
+        return _endgame(now, anchor)
     if group == "diary":
         return _diary(now, first_time)
     if group == "calendar":
@@ -454,15 +451,26 @@ def seed_codes(store: Store, now: datetime) -> None:
             store.put_gift_code(uid, code, result, primogems, "typed", now - timedelta(days=days))
 
 
-def seed_history(store: Store, now: datetime, days: int = 90) -> None:
-    """Fill the store as if Guild Board had run for the `days` game days before today.
+HISTORY_DAYS = 200  # at least the days the demo has been running: over six months, so the Stats calendar fills at any width
+
+
+def history_start(today: date, days: int = HISTORY_DAYS) -> date:
+    """The first game day of the demo's history: the second of the month `days` days before `today`, so that the first month is
+    nearly whole (the primogems are counted from the day before the first read, which stays in the month) and the first diary
+    read, three months, names the two before it."""
+    return (today - timedelta(days=days)).replace(day=2)
+
+
+def seed_history(store: Store, now: datetime, days: int = HISTORY_DAYS) -> None:
+    """Fill the store as if Guild Board had run for the game days before today, from `history_start`. The days before EPOCH
+    are played and synced like the others, but the counters did not move in them.
 
     One transaction: the history is written completely or not at all, and quickly.
     """
     today = game_day(now, DEMO_SERVER)
     first_diary = True
     with store.transaction():
-        for day in days_inclusive(max(EPOCH, today - timedelta(days=days)), today - timedelta(days=1)):
+        for day in days_inclusive(history_start(today, days), today - timedelta(days=1)):
             activity = _day(day)
             start = game_day_start(day, DEMO_SERVER)
             for offset, minutes in activity.sessions:
@@ -473,7 +481,7 @@ def seed_history(store: Store, now: datetime, days: int = 90) -> None:
             at = start + timedelta(hours=23)
             run_id = store.start_run("startup", at)
             for group in GROUPS:
-                record = build(group, at, first_time=first_diary and group == "diary")
+                record = build(group, at, first_time=first_diary and group == "diary", anchor=now)
                 result = FetchResult(group, at, (RawResponse(f"demo/{group}", asdict(record)),), record)
                 apply_result(store, run_id, result, DEMO_SERVER)
                 store.mark_group_ok(group, at)
@@ -493,6 +501,28 @@ def _done_by_rule(catalog: Catalog, stage: Stage) -> bool:
     return stage.order <= stage.group % (stages + 1)
 
 
+DEMO_TICK_EVERY = 22  # of the done stages, in order, one in this many was ticked one by one; the others came as an import brings them
+
+
+def _ticked_days(stage_ids: list[int], now: datetime) -> dict[int, datetime]:
+    """When each stage the demo's player ticked one by one was ticked: a made-up moment of a game day in one of the months the
+    demo's history covers, some months with more than others and none with none. The same for the same `now`; the months and
+    the year count these alone."""
+    today = game_day(now, DEMO_SERVER)
+    first = history_start(today)
+    months = sorted({(day.year, day.month) for day in days_inclusive(first, today - timedelta(days=1))})
+    rng = random.Random(_SEED + 5)
+    weights = [4 + (turn * 5) % 7 for turn in range(len(months))]
+    moments = {}
+    for stage_id in stage_ids:
+        year, month = rng.choices(months, weights)[0]
+        days = [day for day in days_inclusive(date(year, month, 1), date(year, month, 28) + timedelta(days=4))
+                if day.month == month and first <= day < today]
+        day = rng.choice(days)
+        moments[stage_id] = min(game_day_start(day, DEMO_SERVER) + timedelta(minutes=rng.randrange(14 * 60, 22 * 60)), now)
+    return moments
+
+
 def seed_achievements(store: Store, catalog: Catalog, now: datetime) -> None:
     """Made-up progress: most achievements done, the newest left, a few started, pinned and noted.
 
@@ -501,14 +531,15 @@ def seed_achievements(store: Store, catalog: Catalog, now: datetime) -> None:
     hilichurl = [stage.id for stage in catalog.group(_HILICHURL)]
     done = {stage.id for stage in catalog.stages if _done_by_rule(catalog, stage)} | set(hilichurl[:2])
     done -= {*hilichurl[2:], *_NOT_DONE, *DEMO_IN_PROGRESS}
+    ticked = _ticked_days(sorted(done - {*DEMO_PINNED, *DEMO_NOTES})[::DEMO_TICK_EVERY], now)
     rows = [
         ProgressRow(
             stage_id,
             "done" if stage_id in done else "in_progress" if stage_id in DEMO_IN_PROGRESS else "not_started",
-            now if stage_id in done else None,
+            ticked.get(stage_id, now) if stage_id in done else None,
             stage_id in DEMO_PINNED,
             DEMO_NOTES.get(stage_id, ""),
-            "demo",
+            "player" if stage_id in ticked else "demo",
             now,
         )
         for stage_id in sorted({*done, *DEMO_IN_PROGRESS, *DEMO_PINNED, *DEMO_NOTES})
@@ -600,14 +631,18 @@ DEMO_WEAPONS = {*DEMO_FOUR_WEAPONS, *DEMO_THREES, "Wolf's Gravestone"}
 FOUR_GAPS = (9, 10, 8)  # a 4★ every 8 to 10 wishes, counted again from each 5★
 DEMO_FOURS_AT = {"weapon": {10, 20}, "novice": {10}, "chronicled": set()}  # the runs whose 4★ fall where they are told
 # Each run of the demo's wishes: its pool, its wishes, the 5★ that ends it (None for none), and the server times of its
-# first and last wish. The character event's 5★ fall on the 77th and the 158th of its wishes.
+# first and last wish. The character event's 5★ fall on the 77th and the 158th of its wishes. Jean is February's one 5★, a
+# player's usual month before Guild Board ran (wishes only), and Qiqi falls an hour after Wolf's Gravestone on 15 August: the
+# Year's day of two five-stars.
 DEMO_RUNS = (
     ("novice", 20, None, "2026-05-16 18:00:00", "2026-05-16 18:19:00"),
     ("character", 77, "Skirk", "2026-05-16 19:00:00", "2026-06-24 20:30:00"),
-    ("character", 81, "Qiqi", "2026-06-25 19:00:00", "2026-09-02 21:00:00"),
+    ("character", 81, "Qiqi", "2026-06-25 19:00:00", "2026-08-15 21:00:00"),
     ("character", 61, None, "2026-09-03 19:00:00", "2026-10-12 21:30:00"),
+    ("standard", 58, "Jean", "2026-01-11 20:00:00", "2026-02-12 21:00:00"),
     ("standard", 76, "Wolf's Gravestone", "2026-05-20 20:00:00", "2026-08-15 20:00:00"),
-    ("standard", 44, None, "2026-08-16 20:00:00", "2026-10-10 20:00:00"),
+    ("standard", 34, "Diluc", "2026-08-16 20:00:00", "2026-10-05 20:00:00"),
+    ("standard", 10, None, "2026-10-06 20:00:00", "2026-10-10 20:00:00"),
     ("chronicled", 5, None, "2026-07-02 19:00:00", "2026-07-02 19:04:00"),
     ("weapon", 23, None, "2026-10-01 19:00:00", "2026-10-11 21:00:00"),
 )
@@ -682,8 +717,12 @@ def seed_wishes(store: Store, now: datetime) -> None:
         return
     uid = DEMO_ACCOUNT.uid
     draws = _demo_draws(_shift(now))
-    # The start of the window the run gives, the corrections' own: 180 days before it, as every wish it keeps is younger.
-    window = iso(now - timedelta(days=WINDOW_DAYS))
+    reach = now - timedelta(days=WINDOW_DAYS)
+    # A pool's window starts 180 days before the import, or at its oldest wish where that is older: the early standard wishes were
+    # kept by an import of an earlier day, from before Guild Board ran.
+    window = {
+        pool: iso(min([reach, *(moment for kind, _, _, _, moment in draws if kind == pool)])) for pool in ALL_POOLS
+    }
     about = DEMO_ABOUT + (game_day(now, DEMO_SERVER) - game_day(DEMO_PULLS_NOW, DEMO_SERVER))
     with store.transaction():
         run = store.start_wish_import(now)
@@ -695,7 +734,7 @@ def seed_wishes(store: Store, now: datetime) -> None:
             for n, (pool, gacha_type, name, rank, moment) in enumerate(draws, start=1)
         )
         store.finish_wish_import(run, now, "ok", uid, len(draws), 20, None, ALL_POOLS)
-        corrections = {pool: {"pity": 0, "guaranteed": False, "from": window} for pool in ALL_POOLS}
+        corrections = {pool: {"pity": 0, "guaranteed": False, "from": window[pool]} for pool in ALL_POOLS}
         # The made-up player has the Blessing of the Welkin Moon, and not the Gnostic Hymn.
         store.put_pulls_account(PullsAccountRow(uid, "Azurelight", "", 9840, 14, now, corrections, {}, welkin=True))
         store.add_wishlist(uid, "Citlali", "character", about, 1, now)

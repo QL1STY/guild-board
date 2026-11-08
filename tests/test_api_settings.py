@@ -110,12 +110,13 @@ def test_the_picture_quality_is_high_until_the_player_chooses_and_takes_only_its
         assert saved["picture_quality"] == "low", refused
 
 
-def test_smooth_animations_stay_off_until_the_player_turns_them_on(client, core):
-    assert client.get("/api/settings").json()["smooth_animations"] is False
-    assert client.put("/api/settings", json={"smooth_animations": True}).json()["smooth_animations"] is True
-    assert load_settings(core.paths.settings_path).smooth_animations is True
-    for refused in ("yes", 1, None):
-        assert client.put("/api/settings", json={"smooth_animations": refused}).json()["smooth_animations"] is True, refused
+def test_there_is_no_smooth_animations_setting_any_more(client, core):
+    # The Qt build's frame limit is gone with Qt: the window draws at the monitor's rate. A request that names the old key
+    # changes nothing and the setting is not offered.
+    assert "smooth_animations" not in client.get("/api/settings").json()
+    saved = client.put("/api/settings", json={"smooth_animations": True}).json()
+    assert "smooth_animations" not in saved
+    assert "smooth_animations" not in core.paths.settings_path.read_text(encoding="utf-8")
 
 
 def test_a_settings_change_is_an_event(client, core):

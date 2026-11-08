@@ -1,0 +1,335 @@
+/*
+ * The Months tab (the Months and Wrapped design, section 5, and its accepted layout, option A). A strip of months, the
+ * month's five tiles, then its parts in rows. monthsview.ts (layoutParts) chooses the rows from what each card can be,
+ * so that every row is filled whatever is missing, and the cards of a row are as tall as the tallest; what is inside a
+ * card spreads to fill it, so that no card has a blank strip under its last line. The calendar's cells stay square: its
+ * width follows the cell size the layout gives it (--cell). The sizes here are the ones monthsview.ts counts with.
+ */
+
+/* ---------- The strip of months ---------- */
+.mo-strip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0 16px;
+  margin-bottom: 10px;
+  padding: 2px 0 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.mo-year {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+}
+/* Years stand on the page's own background, where small text is in --ink (contrast.test.ts). */
+.mo-yr {
+  margin-right: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.mo-chip {
+  flex: none;
+  padding: 4px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out);
+}
+.mo-chip:hover {
+  border-color: var(--fill);
+}
+/* A month with little data is lighter. */
+.mo-chip.thin {
+  border-color: var(--hairline);
+  background: transparent;
+  color: var(--ink);
+}
+.mo-chip.on {
+  border-color: var(--rail);
+  background: var(--rail);
+  color: var(--rail-text);
+  font-weight: 700;
+}
+
+/* ---------- The five numbers: the Overview's tiles (stats.css), in as many columns as there are tiles ---------- */
+.mo-tiles {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.mo-tiles .st {
+  display: flex;
+  flex-direction: column;
+}
+/* The 5-stars' faces stand on the figure's line, at the right, so that no tile is taller than the rest. */
+.mo-v {
+  display: flex;
+  align-items: center;
+  gap: 4px 12px;
+}
+.mo-faces {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.mo-tipbox {
+  display: inline-flex;
+}
+.mo-more {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* A face: the wiki's icon in a round frame, or the 5-star's sign. */
+.mo-face {
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--w-icon);
+}
+.mo-face img {
+  object-fit: cover;
+}
+.mo-face .sign {
+  width: 62%;
+  height: 62%;
+}
+.mo-face.sm {
+  display: inline-grid;
+  width: 22px;
+  height: 22px;
+}
+
+/* ---------- The parts: rows of cards, each row as tall as its tallest card ---------- */
+.mo-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mo-row {
+  display: flex;
+  gap: 12px;
+}
+/* A part alone in its row keeps its own width, at the left, as the other tabs' cards stand: never the whole page. */
+.mo-part {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+}
+.mo-part > * {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.mo-card {
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
+}
+.mo-since {
+  margin-top: 10px;
+}
+.mo-since .gb-note {
+  margin-top: 3px;
+  color: var(--ink);
+}
+
+/* A list of rows (records, endgame): the rows share the height the card is given. */
+.mo-recs {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+.mo-rec {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  min-height: 34px;
+  max-height: 76px;
+  border-top: 1px solid var(--hairline);
+  font-size: 13px;
+}
+/* In a wide card the rows stand in two columns, each a label and its value, so that no row runs across the whole card. */
+@container (min-width: 620px) {
+  .mo-recs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(34px, 1fr);
+    column-gap: 28px;
+  }
+}
+.mo-rec b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.mo-mode {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.mo-mode.abyss {
+  background: var(--mode-abyss);
+}
+.mo-mode.theater {
+  background: var(--mode-theater);
+}
+.mo-mode.stygian {
+  background: var(--mode-stygian);
+}
+
+/* ---------- The month, day by day ---------- */
+.mo-calbox {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+.mo-wd {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  margin-bottom: 3px;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+/* Square cells: the card is seven cells wide (its width is set from --cell), and each week is a cell tall; a week grows a
+   little only when its row is taller than the calendar. */
+.mo-cal {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: minmax(var(--cell, 28px), 1fr);
+  gap: 3px;
+}
+.mo-cal i {
+  border-radius: 3px;
+  background: var(--r0);
+  animation: fade-in var(--t-open) var(--ease-out) backwards;
+  animation-delay: calc(sibling-index() * var(--stagger) / 4);
+}
+.mo-cal i.l1 {
+  background: var(--r1);
+}
+.mo-cal i.l2 {
+  background: var(--r2);
+}
+.mo-cal i.l3 {
+  background: var(--r3);
+}
+.mo-cal i.l4 {
+  background: var(--r4);
+}
+/* A day with no time kept, and the blanks that complete the first and the last week. */
+.mo-cal i.lx {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+.mo-cal i.pad {
+  background: transparent;
+  animation: none;
+}
+
+/* ---------- Bars: where it came from, where it went, wishes per banner ---------- */
+.mo-flow {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px 28px;
+}
+/* Two lists stand side by side once the card is wide enough for both (the card's own width, not the window's). */
+@container (min-width: 620px) {
+  .mo-flow.pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* A lone list in a wide card spreads its rows over the card: as many columns as fit, each row a label over its bar. */
+  .mo-flow.solo .mo-rows {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 8px 28px;
+  }
+  .mo-flow.solo .mo-rows .hb {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 3px;
+    height: auto;
+    min-height: 44px;
+    max-height: 48px;
+  }
+}
+/* A list's rows share the height the card gives it, each growing a little at most. */
+.mo-list {
+  display: flex;
+  flex-direction: column;
+}
+.mo-rows {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+.mo-list h3 {
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--muted);
+}
+.mo-list .hb {
+  flex: 1 1 26px;
+  grid-template-columns: minmax(96px, min(44%, 230px)) minmax(0, 1fr);
+  height: auto;
+  min-height: 26px;
+  max-height: 48px;
+}
+.mo-resin .hb .b i {
+  background: var(--resin);
+}
+/* A 5-star: its face, its name, and under the name how it came. The rows share the height the card gives the list. */
+.mo-five {
+  display: grid;
+  flex: 1 1 52px;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: center;
+  align-items: center;
+  gap: 0 10px;
+  min-height: 52px;
+  max-height: 76px;
+  border-top: 1px solid var(--hairline);
+  font-size: 13px;
+}
+.mo-five .mo-face {
+  grid-row: 1 / 3;
+}
+.mo-face.lg {
+  width: 36px;
+  height: 36px;
+}
+.mo-five b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mo-five > span:last-child {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

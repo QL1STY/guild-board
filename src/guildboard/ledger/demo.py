@@ -32,6 +32,7 @@ DEMO_CSC_KEY = "DEMO-CSC-KEY-0123456789"  # made up: the demo's Feedback link op
 TREE = "Revitalized Petrified Tree (Domain)"
 COURT = "Denouement of Sin (Domain)"
 TALENTS = "Violet Court (Domain)"
+CRAFTING = "Item crafting material"  # the game's reason for resin made into Condensed Resin
 FIVES = ("Gladiator's Nostalgia", "Wanderer's Troupe", "Night of the Sky's Unveiling", "Scroll of the Hero")
 FOURS = ("Instructor's Brooch", "Berserker's Rose", "Exile's Flower")
 
@@ -111,6 +112,10 @@ def _day(day: date, server: str, first: date) -> list[_Entry]:
         add("artifact", 1220, 1, "Obtained from Mystic Offering", rng.choice(FIVES), 5)
     if rng.random() < 0.15:
         add("artifact", 640, 1, "Opened treasure chest", rng.choice(FOURS), 4)
+    # Every ninth day a Condensed Resin is made, 40 resin as the game's log names it (after every draw above, so that the
+    # day's other entries stay as they were).
+    if into % 9 == 4:
+        add("resin", 1230, -40, CRAFTING)
     return entries
 
 

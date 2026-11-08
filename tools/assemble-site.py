@@ -24,7 +24,7 @@ FONT_PACKAGE = ROOT / "web" / "node_modules" / "@fontsource" / "alegreya-sans"
 WEIGHTS = (400, 500, 700, 800)
 SUBSETS = ("latin", "latin-ext")
 PAGES = ("index.html", "site.css", "site.js")
-SHOTS = ("board.png", "achievements.png", "pulls.png", "stats.png", "overlay.png")
+SHOTS = ("board.png", "achievements.png", "pulls.png", "stats.png", "year.png", "overlay.png")
 
 
 def font_files() -> list[str]:
@@ -74,7 +74,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Assemble Guild Board's site.")
     parser.add_argument("--out", type=Path, required=True, help="a new or empty folder outside the repository")
     parser.add_argument("--demo", type=Path, help="the browser demo's build (web/dist-site)")
-    parser.add_argument("--shots", type=Path, help="a folder with board.png, achievements.png, pulls.png, stats.png, overlay.png")
+    parser.add_argument("--shots", type=Path, help="a folder with board.png, achievements.png, pulls.png, stats.png, year.png, overlay.png")
     parser.add_argument("--require-all", action="store_true", help="fail when the demo or a picture is missing")
     args = parser.parse_args()
     out = args.out.resolve()

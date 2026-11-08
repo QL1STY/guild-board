@@ -11,7 +11,10 @@ import type { SignName } from '../ui/Sign.tsx'
  * (spec 13.4).
  */
 
-/** A size in grid cells: a cell is 168 pixels wide and 96 tall, with 12-pixel gaps. */
+/**
+ * A size in grid cells: a cell is 96 pixels tall and 168 wide, or on the Board a little wider, as its columns share its
+ * width (boardview.ts, columnWidth), with 12-pixel gaps.
+ */
 export type Size = { w: number; h: number }
 
 /** The sizes a type can have: every whole-cell size from `min` to `max` (look pass spec 8.2). */
@@ -93,11 +96,14 @@ export function useHead({ title, meta, counted, read }: Head): void {
 }
 
 /**
- * Where a frame is one cell across: a cell is 168 pixels wide and 96 tall, and two cells 348 and 204, so a frame under
- * this is one cell and over it two or more. The container queries of widgets.css split at the same place (they say 180
- * for a width, and 100 and 180 for a height), and the frame has no padding, so a query and this agree.
+ * Where a frame is one cell across, and one cell down: a frame up to these is one cell, and over them two or more. A cell
+ * is 96 pixels tall and two 204. Across, a cell is 168 pixels on the overlay and a little more on the Board, whose
+ * columns share its width (boardview.ts, columnWidth): under 213 pixels, and two cells at least 348. The container
+ * queries of widgets.css split at the same places (300 for a width, and 100 and 180 for a height), and the frame has no
+ * padding, so a query and this agree.
  */
-const ONE_CELL = 180
+export const ONE_CELL_ACROSS = 300
+const ONE_CELL_DOWN = 180
 
 /**
  * Whether the frame that holds this view is one cell wide (`narrow`) and one cell tall (`short`), kept as it is
@@ -115,8 +121,8 @@ export function useOneCell(): { ref: (element: HTMLElement | null) => (() => voi
     if (element === null) return undefined
     const frame = element.closest('.w') ?? element
     const read = () => {
-      setNarrow(frame.clientWidth <= ONE_CELL)
-      setShort(frame.clientHeight <= ONE_CELL)
+      setNarrow(frame.clientWidth <= ONE_CELL_ACROSS)
+      setShort(frame.clientHeight <= ONE_CELL_DOWN)
     }
     read()
     const observer = new ResizeObserver(read)

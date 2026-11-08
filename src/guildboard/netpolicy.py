@@ -1,5 +1,6 @@
-"""The hosts, and the one exact address, Guild Board may contact (H5), and the only functions that send Guild Board's own
-requests: fetch_bytes, which downloads a file, fetch_hoyoverse, which reads HoYoverse's own pages, fetch_authkey, which
+"""The hosts, and the exact addresses, Guild Board may contact (H5), and the only functions that send Guild Board's own
+requests: fetch_bytes, which downloads a file (the achievement list, HoYoverse's pictures, and the public pictures of
+PUBLIC_PICTURE_URLS), fetch_hoyoverse, which reads HoYoverse's own pages, fetch_authkey, which
 asks HoYoverse for the login's read-only history key, fetch_latest_release and download_installer, which bring the
 installed copy's updates, and fetch_cloud, which talks to the player's online account."""
 from __future__ import annotations
@@ -21,6 +22,24 @@ ALLOWED_DOMAINS = ("hoyolab.com", "hoyoverse.com", "mihoyo.com")
 # client, which carries the session cookies, stays on HoYoverse's domains, and so do the icons and redirects.
 ACHIEVEMENT_LIST_URL = "https://raw.githubusercontent.com/MadeBaruna/paimon-moe/main/src/data/achievement/en.json"
 ALLOWED_URLS: tuple[str, ...] = (ACHIEVEMENT_LIST_URL,)
+# Public pictures from outside HoYoverse (the player's choice, 2026-11-06; the Stats design, section 1 and 3.2): the
+# Endgame headers, each at its one exact address, for the art cache's download alone. Such a request is a plain GET
+# with Guild Board's user agent and nothing else of the player's, follows no redirect (_CheckedRedirects takes none
+# whose source is not HoYoverse's) and is held to the art cache's 8 MB. A URL taken from a HoYoLAB response is never sent
+# to a host outside HoYoverse's: the art cache takes these addresses from this table alone, by their place in it
+# (ArtCache.public_address), and never as an address it is given.
+PUBLIC_PICTURE_URLS: tuple[str, ...] = (
+    # Spiral Abyss, from the Genshin Impact wiki on Fandom (512 x 256).
+    "https://static.wikia.nocookie.net/gensin-impact/images/c/ca/Domain_Spiral_Abyss_Abyssal_Moon_Spire.png/revision/latest",
+    # Imaginarium Theater, from Reddit (3,840 x 2,160).
+    "https://i.redd.it/n427epuvp0bd1.jpg",
+    # Stygian Onslaught, from the Genshin Impact wiki on Fandom (1,080 x 390).
+    "https://static.wikia.nocookie.net/gensin-impact/images/b/b0/Stygian_Onslaught_2025-10-29.png/revision/latest",
+)
+# Their hosts, each once, in the table's order.
+PUBLIC_PICTURE_HOSTS: tuple[str, ...] = tuple(
+    dict.fromkeys(urlsplit(url).hostname or "" for url in PUBLIC_PICTURE_URLS)
+)
 # The installed copy's updates (the player's choice, 2026-10-25): the newest release's facts, from the one public
 # repository the player publishes installers to, and that release's installer, asked for by its asset's address. GitHub
 # sends the installer from its download host, the one redirect such a request follows. Neither carries anything of
@@ -80,8 +99,8 @@ def check_hoyoverse(url: str) -> None:
         raise HostNotAllowed(_host(url) or "(no host)")
 
 
-def _is_listed(url: str) -> bool:
-    """Exactly an address in ALLOWED_URLS: the same scheme, host and path, with no user, port, query or fragment."""
+def _exactly_one_of(url: str, table: tuple[str, ...]) -> bool:
+    """Exactly an address in `table`: the same scheme, host and path, with no user, port, query or fragment."""
     try:
         parts = urlsplit(url)
         port = parts.port
@@ -92,11 +111,21 @@ def _is_listed(url: str) -> bool:
     if parts.query or parts.fragment:
         return False
     # urlsplit gives the host in lower case.
-    return any((parts.hostname, parts.path) == (entry.hostname, entry.path) for entry in map(urlsplit, ALLOWED_URLS))
+    return any((parts.hostname, parts.path) == (entry.hostname, entry.path) for entry in map(urlsplit, table))
+
+
+def _is_listed(url: str) -> bool:
+    """Exactly an address in ALLOWED_URLS."""
+    return _exactly_one_of(url, ALLOWED_URLS)
+
+
+def is_public_picture(url: str) -> bool:
+    """Exactly an address in PUBLIC_PICTURE_URLS."""
+    return _exactly_one_of(url, PUBLIC_PICTURE_URLS)
 
 
 def is_allowed(url: str) -> bool:
-    return is_hoyoverse(url) or _is_listed(url)
+    return is_hoyoverse(url) or _is_listed(url) or is_public_picture(url)
 
 
 def check(url: str) -> None:
@@ -117,8 +146,8 @@ class RedirectRefused(HostNotAllowed):
 
 
 class _CheckedRedirects(urllib.request.HTTPRedirectHandler):
-    """Redirects stay on HoYoverse's domains. The achievement list is fetched directly and never redirected, and so is a
-    request that goes to its own address alone (the wish history's, which takes the key)."""
+    """Redirects stay on HoYoverse's domains. The achievement list and the public pictures are fetched directly and never
+    redirected, and so is a request that goes to its own address alone (the wish history's, which takes the key)."""
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         if getattr(req, "installer", False):

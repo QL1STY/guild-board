@@ -2,6 +2,7 @@ import type { Page, Route } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { tidyOverlay } from './overlay-layout.ts'
 import { SCREENS_OUT } from './out.ts'
 import { expect, test } from '../e2e/fixtures.ts'
 
@@ -116,21 +117,37 @@ test('site: Pulls', { tag: SITE }, async ({ page, core }) => {
 test('site: Stats', { tag: SITE }, async ({ page, core }) => {
   await page.goto(`${core.origin}/#/stats`)
   await expect(page.getByText('Exploration gained')).toBeVisible()
+  // The top of the page: the title, the tabs and the tiles, then the charts. The site frames every tab's picture at one size,
+  // 1,640 by 1,000 (site/index.html), so a picture of the whole page would make this tab's frame twice as tall as the others';
+  // the README's own set (readme.spec.ts) has the whole page, down to the Endgame card.
+  await expect(page.getByRole('region', { name: 'Endgame' }).getByTestId('ec-stygian')).toBeAttached()
+  await page.evaluate(() => window.scrollTo(0, 0))
   await take(page, 'stats')
 })
 
+test('site: the Year', { tag: SITE }, async ({ page, core }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' }) // Wrapped at rest: its counters at their values
+  await page.goto(`${core.origin}/#/stats/year`)
+  await expect(page.getByTestId('year-hero')).toBeVisible()
+  await expect(page.getByTestId('year-card').first()).toBeVisible()
+  await take(page, 'year')
+})
+
 /*
- * The overlay, as it stands over the game: the real page on the demo's data, over a photograph taken in the game. The picture is
- * the maintainer's, is named by GB_OVERLAY_BACKGROUND and stays out of this repository, so without it this test is passed over.
- * It is set at its own size and cut at the bottom edge of the frame, as the game writes its logo in the corner below that.
+ * The overlay, as it stands over the game: the real page on the demo's data, laid out tidily for the picture alone (overlay-layout.ts,
+ * on this test's own core), over a photograph taken in the game. The picture is the maintainer's, is named by GB_OVERLAY_BACKGROUND
+ * and stays out of this repository, so without it this test is passed over. It is set at its own size, 1,640 by 680, the frame the
+ * overlay keeps its widgets in, as the game writes its logo in the corner below that.
  */
-test('site: the overlay', { tag: SITE }, async ({ page, core }) => {
+test('site: the overlay', { tag: SITE }, async ({ page, core, api }) => {
   const photograph = process.env.GB_OVERLAY_BACKGROUND
   test.skip(photograph === undefined, 'GB_OVERLAY_BACKGROUND names no picture')
   const picture = `data:image/png;base64,${readFileSync(photograph!).toString('base64')}`
+  await tidyOverlay(api)
+  await page.setViewportSize({ width: 1640, height: 680 })
   await page.goto(`${core.origin}/#/overlay/open`)
-  await expect(page.locator('[data-widget="start-ov-timers"] li.tm-row').first()).toBeVisible()
-  await expect(page.locator('[data-widget="start-ov-commissions"] li')).not.toHaveCount(0)
+  await expect(page.locator('[data-widget="pic-timers"] li.tm-row').first()).toBeVisible()
+  await expect(page.locator('[data-widget="pic-commissions"] li')).not.toHaveCount(0)
   await page.evaluate((image) => {
     document.documentElement.style.background = `url(${image}) -230px 0 / 2000px 1125px no-repeat fixed`
   }, picture)

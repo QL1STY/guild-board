@@ -63,7 +63,7 @@ def _primogems(core: Any) -> dict[str, Any]:
     today = core.today()
     savings = core._savings()
     diary = {key[len(MONTH_PREFIX):]: int(value) for key, value in core.store.latest_values(MONTH_PREFIX).items()}
-    earned = dict(income.month_values(core.store, core.history, core.ledger_uid(), core.server(), diary, today, MONTHS))
+    earned = dict(income.month_values(core.store, core.ledger_uid(), core.server(), diary, today, MONTHS))
     return {
         "now": savings["primogems"] if savings is not None else None,
         "months": [

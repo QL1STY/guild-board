@@ -4,6 +4,7 @@ import board from './board.css?raw'
 import { contrast, over, tokenValues } from './contrast.ts'
 import elements from '../pages/characters/elements.css?raw'
 import frame from './frame.css?raw'
+import months from './months.css?raw'
 import overlay from './overlay.css?raw'
 import stats from './stats.css?raw'
 import timers from './timers.css?raw'
@@ -40,6 +41,9 @@ test("small text on the page's own background is in --ink, which reaches 4.5:1 w
     [board, '.board-narrow'], // Edit's notice of a narrower window
     [timers, '.tim-group-head'], // the Timers category's groups
     [stats, '.st-note'], // the note under the Stats tiles
+    [months, '.mo-yr'], // the years of the Months strip
+    [months, '.mo-chip.thin'], // a month with little data, which has no card behind it
+    [months, '.mo-since .gb-note'], // the notes under the month's parts
   ]
   for (const [sheet, selector] of onThePage) expect(ruleOf(sheet, selector), selector).toMatch(/color:\s*var\(--ink\)/)
 })

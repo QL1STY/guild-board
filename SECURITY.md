@@ -10,7 +10,7 @@ Anything that could expose a HoYoLAB login, a wish or Feedback key, or the onlin
 
 - Every installer is built by GitHub Actions in this repository from a tagged commit, and carries an attestation that says so (below).
 - Installed copies update only to an installer carrying a signature by a release key whose public half is pinned in `src/guildboard/selfupdate.py`. The private half is kept off GitHub.
-- `tests/test_handsoff.py` enforces what Guild Board may and may not touch: the game's files and process, where the login lives, and the addresses it talks to. It may only be tightened.
+- `tests/test_handsoff.py` enforces what Guild Board may and may not touch: the game's files and process, where the login lives, and the addresses it talks to. It is only ever tightened, except when the maintainer changes a rule in `CLAUDE.md`, as on 2026-11-06 to allow public pictures from outside HoYoverse.
 
 ## Check an installer before you run it
 

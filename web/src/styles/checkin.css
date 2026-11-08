@@ -153,13 +153,13 @@
 .checkin-tick .sign { width: 62%; height: 62%; }
 .checkin-day[data-fresh] .checkin-tick { animation: checkin-stamp var(--t-open) var(--ease-stamp) var(--t-open) backwards; }
 
-@container (min-width: 420px) {
+@container (min-width: 500px) {
   .checkin { grid-template-columns: minmax(150px, 190px) minmax(0, 1fr); }
   .checkin-today { flex-direction: column; justify-content: center; gap: 10px; text-align: center; }
   .checkin-words { align-items: center; width: 100%; }
   .checkin-month { display: grid; }
 }
-@container (min-width: 420px) and (min-height: 300px) {
+@container (min-width: 500px) and (min-height: 300px) {
   .checkin-prize { width: 104px; height: 104px; }
   .checkin-picture { width: 78px; height: 78px; }
 }

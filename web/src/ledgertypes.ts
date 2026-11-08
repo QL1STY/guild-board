@@ -14,8 +14,8 @@ export type Group = 'commissions' | 'welkin' | 'events' | 'endgame' | 'other'
 export type Currency = 'PLN' | 'EUR' | 'USD'
 
 /** One column of "Primogems earned per day": `groups` where the game's log or the diary's detail covers the day, and
- * `estimate` for a day of the old diary total, before either. A week sums its days' groups. */
-export type PrimogemColumn = Columns['columns'][number] & { groups?: Record<Group, number>; estimate?: boolean }
+ * `no_data` where neither does. A week sums its days' groups; `after_gap` marks a week with some days of neither. */
+export type PrimogemColumn = Columns['columns'][number] & { groups?: Record<Group, number> }
 
 export type PrimogemColumns = Omit<Columns, 'columns'> & {
   columns: PrimogemColumn[]

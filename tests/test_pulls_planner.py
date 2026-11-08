@@ -10,13 +10,14 @@ import pytest
 
 from guildboard.config import AppPaths
 from guildboard.core import Core
+from guildboard.gameday import server_tz
 from guildboard.metrics import EARNED_KEY, Point
 from guildboard.pulls import ALL_POOLS, POOLS
 from guildboard.pulls.nextversion import NextVersion, Row, load_reference, next_version
 from guildboard.pulls.planner import PullsRefused
 from guildboard.pulls.rules import PoolState, Wish, pool_state
 from guildboard.pulls.savings import ChainEntry, Estimate, chain, chance_within, convolve, forecast, pulls_to_featured
-from guildboard.store import BannerRow, PullsAccountRow, WikiItemRow, WishlistRow, WishRow, iso
+from guildboard.store import BannerRow, DiaryActionRow, PullsAccountRow, WikiItemRow, WishlistRow, WishRow, iso
 from guildboard.views.pulls import PullsData, build_pulls, four_counts, wish_kind
 from pulls_history import (
     BANNERS_END,
@@ -52,6 +53,21 @@ def core(tmp_path, clock):
     )
     yield core
     core.store.close()
+
+
+def earn(core: Core, amount: int, *days: date, hour: int = 12) -> None:
+    """The diary's detail: `amount` primogems from the commissions on each of `days`, at `hour` of the server's clock."""
+    tz = server_tz(core.server())
+    rows = []
+    for day in days:
+        moment = datetime(day.year, day.month, day.day, hour, tzinfo=tz)
+        rows.append(DiaryActionRow(UID, moment.strftime("%Y-%m-%d %H:%M:%S"), moment.astimezone(timezone.utc),
+                                   "Daily Commission reward", amount, 0))
+    core.store.keep_diary_actions(UID, rows)
+
+
+def days_from(first: date, last: date) -> list[date]:
+    return [first + timedelta(days=n) for n in range((last - first).days + 1)]
 
 
 def wiki_items(core: Core, *items: tuple[str, str, int]) -> None:
@@ -236,25 +252,28 @@ def test_a_forecast_without_income_adds_nothing_and_says_so(core):
     assert savings["set"] == {"primogems": 9840, "fates": 14, "set_at": iso(NOW)}
 
 
-def test_the_income_is_the_diary_s_rise_over_the_days_tracked(core, clock):
+def test_the_income_is_the_exact_days_never_the_diary_s_running_total(core, clock):
     keep_demo_like(core.store)
+    # The diary's running total rises 3,900, which is never counted: only the days its detail records are.
     core.store.add_points(None, at("2026-09-14T20:00"), date(2026, 9, 14), [Point(EARNED_KEY, 1000.0)])
     core.store.add_points(None, at("2026-10-12T20:00"), date(2026, 10, 12), [Point(EARNED_KEY, 4900.0)])
     core.pulls.set_balance(9840, 14)
+    assert core.pulls.model()["savings"]["income_per_day"] is None
+    earn(core, 130, *days_from(date(2026, 10, 1), date(2026, 10, 12)))
     savings = core.pulls.model()["savings"]
-    assert savings["income_per_day"] == 130.0  # 3,900 over the 30 game days tracked
+    assert savings["income_per_day"] == 130.0  # 130 on each of the 12 days recorded
     assert savings["estimated"]["income"] == 0
     assert savings["forecast"]["pulls"] == 14 + (9840 + 130 * 11) // 160  # the pace for the 11 days to 24 Oct
-    # What the diary shows for the day the balance was set was earned before it was typed, and is in it (ruling R16);
-    # the event wishes imported after it are taken off.
-    core.store.add_points(None, NOW + timedelta(hours=1), date(2026, 10, 13), [Point(EARNED_KEY, 5030.0)])
+    # What was earned on the day the balance was set is in it (ruling R16); the event wishes imported after it are
+    # taken off.
+    earn(core, 130, date(2026, 10, 13), hour=13)
     keep(core.store, [*pool_run("character", 3, "2026-10-13T09:00", "2026-10-13T09:02"),
                       *pool_run("standard", 2, "2026-10-13T09:03", "2026-10-13T09:04")], first_id=2 * 10**18)
     estimated = core.pulls.model()["savings"]["estimated"]
     assert estimated == {"primogems": 9840, "fates": 11, "income": 0, "wishes": 3}
-    # The diary's rise from the next day on is added.
+    # The days recorded from the next day on are added.
     clock.advance(days=1)
-    core.store.add_points(None, clock.now(), date(2026, 10, 14), [Point(EARNED_KEY, 5160.0)])
+    earn(core, 130, date(2026, 10, 14))
     estimated = core.pulls.model()["savings"]["estimated"]
     assert estimated == {"primogems": 9840 + 130, "fates": 11, "income": 130, "wishes": 3}
 
@@ -269,12 +288,11 @@ def test_the_model_carries_the_ledger(core, clock):
     assert (ledger["number"], ledger["starts_on"], ledger["ends_on"]) == ("7.2", "2026-11-04", "2026-12-16")
     assert [row["key"] for row in ledger["rows"]] == LEDGER_KEYS
     assert (ledger["primogems"], ledger["fates"], ledger["pulls"], ledger["events_typed"]) == (6170, 0, 38, None)
-    # The diary: 226 primogems a day over the 30 days tracked, and quests of 620 in August and 400 in September.
-    core.store.add_points(None, at("2026-09-25T20:00"), date(2026, 9, 25), [Point(EARNED_KEY, 1000.0)])
+    # The diary: 226 primogems a day recorded, and quests of 620 in August and 400 in September.
+    earn(core, 226, *days_from(date(2026, 9, 25), date(2026, 10, 23)))
     core.store.add_points(
         None, at("2026-10-23T20:00"), date(2026, 10, 23),
         [
-            Point(EARNED_KEY, 7780.0),
             Point("diary.primogems.source.2026-08.quests", 620.0),
             Point("diary.primogems.source.2026-09.quests", 400.0),
         ],

@@ -50,7 +50,10 @@ export function pageOf(hash: string): Page {
  * is not one of the five addresses is the roster, never a page that is not there.
  */
 export type Route =
-  | { page: Exclude<Page, 'characters' | 'friends'> }
+  | { page: Exclude<Page, 'characters' | 'friends' | 'stats'> }
+  | { page: 'stats'; view: 'overview' }
+  | { page: 'stats'; view: 'months'; ym: string | null }
+  | { page: 'stats'; view: 'year'; year: number | null }
   | { page: 'characters'; view: 'roster' | 'endgame' }
   | { page: 'characters'; view: 'profile' | 'plan'; key: string }
   | { page: 'friends'; view: 'list' | 'me' }
@@ -76,10 +79,35 @@ function friendsRoute(hash: string): Route {
   return third === 'compare' ? { page: 'friends', view: 'compare', user: second } : list
 }
 
+/** A month of the Months tab: `2026-10`. */
+const MONTH = /^\d{4}-(?:0[1-9]|1[0-2])$/
+
+/** A year of the Year tab: `2026`. */
+const YEAR = /^\d{4}$/
+
+/**
+ * Stats: Overview at `#/stats`, the Months tab at `#/stats/months` and a month at `#/stats/months/2026-10`, the Year tab
+ * at `#/stats/year` and a year at `#/stats/year/2026`. A month or year that is not one is null, which the tab turns into
+ * the newest one that has data; anything else under `#/stats` is Overview.
+ */
+function statsRoute(hash: string): Route {
+  const [, second, third, ...rest] = pathOf(hash)
+  const overview: Route = { page: 'stats', view: 'overview' }
+  if (rest.length > 0) return overview
+  if (second === 'months') {
+    return { page: 'stats', view: 'months', ym: third !== undefined && MONTH.test(third) ? third : null }
+  }
+  if (second === 'year') {
+    return { page: 'stats', view: 'year', year: third !== undefined && YEAR.test(third) ? Number(third) : null }
+  }
+  return overview
+}
+
 /** The route a location hash names. `pageOf` still gives the page alone, for the callers that want no more. */
 export function routeOf(hash: string): Route {
   const page = pageOf(hash)
   if (page === 'friends') return friendsRoute(hash)
+  if (page === 'stats') return statsRoute(hash)
   if (page !== 'characters') return { page }
   const [, second, third, ...rest] = pathOf(hash)
   const roster: Route = { page: 'characters', view: 'roster' }
@@ -104,6 +132,16 @@ export function hashOf(target: Page | Route): string {
         return `#/friends/${target.user}`
       case 'compare':
         return `#/friends/${target.user}/compare`
+    }
+  }
+  if (target.page === 'stats') {
+    switch (target.view) {
+      case 'overview':
+        return '#/stats'
+      case 'months':
+        return target.ym === null ? '#/stats/months' : `#/stats/months/${target.ym}`
+      case 'year':
+        return target.year === null ? '#/stats/year' : `#/stats/year/${target.year}`
     }
   }
   if (target.page !== 'characters') return `#/${target.page}`

@@ -1,4 +1,41 @@
 {
+  "2.0.0": [
+    {
+      "kind": "better",
+      "title": "A smoother window",
+      "text": "The window now draws at your monitor's full rate. No more flashing squares. It uses less memory."
+    },
+    {
+      "kind": "new",
+      "title": "A fuller Overview",
+      "text": "On Stats, the Overview's grids now fill the width of the window, and a run of days shows how many days in a row you have played."
+    },
+    {
+      "kind": "new",
+      "title": "The Endgame card",
+      "text": "Stats shows your latest Spiral Abyss, Imaginarium Theater and Stygian Onslaught side by side, with their stars, acts, enemies and bosses, and your strongest characters."
+    },
+    {
+      "kind": "new",
+      "title": "Months",
+      "text": "A new Months tab on Stats sums up one month at a time against the month before it: time played, primogems, wishes, achievements and the endgame."
+    },
+    {
+      "kind": "new",
+      "title": "The Year",
+      "text": "A new Year tab on Stats shows your year as Wrapped. Save it as a picture, in the Story or the Wide shape."
+    },
+    {
+      "kind": "better",
+      "title": "Public pictures",
+      "text": "Guild Board now also downloads public pictures from outside HoYoverse, such as the Endgame headers. Nothing of yours is sent with them."
+    },
+    {
+      "kind": "fixed",
+      "title": "No more guessed primogems",
+      "text": "Stats shows the primogems of each day only as the game's history or the HoYoLAB diary records them. A day neither has recorded yet is empty, where it used to be a guess from the diary's monthly total. Your savings and pace on Pulls count the same days."
+    }
+  ],
   "1.0.1": [
     {
       "kind": "new",

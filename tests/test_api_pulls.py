@@ -127,12 +127,12 @@ def test_the_demo_answers_its_made_up_history(tmp_path, clock):
         assert problem_with(model) is None
         assert (model["uid"], model["account_uid"]) == (700000001, 700000001)
         assert [(card["pity"], card["known"], card["guarantee"]) for card in model["pity"]] == [
-            (61, True, "guaranteed"), (23, True, "fifty"), (44, True, "none"), (5, True, "fifty"),
+            (61, True, "guaranteed"), (23, True, "fifty"), (10, True, "none"), (5, True, "fifty"),
         ]
         assert model["pity"][1]["path"] == {"item": "Azurelight", "points": 0, "max": 1}
-        assert model["history_from"] == iso(NOW - timedelta(days=180))
+        assert model["history_from"] == "2026-01-11T19:00:00+00:00"  # the oldest standard wish: kept by an import before Guild Board ran
         # No import has run in this session: the importer's block is idle, the seeded run the last that ended well.
-        assert (model["import"]["state"], model["import"]["found"], model["import"]["pages"]) == ("idle", 387, 20)
+        assert (model["import"]["state"], model["import"]["found"], model["import"]["pages"]) == ("idle", 445, 20)
         assert model["import"]["last_at"] is not None
         assert [banner["name"] for banner in model["banners"]] == [
             "Void Star's Advent", "La Chanson Cerise", "Epitome Invocation",
@@ -155,13 +155,13 @@ def test_the_demo_answers_its_made_up_history(tmp_path, clock):
         assert savings["achievements_pulls"] == savings["achievements_left"] // 160 == 36
         history = model["history"]
         # Skirk at 77 and Qiqi at 81 are the character event's 5★: their average, against a typical player's.
-        assert (history["count"], history["average_pity"], history["won"], history["lost"]) == (387, 79, 1, 1)
+        assert (history["count"], history["average_pity"], history["won"], history["lost"]) == (445, 79, 1, 1)
         assert history["typical_average"] == 62.3
-        assert [row["month"] for row in history["months"]] == [f"2026-{month:02d}" for month in range(5, 11)]
+        assert [row["month"] for row in history["months"]] == [f"2026-{month:02d}" for month in range(1, 11)]
         columns = ("character", "weapon", "standard", "chronicled")
-        assert sum(row[column] for row in history["months"] for column in columns) == 387
+        assert sum(row[column] for row in history["months"] for column in columns) == 445
         page = client.get("/api/pulls/history", params={"limit": 500}).json()
-        assert (len(page["rows"]), page["more"]) == (387, False)
+        assert (len(page["rows"]), page["more"]) == (445, False)
     core.store.close()
 
 

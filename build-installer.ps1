@@ -7,8 +7,9 @@
 # Run it from this folder with:
 #     powershell -ExecutionPolicy Bypass -File build-installer.ps1
 #
-# It builds in a Python environment of its own, .venv-package, so a Guild Board running from this checkout keeps
-# running. The first run installs Inno Setup, which makes the installer, for this Windows user with winget.
+# It freezes the core (the Python program) with PyInstaller in a Python environment of its own, .venv-package, so a Guild
+# Board running from this checkout keeps running, and packs it into the Electron shell (shell\build\package.mjs). The first
+# run installs Inno Setup, which makes the installer, for this Windows user with winget.
 #
 # A Guild Board installed from it takes an update only with a signature by the release key pinned in it (selfupdate.py).
 # While none is pinned, the copy it installs could never update itself, so the script stops before it builds anything,
@@ -59,8 +60,30 @@ if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
+# A Guild Board that runs from this checkout runs from shell\app-dev\electron.exe, the copy of Electron's program that
+# setup.ps1's shortcut starts, or from shell\node_modules\electron\dist\electron.exe (npm start), and the build replaces the
+# interface and the shell it runs; npm ci below deletes the second. A program that runs cannot be opened for writing, so
+# this opens each file for writing, sharing it with everyone (it writes nothing and opens no process); only an IOException,
+# the file being in use, stops the build. It runs before anything is changed, and again just before npm ci of the shell: a
+# Guild Board may start meanwhile.
+function Assert-ShellNotRunning {
+    foreach ($program in 'shell\app-dev\electron.exe', 'shell\node_modules\electron\dist\electron.exe') {
+        $path = Join-Path $PSScriptRoot $program
+        if (-not (Test-Path -LiteralPath $path)) { continue }
+        try {
+            [IO.File]::Open($path, [IO.FileMode]::Open, [IO.FileAccess]::Write, [IO.FileShare]'ReadWrite, Delete').Dispose()
+        } catch [System.IO.IOException] {
+            Write-Output ("A Guild Board is running from this folder ($program is in use), and the build would replace " +
+                'its files. Quit Guild Board first and run this again.')
+            exit 1
+        }
+    }
+}
+Assert-ShellNotRunning
+
 $version = (Select-String -LiteralPath pyproject.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
 $package = Join-Path $PSScriptRoot 'build\package'
+$core = Join-Path $package 'dist\core'
 $env:UV_PROJECT_ENVIRONMENT = '.venv-package'
 
 if (-not (Find-Iscc)) {
@@ -82,18 +105,30 @@ Step 'Build the interface' { npm run build --prefix web }
 # or changed since then stops the build here; run tools/third-party-notices.py, read the change and commit it.
 Step 'Check the third-party notices' { uv run --locked --no-dev --group package python tools/third-party-notices.py --check }
 New-Item -ItemType Directory -Force $package | Out-Null
-Step 'Draw the icon' {
-    $env:QT_QPA_PLATFORM = 'offscreen'
-    uv run --locked --no-dev --group package python packaging/make_icon.py (Join-Path $package 'guildboard.ico')
-    Remove-Item Env:QT_QPA_PLATFORM
-}
 $parts = @($version.Split('.') | ForEach-Object { [int]$_ }) + @(0, 0, 0)
 $tuple = ($parts[0..3] -join ', ')
 (Get-Content -LiteralPath packaging\version_info.txt -Raw).Replace('{tuple}', $tuple).Replace('{version}', $version) |
     Set-Content -LiteralPath (Join-Path $package 'version.txt') -Encoding utf8
-Step 'Pack Guild Board into one folder' {
+Step 'Pack the core into one folder' {
     uv run --locked --no-dev --group package pyinstaller --noconfirm --clean `
         --distpath (Join-Path $package 'dist') --workpath (Join-Path $package 'work') packaging\guildboard.spec
+}
+if (-not (Test-Path -LiteralPath (Join-Path $core 'guildboard-core.exe'))) {
+    Write-Output "The core was not packed: $core holds no guildboard-core.exe."
+    exit 1
+}
+Assert-ShellNotRunning
+Step 'Install the packages of the shell' { npm ci --prefix shell }
+Step 'Test the shell' { npm test --prefix shell }
+# npm ci can leave Electron's own program unfetched; it is fetched here when it is missing.
+if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'shell\node_modules\electron\dist\electron.exe'))) {
+    Step 'Fetch the Electron program' { node (Join-Path $PSScriptRoot 'shell\node_modules\electron\install.js') }
+}
+Step 'Build the shell' { npm run build --prefix shell }
+Step 'Pack the shell and the core' {
+    Push-Location (Join-Path $PSScriptRoot 'shell')
+    try { node build\package.mjs --core $core --version $version }
+    finally { Pop-Location }
 }
 Step 'Make the installer' { & $iscc /Q "/DAppVersion=$version" packaging\installer.iss }
 

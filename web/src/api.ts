@@ -55,7 +55,12 @@ export function answerWithin(path: string): number {
  * and a signal that calls it off, as a read that a newer one took the place of is. A request called off rejects with the
  * signal's reason, an AbortError, which is no failure of the core's and no ApiError.
  */
-export type RequestOptions = { keepalive?: boolean; signal?: AbortSignal }
+export type RequestOptions = {
+  keepalive?: boolean
+  signal?: AbortSignal
+  /** The Content-Type of a file sent as the body (a Blob): application/octet-stream where it is left out. */
+  type?: string
+}
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -90,7 +95,7 @@ async function request<T>(method: Method, path: string, body?: unknown, options:
   if (options.keepalive === true) init.keepalive = true
   if (body instanceof Blob) {
     // A file goes as it is: the browser sends it from where it lies, and the page holds no copy of it.
-    init.headers = { 'Content-Type': 'application/octet-stream' }
+    init.headers = { 'Content-Type': options.type ?? 'application/octet-stream' }
     init.body = body
   } else if (body !== undefined) {
     init.headers = { 'Content-Type': 'application/json' }
@@ -131,6 +136,14 @@ export const api = {
  */
 export function restoreFile(file: File): Promise<{ restarting: boolean }> {
   return request('POST', `/api/backup/restore?file_name=${encodeURIComponent(file.name)}`, file)
+}
+
+/**
+ * Hands the Wrapped picture, a PNG the page made, to the core under the name the Save dialog offers (the Months and Wrapped
+ * design, 6.4). The core holds it and asks the window for its Save dialog; with no window it answers 409.
+ */
+export function savePicture(name: string, picture: Blob): Promise<{ opened: boolean }> {
+  return request('POST', `/api/stats/year/picture?name=${encodeURIComponent(name)}`, picture, { type: 'image/png' })
 }
 
 /**

@@ -38,6 +38,7 @@ from guildboard.codes import MAX_PRIMOGEMS
 from guildboard.core import CodesRefused, Core, SettingRefused
 from guildboard.events import EventBus
 from guildboard.gallery import PictureMissing
+from guildboard.places import launch_target
 from guildboard.ledger import KINDS as LEDGER_KINDS
 from guildboard.pulls import POOLS
 from guildboard.pulls.importer import ImportBusy, ImportNotReady
@@ -101,14 +102,6 @@ MAX_LEDGER_ROWS = 100
 NO_OFFSET = "Give the time with its offset, for example 2026-10-20T10:00:00+02:00."
 NO_PICTURE = "This picture is not in the gallery. Press Look again."
 UNKNOWN_REGION =f"Unknown region. Use {', '.join(REGIONS[:-1])} or {REGIONS[-1]}."
-# Where the launch link may open the page: a click on a reminder opens Timers, or the Board for quick timers alone, and
-# the overlay's window opens the overlay's page.
-LAUNCH_PLACES = {
-    "achievements/timers": "/#/achievements/timers", "board": "/#/board", "friends": "/#/friends", "overlay": "/#/overlay",
-    "week": "/#/week",
-}
-# A click on a Characters notice about a goal that is ready opens that character's profile: "characters/<slug>".
-CHARACTER_PLACE = re.compile(r"characters/[a-z0-9]+(?:-[a-z0-9]+)*")
 # An achievement's id as the page sends it: digits only. A longer number is no id either, and Python refuses to read
 # one of thousands of digits.
 WHOLE_NUMBER = re.compile(r"[0-9]{1,18}")
@@ -120,14 +113,17 @@ BODY_REFUSALS = {
     "/api/achievements/counter/{group_id}": NOT_A_COUNT,
 }
 # The most a request's body may hold, weighed before a route reads any of it (_BodyLimit). A request of the page's is
-# small: the largest, a Board layout of sixty widgets, is a fraction of this. Two carry a file: the achievement import,
-# whose file's text JSON carries (an escaped character is two bytes), and the restore of a backup file, sent as the body
-# itself.
+# small: the largest, a Board layout of sixty widgets, is a fraction of this. Three carry a file: the achievement import,
+# whose file's text JSON carries (an escaped character is two bytes), the restore of a backup file, sent as the body
+# itself, and the Wrapped poster's PNG, sent as the body itself too.
 MAX_BODY_BYTES = 1_000_000
 MAX_IMPORT_BODY_BYTES = 2 * MAX_FILE_BYTES + MAX_BODY_BYTES
 TOO_LARGE = "This request is too large."
 IMPORT_PATHS = ("/api/import/preview", "/api/import/apply")
 RESTORE_PATH = "/api/backup/restore"
+PICTURE_PATH = "/api/stats/year/picture"
+MAX_PICTURE_BYTES = 16 * 1024 * 1024  # a poster of 2,560 × 1,440 is a few megabytes
+PICTURE_TOO_LARGE = "This picture is too large to save."
 
 
 def _demo_faults() -> dict[str, SourceError]:
@@ -256,6 +252,8 @@ def _body_bound(path: str, file_body: bool) -> tuple[int, str]:
         return MAX_BACKUP_BYTES, BACKUP_TOO_LARGE
     if path in IMPORT_PATHS:
         return MAX_IMPORT_BODY_BYTES, IMPORT_TOO_LARGE
+    if path == PICTURE_PATH:
+        return MAX_PICTURE_BYTES, PICTURE_TOO_LARGE
     return MAX_BODY_BYTES, TOO_LARGE
 
 
@@ -368,8 +366,7 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         Your week or a character."""
         if not _same(k, core.launch_secret):
             return _error(403, "This launch link is not valid.")
-        place = f"/#/{to}" if CHARACTER_PLACE.fullmatch(to) else LAUNCH_PLACES.get(to, "/")
-        response = RedirectResponse(place, status_code=303)
+        response = RedirectResponse(launch_target(to),status_code=303)
         response.set_cookie(SESSION_COOKIE, core.session_token, httponly=True, samesite="strict", path="/")
         return response
 
@@ -646,6 +643,42 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         if range_key not in RANGE_KEYS:
             return _error(422, "Unknown range. Use 7, 30, 90 or all.")
         return JSONResponse(core.stats(range_key))
+
+    @app.get("/api/stats/endgame")
+    async def stats_endgame() -> Response:
+        """The Overview's Endgame card (the Stats design, 3.1): a column for each mode, its pictures at /api/art. The
+        modes' wiki entries and header pictures are read in the background, after consent (the design, 3.2)."""
+        core.endgame_art_wanted()
+        return JSONResponse(core.stats_endgame())
+
+    @app.get("/api/stats/month")
+    async def stats_month(ym: str | None = None) -> Response:
+        """The Months tab (the Stats design, section 5): the list of months, and the month `ym`, or the newest when it is
+        missing or not one of them."""
+        return JSONResponse(core.stats_month(ym))
+
+    @app.get("/api/stats/year")
+    async def stats_year(year: str | None = None) -> Response:
+        """The Year tab (the Stats design, section 6): the years listed, and the year `year`, or the newest when it is
+        missing or not one of them."""
+        chosen = int(year) if year is not None and year.isascii() and year.isdigit() and len(year) == 4 else None
+        return JSONResponse(core.stats_year(chosen))
+
+    @app.post(PICTURE_PATH)
+    async def stats_year_picture(request: Request, name: str = "") -> Response:
+        """The Wrapped poster as the PNG the page made (the Stats design, 6.4), its body the picture itself and `name` the
+        name the Save dialog offers. The core holds it in memory and asks the window for its Save dialog, which writes the
+        file the player chooses. Answers 200 {"opened": true}; 409 when there is no window, and the page then downloads
+        the picture itself; 422 for a name that is not the poster's or a body that is no PNG; 413 for one over 16 MB
+        (_BodyLimit)."""
+        try:
+            core.hold_picture(name, await request.body())
+        except ValueError as error:
+            return _error(422, str(error))
+        if not core.request_window("save_picture"):
+            core.drop_picture()
+            return _error(409, "Open Guild Board's window to save the picture.")
+        return JSONResponse({"opened": True})
 
     @app.get("/api/synclog")
     async def synclog(limit: int = 50) -> list[dict[str, Any]]:
