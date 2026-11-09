@@ -38,7 +38,7 @@
   height: 14px;
   border-radius: 50%;
   background: var(--ledger-light);
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 30%, transparent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--shadow-ink) 30%, transparent);
   transition: transform var(--t-state) var(--ease-out);
 }
 .pl-switch:hover {

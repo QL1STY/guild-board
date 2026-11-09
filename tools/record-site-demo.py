@@ -52,7 +52,9 @@ PAGES: dict[str, tuple[str, ...]] = {
     "map": ("/api/map",),
     "stats": tuple(f"/api/stats?range={span}" for span in ("7", "30", "90", "all")) + ("/api/stats/endgame", "/api/stats/month", "/api/stats/year"),
     "pulls": ("/api/pulls", "/api/pulls/choices"),
-    "ledger": ("/api/ledger",) + tuple(f"/api/ledger/history?kind={kind}&limit=50" for kind in ("primogem", "crystal", "resin", "artifact")),
+    # The Ledger page asks each kind's first page; the Artifacts feed lists the five-stars only (`rank=5`, web/src/api.ts).
+    "ledger": ("/api/ledger",) + tuple(f"/api/ledger/history?kind={kind}&limit=50" for kind in ("primogem", "crystal", "resin"))
+    + ("/api/ledger/history?kind=artifact&limit=50&rank=5",),
     "friends": ("/api/friends", "/api/friends?fresh=1", "/api/profile"),
     "characters": ("/api/characters",),
     "week": (),

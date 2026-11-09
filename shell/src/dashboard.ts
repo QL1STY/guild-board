@@ -7,6 +7,7 @@
  */
 import { opensOutside, sameOrigin } from './links.js'
 import { type Bounds, readPlacement, restoredBounds, writePlacement } from './placement.js'
+import { backgroundOf, type ThemeName } from './theme.js'
 
 // A closed window's page is let go this long after it hides: what it sends as it hides, a note's save among them, is
 // not cut off with it (Notes.tsx).
@@ -15,7 +16,6 @@ export const RELEASE_AFTER_MS = 2_000
 // fill it, and a narrower one keeps today's narrow layout.
 export const REFERENCE_WIDTH = 1640
 // `--page-dark` (web/src/styles/tokens.css): the window opens in the page's colour, with no white flash.
-export const BACKGROUND = '#E6DDCA'
 
 // The page sizes, in percent of the size the page grows to with the window: 100 fills the window as before the setting
 // (PAGE_SIZES in src/guildboard/config.py). Ctrl and + or -, and Ctrl and the mouse wheel, step through them.
@@ -112,6 +112,7 @@ export interface WindowLike {
   show(): void
   hide(): void
   focus(): void
+  setBackgroundColor(colour: string): void
   destroy(): void
 }
 
@@ -155,6 +156,8 @@ export interface DashboardDeps {
   warn?(text: string): void
   /** The saved page size of a window, or of a maximized one (the settings `page_size` and `page_size_maximized`). Default 100. */
   pageSize?(maximized: boolean): number
+  /** The theme the windows wear now (`themeOf` of the setting `theme`). Default Parchment. */
+  theme?(): ThemeName
   /** Saves a page size the player stepped to in the window, a maximized one's or not. */
   choosePageSize?(size: number, maximized: boolean): Promise<unknown>
   /** Tells the core whether the window is maximized (`window_state`): the Board keeps an arrangement for each. */
@@ -203,6 +206,15 @@ export class Dashboard {
   /** The saved page sizes changed, as when one is chosen in Settings: the page takes them, unless a step is still saving. */
   pageSizeChanged(): void {
     if (this.unsaved === 0) this.resize(this.savedSizes())
+  }
+
+  /** The setting `theme` changed, or Windows' colours did: the open window takes the new theme's background. */
+  themeChanged(): void {
+    if (this.isOpen()) this.window!.setBackgroundColor(this.background())
+  }
+
+  private background(): string {
+    return backgroundOf(this.deps.theme?.() ?? 'parchment')
   }
 
   private savedSizes(): PageSizes {
@@ -326,7 +338,7 @@ export class Dashboard {
       ...bounds,
       title: this.deps.demo ? 'Guild Board - demo data' : 'Guild Board',
       icon: this.deps.icon,
-      backgroundColor: BACKGROUND,
+      backgroundColor: this.background(),
       show: false,
       webPreferences: {
         partition: 'gb-core',

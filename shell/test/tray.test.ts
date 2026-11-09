@@ -13,6 +13,7 @@ function settings(changes: Partial<Settings> = {}): Settings {
     sync_paused: false,
     notifications: true,
     tray_hint_shown: false,
+    theme: 'parchment',
     ...changes,
   }
 }

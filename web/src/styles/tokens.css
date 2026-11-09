@@ -2,7 +2,7 @@
  * Parchment. The values are those of the stage 1 spec's section 10.5, with the look pass's changes (its section 6).
  * Contrast figures are against the card (--surface) unless said.
  */
-:root {
+:root, [data-theme='parchment'] {
   --page-light: #F3ECDD;
   --page-dark: #E6DDCA;
   /* The page's background, and that of anything that must not stand out from it, such as a bar that stays in view. */
@@ -48,6 +48,10 @@
   --warn-line: #E0BE8A;
   --button: #4A5366;
   --button-text: #F1EADB;
+  /* A mark on a --button plate (the chosen achievement category's bar): gold on Parchment's slate button. */
+  --button-mark: #D3BC8E;
+  /* The colour a shadow is mixed from: the ink on a light look, black on a dark one, where a shadow of the light ink would glow. */
+  --shadow-ink: #3B4255;
   --series: #4470B4;
   --series-light: #A9BFE0;
   --series-track: #CFDAEC;
@@ -74,6 +78,22 @@
   --other: #B9AD92;
   /* The Ledger's spent amounts, a brown beside the earned ones' --good (the ledger design, section 6). */
   --spent: #9A4A2A;
+  /*
+   * The Ledger revamp's colours (the Ledger revamp design, section 8). The sources' marks, drawn on the segmented bar, the dots and
+   * the chart: a theme lightens them where they would not read (3:1 on the card), never another hue. Below them the cover that
+   * lies over Spent on Genshin's money while it is hidden (shown at 0.9 and 0.94 over blurred figures, with a faint stripe) and
+   * the gold edge that runs ahead of it as it peels. A theme keeps them as its card's own two grounds and its own accent.
+   */
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #B6803F;
+  --src-endgame: #4C8A86;
+  --src-other: #978A6E;
+  --src-shop: #A4423A;
+  --ld-cover-a: #FBF7EE;
+  --ld-cover-b: #F7F2E7;
+  --ld-cover-stripe: rgba(211, 188, 142, .10);
+  --ld-edge: #C9A04E;
   /*
    * The Endgame card's three modes (the Stats months and Wrapped design, section 3.1): accents only, for a header's bottom
    * line, the cleared acts and the badge. Each reaches 3:1 on the card, and the white of a mark on it 4.5:1. The medal is
@@ -132,6 +152,8 @@
   --w-focus: #4470B4;
   /* A mark on a ring's track, such as where soft pity starts on a pity card's (the Pulls plan): 3.47:1 on the track. */
   --w-gold-ink: #8E661B;
+  /* The soft-pity mark across a pity ring (marks.css), as --w-gold-ink is here; a dark theme knocks it out in its --w-gap, which reads on the gold of a filled ring. */
+  --w-pity-mark: #8E661B;
   /* The frame of a 4★'s face, as the progress gold frames a 5★'s (the Pulls plan): 3.78:1 on the card. */
   --w-four: #8A6BBE;
   /* The washes of a 5★'s and a 4★'s row in the Pulls page's history, in the gold and the purple, behind ink. */
@@ -139,6 +161,53 @@
   --w-four-wash: rgba(160, 120, 210, .22);
   /* The shade under words laid over a picture, as a banner's name over its art: the card's colour, nearly whole. */
   --w-shade: rgba(247, 242, 231, .85);
+
+  /* Colours that were written in place (the themes plan, Task 2) */
+  /* The gold of a 5★, apart from --fill, the gold of every progress: the pity rings and cards counting toward a 5★, the
+     savings toward the next one, a 5★'s face frame and its star. The same gold as --fill on Parchment. */
+  --five: #A6751F;
+  /* The same on the widgets' roles: the Pity widget's rings, the Savings gem, a 5★'s face in the Wishlist and Last pulls. */
+  --w-five: #A6751F;
+  /* The dim behind the Card panel, over the page and not over the rail. */
+  --scrim: rgba(43, 49, 66, .45);
+  /* The shadows that are not black: under the Card panel, under the Characters pages' light tip, under the map's menu. */
+  --shadow-deep: rgba(30, 30, 40, .35);
+  --shadow-warm: rgba(60, 40, 10, .22);
+  --shadow-map: rgba(40, 34, 20, .28);
+  /* The disc behind an avatar's face on a parchment page: its lit centre and its edge. */
+  --ava-light: #EFE6D2;
+  --ava-edge: #DCCDAA;
+  /* The Characters pages' soft gold for a chosen chip, a hot row and the week's selection, and the dark gold of the words on it. */
+  --gold-soft: #F1E3C2;
+  --warn-ink: #7A5418;
+  /* The soft green of a done or good row, and the red of a bad mark with its soft ground, on the Characters pages. */
+  --good-soft: #DDEBD3;
+  --bad: #8A2E21;
+  --bad-soft: #F3D9D5;
+  /* The white of a mark on a filled plate: the size tag, a week's segment, an act cleared, the stygian badge. */
+  --on-mark: #FFFFFF;
+  /* The week's segment of a character whose resin is spent: a deeper green than --done, behind white. */
+  --seg-done: #4F7C42;
+  /* The plate of a material's sign where it has no icon: a purple that deepens down the plate, and the gold of the sign on it. */
+  --material-a: #6B5A96;
+  --material-b: #3A3266;
+  --material-ink: #E2C98F;
+  /* The glint that crosses an Endgame header, a white light that fades at both ends. */
+  --glint: rgb(255 255 255 / .55);
+  /* The gold of the title's star and of the first run's name, the signs' gold. */
+  --brand: #B8923F;
+  /* The rail's hairline above its foot. */
+  --rail-line: rgba(255, 255, 255, .12);
+  /* The ground of a text field typed in over the page, as a tab's name on the map. */
+  --field: #FFFFFF;
+  /* The ground of the map view behind HoYoverse's map, while it loads and around it. */
+  --map-ground: #1E2A3A;
+  /* The refused note's brown as TEXT on a card (a refused code, a refused request): the note's own ground is --refused. */
+  --refused-ink: #4B3A26;
+  /* The emblem knocked out of its nation's disc, which is a fixed colour on every theme (ui/emblem.ts): a cream. */
+  --emblem-ink: #F7F2E7;
+  /* The same on the widgets' roles (the look emblem): the dark panel sets it again to the dark it knocked the emblem out in before, so the overlay is as it was. */
+  --w-emblem-ink: #F7F2E7;
 }
 
 /*
@@ -168,10 +237,14 @@
   --w-focus: #F1EADB;
   /* Light, as the overlay's --gold-ink is over the game. */
   --w-gold-ink: #E2C98F;
+  --w-pity-mark: #E2C98F;
   --w-four: #B9A2E0;
   /* The washes in the dark panel's gold and purple; the shade the night strip's deepest blue. */
   --w-five-wash: rgba(226, 201, 143, .2);
   --w-four-wash: rgba(185, 162, 224, .18);
   --w-shade: rgba(18, 22, 40, .85);
+  /* A 5★'s gold in the dark panel: the progress gold's. */
+  --w-five: #E2C98F;
   --focus: #F1EADB;
+  --w-emblem-ink: #2B3142;
 }

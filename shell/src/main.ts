@@ -17,6 +17,7 @@ import {
   Menu,
   type MenuItemConstructorOptions,
   nativeImage,
+  nativeTheme,
   screen,
   session,
   shell,
@@ -41,6 +42,7 @@ import { Overlay, type OverlayWindowLike, type ScreenLike } from './overlay.js'
 import { appIconPath, dataFolder, coreCommand } from './paths.js'
 import { aliveByTasklist, imageNameOf, pidFile, readPid, removePidIfMine, tryWritePid } from './pid.js'
 import type { CallName, CoreEvent, Settings } from './protocol.js'
+import { themeOf, themeSourceOf } from './theme.js'
 import { errorName, ShellLog } from './shelllog.js'
 import { applyStartWithWindows, isStandardFolder, startupShortcut, type StartupDeps } from './startup.js'
 import { TrayMenu, type TrayItem } from './tray.js'
@@ -298,11 +300,15 @@ async function main(): Promise<void> {
 
   // ---- the login, the verification and the dialogs they use
 
+  // The theme the windows wear: the setting, with Match Windows resolved against Windows' colours at the moment a window is made.
+  const currentTheme = () => themeOf(settings?.theme, nativeTheme.shouldUseDarkColors)
+
   const dialogDeps: DialogDeps = {
     pagesFolder,
     preload: join(pagesFolder, 'dialog-preload.js'),
     icon: appIcon,
     ipc: ipcMain,
+    theme: currentTheme,
     createWindow: (options) =>
       new BrowserWindow({ ...options, parent: (options.parent as BaseWindow | null) ?? undefined }) as unknown as DialogWindowLike,
   }
@@ -311,6 +317,7 @@ async function main(): Promise<void> {
     preload: dialogDeps.preload,
     icon: appIcon,
     ipc: ipcMain,
+    theme: currentTheme,
     createWindow: (options) => {
       const window = new BaseWindow(options)
       // A BaseWindow is not covered by `browser-window-blur`.
@@ -337,6 +344,8 @@ async function main(): Promise<void> {
 
   // ---- what the core says
 
+  // Match Windows: Windows turned dark or light while Guild Board runs, so the window's background follows.
+  nativeTheme.on('updated', () => guarded('theme update', () => dashboard?.themeChanged()))
   core.on('event', (event: CoreEvent) => guarded(`${event.event} event`, () => onEvent(event)))
   core.on('stopped', ({ unexpected }: { unexpected: boolean }) => {
     log.detach()
@@ -358,6 +367,9 @@ async function main(): Promise<void> {
         }
         overlay?.applySettings(settings)
         dashboard?.pageSizeChanged()
+        // The dark looks (Midnight, Slate, Dusk and the dark nations) darken the title bar; the other settings leave it to Windows.
+        nativeTheme.themeSource = themeSourceOf(settings.theme)
+        dashboard?.themeChanged()
         return undefined
       }
       case 'ready':
@@ -469,6 +481,7 @@ async function main(): Promise<void> {
       openExternal: (url) => void shell.openExternal(url),
       onEnded: () => void quit(0),
       warn,
+      theme: currentTheme,
       pageSize: (maximized) => (maximized ? settings?.page_size_maximized : settings?.page_size) ?? 100,
       choosePageSize: (size, maximized) =>
         call('update_settings', { changes: { [maximized ? 'page_size_maximized' : 'page_size']: size } }),

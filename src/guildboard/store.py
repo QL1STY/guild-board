@@ -2097,10 +2097,14 @@ class Store:
 
     def ledger_entries(
         self, uid: int, kind: str, *, since: datetime | None = None, before_id: int | None = None,
-        limit: int | None = None,
+        limit: int | None = None, min_rarity: int = 0,
     ) -> list[LedgerRow]:
-        """An account's entries of a kind, newest first: those after `since`, older than the entry `before_id`."""
+        """An account's entries of a kind, newest first: those after `since`, older than the entry `before_id`, of
+        `min_rarity` stars or more."""
         where, args = ["uid = ?", "kind = ?"], [uid, kind]
+        if min_rarity:
+            where.append("rarity >= ?")
+            args.append(min_rarity)
         if since is not None:
             where.append("at > ?")
             args.append(iso(since))

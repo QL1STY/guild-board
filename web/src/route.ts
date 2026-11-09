@@ -4,7 +4,8 @@ export type Page =
   | 'characters' | 'week'
   | 'codes' | 'gallery' | 'settings'
 
-const PAGES: readonly string[] = [
+/** Every page of the window, by its address (the themes' light-patch sweep takes its list from here, so that a new page cannot escape it). */
+export const PAGES: readonly string[] = [
   'board', 'achievements', 'backlog', 'map', 'stats', 'pulls',
   'ledger', 'friends',
   'characters', 'week',

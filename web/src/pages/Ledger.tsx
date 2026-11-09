@@ -1,30 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import '../styles/ledger.css'
+import '../styles/ledgerpage.css'
 import { LEDGER_PATH, ledgerApi, messageOf } from '../api.ts'
-import { num } from '../format.ts'
 import { Frame } from '../frame/Frame.tsx'
 import { FreshRing } from '../frame/FreshRing.tsx'
 import { pressed, useNewFlash, withFlash } from '../frame/freshview.ts'
-import type { Ledger as LedgerModel, LedgerEntry, LedgerKind } from '../ledgertypes.ts'
+import type { Ledger as LedgerModel, LedgerKind } from '../ledgertypes.ts'
 import { type Live, useModel, useTick } from '../live.ts'
 import { Segmented } from '../ui/Segmented.tsx'
-import {
-  CURRENCY_NAMES, KIND_LABELS, fivesNote, historyRow, ledgerFresh, ledgerRunning, luckLine, priceParts, money, signed,
-  sinceLine, topOutLine,
-} from './ledgerview.ts'
+import { Compared, Commissions, Wishes } from './ledger/Insights.tsx'
+import { Artifacts, Crystals, Resin } from './ledger/KindViews.tsx'
+import { LedgerChart } from './ledger/LedgerChart.tsx'
+import { addDays, monthTitle } from './ledger/ledgerdays.ts'
+import { SpentCard } from './ledger/SpentCard.tsx'
+import { Sources } from './ledger/Sources.tsx'
+import { Transactions } from './ledger/Transactions.tsx'
+import { KIND_LABELS, ledgerFresh, ledgerRunning } from './ledgerview.ts'
 
+/** The page's tabs, one view each (the Ledger revamp design, sections 3 and 8a): a tab for another kind is one entry here. */
 const KINDS: readonly LedgerKind[] = ['primogem', 'crystal', 'resin', 'artifact']
-const FIVE = '★★★★★'
-
-/** Stars in the rarity's colour; a screen reader hears "5 stars". */
-function Stars({ count }: { count: number }) {
-  if (count <= 0) return null
-  return (
-    <span className={`ld-stars r${count}`} role="img" aria-label={`${count} stars`}>
-      {'★'.repeat(count)}
-    </span>
-  )
-}
+const TABS = KINDS.map((value) => ({ value, label: KIND_LABELS[value] }))
 
 /**
  * What a press of Import does, shared by the button in the top bar and the freshness ring beside the title: the Pulls
@@ -78,205 +73,51 @@ function ImportRing({ live, model, pressing, refusal }: { live: Live; model: Led
   return <FreshRing view={pressing ? pressed(view) : view} testId="ledger-import" />
 }
 
-function Tiles({ model }: { model: LedgerModel }) {
-  const { spent, month, artifacts } = model
-  const price = priceParts(spent.total, spent.currency)
-  const fives = artifacts.five_domain + artifacts.five_other
-  const luck = luckLine(artifacts)
-  const note = fivesNote(artifacts)
-  const monthNote = [month.bought > 0 ? `${signed(month.bought)} from crystals` : '', topOutLine(month)]
-    .filter((part) => part !== '')
-    .join(' · ')
+/** The core's today: the last day of the chart's days, the game's day the core works in. */
+function todayOf(model: LedgerModel, now: Date): string {
+  const last = model.days[model.days.length - 1]
+  if (last !== undefined) return last.day
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+}
+
+/** The Primogems view: the chart over the days on the left, the cards on the right (full screen: a feed down the right). */
+function Primogems({ model, live }: { model: LedgerModel; live: Live }) {
+  const today = todayOf(model, live.now())
+  const monthName = monthTitle(today)
+  const previousName = monthTitle(addDays(`${today.slice(0, 8)}01`, -1))
   return (
-    <div className="ld-tiles">
-      <div className="gb-panel ld-tile" data-testid="ledger-spent">
-        <div className="ld-k">Spent on Genshin</div>
-        <div className="ld-v ld-gold">
-          {spent.total === 0 ? '' : 'about '}
-          {price.before}
-          {price.figure}
-          {price.after !== '' && <small> {price.after}</small>}
+    <div className="ld-layout">
+      <LedgerChart days={model.days} today={today} />
+      <Transactions key={model.last_import ?? ''} kind="primogem" today={today} />
+      <div className="ld-side">
+        <div className="ld-col">
+          {live.settings === null ? (
+            <section className="gb-panel ld-card" data-testid="ledger-spent">
+              <h2 className="gb-section-h ld-h">Spent on Genshin</h2>
+            </section>
+          ) : (
+            <SpentCard spent={model.spent} live={live} />
+          )}
+          <Sources month={model.month} monthName={monthName} />
         </div>
-        <div className="ld-n">{sinceLine(spent)}</div>
-      </div>
-      <div className="gb-panel ld-tile" data-testid="ledger-month">
-        <div className="ld-k">Primogems this month</div>
-        <div className="ld-v">
-          {signed(month.earned)} <small>earned</small> · {signed(-month.out)} <small>out</small>
-        </div>
-        <div className="ld-n">{monthNote}</div>
-      </div>
-      <div className="gb-panel ld-tile" data-testid="ledger-fives">
-        <div className="ld-k">Five-star artifacts, 30 days</div>
-        <div className="ld-v">
-          {num(fives)} {note !== '' && <small>{note}</small>}
-        </div>
-        <div className="ld-n">
-          {luck !== null
-            ? luck.replace(/^Luck: /, '')
-            : `${num(artifacts.five_domain)} from domains, ${num(artifacts.five_other)} from elsewhere`}
+        <div className="ld-col">
+          <Compared month={model.month} monthName={monthName} previousName={previousName} />
+          <Commissions commissions={model.commissions} />
+          <Wishes wishes={model.wishes} />
         </div>
       </div>
     </div>
   )
 }
 
-function Spending({ spent }: { spent: LedgerModel['spent'] }) {
-  return (
-    <section className="gb-panel ld-panel" aria-labelledby="ld-spending">
-      <h2 id="ld-spending" className="ld-h">
-        Spending
-      </h2>
-      <p className="ld-hs">Every Genesis Crystal top-up the game remembers, kept after the game forgets it</p>
-      {spent.rows.length === 0 ? (
-        <p className="ld-empty">No purchases in the history the game keeps.</p>
-      ) : (
-        <ul className="ld-packs" data-testid="ledger-packs">
-          {spent.rows.map((row) => (
-            <li key={row.id}>
-              <span>{row.label}</span>
-              <span>×{num(row.count)}</span>
-              <span>{money(row.total, spent.currency)}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      <p className="ld-note">
-        Prices are an estimate in {CURRENCY_NAMES[spent.currency]}, from the official price list.{' '}
-        <a href="#/settings">Change currency or prices</a>
-      </p>
-    </section>
-  )
-}
-
 /**
- * The raw history of one log, newest first, as the game wrote it. Show more reads the entries before the last one shown
- * and adds them below. A new import starts the list again (its key).
- */
-function History() {
-  const [kind, setKind] = useState<LedgerKind>('primogem')
-  const [entries, setEntries] = useState<LedgerEntry[] | null>(null)
-  const [more, setMore] = useState(false)
-  const [problem, setProblem] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  useEffect(() => {
-    let current = true
-    setEntries(null)
-    setProblem(null)
-    ledgerApi.history(kind, null).then(
-      (page) => {
-        if (!current) return
-        setEntries(page.entries)
-        setMore(page.more)
-      },
-      (failure: unknown) => {
-        if (current) setProblem(messageOf(failure))
-      },
-    )
-    return () => {
-      current = false
-    }
-  }, [kind])
-  const showMore = async () => {
-    const last = entries?.[entries.length - 1]
-    if (last === undefined || loading) return
-    setLoading(true)
-    try {
-      const page = await ledgerApi.history(kind, last.id)
-      setEntries((shown) => [...(shown ?? []), ...page.entries])
-      setMore(page.more)
-    } catch (failure) {
-      setProblem(messageOf(failure))
-    } finally {
-      setLoading(false)
-    }
-  }
-  return (
-    <section className="gb-panel ld-panel" aria-labelledby="ld-history">
-      <div className="ld-head">
-        <h2 id="ld-history" className="ld-h">
-          History
-        </h2>
-        <Segmented
-          label="History of"
-          options={KINDS.map((value) => ({ value, label: KIND_LABELS[value] }))}
-          value={kind}
-          onChange={setKind}
-        />
-      </div>
-      <p className="ld-hs">Newest first, as the game wrote it</p>
-      {entries === null ? (
-        <p className="ld-empty">{problem ?? 'Reading the history…'}</p>
-      ) : entries.length === 0 ? (
-        <p className="ld-empty">Nothing in this history yet.</p>
-      ) : (
-        <ul className="ld-rows" data-testid="ledger-rows">
-          {entries.map((entry) => {
-            const row = historyRow(entry, kind)
-            return (
-              <li key={entry.id}>
-                <span className="ld-t">{row.time}</span>
-                <span className="ld-r">
-                  {row.text}
-                  {row.stars > 0 && <> <Stars count={row.stars} /></>}
-                  {row.note !== undefined && <small>{row.note}</small>}
-                </span>
-                <span className={`ld-a ${row.tone}`}>{row.amount}</span>
-              </li>
-            )
-          })}
-        </ul>
-      )}
-      {entries !== null && problem !== null && <p className="ld-empty">{problem}</p>}
-      {entries !== null && more && (
-        <button type="button" className="gb-btn quiet ld-more" aria-disabled={loading} onClick={() => void showMore()}>
-          Show more
-        </button>
-      )}
-    </section>
-  )
-}
-
-function Artifacts({ artifacts }: { artifacts: LedgerModel['artifacts'] }) {
-  const luck = luckLine(artifacts)
-  return (
-    <section className="gb-panel ld-panel ld-artifacts" aria-labelledby="ld-artifacts" data-testid="ledger-artifacts">
-      <h2 id="ld-artifacts" className="ld-h">
-        Artifacts
-      </h2>
-      <p className="ld-hs">Last 30 days, from the game's artifact history</p>
-      <div className="ld-figures">
-        <div>
-          <div className="ld-k">From domains</div>
-          <div className="ld-v">
-            {num(artifacts.five_domain)} <small className="ld-stars r5">{FIVE}</small>
-          </div>
-          <div className="ld-n">{artifacts.top_domain === null ? '' : `Most from ${artifacts.top_domain}`}</div>
-        </div>
-        <div>
-          <div className="ld-k">From the strongbox and others</div>
-          <div className="ld-v">
-            {num(artifacts.five_other)} <small className="ld-stars r5">{FIVE}</small>
-          </div>
-          <div className="ld-n">and {num(artifacts.four_other)} four-star</div>
-        </div>
-        <div>
-          <div className="ld-k">Fed or salvaged</div>
-          <div className="ld-v">{num(artifacts.fed)}</div>
-          <div className="ld-n">{num(artifacts.fed_five)} of them five-star</div>
-        </div>
-      </div>
-      {luck !== null && <p className="ld-note">{luck}</p>}
-    </section>
-  )
-}
-
-/**
- * The Ledger page (the ledger design, sections 0 and 6; the accepted mockup, screen 2): what the game's own histories
- * say, kept after the game forgets them. Three tiles, then Spending beside the History, then the Artifacts. Before any
- * import it says that it is reading them with the HoYoLAB login, or, without one, how to get the game's history link:
- * open Feedback in the game, then press Import. The model is read
- * again on every event of an import, and every 1.5 s while one runs, so the reading's progress shows.
+ * The Ledger page (the Ledger revamp design, sections 3 to 5): what the game's own histories say, kept after the game forgets
+ * them. The Primogems view is a balance and its chart with the days under it and, beside them, Spent on Genshin, where the
+ * primogems came from and three insights; the Crystals, Resin and Artifacts views are the same frame with a bar chart of what
+ * came in and went out, since they keep no balance.
+ * Before any import it says that it is reading them with the HoYoLAB login, or, without one, how to get the game's history
+ * link: open Feedback in the game, then press Import. The model is read again on every event of an import, and every 1.5 s
+ * while one runs, so the reading's progress shows.
  */
 export function Ledger({ live }: { live: Live }) {
   const [bump, setBump] = useState(0)
@@ -292,11 +133,19 @@ export function Ledger({ live }: { live: Live }) {
     return () => window.clearInterval(timer)
   }, [running])
   const press = useImport(running, () => setBump((count) => count + 1))
+  const [kind, setKind] = useState<LedgerKind>('primogem')
   return (
     <Frame
       page="ledger"
       live={live}
-      beside={data !== null && <ImportRing live={live} model={data} pressing={press.pressing} refusal={press.refusal} />}
+      beside={
+        data !== null && (
+          <>
+            <ImportRing live={live} model={data} pressing={press.pressing} refusal={press.refusal} />
+            {!data.empty && <Segmented label="Ledger view" options={TABS} value={kind} onChange={setKind} />}
+          </>
+        )
+      }
       controls={<ImportButton busy={press.busy} press={press.press} />}
     >
       {data === null ? (
@@ -324,13 +173,16 @@ export function Ledger({ live }: { live: Live }) {
           </p>
         </div>
       ) : (
-        <div className="gb-page ld-page">
-          <Tiles model={data} />
-          <div className="ld-row">
-            <Spending spent={data.spent} />
-            <History key={data.last_import ?? ''} />
-          </div>
-          <Artifacts artifacts={data.artifacts} />
+        <div className="ld-wrap">
+          {kind === 'primogem' ? (
+            <Primogems model={data} live={live} />
+          ) : kind === 'crystal' ? (
+            <Crystals model={data} live={live} today={todayOf(data, live.now())} txKey={data.last_import ?? ''} />
+          ) : kind === 'resin' ? (
+            <Resin model={data} today={todayOf(data, live.now())} txKey={data.last_import ?? ''} />
+          ) : (
+            <Artifacts model={data} today={todayOf(data, live.now())} txKey={data.last_import ?? ''} />
+          )}
         </div>
       )}
     </Frame>

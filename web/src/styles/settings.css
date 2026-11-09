@@ -229,7 +229,7 @@
   border-radius: 12px;
   background: var(--surface);
   color: var(--ink);
-  box-shadow: 0 10px 40px color-mix(in srgb, var(--ink) 30%, transparent);
+  box-shadow: 0 10px 40px color-mix(in srgb, var(--shadow-ink) 30%, transparent);
 }
 .set-dialog::backdrop { background: color-mix(in srgb, var(--rail) 45%, transparent); }
 .set-dialog-body { padding: 20px 24px; font-size: 14px; }

@@ -56,6 +56,94 @@ def group_of(reason: str) -> str:
     return "other"
 
 
+# What a history row is called on the Ledger page: the reasons this file names, made plain; any other reason is its own
+# title (the revamp design, 4.1: the game's history names no event, so a row says what the game wrote).
+_TITLES = {
+    WELKIN_DAILY: "Blessing of the Welkin Moon",
+    COMMISSIONS: "Daily commissions",
+    "Spiral Abyss reward": "Spiral Abyss",
+    "Obtained from Imaginarium Theater": "Imaginarium Theater",
+    "Stygian Onslaught reward": "Stygian Onslaught",
+    "Exchanged Genesis Crystals for Primogems": "Genesis Crystals exchanged",
+    BP_REWARD: "Battle Pass reward",
+}
+
+
+def plain_title(reason: str) -> str:
+    """The title of a history row: the game's reason made plain; a domain's reason is the domain's name; a reason this
+    does not know is its own title."""
+    if reason in _TITLES:
+        return _TITLES[reason]
+    return domain_of(reason) or reason
+
+
+def source_of(reason: str, amount: int, kind: str = "primogem") -> str:
+    """Where an entry of a log comes from or goes to. A primogem entry: one of `GROUPS`, "bought" (primogems paid for),
+    "shop" (primogems out in the shop) or "resin" (primogems out for a refill of resin). A crystal's, a resin's and an
+    artifact's are named by `crystal_source`, `resin_use` and `artifact_source`."""
+    if kind == "crystal":
+        return crystal_source(reason, amount)
+    if kind == "resin":
+        return resin_use(reason, amount)
+    if kind == "artifact":
+        return artifact_source(reason, amount)
+    if reason == SHOP and amount < 0:
+        return "shop"
+    if amount < 0 and "resin" in reason.casefold():
+        return "resin"
+    return group_of(reason)
+
+
+EXCHANGE = "Exchanged Genesis Crystals for Primogems"  # crystals out, the same number of primogems in
+CRAFTING = "Item crafting material"  # the game's reason for resin made into Condensed Resin
+ARTIFACT_FED = "Artifact enhancement material"
+ARTIFACT_SALVAGED = "Artifact decomposition"
+
+# What each log's entries are, by the words the game gives (the Ledger revamp design, section 6).
+CRYSTAL_SOURCES = ("bought", "exchange", "shop", "other")
+RESIN_USES = ("domain", "ley", "boss", "weekly", "condensed", "other")
+ARTIFACT_SOURCES = ("domain", "elsewhere", "fed", "salvaged", "other")
+
+
+def crystal_source(reason: str, amount: int) -> str:
+    """A crystal entry: "bought" (a top-up or the Welkin Moon), "exchange" (crystals made into primogems), "shop" (any other
+    spending) or "other" (any other crystals in)."""
+    if amount > 0:
+        return "bought" if reason in (TOP_UP, WELKIN_BOUGHT) else "other"
+    return "exchange" if reason == EXCHANGE else "shop"
+
+
+WEEKLY_COSTS = (30, 60)  # a weekly boss's Trounce Domain: 30 resin for the first three each week, 60 after
+
+
+def resin_use(reason: str, amount: int = -20) -> str:
+    """What a resin entry was spent on, by the reasons the player's own log holds (the ledger design, section 0): a "domain"
+    run ("<name> (Domain)" for 20 or 40 resin), a "weekly" boss (a Trounce Domain, written "(Domain)" too, for 30 or 60), a
+    "ley" line ("Ley Line Blossom challenge reward"), a "boss" ("Trounce Blossom challenge reward" and any other "challenge
+    reward"), "condensed" resin made ("Item crafting material"), or "other" (Stygian Onslaught, anything not known)."""
+    if reason == CRAFTING:
+        return "condensed"
+    if domain_of(reason) is not None:
+        return "weekly" if -amount in WEEKLY_COSTS else "domain"
+    folded = reason.casefold()
+    if "trounce" in folded:
+        return "boss"
+    if "ley line" in folded or "blossom" in folded:
+        return "ley"
+    if reason.endswith(" challenge reward"):
+        return "boss"
+    return "other"
+
+
+def artifact_source(reason: str, amount: int) -> str:
+    """An artifact entry: from a "domain", from "elsewhere", "fed" to enhance others, "salvaged", or "other"."""
+    if amount > 0:
+        return "domain" if domain_of(reason) is not None else "elsewhere"
+    if reason == ARTIFACT_FED:
+        return "fed"
+    return "salvaged" if reason == ARTIFACT_SALVAGED else "other"
+
+
 def fates_bought(reason: str, amount: int) -> int:
     """The Fates a primogem entry bought: a shop purchase of a whole number of 160s; 0 for any other entry."""
     if reason == SHOP and amount < 0 and amount % FATE_PRIMOGEMS == 0:

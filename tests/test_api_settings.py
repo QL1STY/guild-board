@@ -28,6 +28,29 @@ def client(core):
         yield client
 
 
+def test_the_served_page_carries_the_chosen_theme(core, tmp_path):
+    web = tmp_path / "web"
+    web.mkdir()
+    (web / "index.html").write_text('<!doctype html>\n<html lang="en">\n<head></head><body>built</body></html>', encoding="utf-8")
+    with TestClient(create_app(core, PORT, web), base_url=BASE) as client:
+        assert client.get("/launch", params={"k": core.launch_secret}, follow_redirects=False).status_code == 303
+        assert client.put("/api/settings", json={"theme": "neon"}).status_code == 200  # refused: the theme stays as it was
+        assert client.get("/api/settings").json()["theme"] == "parchment"
+        assert 'data-theme="parchment"' in client.get("/").text
+        assert client.put("/api/settings", json={"theme": "dusk"}).status_code == 200
+        for path in ("/", "/index.html"):
+            page = client.get(path)
+            assert page.status_code == 200
+            assert page.headers["content-type"].startswith("text/html")
+            assert 'data-theme="dusk"' in page.text and "built" in page.text
+        assert client.put("/api/settings", json={"theme": "neon"}).status_code == 200
+        assert client.get("/api/settings").json()["theme"] == "dusk"
+        for nation in ("mondstadt", "liyue", "inazuma", "sumeru", "fontaine", "natlan", "snezhnaya"):
+            assert client.put("/api/settings", json={"theme": nation}).status_code == 200
+            assert client.get("/api/settings").json()["theme"] == nation
+            assert f'data-theme="{nation}"' in client.get("/").text
+
+
 def _events(queue) -> list[str]:
     seen = []
     while not queue.empty():
@@ -144,3 +167,14 @@ def test_the_event_comes_after_the_listeners_have_heard_the_change(core):
     core.settings_listeners.append(lambda settings: seen.append(queue.qsize()))  # the shell applies the change here
     core.update_settings({"overlay_lines": False})
     assert (seen, queue.qsize()) == ([0], 1)
+
+
+def test_ledger_spent_hidden_is_a_setting_that_stays(client, core):
+    assert client.get("/api/settings").json()["ledger_spent_hidden"] is False
+    assert client.put("/api/settings", json={"ledger_spent_hidden": True}).status_code == 200
+    assert client.get("/api/settings").json()["ledger_spent_hidden"] is True
+    assert load_settings(core.paths.settings_path).ledger_spent_hidden is True
+    assert client.put("/api/settings", json={"ledger_spent_hidden": "yes"}).status_code == 200  # refused: it stays
+    assert client.get("/api/settings").json()["ledger_spent_hidden"] is True
+    assert client.put("/api/settings", json={"ledger_spent_hidden": False}).status_code == 200
+    assert client.get("/api/settings").json()["ledger_spent_hidden"] is False

@@ -1,9 +1,13 @@
 import json
+import re
 from pathlib import Path
 
+from guildboard.api.themed import themed_index
+from guildboard.cloud.sync import SYNCED_SETTINGS
 from guildboard.config import (
-    PAGE_SIZES, AppPaths, Settings, default_data_dir, load_settings, save_settings, settings_from_dict,
+    PAGE_SIZES, THEMES, AppPaths, Settings, default_data_dir, load_settings, save_settings, settings_from_dict,
 )
+from guildboard.core import EDITABLE_SETTINGS
 
 
 def test_default_data_dir_is_under_local_app_data(monkeypatch):
@@ -181,6 +185,37 @@ def test_the_picture_quality_is_high_by_default_and_one_of_three_words():
         assert settings_from_dict({"picture_quality": refused}).picture_quality == "high"
 
 
+def test_the_theme_is_parchment_by_default_and_one_of_thirteen_words():
+    assert Settings().theme == "parchment"
+    for theme in (
+        "parchment", "midnight", "slate", "dusk", "mist", "system",
+        "mondstadt", "liyue", "inazuma", "sumeru", "fontaine", "natlan", "snezhnaya",
+    ):
+        assert settings_from_dict({"theme": theme}).theme == theme
+    for refused in ("Midnight", "dark", "", 3, None):
+        assert settings_from_dict({"theme": refused}).theme == "parchment"
+    assert settings_from_dict({}).theme == "parchment"
+
+
+def test_the_theme_is_editable_and_stays_on_this_pc():
+    assert "theme" in EDITABLE_SETTINGS and "theme" not in SYNCED_SETTINGS
+
+
+def test_the_ledgers_hidden_spending_is_shown_by_default_and_stays_on_this_pc():
+    assert Settings().ledger_spent_hidden is False
+    assert settings_from_dict({"ledger_spent_hidden": True}).ledger_spent_hidden is True
+    for refused in ("yes", 1, None):
+        assert settings_from_dict({"ledger_spent_hidden": refused}).ledger_spent_hidden is False
+    assert "ledger_spent_hidden" in EDITABLE_SETTINGS and "ledger_spent_hidden" not in SYNCED_SETTINGS
+
+
+def test_the_page_carries_the_theme_on_its_html():
+    page = '<!doctype html>\n<html lang="en">\n<head></head>'
+    assert '<html lang="en" data-theme="midnight">' in themed_index(page, "midnight")
+    assert themed_index(page, "nonsense") == themed_index(page, "parchment")
+    assert themed_index(page, "system").count("data-theme") == 1
+
+
 def test_a_network_path_is_no_gallery_folder():
     # Looking at it would reach out to another computer.
     for pasted in (r"\\server\share\ScreenShot", "//server/share/ScreenShot", r"\\?\UNC\server\share\ScreenShot"):
@@ -211,3 +246,14 @@ def test_sync_my_data_is_on_by_default_and_is_a_plain_true_or_false():
     assert settings_from_dict({"sync_my_data": False}).sync_my_data is False
     for refused in ("no", 0, None, [], {}):
         assert settings_from_dict({"sync_my_data": refused}).sync_my_data is True
+
+
+def test_the_themes_are_the_interfaces_theme_names_and_match_windows():
+    # web/src/theme.ts' THEME_NAMES is the interface's list of looks; the setting takes those and "system" (Match Windows).
+    source = (Path(__file__).resolve().parent.parent / "web" / "src" / "theme.ts").read_text(encoding="utf-8")
+    names = re.search(r"THEME_NAMES[^=]*=\s*\[([^\]]*)\]", source)
+    assert names is not None
+    interface = re.findall(r"'([a-z]+)'", names.group(1))
+    assert interface
+    assert sorted(t for t in THEMES if t != "system") == sorted(interface)
+    assert "system" in THEMES

@@ -1,4 +1,5 @@
 import { MONTHS, localTime, num, plural } from '../format.ts'
+import { monthTitle } from './ledger/ledgerdays.ts'
 import type { Currency, Ledger, LedgerEntry, LedgerImportState, LedgerKind } from '../ledgertypes.ts'
 import type { PullsImportEvent } from '../types.ts'
 import { ageLabel, type FreshView, ringFill } from '../frame/freshview.ts'
@@ -39,47 +40,25 @@ export function money(amount: number, currency: Currency): string {
   return amount === 0 ? text : `about ${text}`
 }
 
-/** The Spent tile's figure. */
-export function spentLine(spent: Ledger['spent']): string {
-  return money(spent.total, spent.currency)
-}
-
-/** "4 Jun 2025" from "2025-06-04". */
+/** "4 June 2025" from "2025-06-04". */
 function longDay(day: string): string {
-  const [year, month, date] = day.split('-').map(Number)
-  return `${date} ${MONTHS[month - 1]} ${year}`
+  return `${Number(day.slice(8))} ${monthTitle(day)} ${day.slice(0, 4)}`
 }
 
-/** "since 4 Jun 2025 · 10 Welkins, 6 crystal packs, 1 Gnostic Hymn", naming only what was bought. */
-export function sinceLine(spent: Ledger['spent']): string {
-  const parts = [
-    spent.welkins > 0 ? plural(spent.welkins, 'Welkin') : '',
-    spent.packs > 0 ? plural(spent.packs, 'crystal pack') : '',
-    spent.gnostic_hymns > 0 ? plural(spent.gnostic_hymns, 'Gnostic Hymn') : '',
-  ].filter((part) => part !== '')
-  if (parts.length === 0) return 'No purchases in the history the game keeps'
-  const counts = parts.join(', ')
-  return spent.since === null ? counts : `since ${longDay(spent.since)} · ${counts}`
+/**
+ * The line under Spent on Genshin's total (the Ledger revamp design, section 5): "since 16 June 2026 · this month about 26 zł,
+ * one Welkin", or "since 16 June 2026 · nothing this month". Without a purchase kept, that there is none.
+ */
+export function spentSub(spent: Ledger['spent']): string {
+  if (spent.since === null) return 'No purchases in the history the game keeps'
+  const month = spent.month_total > 0 ? `this month ${money(spent.month_total, spent.currency)}, ${spent.month_note}` : 'nothing this month'
+  return `since ${longDay(spent.since)} · ${month}`
 }
 
 /** A signed amount with a true minus: "+60", "−1,600", "0". */
 export function signed(amount: number): string {
   if (amount === 0) return '0'
   return amount > 0 ? `+${num(amount)}` : `${MINUS}${num(-amount)}`
-}
-
-/** "+5,880 earned · +1,090 from crystals · −4,960 out": bought primogems are not earned (the ledger design, section 4). */
-export function monthLine(month: Ledger['month']): string {
-  const parts = [`${signed(month.earned)} earned`]
-  if (month.bought > 0) parts.push(`${signed(month.bought)} from crystals`)
-  parts.push(`${signed(-month.out)} out`)
-  return parts.join(' · ')
-}
-
-/** The month's largest spends: "Intertwined Fates −4,800 · Resin −160". */
-export function topOutLine(month: Ledger['month']): string {
-  if (month.top_out.length === 0) return 'Nothing spent this month'
-  return month.top_out.map((spend) => `${spend.label} ${signed(-spend.amount)}`).join(' · ')
 }
 
 /**

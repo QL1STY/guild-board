@@ -42,9 +42,25 @@ def test_every_shipped_item_is_valid():
     assert ChangeItem  # the type is public
 
 
-def test_the_next_release_tells_of_the_rarity_filters():
+def test_the_next_release_tells_of_the_themes_and_the_ledger():
     notes = load_changes()
-    assert next(iter(notes)) == "2.0.2"
+    assert next(iter(notes)) == "2.1.0"
+    assert notes["2.1.0"] == [
+        {
+            "kind": "new",
+            "title": "Themes",
+            "text": "Choose how the window looks in Settings: Parchment, Midnight, Slate, Dusk, Mist, or Match Windows, which follows Windows' light or dark mode. There are also seven looks, one for each nation, from Mondstadt to Snezhnaya.",
+        },
+        {
+            "kind": "better",
+            "title": "A new Ledger",
+            "text": "The Ledger shows your primogems as a chart and a history of days, with what came from where, your commissions and your wishes; what you spent can be hidden.",
+        },
+    ]
+
+
+def test_2_0_2_tells_of_the_rarity_filters():
+    notes = load_changes()
     assert [(item["kind"], item["title"]) for item in notes["2.0.2"]] == [
         ("new", "Wish history by rarity"), ("new", "Characters by rarity"),
     ]

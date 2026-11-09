@@ -67,6 +67,8 @@ from guildboard.pulls.importer import (
     AUTO_EVERY, ImportBusy, ImportNotReady, WishImporter, demo_links, demo_pages, demo_pause,
 )
 from guildboard.pulls.planner import Planner
+from guildboard.pulls.rules import load_reference
+from guildboard.pulls.savings import Estimate
 from guildboard.pulls.wiki import WikiIcons, wanted_names
 from guildboard.records import LoginNeeded, SourceError
 from guildboard.selfupdate import Release, Updater, parse_version
@@ -103,7 +105,7 @@ EDITABLE_SETTINGS = (
     "characters_notice_weekly", "characters_notice_domain", "characters_notice_ready",
     "overlay_hotkey", "overlay_display", "overlay_opacity", "overlay_pinned", "overlay_lines", "overlay_size",
     "overlay_full_screen", "gallery_enabled", "gallery_folder", "spending_currency", "spending_prices", "picture_quality",
-    "sync_my_data", "page_size", "page_size_maximized",
+    "sync_my_data", "page_size", "page_size_maximized", "theme", "ledger_spent_hidden",
 )
 # The shell holds the overlay's hotkey, or another program does, or there is no hotkey to hold.
 PAUSE_SECONDS = 5.5  # between two gift codes sent, which HoYoverse asks for
@@ -683,14 +685,33 @@ class Core:
         return uids[0] if uids else None
 
     def ledger(self) -> dict[str, Any]:
-        """The Ledger page's model (the ledger design, section 6)."""
+        """The Ledger page's model (the ledger design, section 6; the revamp design, sections 4 and 5). The balance, the wishes
+        in hand and the character banner's pity are Pulls' own figures, taken as Pulls works them out."""
+        uid = self.ledger_uid()
+        estimate, pity = self._pulls_figures(uid)
         return build_ledger(
-            self.store, self.ledger_uid(), self.server(), self.today(), self.settings,
-            self.wish_import.ledger_import_state(),
+            self.store, uid, self.server(), self.today(), self.settings, self.wish_import.ledger_import_state(),
+            estimate=estimate, pity=pity,
         )
 
-    def ledger_history(self, kind: str, before: int | None, limit: int) -> dict[str, Any]:
-        return build_history(self.store, self.ledger_uid(), kind, before, limit)
+    def _pulls_figures(self, uid: int | None) -> tuple[Estimate | None, dict[str, int] | None]:
+        """What the Ledger takes from Pulls: the balance moved on to now, and the character banner's pity with its soft
+        and hard marks. None for each while Pulls has none, or while Pulls shows another account than the Ledger does (the
+        balance a player typed there is that account's); a planner that fails must not fail the whole Ledger."""
+        if uid is None or self.pulls.uid() != uid:
+            return None, None
+        try:
+            estimate = self.pulls.balance_estimate()
+            state = self.pulls.states(uid).get("character") if uid is not None else None
+            rule = load_reference().pool("character")
+        except Exception:
+            log.exception("the figures of Pulls could not be worked out for the Ledger")
+            return None, None
+        pity = {"now": state.pity, "soft": rule.soft, "hard": rule.hard} if state is not None else None
+        return estimate, pity
+
+    def ledger_history(self, kind: str, before: int | None, limit: int, rank: int = 0) -> dict[str, Any]:
+        return build_history(self.store, self.ledger_uid(), kind, before, limit, rank, server=self.server())
 
     def _account(self) -> dict[str, Any] | None:
         token = None if self.demo else self.tokens.load()

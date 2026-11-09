@@ -9,7 +9,7 @@
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 35%, #EFE6D2, #DCCDAA);
+  background: radial-gradient(circle at 50% 35%, var(--ava-light), var(--ava-edge));
   border: 2px solid var(--el-ink, var(--border));
 }
 .cx-ava.on-card {
@@ -50,7 +50,7 @@
   color: var(--c-star); font-size: 14px; line-height: 1.35; pointer-events: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
 }
 /* The same plate on the parchment top bar: the page's surface, its ink and its gold hairline. */
-.cx-tip.light { border-color: var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; box-shadow: 0 6px 18px rgba(60, 40, 10, .22); }
+.cx-tip.light { border-color: var(--border); background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 700; box-shadow: 0 6px 18px var(--shadow-warm); }
 .cx-tip b { display: block; margin-bottom: 2px; font-family: var(--c-serif); font-size: 15px; }
 
 /* ---------- The trail in a character's title, and the switch of her two views (freshness design, section 4) ---------- */

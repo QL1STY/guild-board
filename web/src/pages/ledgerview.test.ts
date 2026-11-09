@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { ringFill } from '../frame/freshview.ts'
 import { ARTIFACT_HISTORY_FIXTURE, HISTORY_FIXTURE, LEDGER_FIXTURE, type Ledger } from '../ledgertypes.ts'
 import {
-  entryTime, fivesNote, historyRow, importLine, ledgerFresh, ledgerRunning, loginUpToLine, luckLine, money, monthLine, restLine, signed, sinceLine, spentLine, topOutLine, upToLine,
+  entryTime, fivesNote, historyRow, importLine, ledgerFresh, ledgerRunning, loginUpToLine, luckLine, money, restLine, signed, spentSub, upToLine,
 } from './ledgerview.ts'
 
 const ledger = (change: (data: Ledger) => void = () => {}): Ledger => {
@@ -11,25 +11,21 @@ const ledger = (change: (data: Ledger) => void = () => {}): Ledger => {
   return copy
 }
 
-test('spent line reads "about 1,240 zł"', () => {
-  expect(spentLine(LEDGER_FIXTURE.spent)).toBe('about 1,240 zł')
+test('prices read "about 1,240 zł"', () => {
+  expect(money(LEDGER_FIXTURE.spent.total, 'PLN')).toBe('about 1,240 zł')
   expect(money(449.99, 'EUR')).toBe('about €450')
   expect(money(4.99, 'USD')).toBe('about $5')
   expect(money(0, 'PLN')).toBe('0 zł')
 })
 
-test('since line names Welkins and packs', () => {
-  expect(sinceLine(LEDGER_FIXTURE.spent)).toBe('since 4 Jun 2025 · 10 Welkins, 6 crystal packs, 1 Gnostic Hymn')
-  const one = ledger((data) => {
-    data.spent.welkins = 1
-    data.spent.packs = 0
-    data.spent.gnostic_hymns = 0
-  })
-  expect(sinceLine(one.spent)).toBe('since 4 Jun 2025 · 1 Welkin')
+test("the line under Spent on Genshin's total says since when, and what this month cost", () => {
+  expect(spentSub(LEDGER_FIXTURE.spent)).toBe('since 4 June 2025 · this month about 23 zł, one Welkin')
+  const quiet = ledger((data) => Object.assign(data.spent, { month_total: 0, month_note: 'nothing' }))
+  expect(spentSub(quiet.spent)).toBe('since 4 June 2025 · nothing this month')
   const none = ledger((data) => {
     Object.assign(data.spent, { since: null, welkins: 0, packs: 0, gnostic_hymns: 0, rows: [], total: 0 })
   })
-  expect(sinceLine(none.spent)).toBe('No purchases in the history the game keeps')
+  expect(spentSub(none.spent)).toBe('No purchases in the history the game keeps')
 })
 
 test('the five-star tile says what its count is made of', () => {
@@ -42,14 +38,6 @@ test('the five-star tile says what its count is made of', () => {
 test('luck line hidden when per_run is null', () => {
   expect(luckLine(LEDGER_FIXTURE.artifacts)).toBe('Luck: 1.13 five-stars per domain run · a typical run gives about 1.07')
   expect(luckLine(ledger((data) => (data.artifacts.per_run = null)).artifacts)).toBeNull()
-})
-
-test('month line shows earned, bought and out', () => {
-  expect(monthLine(LEDGER_FIXTURE.month)).toBe('+5,880 earned · +1,090 from crystals · −4,960 out')
-  // Nothing bought: no part for it.
-  expect(monthLine({ ...LEDGER_FIXTURE.month, bought: 0 })).toBe('+5,880 earned · −4,960 out')
-  expect(topOutLine(LEDGER_FIXTURE.month)).toBe('Intertwined Fates −4,800 · Resin −160')
-  expect(topOutLine({ ...LEDGER_FIXTURE.month, top_out: [] })).toBe('Nothing spent this month')
 })
 
 test('history rows sign and colour amounts', () => {

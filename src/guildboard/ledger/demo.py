@@ -32,6 +32,7 @@ DEMO_CSC_KEY = "DEMO-CSC-KEY-0123456789"  # made up: the demo's Feedback link op
 TREE = "Revitalized Petrified Tree (Domain)"
 COURT = "Denouement of Sin (Domain)"
 TALENTS = "Violet Court (Domain)"
+WEEKLY = ("Confront Stormterror", "Wolf of the North Challenge", "Enter the Golden House")
 CRAFTING = "Item crafting material"  # the game's reason for resin made into Condensed Resin
 FIVES = ("Gladiator's Nostalgia", "Wanderer's Troupe", "Night of the Sky's Unveiling", "Scroll of the Hero")
 FOURS = ("Instructor's Brooch", "Berserker's Rose", "Exile's Flower")
@@ -76,8 +77,14 @@ def _day(day: date, server: str, first: date) -> list[_Entry]:
         add("primogem", 1100, -1600, "Shop purchase")  # ten Fates
     if into % 14 == 5:
         add("primogem", 1110, -50, "Original Resin replenishment")
-    if into % 30 == 1:
+    # The calendar's own: the Welkin Moon on the 5th of each month, its crystals made into primogems at once, and two
+    # purchases in the shop (the game's reason for any crystals spent there), so that every month the Ledger draws has a little of each.
+    if day.day == 5:
         add("crystal", 300, 300, "Purchased Blessing of the Welkin Moon")
+        add("crystal", 305, -300, "Exchanged Genesis Crystals for Primogems")
+        add("primogem", 305, 300, "Exchanged Genesis Crystals for Primogems")
+    if day.day in (12, 19):
+        add("crystal", 340, -60, "Shop purchase")
     if into == 15:
         add("crystal", 310, 1960, "Obtained via purchase")  # 980, the first-time double
     if into == 70:
@@ -116,6 +123,16 @@ def _day(day: date, server: str, first: date) -> list[_Entry]:
     # day's other entries stay as they were).
     if into % 9 == 4:
         add("resin", 1230, -40, CRAFTING)
+    # Bosses, after every draw above so that the day's other entries stay as they were: a Trounce Blossom every fifth day at
+    # 40 resin, and the weekly bosses' Trounce Domains, written "(Domain)" by the game, three at 30 resin on a Monday and one
+    # at the full 60 on the Tuesday.
+    if day.day % 5 == 0:
+        add("resin", 1240, -40, "Trounce Blossom challenge reward")
+    if day.weekday() == 0:
+        for n, name in enumerate(WEEKLY):
+            add("resin", 1250 + n, -30, f"{name} (Domain)")
+    if day.weekday() == 1:
+        add("resin", 1250, -60, f"{WEEKLY[0]} (Domain)")
     return entries
 
 

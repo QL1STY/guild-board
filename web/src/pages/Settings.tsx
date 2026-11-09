@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react'
 import type { ReactNode } from 'react'
 import '../styles/settings.css'
 import { api, messageOf, restoreFile } from '../api.ts'
@@ -21,7 +21,10 @@ import { Sign, type SignName } from '../ui/Sign.tsx'
 import { Switch } from '../ui/Switch.tsx'
 import { ImportPanel } from './ImportPanel.tsx'
 import { ListPanel, useListUpdates } from './ListPanel.tsx'
+import { ThemePicker } from './ThemePicker.tsx'
+import { choiceGoesTo, shownTheme } from './themepickerview.ts'
 import { hashOf } from '../route.ts'
+import { setSiteTheme, siteTheme, subscribeSiteTheme, type ThemeSetting } from '../theme.ts'
 import { weekShown } from './characters/hidden.ts'
 import {
   accountLine, backupLine, BOTH_HOLD_DATA, cloudSpace, galleryFolderMissing, KEEP_REPLACES, KEEP_THIS_PC, type NoticeKey, type NoticeSwitches,
@@ -142,9 +145,9 @@ function Group({ name, sign, children }: { name: string; sign: SignName; childre
 }
 
 /** One option: its name in bold, one plain sentence under it, and the control on the right. */
-function Row({ name, sentence, children }: { name: string; sentence?: ReactNode; children?: ReactNode }) {
+function Row({ name, sentence, className, children }: { name: string; sentence?: ReactNode; className?: string; children?: ReactNode }) {
   return (
-    <div className="set-row">
+    <div className={className === undefined ? 'set-row' : `set-row ${className}`}>
       <div className="set-tx">
         <b>{name}</b>
         {sentence !== undefined && <span>{sentence}</span>}
@@ -737,6 +740,30 @@ function OverlaySettings({ live, settings, id }: { live: Live; settings: Setting
       </div>
       <Notice text={notice} />
     </div>
+  )
+}
+
+/**
+ * The window's theme (the themes design, section 2): thirteen tiles in one row that scrolls sideways, and a click saves at once. The site's browser demo has no core
+ * to write to, so there the choice is the visitor's own, kept in their browser.
+ */
+function ThemeRow({ live, settings }: { live: Live; settings: SettingsModel }) {
+  const { notice, run } = useAction(live)
+  const [kept, chooseKept] = useSetting(live, settings, 'theme', run)
+  const visitor = useSyncExternalStore(subscribeSiteTheme, siteTheme)
+  const siteDemo = import.meta.env.VITE_SITE_DEMO === '1'
+  const choose = (value: ThemeSetting) => (choiceGoesTo(siteDemo) === 'site' ? setSiteTheme(value) : chooseKept(value))
+  return (
+    <>
+      <Row
+        name="Theme"
+        sentence="How the window looks. Match Windows follows Windows' light or dark mode."
+        className="tp-row"
+      >
+        <ThemePicker value={shownTheme(siteDemo, kept, visitor)} choose={choose} />
+      </Row>
+      <Notice text={notice} />
+    </>
   )
 }
 
@@ -1387,6 +1414,7 @@ export function Settings({ live }: { live: Live }) {
           <Online live={live} status={status} settings={settings} />
           <Sync live={live} settings={settings} />
           <Group name="Guild Board" sign="star">
+            <ThemeRow live={live} settings={settings} />
             <StartWithWindows live={live} status={status} settings={settings} />
             <Notifications live={live} settings={settings} />
             <PageSizes live={live} status={status} settings={settings} />

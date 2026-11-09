@@ -41,7 +41,7 @@
   transform: translateX(-50%);
   padding: 0 5px;
   border-radius: 999px;
-  background: var(--ink);
+  background: var(--rail);
   color: var(--gold);
   font-size: 10px;
   font-weight: 800;
@@ -134,7 +134,7 @@
 .frd-stale .gb-link { flex: none; }
 .prf-cols > .frd-stale,
 .cmp-page > .frd-stale { margin-top: 0; }
-.frd-refused { margin: 8px 0 0; color: var(--refused); font-size: 13px; font-weight: 700; }
+.frd-refused { margin: 8px 0 0; color: var(--refused-ink); font-size: 13px; font-weight: 700; }
 .frd-note { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0; }
 .frd-note .gb-link { flex: none; }
 .frd-said { margin: 6px 0 0; color: var(--ink2); font-size: 12.5px; }
@@ -284,7 +284,7 @@
 .cmp-col .f { background: var(--series); }
 .cmp-x { display: flex; grid-column: 2; gap: 18px; padding: 0 10px; color: var(--muted); font-size: 11px; }
 .cmp-x span { flex: 1; min-width: 0; text-align: center; white-space: nowrap; }
-.cmp-tip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; z-index: 3; transform: translateX(-50%); padding: 6px 9px; border-radius: 6px; background: var(--ink); color: var(--rail-text); font-size: 12px; line-height: 1.4; white-space: nowrap; pointer-events: none; }
+.cmp-tip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; z-index: 3; transform: translateX(-50%); padding: 6px 9px; border-radius: 6px; background: var(--rail); color: var(--rail-text); font-size: 12px; line-height: 1.4; white-space: nowrap; pointer-events: none; }
 .cmp-col:hover .cmp-tip,
 .cmp-col:focus .cmp-tip { display: block; }
 .cmp-tip b { display: block; }

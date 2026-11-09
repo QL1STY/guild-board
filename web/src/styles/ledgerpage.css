@@ -1,0 +1,392 @@
+/*
+ * The Ledger page (the Ledger revamp design, sections 3 to 5; the accepted mockup ledger.html, calendar way A): a finance app's
+ * account view in Guild Board's own frames. Every card is the app's panel with the Pulls ledger's light on its top (.ld-card),
+ * every heading the app's ornament (.gb-section-h). The layout follows the page's own width, not the window's:
+ *   - 1,650 pixels and up (full screen): the transactions a feed of 500 down the right, as tall as the left side; the chart on
+ *     the left with two even rows under it, the two larger cards half the width each, then the three insights a third each;
+ *     every card is as tall as its row and every gap is the same;
+ *   - from there to 900 (the usual window): the chart over the transactions, a column of 360 on the right;
+ *   - under 900: one column.
+ * No colour is written here: every one is a token, so that each theme sets its own (the Ledger revamp design, section 8).
+ */
+.ld-wrap { container-type: inline-size; }
+
+/* ---------- The layout ---------- */
+.ld-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 'chart side' 'tx side';
+  gap: 18px;
+  align-items: start;
+}
+.ld-layout > .ld-chart { grid-area: chart; }
+.ld-layout > .ld-tx { grid-area: tx; align-self: stretch; }
+/* The feed is as tall as the right column less the chart's card, and adds nothing to the layout's height: its rows scroll
+   inside it and "Show earlier days" stays at its foot, so both columns end on one line whatever the data (a short feed is
+   never stretched, and a long one never pushes the right column down). It is never shorter than 320 pixels. */
+.ld-layout > .ld-tx { position: relative; min-height: 320px; }
+.ld-layout > .ld-tx .ld-txin { position: absolute; inset: 0; }
+.ld-layout > .ld-tx .ld-scroll { flex: 1 1 0; min-height: 0; overflow-y: auto; scrollbar-width: thin; margin-right: -8px; padding-right: 8px; }
+.ld-side { grid-area: side; display: grid; gap: 18px; align-items: start; min-width: 0; }
+.ld-col { display: grid; gap: 18px; min-width: 0; align-content: start; }
+.ld-single { max-width: 900px; }
+
+@container (min-width: 1650px) {
+  .ld-layout { grid-template-columns: minmax(0, 1fr) 500px; grid-template-areas: 'chart tx' 'side tx'; }
+  /* Two rows, each card as tall as its row. */
+  .ld-side { grid-template-columns: repeat(6, minmax(0, 1fr)); align-items: stretch; }
+  .ld-col { display: contents; }
+  .ld-col:first-child > .ld-card { grid-column: span 3; }
+  .ld-col:last-child > .ld-card { grid-column: span 2; }
+  /* A view with two cards in its second column (Crystals, Resin): they take half the width each. */
+  .ld-col.two > .ld-card { grid-column: span 3; }
+}
+@container (max-width: 900px) {
+  .ld-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'chart' 'side' 'tx'; }
+  /* One column: the transactions are the last card and take the height of their rows. */
+  .ld-layout > .ld-tx { position: static; min-height: 0; }
+  .ld-layout > .ld-tx .ld-txin { position: static; }
+  .ld-layout > .ld-tx .ld-scroll { overflow: visible; margin-right: 0; padding-right: 0; }
+}
+
+/* ---------- The card ---------- */
+.gb-panel.ld-card {
+  min-width: 0;
+  padding: 22px 24px;
+  background: linear-gradient(180deg, var(--ledger-light), var(--surface) 70%);
+  box-shadow: inset 0 0 0 3px var(--ledger-light), inset 0 0 0 4px var(--hairline);
+}
+.gb-panel.ld-tx { display: flex; flex-direction: column; padding: 0; }
+.ld-h { margin: 0 0 4px; font-size: 15.5px; font-weight: 800; color: var(--ink); gap: 10px; }
+.ld-sub { margin: 0 0 4px 17px; font-size: 13px; color: var(--muted); }
+.ld-empty { margin: 8px 0; font-size: 13.5px; color: var(--ink2); }
+.ld-link { color: var(--ink); text-decoration-color: var(--gold); }
+
+/* ---------- The balance and its chart ---------- */
+.ld-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+.ld-bal { display: grid; gap: 4px; }
+.ld-label { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
+.ld-amount { font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -.01em; }
+.ld-amount small { margin-left: 6px; font-size: 18px; font-weight: 700; color: var(--muted); letter-spacing: 0; }
+.ld-delta { font-size: 14.5px; color: var(--ink2); }
+.ld-in { color: var(--good); }
+.ld-out { color: var(--ink); font-weight: 700; }
+.ld-bal .ld-link { font-size: 13.5px; }
+.ld-chartbox { margin-top: 18px; touch-action: none; }
+.ld-svg { display: block; max-width: 100%; }
+.ld-g0 { stop-color: var(--r1); stop-opacity: .28; }
+.ld-g1 { stop-color: var(--r1); stop-opacity: 0; }
+.ld-start-line { stroke: var(--axis); stroke-dasharray: 3 4; }
+.ld-axis-text { font-family: inherit; font-size: 12.5px; fill: var(--muted); }
+.ld-line { fill: none; stroke: var(--fill); stroke-width: 2.25; stroke-linejoin: round; stroke-linecap: round; }
+.ld-moment { fill: var(--ledger-light); stroke: var(--fill); stroke-width: 1.6; }
+.ld-now { fill: var(--fill); }
+.ld-xline { stroke: var(--ink); stroke-width: 1; }
+.ld-dot { fill: var(--fill); stroke: var(--ledger-light); stroke-width: 2.5; }
+
+/* ---------- The other three views: bars of what came in and went out (the revamp design, section 6) ---------- */
+.ld-luck { margin-top: 2px; font-size: 14.5px; color: var(--ink2); }
+.ld-luck b { color: var(--ink); }
+.ld-bnote { max-width: 62ch; margin-top: 2px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+.ld-grid { stroke: var(--hairline); }
+.ld-zero { stroke: var(--axis); }
+.ld-ref { stroke: var(--fill); stroke-dasharray: 3 4; }
+.ld-band { fill: var(--fill); }
+.ld-halo { paint-order: stroke; stroke: var(--ledger-light); stroke-width: 3; }
+.ld-keyline { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 10px; font-size: 13px; color: var(--ink2); }
+.ld-keyline i { display: inline-block; width: 11px; height: 11px; margin-right: 6px; border-radius: 3px; vertical-align: -1px; }
+.ld-refkey { display: inline-block; width: 16px; height: 0; margin-right: 6px; border-top: 1.5px dashed var(--fill); vertical-align: 3px; }
+
+/* ---------- The transactions ---------- */
+.ld-txin { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; padding: 22px 24px; }
+.ld-daygroup + .ld-daygroup .ld-day { padding-top: 18px; }
+.ld-day {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0;
+  padding: 6px 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.ld-rows,
+.ld-folded,
+.ld-flat { margin: 0; padding: 0; list-style: none; }
+.ld-row {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 9px 0;
+  border-top: 1px solid var(--hairline);
+}
+.ld-row:first-child { border-top: 0; }
+/* A day's chests folded into one row: the whole row is the button. */
+.ld-row.folded { display: block; padding: 0; }
+.ld-fold {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 9px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.ld-fold:focus-visible { outline-offset: 2px; }
+.ld-folded { margin: 0 0 8px 50px; font-size: 13px; color: var(--ink2); }
+.ld-folded li { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 8px; padding: 3px 0; }
+.ld-av {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--ledger-light);
+  box-shadow: inset 0 0 0 1px var(--border), inset 0 0 0 3px var(--ledger-light), inset 0 0 0 4px var(--hairline);
+  color: var(--fill);
+}
+.ld-t { font-size: 15px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.ld-s { font-size: 13px; color: var(--muted); }
+.ld-amt { font-size: 15.5px; font-weight: 800; text-align: right; }
+.ld-amt.in { color: var(--good); }
+.ld-amt small { display: block; font-size: 13px; font-weight: 500; color: var(--muted); }
+.ld-more {
+  flex: none;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--tint);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ld-more:hover { background: color-mix(in srgb, var(--tint) 70%, var(--hairline)); }
+.ld-more[aria-disabled='true'] { opacity: .6; cursor: default; }
+.ld-scroll { min-width: 0; }
+/* The other logs, as the game wrote them. */
+.ld-flat li { display: grid; grid-template-columns: 112px minmax(0, 1fr) 80px; gap: 10px; padding: 7px 0; border-top: 1px solid var(--hairline); font-size: 13.5px; }
+.ld-flat li:first-child { border-top: 0; }
+.ld-ft { color: var(--muted); white-space: nowrap; }
+.ld-fr { min-width: 0; overflow-wrap: anywhere; }
+.ld-fr small { display: block; font-size: 12px; color: var(--muted); }
+.ld-fa { text-align: right; font-weight: 700; }
+.ld-fa.plus { color: var(--good); }
+
+/* ---------- Where they came from ---------- */
+.ld-segbar { display: flex; gap: 3px; height: 10px; margin: 14px 0 16px; }
+.ld-segbar i { display: block; height: 100%; border-radius: 3px; }
+.ld-cats { margin: 0; padding: 0; list-style: none; }
+.ld-cat,
+.ld-fates { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 7px 0; font-size: 14.5px; }
+.ld-cat i,
+.ld-fates i { width: 10px; height: 10px; border-radius: 50%; }
+.ld-cat b { font-weight: 800; }
+.ld-share { width: 34px; font-size: 13px; color: var(--muted); text-align: right; }
+.ld-none { padding: 7px 0; font-size: 13.5px; color: var(--ink2); }
+.ld-fates { grid-template-columns: 10px minmax(0, 1fr) auto; margin-top: 6px; padding: 12px 44px 0 0; border-top: 1px solid var(--hairline); color: var(--ink2); }
+.ld-fates i { box-shadow: inset 0 0 0 1.5px var(--src-shop); }
+.ld-fates b { font-weight: 800; color: var(--ink); }
+
+/* "Where it went" and its kin: the list fills the card, a note follows it and the account's own line sits at the foot. */
+.ld-where { display: flex; flex-direction: column; }
+.ld-where .ld-trio { margin-top: 12px; }
+.ld-where .ld-segbar { margin-top: 14px; }
+.ld-foot-note { margin: 10px 0 0; font-size: 13.5px; line-height: 1.45; color: var(--ink2); }
+.ld-foot-note.ld-tot { margin-top: auto; padding-top: 10px; }
+.ld-cat.ld-tot { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--hairline); color: var(--ink2); }
+.ld-cat span { overflow-wrap: anywhere; }
+.ld-ring { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--bad); }
+.ld-ring.gold { box-shadow: inset 0 0 0 1.5px var(--fill); }
+.ld-ring.plain { box-shadow: inset 0 0 0 1.5px var(--ink2); }
+
+/* ---------- The insights: a sentence and a small picture each ---------- */
+.ld-ins { display: flex; flex-direction: column; gap: 10px; }
+/* The last line of an insight sits at the card's foot, so cards side by side end on one line. */
+.ld-ins > :last-child { margin-top: auto; }
+.ld-ins .ld-h { margin-bottom: 4px; }
+.ld-lead { margin: 0; font-size: 16px; font-weight: 800; line-height: 1.3; }
+.ld-ins p { margin: 0; font-size: 13.5px; line-height: 1.45; color: var(--ink2); }
+.ld-bars,
+.ld-cmp2 { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+.ld-bars > div { display: grid; grid-template-columns: 70px minmax(0, 1fr) 46px; gap: 8px; align-items: center; }
+.ld-cmp2 { gap: 8px; }
+.ld-cmp2 > div { display: grid; grid-template-columns: 96px minmax(0, 1fr) 40px; gap: 8px; align-items: center; }
+.ld-bars s,
+.ld-cmp2 s { display: block; height: 8px; overflow: hidden; border-radius: 4px; background: var(--tint); text-decoration: none; }
+.ld-bars s i,
+.ld-cmp2 s i { display: block; height: 100%; border-radius: 4px; }
+.ld-bars i.before,
+.ld-cmp2 i.before { background: var(--axis); }
+.ld-bars i.now,
+.ld-cmp2 i.now { background: var(--fill); }
+.ld-bars b,
+.ld-cmp2 b { text-align: right; color: var(--ink); }
+.ld-chg > div { display: flex; justify-content: space-between; gap: 10px; overflow-wrap: anywhere; padding: 5px 0; border-top: 1px solid var(--hairline); font-size: 13.5px; color: var(--ink2); }
+.ld-chg > div:first-child { border-top: 0; }
+.ld-chg b { font-weight: 800; color: var(--muted); }
+.ld-chg b.up { color: var(--good); }
+.ld-chg b.down { color: var(--bad); }
+
+/* Daily commissions: the month as Stats draws "October, day by day" (months.css, .mo-wd and .mo-cal): squares of 28 pixels, 3
+   apart, corners of 3, fading in one after another. A day done is --r2, a day missed --r0, a day not known outlined, today
+   outlined in ink and the days to come empty. The calendar and its numbers share the card's spare width evenly: as much at the
+   left, between them and at the right; centred down the card. */
+.ld-wd,
+.ld-cal { display: grid; grid-template-columns: repeat(7, 28px); gap: 3px; }
+.ld-wd { margin-bottom: 3px; font-size: 11px; color: var(--muted); text-align: center; }
+.ld-cal i {
+  height: 28px;
+  border-radius: 3px;
+  background: var(--r0);
+  animation: fade-in var(--t-open) var(--ease-out) backwards;
+  animation-delay: calc(sibling-index() * var(--stagger) / 4);
+}
+.ld-cal i.l2 { background: var(--r2); }
+.ld-cal i.lx { background: transparent; box-shadow: inset 0 0 0 1px var(--hairline); }
+.ld-cal i.pad { background: transparent; animation: none; }
+.ld-cal i.today { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--ink); }
+.ld-calwrap { display: grid; flex: 1 1 auto; align-content: center; container-type: inline-size; }
+.ld-calinner { display: grid; gap: 10px; }
+.ld-calbox { display: grid; gap: 0; justify-self: start; }
+.ld-keys { display: flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+.ld-keys i { width: 11px; height: 11px; border-radius: 2px; }
+.ld-keys i.missed { background: var(--r0); }
+.ld-keys i.done { margin-left: 8px; background: var(--r2); }
+.ld-calstats { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; color: var(--ink2); }
+.ld-calstats b { color: var(--ink); }
+.ld-big { display: none; }
+@container (min-width: 300px) {
+  .ld-calinner { grid-template-columns: auto auto; justify-content: space-evenly; gap: 14px; align-items: center; }
+  .ld-calstats { flex-direction: column; justify-content: center; gap: 12px; padding-left: 16px; border-left: 1px solid var(--hairline); }
+  .ld-calstats .ld-line { display: none; }
+  .ld-calstats .ld-big { display: grid; gap: 0; }
+  .ld-big b { font-size: 22px; font-weight: 800; line-height: 1.05; }
+  .ld-big span { font-size: 13px; color: var(--muted); }
+}
+
+/* Wishes: earned and made this month, then, after a hairline, what is in hand; then how far that carries the pity. */
+.ld-trio { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; }
+.ld-trio > div { display: grid; gap: 1px; align-content: start; }
+.ld-trio b { font-size: 24px; font-weight: 800; line-height: 1.05; }
+.ld-trio span { font-size: 13px; color: var(--muted); }
+.ld-trio .in b { color: var(--good); }
+.ld-trio .out b { color: var(--bad); }
+.ld-trio .hand { padding-left: 10px; border-left: 1px solid var(--hairline); }
+.ld-pity { display: block; }
+.ld-pity text { font-family: inherit; }
+.ld-pity .trk { fill: var(--tint); }
+.ld-pity .soft-ground { fill: var(--gold-soft); }
+.ld-pity .soft-line { stroke: var(--gold); }
+.ld-pity .now { fill: var(--ink2); }
+.ld-pity .carry { fill: var(--r1); }
+.ld-pity .rim { stroke: var(--border); }
+.ld-pity .mark { stroke: var(--ink); }
+.ld-pity .mark-text { font-size: 13.5px; font-weight: 800; fill: var(--ink); }
+.ld-pity .reach { fill: var(--fill); }
+.ld-pity .reach-text { font-size: 13.5px; font-weight: 800; fill: var(--fill); }
+/* The drawing is 320 wide in a card of about 312, so 13.5 units draw at 13.2 pixels. */
+.ld-pity .scale { font-size: 13.5px; fill: var(--muted); }
+
+/* ---------- Spent on Genshin: real money, so it can be hidden ---------- */
+/* Hidden, a cover lies over the blurred figures; Show peels it away left to right behind a gold edge, the figures come into
+   focus and the total counts up. Hide lays it back. */
+.ld-headrow { display: flex; align-items: center; gap: 10px; }
+.ld-headrow .ld-h { flex: 1; margin: 0; }
+.ld-eye {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px 4px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink2);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ld-eye:hover { border-color: var(--gold); color: var(--ink); }
+.ld-money { position: relative; margin-top: 10px; border-radius: 10px; }
+.ld-figures { transition: filter .6s ease .15s, opacity .6s ease .15s; }
+.ld-money.hidden .ld-figures { filter: blur(7px); opacity: .55; transition-delay: 0s; }
+.ld-total { font-size: 34px; font-weight: 800; line-height: 1; }
+.ld-total small { margin-left: 4px; font-size: 16px; font-weight: 700; color: var(--muted); }
+.ld-spend-sub { margin-top: 4px; font-size: 13.5px; color: var(--ink2); }
+.ld-packs { margin: 12px 0 0; padding: 0; list-style: none; }
+.ld-packs li { display: grid; grid-template-columns: minmax(0, 1fr) 36px auto; gap: 8px; padding: 7px 0; border-top: 1px solid var(--hairline); font-size: 14.5px; }
+.ld-packs b { text-align: right; font-weight: 800; }
+.ld-x { font-size: 13px; color: var(--muted); text-align: right; }
+.ld-note { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.ld-note a { color: var(--ink); text-decoration-color: var(--gold); }
+.ld-cover {
+  position: absolute;
+  inset: -4px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  border-radius: 10px;
+  background:
+    repeating-linear-gradient(135deg, var(--ld-cover-stripe) 0 6px, transparent 6px 12px),
+    linear-gradient(180deg, color-mix(in srgb, var(--ld-cover-a) 90%, transparent), color-mix(in srgb, var(--ld-cover-b) 94%, transparent));
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  color: var(--ink2);
+  font-size: 13.5px;
+  cursor: pointer;
+  clip-path: inset(0 0 0 0%);
+  transition: clip-path .75s cubic-bezier(.65, 0, .35, 1);
+}
+.ld-cover b { font-size: 15px; color: var(--ink); }
+.ld-cover svg { color: var(--fill); }
+.ld-money:not(.hidden) .ld-cover { clip-path: inset(0 0 0 100%); pointer-events: none; }
+/* The gold edge that runs ahead of the cover as it peels. */
+.ld-edge {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: -4px;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, transparent, var(--ld-edge) 25%, var(--ld-edge) 75%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--ld-edge) 55%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.ld-edge.peel { animation: ld-peel .75s cubic-bezier(.65, 0, .35, 1); }
+.ld-edge.cover { animation: ld-peel .75s cubic-bezier(.65, 0, .35, 1) reverse; }
+@keyframes ld-peel {
+  0% { left: -4px; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: calc(100% + 1px); opacity: 0; }
+}
+
+/* The Welkin Moon's 30 days; the domains run most and the domains that gave the most, a bar each; the resin against 180 a day. */
+.ld-days30 { display: grid; grid-template-columns: repeat(30, minmax(0, 1fr)); gap: 3px; }
+.ld-days30 i { height: 28px; border-radius: 3px; background: var(--r0); }
+.ld-days30 i.done { background: var(--r2); }
+.ld-days30 i.today { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--ink); }
+.ld-keys.k2 { margin-top: 2px; }
+.ld-keys.k2 i.done { margin-left: 0; }
+.ld-keys.k2 i.missed { margin-left: 8px; }
+.ld-rank > div { display: grid; grid-template-columns: minmax(0, 1fr) 84px 26px; gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--hairline); font-size: 13.5px; color: var(--ink2); }
+.ld-rank > div:first-child { border-top: 0; }
+.ld-rank span { overflow-wrap: anywhere; }
+.ld-rank s { display: block; height: 8px; overflow: hidden; border-radius: 4px; background: var(--tint); text-decoration: none; }
+.ld-rank s i { display: block; height: 100%; border-radius: 4px; background: var(--fill); }
+.ld-rank b { text-align: right; color: var(--ink); font-weight: 800; }
+.ld-meter { display: flex; height: 8px; overflow: hidden; border-radius: 4px; background: var(--tint); }
+.ld-meter i { display: block; height: 100%; background: var(--fill); }
+.ld-meter-keys { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--muted); }

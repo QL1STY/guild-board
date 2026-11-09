@@ -138,9 +138,12 @@ test('the Board uses the whole width at 2,560 pixels, with more widgets side by 
 test('the last column of the Board ends where the top bar ends, in a window of any width', async ({ page, api }) => {
   // The 1,366-pixel window has six columns sharing 108 pixels left over, the 1,640 eight sharing 22, and the 1,920 nine
   // sharing 122. Guild Board's own window lays its page out at 1,640 pixels from there up, zoomed to the window.
-  for (const width of [1366, 1640, 1920]) {
+  for (const [width, wanted] of [[1366, 6], [1640, 8], [1920, 9]]) {
     await page.setViewportSize({ width, height: 900 })
-    const columns = await page.getByTestId('board').evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(' ').length)
+    // The Board counts its columns when the window has resized, a moment after the viewport changes: read them once they are the width's.
+    const count = () => page.getByTestId('board').evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(' ').length)
+    await expect.poll(count, { message: `${width}: the Board's columns` }).toBe(wanted)
+    const columns = await count()
     await setBoard(api, page, [{ ...clockWidget('clock-right'), x: columns - 2, y: 0 }])
     await expect(widgetById(page, 'clock-right')).toBeVisible()
     expect(await cellOf(page, 'clock-right'), `${width}`).toEqual({ x: columns - 2, y: 0 })

@@ -1,6 +1,6 @@
 import { _electron as electron, expect, test, type ElectronApplication, type Page } from '@playwright/test'
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process'
-import { existsSync, mkdtempSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -246,3 +246,75 @@ test('the window writes nothing outside its data folder', async () => {
     await rm(temp, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 })
   }
 })
+
+/** Each theme's `--page-dark` (web/src/styles), as the window's background and its pages' body have it. */
+const LOOKS = [
+  { theme: 'parchment', hex: '#E6DDCA', rgb: 'rgb(230, 221, 202)', source: 'system' },
+  { theme: 'midnight', hex: '#0C0F1A', rgb: 'rgb(12, 15, 26)', source: 'dark' },
+  { theme: 'slate', hex: '#2C333F', rgb: 'rgb(44, 51, 63)', source: 'dark' },
+  { theme: 'dusk', hex: '#211D19', rgb: 'rgb(33, 29, 25)', source: 'dark' },
+  { theme: 'mist', hex: '#E3E9F0', rgb: 'rgb(227, 233, 240)', source: 'system' },
+  { theme: 'mondstadt', hex: '#E2EDF0', rgb: 'rgb(226, 237, 240)', source: 'system' },
+  { theme: 'liyue', hex: '#1F1412', rgb: 'rgb(31, 20, 18)', source: 'dark' },
+  { theme: 'inazuma', hex: '#191526', rgb: 'rgb(25, 21, 38)', source: 'dark' },
+  { theme: 'sumeru', hex: '#E8EBD6', rgb: 'rgb(232, 235, 214)', source: 'system' },
+  { theme: 'fontaine', hex: '#101A30', rgb: 'rgb(16, 26, 48)', source: 'dark' },
+  { theme: 'natlan', hex: '#1B1513', rgb: 'rgb(27, 21, 19)', source: 'dark' },
+  { theme: 'snezhnaya', hex: '#E5ECF1', rgb: 'rgb(229, 236, 241)', source: 'system' },
+] as const
+
+for (const look of LOOKS) {
+  test(`the ${look.theme} theme: the window opens in its colour, the title bar follows it, and a dialog page wears it`, async () => {
+    // The setting is kept in the data folder, as the core's Settings keeps it; the shell reads it from the core at start.
+    writeFileSync(join(folder, 'settings.json'), JSON.stringify({ theme: look.theme }))
+    const first = await launch()
+    const window = await first.firstWindow()
+    await expect(window.locator('.gb-rail')).toBeVisible({ timeout: 60_000 })
+    // The interface wears it, and the window was made in its colour (no flash of another before the page drew).
+    await expect.poll(() => window.evaluate(() => document.documentElement.dataset.theme)).toBe(look.theme)
+    await expect.poll(() => window.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe(look.rgb)
+    expect(await first.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getBackgroundColor().toUpperCase())).toBe(look.hex)
+    // The dark themes darken the title bar and the menus; the others leave them to Windows.
+    expect(await first.evaluate(({ nativeTheme }) => nativeTheme.themeSource)).toBe(look.source)
+
+    // The shell's own dialog: its paste page, opened by the shell's askDialog on the real Electron windows, as main.ts does.
+    const waiting = first.waitForEvent('window', { timeout: 20_000 })
+    await first.evaluate(
+      ({ BrowserWindow, ipcMain }, { dist, theme }) => {
+        const required = (process as unknown as { mainModule: { require(name: string): any } }).mainModule.require
+        const { askDialog } = required(`${dist}/dialog.js`)
+        const pagesFolder = `${dist}/pages`
+        const open = askDialog(
+          {
+            pagesFolder,
+            preload: `${pagesFolder}/dialog-preload.js`,
+            icon: '',
+            ipc: ipcMain,
+            theme: () => theme,
+            createWindow: (options: Record<string, unknown>) => new BrowserWindow({ ...options, parent: undefined }),
+          },
+          'paste',
+          { steps: '1. Open HoYoLAB in your usual browser.' },
+          null,
+        )
+        ;(globalThis as unknown as { openDialog: unknown }).openDialog = open
+      },
+      { dist: join(SHELL, 'dist'), theme: look.theme },
+    )
+    const dialog = await waiting
+    await dialog.waitForLoadState('domcontentloaded')
+    await expect(dialog.getByRole('button', { name: 'Use this login' })).toBeVisible()
+    // theme.js, in the page's head, put the theme on before the body drew: the page's own colour is the theme's.
+    expect(await dialog.evaluate(() => document.documentElement.dataset.theme)).toBe(look.theme)
+    expect(await dialog.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe(look.rgb)
+    // A dark look says so to Chromium, which draws the textarea and the scrollbars of the page dark.
+    expect(await dialog.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe(look.source === 'dark' ? 'dark' : 'normal')
+    // The pictures of the dialog in each look, taken when a folder is named for them (GB_SCREENS_DIR, as the web's `npm run screens*`).
+    if (process.env.GB_SCREENS_DIR) {
+      const folderOut = join(resolve(process.env.GB_SCREENS_DIR), '2026-11-08-themes-screens')
+      mkdirSync(folderOut, { recursive: true })
+      await dialog.screenshot({ path: join(folderOut, `shell-paste-${look.theme}.png`) })
+    }
+    await dialog.getByRole('button', { name: 'Cancel' }).click()
+  })
+}

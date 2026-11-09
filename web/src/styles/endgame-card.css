@@ -41,7 +41,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / .55) 50%, transparent 70%);
+  background: linear-gradient(100deg, transparent 30%, var(--glint) 50%, transparent 70%);
   transform: translateX(120%);
   pointer-events: none;
   animation: ec-glint var(--t-glint) var(--ease-move) var(--t-enter) backwards;
@@ -124,7 +124,7 @@
   background: var(--track);
   animation: ec-pop var(--t-open) var(--ease-out) calc(var(--t-hover) + var(--i) * var(--stagger) * 2) backwards;
 }
-.ec-act.done { color: white; background: var(--mode-theater); }
+.ec-act.done { color: var(--on-mark); background: var(--mode-theater); }
 .ec-act.medal {
   color: var(--medal-ink);
   background: radial-gradient(circle at 35% 30%, var(--medal-light), var(--medal));
@@ -148,12 +148,12 @@
   height: 40px;
   margin: 4px;
   border-radius: 10px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--mode-stygian) 55%, white), var(--mode-stygian));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--mode-stygian) 55%, var(--on-mark)), var(--mode-stygian));
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mode-stygian) 16%, var(--surface));
   transform: rotate(45deg);
   animation: ec-stamp var(--t-enter) var(--ease-stamp) var(--t-move) backwards;
 }
-.ec-badge span { transform: rotate(-45deg); font-size: 17px; font-weight: 800; color: white; }
+.ec-badge span { transform: rotate(-45deg); font-size: 17px; font-weight: 800; color: var(--on-mark); }
 .ec-medal { flex: none; width: 52px; height: 52px; object-fit: contain; animation: ec-land var(--t-enter) var(--ease-stamp) var(--t-move) backwards; }
 .ec-bosses { display: grid; flex: 1; grid-auto-rows: 1fr; }
 .ec-bosses.dimmed { opacity: .6; }

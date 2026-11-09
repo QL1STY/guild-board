@@ -783,8 +783,8 @@
   min-width: 0;
 }
 /*
- * The region's emblem knocked out of a disc of its nation's colour (ui/emblem.ts sets --emblem), in a gold ring: white
- * on parchment, dark on the overlay's panel.
+ * The region's emblem knocked out of a disc of its nation's colour (ui/emblem.ts sets --emblem), in a gold ring: a cream
+ * (--w-emblem-ink) on every theme; the overlay's panel keeps the dark it always had.
  */
 .look-emblem {
   --size: 32px;
@@ -795,7 +795,7 @@
   border: 2px solid var(--w-icon);
   border-radius: 50%;
   background: var(--emblem);
-  color: var(--w-gap);
+  color: var(--w-emblem-ink);
 }
 .look-emblem .sign {
   width: 70%;
@@ -1847,6 +1847,11 @@
 }
 
 /* Pity: one wish's ring with its words beside it, or all four rings, each with its wish's name under it. */
+/* Each ring counts toward a 5★. */
+.py,
+.py-all {
+  --w-fill: var(--w-five);
+}
 .py {
   flex: 1;
   min-height: 0;
@@ -1940,7 +1945,7 @@
 .sv-gem {
   width: 28px;
   height: 28px;
-  color: var(--w-fill);
+  color: var(--w-five);
 }
 .sv-by {
   padding: 3px 12px;
@@ -2012,7 +2017,7 @@
 }
 .wl-face.r5,
 .lp-face.r5 {
-  border-color: var(--w-fill);
+  border-color: var(--w-five);
 }
 .wl-face.r4,
 .lp-face.r4 {
@@ -2104,7 +2109,7 @@
   border-radius: 4px;
 }
 .lk-won {
-  background: var(--w-fill);
+  background: var(--w-five);
 }
 .lk-lost {
   background: var(--w-track);

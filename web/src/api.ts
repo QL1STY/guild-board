@@ -153,9 +153,9 @@ export function savePicture(name: string, picture: Blob): Promise<{ opened: bool
 export const LEDGER_PATH = '/api/ledger'
 
 export const ledgerApi = {
-  history: (kind: LedgerKind, before: string | null, limit = 50) =>
+  history: (kind: LedgerKind, before: string | null, limit = 50, rank = 0) =>
     api.get<LedgerHistory>(
-      `/api/ledger/history?kind=${kind}&limit=${limit}${before === null ? '' : `&before=${encodeURIComponent(before)}`}`,
+      `/api/ledger/history?kind=${kind}&limit=${limit}${rank > 0 ? `&rank=${rank}` : ''}${before === null ? '' : `&before=${encodeURIComponent(before)}`}`,
     ),
   importFromGame: () => api.post('/api/pulls/import'),
 }

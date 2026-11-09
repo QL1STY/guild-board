@@ -131,13 +131,25 @@ test('a paste dialog opens in gb-dialog with the bridge preload, and resolves wi
       spellcheck: false,
     },
   })
-  expect(windows[0].contents.loaded[0]).toBe(pageUrl(PAGES, 'paste', { steps: '1. Go.' }))
+  expect(windows[0].contents.loaded[0]).toBe(pageUrl(PAGES, 'paste', { steps: '1. Go.', theme: 'parchment' }))
   expect(windows[0].shown).toBe(true)
   expect(windows[0].contents.opener!()).toEqual({ action: 'deny' })
   ipc.send(SUBMIT_CHANNEL, windows[0].contents, 'ltoken_v2=made-up-ltoken')
   expect(await answer).toBe('ltoken_v2=made-up-ltoken')
   expect(windows[0].closed).toBe(true)
   expect(ipc.count()).toBe(0)
+})
+
+test('a dialog opens in the theme’s background, and its page address carries the theme', () => {
+  const plain = setup()
+  void askDialog(plain.deps, 'paste', {}, null)
+  expect(plain.options[0].backgroundColor).toBe('#E6DDCA')
+  expect(new URL(plain.windows[0].contents.loaded[0]).searchParams.get('theme')).toBe('parchment')
+  const dusk = setup()
+  dusk.deps.theme = () => 'dusk'
+  void askDialog(dusk.deps, 'choose', { labels: '[]' }, null)
+  expect(dusk.options[0].backgroundColor).toBe('#211D19')
+  expect(dusk.windows[0].contents.loaded[0]).toBe(pageUrl(PAGES, 'choose', { labels: '[]', theme: 'dusk' }))
 })
 
 test('a dialog of one kind takes only its kind of value', async () => {

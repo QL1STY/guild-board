@@ -34,6 +34,16 @@ def test_a_route_is_a_file_name_the_page_makes_the_same_way(tool):
     assert len(tool.recording_key("/api/" + "x" * 500)) < 80
 
 
+def test_the_ledger_pages_routes_are_the_ones_it_asks(tool):
+    # The Artifacts feed asks for the five-stars alone (web/src/api.ts `ledgerApi.history`); the site's transport matches exact routes.
+    routes = tool.PAGES["ledger"]
+    assert "/api/ledger" in routes
+    assert "/api/ledger/history?kind=artifact&limit=50&rank=5" in routes
+    assert "/api/ledger/history?kind=artifact&limit=50" not in routes
+    for kind in ("primogem", "crystal", "resin"):
+        assert f"/api/ledger/history?kind={kind}&limit=50" in routes
+
+
 def test_the_routes_that_depend_on_an_answer_are_made_from_it(tool):
     answers = {
         "/api/achievements?view=left": {"categories": [{"name": "a"}, {"name": "b"}]},

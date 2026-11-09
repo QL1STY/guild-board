@@ -1,4 +1,16 @@
 {
+  "2.1.0": [
+    {
+      "kind": "new",
+      "title": "Themes",
+      "text": "Choose how the window looks in Settings: Parchment, Midnight, Slate, Dusk, Mist, or Match Windows, which follows Windows' light or dark mode. There are also seven looks, one for each nation, from Mondstadt to Snezhnaya."
+    },
+    {
+      "kind": "better",
+      "title": "A new Ledger",
+      "text": "The Ledger shows your primogems as a chart and a history of days, with what came from where, your commissions and your wishes; what you spent can be hidden."
+    }
+  ],
   "2.0.2": [
     {
       "kind": "new",

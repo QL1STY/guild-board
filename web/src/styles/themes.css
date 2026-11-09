@@ -1,0 +1,1307 @@
+/*
+ * Midnight, Slate, Dusk and Mist (the themes design, sections 2 to 5). Parchment is tokens.css; each block here gives every token of
+ * Parchment's `:root` a value of its own, but those that keep one value in every theme (SAME_EVERYWHERE in themes.test.ts).
+ * The starting values are those of the mockup, themes.html; themes.test.ts holds each theme to the contrast rules Parchment
+ * passes. Contrast figures are against the card (--surface) unless said.
+ *
+ * On a dark theme the meaning colours are lightened where they would not read, never swapped for others: the marks that stand
+ * on the card (the wishes, the modes, the elements, the 5★ gold) are lighter versions of Parchment's, and the colours that
+ * stand under a white mark (--gold-ink, the modes) carry a dark --on-mark instead of the white.
+ */
+
+/* Midnight: a near-black navy, with gold. */
+[data-theme='midnight'] {
+  color-scheme: dark;
+  --page-light: #161C2E;
+  --page-dark: #0C0F1A;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #1B2236;
+  --ledger-light: #1A2236;
+  --rail: #080A12;
+  --rail-text: #ECE6D8;
+  --rail-muted: #8590A6;
+  --gold: #D9B467;
+  --surface: #151B2B;
+  --border: #262F47;
+  --hairline: #1F273B;
+  --ink: #ECE6D8;
+  --ink2: #CFC8B8;
+  --muted: #8F98AD;
+  --fill: #D9B467;
+  --track: #262E44;
+  --outline: #6D7690;
+  --gold-ink: #E3C57F;
+  --done: #8DBF7C;
+  --refused: #3A2B21;
+  --refused-ink: #EBA18C;
+  --resin: #7BA0DC;
+  --warn-soft: #3A2F20;
+  --warn-line: #6B5530;
+  --button: #D9B467;
+  --button-text: #151B2B;
+  --button-mark: #151B2B;
+  --shadow-ink: #000000;
+  --series: #7FA3DE;
+  --series-light: #4A6699;
+  --series-track: #263150;
+  --accent: #D9B467;
+  --deemph: #566079;
+  --grid: #1F273B;
+  --axis: #3A4560;
+  --r0: #202840;
+  --r1: #6B5A33;
+  --r2: #9A8043;
+  --r3: #C4A257;
+  --r4: #E8CB84;
+  --wish-character: #D9B467;
+  --wish-weapon: #7FA3DE;
+  --wish-standard: #E0809A;
+  --wish-chronicled: #A590E8;
+  --other: #707A94;
+  --spent: #E0906A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #C08A4A;
+  --src-endgame: #4C8A86;
+  --src-other: #A79C84;
+  --src-shop: #B74A41;
+  --ld-cover-a: #1A2236;
+  --ld-cover-b: #151B2B;
+  --ld-cover-stripe: rgba(217, 180, 103, .10);
+  --ld-edge: #E6C778;
+  --mode-abyss: #7C9BE8;
+  --mode-theater: #E07A96;
+  --mode-stygian: #55B5AE;
+  --good: #9DCB8B;
+  --focus: #9DB8F0;
+
+  --w-bg: #151B2B;
+  --w-gap: #151B2B;
+  --w-plate: #1B2236;
+  --w-border: #262F47;
+  --w-line: #1F273B;
+  --w-ink: #ECE6D8;
+  --w-ink2: #CFC8B8;
+  --w-muted: #8F98AD;
+  --w-fill: #D9B467;
+  --w-track: #262E44;
+  --w-icon: #D3BC8E;
+  --w-done: #8DBF7C;
+  --w-good: #9DCB8B;
+  --w-outline: #6D7690;
+  --w-btn: #D9B467;
+  --w-btn-text: #151B2B;
+  --w-quiet: #262F47;
+  --w-focus: #9DB8F0;
+  --w-gold-ink: #E3C57F;
+  --w-pity-mark: #151B2B;
+  --w-four: #B9A2E0;
+  --w-five-wash: rgba(217, 180, 103, .20);
+  --w-four-wash: rgba(170, 140, 230, .17);
+  --w-shade: rgba(21, 27, 43, .85);
+
+  --five: #E6C778;
+  --w-five: #E6C778;
+  --scrim: rgba(3, 5, 12, .6);
+  --shadow-deep: rgba(0, 0, 0, .55);
+  --shadow-warm: rgba(0, 0, 0, .45);
+  --shadow-map: rgba(0, 0, 0, .5);
+  --ava-light: #26304A;
+  --ava-edge: #1B2236;
+  --gold-soft: #382F1D;
+  --warn-ink: #E8CB84;
+  --good-soft: #1D3126;
+  --bad: #F0907F;
+  --bad-soft: #3A2224;
+  --on-mark: #0C0F1A;
+  --seg-done: #6FA45F;
+  --glint: rgb(236 214 160 / .22);
+  --field: #0F1424;
+}
+
+/*
+ * Slate: a blue-grey stone between Midnight and grey, with the gold kept. Its page is one flat colour, with no gradient (the
+ * player's choice, 2026-11-09; the other themes keep their soft gradients): --page is the page colour itself, and the two page
+ * colours are the same. The starting values are those of option A in the mockup, slate.html.
+ */
+[data-theme='slate'] {
+  color-scheme: dark;
+  --page-light: #2C333F;
+  --page-dark: #2C333F;
+  --page: var(--page-dark);
+  --tint: #3A4352;
+  --ledger-light: #394252;
+  --rail: #232933;
+  --rail-text: #EEF0F4;
+  --rail-muted: #9AA3B4;
+  --gold: #DDBB72;
+  --surface: #343C4A;
+  --border: #4A5466;
+  --hairline: #414A5A;
+  --ink: #EEF0F4;
+  --ink2: #D3D8E1;
+  --muted: #A9B1C1;
+  --fill: #DDBB72;
+  --track: #4A5466;
+  --outline: #8C95A8;
+  --gold-ink: #E8CE8A;
+  --done: #97C788;
+  --refused: #43332A;
+  --refused-ink: #EFA994;
+  --resin: #86A9E2;
+  --warn-soft: #453A28;
+  --warn-line: #7A6338;
+  --button: #DDBB72;
+  --button-text: #262C36;
+  --button-mark: #262C36;
+  --shadow-ink: #000000;
+  --series: #8CAEE4;
+  --series-light: #5A7099;
+  --series-track: #404B64;
+  --accent: #DDBB72;
+  --deemph: #6D778C;
+  --grid: #414A5A;
+  --axis: #5A6479;
+  --r0: #3E475A;
+  --r1: #75643B;
+  --r2: #A38848;
+  --r3: #C9A95E;
+  --r4: #EBD08C;
+  --wish-character: #DDBB72;
+  --wish-weapon: #88AAE2;
+  --wish-standard: #E589A2;
+  --wish-chronicled: #AB97EA;
+  --other: #7F89A0;
+  --spent: #E6987A;
+  --src-welkin: #9385B8;
+  --src-commissions: #728EB6;
+  --src-events: #C08A4A;
+  --src-endgame: #549994;
+  --src-other: #A79C84;
+  --src-shop: #CC756E;
+  --ld-cover-a: #394252;
+  --ld-cover-b: #343C4A;
+  --ld-cover-stripe: rgba(221, 187, 114, .10);
+  --ld-edge: #DDBB72;
+  --mode-abyss: #86A3EA;
+  --mode-theater: #E683A0;
+  --mode-stygian: #5EBAB3;
+  --good: #A6D596;
+  --focus: #A4BEF2;
+
+  --w-bg: #343C4A;
+  --w-gap: #343C4A;
+  --w-plate: #3A4352;
+  --w-border: #4A5466;
+  --w-line: #414A5A;
+  --w-ink: #EEF0F4;
+  --w-ink2: #D3D8E1;
+  --w-muted: #A9B1C1;
+  --w-fill: #DDBB72;
+  --w-track: #4A5466;
+  --w-icon: #D8C395;
+  --w-done: #97C788;
+  --w-good: #A6D596;
+  --w-outline: #8C95A8;
+  --w-btn: #DDBB72;
+  --w-btn-text: #262C36;
+  --w-quiet: #4A5466;
+  --w-focus: #A4BEF2;
+  --w-gold-ink: #E8CE8A;
+  --w-pity-mark: #343C4A;
+  --w-four: #BCA8E6;
+  --w-five-wash: rgba(221, 187, 114, .20);
+  --w-four-wash: rgba(180, 150, 235, .18);
+  --w-shade: rgba(52, 60, 74, .85);
+
+  --five: #DDBB72;
+  --w-five: #DDBB72;
+  --scrim: rgba(10, 13, 20, .6);
+  --shadow-deep: rgba(0, 0, 0, .5);
+  --shadow-warm: rgba(0, 0, 0, .4);
+  --shadow-map: rgba(0, 0, 0, .45);
+  --ava-light: #3E475A;
+  --ava-edge: #3A4352;
+  --gold-soft: #48402B;
+  --warn-ink: #EBD08C;
+  --good-soft: #2E4034;
+  --bad: #F2988A;
+  --bad-soft: #4A2F32;
+  --on-mark: #1F2530;
+  --seg-done: #6FA45F;
+  --glint: rgb(240 222 170 / .22);
+  --field: #272D38;
+}
+
+/*
+ * Match Windows, before the script has run. The core writes `data-theme="system"` into the page, and main.tsx (applyInitialTheme)
+ * replaces it with Midnight or Parchment only when it runs, which can be after the first paint. No block above matches the word, so
+ * the page would paint Parchment first on a dark Windows. This gives the page's own background and ink Midnight's values until then,
+ * and nothing else: the rule is gone as soon as the word is. A light Windows needs none: `:root` is Parchment.
+ */
+@media (prefers-color-scheme: dark) {
+  [data-theme='system'] {
+    color-scheme: dark;
+    --page-light: #161C2E;
+    --page-dark: #0C0F1A;
+    --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+    --ink: #ECE6D8;
+  }
+}
+
+/* Dusk: a warm brown-charcoal, with candle gold. */
+[data-theme='dusk'] {
+  color-scheme: dark;
+  --page-light: #2E2924;
+  --page-dark: #211D19;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #332D27;
+  --ledger-light: #302A24;
+  --rail: #191613;
+  --rail-text: #EFE4CF;
+  --rail-muted: #9C907D;
+  --gold: #D7A24E;
+  --surface: #2B2621;
+  --border: #40382F;
+  --hairline: #372F28;
+  --ink: #EFE4CF;
+  --ink2: #D6CAB3;
+  --muted: #A69A86;
+  --fill: #D7A24E;
+  --track: #3D352C;
+  --outline: #85786A;
+  --gold-ink: #E3B873;
+  --done: #9CBF78;
+  --refused: #3B2A20;
+  --refused-ink: #EDA48D;
+  --resin: #86A6DD;
+  --warn-soft: #3F3120;
+  --warn-line: #75592F;
+  --button: #D7A24E;
+  --button-text: #241F1A;
+  --button-mark: #241F1A;
+  --shadow-ink: #000000;
+  --series: #86A6DD;
+  --series-light: #566C9A;
+  --series-track: #36394C;
+  --accent: #D7A24E;
+  --deemph: #6A5F52;
+  --grid: #372F28;
+  --axis: #54493D;
+  --r0: #382F27;
+  --r1: #6E5732;
+  --r2: #9C7B40;
+  --r3: #C79B52;
+  --r4: #E8C381;
+  --wish-character: #D7A24E;
+  --wish-weapon: #86A6DD;
+  --wish-standard: #E0889C;
+  --wish-chronicled: #A992E6;
+  --other: #85786A;
+  --spent: #E49A74;
+  --src-welkin: #7E6DAA;
+  --src-commissions: #5778A8;
+  --src-events: #C08A4A;
+  --src-endgame: #4C8A86;
+  --src-other: #A79C84;
+  --src-shop: #C0554C;
+  --ld-cover-a: #302A24;
+  --ld-cover-b: #2B2621;
+  --ld-cover-stripe: rgba(215, 162, 78, .10);
+  --ld-edge: #E8BD6A;
+  --mode-abyss: #839FE6;
+  --mode-theater: #E3809A;
+  --mode-stygian: #5DB9B1;
+  --good: #ADCB8A;
+  --focus: #A8BEEC;
+
+  --w-bg: #2B2621;
+  --w-gap: #2B2621;
+  --w-plate: #332D27;
+  --w-border: #40382F;
+  --w-line: #372F28;
+  --w-ink: #EFE4CF;
+  --w-ink2: #D6CAB3;
+  --w-muted: #A69A86;
+  --w-fill: #D7A24E;
+  --w-track: #3D352C;
+  --w-icon: #D3BC8E;
+  --w-done: #9CBF78;
+  --w-good: #ADCB8A;
+  --w-outline: #85786A;
+  --w-btn: #D7A24E;
+  --w-btn-text: #241F1A;
+  --w-quiet: #40382F;
+  --w-focus: #A8BEEC;
+  --w-gold-ink: #E3B873;
+  --w-pity-mark: #2B2621;
+  --w-four: #BDA6E2;
+  --w-five-wash: rgba(215, 162, 78, .22);
+  --w-four-wash: rgba(175, 135, 200, .16);
+  --w-shade: rgba(43, 38, 33, .85);
+
+  --five: #E8BD6A;
+  --w-five: #E8BD6A;
+  --scrim: rgba(12, 8, 4, .6);
+  --shadow-deep: rgba(0, 0, 0, .55);
+  --shadow-warm: rgba(0, 0, 0, .45);
+  --shadow-map: rgba(0, 0, 0, .5);
+  --ava-light: #3D352C;
+  --ava-edge: #2B2621;
+  --gold-soft: #41331E;
+  --warn-ink: #EBC589;
+  --good-soft: #26331F;
+  --bad: #F0937F;
+  --bad-soft: #42261F;
+  --on-mark: #1B1713;
+  --seg-done: #78A965;
+  --glint: rgb(240 214 160 / .22);
+  --field: #1B1713;
+}
+
+/* Mist: a cool white-grey, with sky blue. The general accent is blue; the 5★ gold stays gold. */
+[data-theme='mist'] {
+  --page-light: #F4F7FA;
+  --page-dark: #E3E9F0;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #EEF2F7;
+  --ledger-light: #FFFFFF;
+  --rail: #26304A;
+  --rail-text: #EEF2F7;
+  --rail-muted: #A3AEC2;
+  --gold: #9CC3E6;
+  --surface: #FBFCFE;
+  --border: #D3DCE7;
+  --hairline: #E4EAF1;
+  --ink: #26304A;
+  --ink2: #4B5570;
+  --muted: #5E687E;
+  --fill: #2F6FA8;
+  --track: #D9E2EC;
+  --outline: #7D889C;
+  --gold-ink: #2A6296;
+  --done: #3F8F6A;
+  --refused: #4B3A26;
+  --refused-ink: #5A3A33;
+  --resin: #4F78B8;
+  --warn-soft: #F6E3C4;
+  --warn-line: #E0BE8A;
+  --button: #2F6FA8;
+  --button-text: #FFFFFF;
+  --button-mark: #FFFFFF;
+  --shadow-ink: #26304A;
+  --series: #2F8791;
+  --series-light: #A5D0D4;
+  --series-track: #D5E9EB;
+  --accent: #2F6FA8;
+  --deemph: #B2BCCB;
+  --grid: #E4EAF1;
+  --axis: #C5D0DD;
+  --r0: #E4EAF1;
+  --r1: #A9C6E2;
+  --r2: #6E9CC6;
+  --r3: #3F77AB;
+  --r4: #234F7A;
+  --wish-character: #A6751F;
+  --wish-weapon: #4470B4;
+  --wish-standard: #B5546A;
+  --wish-chronicled: #6A4FB8;
+  --other: #A9B4C4;
+  --spent: #9A4A2A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #B6803F;
+  --src-endgame: #4C8A86;
+  --src-other: #978A6E;
+  --src-shop: #A4423A;
+  --ld-cover-a: #FFFFFF;
+  --ld-cover-b: #FBFCFE;
+  --ld-cover-stripe: rgba(156, 195, 230, .10);
+  --ld-edge: #C9A04E;
+  --mode-abyss: #3E5A9E;
+  --mode-theater: #9C3B52;
+  --mode-stygian: #2D6E6A;
+  --good: #1F6E4C;
+  --focus: #2F6FA8;
+
+  --w-bg: #FBFCFE;
+  --w-gap: #FBFCFE;
+  --w-plate: #EEF2F7;
+  --w-border: #D3DCE7;
+  --w-line: #E4EAF1;
+  --w-ink: #26304A;
+  --w-ink2: #4B5570;
+  --w-muted: #5E687E;
+  --w-fill: #2F6FA8;
+  --w-track: #D9E2EC;
+  --w-icon: #B8923F;
+  --w-done: #3F8F6A;
+  --w-good: #1F6E4C;
+  --w-outline: #7D889C;
+  --w-btn: #2F6FA8;
+  --w-btn-text: #FFFFFF;
+  --w-quiet: #D3DCE7;
+  --w-focus: #2F6FA8;
+  --w-gold-ink: #2A6296;
+  --w-pity-mark: #2A6296;
+  --w-four: #8A6BBE;
+  --w-five-wash: rgba(230, 185, 90, .26);
+  --w-four-wash: rgba(150, 120, 215, .18);
+  --w-shade: rgba(251, 252, 254, .85);
+
+  /* Gold, as on Parchment: it reaches 3:1 on this card, and means a 5★ whatever the accent is. */
+  --five: #A6751F;
+  --w-five: #A6751F;
+  --scrim: rgba(38, 48, 74, .45);
+  --shadow-deep: rgba(24, 32, 52, .35);
+  --shadow-warm: rgba(40, 48, 70, .2);
+  --shadow-map: rgba(30, 38, 56, .28);
+  --ava-light: #EEF2F7;
+  --ava-edge: #D3DCE7;
+  --gold-soft: #FBEBC9;
+  --warn-ink: #7A5418;
+  --good-soft: #DCEFE4;
+  --bad: #8A2E21;
+  --bad-soft: #F6DAD6;
+  --on-mark: #FFFFFF;
+  --seg-done: #3E7D5C;
+  --glint: rgb(255 255 255 / .55);
+  --field: #FFFFFF;
+}
+
+/*
+ * The seven nations (the themes design, section 12), after Mist: Mondstadt, Liyue, Inazuma, Sumeru, Fontaine, Natlan and Snezhnaya.
+ * A dark nation is built like Midnight and Dusk (color-scheme: dark, lighter inks, black shadows); a light one like Mist (its ink
+ * as its shadow, white on its buttons). The page, card, ink, muted, accent, track, rail and button are the player's table from the
+ * mockup nations.html; the rest is derived from them in the manner of Midnight and Mist, and held by themes.test.ts.
+ */
+
+/* Mondstadt: open sky over the meadows, a pale blue-green page with white cards, a wind teal and a deep pine rail. */
+[data-theme='mondstadt'] {
+  --page-light: #F3F8F9;
+  --page-dark: #E2EDF0;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #ECF3F5;
+  --ledger-light: #FFFFFF;
+  --rail: #21434A;
+  --rail-text: #E8F3F4;
+  --rail-muted: #9AAFB2;
+  --gold: #8AB9C0;
+  --surface: #FBFDFD;
+  --border: #D5E3E7;
+  --hairline: #E8F0F2;
+  --ink: #1F3A3E;
+  --ink2: #4F6568;
+  --muted: #587076;
+  --fill: #2A7F8C;
+  --track: #D2E2E6;
+  --outline: #7E9095;
+  --gold-ink: #226873;
+  --done: #3F8F6A;
+  --refused: #4B3A26;
+  --refused-ink: #5A3A33;
+  --resin: #4F78B8;
+  --warn-soft: #F6E3C4;
+  --warn-line: #E0BE8A;
+  --button: #2A7F8C;
+  --button-text: #FFFFFF;
+  --button-mark: #FFFFFF;
+  --shadow-ink: #1F3A3E;
+  --series: #3E69AE;
+  --series-light: #AFC2DD;
+  --series-track: #DFE7F1;
+  --accent: #2A7F8C;
+  --deemph: #B2BEC0;
+  --grid: #E8F0F2;
+  --axis: #BCCCD0;
+  --r0: #ECF3F5;
+  --r1: #ACCDD2;
+  --r2: #79AFB7;
+  --r3: #49929D;
+  --r4: #1D5962;
+  --wish-character: #A6751F;
+  --wish-weapon: #4470B4;
+  --wish-standard: #B5546A;
+  --wish-chronicled: #6A4FB8;
+  --other: #B2BEC0;
+  --spent: #9A4A2A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #B6803F;
+  --src-endgame: #4C8A86;
+  --src-other: #978A6E;
+  --src-shop: #A4423A;
+  --ld-cover-a: #FFFFFF;
+  --ld-cover-b: #FBFDFD;
+  --ld-cover-stripe: rgba(138, 185, 192, .10);
+  --ld-edge: #C9A04E;
+  --mode-abyss: #3E5A9E;
+  --mode-theater: #9C3B52;
+  --mode-stygian: #2D6E6A;
+  --good: #1F6E4C;
+  --focus: #2A7F8C;
+
+  --w-bg: #FBFDFD;
+  --w-gap: #FBFDFD;
+  --w-plate: #ECF3F5;
+  --w-border: #D5E3E7;
+  --w-line: #E8F0F2;
+  --w-ink: #1F3A3E;
+  --w-ink2: #4F6568;
+  --w-muted: #587076;
+  --w-fill: #2A7F8C;
+  --w-track: #D2E2E6;
+  --w-icon: #B8923F;
+  --w-done: #3F8F6A;
+  --w-good: #1F6E4C;
+  --w-outline: #7E9095;
+  --w-btn: #2A7F8C;
+  --w-btn-text: #FFFFFF;
+  --w-quiet: #D5E3E7;
+  --w-focus: #2A7F8C;
+  --w-gold-ink: #226873;
+  --w-pity-mark: #226873;
+  --w-four: #8A6BBE;
+  --w-five-wash: rgba(230, 185, 90, .26);
+  --w-four-wash: rgba(150, 120, 215, .18);
+  --w-shade: rgba(251, 253, 253, 0.85);
+
+  --five: #A6751F;
+  --w-five: #A6751F;
+  --scrim: rgba(31, 58, 62, .45);
+  --shadow-deep: rgba(31, 58, 62, .35);
+  --shadow-warm: rgba(31, 58, 62, .2);
+  --shadow-map: rgba(31, 58, 62, .28);
+  --ava-light: #ECF3F5;
+  --ava-edge: #D5E3E7;
+  --gold-soft: #FBEBC9;
+  --warn-ink: #7A5418;
+  --good-soft: #DCEFE4;
+  --bad: #8A2E21;
+  --bad-soft: #F6DAD6;
+  --on-mark: #FFFFFF;
+  --seg-done: #3E7D5C;
+  --glint: rgb(255 255 255 / .55);
+  --field: #FFFFFF;
+}
+
+/* Liyue: red lacquer and gold leaf, a deep cinnabar-brown page and the gold of a contract seal. */
+[data-theme='liyue'] {
+  color-scheme: dark;
+  --page-light: #2B1B17;
+  --page-dark: #1F1412;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #362621;
+  --ledger-light: #34241F;
+  --rail: #150D0B;
+  --rail-text: #F2E4D0;
+  --rail-muted: #8F8377;
+  --gold: #E1B35C;
+  --surface: #2C1C18;
+  --border: #3E2A24;
+  --hairline: #36241F;
+  --ink: #F2E4D0;
+  --ink2: #CABCAB;
+  --muted: #B79F88;
+  --fill: #E1B35C;
+  --track: #45302A;
+  --outline: #8D7866;
+  --gold-ink: #E8C480;
+  --done: #8DBF7C;
+  --refused: #47281E;
+  --refused-ink: #EBA18C;
+  --resin: #7BA0DC;
+  --warn-soft: #483121;
+  --warn-line: #75542F;
+  --button: #E1B35C;
+  --button-text: #2C1C18;
+  --button-mark: #2C1C18;
+  --shadow-ink: #000000;
+  --series: #7FA3DE;
+  --series-light: #5A6685;
+  --series-track: #393238;
+  --accent: #E1B35C;
+  --deemph: #6B574A;
+  --grid: #36241F;
+  --axis: #624D42;
+  --r0: #3E2B1F;
+  --r1: #785B35;
+  --r2: #A38045;
+  --r3: #CBA154;
+  --r4: #EACA8D;
+  --wish-character: #E8C070;
+  --wish-weapon: #7FA3DE;
+  --wish-standard: #E0809A;
+  --wish-chronicled: #A590E8;
+  --other: #867161;
+  --spent: #E0906A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #C08A4A;
+  --src-endgame: #4C8A86;
+  --src-other: #A79C84;
+  --src-shop: #BC4C43;
+  --ld-cover-a: #34241F;
+  --ld-cover-b: #2C1C18;
+  --ld-cover-stripe: rgba(225, 179, 92, .10);
+  --ld-edge: #E8C070;
+  --mode-abyss: #7C9BE8;
+  --mode-theater: #E07A96;
+  --mode-stygian: #55B5AE;
+  --good: #9DCB8B;
+  --focus: #9DB8F0;
+
+  --w-bg: #2C1C18;
+  --w-gap: #2C1C18;
+  --w-plate: #362621;
+  --w-border: #3E2A24;
+  --w-line: #36241F;
+  --w-ink: #F2E4D0;
+  --w-ink2: #CABCAB;
+  --w-muted: #B79F88;
+  --w-fill: #E1B35C;
+  --w-track: #45302A;
+  --w-icon: #E6C27F;
+  --w-done: #8DBF7C;
+  --w-good: #9DCB8B;
+  --w-outline: #8D7866;
+  --w-btn: #E1B35C;
+  --w-btn-text: #2C1C18;
+  --w-quiet: #3E2A24;
+  --w-focus: #9DB8F0;
+  --w-gold-ink: #E8C480;
+  --w-pity-mark: #2C1C18;
+  --w-four: #B9A2E0;
+  --w-five-wash: rgba(232, 192, 112, 0.2);
+  --w-four-wash: rgba(170, 140, 230, .17);
+  --w-shade: rgba(44, 28, 24, 0.85);
+
+  --five: #E8C070;
+  --w-five: #E8C070;
+  --scrim: rgba(12, 8, 7, 0.6);
+  --shadow-deep: rgba(0, 0, 0, .55);
+  --shadow-warm: rgba(0, 0, 0, .45);
+  --shadow-map: rgba(0, 0, 0, .5);
+  --ava-light: #44342E;
+  --ava-edge: #362621;
+  --gold-soft: #463020;
+  --warn-ink: #E8CB84;
+  --good-soft: #343326;
+  --bad: #F0907F;
+  --bad-soft: #4B2520;
+  --on-mark: #140D0C;
+  --seg-done: #6FA45F;
+  --glint: rgb(240 217 174 / .22);
+  --field: #1D1210;
+}
+
+/* Inazuma: a storm-violet night under the Sacred Sakura; sakura pink for progress and buttons, never violet (that would read as 4★). */
+[data-theme='inazuma'] {
+  color-scheme: dark;
+  --page-light: #231D35;
+  --page-dark: #191526;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #2E2840;
+  --ledger-light: #2C263E;
+  --rail: #100D1A;
+  --rail-text: #EEE8F6;
+  --rail-muted: #8A8593;
+  --gold: #E79AB8;
+  --surface: #241E36;
+  --border: #352D4C;
+  --hairline: #2D2642;
+  --ink: #EEE8F6;
+  --ink2: #C6C0D0;
+  --muted: #A69DBC;
+  --fill: #E79AB8;
+  --track: #3A3152;
+  --outline: #7F7794;
+  --gold-ink: #ECB0C8;
+  --done: #8DBF7C;
+  --refused: #402A37;
+  --refused-ink: #EBA18C;
+  --resin: #7BA0DC;
+  --warn-soft: #41333A;
+  --warn-line: #705540;
+  --button: #E79AB8;
+  --button-text: #241E36;
+  --button-mark: #241E36;
+  --shadow-ink: #000000;
+  --series: #7FA3DE;
+  --series-light: #566792;
+  --series-track: #333351;
+  --accent: #E79AB8;
+  --deemph: #5E5772;
+  --grid: #2D2642;
+  --axis: #574F6E;
+  --r0: #382A43;
+  --r1: #76526D;
+  --r2: #A5708C;
+  --r3: #D08BA8;
+  --r4: #EEB8CD;
+  --wish-character: #E6C778;
+  --wish-weapon: #7FA3DE;
+  /* Not a pink: the accent is, and the chart of primogems by source stacks the two side by side (themes.test.ts). */
+  --wish-standard: #E8736B;
+  --wish-chronicled: #A590E8;
+  --other: #78718D;
+  --spent: #E0906A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #C08A4A;
+  --src-endgame: #4C8A86;
+  --src-other: #A79C84;
+  --src-shop: #BD4E45;
+  --ld-cover-a: #2C263E;
+  --ld-cover-b: #241E36;
+  --ld-cover-stripe: rgba(231, 154, 184, .10);
+  --ld-edge: #E6C778;
+  --mode-abyss: #7C9BE8;
+  --mode-theater: #E07A96;
+  --mode-stygian: #55B5AE;
+  --good: #9DCB8B;
+  --focus: #9DB8F0;
+
+  --w-bg: #241E36;
+  --w-gap: #241E36;
+  --w-plate: #2E2840;
+  --w-border: #352D4C;
+  --w-line: #2D2642;
+  --w-ink: #EEE8F6;
+  --w-ink2: #C6C0D0;
+  --w-muted: #A69DBC;
+  --w-fill: #E79AB8;
+  --w-track: #3A3152;
+  --w-icon: #E9B1CB;
+  --w-done: #8DBF7C;
+  --w-good: #9DCB8B;
+  --w-outline: #7F7794;
+  --w-btn: #E79AB8;
+  --w-btn-text: #241E36;
+  --w-quiet: #352D4C;
+  --w-focus: #9DB8F0;
+  --w-gold-ink: #ECB0C8;
+  --w-pity-mark: #241E36;
+  --w-four: #B9A2E0;
+  --w-five-wash: rgba(230, 199, 120, 0.2);
+  --w-four-wash: rgba(170, 140, 230, .17);
+  --w-shade: rgba(36, 30, 54, 0.85);
+
+  --five: #E6C778;
+  --w-five: #E6C778;
+  --scrim: rgba(10, 8, 15, 0.6);
+  --shadow-deep: rgba(0, 0, 0, .55);
+  --shadow-warm: rgba(0, 0, 0, .45);
+  --shadow-map: rgba(0, 0, 0, .5);
+  --ava-light: #3C364D;
+  --ava-edge: #2E2840;
+  --gold-soft: #3F323A;
+  --warn-ink: #E8CB84;
+  --good-soft: #2D353F;
+  --bad: #F0907F;
+  --bad-soft: #442739;
+  --on-mark: #100E19;
+  --seg-done: #6FA45F;
+  --glint: rgb(243 204 220 / .22);
+  --field: #171423;
+}
+
+/* Sumeru: rainforest leaves, a warm sage page with cream cards and a leaf green. */
+[data-theme='sumeru'] {
+  --page-light: #F6F5E9;
+  --page-dark: #E8EBD6;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #F0F2E3;
+  --ledger-light: #FFFFFF;
+  --rail: #2D4024;
+  --rail-text: #EEF3E4;
+  --rail-muted: #A1AB97;
+  --gold: #9BBB89;
+  --surface: #FDFDF6;
+  --border: #DEE3CD;
+  --hairline: #EEF0E2;
+  --ink: #2A3A20;
+  --ink2: #58654F;
+  --muted: #5E6A50;
+  --fill: #4A8428;
+  --track: #DCE2C9;
+  --outline: #868F7A;
+  --gold-ink: #3D6C21;
+  --done: #3F8F6A;
+  --refused: #4B3A26;
+  --refused-ink: #5A3A33;
+  --resin: #4F78B8;
+  --warn-soft: #F6E3C4;
+  --warn-line: #E0BE8A;
+  --button: #4A8428;
+  --button-text: #FFFFFF;
+  --button-mark: #FFFFFF;
+  --shadow-ink: #2A3A20;
+  --series: #2F8791;
+  --series-light: #ABCECE;
+  --series-track: #DEEBE7;
+  --accent: #4A8428;
+  --deemph: #B5BBAB;
+  --grid: #EEF0E2;
+  --axis: #C4CBB4;
+  --r0: #F0F2E3;
+  --r1: #B9CFA8;
+  --r2: #8EB276;
+  --r3: #659647;
+  --r4: #345C1C;
+  --wish-character: #A6751F;
+  --wish-weapon: #4470B4;
+  --wish-standard: #B5546A;
+  --wish-chronicled: #6A4FB8;
+  --other: #B5BBAB;
+  --spent: #9A4A2A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #B6803F;
+  --src-endgame: #4C8A86;
+  --src-other: #978A6E;
+  --src-shop: #A4423A;
+  --ld-cover-a: #FFFFFF;
+  --ld-cover-b: #FDFDF6;
+  --ld-cover-stripe: rgba(155, 187, 137, .10);
+  --ld-edge: #C9A04E;
+  --mode-abyss: #3E5A9E;
+  --mode-theater: #9C3B52;
+  --mode-stygian: #2D6E6A;
+  --good: #1F6E4C;
+  --focus: #4A8428;
+
+  --w-bg: #FDFDF6;
+  --w-gap: #FDFDF6;
+  --w-plate: #F0F2E3;
+  --w-border: #DEE3CD;
+  --w-line: #EEF0E2;
+  --w-ink: #2A3A20;
+  --w-ink2: #58654F;
+  --w-muted: #5E6A50;
+  --w-fill: #4A8428;
+  --w-track: #DCE2C9;
+  --w-icon: #B8923F;
+  --w-done: #3F8F6A;
+  --w-good: #1F6E4C;
+  --w-outline: #868F7A;
+  --w-btn: #4A8428;
+  --w-btn-text: #FFFFFF;
+  --w-quiet: #DEE3CD;
+  --w-focus: #4A8428;
+  --w-gold-ink: #3D6C21;
+  --w-pity-mark: #3D6C21;
+  --w-four: #8A6BBE;
+  --w-five-wash: rgba(230, 185, 90, .26);
+  --w-four-wash: rgba(150, 120, 215, .18);
+  --w-shade: rgba(253, 253, 246, 0.85);
+
+  --five: #A6751F;
+  --w-five: #A6751F;
+  --scrim: rgba(42, 58, 32, .45);
+  --shadow-deep: rgba(42, 58, 32, .35);
+  --shadow-warm: rgba(42, 58, 32, .2);
+  --shadow-map: rgba(42, 58, 32, .28);
+  --ava-light: #F0F2E3;
+  --ava-edge: #DEE3CD;
+  --gold-soft: #FBEBC9;
+  --warn-ink: #7A5418;
+  --good-soft: #DCEFE4;
+  --bad: #8A2E21;
+  --bad-soft: #F6DAD6;
+  --on-mark: #FFFFFF;
+  --seg-done: #3E7D5C;
+  --glint: rgb(255 255 255 / .55);
+  --field: #FFFFFF;
+}
+
+/* Fontaine, B (Court blue): the Opera Epiclese at night, a deep royal blue clearly bluer than Midnight, with polished brass. */
+[data-theme='fontaine'] {
+  color-scheme: dark;
+  --page-light: #18264A;
+  --page-dark: #101A30;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #253252;
+  --ledger-light: #223050;
+  --rail: #0A1122;
+  --rail-text: #EEF0F6;
+  --rail-muted: #878C97;
+  --gold: #DDBA6E;
+  --surface: #1A2849;
+  --border: #26365A;
+  --hairline: #213052;
+  --ink: #EEF0F6;
+  --ink2: #C4C8D3;
+  --muted: #9BA6C2;
+  --fill: #DDBA6E;
+  --track: #2B3A60;
+  --outline: #74809E;
+  --gold-ink: #E4C98E;
+  --done: #8DBF7C;
+  --refused: #383246;
+  --refused-ink: #EBA18C;
+  --resin: #7BA0DC;
+  --warn-soft: #393C4A;
+  --warn-line: #6A5B4B;
+  --button: #DDBA6E;
+  --button-text: #1A2849;
+  --button-mark: #1A2849;
+  --shadow-ink: #000000;
+  --series: #7FA3DE;
+  --series-light: #526C9B;
+  --series-track: #2A3C61;
+  --accent: #DDBA6E;
+  --deemph: #54617F;
+  --grid: #213052;
+  --axis: #495879;
+  --r0: #2E374D;
+  --r1: #6C6559;
+  --r2: #9B8861;
+  --r3: #C6A86A;
+  --r4: #E7CF9A;
+  --wish-character: #E6C778;
+  --wish-weapon: #7FA3DE;
+  --wish-standard: #E0809A;
+  --wish-chronicled: #A590E8;
+  --other: #6E7A98;
+  --spent: #E0906A;
+  --src-welkin: #7F6FAB;
+  --src-commissions: #587AA9;
+  --src-events: #C08A4A;
+  --src-endgame: #4C8A86;
+  --src-other: #A79C84;
+  --src-shop: #C15850;
+  --ld-cover-a: #223050;
+  --ld-cover-b: #1A2849;
+  --ld-cover-stripe: rgba(221, 186, 110, .10);
+  --ld-edge: #E6C778;
+  --mode-abyss: #7C9BE8;
+  --mode-theater: #E07A96;
+  --mode-stygian: #55B5AE;
+  --good: #9DCB8B;
+  --focus: #9DB8F0;
+
+  --w-bg: #1A2849;
+  --w-gap: #1A2849;
+  --w-plate: #253252;
+  --w-border: #26365A;
+  --w-line: #213052;
+  --w-ink: #EEF0F6;
+  --w-ink2: #C4C8D3;
+  --w-muted: #9BA6C2;
+  --w-fill: #DDBA6E;
+  --w-track: #2B3A60;
+  --w-icon: #E2CA97;
+  --w-done: #8DBF7C;
+  --w-good: #9DCB8B;
+  --w-outline: #74809E;
+  --w-btn: #DDBA6E;
+  --w-btn-text: #1A2849;
+  --w-quiet: #26365A;
+  --w-focus: #9DB8F0;
+  --w-gold-ink: #E4C98E;
+  --w-pity-mark: #1A2849;
+  --w-four: #B9A2E0;
+  --w-five-wash: rgba(230, 199, 120, 0.2);
+  --w-four-wash: rgba(170, 140, 230, .17);
+  --w-shade: rgba(26, 40, 73, 0.85);
+
+  --five: #E6C778;
+  --w-five: #E6C778;
+  --scrim: rgba(6, 10, 19, 0.6);
+  --shadow-deep: rgba(0, 0, 0, .55);
+  --shadow-warm: rgba(0, 0, 0, .45);
+  --shadow-map: rgba(0, 0, 0, .5);
+  --ava-light: #33405E;
+  --ava-edge: #253252;
+  --gold-soft: #373A4A;
+  --warn-ink: #E8CB84;
+  --good-soft: #253D4F;
+  --bad: #F0907F;
+  --bad-soft: #3C2F49;
+  --on-mark: #0A111F;
+  --seg-done: #6FA45F;
+  --glint: rgb(238 220 182 / .22);
+  --field: #111A2F;
+}
+
+/* Natlan, B (Basalt dark): a near-black basalt page; turquoise for progress and the accent, ember buttons with dark text. */
+[data-theme='natlan'] {
+  color-scheme: dark;
+  --page-light: #261D19;
+  --page-dark: #1B1513;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #332A26;
+  --ledger-light: #312824;
+  --rail: #110D0C;
+  --rail-text: #F3E8DD;
+  --rail-muted: #8D857F;
+  --gold: #46C2B2;
+  --surface: #29201C;
+  --border: #3B2F2A;
+  --hairline: #332824;
+  --ink: #F3E8DD;
+  --ink2: #CBC0B6;
+  --muted: #AE9C8E;
+  --fill: #46C2B2;
+  --track: #413430;
+  --outline: #86776C;
+  --gold-ink: #6FCFC3;
+  --done: #8DBF7C;
+  --refused: #442C21;
+  --refused-ink: #EBA18C;
+  --resin: #7BA0DC;
+  --warn-soft: #453524;
+  --warn-line: #735731;
+  --button: #F08A4B;
+  --button-text: #29201C;
+  --button-mark: #29201C;
+  --shadow-ink: #000000;
+  --series: #7FA3DE;
+  --series-light: #586887;
+  --series-track: #37353B;
+  --accent: #46C2B2;
+  --deemph: #65584F;
+  --grid: #332824;
+  --axis: #5E5048;
+  --r0: #2C302B;
+  --r1: #35645B;
+  --r2: #3C8B7F;
+  --r3: #43AFA0;
+  --r4: #7ED4C9;
+  --wish-character: #E6C778;
+  --wish-weapon: #7FA3DE;
+  --wish-standard: #E0809A;
+  --wish-chronicled: #A590E8;
+  --other: #7F7166;
+  --spent: #E0906A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #C08A4A;
+  --src-endgame: #4C8A86;
+  --src-other: #A79C84;
+  --src-shop: #BE5046;
+  --ld-cover-a: #312824;
+  --ld-cover-b: #29201C;
+  --ld-cover-stripe: rgba(70, 194, 178, .10);
+  --ld-edge: #E6C778;
+  --mode-abyss: #7C9BE8;
+  --mode-theater: #E07A96;
+  --mode-stygian: #55B5AE;
+  --good: #9DCB8B;
+  --focus: #9DB8F0;
+
+  --w-bg: #29201C;
+  --w-gap: #29201C;
+  --w-plate: #332A26;
+  --w-border: #3B2F2A;
+  --w-line: #332824;
+  --w-ink: #F3E8DD;
+  --w-ink2: #CBC0B6;
+  --w-muted: #AE9C8E;
+  --w-fill: #46C2B2;
+  --w-track: #413430;
+  --w-icon: #7ACDBF;
+  --w-done: #8DBF7C;
+  --w-good: #9DCB8B;
+  --w-outline: #86776C;
+  --w-btn: #F08A4B;
+  --w-btn-text: #29201C;
+  --w-quiet: #3B2F2A;
+  --w-focus: #9DB8F0;
+  --w-gold-ink: #6FCFC3;
+  --w-pity-mark: #29201C;
+  --w-four: #B9A2E0;
+  --w-five-wash: rgba(230, 199, 120, 0.2);
+  --w-four-wash: rgba(170, 140, 230, .17);
+  --w-shade: rgba(41, 32, 28, 0.85);
+
+  --five: #E6C778;
+  --w-five: #E6C778;
+  --scrim: rgba(11, 8, 8, 0.6);
+  --shadow-deep: rgba(0, 0, 0, .55);
+  --shadow-warm: rgba(0, 0, 0, .45);
+  --shadow-map: rgba(0, 0, 0, .5);
+  --ava-light: #413833;
+  --ava-edge: #332A26;
+  --gold-soft: #433424;
+  --warn-ink: #E8CB84;
+  --good-soft: #323729;
+  --bad: #F0907F;
+  --bad-soft: #482824;
+  --on-mark: #120E0C;
+  --seg-done: #6FA45F;
+  --glint: rgb(162 224 216 / .22);
+  --field: #1B1512;
+}
+
+/* Snezhnaya: snow and the Tsaritsa's palace, a frost-white page with ice-blue cards and a crimson progress and button. */
+[data-theme='snezhnaya'] {
+  --page-light: #F5F8FA;
+  --page-dark: #E5ECF1;
+  --page: radial-gradient(1200px 500px at 70% -10%, var(--page-light) 0%, var(--page-dark) 70%) fixed var(--page-dark);
+  --tint: #EEF3F6;
+  --ledger-light: #FFFFFF;
+  --rail: #1D2838;
+  --rail-text: #EEF2F7;
+  --rail-muted: #9AA1AB;
+  --gold: #CC8D94;
+  --surface: #FCFDFE;
+  --border: #DCE3EA;
+  --hairline: #ECF0F4;
+  --ink: #1D2838;
+  --ink2: #4E5764;
+  --muted: #5B6577;
+  --fill: #A3303C;
+  --track: #DAE2EA;
+  --outline: #838B99;
+  --gold-ink: #A3303C;
+  --done: #3F8F6A;
+  --refused: #4B3A26;
+  --refused-ink: #5A3A33;
+  --resin: #4F78B8;
+  --warn-soft: #F6E3C4;
+  --warn-line: #E0BE8A;
+  --button: #A3303C;
+  --button-text: #FFFFFF;
+  --button-mark: #FFFFFF;
+  --shadow-ink: #1D2838;
+  --series: #3F6FA8;
+  --series-light: #B0C4DC;
+  --series-track: #E0E8F1;
+  --accent: #A3303C;
+  --deemph: #B4B9C1;
+  --grid: #ECF0F4;
+  --axis: #C2CAD3;
+  --r0: #EEF3F6;
+  --r1: #DAAFB4;
+  --r2: #C57E86;
+  --r3: #B04F59;
+  --r4: #72222A;
+  --wish-character: #A6751F;
+  --wish-weapon: #4470B4;
+  /* Not a rose red: the accent is a crimson, and the chart of primogems by source stacks the two side by side (themes.test.ts). */
+  --wish-standard: #A83E94;
+  --wish-chronicled: #6A4FB8;
+  --other: #B4B9C1;
+  --spent: #9A4A2A;
+  --src-welkin: #7B6AA8;
+  --src-commissions: #5677A6;
+  --src-events: #B6803F;
+  --src-endgame: #4C8A86;
+  --src-other: #978A6E;
+  --src-shop: #A4423A;
+  --ld-cover-a: #FFFFFF;
+  --ld-cover-b: #FCFDFE;
+  --ld-cover-stripe: rgba(204, 141, 148, .10);
+  --ld-edge: #C9A04E;
+  --mode-abyss: #3E5A9E;
+  --mode-theater: #9C3B52;
+  --mode-stygian: #2D6E6A;
+  --good: #1F6E4C;
+  --focus: #A3303C;
+
+  --w-bg: #FCFDFE;
+  --w-gap: #FCFDFE;
+  --w-plate: #EEF3F6;
+  --w-border: #DCE3EA;
+  --w-line: #ECF0F4;
+  --w-ink: #1D2838;
+  --w-ink2: #4E5764;
+  --w-muted: #5B6577;
+  --w-fill: #A3303C;
+  --w-track: #DAE2EA;
+  --w-icon: #B8923F;
+  --w-done: #3F8F6A;
+  --w-good: #1F6E4C;
+  --w-outline: #838B99;
+  --w-btn: #A3303C;
+  --w-btn-text: #FFFFFF;
+  --w-quiet: #DCE3EA;
+  --w-focus: #A3303C;
+  --w-gold-ink: #A3303C;
+  --w-pity-mark: #A3303C;
+  --w-four: #8A6BBE;
+  --w-five-wash: rgba(230, 185, 90, .26);
+  --w-four-wash: rgba(150, 120, 215, .18);
+  --w-shade: rgba(252, 253, 254, 0.85);
+
+  --five: #A6751F;
+  --w-five: #A6751F;
+  --scrim: rgba(29, 40, 56, .45);
+  --shadow-deep: rgba(29, 40, 56, .35);
+  --shadow-warm: rgba(29, 40, 56, .2);
+  --shadow-map: rgba(29, 40, 56, .28);
+  --ava-light: #EEF3F6;
+  --ava-edge: #DCE3EA;
+  --gold-soft: #FBEBC9;
+  --warn-ink: #7A5418;
+  --good-soft: #DCEFE4;
+  --bad: #8A2E21;
+  --bad-soft: #F6DAD6;
+  --on-mark: #FFFFFF;
+  --seg-done: #3E7D5C;
+  --glint: rgb(255 255 255 / .55);
+  --field: #FFFFFF;
+}
+
+/*
+ * The inks of the elements on the roster, Your week and Endgame, which follow the theme: each element's colour deepened to
+ * read on a parchment card in elements.css, and here lightened to read on a dark one. The profile pages and the planner keep
+ * their dark card on every theme and do not use these. Mist keeps the values of elements.css, which reach 3:1 on its card.
+ */
+[data-theme='midnight'] .el-cryo { --el-ink: #6BC3E6; }
+[data-theme='midnight'] .el-pyro { --el-ink: #EE8963; }
+[data-theme='midnight'] .el-hydro { --el-ink: #6FA3F0; }
+[data-theme='midnight'] .el-anemo { --el-ink: #4FD0B0; }
+[data-theme='midnight'] .el-electro { --el-ink: #B58AF0; }
+[data-theme='midnight'] .el-dendro { --el-ink: #9BCB52; }
+[data-theme='midnight'] .el-geo { --el-ink: #D9AB3A; }
+
+[data-theme='slate'] .el-cryo { --el-ink: #70C6E8; }
+[data-theme='slate'] .el-pyro { --el-ink: #F08E68; }
+[data-theme='slate'] .el-hydro { --el-ink: #78A9F2; }
+[data-theme='slate'] .el-anemo { --el-ink: #56D2B3; }
+[data-theme='slate'] .el-electro { --el-ink: #BA90F2; }
+[data-theme='slate'] .el-dendro { --el-ink: #A1CE59; }
+[data-theme='slate'] .el-geo { --el-ink: #DDB041; }
+
+[data-theme='dusk'] .el-cryo { --el-ink: #6FC5E6; }
+[data-theme='dusk'] .el-pyro { --el-ink: #EE8D68; }
+[data-theme='dusk'] .el-hydro { --el-ink: #77A8F0; }
+[data-theme='dusk'] .el-anemo { --el-ink: #55D0B2; }
+[data-theme='dusk'] .el-electro { --el-ink: #B98FF0; }
+[data-theme='dusk'] .el-dendro { --el-ink: #A0CC58; }
+[data-theme='dusk'] .el-geo { --el-ink: #DCAE40; }
+
+[data-theme='liyue'] .el-cryo { --el-ink: #6BC3E6; }
+[data-theme='liyue'] .el-pyro { --el-ink: #EE8963; }
+[data-theme='liyue'] .el-hydro { --el-ink: #6FA3F0; }
+[data-theme='liyue'] .el-anemo { --el-ink: #4FD0B0; }
+[data-theme='liyue'] .el-electro { --el-ink: #B58AF0; }
+[data-theme='liyue'] .el-dendro { --el-ink: #9BCB52; }
+[data-theme='liyue'] .el-geo { --el-ink: #D9AB3A; }
+
+[data-theme='inazuma'] .el-cryo { --el-ink: #6BC3E6; }
+[data-theme='inazuma'] .el-pyro { --el-ink: #EE8963; }
+[data-theme='inazuma'] .el-hydro { --el-ink: #6FA3F0; }
+[data-theme='inazuma'] .el-anemo { --el-ink: #4FD0B0; }
+[data-theme='inazuma'] .el-electro { --el-ink: #B58AF0; }
+[data-theme='inazuma'] .el-dendro { --el-ink: #9BCB52; }
+[data-theme='inazuma'] .el-geo { --el-ink: #D9AB3A; }
+
+[data-theme='fontaine'] .el-cryo { --el-ink: #6BC3E6; }
+[data-theme='fontaine'] .el-pyro { --el-ink: #EE8963; }
+[data-theme='fontaine'] .el-hydro { --el-ink: #6FA3F0; }
+[data-theme='fontaine'] .el-anemo { --el-ink: #4FD0B0; }
+[data-theme='fontaine'] .el-electro { --el-ink: #B58AF0; }
+[data-theme='fontaine'] .el-dendro { --el-ink: #9BCB52; }
+[data-theme='fontaine'] .el-geo { --el-ink: #D9AB3A; }
+
+[data-theme='natlan'] .el-cryo { --el-ink: #6BC3E6; }
+[data-theme='natlan'] .el-pyro { --el-ink: #EE8963; }
+[data-theme='natlan'] .el-hydro { --el-ink: #6FA3F0; }
+[data-theme='natlan'] .el-anemo { --el-ink: #4FD0B0; }
+[data-theme='natlan'] .el-electro { --el-ink: #B58AF0; }
+[data-theme='natlan'] .el-dendro { --el-ink: #9BCB52; }
+[data-theme='natlan'] .el-geo { --el-ink: #D9AB3A; }

@@ -92,6 +92,8 @@
   gap: 12px;
 }
 .pl-pity {
+  /* Its ring counts toward a 5★. */
+  --w-fill: var(--w-five);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -202,7 +204,7 @@
 .pl-hero .pl-primo {
   width: 40px;
   height: 40px;
-  color: var(--fill);
+  color: var(--five);
 }
 .pl-hero b {
   font-size: 54px;
@@ -429,7 +431,7 @@
   color: var(--good);
 }
 .pl-chip.likely {
-  background: color-mix(in srgb, var(--fill) 16%, var(--surface));
+  background: color-mix(in srgb, var(--five) 16%, var(--surface));
   color: var(--gold-ink);
 }
 .pl-chip.maybe {
@@ -462,7 +464,7 @@
 .pl-bar i {
   display: block;
   height: 100%;
-  background: var(--fill);
+  background: var(--five);
 }
 .pl-bar i.certain {
   background: var(--done);
@@ -848,7 +850,7 @@
   border-radius: 3px;
 }
 .pl-split .won {
-  background: var(--fill);
+  background: var(--five);
 }
 .pl-split .lost {
   background: var(--axis);
@@ -980,7 +982,7 @@
   gap: 1px;
   padding: 5px 10px;
   border-radius: 6px;
-  background: var(--ink);
+  background: var(--rail);
   color: var(--rail-text);
   font-size: 12px;
   line-height: 1.35;

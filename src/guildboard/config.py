@@ -31,6 +31,10 @@ FISHING_REGIONS = (*REGIONS, "nod_krai", "snezhnaya")
 FISHING_REGION_NAMES = {**REGION_NAMES, "nod_krai": "Nod-Krai", "snezhnaya": "Snezhnaya"}
 FISHING_RULES = ("3_days", "next_reset")  # when a fishing spot comes back: guides disagree (spec 9.3)
 PICTURE_QUALITIES = ("high", "medium", "low")  # the Characters pages' big pictures: the originals, at most 1536 pixels, at most 1024
+THEMES = (
+    "parchment", "midnight", "slate", "dusk", "mist", "system",
+    "mondstadt", "liyue", "inazuma", "sumeru", "fontaine", "natlan", "snezhnaya",
+)  # the interface's look: the five looks, "system" (follows Windows), then the seven nations (the themes design, sections 2 and 12)
 
 
 @dataclass(frozen=True)
@@ -110,6 +114,8 @@ class Settings:
     # one for a maximized window, so that a full screen can draw smaller than the usual window.
     page_size: int = 100
     page_size_maximized: int = 100
+    theme: str = "parchment"  # the interface's look: one of THEMES; it stays on this PC
+    ledger_spent_hidden: bool = False  # the Ledger's "Spent on Genshin" is covered (the revamp design, 5); it stays on this PC
     last_seen_version: str = ""  # the version whose "What's new" card the player has seen; "" before any
     codes_login_done: bool = False  # a login has finished: HoYoverse's first code of an account needs a fresh one
     gallery_enabled: bool = False  # the screenshot gallery (the ledger design, section 7): off, nothing of it is read
@@ -132,7 +138,7 @@ MAX_PRICE = 100_000  # a pack's corrected price, at most
 # The settings that hold one of a few words.
 CHOICES: dict[str, tuple[str, ...]] = {
     "commission_region": REGIONS, "fishing_rule": FISHING_RULES, "spending_currency": CURRENCIES,
-    "picture_quality": PICTURE_QUALITIES,
+    "picture_quality": PICTURE_QUALITIES, "theme": THEMES,
 }
 
 

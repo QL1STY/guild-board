@@ -15,6 +15,8 @@ export interface Settings {
   sync_paused: boolean
   notifications: boolean
   tray_hint_shown: boolean
+  /** `parchment`, `midnight`, `slate`, `dusk`, `mist`, a nation (`mondstadt`, `liyue`, `inazuma`, `sumeru`, `fontaine`, `natlan`, `snezhnaya`) or `system` (Match Windows); anything else is Parchment. */
+  theme: string
   [key: string]: unknown
 }
 

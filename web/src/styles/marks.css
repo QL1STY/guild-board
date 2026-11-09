@@ -117,7 +117,7 @@
 }
 /* A point marked across the ring, wider than it, such as where soft pity starts on a pity card's. */
 .ring > svg .r-mark {
-  stroke: var(--w-gold-ink);
+  stroke: var(--w-pity-mark);
   stroke-width: 13;
 }
 .ring-in {

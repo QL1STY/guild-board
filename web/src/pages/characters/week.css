@@ -5,7 +5,7 @@
  */
 .wk-page {
   display: grid; gap: 16px;
-  --cr-paper: var(--ledger-light); --cr-gold-soft: #F1E3C2; --wk-good-soft: #DDEBD3; --wk-warn-ink: #7A5418;
+  --cr-paper: var(--ledger-light); --cr-gold-soft: var(--gold-soft); --wk-good-soft: var(--good-soft); --wk-warn-ink: var(--warn-ink);
 }
 .wk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .wk-line { margin: 0; padding: 4px 2px; color: var(--ink2); font-size: 15px; line-height: 1.45; }
@@ -93,10 +93,10 @@
 .wk-rbar { display: flex; gap: 3px; height: 30px; border-radius: 10px; overflow: hidden; background: var(--tint); }
 .wk-seg {
   display: flex; align-items: center; gap: 6px; min-width: 0; padding: 0 8px; overflow: hidden; white-space: nowrap; font-size: 12.5px; font-weight: 800;
-  background: var(--gold-ink); color: #fff; transition: background-color var(--t-state);
+  background: var(--gold-ink); color: var(--on-mark); transition: background-color var(--t-state);
 }
 .wk-seg .cx-ava { --size: 22px; flex: none; border-width: 1.5px; }
-.wk-seg.done { background: #4F7C42; }
+.wk-seg.done { background: var(--seg-done); }
 .wk-seg.left { background: transparent; color: var(--muted); font-weight: 600; }
 .wk-alert {
   display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--r1); border-radius: 12px; background: var(--cr-gold-soft);
@@ -124,7 +124,7 @@
 .wk-what { font-size: 20px; font-weight: 800; line-height: 1.15; }
 .wk-why { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 3px; font-size: 14px; color: var(--ink2); }
 .wk-why .cx-ava { --size: 26px; }
-.wk-mat { width: 26px; height: 26px; border-radius: 6px; background: linear-gradient(160deg, #6B5A96, #3A3266); color: #E2C98F; overflow: hidden; flex: none; }
+.wk-mat { width: 26px; height: 26px; border-radius: 6px; background: linear-gradient(160deg, var(--material-a), var(--material-b)); color: var(--material-ink); overflow: hidden; flex: none; }
 .wk-mat .sign { padding: 15%; }
 .wk-mat.small { width: 26px; height: 26px; }
 .wk-cost { text-align: right; }
@@ -154,7 +154,7 @@
 .wk-grow.dim, .wk-srow.dim, .wk-rowh.dim { opacity: .3; }
 .wk-track { position: relative; height: 38px; border-radius: 8px; background: repeating-linear-gradient(90deg, var(--hairline) 0 1px, transparent 1px calc(100% / 3)); }
 .wk-track .bar { position: absolute; left: 0; top: 7px; height: 10px; border-radius: 5px; background: var(--fill); }
-.wk-track .bar.luck { background: linear-gradient(90deg, var(--fill), rgba(166, 117, 31, .08)); }
+.wk-track .bar.luck { background: linear-gradient(90deg, var(--fill), color-mix(in srgb, var(--fill) 8%, transparent)); }
 .wk-track .m { position: absolute; top: 3px; width: 2px; height: 18px; margin-left: -1px; background: var(--ink); }
 .wk-track .lab { position: absolute; top: 21px; font-size: 12.5px; font-weight: 800; white-space: nowrap; color: var(--ink); }
 .wk-track .lab.r { transform: translateX(-100%); }
@@ -179,7 +179,7 @@
 .wk-week-head h2 { font-size: 22px; font-weight: 800; }
 .wk-week-head p { margin: 0; color: var(--muted); font-size: 14px; }
 .wk-grid { position: relative; display: grid; grid-template-columns: 190px repeat(7, 1fr); }
-.wk-sel { position: absolute; top: 0; bottom: 0; border: 1.5px solid var(--fill); border-radius: 14px; background: rgba(241, 227, 194, .55); pointer-events: none; }
+.wk-sel { position: absolute; top: 0; bottom: 0; border: 1.5px solid var(--fill); border-radius: 14px; background: color-mix(in srgb, var(--gold-soft) 55%, transparent); pointer-events: none; }
 .wk-dh {
   position: relative; z-index: 1; padding: 8px 8px 10px; border: 0; border-radius: 12px; background: none; text-align: center; cursor: pointer; color: var(--ink);
 }

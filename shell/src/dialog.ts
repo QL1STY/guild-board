@@ -8,6 +8,7 @@
  */
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { backgroundOf, type ThemeName } from './theme.js'
 
 // The preload (pages/dialog-preload.ts) cannot load this file, so it writes the same two names; dialog.test.ts checks.
 export const SUBMIT_CHANNEL = 'gb-dialog:submit'
@@ -114,10 +115,10 @@ export interface DialogDeps {
   /** The app's icon file (`appIconPath`). */
   icon: string
   ipc: IpcLike
+  /** The theme the window and its page wear when made. Default Parchment. */
+  theme?(): ThemeName
   createWindow(options: DialogWindowOptions): DialogWindowLike
 }
-
-const BACKGROUND = '#E6DDCA' // `--page-dark`, as the dashboard's
 
 const DIALOGS = {
   paste: { title: 'Paste a HoYoLAB login', width: 600, height: 460 },
@@ -136,6 +137,7 @@ export function askDialog(
 ): Promise<string | number | null> {
   return new Promise((resolve) => {
     const { title, width, height } = DIALOGS[page]
+    const theme = deps.theme?.() ?? 'parchment'
     const win = deps.createWindow({
       title,
       icon: deps.icon,
@@ -146,7 +148,7 @@ export function askDialog(
       show: false,
       minimizable: false,
       maximizable: false,
-      backgroundColor: BACKGROUND,
+      backgroundColor: backgroundOf(theme),
       webPreferences: dialogWebPreferences(deps.preload),
     })
     let done = false
@@ -171,7 +173,7 @@ export function askDialog(
     for (const name of ['will-navigate', 'will-frame-navigate', 'will-redirect']) {
       win.webContents.on(name, (event: { preventDefault(): void }) => event.preventDefault())
     }
-    win.webContents.loadURL(pageUrl(deps.pagesFolder, page, params)).catch(() => finish(null))
+    win.webContents.loadURL(pageUrl(deps.pagesFolder, page, { ...params, theme })).catch(() => finish(null))
     win.show()
     win.focus()
   })

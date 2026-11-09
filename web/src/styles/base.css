@@ -13,6 +13,17 @@ body {
   background: var(--page);
 }
 
+/* A change of theme fades (theme.ts puts the class on <html> for 200 ms). Reduced motion zeroes the durations in motion.css. */
+html.theme-fade,
+html.theme-fade *,
+html.theme-fade *::before,
+html.theme-fade *::after {
+  transition:
+    background-color var(--t-state) ease,
+    color var(--t-state) ease,
+    border-color var(--t-state) ease;
+}
+
 h1,
 h2,
 h3,

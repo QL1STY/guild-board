@@ -88,14 +88,14 @@ test('a ring of segments never fills past the maximum, and holds what it is give
   expect(inside).toContain('<div class="ring-in"><b>in</b></div>')
 })
 
-test('a ring can mark a point of its circle, such as where soft pity starts, in the gold ink', () => {
+test('a ring can mark a point of its circle, such as where soft pity starts, in its own role, --w-pity-mark', () => {
   // A pity card's ring (the Pulls plan, Task 11): 61 of 90, no segments, soft pity marked at the 74th wish.
   const markup = renderToStaticMarkup(createElement(SegmentRing, { value: 61, max: 90, segment: 0, mark: 74 }))
   expect(markup).not.toContain('r-gaps')
   expect(attribute(markup, 'r-fill', 'style')).toBe('stroke-dasharray:61 90')
   // A short dash, 1.2% of the circle, centred on 74 of the 90.
   expect(attribute(markup, 'r-mark', 'style')).toBe('stroke-dasharray:1.08 88.92;stroke-dashoffset:-73.46')
-  expect(marksCss).toMatch(/\.ring > svg \.r-mark\s*\{[^}]*stroke:\s*var\(--w-gold-ink\)/)
+  expect(marksCss).toMatch(/\.ring > svg \.r-mark\s*\{[^}]*stroke:\s*var\(--w-pity-mark\)/)
   // Resin's ring has none.
   expect(renderToStaticMarkup(createElement(SegmentRing, { value: 77, max: 200, segment: 20 }))).not.toContain('r-mark')
 })

@@ -8,9 +8,9 @@
  */
 import { listen, dialogWebPreferences, type DialogWebPreferences, type IpcLike, pageUrl } from './dialog.js'
 import type { Bounds } from './placement.js'
+import { backgroundOf, type ThemeName } from './theme.js'
 
 export const BAR_HEIGHT = 120
-const BACKGROUND = '#E6DDCA' // `--page-dark`, as the dashboard's
 
 export type FrameAction = 'paste' | 'retry'
 
@@ -92,6 +92,8 @@ export interface FrameDeps {
   /** The app's icon file (`appIconPath`). */
   icon: string
   ipc: IpcLike
+  /** The theme the window and its bar wear when made. Default Parchment. */
+  theme?(): ThemeName
   createWindow(options: FrameWindowOptions): FrameWindowLike
   createView(options: FrameViewOptions): FrameViewLike
 }
@@ -104,13 +106,22 @@ export class FramedWindow {
   private readonly stopListening: () => void
   private readonly actionCallbacks: ((action: FrameAction) => void)[] = []
   private readonly closedCallbacks: (() => void)[] = []
+  private readonly theme: ThemeName
   private closed = false
 
   constructor(
     private readonly deps: FrameDeps,
     private readonly options: FrameOptions,
   ) {
-    this.window = deps.createWindow({ title: options.title, icon: deps.icon, width: 1100, height: 820, show: false, backgroundColor: BACKGROUND })
+    this.theme = deps.theme?.() ?? 'parchment'
+    this.window = deps.createWindow({
+      title: options.title,
+      icon: deps.icon,
+      width: 1100,
+      height: 820,
+      show: false,
+      backgroundColor: backgroundOf(this.theme),
+    })
     this.page = deps.createView({
       webPreferences: {
         partition: options.partition,
@@ -184,7 +195,7 @@ export class FramedWindow {
       params.message = message.text
       if (message.canRetry) params.retry = '1'
     }
-    this.bar.webContents.loadURL(pageUrl(this.deps.pagesFolder, 'bar', params)).catch(() => undefined)
+    this.bar.webContents.loadURL(pageUrl(this.deps.pagesFolder, 'bar', { ...params, theme: this.theme })).catch(() => undefined)
   }
 
   private layout(): void {

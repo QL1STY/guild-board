@@ -114,8 +114,9 @@
 .ach-cat .bar { grid-column: 1 / -1; height: 3px; }
 /* The bars grow one after another as the page opens (Achievements.tsx sets --k, at most 12). */
 .ach-cat .bar-fill { animation-delay: calc(var(--k, 0) * var(--stagger) + 120ms); }
-/* On the chosen category's dark plate the bar is gold on a pale track. */
-.ach-cat.on { --w-track: color-mix(in srgb, var(--button-text) 22%, transparent); --w-fill: var(--gold); }
+/* On the chosen category's plate the bar is the plate's mark (gold on Parchment's slate, the button's ink on a gold or
+   blue button) on a track of the button's ink. */
+.ach-cat.on { --w-track: color-mix(in srgb, var(--button-text) 22%, transparent); --w-fill: var(--button-mark); }
 .ach-sep { width: 100%; margin: 5px 0; border: 0; border-top: 1px solid var(--hairline); }
 .ach-fold { align-self: flex-start; margin: 6px 10px; }
 

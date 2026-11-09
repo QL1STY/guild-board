@@ -1,4 +1,5 @@
 /** The shapes the local API returns. They mirror src/guildboard/core.py and src/guildboard/views/. */
+import type { ThemeSetting } from './theme.ts'
 
 import type { PrimogemColumns } from './ledgertypes.ts'
 import type { OnlineView } from './onlinetypes.ts'
@@ -93,6 +94,8 @@ export type FishingRegion = Region | 'nod_krai' | 'snezhnaya'
 export type FishingRule = '3_days' | 'next_reset'
 
 export type Settings = {
+  /** The window's look: a theme, or Match Windows. A recording made before themes lacks it, which counts as Parchment. */
+  theme: ThemeSetting
   in_session_interval_min: 0 | 30 | 60
   sync_paused: boolean
   start_with_windows: boolean
@@ -128,6 +131,8 @@ export type Settings = {
    */
   page_size: number
   page_size_maximized: number
+  /** The Ledger's "Spent on Genshin" is covered (the revamp design, section 5). It stays on this PC, and is shown the first time. */
+  ledger_spent_hidden: boolean
   /** The screenshot gallery (the ledger design, section 7): off by default; while off, nothing of the game's is read. */
   gallery_enabled: boolean
   /** The game's ScreenShot folder, found or pasted; "" before either. */

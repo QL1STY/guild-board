@@ -18,6 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.datastructures import Headers
 from starlette.exceptions import HTTPException
 
+from guildboard.api.themed import themed_index
 from guildboard.achievements.commissions import AlreadyToday, NotACommission
 from guildboard.achievements.importers import (
     MAX_FILE_BYTES, TOO_LARGE as IMPORT_TOO_LARGE, ImportBackupFailed, ImportChanged, ImportFileError, ImportSaveFailed,
@@ -1351,16 +1352,17 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         return JSONResponse(core.ledger())
 
     @app.get("/api/ledger/history")
-    async def ledger_history(kind: str, before: str | None = None, limit: int = LEDGER_ROWS) -> Response:
-        """A kind's entries, newest first, older than the entry `before` (its id, as text) when it is given; 1 to 100."""
-        if kind not in LEDGER_KINDS:
+    async def ledger_history(kind: str, before: str | None = None, limit: int = LEDGER_ROWS, rank: int = 0) -> Response:
+        """A kind's entries, newest first, older than the entry `before` (its id, as text) when it is given; 1 to 100. A
+        `rank` of 3 to 5 keeps the entries of that many stars and up."""
+        if kind not in LEDGER_KINDS or rank not in (0, 3, 4, 5):
             return _error(422, UNEXPECTED_REQUEST)
         older: int | None = None
         if before is not None:
             if not (before.isascii() and before.isdigit() and len(before) <= 19 and int(before) < 2**63):
                 return _error(422, UNEXPECTED_REQUEST)
             older = int(before)
-        return JSONResponse(core.ledger_history(kind, older, max(1, min(limit, MAX_LEDGER_ROWS))))
+        return JSONResponse(core.ledger_history(kind, older, max(1, min(limit, MAX_LEDGER_ROWS)), rank))
 
     @app.put("/api/pulls/settings")
     async def pulls_settings(body: dict[str, Any] = Body(...)) -> Response:
@@ -1590,6 +1592,14 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
     if web_dir is not None and (web_dir / "index.html").is_file():
         for extension, media_type in STATIC_TYPES.items():
             mimetypes.add_type(media_type, extension)
+
+        # The page itself is answered here, with the player's theme on its <html>, ahead of the static mount.
+        @app.get("/")
+        @app.get("/index.html")
+        async def themed_page() -> Response:
+            html = (web_dir / "index.html").read_text(encoding="utf-8")
+            return HTMLResponse(themed_index(html, core.settings.theme), headers={"Cache-Control": "no-cache"})
+
         app.mount("/", StaticFiles(directory=web_dir, html=True), name="web")
     else:
 

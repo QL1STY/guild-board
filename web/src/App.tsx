@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useLayoutEffect, useState } from 'react'
+import { type ReactNode, useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'react'
 import { type Live, useLive } from './live.ts'
 import { Achievements } from './pages/Achievements.tsx'
 import { Backlog } from './pages/Backlog.tsx'
@@ -18,6 +18,7 @@ import { Ledger } from './pages/Ledger.tsx'
 import { Settings } from './pages/Settings.tsx'
 import { Stats } from './pages/Stats.tsx'
 import { YourProfile } from './pages/YourProfile.tsx'
+import { siteTheme, subscribeSiteTheme, type ThemeSetting, useTheme } from './theme.ts'
 import { hashOf, type Page, pageOf, routeOf } from './route.ts'
 import { placeWhileHidden, weekShown } from './pages/characters/hidden.ts'
 import { closeNote } from './ui/note.tsx'
@@ -56,6 +57,11 @@ export default function App() {
   useLayoutEffect(() => {
     document.documentElement.classList.toggle('ov-doc', overlay)
   }, [overlay])
+  // The window's theme: the setting the core keeps (a recording made before themes lacks it: Parchment). The site's browser demo has no
+  // core, so the visitor's own choice stands in, and the page draws again when they change it.
+  const visitorTheme = useSyncExternalStore(subscribeSiteTheme, siteTheme)
+  const kept: ThemeSetting | undefined = live.settings === null ? undefined : (live.settings.theme ?? 'parchment')
+  useTheme(import.meta.env.VITE_SITE_DEMO === '1' ? (visitorTheme ?? 'parchment') : kept)
   if (overlay) {
     // Over the game nothing shows until the core has answered, and nothing before the risk statement is acknowledged.
     if (live.status === null || live.settings === null || !live.settings.risk_acknowledged) return null

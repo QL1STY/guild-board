@@ -1,62 +1,13 @@
 /*
- * The Ledger page (the ledger design, section 6; the accepted mockup, screen 2): three tiles, Spending beside the
- * History, then the Artifacts, in the page's 1,440-pixel cap. Its labels are not set in capitals (the look pass, spec 3).
+ * The Ledger page's first-run state and the stars of its artifact rows. The page itself is ledgerpage.css (the Ledger revamp
+ * design). The labels are not set in capitals (the look pass, spec 3).
  */
-.ld-page { display: flex; flex-direction: column; gap: 14px; }
-
-.ld-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.ld-tile { padding: 14px 18px; }
-.ld-k { font-size: 12.5px; font-weight: 700; color: var(--ink2); }
-.ld-v { margin-top: 2px; font-size: 30px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.ld-v small { font-size: 15px; font-weight: 600; color: var(--muted); }
-.ld-gold { color: var(--gold-ink); }
-.ld-n { margin-top: 3px; font-size: 13px; color: var(--muted); }
-
-/* Spending and the History take one row, at one height. */
-.ld-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: stretch; }
-.ld-panel { padding: 16px 18px; }
-.ld-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
-.ld-head .gb-seg { margin-left: auto; }
-.ld-h { margin: 0; font-size: 16px; font-weight: 800; }
-.ld-hs { margin: 2px 0 10px; font-size: 13px; color: var(--muted); }
-.ld-empty { margin: 8px 0; font-size: 13.5px; color: var(--ink2); }
-.ld-note { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); }
-.ld-note a { color: var(--ink); text-decoration-color: var(--gold); }
-
-.ld-packs,
-.ld-rows { margin: 0; padding: 0; list-style: none; }
-.ld-packs li { display: grid; grid-template-columns: minmax(0, 1fr) 48px 110px; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--hairline); font-size: 13.5px; }
-.ld-packs li span:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
-.ld-packs li:last-child,
-.ld-rows li:last-child { border-bottom: 0; }
-
-/* The history scrolls in its own box, so that it stands beside Spending at about its height and the artifacts stay on
-   the first screen, as in the mockup; Show more adds to the box. */
-.ld-rows { max-height: 420px; overflow-y: auto; padding-right: 6px; scrollbar-width: thin; }
-.ld-rows li { display: grid; grid-template-columns: 96px minmax(0, 1fr) 80px; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--hairline); font-size: 13.5px; }
-.ld-t { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ld-r { min-width: 0; overflow-wrap: anywhere; }
-.ld-r small { display: block; font-size: 12px; color: var(--muted); }
-.ld-a { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
-.ld-a.plus { color: var(--good); }
-.ld-a.minus { color: var(--spent); }
-.ld-more { margin-top: 10px; }
+.ld-start { max-width: 760px; }
+.ld-start p { margin: 0; }
 
 .ld-stars { font-size: 12px; letter-spacing: .02em; }
-.ld-stars.r5 { color: var(--fill); }
+.ld-stars.r5 { color: var(--five); }
 .ld-stars.r4 { color: var(--w-four); }
 .ld-stars.r3,
 .ld-stars.r2,
 .ld-stars.r1 { color: var(--muted); }
-
-.ld-figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-
-.ld-start { max-width: 760px; }
-.ld-start p { margin: 0; }
-
-/* A narrow window: the tiles and the two panels stack. */
-@media (max-width: 1100px) {
-  .ld-tiles,
-  .ld-row,
-  .ld-figures { grid-template-columns: minmax(0, 1fr); }
-}

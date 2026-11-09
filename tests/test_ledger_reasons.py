@@ -4,6 +4,7 @@ import pytest
 from guildboard.ledger import reasons
 from guildboard.ledger.reasons import (
     DEFAULT_PRICES, GROUPS, PACK_IDS, domain_of, domain_runs, fates_bought, gnostic_hymns, group_of, pack_of,
+    plain_title, source_of,
 )
 
 
@@ -78,3 +79,69 @@ def test_every_currency_prices_every_pack():
         assert set(prices) == set(PACK_IDS)
         assert all(price > 0 for price in prices.values())
     assert reasons.PACKS["c980"].crystals == 980
+
+
+def test_plain_title_makes_the_games_reasons_plain():
+    assert plain_title("Obtained from Imaginarium Theater") == "Imaginarium Theater"
+    assert plain_title("Blessing of the Welkin Moon daily reward") == "Blessing of the Welkin Moon"
+    assert plain_title("Daily Commission reward") == "Daily commissions"
+    assert plain_title("Spiral Abyss reward") == "Spiral Abyss"
+    assert plain_title("Stygian Onslaught reward") == "Stygian Onslaught"
+    assert plain_title("Revitalized Petrified Tree (Domain)") == "Revitalized Petrified Tree"
+    assert plain_title("Event reward") == "Event reward"
+    assert plain_title("Some reason the game adds later") == "Some reason the game adds later"
+
+
+def test_source_of_tells_the_shop_from_bought_and_the_groups():
+    assert source_of("Shop purchase", -1600) == "shop"
+    assert source_of("Shop purchase", -50) == "shop"  # a negative shop entry, whatever it bought
+    assert source_of("Exchanged Genesis Crystals for Primogems", 300) == "bought"
+    assert source_of("Spiral Abyss reward", 600) == "endgame"
+    assert source_of("Opened treasure chest", 5) == "other"
+    assert source_of("Daily Commission reward", 60) == "commissions"
+
+
+@pytest.mark.parametrize("reason, amount, source", [
+    ("Purchased Blessing of the Welkin Moon", 300, "bought"),
+    ("Obtained via purchase", 1090, "bought"),
+    ("Exchanged Genesis Crystals for Primogems", -1090, "exchange"),
+    ("Purchased Fragile Resin", -60, "shop"),
+    ("Something else", 5, "other"),
+])
+def test_crystal_source(reason, amount, source):
+    assert reasons.crystal_source(reason, amount) == source
+    assert source_of(reason, amount, "crystal") == source
+
+
+@pytest.mark.parametrize("reason, amount, use", [
+    ("Revitalized Petrified Tree (Domain)", -20, "domain"),
+    ("Violet Court (Domain)", -40, "domain"),  # a condensed run
+    ("Confront Stormterror (Domain)", -30, "weekly"),  # a weekly boss's Trounce Domain: written "(Domain)" too
+    ("Confront Stormterror (Domain)", -60, "weekly"),
+    ("Ley Line Blossom challenge reward", -20, "ley"),
+    ("Trounce Blossom challenge reward", -40, "boss"),  # the player's log: a boss, not a ley line, not a weekly boss
+    ("Anemo Hypostasis challenge reward", -40, "boss"),
+    ("Item crafting material", -40, "condensed"),
+    ("Stygian Onslaught", -20, "other"),
+    ("Something the game says one day", -20, "other"),
+])
+def test_resin_use(reason, amount, use):
+    assert reasons.resin_use(reason, amount) == use
+    assert source_of(reason, amount, "resin") == use
+
+
+@pytest.mark.parametrize("reason, amount, source", [
+    ("Sanctum of Rainbow Spirits (Domain)", 1, "domain"),
+    ("Obtained from Mystic Offering", 1, "elsewhere"),
+    ("Artifact enhancement material", -1, "fed"),
+    ("Artifact decomposition", -1, "salvaged"),
+    ("Something else", -1, "other"),
+])
+def test_artifact_source(reason, amount, source):
+    assert reasons.artifact_source(reason, amount) == source
+    assert source_of(reason, amount, "artifact") == source
+
+
+def test_a_resin_refill_with_primogems_is_the_resins_not_the_shops():
+    assert source_of("Original Resin replenishment", -50) == "resin"
+    assert source_of("Shop purchase", -1600) == "shop"

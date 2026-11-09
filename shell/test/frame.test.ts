@@ -115,7 +115,7 @@ test('the window holds the page above a bar, each in its own partition', () => {
   windows[0].emit('resize')
   expect(page.bounds).toEqual({ x: 0, y: 0, width: 900, height: 600 - BAR_HEIGHT })
   expect(bar.bounds).toEqual({ x: 0, y: 600 - BAR_HEIGHT, width: 900, height: BAR_HEIGHT })
-  expect(bar.webContents.loaded).toEqual([pageUrl(PAGES, 'bar', { service: 'Use paste.' })])
+  expect(bar.webContents.loaded).toEqual([pageUrl(PAGES, 'bar', { service: 'Use paste.', theme: 'parchment' })])
   expect(framed.contents).toBe(page.webContents)
 })
 
@@ -131,8 +131,8 @@ test('a message reloads the bar with the text and the Try again choice', () => {
   framed.showMessage('Checking the login with HoYoLAB.', false)
   framed.showMessage('HoYoLAB could not be reached.', true)
   expect(views[1].webContents.loaded.slice(1)).toEqual([
-    pageUrl(PAGES, 'bar', { service: 'S', message: 'Checking the login with HoYoLAB.' }),
-    pageUrl(PAGES, 'bar', { service: 'S', message: 'HoYoLAB could not be reached.', retry: '1' }),
+    pageUrl(PAGES, 'bar', { service: 'S', message: 'Checking the login with HoYoLAB.', theme: 'parchment' }),
+    pageUrl(PAGES, 'bar', { service: 'S', message: 'HoYoLAB could not be reached.', retry: '1', theme: 'parchment' }),
   ])
 })
 
@@ -193,4 +193,15 @@ test('open puts the keyboard in HoYoLAB’s page, not in the bar', () => {
   expect(views[0].webContents.focused).toBe(1)
   expect(views[1].webContents.focused).toBe(0)
   expect(windows[0].shown).toBe(1)
+})
+
+test('the window and its bar open in the theme: its background, and theme= in the bar’s address, kept when the message changes', () => {
+  const { windows, views, deps } = setup()
+  deps.theme = () => 'midnight'
+  const framed = new FramedWindow(deps, { title: 't', partition: 'gb-login', bar: { service: 'S' } })
+  expect(windows[0].options.backgroundColor).toBe('#0C0F1A')
+  const [, bar] = views
+  expect(new URL(bar.webContents.loaded[0]).searchParams.get('theme')).toBe('midnight')
+  framed.showMessage('Gone wrong.', true)
+  expect(new URL(bar.webContents.loaded[1]).searchParams.get('theme')).toBe('midnight')
 })

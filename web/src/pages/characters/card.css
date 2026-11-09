@@ -4,12 +4,12 @@
  * a list grows. Buttons of a kind are one size.
  */
 .cp-layer { position: fixed; z-index: 40; inset: 0 0 0 var(--rail-w); display: flex; align-items: center; justify-content: center; }
-.cp-dim { position: absolute; inset: 0; background: rgba(43, 49, 66, .45); }
+.cp-dim { position: absolute; inset: 0; background: var(--scrim); }
 .cp-wrap { position: relative; width: min(880px, calc(100% - 48px)); height: min(860px, calc(100vh - 48px)); }
 .cp-panel {
   display: flex; flex-direction: column; height: 100%; overflow: hidden; border: 1px solid var(--border); border-radius: 16px;
-  background: linear-gradient(180deg, var(--ledger-light) 0%, var(--surface) 60%); box-shadow: inset 0 0 0 4px var(--ledger-light), inset 0 0 0 5px var(--hairline), 0 18px 48px rgba(30, 30, 40, .35);
-  color: var(--ink); --cp-gold-soft: #F1E3C2; --cp-warn-ink: #7A5418;
+  background: linear-gradient(180deg, var(--ledger-light) 0%, var(--surface) 60%); box-shadow: inset 0 0 0 4px var(--ledger-light), inset 0 0 0 5px var(--hairline), 0 18px 48px var(--shadow-deep);
+  color: var(--ink); --cp-gold-soft: var(--gold-soft); --cp-warn-ink: var(--warn-ink);
 }
 .cp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 26px 12px; border-bottom: 1px solid var(--hairline); }
 .cp-head h2 { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.1; }

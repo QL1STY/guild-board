@@ -87,7 +87,7 @@ function problemsIn(css: string, allowed: ReadonlySet<string>): string[] {
 
 /** The custom properties the widget stylesheets may use: the roles and the motion tokens of tokens.css, and their own. */
 function allowedProperties(...sheets: string[]): Set<string> {
-  const root = declarationsOf(tokens).filter((one) => one.selector === ':root').map((one) => one.name)
+  const root = declarationsOf(tokens).filter((one) => one.selector === ":root, [data-theme='parchment']").map((one) => one.name)
   const own = sheets.flatMap((css) => declarationsOf(css).map((one) => one.name)).filter((name) => name.startsWith('--'))
   const motion = root.filter((name) => /^--(t-|ease-|stagger$)/.test(name))
   // --n is set by a view, on the element (a slot's place, for the stagger of its tick).
@@ -96,8 +96,9 @@ function allowedProperties(...sheets: string[]): Set<string> {
 
 test('the widget roles are the colours of tokens.css that the widget stylesheets may use', () => {
   const allowed = allowedProperties(widgets, marks)
-  // --w-gold-ink and --w-four: the Pulls plan, Tasks 11 and 12; --w-five-wash, --w-four-wash and --w-shade: its review.
-  expect([...allowed].filter((name) => name.startsWith('--w-')).length).toBe(23)
+  // --w-gold-ink and --w-four: the Pulls plan, Tasks 11 and 12; --w-five-wash, --w-four-wash and --w-shade: its review;
+  // --w-five: the themes plan, Task 2; --w-emblem-ink: its Task 3; --w-pity-mark: its fix round.
+  expect([...allowed].filter((name) => name.startsWith('--w-')).length).toBe(26)
   for (const own of ['--fade', '--size', '--line']) expect(allowed.has(own), own).toBe(true)
   for (const page of ['--ink', '--ink2', '--muted', '--surface', '--border', '--hairline', '--fill', '--track', '--accent']) {
     expect(allowed.has(page), page).toBe(false) // a colour of the pages, which the dark panel does not set again
@@ -167,7 +168,6 @@ test('ring gaps, notches and knock-outs are drawn in the opaque gap colour', () 
     '.dial-tick { color: var(--w-gap) }', // the tick on a ready dial's badge
     '.dial-tick { box-shadow: 0 0 0 2px var(--w-gap) }', // round that badge, over the dial's ring
     '.pn-tick .sign { color: var(--w-gap) }', // the tick in a checked box of Pinned achievements
-    '.look-emblem { color: var(--w-gap) }', // a region's emblem on its nation's disc
     '.cf-pin-dot { fill: var(--w-gap) }', // the dot in the Clock's pin, over its hands
     '.clock-dial .fig { background: var(--w-gap) }', // the plate of the Clock's time, over its hands
     '.ex .face-tick { color: var(--w-gap) }', // the tick on an expedition's badge

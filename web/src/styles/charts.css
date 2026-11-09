@@ -55,7 +55,7 @@
 .col-bars { position: absolute; inset: 0; display: flex; padding: 0 3px; }
 .col-item { flex: 1; min-width: 0; display: flex; align-items: flex-end; justify-content: center; }
 .col-item:hover,
-.col-item:focus-visible { background: rgba(59, 66, 85, .06); }
+.col-item:focus-visible { background: color-mix(in srgb, var(--ink) 6%, transparent); }
 /* A column grows from its baseline when it appears, and moves to its new height when its value or the axis changes. */
 .col-item i { position: relative; display: block; width: clamp(2px, 60%, 24px); border-radius: 4px 4px 0 0; background: var(--series); animation: grow-h var(--t-enter) var(--ease-out) backwards; transition: height var(--t-enter) var(--ease-out); }
 .col-item i.gap,

@@ -122,6 +122,31 @@ test('tokenValues reads the colours of :root and nothing else', () => {
   expect(tokenValues(sheet)).toEqual({ '--a': '#AABBCC', '--b': '#00ff00', '--c': '#010203' })
 })
 
+test("tokenValues reads a rule whose selector list holds :root as Parchment, and no other theme's", () => {
+  const sheet = `
+    :root, [data-theme='parchment'] { --a: #AABBCC; }
+    [data-theme='dusk'], .on-dark { --a: #000000; --d: #FFFFFF; }
+    .x, :root { --b: #00ff00; }
+    :root-ish { --e: #123456; }
+  `
+  expect(tokenValues(sheet)).toEqual({ '--a': '#AABBCC', '--b': '#00ff00' })
+})
+
+test("tokenValues reads a theme's own rule, with either quote, and never a descendant rule, .on-dark or Parchment's", () => {
+  const sheet = `
+    :root, [data-theme='parchment'] { --a: #AABBCC; --b: #010101; }
+    [data-theme="dusk"] { --a: #111111; --page: radial-gradient(#222222 0%, #333333 70%); }
+    [data-theme='dusk'], .x { --c: #222222; }
+    [data-theme='dusk'] .el-pyro { --el-ink: #333333; }
+    [data-theme='dusk-dim'] { --d: #444444; }
+    .on-dark { --a: #555555; }
+  `
+  expect(tokenValues(sheet, 'dusk')).toEqual({ '--a': '#111111', '--c': '#222222' })
+  expect(tokenValues(sheet, 'parchment')).toEqual({ '--a': '#AABBCC', '--b': '#010101' })
+  expect(tokenValues(sheet)).toEqual(tokenValues(sheet, 'parchment'))
+  expect(tokenValues(sheet, 'mist')).toEqual({})
+})
+
 test('tokenValues finds the real palette', () => {
   expect(t['--surface']).toBe('#F7F2E7')
   expect(t['--page-dark']).toBe('#E6DDCA')
@@ -148,6 +173,15 @@ test("the monthly graph's wishes have the plan's colours, in its order, and each
   expect(wishes.map((name) => t[name])).toEqual(['#A6751F', '#4470B4', '#B5546A', '#6A4FB8'])
   for (const name of wishes) expect(contrast(t[name], t['--surface']), name).toBeGreaterThanOrEqual(3)
 })
+
+// The Ledger's sources (the Ledger revamp design, section 8): each mark reaches 3:1 on the card, on Parchment as on every theme.
+test("the Ledger's sources each reach 3:1 on the card", () => {
+  for (const name of ['--src-welkin', '--src-commissions', '--src-events', '--src-endgame', '--src-other', '--src-shop'])
+    expect(contrast(t[name], t['--surface']), name).toBeGreaterThanOrEqual(3)
+})
+
+/** Parchment's rule in tokens.css: `:root`, with the name a theme's block is read by. */
+const PARCHMENT = ":root, [data-theme='parchment']"
 
 /** The declarations of the first rule written as `selector {` in a stylesheet, tokens.css unless said, as written. */
 function declarations(selector: string, sheet = css): Record<string, string> {
@@ -181,6 +215,9 @@ const roles: [role: string, parchment: string, dark: string, stands: string | nu
   // The Pulls plan, Task 11: the mark of soft pity on a pity ring, dark as --gold-ink is on parchment and light as the
   // overlay's --gold-ink is over the game.
   ['--w-gold-ink', '#8E661B', '#E2C98F', '--gold-ink'],
+  // The themes fix round: the soft-pity mark has a role of its own, so that a dark theme can knock it out of a filled ring; the
+  // same as --w-gold-ink on parchment and in the dark panel.
+  ['--w-pity-mark', '#8E661B', '#E2C98F', '--gold-ink'],
   // The Pulls plan, Task 12: the purple frame of a 4★'s face, as the gold one (--w-fill) is a 5★'s. The pages have no
   // purple of their own to stand for.
   ['--w-four', '#8A6BBE', '#B9A2E0', null],
@@ -189,6 +226,11 @@ const roles: [role: string, parchment: string, dark: string, stands: string | nu
   ['--w-five-wash', 'rgba(232, 190, 100, .28)', 'rgba(226, 201, 143, .2)', null],
   ['--w-four-wash', 'rgba(160, 120, 210, .22)', 'rgba(185, 162, 224, .18)', null],
   ['--w-shade', 'rgba(247, 242, 231, .85)', 'rgba(18, 22, 40, .85)', null],
+  // The themes plan, Task 2: the gold of a 5★ apart from the progress gold's, the same gold on parchment and in the dark panel.
+  ['--w-five', '#A6751F', '#E2C98F', '--five'],
+  // The fix round of the themes plan, Task 3: the cream knocked out of a nation's disc on the pages; in the dark panel the
+  // dark it was knocked out in before (its --w-gap), so that the overlay is as it was.
+  ['--w-emblem-ink', '#F7F2E7', '#2B3142', '--emblem-ink'],
 ]
 
 test("the soft pity's mark reaches 3:1 on the ring's track, on parchment and over a white and a black game", () => {
@@ -207,12 +249,17 @@ test("a 4★'s purple frame reaches 3:1 on the card, on parchment and over a whi
 })
 
 test.each(roles)('%s holds the spec values on parchment and in the dark panel', (role, parchment, dark) => {
-  expect(declarations(':root')[role]).toBe(parchment)
+  expect(declarations(PARCHMENT)[role]).toBe(parchment)
   expect(declarations('.on-dark')[role]).toBe(dark)
 })
 
+test("the overlay's emblem is knocked out in the dark it always was: --w-emblem-ink is the dark panel's --w-gap there", () => {
+  expect(declarations('.on-dark')['--w-emblem-ink']).toBe(declarations('.on-dark')['--w-gap'])
+  expect(declarations('.on-dark')['--w-emblem-ink']).toBe('#2B3142')
+})
+
 test('on parchment a widget role is the colour of the token it stands for, so there is one gold and one muted', () => {
-  const root = declarations(':root')
+  const root = declarations(PARCHMENT)
   for (const [role, , , stands] of roles) {
     if (stands !== null) expect([role, root[role]]).toEqual([role, t[stands]])
   }
@@ -221,7 +268,7 @@ test('on parchment a widget role is the colour of the token it stands for, so th
 // Look pass spec 20.3, item 16: a ring's gaps and a bar's notches are drawn in the background's colour, which the dark
 // panel makes see-through; theirs is the same colour, opaque, so that the mark under them never shows through.
 test("the gap colour is the background's, opaque on parchment and in the dark panel", () => {
-  const root = declarations(':root')
+  const root = declarations(PARCHMENT)
   const dark = declarations('.on-dark')
   for (const gap of [root['--w-gap'], dark['--w-gap']]) expect(gap).toMatch(/^#[0-9A-F]{6}$/)
   expect(root['--w-gap']).toBe(root['--w-bg'])
@@ -252,7 +299,7 @@ test("the overlay sets the page's tokens dark, its text reaching 4.5:1 on the pa
 })
 
 test('the dark panel sets every widget role again, and the focus ring', () => {
-  const widgetRoles = Object.keys(declarations(':root')).filter((name) => name.startsWith('--w-'))
+  const widgetRoles = Object.keys(declarations(PARCHMENT)).filter((name) => name.startsWith('--w-'))
   expect(widgetRoles.sort()).toEqual(roles.map(([role]) => role).sort())
   expect(Object.keys(declarations('.on-dark')).sort()).toEqual([...widgetRoles, '--focus'].sort())
   expect(declarations('.on-dark')['--focus']).toBe('#F1EADB')
@@ -273,7 +320,7 @@ test.each([
   ['--ease-move', 'cubic-bezier(.45, 0, .2, 1)'],
   ['--ease-stamp', 'linear(0, 1.14 42%, .97 70%, 1)'],
 ])('the motion token %s is %s', (name, value) => {
-  expect(declarations(':root')[name]).toBe(value)
+  expect(declarations(PARCHMENT)[name]).toBe(value)
 })
 
 test('the focus ring is drawn with the focus token, which the dark panel sets again', () => {

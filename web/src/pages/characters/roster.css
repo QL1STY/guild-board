@@ -2,7 +2,7 @@
  * The roster (the design's section 6.1): parchment, with the week mockup's roster chips and focus cards. Pages keep
  * .gb-page's 1,440 pixels, with no zoom of their own.
  */
-.cr-page { display: grid; gap: 14px; --cr-paper: var(--ledger-light); --cr-gold-soft: #F1E3C2; }
+.cr-page { display: grid; gap: 14px; --cr-paper: var(--ledger-light); --cr-gold-soft: var(--gold-soft); }
 /* Scaled down on a full screen (scale.ts), the page still takes the 1,440 pixels of the screen it had: counted in its own, larger, pixels. */
 .gb-page.cr-page { max-width: calc(1440px / var(--cs, 1)); }
 .cr-grow { flex: 1; }

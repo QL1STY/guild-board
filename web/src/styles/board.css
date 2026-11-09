@@ -67,7 +67,7 @@
   padding: 2px 9px;
   border-radius: 999px;
   background: var(--gold-ink);
-  color: #fff;
+  color: var(--on-mark);
   font-size: 12px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;

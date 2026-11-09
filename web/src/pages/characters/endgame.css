@@ -5,7 +5,7 @@
  */
 .eg-page {
   display: grid; gap: 16px;
-  --cr-paper: var(--ledger-light); --cr-gold-soft: #F1E3C2; --eg-good-soft: #DDEBD3; --eg-bad: #8A2E21; --eg-bad-soft: #F3D9D5; --eg-warn-ink: #7A5418;
+  --cr-paper: var(--ledger-light); --cr-gold-soft: var(--gold-soft); --eg-good-soft: var(--good-soft); --eg-bad: var(--bad); --eg-bad-soft: var(--bad-soft); --eg-warn-ink: var(--warn-ink);
 }
 .eg-grow { flex: 1; }
 .eg-note { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.4; }

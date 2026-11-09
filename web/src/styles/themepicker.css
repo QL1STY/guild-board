@@ -1,0 +1,130 @@
+/*
+ * The theme picker in Settings (the themes design, section 2; the accepted mockup is picker-chosen-A.html). Each tile holds
+ * a tiny Board drawn with the ordinary tokens inside an element that carries its own data-theme, so it shows that theme's
+ * real values whichever theme the window wears. Everything outside the tiny Boards (the frame, the ring, the tick, the words)
+ * is the window's own theme.
+ */
+
+/* The row gives the tiles the room: beside the text when there is room, otherwise under it, and the text fills whatever line it has. The thirteen tiles are one row that scrolls sideways (the themes design, section 12); the page never does. */
+.set-row.tp-row { flex-wrap: wrap; align-items: flex-start; }
+.set-row.tp-row .set-tx { flex: 1 1 220px; }
+.set-row.tp-row .set-ctl { flex: 1 1 700px; min-width: 0; max-width: 100%; align-items: flex-start; }
+
+.tp-wrap { position: relative; flex: 1 1 0; min-width: 0; max-width: 100%; }
+
+/* The row: tiles side by side, scrolling sideways, snapping to a tile's start when it stops near one. The padding keeps the chosen tile's ring, a tile's lift and the focus ring from being cut by the row's own edge. */
+.tp {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 8px;
+  padding: 8px 8px 14px;
+  margin: -8px -8px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline) transparent;
+}
+
+/* The fade at the right edge, while more is to the right: the card's own colour, over the tiles, never in the way of a click. */
+.tp-fade {
+  position: absolute;
+  top: 0;
+  right: -8px;
+  bottom: 14px;
+  width: 44px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--surface));
+  opacity: 0;
+  transition: opacity var(--t-hover);
+}
+.tp-wrap.more .tp-fade { opacity: 1; }
+
+/* The small "Nations" mark between Match Windows and Mondstadt: vertical words beside a hairline. A label only. */
+.tp-sep { flex: none; display: grid; place-items: center; width: 22px; }
+.tp-sep span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding-left: 6px;
+  border-left: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tp-tile {
+  display: block;
+  flex: none;
+  width: 108px;
+  scroll-snap-align: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: center;
+  color: var(--ink);
+  cursor: pointer;
+}
+.tp-tile:focus-visible { outline: none; }
+.tp-tile:focus-visible .tp-mini { outline: 2px solid var(--focus); outline-offset: 5px; }
+
+.tp-mini {
+  position: relative;
+  display: block;
+  height: 70px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  transition: transform var(--t-hover) var(--ease-out), box-shadow var(--t-hover);
+}
+.tp-tile:hover .tp-mini { transform: translateY(-2px); }
+.tp-tile.on .tp-mini { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--fill); }
+
+.tp-name { display: block; margin-top: 7px; font-size: 13px; font-weight: 600; color: var(--ink); }
+.tp-ds { display: block; font-size: 13px; color: var(--muted); }
+
+.tp-tick {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  display: none;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--fill);
+  color: var(--surface);
+  place-items: center;
+}
+.tp-tile.on .tp-tick { display: grid; }
+.tp-tick .sign { width: 11px; height: 11px; stroke-width: 2.6; }
+
+/* ---- the tiny Board: rail, a heading bar, two cards with a progress bar, a wide card ---- */
+.tp-board {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 22px 1fr;
+}
+/* Match Windows: the Midnight Board over the Parchment one, cut on the diagonal so that its lower right half shows. */
+.tp-board.over { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+.tp-rail { display: grid; align-content: start; gap: 4px; padding: 5px 3px; background: var(--rail); }
+.tp-rail i { display: block; height: 3px; border-radius: 2px; background: var(--rail-text); opacity: .45; }
+.tp-rail i:first-child { background: var(--gold); opacity: 1; }
+
+.tp-main { display: grid; align-content: start; gap: 4px; padding: 5px; background: var(--page-dark); }
+.tp-h { display: block; width: 40%; height: 5px; border-radius: 2px; background: var(--ink); opacity: .8; }
+.tp-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.tp-card { display: grid; gap: 3px; padding: 4px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); }
+.tp-card u { display: block; height: 3px; border-radius: 2px; background: var(--ink); opacity: .35; text-decoration: none; }
+.tp-card s { display: block; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--fill) 65%, var(--track) 65%); text-decoration: none; }
+.tp-wide { display: block; height: 11px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); }
+
+/* The sun on the light half, in the Parchment Board's gold, and the moon on the dark half, in the Midnight Board's. */
+.tp-sun, .tp-moon { position: absolute; color: var(--fill); }
+.tp-sun { left: 26px; top: 42px; width: 13px; height: 13px; }
+.tp-moon { right: 5px; top: 4px; width: 13px; height: 13px; }

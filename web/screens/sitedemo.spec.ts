@@ -138,3 +138,53 @@ test(
     await expect(frame.getByRole('button', { name: 'Edit', exact: true })).toBeVisible()
   },
 )
+
+/** src/sitedemo.ts's RECORDING_REFUSAL: what a page shows when a write is tried in the recording. */
+const REFUSAL = 'This is a recording, so nothing here changes. Install Guild Board to use it.'
+
+test.describe('site demo: the theme', () => {
+  test.use({ viewport: { width: 1440, height: 900 } }) // not wider than the usual window: the interface is the page itself, with no frame
+
+  test(
+    'site demo: a tile applies the theme and tries no write (the recording would refuse it in words), and the choice survives a reload',
+    { tag: '@demoframe' },
+    async ({ page }) => {
+      test.skip(!existsSync(path.join(DIST, 'recording', 'index.json')), 'no built demo with its recording: see CONTRIBUTING.md')
+      await serveBuild(page)
+      const sent: string[] = []
+      page.on('request', (request) => {
+        if (request.method() !== 'GET') sent.push(`${request.method()} ${request.url()}`)
+      })
+      await page.goto(`${ORIGIN}${BASE}#/settings`)
+      const picker = page.getByRole('radiogroup', { name: 'Theme' })
+      await expect(picker).toBeVisible()
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'parchment')
+      await picker.getByRole('radio', { name: /^Midnight, / }).click()
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'midnight')
+      await expect(picker.getByRole('radio', { name: /^Midnight, / })).toHaveAttribute('aria-checked', 'true')
+      expect(await page.evaluate(() => localStorage.getItem('gb-theme'))).toBe('midnight')
+      // The demo's transport refuses every write in place, with RECORDING_REFUSAL (src/sitedemo.ts), which the page shows under the row
+      // that asked for it: a tile that wrote the setting would show it (no request leaves the page, so the page's own words are the proof).
+      await page.waitForTimeout(500) // a refused write is answered at once; this is longer than it takes
+      await expect(page.getByText(REFUSAL)).toHaveCount(0)
+      // The Theme row's notice (role="status", after the row) is where a refused write would show.
+      await expect(page.locator('.tp-row + [role="status"]')).toHaveCount(0)
+      expect(sent).toEqual([])
+      // A reload brings the choice back, before the interface draws.
+      await page.reload()
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'midnight')
+      await expect(page.getByRole('radiogroup', { name: 'Theme' }).getByRole('radio', { name: /^Midnight, / })).toHaveAttribute('aria-checked', 'true')
+      // And another one, Mist, and Match Windows (which follows this browser's scheme, dark here).
+      await page.emulateMedia({ colorScheme: 'dark' })
+      await page.getByRole('radiogroup', { name: 'Theme' }).getByRole('radio', { name: /^Match Windows, / }).click()
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'midnight')
+      expect(await page.evaluate(() => localStorage.getItem('gb-theme'))).toBe('system')
+      await page.waitForTimeout(500)
+      await expect(page.getByText(REFUSAL)).toHaveCount(0)
+      expect(sent).toEqual([])
+      // The control: a setting that does write (a switch of the same group) is refused in those very words, so the check above can fail.
+      await page.getByRole('region', { name: 'Guild Board', exact: true }).locator('button[aria-pressed]').first().click()
+      await expect(page.getByText(REFUSAL).first()).toBeVisible()
+    },
+  )
+})

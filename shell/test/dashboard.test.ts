@@ -193,6 +193,10 @@ class FakeWindow implements WindowLike {
   focus(): void {
     this.calls.push('focus')
   }
+  backgrounds: string[] = []
+  setBackgroundColor(colour: string): void {
+    this.backgrounds.push(colour)
+  }
   destroy(): void {
     this.calls.push('destroy')
     this.destroyed = true
@@ -843,4 +847,23 @@ test('a closing window no longer feeds onFragment or onResized', () => {
   windows[1].webContents.emit('did-navigate', {}, `${ORIGIN}/#/stats`)
   expect(resizes).toBe(2)
   expect(fragments).toEqual(['#/map', '#/stats'])
+})
+
+test('a window is made in the background of the theme the player chose, Parchment’s with none', () => {
+  make().open()
+  expect(windows[0].options.backgroundColor).toBe('#E6DDCA')
+  make({ theme: () => 'dusk' }).open()
+  expect(windows[1].options.backgroundColor).toBe('#211D19')
+})
+
+test('themeChanged sets the open window’s background, and does nothing with no window', () => {
+  let theme: 'parchment' | 'midnight' | 'mist' = 'parchment'
+  const dashboard = make({ theme: () => theme })
+  dashboard.themeChanged() // no window yet
+  dashboard.open()
+  theme = 'midnight'
+  dashboard.themeChanged()
+  theme = 'mist'
+  dashboard.themeChanged()
+  expect(windows[0].backgrounds).toEqual(['#0C0F1A', '#E3E9F0'])
 })

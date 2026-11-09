@@ -64,7 +64,7 @@
 .gb-ring::before { content: ''; grid-area: 1 / 1; width: 42px; height: 42px; border-radius: 50%; background: var(--surface); }
 /* A Picture (ui/Picture.tsx): the emblem over its sign, the compass, which shows where there is no emblem. */
 /* The region's white emblem on a disc of its nation's colour (ui/emblem.ts sets --emblem); its sign is drawn in white too. */
-.gb-emb { grid-area: 1 / 1; z-index: 1; width: 34px; height: 34px; padding: 3px; border-radius: 50%; background: var(--emblem, var(--w-btn)); color: var(--surface); }
+.gb-emb { grid-area: 1 / 1; z-index: 1; width: 34px; height: 34px; padding: 3px; border-radius: 50%; background: var(--emblem, var(--w-btn)); color: var(--emblem-ink); }
 .gb-emb .sign { width: 62%; height: 62%; }
 /* The name, whole, on a second line where it needs one, and the share explored beside its first line. */
 .gb-rn { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
