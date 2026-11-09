@@ -191,6 +191,25 @@ test('the pointer on the chart shows that day', async ({ page, core }) => {
   await expect(chart.getByTestId('ledger-chart-label')).toHaveText('Primogems held')
 })
 
+test("the pointer across a chart never changes its card's height, on any of the four views", async ({ page, core }) => {
+  // The demo core's own history: real days, long lines of moments, a note under the number on the other views.
+  await page.setViewportSize({ width: 1640, height: 1100 })
+  await page.goto(`${core.origin}/#/ledger`)
+  for (const view of ['Primogems', 'Crystals', 'Resin', 'Artifacts']) {
+    await page.getByRole('radio', { name: view }).click()
+    const chart = page.getByTestId('ledger-chart')
+    const svg = chart.locator('svg').first()
+    await expect(svg).toBeVisible()
+    const resting = (await box(chart)).height
+    const where = await box(svg)
+    for (let step = 0; step <= 40; step++) {
+      await page.mouse.move(where.x + (step / 40) * (where.width - 1), where.y + where.height / 2)
+      expect((await box(chart)).height, `${view}, the pointer at ${step}/40`).toBe(resting)
+    }
+    await page.mouse.move(where.x + where.width / 2, where.y - 200)
+  }
+})
+
 test('the range pills change only the chart', async ({ page, core }) => {
   await answer(page, LEDGER_FIXTURE, fixturePages)
   await page.goto(`${core.origin}/#/ledger`)

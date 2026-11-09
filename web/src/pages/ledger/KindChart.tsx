@@ -63,6 +63,8 @@ export function KindChart<T extends { day: string }>({
   const scale = barScale(drawn, { ref: ref?.value, minHi })
   const drawing = barsGeometry(drawn, scale, ref?.value ?? null)
   const words = head(shown, at, range)
+  // The note under the number is the resting one, kept while the pointer is on a day: the card never changes height.
+  const resting = at === null ? words : head(shown, null, range)
   const { left, right, top } = BAR_MARGINS
   const indexes = labelIndexes(shown.length)
 
@@ -87,14 +89,14 @@ export function KindChart<T extends { day: string }>({
           <span className="ld-delta num" data-testid="ledger-chart-line">
             <Segs line={words.line} />
           </span>
-          {words.luck !== null && (
+          {resting.luck !== null && (
             <span className="ld-luck num" data-testid="ledger-chart-luck">
-              <Segs line={words.luck} />
+              <Segs line={words.luck ?? resting.luck} />
             </span>
           )}
-          {words.note !== '' && (
+          {resting.note !== '' && (
             <span className="ld-bnote" data-testid="ledger-chart-note">
-              {words.note}
+              {resting.note}
             </span>
           )}
         </div>

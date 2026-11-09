@@ -65,10 +65,14 @@
 
 /* ---------- The balance and its chart ---------- */
 .ld-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
-.ld-bal { display: grid; gap: 4px; }
+/* The number's column takes the room the range pills leave, and its lines never wrap: a day under the pointer changes
+   the words, never the card's height. A line too long for the card ends in an ellipsis. */
+.ld-bal { display: grid; flex: 1 1 0; min-width: 0; gap: 4px; }
+.ld-bal > * { min-width: 0; }
 .ld-label { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
 .ld-amount { font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -.01em; }
 .ld-amount small { margin-left: 6px; font-size: 18px; font-weight: 700; color: var(--muted); letter-spacing: 0; }
+.ld-delta, .ld-luck { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .ld-delta { font-size: 14.5px; color: var(--ink2); }
 .ld-in { color: var(--good); }
 .ld-out { color: var(--ink); font-weight: 700; }

@@ -76,8 +76,9 @@ export function LedgerChart({ days, today, words = PRIMOGEM_WORDS }: { days: Led
           <span className="ld-delta num" data-testid="ledger-chart-line">
             <Movement line={head.line} came={words.came} />
           </span>
-          {noBalance && at === null && (
-            <a className="ld-link" href="#/pulls">
+          {noBalance && (
+            // Kept in its place while the pointer is on a day, only hidden, so the card keeps its height.
+            <a className="ld-link" href="#/pulls" style={at === null ? undefined : { visibility: 'hidden' }} tabIndex={at === null ? undefined : -1}>
               Set your balance in Pulls
             </a>
           )}

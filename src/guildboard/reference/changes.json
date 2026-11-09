@@ -1,4 +1,11 @@
 {
+  "2.1.1": [
+    {
+      "kind": "fixed",
+      "title": "A steady Ledger chart",
+      "text": "Moving the pointer along a chart on the Ledger no longer makes its card jump in height."
+    }
+  ],
   "2.1.0": [
     {
       "kind": "new",

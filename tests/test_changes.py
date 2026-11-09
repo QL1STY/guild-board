@@ -42,9 +42,20 @@ def test_every_shipped_item_is_valid():
     assert ChangeItem  # the type is public
 
 
-def test_the_next_release_tells_of_the_themes_and_the_ledger():
+def test_2_1_1_tells_of_the_steady_ledger_chart():
     notes = load_changes()
-    assert next(iter(notes)) == "2.1.0"
+    assert next(iter(notes)) == "2.1.1"
+    assert notes["2.1.1"] == [
+        {
+            "kind": "fixed",
+            "title": "A steady Ledger chart",
+            "text": "Moving the pointer along a chart on the Ledger no longer makes its card jump in height.",
+        },
+    ]
+
+
+def test_2_1_0_tells_of_the_themes_and_the_ledger():
+    notes = load_changes()
     assert notes["2.1.0"] == [
         {
             "kind": "new",
