@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "CryoC1": {"on": false, "state": "on", "label": "Constellation 1, enemy affected by Cryo", "covers": [], "reason": "Depends on the enemy being affected by Cryo."}
+  }
+}

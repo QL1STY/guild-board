@@ -34,7 +34,7 @@ test('the set holds the signs of spec 7.2, each once, and the Pulls widgets\' fi
       // The top bar and undo plan, Task 4: the plate's Sync button and the warning of a refusal and of an amber state.
       ...['sync', 'warn'],
       // The Characters plan, Task U1: the rail's Characters, the five weapons, and the profile's Artifacts, Constellation and
-      // Talents (its Story and Your week are the book).
+      // Talents (its Story is the book).
       ...['bust', 'sword', 'claymore', 'polearm', 'bow', 'catalyst', 'flower', 'stars', 'crown'],
       // The online plan, Task B6: Friends, in the rail, and the Friends page's own: two people.
       'people',

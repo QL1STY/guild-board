@@ -28,27 +28,28 @@ async function withPictures(page: Page) {
 
 /*
  * The Characters pages against the demo core (the Characters plan, Task U9), which starts on Sunday 25 October 2026 at
- * 08:00 UTC with Sandrone, Odette, Alyosha and Jahoda in the focus. The week's and the endgame's tests are in week.spec.ts
- * and endgame.spec.ts.
+ * 08:00 UTC with Sandrone, Odette, Alyosha and Jahoda in the focus. The Plan page's tests are in plan.spec.ts and the
+ * endgame's in endgame.spec.ts.
  */
 test.use({ viewport: { width: 1640, height: 1100 }, demoNow: '2026-10-25T08:00:00+00:00' })
 
-test('the rail has the two Characters pages, and each opens its own', async ({ page }) => {
+test('the rail has the Characters and the Plan pages, and each opens its own', async ({ page }) => {
   const rail = page.getByRole('navigation').first()
   await expect(rail.getByRole('link', { name: 'Characters' })).toBeVisible()
-  await expect(rail.getByRole('link', { name: 'Your week' })).toBeVisible()
-  await rail.getByRole('link', { name: 'Your week' }).click()
-  await expect(page).toHaveURL(/#\/week$/)
-  await expect(page.getByRole('heading', { name: 'When each is ready' })).toBeVisible()
+  await expect(rail.getByRole('link', { name: 'Plan', exact: true })).toBeVisible()
+  await expect(rail.getByRole('link', { name: 'Your week' })).toHaveCount(0)
+  await rail.getByRole('link', { name: 'Plan', exact: true }).click()
+  await expect(page).toHaveURL(/#\/plan$/)
+  await expect(page.getByRole('heading', { name: 'The week' })).toBeVisible()
   await rail.getByRole('link', { name: 'Characters' }).click()
   await expect(page).toHaveURL(/#\/characters$/)
   await expect(page.getByRole('heading', { name: 'Characters', level: 2 })).toBeVisible()
 })
 
-test("the roster opens a character's profile, and the focus on a card shows its number", async ({ page, core }) => {
+test("the roster opens a character's profile, from a card that is its link alone", async ({ page, core }) => {
   await page.goto(`${core.origin}/#/characters`)
   const card = page.locator('.cr-card[data-key="sandrone"]')
-  await expect(card).toContainText('In focus, 1')
+  await expect(card.getByRole('button')).toHaveCount(0)
   await card.locator('a.cr-link').click()
   await expect(page).toHaveURL(/#\/characters\/sandrone$/)
   await expect(page.locator('.pf-name')).toHaveText('Sandrone')
@@ -176,16 +177,19 @@ test('the entrance plays on the first visit only: coming back from a card or ano
   expect(await entranceRunning(page)).toBe(0)
 })
 
-test('the roster is read again quietly: a card that changed updates and the others are not drawn again', async ({ page, core }) => {
+test('the roster is read again quietly: a change to one character leaves the cards of the others as they are', async ({ page, core, api }) => {
   await page.goto(`${core.origin}/#/characters`)
   const jahoda = page.locator('.cr-card[data-key="jahoda"]')
-  await expect(jahoda).toContainText('In focus, 4')
+  await expect(jahoda).toBeVisible()
   await page.getByRole('link', { name: 'Stats' }).click()
   await page.getByRole('link', { name: 'Characters', exact: true }).click()
   await expect(jahoda).toBeVisible()
   await page.locator('.cr-card[data-key="nefer"]').evaluate((element) => ((element as unknown as { marked: boolean }).marked = true))
-  await jahoda.getByRole('button', { name: /In focus/ }).click()
-  await expect(jahoda.getByRole('button', { name: 'Add to focus' })).toBeVisible()
+  // Taking her off the plan changes her entry in the roster's read (a card shows nothing of the plan), and the read is taken again
+  // without the page being drawn over: the card of a character who did not change is the same element as before.
+  await api.put('/api/plan/characters', { characters: ['sandrone', 'odette', 'alyosha'] })
+  await expect.poll(async () => (await api.get<{ focus: string[] }>('/api/characters')).focus).toEqual(['sandrone', 'odette', 'alyosha'])
+  await expect(jahoda).toBeVisible()
   expect(await page.locator('.cr-card[data-key="nefer"]').evaluate((element) => (element as unknown as { marked?: boolean }).marked)).toBe(true)
   await expect(page.getByText('Reading your characters')).toHaveCount(0)
 })
@@ -338,37 +342,24 @@ test('a piece of the build strip unfolds, and shows its crit value and its verdi
   await expect(unfold).toContainText(/crit value/i)
 })
 
-test("the planner's goblet to Cryo shows +35%, and another goblet takes it away", async ({ page, core, api }) => {
-  await page.goto(`${core.origin}/#/characters/sandrone/plan`)
-  const change = page.locator('.pp-chip.hero b .sr-only')
-  const goblet = page.locator('.pp-mrow', { hasText: 'Goblet' })
-  await expect(change).toHaveText('+35%')
-  await goblet.getByRole('button', { name: 'ATK %' }).click()
-  await expect(change).not.toHaveText('+35%')
-  await goblet.getByRole('button', { name: 'Cryo DMG Bonus' }).click()
-  await expect(change).toHaveText('+35%')
-  // The plan was sent, and the core answers it as it was kept.
-  await expect.poll(async () => (await api.get<{ plan: { mains: { goblet: string } } }>('/api/characters/sandrone/plan')).plan.mains.goblet).toBe('dmg')
-})
-
 test('a change made just before leaving the planner is sent all the same', async ({ page, core, api }) => {
-  type Plan = { plan: { mains: { goblet: string } } }
+  type Plan = { plan: { talents: { normal: number } } }
   await page.goto(`${core.origin}/#/characters/sandrone/plan`)
-  const atk = page.locator('.pp-mrow', { hasText: 'Goblet' }).getByRole('button', { name: 'ATK %' })
-  await expect(atk).toBeVisible()
-  const before = (await api.get<Plan>('/api/characters/sandrone/plan')).plan.mains.goblet
+  const lower = page.getByRole('button', { name: 'Lower the Normal Attack target' })
+  await expect(lower).toBeEnabled()
+  const before = (await api.get<Plan>('/api/characters/sandrone/plan')).plan.talents.normal
   const put = page.waitForRequest(
     (request) => request.method() === 'PUT' && new URL(request.url()).pathname === '/api/characters/sandrone/plan',
     { timeout: 5_000 },
   )
   // The press and the leaving in one go, well inside the 150 ms the planner waits before it sends a change.
-  await atk.evaluate((button) => {
+  await lower.evaluate((button) => {
     ;(button as HTMLButtonElement).click()
     window.location.hash = '#/board'
   })
-  const goblet = ((await put).postDataJSON() as Plan['plan']).mains.goblet
-  expect(goblet).not.toBe(before)
-  await expect.poll(async () => (await api.get<Plan>('/api/characters/sandrone/plan')).plan.mains.goblet).toBe(goblet)
+  const normal = ((await put).postDataJSON() as Plan['plan']).talents.normal
+  expect(normal).not.toBe(before)
+  await expect.poll(async () => (await api.get<Plan>('/api/characters/sandrone/plan')).plan.talents.normal).toBe(normal)
 })
 
 test('the Card panel edits a goal alone and each field goes back to the card on its own', async ({ page, core, api }) => {

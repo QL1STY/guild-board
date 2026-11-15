@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "activeInArea": {"on": false, "state": "activeInArea", "label": "Constellation 6 inside the Burst's field", "covers": [], "reason": "A Constellation 6 bonus of his Burst's field, on only while the character on the field stands in it."},
+    "underHP": {"on": false, "state": "underHP", "label": "Constellation 2 below 70% HP", "covers": [], "reason": "Depends on his HP staying below 70%, and it raises only Energy Recharge."}
+  }
+}

@@ -1,7 +1,7 @@
 {
   "key": "shenhe", "name": "Shenhe", "element": "Cryo", "weapon_type": "Polearm", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"er": 200},
   "mains": {"sands": ["atk_pct", "er"], "goblet": ["atk_pct", "dmg"], "circlet": ["atk_pct", "cr", "cd"]},
   "weights": {"atk_pct": "wants", "er": "wants", "atk": "some", "cr": "some", "cd": "none", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

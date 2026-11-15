@@ -1,0 +1,1222 @@
+{
+ "a-teaspoon-of-transcendence": {
+  "base_atk": 674.3345,
+  "sub": "cd",
+  "sub_value": 0.441024
+ },
+ "a-thousand-blazing-suns": {
+  "base_atk": 740.5802,
+  "sub": "cr",
+  "sub_value": 0.110256
+ },
+ "a-thousand-floating-dreams": {
+  "base_atk": 541.8298,
+  "sub": "em",
+  "sub_value": 264.6144
+ },
+ "absolution": {
+  "base_atk": 674.3345,
+  "sub": "cd",
+  "sub_value": 0.441024
+ },
+ "akuoumaru": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "alley-hunter": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "amenoma-kageuchi": {
+  "base_atk": 454.3632,
+  "sub": "atk_pct",
+  "sub_value": 0.55128
+ },
+ "amos-bow": {
+  "base_atk": 608.0746,
+  "sub": "atk_pct",
+  "sub_value": 0.496152
+ },
+ "angelos-heptades": {
+  "base_atk": 740.5802,
+  "sub": "atk_pct",
+  "sub_value": 0.165384
+ },
+ "aqua-simulacra": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "aquila-favonia": {
+  "base_atk": 674.3345,
+  "sub": "phys",
+  "sub_value": 0.41346
+ },
+ "ash-graven-drinking-horn": {
+  "base_atk": 509.6059,
+  "sub": "hp_pct",
+  "sub_value": 0.41346
+ },
+ "astral-vulture-s-crimson-plumage": {
+  "base_atk": 608.0746,
+  "sub": "cd",
+  "sub_value": 0.661536
+ },
+ "athame-artis": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "azurelight": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "ballad-of-the-boundless-blue": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "ballad-of-the-fjords": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "beacon-of-the-reed-sea": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "beyond-the-chrysalis": {
+  "base_atk": 674.3345,
+  "sub": "cd",
+  "sub_value": 0.441024
+ },
+ "black-tassel": {
+  "base_atk": 354.3794,
+  "sub": "hp_pct",
+  "sub_value": 0.469199
+ },
+ "blackcliff-agate": {
+  "base_atk": 509.6059,
+  "sub": "cd",
+  "sub_value": 0.55128
+ },
+ "blackcliff-longsword": {
+  "base_atk": 564.7837,
+  "sub": "cd",
+  "sub_value": 0.36752
+ },
+ "blackcliff-pole": {
+  "base_atk": 509.6059,
+  "sub": "cd",
+  "sub_value": 0.55128
+ },
+ "blackcliff-slasher": {
+  "base_atk": 509.6059,
+  "sub": "cd",
+  "sub_value": 0.55128
+ },
+ "blackcliff-warbow": {
+  "base_atk": 564.7837,
+  "sub": "cd",
+  "sub_value": 0.36752
+ },
+ "blackmarrow-lantern": {
+  "base_atk": 454.3632,
+  "sub": "em",
+  "sub_value": 220.512
+ },
+ "blade-of-atonement": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "bloodsoaked-ruins": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "bloodtainted-greatsword": {
+  "base_atk": 354.3794,
+  "sub": "em",
+  "sub_value": 187.4352
+ },
+ "breezeborne-refrain": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "calamity-of-eshu": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "calamity-queller": {
+  "base_atk": 740.5802,
+  "sub": "atk_pct",
+  "sub_value": 0.165384
+ },
+ "cashflow-supervision": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "chain-breaker": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "cinnabar-spindle": {
+  "base_atk": 454.3632,
+  "sub": "def_pct",
+  "sub_value": 0.689711
+ },
+ "clash-of-kings": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "cloudforged": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "compound-bow": {
+  "base_atk": 454.3632,
+  "sub": "phys",
+  "sub_value": 0.689711
+ },
+ "cool-steel": {
+  "base_atk": 401.2936,
+  "sub": "atk_pct",
+  "sub_value": 0.3519
+ },
+ "covenant-of-frost-and-snow": {
+  "base_atk": 509.6059,
+  "sub": "def_pct",
+  "sub_value": 0.517284
+ },
+ "crane-s-echoing-call": {
+  "base_atk": 740.5802,
+  "sub": "atk_pct",
+  "sub_value": 0.165384
+ },
+ "crescent-pike": {
+  "base_atk": 564.7837,
+  "sub": "phys",
+  "sub_value": 0.344858
+ },
+ "crimson-moon-s-semblance": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "dark-iron-sword": {
+  "base_atk": 401.2936,
+  "sub": "em",
+  "sub_value": 140.5764
+ },
+ "dawning-frost": {
+  "base_atk": 509.6059,
+  "sub": "cd",
+  "sub_value": 0.55128
+ },
+ "deathmatch": {
+  "base_atk": 454.3632,
+  "sub": "cr",
+  "sub_value": 0.36752
+ },
+ "debate-club": {
+  "base_atk": 401.2936,
+  "sub": "atk_pct",
+  "sub_value": 0.3519
+ },
+ "dialogues-of-the-desert-sages": {
+  "base_atk": 509.6059,
+  "sub": "hp_pct",
+  "sub_value": 0.41346
+ },
+ "disaster-and-remorse": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "dodoco-tales": {
+  "base_atk": 454.3632,
+  "sub": "atk_pct",
+  "sub_value": 0.55128
+ },
+ "dragon-s-bane": {
+  "base_atk": 454.3632,
+  "sub": "em",
+  "sub_value": 220.512
+ },
+ "dragonspine-spear": {
+  "base_atk": 454.3632,
+  "sub": "phys",
+  "sub_value": 0.689711
+ },
+ "earth-shaker": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "echoes-of-the-heart": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "elegy-for-the-end": {
+  "base_atk": 608.0746,
+  "sub": "er",
+  "sub_value": 0.55128
+ },
+ "emberwell": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "emerald-orb": {
+  "base_atk": 448.2216,
+  "sub": "em",
+  "sub_value": 93.7176
+ },
+ "end-of-the-line": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "engulfing-lightning": {
+  "base_atk": 608.0746,
+  "sub": "er",
+  "sub_value": 0.55128
+ },
+ "etherlight-spindlelute": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "everlasting-moonglow": {
+  "base_atk": 608.0746,
+  "sub": "hp_pct",
+  "sub_value": 0.496152
+ },
+ "exaiphanes-blade": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "eye-of-perception": {
+  "base_atk": 454.3632,
+  "sub": "atk_pct",
+  "sub_value": 0.55128
+ },
+ "fading-twilight": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "fang-of-the-mountain-king": {
+  "base_atk": 740.5802,
+  "sub": "cr",
+  "sub_value": 0.110256
+ },
+ "favonius-codex": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "favonius-greatsword": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "favonius-lance": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "favonius-sword": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "favonius-warbow": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "ferrous-shadow": {
+  "base_atk": 401.2936,
+  "sub": "hp_pct",
+  "sub_value": 0.3519
+ },
+ "festering-desire": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "fillet-blade": {
+  "base_atk": 401.2936,
+  "sub": "atk_pct",
+  "sub_value": 0.3519
+ },
+ "finale-of-the-deep": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "flame-forged-insight": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "fleuve-cendre-ferryman": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "flower-wreathed-feathers": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "flowing-purity": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "flute-of-ezpitzal": {
+  "base_atk": 454.3632,
+  "sub": "def_pct",
+  "sub_value": 0.689711
+ },
+ "footprint-of-the-rainbow": {
+  "base_atk": 509.6059,
+  "sub": "def_pct",
+  "sub_value": 0.517284
+ },
+ "forest-regalia": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "forged-by-the-golden-melody": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "fractured-halo": {
+  "base_atk": 608.0746,
+  "sub": "cd",
+  "sub_value": 0.661536
+ },
+ "freedom-sworn": {
+  "base_atk": 608.0746,
+  "sub": "em",
+  "sub_value": 198.4608
+ },
+ "frostbearer": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "frostbreath": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "fruit-of-fulfillment": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "fruitful-hook": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "gest-of-the-mighty-wolf": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "golden-frostbound-oath": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "hakushin-ring": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "halberd": {
+  "base_atk": 448.2216,
+  "sub": "atk_pct",
+  "sub_value": 0.234602
+ },
+ "hamayumi": {
+  "base_atk": 454.3632,
+  "sub": "atk_pct",
+  "sub_value": 0.55128
+ },
+ "haran-geppaku-futsu": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "harbinger-of-dawn": {
+  "base_atk": 401.2936,
+  "sub": "cd",
+  "sub_value": 0.468588
+ },
+ "heretic-s-molten-blade": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "hunter-s-path": {
+  "base_atk": 541.8298,
+  "sub": "cr",
+  "sub_value": 0.441024
+ },
+ "hymn-of-the-maelstrom": {
+  "base_atk": 541.8298,
+  "sub": "hp_pct",
+  "sub_value": 0.661536
+ },
+ "ibis-piercer": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "iron-sting": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "jade-vista": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "jadefall-s-splendor": {
+  "base_atk": 608.0746,
+  "sub": "hp_pct",
+  "sub_value": 0.496152
+ },
+ "kagotsurube-isshin": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "kagura-s-verity": {
+  "base_atk": 608.0746,
+  "sub": "cd",
+  "sub_value": 0.661536
+ },
+ "katsuragikiri-nagamasa": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "key-of-khaj-nisut": {
+  "base_atk": 541.8298,
+  "sub": "hp_pct",
+  "sub_value": 0.661536
+ },
+ "king-s-squire": {
+  "base_atk": 454.3632,
+  "sub": "atk_pct",
+  "sub_value": 0.55128
+ },
+ "kitain-cross-spear": {
+  "base_atk": 564.7837,
+  "sub": "em",
+  "sub_value": 110.256
+ },
+ "light-of-foliar-incision": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "lightbearing-moonshard": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "lion-s-roar": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "lithic-blade": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "lithic-spear": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "lost-prayer-to-the-sacred-winds": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "lumidouce-elegy": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "luxurious-sea-lord": {
+  "base_atk": 454.3632,
+  "sub": "atk_pct",
+  "sub_value": 0.55128
+ },
+ "magic-guide": {
+  "base_atk": 354.3794,
+  "sub": "em",
+  "sub_value": 187.4352
+ },
+ "mailed-flower": {
+  "base_atk": 564.7837,
+  "sub": "em",
+  "sub_value": 110.256
+ },
+ "makhaira-aquamarine": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "mappa-mare": {
+  "base_atk": 564.7837,
+  "sub": "em",
+  "sub_value": 110.256
+ },
+ "master-key": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "memory-of-dust": {
+  "base_atk": 608.0746,
+  "sub": "atk_pct",
+  "sub_value": 0.496152
+ },
+ "messenger": {
+  "base_atk": 448.2216,
+  "sub": "cd",
+  "sub_value": 0.312392
+ },
+ "missive-windspear": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "mistsplitter-reforged": {
+  "base_atk": 674.3345,
+  "sub": "cd",
+  "sub_value": 0.441024
+ },
+ "mitternachts-waltz": {
+  "base_atk": 509.6059,
+  "sub": "phys",
+  "sub_value": 0.517284
+ },
+ "moonpiercer": {
+  "base_atk": 564.7837,
+  "sub": "em",
+  "sub_value": 110.256
+ },
+ "moonweaver-s-dawn": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "mountain-bracing-bolt": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "mouun-s-moon": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "new-bough": {
+  "base_atk": 509.6059,
+  "sub": "cd",
+  "sub_value": 0.55128
+ },
+ "nightweaver-s-looking-glass": {
+  "base_atk": 541.8298,
+  "sub": "em",
+  "sub_value": 264.6144
+ },
+ "nocturne-s-curtain-call": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "oathsworn-eye": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "otherworldly-story": {
+  "base_atk": 401.2936,
+  "sub": "er",
+  "sub_value": 0.39049
+ },
+ "peak-patrol-song": {
+  "base_atk": 541.8298,
+  "sub": "def_pct",
+  "sub_value": 0.82692
+ },
+ "polar-star": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "portable-power-saw": {
+  "base_atk": 454.3632,
+  "sub": "hp_pct",
+  "sub_value": 0.55128
+ },
+ "predator": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "primordial-jade-cutter": {
+  "base_atk": 541.8298,
+  "sub": "cr",
+  "sub_value": 0.441024
+ },
+ "primordial-jade-winged-spear": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "prospector-s-drill": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "prospector-s-shovel": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "prototype-amber": {
+  "base_atk": 509.6059,
+  "sub": "hp_pct",
+  "sub_value": 0.41346
+ },
+ "prototype-archaic": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "prototype-crescent": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "prototype-rancour": {
+  "base_atk": 564.7837,
+  "sub": "phys",
+  "sub_value": 0.344858
+ },
+ "prototype-starglitter": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "quantum-cat-alyst": {
+  "base_atk": 608.0746,
+  "sub": "cr",
+  "sub_value": 0.330768
+ },
+ "rainbow-serpent-s-rain-bow": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "rainslasher": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "range-gauge": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "raven-bow": {
+  "base_atk": 448.2216,
+  "sub": "em",
+  "sub_value": 93.7176
+ },
+ "recurve-bow": {
+  "base_atk": 354.3794,
+  "sub": "hp_pct",
+  "sub_value": 0.469199
+ },
+ "redhorn-stonethresher": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "reliquary-of-truth": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "rightful-reward": {
+  "base_atk": 564.7837,
+  "sub": "hp_pct",
+  "sub_value": 0.27564
+ },
+ "ring-of-yaxche": {
+  "base_atk": 509.6059,
+  "sub": "hp_pct",
+  "sub_value": 0.41346
+ },
+ "royal-bow": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "royal-greatsword": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "royal-grimoire": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "royal-longsword": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "royal-spear": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "rust": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "sacrificer-s-staff": {
+  "base_atk": 620.033,
+  "sub": "cr",
+  "sub_value": 0.09188
+ },
+ "sacrificial-bow": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "sacrificial-fragments": {
+  "base_atk": 454.3632,
+  "sub": "em",
+  "sub_value": 220.512
+ },
+ "sacrificial-greatsword": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "sacrificial-jade": {
+  "base_atk": 454.3632,
+  "sub": "cr",
+  "sub_value": 0.36752
+ },
+ "sacrificial-sword": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "sapwood-blade": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "scion-of-the-blazing-sun": {
+  "base_atk": 564.7837,
+  "sub": "cr",
+  "sub_value": 0.18376
+ },
+ "sequence-of-solitude": {
+  "base_atk": 509.6059,
+  "sub": "hp_pct",
+  "sub_value": 0.41346
+ },
+ "serenity-s-call": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "serpent-spine": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "sharpshooter-s-oath": {
+  "base_atk": 401.2936,
+  "sub": "cd",
+  "sub_value": 0.468588
+ },
+ "silver-light": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "silvershower-heartstrings": {
+  "base_atk": 541.8298,
+  "sub": "hp_pct",
+  "sub_value": 0.661536
+ },
+ "skyrider-greatsword": {
+  "base_atk": 401.2936,
+  "sub": "phys",
+  "sub_value": 0.439186
+ },
+ "skyrider-sword": {
+  "base_atk": 354.3794,
+  "sub": "er",
+  "sub_value": 0.520652
+ },
+ "skyward-atlas": {
+  "base_atk": 674.3345,
+  "sub": "atk_pct",
+  "sub_value": 0.330768
+ },
+ "skyward-blade": {
+  "base_atk": 608.0746,
+  "sub": "er",
+  "sub_value": 0.55128
+ },
+ "skyward-harp": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "skyward-pride": {
+  "base_atk": 674.3345,
+  "sub": "er",
+  "sub_value": 0.36752
+ },
+ "skyward-spine": {
+  "base_atk": 674.3345,
+  "sub": "er",
+  "sub_value": 0.36752
+ },
+ "slingshot": {
+  "base_atk": 354.3794,
+  "sub": "cr",
+  "sub_value": 0.312392
+ },
+ "snare-hook": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "snow-tombed-starsilver": {
+  "base_atk": 564.7837,
+  "sub": "phys",
+  "sub_value": 0.344858
+ },
+ "solar-pearl": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "song-of-broken-pines": {
+  "base_atk": 740.5802,
+  "sub": "phys",
+  "sub_value": 0.20673
+ },
+ "song-of-stillness": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "song-of-the-vigil": {
+  "base_atk": 564.7837,
+  "sub": "em",
+  "sub_value": 110.256
+ },
+ "splendor-of-tranquil-waters": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "staff-of-homa": {
+  "base_atk": 608.0746,
+  "sub": "cd",
+  "sub_value": 0.661536
+ },
+ "staff-of-the-scarlet-sands": {
+  "base_atk": 541.8298,
+  "sub": "cr",
+  "sub_value": 0.441024
+ },
+ "starcaller-s-watch": {
+  "base_atk": 541.8298,
+  "sub": "em",
+  "sub_value": 264.6144
+ },
+ "starsealed-edict": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "sturdy-bone": {
+  "base_atk": 564.7837,
+  "sub": "atk_pct",
+  "sub_value": 0.27564
+ },
+ "summit-shaper": {
+  "base_atk": 608.0746,
+  "sub": "atk_pct",
+  "sub_value": 0.496152
+ },
+ "sunny-morning-sleep-in": {
+  "base_atk": 541.8298,
+  "sub": "em",
+  "sub_value": 264.6144
+ },
+ "surf-s-up": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "sword-of-descension": {
+  "base_atk": 440.1936,
+  "sub": "atk_pct",
+  "sub_value": 0.3519
+ },
+ "sword-of-narzissenkreuz": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "symphonist-of-scents": {
+  "base_atk": 608.0746,
+  "sub": "cd",
+  "sub_value": 0.661536
+ },
+ "talking-stick": {
+  "base_atk": 564.7837,
+  "sub": "cr",
+  "sub_value": 0.18376
+ },
+ "tamayuratei-no-ohanashi": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "the-alley-flash": {
+  "base_atk": 620.033,
+  "sub": "em",
+  "sub_value": 55.127945
+ },
+ "the-bell": {
+  "base_atk": 509.6059,
+  "sub": "hp_pct",
+  "sub_value": 0.41346
+ },
+ "the-black-sword": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "the-catch": {
+  "base_atk": 509.6059,
+  "sub": "er",
+  "sub_value": 0.4594
+ },
+ "the-daybreak-chronicles": {
+  "base_atk": 674.3345,
+  "sub": "cd",
+  "sub_value": 0.441024
+ },
+ "the-dockhand-s-assistant": {
+  "base_atk": 509.6059,
+  "sub": "hp_pct",
+  "sub_value": 0.41346
+ },
+ "the-first-great-magic": {
+  "base_atk": 608.0746,
+  "sub": "cd",
+  "sub_value": 0.661536
+ },
+ "the-flute": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "the-stringless": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "the-unforged": {
+  "base_atk": 608.0746,
+  "sub": "atk_pct",
+  "sub_value": 0.496152
+ },
+ "the-viridescent-hunt": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "the-widsith": {
+  "base_atk": 509.6059,
+  "sub": "cd",
+  "sub_value": 0.55128
+ },
+ "thrilling-tales-of-dragon-slayers": {
+  "base_atk": 401.2936,
+  "sub": "hp_pct",
+  "sub_value": 0.3519
+ },
+ "thundering-pulse": {
+  "base_atk": 608.0746,
+  "sub": "cd",
+  "sub_value": 0.661536
+ },
+ "tidal-shadow": {
+  "base_atk": 509.6059,
+  "sub": "atk_pct",
+  "sub_value": 0.41346
+ },
+ "tome-of-the-eternal-flow": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "toukabou-shigure": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "traveler-s-handy-sword": {
+  "base_atk": 448.2216,
+  "sub": "def_pct",
+  "sub_value": 0.292789
+ },
+ "tulaytullah-s-remembrance": {
+  "base_atk": 674.3345,
+  "sub": "cd",
+  "sub_value": 0.441024
+ },
+ "twin-nephrite": {
+  "base_atk": 448.2216,
+  "sub": "cr",
+  "sub_value": 0.156196
+ },
+ "ultimate-overlord-s-mega-magic-sword": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "uraku-misugiri": {
+  "base_atk": 541.8298,
+  "sub": "cd",
+  "sub_value": 0.882048
+ },
+ "verdict": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "vivid-notions": {
+  "base_atk": 674.3345,
+  "sub": "cd",
+  "sub_value": 0.441024
+ },
+ "vortex-vanquisher": {
+  "base_atk": 608.0746,
+  "sub": "atk_pct",
+  "sub_value": 0.496152
+ },
+ "wandering-evenstar": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "wavebreaker-s-fin": {
+  "base_atk": 620.033,
+  "sub": "atk_pct",
+  "sub_value": 0.13782
+ },
+ "waveriding-whirl": {
+  "base_atk": 454.3632,
+  "sub": "er",
+  "sub_value": 0.612532
+ },
+ "white-iron-greatsword": {
+  "base_atk": 401.2936,
+  "sub": "def_pct",
+  "sub_value": 0.439186
+ },
+ "white-tassel": {
+  "base_atk": 401.2936,
+  "sub": "cr",
+  "sub_value": 0.234294
+ },
+ "whiteblind": {
+  "base_atk": 509.6059,
+  "sub": "def_pct",
+  "sub_value": 0.517284
+ },
+ "whitelake-frostfeather": {
+  "base_atk": 674.3345,
+  "sub": "cr",
+  "sub_value": 0.220512
+ },
+ "windblume-ode": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ },
+ "wine-and-song": {
+  "base_atk": 564.7837,
+  "sub": "er",
+  "sub_value": 0.306268
+ },
+ "winter-s-heavy-heart": {
+  "base_atk": 509.6059,
+  "sub": "cd",
+  "sub_value": 0.55128
+ },
+ "wolf-fang": {
+  "base_atk": 509.6059,
+  "sub": "cr",
+  "sub_value": 0.27564
+ },
+ "wolf-s-gravestone": {
+  "base_atk": 608.0746,
+  "sub": "atk_pct",
+  "sub_value": 0.496152
+ },
+ "xiphos-moonlight": {
+  "base_atk": 509.6059,
+  "sub": "em",
+  "sub_value": 165.384
+ }
+}

@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "lockHomework": {"on": false, "state": "on", "label": "Witch's Homework done (Hexerei)", "covers": [], "reason": "Her Hexerei effects need her Witch's Homework quest done and the party to have two Hexerei characters, which the planner cannot tell, so it is left for the player to switch on. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "lockC1": {"on": false, "state": "on", "label": "Constellation 1 ATK (Hexerei)", "covers": [], "reason": "A Constellation 1 ATK bonus of her Hexerei form. It needs the Witch's Homework switch as well. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

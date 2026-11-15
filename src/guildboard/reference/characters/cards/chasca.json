@@ -1,7 +1,7 @@
 {
   "key": "chasca", "name": "Chasca", "element": "Anemo", "weapon_type": "Bow", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"atk": 2000, "cr": 50, "cd": 200, "er": 110},
   "mains": {"sands": ["atk_pct"], "goblet": ["atk_pct", "dmg"], "circlet": ["cd", "cr"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "er": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

@@ -125,6 +125,8 @@
   animation: ec-pop var(--t-open) var(--ease-out) calc(var(--t-hover) + var(--i) * var(--stagger) * 2) backwards;
 }
 .ec-act.done { color: var(--on-mark); background: var(--mode-theater); }
+/* An Arcana fight is not an act: a rounded square, as the game's Arcana cards are not medals. */
+.ec-act.arcana { border-radius: 28%; font-size: 9px; }
 .ec-act.medal {
   color: var(--medal-ink);
   background: radial-gradient(circle at 35% 30%, var(--medal-light), var(--medal));
@@ -135,6 +137,36 @@
 .ec-legend i.medal { background: radial-gradient(circle at 35% 30%, var(--medal-light), var(--medal)); }
 .ec-legend i.done { background: var(--mode-theater); }
 .ec-legend i.off { background: var(--track); }
+.ec-legend.official i.done { background: var(--theater-cleared); }
+.ec-legend-mark { width: 14px; height: 14px; margin-right: 4px; vertical-align: -3px; }
+
+/* HoYoLAB's own marks, once kept: the medal won, or its white outline on a dusty lilac where the act was cleared without
+   it, the number under each, and a thin line before the Arcana fights, as HoYoLAB draws it. */
+.ec-big-heraldry { display: flex; align-items: center; gap: 10px; }
+.ec-big-heraldry > .ec-big { flex: 1; min-width: 0; }
+.ec-heraldry { flex: none; width: 40px; height: 40px; object-fit: contain; animation: ec-land var(--t-enter) var(--ease-stamp) var(--t-move) backwards; }
+.ec-marks {
+  display: grid;
+  align-items: start;
+  gap: 3px;
+}
+.ec-mark {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink);
+  animation: ec-pop var(--t-open) var(--ease-out) calc(var(--t-hover) + var(--i) * var(--stagger) * 2) backwards;
+}
+.ec-mark.off { color: var(--muted); }
+.ec-disc { display: grid; place-items: center; width: 100%; aspect-ratio: 1; border-radius: 50%; background: var(--track); }
+.ec-disc img { width: 92%; height: 92%; object-fit: contain; }
+.ec-mark.medal .ec-disc { background: color-mix(in srgb, var(--mode-theater) 16%, var(--surface)); }
+.ec-mark.done .ec-disc { background: var(--theater-cleared); }
+.ec-mark.arcana .ec-disc { border-radius: 28%; }
+.ec-split { width: 1px; height: 70%; justify-self: center; margin-top: 4%; background: var(--border); }
+.ec-glyph-pic { flex: none; width: 26px; height: 26px; object-fit: contain; }
 
 /* The Stygian Onslaught: the badge lands like a stamp, the bosses rise in. */
 .ec-big-badge { align-items: center; gap: 12px; }
@@ -197,6 +229,8 @@
   .ec-star,
   .ec-ic,
   .ec-act,
+  .ec-mark,
+  .ec-heraldry,
   .ec-badge,
   .ec-medal { animation: none; }
 }

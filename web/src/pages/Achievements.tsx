@@ -17,7 +17,7 @@ import { tickedPercent } from '../widgets/widgetview.ts'
 import { AchievementCard } from './AchievementCard.tsx'
 import type { Change } from './AchievementGroup.tsx'
 import {
-  categoryName, categoryTicked, changesListing, contentTitle, emptyLine, type FocusControl, keptAfter, type LostFocus,
+  categoryName, categoryTicked, changesListing, contentTitle, emptyLine, EVERY_CATEGORY, type FocusControl, keptAfter, type LostFocus,
   matchingControl, modelPath, type Place, placeAfter, sentSearch, shareGroups, takesPlace, unlistedDetails,
 } from './achievementsview.ts'
 import { Commissions } from './Commissions.tsx'
@@ -222,6 +222,12 @@ function Categories({
         />
       )}
       <hr className="ach-sep" />
+      <PlaceButton
+        label="All"
+        count={data.totals.left}
+        current={inCategory && shown.category === EVERY_CATEGORY}
+        onClick={() => choose({ category: EVERY_CATEGORY, pinned: false, unlisted: false })}
+      />
       {open.map(button)}
       {complete.length > 0 && (
         <button
@@ -406,8 +412,8 @@ function Content({
   const shown = data.query
   if (shown.unlisted && data.unlisted_rows.length > 0) return <Unlisted rows={data.unlisted_rows} />
   if (groups.length === 0) return <div className="gb-panel gb-empty">{emptyLine(shown)}</div>
-  // Pinned and a search show achievements of every category, so each card names its own.
-  const everyCategory = shown.pinned || shown.search.trim() !== ''
+  // Pinned, All and a search show achievements of every category, so each card names its own.
+  const everyCategory = shown.pinned || shown.category === EVERY_CATEGORY || shown.search.trim() !== ''
   return (
     <div className="ach-cards" ref={cards} onFocus={onFocus} onBlur={onBlur}>
       {groups.map((group) => (

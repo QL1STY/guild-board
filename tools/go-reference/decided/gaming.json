@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "a4HpState": {"on": true, "state": "above", "label": "HP at 50% or more", "covers": ["plunging"], "reason": "His own plunges and Burst heal him, so he usually stays at half HP or more, where his Charmed Cloudstrider plunge deals 20% more damage."},
+    "c2Overheal": {"on": false, "state": "on", "label": "Constellation 2 after overhealing", "covers": [], "reason": "A Constellation 2 ATK bonus for 5 seconds after healing beyond full HP, which depends on the team's healing."}
+  }
+}

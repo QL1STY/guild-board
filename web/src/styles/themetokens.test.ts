@@ -24,6 +24,7 @@ const LEFT_ALONE = [
   'styles/year.css', // the Year tab's night poster
   'pages/characters/planner.css', // so does her planner
   'pages/characters/elements.css', // the dark card's values themselves
+  'pages/characters/cv.css', // the Crit Value tiers' colours are fixed, on every theme and on the card
 ]
 
 /**
@@ -53,8 +54,8 @@ const STAYS: Record<string, string> = {
   'styles/gallery.css | .ga-nav | color': 'white arrows over the screenshot',
   'styles/gallery.css | .ga-nav:not(:disabled):hover | background': 'the same shade, darker, on hover',
   'pages/characters/characters.css | .cx-ava.on-card | background': "an avatar on a profile's dark card, in the element's look",
-  'pages/characters/characters.css | .cx-tip | border': "the dark tip of the profile, the planner and Your week's tooltip, dark on every theme",
-  'pages/characters/characters.css | .cx-tip | background': "the dark tip of the profile, the planner and Your week's tooltip, dark on every theme",
+  'pages/characters/characters.css | .cx-tip | border': "the dark tip of the profile and the planner's tooltip, dark on every theme",
+  'pages/characters/characters.css | .cx-tip | background': "the dark tip of the profile and the planner's tooltip, dark on every theme",
 }
 
 type Finding = { file: string; selector: string; property: string; value: string }
@@ -132,7 +133,6 @@ test('every colour that stays is still written where it is listed', () => {
 
 /** A rule that fills with --ink but carries no text: a line on a track. */
 const INK_GROUNDS_WITHOUT_TEXT: Record<string, string> = {
-  'pages/characters/week.css | .wk-track .m': "a 2px marker on the week's track, with no text on it",
   'styles/themepicker.css | .tp-h': "a 5px bar that stands for a heading in a picker tile's tiny Board, in that tile's own --ink: no text on it",
   'styles/themepicker.css | .tp-card u': "a 3px bar that stands for a line of text in a picker tile's tiny Board: no text on it",
 }
@@ -219,7 +219,7 @@ test("the profile's Readiness sheet is scanned, and the dark card above it is wh
 
 test('the scan sees the stylesheets', () => {
   expect(Object.keys(SHEETS).length).toBeGreaterThan(30)
-  expect(Object.keys(SHEETS)).toContain('../pages/characters/week.css')
+  expect(Object.keys(SHEETS)).toContain('../pages/characters/roster.css')
   expect(all.map((finding) => finding.file)).not.toContain('styles/tokens.css')
 })
 

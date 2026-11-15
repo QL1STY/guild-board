@@ -327,14 +327,40 @@ SANDRONE_DETAIL = {
                [(22, "19.4%", 2), (6, "14.0%", 2), (23, "6.5%", 0), (2, "299", 0)]),
     ],
     "constellations": [{"id": 1, "name": "Morrow After the Golden Dusk", "pos": 1, "is_actived": True}],
+    # As a real answer has them: the three talents with levels, all of type 1, then the passives, of type 2; a talent's rows
+    # at the level she has it ({"name", "value"}, the values as text). The values are the game's own at those levels (Normal
+    # Attack 9, Skill 10, Burst 10; Genshin Optimizer's datamine copy), the names and the way each value prints are those of
+    # the game's English text for her (GO's localisation: one decimal, "4.0s", "{{0, percent(fixed: 1)}}% ×3"), which is how
+    # HoYoLAB writes a row ("44.5%", "18.0s"). Her first three Normal Attack rows only.
     "skills": [
         {"skill_id": 1, "skill_type": 1, "name": "Formule Phenomenale: Self-Evident Proposition", "level": 9,
-         "icon": "https://act-webstatic.hoyoverse.com/normal.png", "desc": "", "skill_affix_list": [], "is_unlock": True},
-        {"skill_id": 2, "skill_type": 2, "name": "Skill", "level": 10, "icon": "", "desc": "", "skill_affix_list": [],
+         "icon": "https://act-webstatic.hoyoverse.com/normal.png", "desc": "",
+         "skill_affix_list": [{"name": "1-Hit DMG", "value": "140.2%"}, {"name": "2-Hit DMG", "value": "123.5%"},
+                              {"name": "3-Hit DMG", "value": "188.9%"}], "is_unlock": True},
+        {"skill_id": 2, "skill_type": 1, "name": "Formule Phenomenale: Differential Analysis", "level": 10, "icon": "",
+         "desc": "",
+         "skill_affix_list": [{"name": "Prism Shot DMG", "value": "58.3%"},
+                              {"name": "Prism Shot Stellar-Conduct DMG", "value": "38.9%"},
+                              {"name": "Prism Shot Stellar Swirl DMG", "value": "58.3%"}, {"name": "CD", "value": "4.0s"}],
          "is_unlock": True},
-        {"skill_id": 3, "skill_type": 3, "name": "Burst", "level": 10, "icon": "", "desc": "", "skill_affix_list": [],
-         "is_unlock": True},
+        {"skill_id": 3, "skill_type": 1, "name": "Formule Phenomenale: Q.E.D.", "level": 10, "icon": "", "desc": "",
+         "skill_affix_list": [{"name": "Bombardment DMG", "value": "158.8% ×3"},
+                              {"name": "Convective Inhibition Ray DMG", "value": "595.4%"},
+                              {"name": "Convective Inhibition Ray Stellar-Conduct DMG", "value": "397.0%"},
+                              {"name": "Convective Inhibition Ray Stellar Swirl DMG", "value": "595.4%"},
+                              {"name": "CD", "value": "15.0s"}, {"name": "Energy Cost", "value": "60"}], "is_unlock": True},
+        {"skill_id": 4, "skill_type": 2, "name": "Eternal Speculation Engine", "level": 1, "icon": "", "desc": "",
+         "skill_affix_list": [], "is_unlock": True},
     ],
+    # One recommendation a character, as a real answer has it (a public full answer's, the Pyro Traveler's: any element's DMG
+    # Bonus is a `dmg`).
+    "recommend_relic_property": {
+        "recommend_properties": {
+            "sand_main_property_list": [6], "goblet_main_property_list": [40], "circlet_main_property_list": [20],
+            "sub_property_list": [20, 22, 6],
+        },
+        "custom_properties": None, "has_set_recommend_prop": False,
+    },
     "base_properties": [
         _value(2000, "13226", "6926.4", "20152.4"),
         _value(2001, "1016", "1948.1", "2964.1"),

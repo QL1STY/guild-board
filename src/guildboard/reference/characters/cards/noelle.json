@@ -1,7 +1,7 @@
 {
   "key": "noelle", "name": "Noelle", "element": "Geo", "weapon_type": "Claymore", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["damage", "protector"], "keeps_alive": true, "scaling": "def",
-  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "physical",
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "protector"], "keeps_alive": true,
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"],
   "goals": {"er": 155},
   "mains": {"sands": ["def_pct", "er", "atk_pct"], "goblet": ["dmg", "def_pct"], "circlet": ["cr", "cd", "def_pct"]},
   "weights": {"def_pct": "wants", "cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "some", "atk": "some", "def": "some", "em": "none", "hp_pct": "none", "hp": "none"},

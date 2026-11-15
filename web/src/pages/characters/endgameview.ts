@@ -95,10 +95,10 @@ export function closeLine(entry: Endgame['theater']['close'][number]): string {
 // ----------------------------------------------------------------------------------------------------- To clear everything
 
 /**
- * What an action offers: the planner as a link, or adding to the focus (the key to add). The words need no pronoun, since
+ * What an action offers: the planner as a link, or adding to the plan (the key to add). The words need no pronoun, since
  * an action carries a character's name in its title and no pronouns.
  */
 export function clearAction(action: Pick<Endgame['clear'][number], 'action' | 'target'>): { label: string; href: string | null; focus: string | null } {
   if (action.action === 'planner') return { label: 'Open the planner', href: `#/characters/${action.target}/plan`, focus: null }
-  return { label: 'Add to your focus', href: null, focus: action.target }
+  return { label: 'Add to the plan', href: null, focus: action.target }
 }

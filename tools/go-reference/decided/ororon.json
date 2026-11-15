@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "c2Supersense": {"on": false, "state": "on", "label": "Constellation 2 after the Burst", "covers": [], "reason": "A Constellation 2 window after his Burst whose size grows with the number of enemies hit."},
+    "c6Stacks": {"on": false, "state": "3", "label": "Constellation 6 stacks", "covers": [], "reason": "Stacks from Hypersense, which other party members' reactions or Nightsoul-aligned hits set off."},
+    "c2BurstHitStack": {"on": false, "state": "4", "label": "Constellation 2 stacks from Burst hits", "covers": [], "reason": "The bonus grows with the enemies his Burst hits, up to four, and only inside the window after the Burst, whose switch is off. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

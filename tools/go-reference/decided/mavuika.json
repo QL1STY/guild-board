@@ -1,0 +1,10 @@
+{
+  "main": null,
+  "toggles": {
+    "a1NsBurst": {"on": true, "state": "on", "label": "After a Nightsoul Burst", "covers": ["normal", "charged", "plunging", "skill", "burst"], "reason": "Her own Nightsoul-aligned hits trigger a Nightsoul Burst as her Skill lands, and the 10-second ATK bonus lasts through the Burst and Flamestrider attacks that follow."},
+    "a4TimeSinceBurst": {"on": false, "state": "19", "label": "Bonus after her Burst", "covers": [], "reason": "The DMG bonus after her Burst fades over 20 seconds, so its size depends on the moment of each hit."},
+    "burstSpirit": {"on": true, "state": "100", "label": "Fighting Spirit at 100", "covers": ["normal", "charged", "burst"], "reason": "Her Burst always uses at least 100 Fighting Spirit, which raises the Burst and the Flamestrider Normal and Charged Attacks that follow; more than 100 depends on the team."},
+    "c1GainSpirit": {"on": false, "state": "on", "label": "Constellation 1 ATK after Fighting Spirit", "covers": [], "reason": "A Constellation 1 ATK bonus for 8 seconds after she gains Fighting Spirit, which depends on what the team does around her Burst."},
+    "c2FlameForm": {"on": true, "state": "on", "label": "Constellation 2 Flamestrider bonus", "covers": ["normal", "charged", "burst"], "reason": "With Constellation 2 her Burst puts her on the Flamestrider in Nightsoul's Blessing, where her Normal, Charged and Burst hits deal the extra damage."}
+  }
+}

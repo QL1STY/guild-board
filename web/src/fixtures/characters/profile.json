@@ -344,6 +344,7 @@
       "verdict": "keep",
       "why": "9 of 9 rolls in stats she wants.",
       "crit_value": 42.8,
+      "cv_tier": 3,
       "rolls_wanted": 9,
       "rolls_all": 9,
       "set_name": "Disenchantment in Deep Shadow"
@@ -391,6 +392,7 @@
       "verdict": "level",
       "why": "At +16, with 3 substats she wants.",
       "crit_value": 27.2,
+      "cv_tier": 2,
       "rolls_wanted": 6,
       "rolls_all": 8,
       "set_name": "Disenchantment in Deep Shadow"
@@ -438,6 +440,7 @@
       "verdict": "keep",
       "why": "6 of 8 rolls in stats she wants, four of them Crit DMG. A Sands this good is rare: keep it.",
       "crit_value": 41.2,
+      "cv_tier": 3,
       "rolls_wanted": 6,
       "rolls_all": 8,
       "set_name": "Disenchantment in Deep Shadow"
@@ -485,6 +488,7 @@
       "verdict": "replace",
       "why": "Its main stat is ATK %; her card asks for Cryo DMG Bonus.",
       "crit_value": 0,
+      "cv_tier": 0,
       "rolls_wanted": 0,
       "rolls_all": 8,
       "set_name": "Disenchantment in Deep Shadow"
@@ -532,6 +536,7 @@
       "verdict": "keep",
       "why": "7 of 8 rolls in stats she wants.",
       "crit_value": 19.4,
+      "cv_tier": 2,
       "rolls_wanted": 7,
       "rolls_all": 8,
       "set_name": "Disenchantment in Deep Shadow"
@@ -753,7 +758,6 @@
         "damage"
       ],
       "keeps_alive": false,
-      "scaling": "atk",
       "damage_talent": "normal",
       "talent_priority": [
         "normal",

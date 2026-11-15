@@ -1,7 +1,7 @@
 {
   "key": "mualani", "name": "Mualani", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "hp",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"hp": 30000, "cr": 50, "cd": 200},
   "mains": {"sands": ["hp_pct", "em"], "goblet": ["dmg", "hp_pct"], "circlet": ["cd", "cr"]},
   "weights": {"cr": "wants", "cd": "wants", "hp_pct": "wants", "em": "some", "hp": "some", "er": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},

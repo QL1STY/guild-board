@@ -25,7 +25,7 @@ const PICTURES = path.resolve(HERE, '..', '..', 'src', 'guildboard', 'characters
 /** The official address of each picture of the icon cache, by key: written by tools/record-site-demo.py beside the recording. */
 const ICONS = path.resolve(HERE, '..', 'site-demo', 'recording', 'icons.json')
 
-test.use({ siteArt: true, weekAndEndgame: false })
+test.use({ siteArt: true, endgame: false })
 
 /** The picture at `url`, fetched once through the route and kept for the next time; a host that refuses gives a 404 (the sign shows). */
 function official(listed: (key: string) => string | undefined, kept: Map<string, { status: number; contentType: string; body: Buffer }>) {

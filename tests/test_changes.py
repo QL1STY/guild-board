@@ -42,9 +42,25 @@ def test_every_shipped_item_is_valid():
     assert ChangeItem  # the type is public
 
 
+def test_2_2_0_tells_of_the_plan_page_the_stat_simulator_and_the_verdict():
+    notes = load_changes()
+    assert next(iter(notes)) == "2.2.0"
+    assert [(item["kind"], item["title"]) for item in notes["2.2.0"]] == [
+        ("new", "The Plan page"),
+        ("new", "Crit Value"),
+        ("new", "A stat simulator in the planner"),
+        ("new", "The planner's damage verdict"),
+        ("better", "Exact weapon numbers"),
+        ("fixed", "A set's own-element bonus"),
+        ("better", "Achievements in one list"),
+        ("better", "Readiness from your goals"),
+    ]
+    assert all(item["text"] for item in notes["2.2.0"])
+
+
 def test_2_1_1_tells_of_the_steady_ledger_chart():
     notes = load_changes()
-    assert next(iter(notes)) == "2.1.1"
+    assert "2.1.1" in notes
     assert notes["2.1.1"] == [
         {
             "kind": "fixed",

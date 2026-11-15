@@ -1,7 +1,7 @@
 {
   "key": "lyney", "name": "Lyney", "element": "Pyro", "weapon_type": "Bow", "rarity": 5,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"],
   "goals": {"atk": 2200, "cr": 60, "cd": 200, "er": 130},
   "mains": {"sands": ["atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "er": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

@@ -261,7 +261,7 @@ def in_combat(
 ) -> dict[str, float]:
     """The stats in combat: the panel with the weapon's and the set's effects that hold when met counted as met, every one
     that applies and with no grouping. A percentage of ATK is counted on `base_atk`; one of HP or DEF on the panel's `base_hp`
-    or `base_def` (the stat itself when the panel has none). `phys` stays a key of its own: the damage estimate counts it."""
+    or `base_def` (the stat itself when the panel has none). `phys` stays a key of its own."""
     add = _weapon_effects(weapon, refinement, refs, "met")
     for stat, value in _set_effects(set_choice, refs, "met").items():
         add[stat] = add.get(stat, 0.0) + value

@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c4": {"on": false, "state": "on", "label": "Constellation 4 after Crystallize", "covers": [], "reason": "Needs a Crystallize reaction, which depends on the party."},
+    "skill": {"on": false, "state": "on", "label": "Flying Cloud Flag Formation", "covers": [], "reason": "Her Burst's Normal Attack bonus is a buff for the party, and her own damage comes from her Skill and Burst."}
+  }
+}

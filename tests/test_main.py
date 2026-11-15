@@ -254,16 +254,24 @@ def test_demo_now_is_checked(capsys):
     assert "time zone" in capsys.readouterr().out
 
 
-def test_week_and_endgame_can_be_turned_on_for_a_demo_only(capsys, monkeypatch):
+def test_endgame_can_be_turned_on_for_a_demo_only(capsys, monkeypatch):
     from guildboard import characters
 
-    monkeypatch.setattr(characters, "WEEK_AND_ENDGAME", False)
-    assert main(["--no-shell", "--week-and-endgame"]) == 2
-    assert "--week-and-endgame needs --demo" in capsys.readouterr().out
-    assert characters.WEEK_AND_ENDGAME is False
+    monkeypatch.setattr(characters, "ENDGAME", False)
+    assert main(["--no-shell", "--endgame"]) == 2
+    assert "--endgame needs --demo" in capsys.readouterr().out
+    assert characters.ENDGAME is False
     monkeypatch.setattr("guildboard.__main__.run_headless", lambda *args, **kwargs: asyncio.sleep(0, 0))
-    assert main(["--demo", "--no-shell", "--week-and-endgame"]) == 0
-    assert characters.WEEK_AND_ENDGAME is True
+    assert main(["--demo", "--no-shell", "--endgame"]) == 0
+    assert characters.ENDGAME is True
+
+
+def test_the_verdict_flag_is_accepted_and_changes_nothing(monkeypatch):
+    from guildboard import characters
+
+    monkeypatch.setattr("guildboard.__main__.run_headless", lambda *args, **kwargs: asyncio.sleep(0, 0))
+    assert main(["--demo", "--no-shell", "--verdict"]) == 0
+    assert characters.VERDICT is True
 
 
 async def test_headless_demo_starts_at_the_given_instant(tmp_path):

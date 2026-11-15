@@ -26,7 +26,7 @@ RAW_FULL_DAYS = 30  # how long every raw body is kept; after that, the last one 
 BUSY_SECONDS = 5.0  # how long to wait for another program that is writing to the database
 # How an import of the wish history that Guild Board's closing cut short ended, as the next start records it.
 IMPORT_CUT_SHORT = "Guild Board closed before this import finished."
-CHAR_FOCUS_MAX = 4  # the Characters pages' focus (the plan's FOCUS_MAX, which the store may not import)
+CHAR_FOCUS_MAX = 128  # the Plan page's planned list, the old focus (`characters.PLANNED_MAX`, which the store may not import)
 
 # What schema 12 watches for sync (the online plan, Task C2): the tables the player makes rows in, each with the columns that
 # name a row across PCs, and the columns that make up a change of it (every column but those that stay on this PC: the numbers
@@ -80,6 +80,38 @@ def _sync_line(table: str, row: str, deleted: int) -> str:
     )
 
 
+def _sync_triggers(table: str, key: tuple[str, ...], changes: tuple[str, ...]) -> list[str]:
+    """The three triggers of one synced table, as schema 12 makes them (a later schema that rebuilds the table makes them
+    again with this)."""
+    script: list[str] = []
+    new, old = (", ".join(f"{side}.{column}" for column in key) for side in ("NEW", "OLD"))
+    if key == ("sync_key",):
+        # The key is drawn once the row is there, and the line is made from the row as it is then.
+        insert = [
+            f"UPDATE {table} SET sync_key = {_sync_key_drawn(table, 'NEW.')} WHERE rowid = NEW.rowid AND sync_key IS NULL;",
+            "INSERT OR REPLACE INTO sync_outbox (kind, row_key, edited_at, deleted) "
+            f"SELECT '{table}', json_array(sync_key), {_SYNC_NOW}, 0 FROM {table} WHERE rowid = NEW.rowid;",
+        ]
+        update, watched = [_sync_line(table, new, 0)], changes
+    else:
+        insert = [_sync_line(table, new, 0)]
+        # A key that was changed names a row that is gone, and a row that is new.
+        update = [
+            "INSERT OR REPLACE INTO sync_outbox (kind, row_key, edited_at, deleted) "
+            f"SELECT '{table}', json_array({old}), {_SYNC_NOW}, 1 WHERE json_array({old}) IS NOT json_array({new});",
+            _sync_line(table, new, 0),
+        ]
+        watched = key + changes
+    for what, when, body in (
+        ("insert", "AFTER INSERT", insert),
+        ("update", f"AFTER UPDATE OF {', '.join(watched)}", update),
+        ("delete", "AFTER DELETE", [_sync_line(table, old, 1)]),
+    ):
+        script.append(f"CREATE TRIGGER sync_{table}_{what} {when} ON {table} WHEN {_SYNC_OPEN}")
+        script += ["BEGIN", *(f"    {statement}" for statement in body), "END;"]
+    return script
+
+
 def _sync_migration() -> str:
     """Schema 12 as one script. The four tables whose rows a PC numbers for itself gain a `sync_key`, which every row that is
     there gets before the triggers exist, so that the migration leaves the outbox empty. Then each table gets three triggers: a
@@ -100,31 +132,7 @@ def _sync_migration() -> str:
                 f"CREATE UNIQUE INDEX {table}_by_sync_key ON {table} (sync_key);",
             ]
     for table, key, changes in _SYNCED_AT_12:
-        new, old = (", ".join(f"{side}.{column}" for column in key) for side in ("NEW", "OLD"))
-        if key == ("sync_key",):
-            # The key is drawn once the row is there, and the line is made from the row as it is then.
-            insert = [
-                f"UPDATE {table} SET sync_key = {_sync_key_drawn(table, 'NEW.')} WHERE rowid = NEW.rowid AND sync_key IS NULL;",
-                "INSERT OR REPLACE INTO sync_outbox (kind, row_key, edited_at, deleted) "
-                f"SELECT '{table}', json_array(sync_key), {_SYNC_NOW}, 0 FROM {table} WHERE rowid = NEW.rowid;",
-            ]
-            update, watched = [_sync_line(table, new, 0)], changes
-        else:
-            insert = [_sync_line(table, new, 0)]
-            # A key that was changed names a row that is gone, and a row that is new.
-            update = [
-                "INSERT OR REPLACE INTO sync_outbox (kind, row_key, edited_at, deleted) "
-                f"SELECT '{table}', json_array({old}), {_SYNC_NOW}, 1 WHERE json_array({old}) IS NOT json_array({new});",
-                _sync_line(table, new, 0),
-            ]
-            watched = key + changes
-        for what, when, body in (
-            ("insert", "AFTER INSERT", insert),
-            ("update", f"AFTER UPDATE OF {', '.join(watched)}", update),
-            ("delete", "AFTER DELETE", [_sync_line(table, old, 1)]),
-        ):
-            script.append(f"CREATE TRIGGER sync_{table}_{what} {when} ON {table} WHEN {_SYNC_OPEN}")
-            script += ["BEGIN", *(f"    {statement}" for statement in body), "END;"]
+        script += _sync_triggers(table, key, changes)
     return _LINE.join(script)
 
 
@@ -386,6 +394,18 @@ MIGRATIONS: tuple[str, ...] = (
     DROP TABLE wiki_entries;
     ALTER TABLE wiki_entries_new RENAME TO wiki_entries;
     """,
+    # The Plan page's planned list (the old focus) holds up to 128 characters, not four (the Plan design, section 4): the table is
+    # made again with the new check, its rows copied before its sync triggers exist (so that the copy leaves the outbox alone), and
+    # the three triggers of schema 12 are made again with the same function.
+    _LINE.join([
+        """
+    CREATE TABLE char_focus_new (uid INTEGER NOT NULL, position INTEGER NOT NULL CHECK (position >= 1),
+        character TEXT NOT NULL, PRIMARY KEY (uid, position)) WITHOUT ROWID;
+    INSERT INTO char_focus_new (uid, position, character) SELECT uid, position, character FROM char_focus;
+    DROP TABLE char_focus;
+    ALTER TABLE char_focus_new RENAME TO char_focus;""",
+        *_sync_triggers(*next(row for row in _SYNCED_AT_12 if row[0] == "char_focus")),
+    ]),
 )
 
 POINTS_TRIMMED_AT = 14  # the schema whose upgrade deletes most of `points`: the upgrade to it gives the room back (Store._compact)
@@ -2203,15 +2223,16 @@ class Store:
 
     # ------------------------------------------------------------------ the Characters pages
     def focus(self, uid: int) -> list[str]:
-        """The characters of the account's focus, by position."""
+        """The characters of the account's focus, by position, each once: synced rows are per position and the last write wins, so
+        two PCs can leave one character in two positions, and she keeps her first. This is the only reader of the table."""
         rows = self._conn.execute("SELECT character FROM char_focus WHERE uid = ? ORDER BY position", (uid,))
-        return [str(character) for (character,) in rows]
+        return list(dict.fromkeys(str(character) for (character,) in rows))
 
     def put_focus(self, uid: int, characters: Sequence[str]) -> None:
-        """The focus becomes `characters`, in that order. More than four is refused, and the focus stays as it was."""
+        """The focus becomes `characters`, in that order. More than `CHAR_FOCUS_MAX` is refused, and the focus stays as it was."""
         kept = [valid_text(character) for character in characters]
         if len(kept) > CHAR_FOCUS_MAX:
-            raise ValueError(f"The focus holds {CHAR_FOCUS_MAX} characters at most.")
+            raise ValueError(f"The planned list holds {CHAR_FOCUS_MAX} characters at most.")
         with self._commit():
             self._conn.execute("DELETE FROM char_focus WHERE uid = ?", (uid,))
             self._conn.executemany(
@@ -2356,6 +2377,16 @@ class Store:
             (kind,),
         ).fetchall()
         return {row[0]: self._wiki_entry(row) for row in rows}
+
+    def wiki_entries_below_format(self, kind: str, format_: int) -> list[str]:
+        """The page ids of the entries of a kind kept in a format lower than this one (an entry with no format is of 1), found
+        without decoding any of them in Python."""
+        rows = self._conn.execute(
+            "SELECT entry_page_id FROM wiki_entries WHERE kind = ? AND COALESCE(json_extract(data, '$.format'), 1) < ? "
+            "ORDER BY entry_page_id",
+            (kind, format_),
+        ).fetchall()
+        return [row[0] for row in rows]
 
     def put_wiki_entry(self, row: WikiEntryRow) -> None:
         """Keep an entry under its page id, replacing the one kept."""

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { ringFill } from '../../frame/freshview.ts'
 import type { CharSync } from '../../types.ts'
-import { CALCULATOR_OFF, FOUR_AT_MOST, LOGIN_FIRST, NOT_YOURS, charactersFresh } from './words.ts'
+import { CALCULATOR_OFF, LOGIN_FIRST, NOT_YOURS, charactersFresh } from './words.ts'
 
 const NOW = new Date('2026-10-25T07:20:00+00:00')
 const base: CharSync = {
@@ -9,7 +9,6 @@ const base: CharSync = {
 }
 
 test('the plain sentences of the Characters pages are the plan\'s', () => {
-  expect(FOUR_AT_MOST).toBe('Four at most: take one out first.')
   expect(NOT_YOURS).toBe('Not yours yet')
   expect(CALCULATOR_OFF).toBe(
     "Calculator sync is off in HoYoLAB, so Guild Board can't see what you hold. Switch it on in HoYoLAB's Enhancement Progression Calculator, or type what you hold here.",

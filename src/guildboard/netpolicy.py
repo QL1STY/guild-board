@@ -35,6 +35,18 @@ PUBLIC_PICTURE_URLS: tuple[str, ...] = (
     "https://i.redd.it/n427epuvp0bd1.jpg",
     # Stygian Onslaught, from the Genshin Impact wiki on Fandom (1,080 x 390).
     "https://static.wikia.nocookie.net/gensin-impact/images/b/b0/Stygian_Onslaught_2025-10-29.png/revision/latest",
+    # The Imaginarium Theater's marks, HoYoLAB's own, from its Battle Chronicle (the player's choice, 2026-11-10): the
+    # medal won, an act cleared without it, the Fantasia Flower and the season's heraldry, 0 to 5 (HoYoLAB gives
+    # heraldry 6 the picture of 5). Their names change when HoYoLAB rebuilds the page: the card then keeps its circles.
+    "https://act.hoyolab.com/app/community-game-records-sea/images/active-medal-icon.b3adc53a.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/default-medal-icon.966c006f.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/flower-icon.dd04a858.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-0.4625c4b3.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-1.4e456b5e.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-2.3b5e7c80.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-3.d3c03e1a.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-4.0097b91f.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-5.0ae98c9e.png",
 )
 # Their hosts, each once, in the table's order.
 PUBLIC_PICTURE_HOSTS: tuple[str, ...] = tuple(

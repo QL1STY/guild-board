@@ -1,7 +1,7 @@
 {
   "key": "candace", "name": "Candace", "element": "Hydro", "weapon_type": "Polearm", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["support", "protector"], "keeps_alive": true, "scaling": "hp",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support", "protector"], "keeps_alive": true,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"er": 200},
   "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct", "dmg"], "circlet": ["hp_pct", "cr", "cd"]},
   "weights": {"er": "wants", "hp_pct": "wants", "cr": "some", "cd": "some", "em": "some", "hp": "some", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},

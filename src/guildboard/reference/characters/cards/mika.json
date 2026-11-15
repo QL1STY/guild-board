@@ -1,7 +1,7 @@
 {
   "key": "mika", "name": "Mika", "element": "Cryo", "weapon_type": "Polearm", "rarity": 4,
-  "pronouns": ["he", "him", "his"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "hp",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["healer", "support"], "keeps_alive": true,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"er": 200},
   "mains": {"sands": ["er", "hp_pct"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "heal", "cr"]},
   "weights": {"er": "wants", "hp_pct": "wants", "cr": "some", "hp": "some", "atk_pct": "none", "atk": "none", "em": "none", "cd": "none", "def_pct": "none", "def": "none"},

@@ -17,7 +17,7 @@ import { test, type Core } from '../e2e/fixtures.ts'
  */
 const TAG = '@stars'
 const CHARTS = process.env.STARS_CHARTS ?? ''
-test.use({ demoNow: '2026-10-25T08:00:00+00:00', realCharts: CHARTS, weekAndEndgame: false })
+test.use({ demoNow: '2026-10-25T08:00:00+00:00', realCharts: CHARTS, endgame: false })
 
 const WEB = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const STARS = path.join(WEB, '..', 'src', 'guildboard', 'reference', 'characters', 'stars.json')

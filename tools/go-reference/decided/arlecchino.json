@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "bondPercent": {"on": true, "state": "130", "label": "Masque of the Red Death, Bond of Life 130%", "covers": ["normal", "charged", "plunging", "burst"], "reason": "She absorbs her Skill's Blood-Debt Due for a Bond of Life of 130% before her Normal Attacks, which makes them Pyro and adds the Masque's damage; the Bond shrinks as she attacks."},
+    "c6AfterSkill": {"on": true, "state": "on", "label": "Constellation 6 crits after Skill", "covers": ["normal", "burst"], "reason": "With Constellation 6 her Skill, cast at the start of her combo, gives her Normal Attacks and Burst the crit bonus for 20 seconds, which lasts through the attacks that follow."}
+  }
+}

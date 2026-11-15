@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "burstInArea": {"on": false, "state": "on", "label": "Inside the Burst's field", "covers": [], "reason": "His Burst's Normal Attack bonus is on only while he stands in its field, and many teams cast it for the others."},
+    "c1OppHp": {"on": false, "state": "on", "label": "Constellation 1, enemy at 50% HP or less", "covers": [], "reason": "Depends on the enemy's HP."},
+    "skillStacks": {"on": true, "state": "4", "label": "Namisen, four stacks", "covers": ["skill"], "reason": "His Skill gives him Namisen stacks when cast and his Shunsuiken hits fill them, so four stacks are on through most of its hits."}
+  }
+}

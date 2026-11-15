@@ -1,7 +1,7 @@
 {
   "key": "alhaitham", "name": "Alhaitham", "element": "Dendro", "weapon_type": "Sword", "rarity": 5,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
-  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"],
   "goals": {"er": 120},
   "mains": {"sands": ["em", "atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
   "weights": {"em": "wants", "er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

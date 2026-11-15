@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "Constellation6": {"on": false, "state": "higher", "label": "Constellation 6 above half HP", "covers": [], "reason": "Adds Elemental Mastery only, which none of her counted hits use."},
+    "lockRevelation": {"on": false, "state": "on", "label": "Constellation 6 HP bonus", "covers": [], "reason": "Adds Max HP only, which none of her counted hits use."}
+  }
+}

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { OnlineView } from '../onlinetypes.ts'
 import {
-  accountLine, backupLine, BOTH_HOLD_DATA, cloudSpace, galleryFolderMissing, KEEP_REPLACES, KEEP_THIS_PC, noticeSwitches, NO_PLACE_FREE,
+  accountLine, backupLine, BOTH_HOLD_DATA, cloudSpace, galleryFolderMissing, KEEP_REPLACES, KEEP_THIS_PC, NO_PLACE_FREE,
   onlineLine, opensSyncLog, overlayLine, spaceText, syncDataLine, USE_REPLACES, USE_THE_ACCOUNT,
 } from './settingsview.ts'
 
@@ -104,20 +104,6 @@ describe('opensSyncLog', () => {
 describe('overlayLine', () => {
   it('names the hotkey that opens the overlay', () => {
     expect(overlayLine('Ctrl+Alt+G')).toBe('A small panel over the game · Ctrl+Alt+G')
-  })
-})
-
-describe('noticeSwitches', () => {
-  it('lists the three Characters notices, each with its name and its sentence, in the order of the design', () => {
-    const rows = noticeSwitches({})
-    expect(rows.map((row) => row.name)).toEqual(['Characters: weekly bosses', 'Characters: domains', 'Characters: level-ups'])
-    expect(rows.map((row) => row.key)).toEqual(['characters_notice_weekly', 'characters_notice_domain', 'characters_notice_ready'])
-    expect(rows[0].sentence).toBe('A notification on Sunday at 18:00 server time while a weekly boss in your plan is not done')
-  })
-
-  it('has every switch on until the player switches one off, since a core that has no value for it sends it on', () => {
-    expect(noticeSwitches({}).map((row) => row.on)).toEqual([true, true, true])
-    expect(noticeSwitches({ characters_notice_domain: false }).map((row) => row.on)).toEqual([true, false, true])
   })
 })
 

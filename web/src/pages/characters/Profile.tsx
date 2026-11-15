@@ -1,6 +1,5 @@
 import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './profile.css'
-import { api, messageOf } from '../../api.ts'
 import { Frame } from '../../frame/Frame.tsx'
 import { type Live, useModel } from '../../live.ts'
 import { hashOf } from '../../route.ts'
@@ -18,8 +17,7 @@ import { scaleStyle, useCharactersScale } from './scale.ts'
 import { agree, cardLine, CHART_STAGE, chartBox, chartPlaces, edgeOf, litLines, PANES, type PaneKey, paneSign, pictureLight, pityPill, stepKey } from './profileview.ts'
 import { rosterOrderFor, useRoster, useRosterMemory } from './memory.ts'
 import { ReadinessRing } from './ReadinessRing.tsx'
-import { weekShown } from './hidden.ts'
-import { neighbours, toggleFocus } from './rosterview.ts'
+import { neighbours } from './rosterview.ts'
 import { SyncLine } from './SyncLine.tsx'
 import { PageSwitch, Trail } from './Trail.tsx'
 import { Tip, useTip } from './Tip.tsx'
@@ -194,21 +192,11 @@ function useArtEdge(src: string | null): number {
 /** The profile as the model has it (the design's section 6.2): the dark card with its six pages, her build, and her readiness. */
 export function ProfileView({
   profile,
-  focus,
-  onFocus,
-  refusal,
   onCard,
-  focusShown = true,
 }: {
   profile: ProfileModel
-  /** The characters in the player's focus, or null until they are read. */
-  focus: readonly string[] | null
-  onFocus: (key: string) => void
-  refusal: string | null
   /** Opens the Card panel; the readiness sheet's button for it is there while a page gives this. */
   onCard?: () => void
-  /** The focus goes with Your week (hidden.ts): while that is hidden the card has no button for it. */
-  focusShown?: boolean
 }) {
   const scale = useCharactersScale()
   const [pane, setPane] = useState<PaneKey>('attr')
@@ -219,7 +207,6 @@ export function ProfileView({
   const firstPane = useRef(true)
   const edge = useArtEdge(profile.art)
   const pity = pityPill(profile.pity)
-  const inFocus = focus?.includes(profile.key) ?? false
 
   // The profile comes in once: her art slides in with a spring, her name is uncovered from the left, what she is rises
   // line by line, and then her build. When the card moves on to the character beside her (the arrows), the page stays, and
@@ -247,7 +234,7 @@ export function ProfileView({
     )
     const giant = root.querySelector<HTMLElement>('.pf-giant')
     if (giant !== null) clipReveal(giant, { delay: 0.2, duration: 1.4 })
-    rise(root.querySelectorAll<HTMLElement>('.pf-who > *, .pf-actions'), { step: 0.08, start: 0.25, duration: 0.5, lift: 16 })
+    rise(root.querySelectorAll<HTMLElement>('.pf-who > *'), { step: 0.08, start: 0.25, duration: 0.5, lift: 16 })
     rise(root.querySelectorAll<HTMLElement>('.pf-strip > *'), { step: 0.06, start: 0.6, duration: 0.5, lift: 16 })
   }, [profile.key])
 
@@ -333,18 +320,6 @@ export function ProfileView({
                 </button>
               )}
             </div>
-            <div className="pf-actions">
-              {refusal !== null && (
-                <p className="pf-refusal" role="status">
-                  {refusal}
-                </p>
-              )}
-              {focusShown && (
-                <button type="button" className="pf-btn" aria-pressed={inFocus} disabled={focus === null} onClick={() => onFocus(profile.key)}>
-                  {profile.owned ? (inFocus ? 'In focus' : 'Add to focus') : inFocus ? 'Pre-farming' : 'Pre-farm'}
-                </button>
-              )}
-            </div>
           </div>
           <aside className="pf-panel" aria-label={`${profile.name}, ${PANES.find((one) => one.key === pane)?.label ?? ''}`}>
             <Pane key={pane} pane={pane} profile={profile} tipOf={tipOf} hot={hot} setHot={setHot} onOpenPiece={openFromList} />
@@ -358,13 +333,11 @@ export function ProfileView({
   )
 }
 
-/** A character's profile page: the model, and the focus it can change. */
+/** A character's profile page: the model. */
 export function Profile({ live, characterKey }: { live: Live; characterKey: string }) {
-  const [changed, setChanged] = useState(0)
-  const { data, error } = useModel<ProfileModel>(`/api/characters/${characterKey}`, live.version + changed)
-  const roster = useRoster(live.version + changed, live.status)
+  const { data, error } = useModel<ProfileModel>(`/api/characters/${characterKey}`, live.version)
+  useRoster(live.version, live.status)
   const memory = useRosterMemory()
-  const [refusal, setRefusal] = useState<string | null>(null)
   const [cardOpen, setCardOpen] = useState(false)
 
   // The character beside her in the roster as the player left it: its search, its filters and its sort. The ← and → keys stop at
@@ -385,23 +358,6 @@ export function Profile({ live, characterKey }: { live: Live; characterKey: stri
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
-  useEffect(() => setRefusal(null), [characterKey])
-
-  const toggle = async (key: string) => {
-    if (roster.data === null) return
-    const next = toggleFocus(roster.data.focus, key)
-    if ('refused' in next) {
-      setRefusal(next.refused)
-      return
-    }
-    setRefusal(null)
-    try {
-      await api.put('/api/focus', { characters: next.focus })
-    } catch (failure) {
-      setRefusal(messageOf(failure))
-    }
-    setChanged((count) => count + 1)
-  }
 
   // The trail names the character on the page: her model, else the roster as the player left it while hers is on its way.
   const name = data?.name ?? known?.name ?? 'Character'
@@ -429,11 +385,7 @@ export function Profile({ live, characterKey }: { live: Live; characterKey: stri
       ) : (
         <ProfileView
           profile={data}
-          focus={roster.data === null ? null : roster.data.focus}
-          onFocus={(key) => void toggle(key)}
-          refusal={refusal}
           onCard={() => setCardOpen(true)}
-          focusShown={weekShown(live.status)}
         />
       )}
       {cardOpen && <CardPanel live={live} characterKey={characterKey} onClose={() => setCardOpen(false)} />}

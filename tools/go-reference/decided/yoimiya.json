@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "skill": {"on": true, "state": "skill", "label": "Niwabi Fire-Dance", "covers": ["normal"], "reason": "Her Skill makes her Normal Attacks Pyro and multiplies their damage for 10 seconds, which is when she uses them."},
+    "c1": {"on": false, "state": "c1", "label": "Constellation 1 after a defeat", "covers": [], "reason": "Needs an enemy defeated inside her Burst's mark."},
+    "c2": {"on": false, "state": "c2", "label": "Constellation 2 after a critical hit", "covers": [], "reason": "A Constellation 2 window that starts after her Pyro damage lands a critical hit."},
+    "a1": {"on": true, "state": "10", "label": "Tricks of the Trouble-Maker stacks", "covers": ["normal"], "reason": "Each Normal Attack shot during Niwabi Fire-Dance adds 2% Pyro DMG Bonus for up to ten stacks, which a few shots reach; she shoots throughout the Skill."}
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "burstResolve": {"on": false, "state": "60", "label": "Resolve at 60 stacks", "covers": [], "reason": "Resolve stacks come from the Energy her team spends, so how many she holds depends on the team. Checked once with it on against Genshin Optimizer."},
+    "skillEye": {"on": true, "state": "skillEye", "label": "Eye of Stormy Judgment", "covers": ["burst"], "reason": "Her Elemental Skill is always cast before her Burst, and its Eye stays up through the Burst, so the Burst DMG bonus is on whenever her Burst hits."}
+  }
+}

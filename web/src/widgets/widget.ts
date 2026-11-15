@@ -43,8 +43,6 @@ export type WidgetType = {
   max: Size
   /** The size it is added at. */
   start: Size
-  /** It draws Your week, so it is offered and shown only while Your week is (pages/characters/hidden.ts). */
-  needsWeek?: boolean
   /**
    * Its default settings. A widget added in Edit starts with them; the starting layout's widgets have none, so a view
    * merges them under what its widget keeps (settingsOf).

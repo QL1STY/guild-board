@@ -12,7 +12,6 @@ import { Glint } from '../ui/Glint.tsx'
 import { glideFrom, reducedMotion, useGlide, useGlint } from '../ui/motion.tsx'
 import { useUndoKey } from '../ui/note.tsx'
 import { Sign } from '../ui/Sign.tsx'
-import { leftOff, offered, weekShown } from './characters/hidden.ts'
 import { rangeOf, WIDGET_TYPES, widgetType } from '../widgets/registry.ts'
 import { type Head, HeadContext, type WidgetContext, type WidgetType } from '../widgets/widget.ts'
 import { WidgetBoundary } from '../widgets/WidgetBoundary.tsx'
@@ -306,11 +305,11 @@ function useCells(ref: RefObject<HTMLElement | null>, bounded: boolean): { colum
  * Add a widget: every type this version knows, with its sign and a line on what it shows. It stays open for the next,
  * and Escape closes it.
  */
-function AddSheet({ add, close, week }: { add: (type: WidgetType) => void; close: () => void; week: boolean }) {
+function AddSheet({ add, close }: { add: (type: WidgetType) => void; close: () => void }) {
   return (
     <section className="gb-panel board-sheet board-add" aria-label="Add a widget" onKeyDown={closesOnEscape(close)}>
       <ul className="board-types">
-        {offered(WIDGET_TYPES, week).map((type) => (
+        {WIDGET_TYPES.map((type) => (
           <li key={type.id}>
             <span className="board-type">
               <Sign name={type.sign} />
@@ -731,15 +730,15 @@ export function ArrangementGrid({
   const settingsOpen = draft?.widgets.find((one) => one.id === sheet)
   const settingsType = settingsOpen === undefined ? undefined : widgetType(settingsOpen.type)
   const SettingsForm = settingsType?.Settings
-  // Each widget the arrangement has, that `show` lets through and the hidden week does not leave off.
+  // Each widget the arrangement has, that `show` lets through.
   const frames = drawn.filter((cells) => {
     const one = byId.get(cells.id)
-    if (one === undefined || leftOff(widgetType(one.type), weekShown(ctx.live.status), draft !== null)) return false
+    if (one === undefined) return false
     return show === undefined || show(one)
   })
   return (
     <>
-      {sheet === 'add' && draft !== null && <AddSheet add={add} close={closeSheet} week={weekShown(ctx.live.status)} />}
+      {sheet === 'add' && draft !== null && <AddSheet add={add} close={closeSheet} />}
       {settingsOpen !== undefined && settingsType !== undefined && SettingsForm !== undefined && (
         <section
           ref={sheetRef}

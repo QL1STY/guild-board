@@ -5,7 +5,7 @@ import { Backlog } from './pages/Backlog.tsx'
 import { Codes } from './pages/Codes.tsx'
 import { Board } from './pages/Board.tsx'
 import { Characters } from './pages/characters/Characters.tsx'
-import { Week } from './pages/characters/Week.tsx'
+import { Plan } from './pages/Plan.tsx'
 import { Compare } from './pages/Compare.tsx'
 import { FirstRun } from './pages/FirstRun.tsx'
 import { FriendProfile } from './pages/FriendProfile.tsx'
@@ -19,8 +19,8 @@ import { Settings } from './pages/Settings.tsx'
 import { Stats } from './pages/Stats.tsx'
 import { YourProfile } from './pages/YourProfile.tsx'
 import { siteTheme, subscribeSiteTheme, type ThemeSetting, useTheme } from './theme.ts'
-import { hashOf, type Page, pageOf, routeOf } from './route.ts'
-import { placeWhileHidden, weekShown } from './pages/characters/hidden.ts'
+import { hashOf, movedTo, type Page, pageOf, routeOf } from './route.ts'
+import { endgameShown, placeWhileHidden } from './pages/characters/hidden.ts'
 import { closeNote } from './ui/note.tsx'
 import { PageBoundary } from './ui/PageBoundary.tsx'
 
@@ -45,11 +45,14 @@ export default function App() {
   useEffect(() => {
     if (galleryOff) window.location.replace(hashOf('settings'))
   }, [galleryOff])
-  // Your week and the Endgame tab are hidden while the core says so: their addresses open the roster.
-  const hiddenPlace = live.status !== null && !weekShown(live.status) ? placeWhileHidden(hash) : null
+  // The Endgame tab is hidden while the core says so: its address opens the roster. Your week's address, from before the
+  // Plan page, opens the Plan page.
+  const hiddenPlace = live.status !== null && !endgameShown(live.status) ? placeWhileHidden(hash) : null
+  const moved = movedTo(hash)
   useEffect(() => {
     if (hiddenPlace !== null) window.location.replace(hiddenPlace)
-  }, [hiddenPlace])
+    else if (moved !== null) window.location.replace(moved)
+  }, [hiddenPlace, moved])
   // The overlay's page (plan 2A-4), which the overlay's window shows over the game: closed at #/overlay, open at
   // #/overlay/open. Its document is see-through: main.tsx makes it so before React draws, and this keeps it in step
   // when the address changes later.
@@ -106,7 +109,7 @@ function pageShown(page: Page, hash: string, live: Live, galleryOff: boolean, hi
     return <Friends live={live} />
   }
   if (route.page === 'characters') return <Characters live={live} route={route} />
-  if (page === 'week') return <Week live={live} />
+  if (page === 'plan') return <Plan live={live} />
   if (page === 'codes') return <Codes live={live} />
   if (page === 'map') return <MapPage live={live} />
   return <Board live={live} />

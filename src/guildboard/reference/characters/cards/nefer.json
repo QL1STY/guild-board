@@ -1,7 +1,7 @@
 {
   "key": "nefer", "name": "Nefer", "element": "Dendro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"em": 500, "cr": 50, "cd": 220, "er": 105},
   "mains": {"sands": ["em"], "goblet": ["em"], "circlet": ["cd", "cr", "em"]},
   "weights": {"em": "wants", "cr": "wants", "cd": "wants", "er": "some", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

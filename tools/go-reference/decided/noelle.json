@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "SweepingTime": {"on": true, "state": "on", "label": "Sweeping Time", "covers": ["normal", "charged", "plunging", "burst"], "reason": "Her attacks deal Geo damage with the ATK bonus only inside her Burst, where she does her damage."}
+  }
+}

@@ -1,7 +1,7 @@
 {
   "key": "escoffier", "name": "Escoffier", "element": "Cryo", "weapon_type": "Polearm", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["damage", "healer"], "keeps_alive": true, "scaling": "atk",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "healer"], "keeps_alive": true,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"atk": 2000, "cr": 70, "cd": 120, "er": 160},
   "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

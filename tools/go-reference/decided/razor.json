@@ -1,0 +1,10 @@
+{
+  "main": null,
+  "toggles": {
+    "A4": {"on": false, "state": "on", "label": "Energy below 50%", "covers": [], "reason": "Adds Energy Recharge only, which none of his counted hits use."},
+    "C1": {"on": false, "state": "on", "label": "Constellation 1 after picking up energy", "covers": [], "reason": "A Constellation 1 window of 8 seconds after he picks up an Elemental Orb or Particle, which does not always cover his main hits."},
+    "C2": {"on": false, "state": "on", "label": "Constellation 2 against low-HP enemies", "covers": [], "reason": "Depends on the enemy being below 30% HP."},
+    "ElectroSigil": {"on": false, "state": "3", "label": "Electro Sigils", "covers": [], "reason": "Adds Energy Recharge only, which none of his counted hits use."},
+    "lockHomework": {"on": false, "state": "on", "label": "Witch's Homework done", "covers": [], "reason": "Reaches only a hit that is not counted among his main talents."}
+  }
+}

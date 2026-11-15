@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a4DeathStacks": {"on": false, "state": "3", "label": "Death's Crossing stacks", "covers": [], "reason": "She gains a stack when Hydro or other Cryo party members hit enemies, so the stacks depend on the team."},
+    "burstVoidAbsorb": {"on": false, "state": "3", "label": "Void Rifts absorbed", "covers": [], "reason": "Void Rifts come from Cryo reactions the party triggers, so how many she absorbs depends on the team."},
+    "c2AfterBurst": {"on": true, "state": "on", "label": "Constellation 2 ATK after Havoc: Extinction", "covers": ["normal", "charged", "plunging"], "reason": "After her Burst she attacks in Seven-Phase Flash for the 12.5 seconds the bonus lasts; her ordinary Normal Attacks and the Burst itself do not get it, and the planner counts it for the Seven-Phase attacks alone."}
+  }
+}

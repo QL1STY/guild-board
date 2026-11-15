@@ -1,7 +1,7 @@
 {
   "key": "mona", "name": "Mona", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "burst", "talent_priority": ["burst", "normal", "skill"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false,
+  "damage_talent": "burst", "talent_priority": ["burst", "normal", "skill"],
   "goals": {"atk": 2000, "cr": 50, "cd": 100, "er": 300},
   "mains": {"sands": ["er", "atk_pct"], "goblet": ["dmg", "atk_pct"], "circlet": ["cr", "cd"]},
   "weights": {"er": "wants", "cr": "some", "cd": "some", "atk_pct": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

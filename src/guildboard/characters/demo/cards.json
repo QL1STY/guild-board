@@ -14,14 +14,12 @@
    "damage"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 75.0,
    "cd": 200.0,
@@ -89,14 +87,12 @@
    "damage"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 70.0,
    "cd": 140.0,
@@ -162,14 +158,12 @@
    "support"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "skill",
   "talent_priority": [
    "skill",
    "burst",
    "normal"
   ],
-  "talent_table": "elemental",
   "goals": {
    "er": 160.0
   },
@@ -234,14 +228,12 @@
    "healer"
   ],
   "keeps_alive": true,
-  "scaling": "hp",
   "damage_talent": "skill",
   "talent_priority": [
    "skill",
    "burst",
    "normal"
   ],
-  "talent_table": "elemental",
   "goals": {
    "er": 140.0
   },
@@ -306,14 +298,12 @@
    "damage"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 70.0,
    "cd": 140.0,
@@ -379,14 +369,12 @@
    "support"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 70.0,
    "cd": 140.0,
@@ -452,14 +440,12 @@
    "support"
   ],
   "keeps_alive": false,
-  "scaling": "em",
   "damage_talent": "skill",
   "talent_priority": [
    "skill",
    "burst",
    "normal"
   ],
-  "talent_table": "elemental",
   "goals": {
    "er": 160.0
   },
@@ -524,14 +510,12 @@
    "support"
   ],
   "keeps_alive": true,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 70.0,
    "cd": 140.0,
@@ -597,14 +581,12 @@
    "protector"
   ],
   "keeps_alive": true,
-  "scaling": "atk",
   "damage_talent": "skill",
   "talent_priority": [
    "skill",
    "burst",
    "normal"
   ],
-  "talent_table": "elemental",
   "goals": {
    "er": 160.0
   },
@@ -669,14 +651,12 @@
    "support"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "skill",
   "talent_priority": [
    "skill",
    "burst",
    "normal"
   ],
-  "talent_table": "elemental",
   "goals": {
    "er": 160.0
   },
@@ -741,14 +721,12 @@
    "support"
   ],
   "keeps_alive": false,
-  "scaling": "em",
   "damage_talent": "skill",
   "talent_priority": [
    "skill",
    "burst",
    "normal"
   ],
-  "talent_table": "elemental",
   "goals": {
    "er": 160.0
   },
@@ -813,14 +791,12 @@
    "protector"
   ],
   "keeps_alive": true,
-  "scaling": "hp",
   "damage_talent": "skill",
   "talent_priority": [
    "skill",
    "burst",
    "normal"
   ],
-  "talent_table": "elemental",
   "goals": {
    "er": 140.0
   },
@@ -884,14 +860,12 @@
    "damage"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 70.0,
    "cd": 140.0,
@@ -957,14 +931,12 @@
    "damage"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 70.0,
    "cd": 140.0,
@@ -1030,14 +1002,12 @@
    "damage"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "normal",
   "talent_priority": [
    "normal",
    "skill",
    "burst"
   ],
-  "talent_table": "elemental",
   "goals": {
    "cr": 70.0,
    "cd": 140.0,

@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "ballad-of-the-boundless-blue:hits": {"on": true, "state": "3", "label": "3 stacks from her attacks", "covers": ["normal", "charged"], "reason": "Her own Normal and Charged Attack hits fill its three stacks within a second and keep them while she attacks, so the hits it raises have it."}
+  }
+}

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { hashOf, hashOfPlace, PAGE_TITLES, pageOf, placeOfHash, routeOf, type Route } from './route.ts'
+import { hashOf, hashOfPlace, movedTo, PAGE_TITLES, pageOf, placeOfHash, routeOf, type Route } from './route.ts'
 
 test('the address names the page', () => {
   expect(pageOf('#/achievements')).toBe('achievements')
@@ -54,16 +54,21 @@ test('a special category has one address, and the rest of the Achievements page 
 })
 
 // The Characters plan, Task U1: five addresses on two pages.
-test('the Characters pages and Your week are pages of the rail', () => {
+test('the Characters pages and the Plan page are pages of the rail', () => {
   expect(pageOf('#/characters')).toBe('characters')
   expect(pageOf('#/characters/endgame')).toBe('characters')
   expect(pageOf('#/characters/sandrone')).toBe('characters')
   expect(pageOf('#/characters/sandrone/plan')).toBe('characters')
-  expect(pageOf('#/week')).toBe('week')
+  expect(pageOf('#/plan')).toBe('plan')
+  expect(pageOf('#/week')).toBe('plan') // Your week's address opens the Plan page
   expect(PAGE_TITLES.characters).toBe('Characters')
-  expect(PAGE_TITLES.week).toBe('Your week')
+  expect(PAGE_TITLES.plan).toBe('Plan')
   expect(hashOf('characters')).toBe('#/characters')
-  expect(hashOf('week')).toBe('#/week')
+  expect(hashOf('plan')).toBe('#/plan')
+  expect(movedTo('#/week')).toBe('#/plan')
+  expect(movedTo('#/week?x=1')).toBe('#/plan')
+  expect(movedTo('#/plan')).toBeNull()
+  expect(movedTo('#/weekly')).toBeNull()
 })
 
 test('each Characters address names its view, and the character it is about', () => {
@@ -74,7 +79,7 @@ test('each Characters address names its view, and the character it is about', ()
   expect(routeOf('#/characters/lan-yan/plan')).toEqual({ page: 'characters', view: 'plan', key: 'lan-yan' })
   expect(routeOf('#characters/lan-yan')).toEqual({ page: 'characters', view: 'profile', key: 'lan-yan' })
   expect(routeOf('#/characters/sandrone?pane=story')).toEqual({ page: 'characters', view: 'profile', key: 'sandrone' })
-  expect(routeOf('#/week')).toEqual({ page: 'week' })
+  expect(routeOf('#/week')).toEqual({ page: 'plan' })
   expect(routeOf('#/stats')).toEqual({ page: 'stats', view: 'overview' })
   expect(routeOf('')).toEqual({ page: 'board' })
 })
@@ -92,7 +97,7 @@ test('every route round-trips through its address, and a page still has the addr
     { page: 'characters', view: 'endgame' },
     { page: 'characters', view: 'profile', key: 'sandrone' },
     { page: 'characters', view: 'plan', key: 'lan-yan' },
-    { page: 'week' },
+    { page: 'plan' },
     { page: 'stats', view: 'overview' },
     { page: 'stats', view: 'months', ym: null },
     { page: 'stats', view: 'months', ym: '2026-10' },

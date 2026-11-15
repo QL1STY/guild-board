@@ -52,6 +52,14 @@ MODE_ART: dict[str, ModeArt] = {
     # The Stygian banner's left 48%, the flower, centred at 42% of its height as the accepted mockup has it: the words on its right are never shown.
     "stygian": ModeArt("stygian", "7786", 2, (0.0, 0.0, 0.48, 0.84)),
 }
+# The Theater's marks, HoYoLAB's own, by their places in netpolicy's table: the medal won, an act cleared without it, the
+# Fantasia Flower, and the heraldry of each level from 0 to 5.
+THEATER_MARKS: dict[str, Any] = {"medal": 3, "cleared": 4, "flower": 5, "heraldry": (6, 7, 8, 9, 10, 11)}
+# Every public picture the card shows, which the core keeps warm.
+PUBLIC_INDEXES: tuple[int, ...] = (
+    *(spec.picture_index for spec in MODE_ART.values()),
+    THEATER_MARKS["medal"], THEATER_MARKS["cleared"], THEATER_MARKS["flower"], *THEATER_MARKS["heraldry"],
+)
 
 
 # ------------------------------------------------------------------------------------------------ the pictures
@@ -80,6 +88,23 @@ def header_art(mode: str, art: ArtCache, wiki_row: WikiEntryRow | None) -> dict[
         (found for url in _texts(data.get("pictures")) if url and url != icon_url and (found := art.address(url))), None
     )
     return {"icon": icon, "picture": wiki, "crop": None}
+
+
+def theater_marks(art: ArtCache, heraldry: int | None) -> dict[str, str | None]:
+    """The Theater's marks the art cache keeps on disk, each None until then, so that the card keeps its own circles and
+    never shows a broken picture. HoYoLAB gives heraldry 6 the picture of 5."""
+    def kept(index: int) -> str | None:
+        address = art.public_address(index)
+        return address if address is not None and art.kept(address) else None
+
+    levels = THEATER_MARKS["heraldry"]
+    level = min(heraldry, len(levels) - 1) if isinstance(heraldry, int) and heraldry >= 0 else None
+    return {
+        "medal": kept(THEATER_MARKS["medal"]),
+        "cleared": kept(THEATER_MARKS["cleared"]),
+        "flower": kept(THEATER_MARKS["flower"]),
+        "heraldry": kept(levels[level]) if level is not None else None,
+    }
 
 
 # The words above each difficulty's medal in the Stygian Onslaught's entry: "Normal Challenge: Normal" up to "Perilous
@@ -249,6 +274,7 @@ def _theater(detail: Mapping[str, Any], summary: Mapping[str, Any], reading: _Re
     starts = _moment(detail.get("theater_starts") or summary.get("period_start"))
     month = MONTHS[game_day(starts, reading.server).month - 1] if starts is not None else ""
     difficulty = str(detail.get("theater_difficulty") or "")
+    heraldry = _carried(detail, "theater_heraldry", _int)
     # On the 1st, before the new season's first try, the season shown is last month's: it says it has ended, as the
     # Stygian Onslaught's does.
     ends = _moment(detail.get("theater_ends") or summary.get("period_end"))
@@ -264,6 +290,9 @@ def _theater(detail: Mapping[str, Any], summary: Mapping[str, Any], reading: _Re
         "ranks": _carried(detail, "theater_ranks", lambda listed: _ranks(listed, _THEATER_RANKS, reading)),
         "flowers": _carried(detail, "theater_flowers", _int),
         "seconds": _carried(detail, "theater_seconds", _int),
+        "arcana": _carried(detail, "theater_arcana", _int),  # the Arcana fights cleared
+        "heraldry": heraldry,
+        "marks": theater_marks(reading.art, heraldry),
     }
 
 

@@ -1,7 +1,7 @@
 {
   "key": "diona", "name": "Diona", "element": "Cryo", "weapon_type": "Bow", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["healer", "protector"], "keeps_alive": true, "scaling": "hp",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "protector"], "keeps_alive": true,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"er": 180},
   "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "heal", "cr"]},
   "weights": {"er": "wants", "hp_pct": "wants", "cr": "some", "hp": "some", "cd": "none", "em": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},

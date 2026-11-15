@@ -127,23 +127,14 @@ def test_the_amounts_held_are_typed_with_their_sentence(client):
     assert client.put("/api/characters/held", json={}).status_code == 422
 
 
-def test_the_focus_the_week_and_its_ticks(client):
+def test_the_focus_answers_with_the_roster(client):
     answer = client.put("/api/focus", json={"characters": ["sandrone"]})
-    assert answer.status_code == 200 and problem_with(answer.json(), "Week") is None
-    assert [card["key"] for card in answer.json()["focus"]] == ["sandrone"]
-    refused = client.put("/api/focus", json={"characters": ["sandrone", "odette", "alyosha", "jahoda", "nefer"]})
-    assert (refused.status_code, refused.json()) == (422, {"error": "Four at most: take one out first."})
+    assert answer.status_code == 200 and problem_with(answer.json(), "Roster") is None
+    assert [entry["key"] for entry in answer.json()["entries"] if entry["focus"] is not None] == ["sandrone"]
+    refused = client.put("/api/focus", json={"characters": [f"c{n}" for n in range(129)]})
+    assert (refused.status_code, refused.json()) == (422, {"error": "The plan holds 128 characters at most: take one out first."})
     assert client.put("/api/focus", json={"characters": ["nobody"]}).json() == {"error": NO_SUCH}
     assert client.put("/api/focus", json={"characters": ["nobody"]}).status_code == 404
-    week = client.get("/api/week").json()
-    assert problem_with(week, "Week") is None and week["today"]["day"] == "2026-10-25"
-    # a task of today is ticked, one of another day or of no day is not
-    tasks = week["today"]["tasks"]
-    if tasks:
-        ticked = client.put("/api/week/ticks", json={"day": "2026-10-25", "task": tasks[0]["key"], "done": True})
-        assert ticked.status_code == 200 and ticked.json()["today"]["tasks"][0]["done"] is True
-    refused = client.put("/api/week/ticks", json={"day": "2026-10-26", "task": "x", "done": True})
-    assert (refused.status_code, refused.json()) == (422, {"error": "Only today's tasks can be ticked."})
 
 
 def test_the_endgame_answers_now_and_after_and_the_theater_pick_is_kept_for_the_month(client, core, clock):
@@ -167,7 +158,7 @@ def test_the_endgame_answers_now_and_after_and_the_theater_pick_is_kept_for_the_
 
 def test_every_change_publishes_characters_changed(client, core):
     queue = core.bus.subscribe()
-    client.get("/api/characters"), client.get("/api/characters/sandrone"), client.get("/api/week"), client.get("/api/endgame")
+    client.get("/api/characters"), client.get("/api/characters/sandrone"), client.get("/api/plan"), client.get("/api/endgame")
     assert _published(queue) == []   # reading changes nothing
     plan = client.get("/api/characters/sandrone/plan").json()["plan"]
     for method, path, body in (
@@ -281,4 +272,3 @@ def test_after_the_days_24_runs_the_page_shows_the_minutes_until_the_count_start
     sync = client.get("/api/characters").json()["sync"]
     minutes = math.ceil((start + timedelta(days=1) - clock.now()).total_seconds() / 60)
     assert sync["can_refresh"] is False and sync["wait_minutes"] == minutes
-    assert client.get("/api/week").json()["sync"]["wait_minutes"] == minutes

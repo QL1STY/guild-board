@@ -2,15 +2,14 @@
 
 The candidates are: replace each piece the X-ray says to replace (with an average good piece: the right main stat at +20 and 2
 rolls each in her two most wanted substats), level each piece below +20, raise each talent one level, level her and her
-weapon, and change weapon (offered only as "if you have it", and only for a weapon the card ranks above the one she holds). A damage role ranks them by damage gain, and a role without a
-damage estimate by readiness gain. Leveling her and her weapon has no damage model (her stats at another level need the wiki),
-so for a damage role those two only fill the list after every candidate that gains damage, ranked by readiness."""
+weapon, and change weapon (offered only as "if you have it", and only for a weapon the card ranks above the one she holds).
+Every role ranks them by the readiness each gains."""
 from __future__ import annotations
 
 import dataclasses
 from dataclasses import dataclass
 
-from guildboard.characters import damage, readiness, stats, xray
+from guildboard.characters import readiness, stats, xray
 from guildboard.characters.models import Build, Card, Plan, Refs, Step, TypedPiece
 from guildboard.characters.stats import label, max_level
 
@@ -67,9 +66,7 @@ def _candidates(build: Build, card: Card, refs: Refs) -> list[_Candidate]:
                 f"Raise {poss} {name} to {level + 1}.", dataclasses.replace(now, talents={**now.talents, kind: level + 1}),
             ))
     current = build.weapon
-    # Only a weapon the card ranks above the one she holds: the damage estimate leaves out many passives (Nightsoul, Moonsign
-    # and the like), so it cannot say that a signature weapon is worse than the card's lower picks. A weapon that is not on
-    # the card ranks below all of them.
+    # Only a weapon the card ranks above the one she holds. A weapon that is not on the card ranks below all of them.
     held = card.weapons.index(current.key) if current is not None and current.key in card.weapons else len(card.weapons)
     for place, key in enumerate(card.weapons[:held]):
         ref = refs.weapons.get(key)
@@ -89,14 +86,10 @@ def _weapons_in_cards_order(steps: list[tuple[Step, int | None]]) -> list[Step]:
     return [step for step, _ in steps]
 
 
-def _gain_of(build: Build, card: Card, refs: Refs, candidate: _Candidate, base_est: float, base_raw: float, damage_role: bool) -> float:
+def _gain_of(build: Build, card: Card, refs: Refs, candidate: _Candidate, base_raw: float) -> float:
     after = stats.apply_plan(build, candidate.plan, card, refs)
     combat = stats.combat(build, candidate.plan, card, refs)
-    if damage_role:
-        estimate = damage.estimate(combat, card, readiness.talent_level(after, card), refs)
-        return estimate / base_est - 1 if base_est > 0 else 0.0
-    plan = candidate.plan
-    result = readiness.score(after, card, refs, combat, weapon_level=plan.weapon_level)
+    result = readiness.score(after, card, refs, combat, weapon_level=candidate.plan.weapon_level)
     return readiness.raw(result.parts) - base_raw
 
 
@@ -120,22 +113,13 @@ def _points(gain: float) -> str:
 
 def rank(build: Build, card: Card, refs: Refs, n: int = 3) -> tuple[Step, ...]:
     """The `n` steps that gain her the most, best first."""
-    damage_role = "damage" in card.roles
     combat = stats.combat_now(build, card, refs)
-    base_est = damage.estimate(combat, card, readiness.talent_level(build, card), refs) if damage_role else 0.0
     base_raw = readiness.raw(readiness.score(build, card, refs, combat).parts)
     steps = []
     for candidate in _candidates(build, card, refs):
-        gain = _gain_of(build, card, refs, candidate, base_est, base_raw, damage_role)
+        gain = _gain_of(build, card, refs, candidate, base_raw)
         if round(gain * 100) >= 1:
-            steps.append((Step(candidate.text, f"about +{round(gain * 100)}% damage" if damage_role else _points(gain), gain),
-                          candidate.weapon_rank))
-    levels = [(step, None) for step in _levels(build, card, refs, base_raw)]
-    if damage_role:
-        steps.sort(key=lambda pair: -pair[0].value)
-        steps = _weapons_in_cards_order(steps)
-        steps.extend(step for step, _ in sorted(levels, key=lambda pair: -pair[0].value))
-        return tuple(steps[:n])
-    steps.extend(levels)
+            steps.append((Step(candidate.text, _points(gain), gain), candidate.weapon_rank))
+    steps.extend((step, None) for step in _levels(build, card, refs, base_raw))
     steps.sort(key=lambda pair: -pair[0].value)
     return tuple(_weapons_in_cards_order(steps)[:n])

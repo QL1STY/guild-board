@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c6Charged": {"on": false, "state": "on", "label": "Constellation 6 Charged Attacks", "covers": [], "reason": "A Constellation 6 ATK bonus for her Charged Attacks only, which are not her main damage."},
+    "p2Shield": {"on": true, "state": "on", "label": "Shielded by Sweeping Fervor", "covers": ["normal", "charged", "plunging", "burst"], "reason": "She casts her Skill's shield before attacking, so its Physical bonus is on while her attacks and Burst hit."}
+  }
+}

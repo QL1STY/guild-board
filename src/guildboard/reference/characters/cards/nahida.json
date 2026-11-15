@@ -1,7 +1,7 @@
 {
   "key": "nahida", "name": "Nahida", "element": "Dendro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "em",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"em": 800, "er": 160},
   "mains": {"sands": ["em"], "goblet": ["em", "dmg"], "circlet": ["em", "cr", "cd"]},
   "weights": {"em": "wants", "er": "wants", "cr": "some", "cd": "some", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

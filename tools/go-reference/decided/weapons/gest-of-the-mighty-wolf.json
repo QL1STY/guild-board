@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "gest-of-the-mighty-wolf:stacks": {"on": true, "state": "4", "label": "4 stacks from her attacks", "covers": [], "reason": "Her Normal Attack hits, Skill casts and Charged Attacks fill its four stacks within a few hits and keep them while she attacks."}
+  }
+}

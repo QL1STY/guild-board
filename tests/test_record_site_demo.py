@@ -69,7 +69,9 @@ def test_the_routes_that_depend_on_an_answer_are_made_from_it(tool):
     assert "/api/commissions?region=natlan" in achievements and "/api/status" in achievements
     assert "/api/widgets/start-notes/data" in tool.routes_of("board", get)
     assert "/api/widgets/start-ov-clock/data" in tool.routes_of("overlay", get)
-    assert tool.routes_of("characters", get)[-2:] == ["/api/characters/sandrone", "/api/characters/sandrone/plan"]
+    assert tool.routes_of("characters", get)[-4:] == [
+        "/api/characters/sandrone", "/api/characters/sandrone/plan", "/api/characters/sandrone/weapons", "/api/artifact-sets?character=sandrone"]
+    assert "/api/artifact-sets" in tool.routes_of("characters", get)  # the sets picker asks with her key, the list alone stays recorded
     assert tool.routes_of("friends", get)[-3:] == ["/api/friends/u1", "/api/friends/u1/compare", "/api/friends/u2"]
     assert "/api/map/tabs/1" in tool.routes_of("map", get)
     stats = tool.routes_of("stats", get)
@@ -78,11 +80,9 @@ def test_the_routes_that_depend_on_an_answer_are_made_from_it(tool):
     assert "/api/stats/year" in stats and "/api/stats/year?year=2025" in stats and "/api/stats/year?year=2026" in stats
 
 
-def test_your_week_and_the_endgame_are_recorded_only_while_the_core_shows_them(tool):
+def test_the_endgame_is_recorded_only_while_the_core_shows_it(tool):
     get = {"/api/characters": {"entries": []}}.__getitem__
-    assert "/api/week" not in tool.routes_of("week", get, False)
     assert "/api/endgame?after=1" not in tool.routes_of("characters", get, False)
-    assert "/api/week" in tool.routes_of("week", get, True)
     assert "/api/endgame?after=1" in tool.routes_of("characters", get, True)
 
 
@@ -111,7 +111,7 @@ def _recorded(tool) -> set[str]:
     routes = set(tool.COMMON)
     for page_routes in tool.PAGES.values():
         routes.update(page_routes)
-    routes.update(tool.WEEK_AND_ENDGAME)
+    routes.update(tool.ENDGAME)
     routes.update({"/api/achievements", "/api/commissions", "/api/widgets", "/api/characters", "/api/friends", "/api/map/tabs", "/api/layouts"})
     return {re.split(r"[?]", route, maxsplit=1)[0] for route in routes}
 
@@ -172,7 +172,7 @@ def test_a_recording_holds_every_route_of_every_page_and_nothing_of_this_machine
     assert set(index["pages"]) == set(tool.PAGES)
     for page, routes in index["pages"].items():
         for route in tool.COMMON + tool.PAGES[page]:
-            if route in tool.WEEK_AND_ENDGAME and not index["week_and_endgame"]:
+            if route in tool.ENDGAME and not index["endgame"]:
                 continue
             assert route in routes, (page, route)
         for route in routes:

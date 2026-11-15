@@ -1,0 +1,10 @@
+{
+  "main": null,
+  "toggles": {
+    "c1LumiStacks": {"on": false, "state": "10", "label": "Constellation 1 stacks for Million Ton Crush", "covers": [], "reason": "A Constellation 1 bonus from Field Catalog stacks, which the party's Lunar-Crystallize reactions also spend, so how many are left for Lumi's Million Ton Crush depends on the team."},
+    "c1TeamStacks": {"on": false, "state": "on", "label": "Constellation 1 stacks for reactions", "covers": [], "reason": "A Constellation 1 bonus spent by Lunar-Crystallize reactions the party triggers."},
+    "c2Moondrift": {"on": false, "state": "on", "label": "Constellation 2 after Moondrift Harmony", "covers": [], "reason": "A Constellation 2 crit bonus after Moondrift Harmony, which needs a Moonsign party."},
+    "c4Moondrift": {"on": false, "state": "on", "label": "Constellation 4 DEF after Moondrift Harmony", "covers": [], "reason": "A Constellation 4 DEF bonus for 5 seconds after Moondrift Harmony, which needs a Moonsign party."}
+  },
+  "reads": {"tally.moonsign": 1, "active.flags.isMoonsign": 1}
+}

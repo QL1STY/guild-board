@@ -9,7 +9,7 @@ import profile from '../pages/characters/profile.css?raw'
 import roster from '../pages/characters/roster.css?raw'
 import card from '../pages/characters/card.css?raw'
 import endgame from '../pages/characters/endgame.css?raw'
-import week from '../pages/characters/week.css?raw'
+import plan from './plan.css?raw'
 import ledger from './ledger.css?raw'
 import marks from './marks.css?raw'
 import timers from './timers.css?raw'
@@ -32,7 +32,7 @@ test.each([
   ['roster.css', roster],
   ['profile.css', profile],
   ['planner.css', planner],
-  ['week.css', week],
+  ['plan.css', plan],
   ['endgame.css', endgame],
   ['card.css', card],
 ])('%s sets no text in capitals', (_, css) => {

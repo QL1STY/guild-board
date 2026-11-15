@@ -1,9 +1,7 @@
-import { dayMonth, duration, localDay, localTime, MONTHS, num, weekday, WEEKDAYS } from '../format.ts'
+import { dayMonth, duration, localDay, localTime, MONTHS, num, plural, weekday, WEEKDAYS } from '../format.ts'
 import { dayOf, isCertain, percent, resultWords } from '../pages/pullsview.ts'
-import { resinBar, spareLine, type Segment, tickBody } from '../pages/characters/weekview.ts'
-import { EMPTY_WEEK } from '../pages/characters/words.ts'
 import { readyTime, timeLeft } from '../pages/timersview.ts'
-import type { BoardModel, HistoryRow, Pulls, QuickTimer, Timer, Week, WeekTask } from '../types.ts'
+import type { BoardModel, HistoryRow, PlanModel, Pulls, QuickTimer, Timer } from '../types.ts'
 import type { SignName } from '../ui/Sign.tsx'
 
 /** The servers' names, as Settings and the Clock widget say them. */
@@ -424,52 +422,51 @@ export function fiftyRecord(history: Pulls['history']): string {
 
 // ----------------------------------------------------------------------------------------------------- The Today widget
 
-/** One step of today in the widget: the week page's own task, with its cost said as the widget says it. */
-export type TodayRow = { key: string; kind: WeekTask['kind']; title: string; why: string; who: string[]; cost: string; done: boolean; free: boolean }
+/** One series open today in the widget: its picture, its name, the planned characters it is for (by name, and as faces). */
+export type TodayRow = {
+  key: string
+  kind: 'book' | 'weapon'
+  title: string
+  icon: string | null
+  names: string
+  who: { key: string; name: string; icon: string | null }[]
+}
 
 export type TodayView = {
   rows: TodayRow[]
-  /** The one line that stands where the rows would: no focus, or nothing to farm with resin today; null when there are rows. */
+  /** The one line that stands where the rows would: nobody planned, or nothing open today; null when there are rows. */
   line: string | null
-  resin: string
   meta: string | null
-  bar: Segment[]
 }
 
 /**
- * Today's steps from the week's model (its `today` part, which is the first day of the week page): those that cost resin
- * first, then those on the way, with how many are done for the heading. The words are the week page's.
+ * What is open today from the Plan page's model: the talent books, then the weapon materials, each with the planned characters
+ * it is for, and how many are open for the heading.
  */
-export function todayView(week: Week): TodayView {
-  const day = week.today
-  const spend = day.tasks.filter((task) => !task.free)
-  const rows = [...spend, ...day.tasks.filter((task) => task.free)].map((task) => ({
-    key: task.key,
-    kind: task.kind,
-    title: task.title,
-    why: task.why,
-    who: task.who,
-    cost: task.free ? (task.kind === 'level' ? 'Ready' : 'No resin') : `${task.resin} resin`,
-    done: task.done,
-    free: task.free,
-  }))
-  const line = week.focus.length === 0 ? EMPTY_WEEK : rows.length === 0 ? spareLine(day, spend) : null
-  const done = rows.filter((row) => row.done).length
-  return {
-    rows: week.focus.length === 0 ? [] : rows,
-    line,
-    resin: `${day.spent} of ${day.start} resin`,
-    meta: rows.length === 0 || week.focus.length === 0 ? null : `${done} of ${rows.length} done`,
-    bar: resinBar(day),
+export function todayView(plan: PlanModel): TodayView {
+  const known = new Map(plan.rows.map((row) => [row.key, { key: row.key, name: row.name, icon: row.icon }]))
+  const whoOf = (keys: string[]) => keys.map((key) => known.get(key) ?? { key, name: key, icon: null })
+  const row = (kind: TodayRow['kind'], series: string, icon: string | null, keys: string[], title: string): TodayRow => {
+    const who = whoOf(keys)
+    return { key: `${kind}:${series}`, kind, title, icon, names: who.map((one) => one.name).join(', '), who }
   }
+  const rows = [
+    ...plan.books.map((book) => row('book', book.series, book.icon, book.who, `Teachings of ${book.series}`)),
+    ...plan.weapons.map((weapon) => row('weapon', weapon.series, weapon.icon, weapon.who, weapon.series)),
+  ]
+  if (plan.count === 0) return { rows: [], line: 'Nobody is planned yet. Add characters on the Plan page.', meta: null }
+  if (rows.length === 0) {
+    // Not read from the wiki yet is not "nothing open": that would be a guess (false on a Sunday).
+    if (plan.rows.every((one) => one.book === null && one.material === null)) {
+      const unread = plan.rows.length
+      return { rows: [], line: `${plural(unread, 'planned character')} ${unread === 1 ? 'is' : 'are'} not read from the wiki yet.`, meta: null }
+    }
+    return { rows: [], line: 'Nothing is open today for the planned characters.', meta: null }
+  }
+  return { rows, line: null, meta: `${rows.length} open` }
 }
 
-/** What the widget draws at its size in cells: a face for each step from 4 wide, the reasons from 5, today's resin bar from 3 tall. */
-export function todayLayout(size: { w: number; h: number }): { faces: boolean; why: boolean; bar: boolean } {
-  return { faces: size.w >= 4, why: size.w >= 5, bar: size.h >= 3 }
-}
-
-/** The body of a tick in the widget: the week page's, for the same task of today. */
-export function todayTick(week: Week, task: WeekTask, done: boolean): { day: string; task: string; done: boolean } {
-  return tickBody(week.today, task, done)
+/** What the widget draws at its size in cells: a face for each character from 4 wide. */
+export function todayLayout(size: { w: number; h: number }): { faces: boolean } {
+  return { faces: size.w >= 4 }
 }

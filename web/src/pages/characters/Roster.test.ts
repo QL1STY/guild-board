@@ -3,13 +3,13 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { expect, test } from 'vitest'
 import fixture from '../../fixtures/characters/roster.json'
 import type { Roster as RosterModel } from '../../types.ts'
-import { FocusStrip, RosterGrid } from './Roster.tsx'
+import { RosterGrid } from './Roster.tsx'
 import css from './roster.css?raw'
 import { ROSTER_HEADING } from './words.ts'
 import { CharactersTabs } from './Tabs.tsx'
 
 const roster = fixture as unknown as RosterModel
-const grid = (entries = roster.entries) => renderToStaticMarkup(createElement(RosterGrid, { entries, onToggle: () => undefined }))
+const grid = (entries = roster.entries) => renderToStaticMarkup(createElement(RosterGrid, { entries }))
 
 /** The markup of one card of the grid, by the character's key. */
 function card(markup: string, key: string): string {
@@ -35,46 +35,32 @@ test('a character who is not out yet says so, in place of the words for one the 
   expect(escoffier).not.toContain('Not yours yet')
 })
 
-test('every card is a link to the character\'s profile, with her name, and a focus button of its own', () => {
+test('every card is a link to the character\'s profile, with her name and no button', () => {
   const sandrone = card(grid(), 'sandrone')
   expect(sandrone).toContain('href="#/characters/sandrone"')
   expect(sandrone).toContain('Sandrone')
-  expect(sandrone).toMatch(/<button[^>]*aria-pressed="true"/)
-  expect(card(grid(), 'nefer')).toMatch(/<button[^>]*aria-pressed="false"/)
+  expect(grid()).not.toContain('<button')
+  expect(grid()).not.toContain('In focus')
+  expect(grid()).not.toContain('Add to focus')
 })
 
-test('without the focus a card is its link alone: no button, no foot, and the banner inside the link', () => {
-  const markup = renderToStaticMarkup(createElement(RosterGrid, { entries: roster.entries, onToggle: () => undefined, focusShown: false }))
-  const escoffier = card(markup, 'escoffier')
-  expect(escoffier).not.toContain('<button')
+test('a card is its link alone: no foot, and the banner inside the link', () => {
+  const escoffier = card(grid(), 'escoffier')
   expect(escoffier).not.toContain('cr-foot')
   expect(escoffier).toMatch(/<a[^>]*class="cr-link"[\s\S]*On the banner until 3 Nov[\s\S]*<\/a>/)
-  expect(card(markup, 'sandrone')).not.toContain('In focus')
 })
 
-test('without the focus the whole card is the link, with no room left for a foot', () => {
+test('the whole card is the link, with no room left for a foot', () => {
   expect(css).toMatch(/\.cr-card\.whole \.cr-link::after\s*\{[^}]*inset:\s*0/)
 })
 
-test('the focus number is on the card of each character in the focus, and a ring shows how ready she is', () => {
-  const odette = card(grid(), 'odette')
-  expect(odette).toContain('In focus, 2')
-  expect(odette).toContain('aria-label="64% ready"')
-  expect(card(grid(), 'nefer')).not.toContain('In focus')
+test('a ring on each owned card shows how ready she is', () => {
+  expect(card(grid(), 'odette')).toContain('aria-label="64% ready"')
 })
 
-test('an empty focus says to choose, in the plan\'s words, and fills every slot with a plain line', () => {
-  const markup = renderToStaticMarkup(createElement(FocusStrip, { cards: [], onToggle: () => undefined }))
-  expect(markup).toContain('Choose up to four characters to plan for.')
-  expect(markup.match(/Choose a character below/g)).toHaveLength(4)
-})
-
-test('the focus strip shows four slots: each character in the focus, and a plain line in the rest', () => {
-  const cards = roster.entries.slice(0, 2)
-  const markup = renderToStaticMarkup(createElement(FocusStrip, { cards, onToggle: () => undefined }))
-  expect(markup).toContain('1. Sandrone')
-  expect(markup).toContain('2. Odette')
-  expect(markup.match(/Choose a character below/g)).toHaveLength(2)
+test('the roster has no focus strip and no focus styles', () => {
+  expect(css).not.toContain('cr-focus')
+  expect(css).not.toContain('cr-fc')
 })
 
 test('the Characters tabs link the roster and the endgame, and mark the page shown', () => {

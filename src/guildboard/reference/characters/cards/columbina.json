@@ -1,7 +1,7 @@
 {
   "key": "columbina", "name": "Columbina", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "hp",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"hp": 35000, "cr": 80, "cd": 200, "er": 180},
   "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["cr", "cd", "hp_pct"]},
   "weights": {"hp_pct": "wants", "er": "wants", "cr": "wants", "cd": "wants", "em": "some", "hp": "some", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},

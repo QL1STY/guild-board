@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c4Pathfinder": {"on": false, "state": "on", "label": "Constellation 4 Pathfinder's Blessing", "covers": [], "reason": "A Constellation 4 bonus given when a party member's Grace of Kenosis is upgraded, used up a few hits at a time."},
+    "skillGraceActive": {"on": false, "state": "on", "label": "Constellation 2 Grace of Kenosis ATK", "covers": [], "reason": "A Constellation 2 ATK bonus on top of her Skill's Grace of Kenosis, a party buff whose base ATK bonus the planner does not count yet."}
+  }
+}

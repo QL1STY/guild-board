@@ -983,8 +983,8 @@ def test_a_version_10_database_gains_the_characters_tables_after_a_backup(tmp_pa
     # The Characters tables are the 11th migration: the plan called them schema 8, before the gift codes, the gallery
     # and the ledger took 8 to 10. Sync is the 12th (the online plan, Task C2), its outbox's numbered lines the 13th, and the
     # database moves on to them. The 14th only deletes rows, the 15th keeps the endgame's cycles (the Stats design, 3.5),
-    # and the 16th lets the wiki's table hold the Tutorial entries (the Stats design, 3.2).
-    assert len(MIGRATIONS) == 16
+    # the 16th lets the wiki's table hold the Tutorial entries (the Stats design, 3.2), and the 17th lets the focus hold 128.
+    assert len(MIGRATIONS) == 17
     path = tmp_path / "guildboard.db"
     old = sqlite3.connect(path)
     old.executescript("".join(MIGRATIONS[:10]))
@@ -1010,7 +1010,7 @@ def test_a_version_10_database_gains_the_characters_tables_after_a_backup(tmp_pa
     assert tables_and_version(backups[0]) == (set(), 10)  # the backup is the database as it was
 
 
-def test_the_focus_keeps_four_in_order_and_refuses_a_fifth(store):
+def test_the_focus_keeps_four_in_order_and_refuses_a_129th(store):
     four = ["sandrone", "odette", "alyosha", "jahoda"]
     store.put_focus(UID, four)
     assert store.focus(UID) == four
@@ -1019,7 +1019,7 @@ def test_the_focus_keeps_four_in_order_and_refuses_a_fifth(store):
     assert store.focus(UID) == ["jahoda", "sandrone"]
     assert store.focus(OTHER_UID) == ["jahoda"]
     with pytest.raises(ValueError):
-        store.put_focus(UID, [*four, "flins"])
+        store.put_focus(UID, [f"c{n}" for n in range(129)])
     assert store.focus(UID) == ["jahoda", "sandrone"]  # a refused change leaves the focus as it was
     store.put_focus(UID, [])
     assert store.focus(UID) == []
@@ -1432,3 +1432,11 @@ def test_writes_are_synced_at_the_normal_level_in_the_log(tmp_path):
     on_disk = Store.open(tmp_path / "guildboard.db", tmp_path / "backups", NOW)
     assert on_disk._conn.execute("PRAGMA synchronous").fetchone()[0] == 1  # NORMAL
     on_disk.close()
+
+
+def test_the_focus_holds_a_character_once_when_synced_rows_repeat_her(store):
+    # After sync the rows are per position and last write wins, so two PCs (or an older version rewriting positions 1 to 4 while
+    # 5 and on remain) can leave one character in two positions. The list names her once, at her first position.
+    for position, character in enumerate(["e", "a", "e", "b", "a"], start=1):
+        store._conn.execute("INSERT INTO char_focus (uid, position, character) VALUES (?, ?, ?)", (UID, position, character))
+    assert store.focus(UID) == ["e", "a", "b"]

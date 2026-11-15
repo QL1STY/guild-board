@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "a4HasStacks": {"on": false, "state": "on", "label": "Starwicker holds Adeptal Assistance stacks", "covers": [], "reason": "The Starwicker starts with its stacks and each plunge uses one, but it counts only while her Burst's Starwicker is up, and her own Driftcloud Wave often comes before the Burst. No swap of the comparison can show it, because a flat bonus that scales with ATK, far below its cap, cancels in every one."},
+    "a1Stacks": {"on": false, "state": "4", "label": "Storm Pinion stacks", "covers": [], "reason": "Stacks come from each enemy her Driftcloud Waves hit, so how many she holds depends on the enemies."},
+    "c2AfterSkill": {"on": true, "state": "on", "label": "Constellation 2 after a Skyladder", "covers": ["skill"], "reason": "Her Skill always performs a Skyladder, and the Driftcloud Wave that follows hits inside the 15 seconds of the ATK bonus."},
+    "c6SkyladderUses": {"on": false, "state": "3", "label": "Constellation 6, three Skyladders", "covers": [], "reason": "Depends on how many Skyladders the player uses before the Driftcloud Wave."}
+  }
+}

@@ -31,33 +31,19 @@ async def test_the_demo_shows_the_mockups_characters_and_numbers(core):
     assert problem_with(roster, "Roster") is None
     assert roster["owned"] == 15 and roster["focus"] == ["sandrone", "odette", "alyosha", "jahoda"]
     ready = {entry["key"]: entry["readiness"] for entry in roster["entries"] if entry["owned"]}
-    assert ready["sandrone"] == 89 and ready["nefer"] == 88 and ready["vesna"] == 40
+    assert ready["sandrone"] == 90 and ready["nefer"] == 88 and ready["vesna"] == 40
     assert next(e for e in roster["entries"] if e["key"] == "escoffier")["banner"]["running"] is True
     profile = service.profile("sandrone")
     assert problem_with(profile, "Profile") is None
     texts = {row["key"]: row["text"] for row in profile["stats"]}
     assert (texts["hp"], texts["atk"], texts["cr"], texts["cd"], texts["er"]) == ("20,152", "2,964", "79.4%", "176.5%", "122.7%")
-    assert sum(profile["rolls_by"].values()) == 41 and profile["readiness"]["total"] == 89
-    assert [step["gain"] for step in profile["next_steps"]] == ["about +31% damage", "about +6% damage", "about +3% damage"]
+    assert sum(profile["rolls_by"].values()) == 41 and profile["readiness"]["total"] == 90
+    assert [step["gain"] for step in profile["next_steps"]] == ["about +8 readiness", "about +1 readiness"]
     planner = service.planner("sandrone")
     assert problem_with(planner, "Planner") is None
-    assert planner["now"]["readiness"] == 89 and planner["with_plan"] == {"readiness": 99, "damage": 135, "change": 35}
     assert planner["sync"]["calculator"] == "on"
     for key in ("odette", "alyosha", "jahoda"):
         assert problem_with(service.planner(key), "Planner") is None and problem_with(service.profile(key), "Profile") is None
-    week = service.week()
-    assert problem_with(week, "Week") is None
-    sunday = week["days"][0]
-    assert (sunday["label"], sunday["start"], sunday["spent"]) == ("Sunday 25 October", 200, 200)
-    assert sunday["alert"]["loud"] is True
-    assert [(t["kind"], t["who"], t["title"], t["resin"]) for t in sunday["tasks"]] == [
-        ("weekly", ["sandrone"], "The Doctor, weekly boss", 30),
-        ("books", ["sandrone"], "Overturned Roost, 6 runs", 120),
-        ("weekly", ["odette"], "Il Dottore, weekly boss", 30),
-        ("books", ["odette"], "Relics of the Frozen Grace, 1 run", 20),
-        ("flowers", ["alyosha"], "Pick 23 Flockingweed in Fellfrost Peak", 0),
-    ]
-    assert [card["key"] for card in week["focus"]] == ["sandrone", "odette", "alyosha", "jahoda"]
     endgame = service.endgame(False)
     assert problem_with(endgame, "Endgame") is None
     assert endgame["modes"][1]["value"] == "Cryo, Electro, Anemo" and endgame["theater"]["from_calendar"] is True
@@ -98,7 +84,7 @@ def _addresses(model) -> set[str]:
 
 async def test_the_demo_names_no_picture_and_its_pages_hold_the_signs(core):
     service = core.characters
-    models = [service.roster(), service.week(), service.endgame(False), service.endgame(True)]
+    models = [service.roster(), service.plan_page(), service.endgame(False), service.endgame(True)]
     models += [service.profile(key) for key in ("sandrone", "odette")] + [service.planner(key) for key in ("sandrone", "alyosha")]
     assert set().union(*(_addresses(model) for model in models)) == set()   # it ships none of the game's art and downloads none
     profile = service.profile("sandrone")
@@ -106,15 +92,6 @@ async def test_the_demo_names_no_picture_and_its_pages_hold_the_signs(core):
     assert not any(piece["icon"] for piece in profile["pieces"]) and not any(c["icon"] for c in profile["constellations"])
     assert not any(entry["icon"] for entry in service.roster()["entries"])
     assert core.art.address("https://example.com/a.png") is None
-
-
-async def test_the_planners_resin_note_says_where_the_rest_of_the_days_resin_goes(core):
-    takes = core.characters.planner("sandrone")["takes"]
-    spent = sum(part["resin"] for part in takes["resin_today"])
-    assert spent == 150
-    # Odette's weekly boss and book runs take the other 50, as the bar's rest shows: the note does not say "0 left over".
-    assert takes["today_note"].endswith(f"{spent} of your 200 resin today; the other 50 go to Odette.")
-    assert "left over" not in takes["today_note"]
 
 
 async def test_the_demo_gives_sandrone_her_three_copies_so_her_story_shows_as_the_mockup_has_it(core):
@@ -127,3 +104,17 @@ async def test_the_demo_gives_sandrone_her_three_copies_so_her_story_shows_as_th
     assert [e["at"] for e in profile["pity"]] == sorted(e["at"] for e in profile["pity"])
     # The wish history of the Pulls page is the demo's own and has no copy of her: the story is the Characters' demo's.
     assert core.characters.profile("odette")["pity"] == []
+
+
+async def test_the_demo_plan_page_reads_sandrones_book_days_and_nothing_made_up(core):
+    """The Plan page's days come from the wiki entries the demo keeps, as the wiki gave them: Sandrone's book (Vagrancy, Wednesday,
+    Saturday and Sunday). No weapon material's entry is kept, so it says nothing of the days, and nor do the others' books."""
+    plan = core.characters.plan_page()
+    sandrone = next(row for row in plan["rows"] if row["key"] == "sandrone")
+    assert sandrone["book"]["series"] == "Vagrancy" and sandrone["book"]["days"] == [2, 5, 6]
+    assert sandrone["material"] is None
+    for key in ("odette", "alyosha", "jahoda"):
+        row = next(row for row in plan["rows"] if row["key"] == key)
+        assert row["book"] is None and row["material"] is None   # an entry the demo does not keep says so, never a guess
+    entry = core.store.wiki_entry("8588")
+    assert entry is not None and "Overturned Roost" in str(entry.data) and "Wednesday/Saturday/Sunday" in str(entry.data)

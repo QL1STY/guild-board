@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "c4Active": {"on": false, "state": "on", "label": "Constellation 4 Dawn Star", "covers": [], "reason": "A Constellation 4 party buff that lasts a few seconds and ends after one Normal or Charged Attack."}
+  }
+}

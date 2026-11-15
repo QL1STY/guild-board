@@ -7,7 +7,8 @@ export interface ShellArgs {
   quit: boolean
   demoNow: string | null
   acknowledged: boolean
-  weekAndEndgame: boolean
+  endgame: boolean
+  verdict: boolean
   invite: string | null
   refused: string[]
 }
@@ -41,7 +42,7 @@ function debuggingSwitch(arg: string): string | null {
 export function parseArgs(argv: readonly string[]): ShellArgs {
   const args: ShellArgs = {
     demo: false, dataDir: null, hidden: false, quit: false, demoNow: null,
-    acknowledged: false, weekAndEndgame: false, invite: null, refused: [],
+    acknowledged: false, endgame: false, verdict: false, invite: null, refused: [],
   }
   const debugging: string[] = []
   for (const arg of argv) {
@@ -57,7 +58,8 @@ export function parseArgs(argv: readonly string[]): ShellArgs {
     else if (name === '--hidden') args.hidden = true
     else if (name === '--quit') args.quit = true
     else if (name === '--acknowledged') args.acknowledged = true
-    else if (name === '--week-and-endgame') args.weekAndEndgame = true
+    else if (name === '--endgame') args.endgame = true
+    else if (name === '--verdict') args.verdict = true
     else if (name === '--data-dir' || name === '--demo-now') {
       let value = inline
       if (value === null && at + 1 < argv.length) value = argv[++at]

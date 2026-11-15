@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "Ascension4": {"on": false, "state": "on", "label": "Through the Jade Screen", "covers": [], "reason": "The Geo DMG bonus needs her to move through her Jade Screen, which depends on how she is played."}
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "main": ["1-Hit DMG", "2-Hit DMG", "3-Hit DMG", "4-Hit DMG", "Charged Attack Spinning DMG", "Charged Attack Final DMG", "Plunge DMG", "Low/High Plunge DMG", "Fuufuu Windwheel DMG", "Fuufuu Whirlwind Kick Press DMG", "Fuufuu Whirlwind Kick Hold DMG", "Skill Activation DMG", "Muji-Muji Daruma DMG"],
+  "toggles": {
+    "c2SkillStack": {"on": false, "state": "20", "label": "Constellation 2, Skill held longer", "covers": [], "reason": "Grows with how long her Skill is held, which differs with each use."}
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "afterBurst": {"on": true, "state": "on", "label": "Brilliance", "covers": ["charged"], "reason": "Her Charged Attacks are mostly used inside the 15 seconds after her Burst, which raises their damage."},
+    "c2EnemyHp": {"on": false, "state": "on", "label": "Constellation 2, enemy below 50% HP", "covers": [], "reason": "Depends on the enemy's HP."},
+    "p1Seals": {"on": false, "state": "3", "label": "Scarlet Seals spent", "covers": [], "reason": "The Pyro bonus starts after a Charged Attack spends the seals, so it misses the Charged Attack that starts it."}
+  }
+}

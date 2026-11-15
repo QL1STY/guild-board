@@ -1,7 +1,7 @@
 {
   "key": "chiori", "name": "Chiori", "element": "Geo", "weapon_type": "Sword", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "def",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"def": 2400, "cr": 80, "cd": 160, "er": 190},
   "mains": {"sands": ["def_pct", "atk_pct"], "goblet": ["dmg", "def_pct"], "circlet": ["cr", "cd"]},
   "weights": {"cr": "wants", "cd": "wants", "def_pct": "wants", "atk_pct": "some", "atk": "some", "er": "some", "def": "some", "em": "none", "hp_pct": "none", "hp": "none"},

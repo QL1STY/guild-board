@@ -1,0 +1,11 @@
+{
+  "main": null,
+  "toggles": {
+    "c2": {"on": false, "state": "c2", "label": "Constellation 2 Elemental Mastery", "covers": [], "reason": "Adds Elemental Mastery only, which none of his counted hits use."},
+    "c6": {"on": false, "state": "c6", "label": "Constellation 6 after Skill or Burst", "covers": [], "reason": "A Constellation 6 window of 5 seconds after his Skill or Burst covers only part of his Normal, Charged and Plunging Attacks. It gives them an Anemo infusion and a bonus from his Elemental Mastery, both counted when it is switched on here; it was checked once with it on against Genshin Optimizer."},
+    "swirlcryo": {"on": false, "state": "cryo", "label": "Swirled Cryo", "covers": [], "reason": "A bonus for the party's Cryo damage after he swirls Cryo, which reaches none of his counted hits."},
+    "swirlelectro": {"on": false, "state": "electro", "label": "Swirled Electro", "covers": [], "reason": "A bonus for the party's Electro damage after he swirls Electro, which reaches none of his counted hits."},
+    "swirlhydro": {"on": false, "state": "hydro", "label": "Swirled Hydro", "covers": [], "reason": "A bonus for the party's Hydro damage after he swirls Hydro, which reaches none of his counted hits."},
+    "swirlpyro": {"on": false, "state": "pyro", "label": "Swirled Pyro", "covers": [], "reason": "A bonus for the party's Pyro damage after he swirls Pyro, which reaches none of his counted hits."}
+  }
+}

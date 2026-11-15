@@ -16,6 +16,7 @@ from guildboard.characters import wiki as characters_wiki
 from guildboard.characters.models import Source
 from guildboard.characters.wiki import ENTRY_URL, HEADERS, CharacterWiki, parse_source, plain, stat_key
 from guildboard.pulls import wiki as pulls_wiki
+from guildboard.store import WikiEntryRow
 from pulls_samples import CHARACTERS, WEAPONS, wiki_page
 from support import FakeClock
 
@@ -370,3 +371,111 @@ def test_the_materials_of_a_string_are_found_without_a_search_from_every_dollar_
     assert characters_wiki._entries('$[{"a": 1}]$ and $[{"b": 2}]$') == []  # the greedy pattern read one list from the first
     assert characters_wiki._entries("$[]$") == [] and characters_wiki._entries("$[$") == []
     assert characters_wiki._entries(None) == []
+
+
+# ------------------------------------------------------------------------------------------------ the talent tables (stage 2)
+
+# Sandrone's first Normal Attack hit at levels 1 to 11, from the game's own data (Genshin Optimizer's datamine copy).
+SANDRONE_FIRST_HIT = [
+    "76.29%", "82.5%", "88.7%", "97.58%", "103.78%", "110.88%", "120.64%", "130.4%", "140.15%", "150.8%", "161.44%",
+]
+
+
+async def test_talent_tables_are_kept(wiki, store):
+    characters, _, _ = wiki
+    row = await characters.entry("10920", "character")
+    talents = row.data["modules"]["Talents"]["talent"]["list"]
+    assert talents[0]["attributes"][0] == {"key": "Level", "values": [f"Lv.{n}" for n in range(1, 12)]}
+    assert [len(t["attributes"][0]["values"]) for t in talents[:3]] == [11, 13, 13]   # the lengths are the wiki's, not ten
+    assert talents[0]["leveled"] is True and talents[3]["leveled"] is False
+    assert talents[3]["attributes"] == []                                           # a passive has no table
+    assert all("talent_img" not in t and "talent_imgs" not in t and "points" not in t for t in talents)  # the weight stays out
+    assert store.wiki_entry("10920").data["modules"]["Talents"]["talent"]["list"][0]["attributes"] == talents[0]["attributes"]
+
+
+def _with_rows(rows: list[dict]):
+    """The recorded Sandrone entry with these rows added to her Normal Attack's table."""
+
+    def answer(url, *, headers=None, body=None):
+        entry = json.loads(samples.wiki_entry_answer("10920"))
+        for module in entry["data"]["page"]["modules"]:
+            for component in module["components"]:
+                if component["component_id"] == "talent":
+                    value = json.loads(component["data"])
+                    value["list"][0]["attributes"].extend(rows)
+                    component["data"] = json.dumps(value)
+        return json.dumps(entry).encode("utf-8")
+
+    return answer
+
+
+async def test_a_row_is_kept_with_its_values_and_its_name_takes_the_pc_wording(store, clock):
+    # A synthetic row, a parser input: the wiki's token form on a row name (the name is not one of hers; the values are her
+    # real first-hit values at levels 1 to 11).
+    rows = [{"key": "#{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press} DMG", "values": SANDRONE_FIRST_HIT}]
+    characters = CharacterWiki(store, clock, _with_rows(rows), lambda: "7.1")
+    row = await characters.entry("10920", "character")
+    kept = row.data["modules"]["Talents"]["talent"]["list"][0]["attributes"]
+    assert kept[1] == {"key": "Press DMG", "values": SANDRONE_FIRST_HIT}
+
+
+def test_layout_tokens_take_the_pc_wording():
+    clean = characters_wiki.clean_row_name
+    assert clean("#{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press} DMG") == "Press DMG"
+    assert clean("#{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press}/{LAYOUT_MOBILE#Hold}{LAYOUT_PC#Hold} DMG") == "Press/Hold DMG"
+    assert clean("{LAYOUT_PC#Press}{LAYOUT_MOBILE#Tap} DMG") == "Press DMG"      # the order of the two does not matter
+    assert clean("#{LAYOUT_MOBILE#Tap} DMG") == "Tap DMG"                         # no PC wording: the first there is
+    assert clean("1-Hit DMG") == "1-Hit DMG" and clean("  Skill   DMG ") == "Skill DMG"
+    assert clean("Elemental Mastery #1") == "Elemental Mastery #1"                # a lone hash is left alone
+
+
+def _stored(store, ident: str, kind: str, fmt: int | None) -> None:
+    data = {"id": ident, "name": "Sandrone", "modules": {}}
+    if fmt is not None:
+        data["format"] = fmt
+    store.put_wiki_entry(WikiEntryRow(ident, kind, "Sandrone", data, "7.1", NOW))
+
+
+def test_an_entry_of_an_older_format_is_wanted_once_more(wiki, store):
+    characters, _, _ = wiki
+    assert characters_wiki.ENTRY_FORMAT == 2
+    _stored(store, "10920", "character", 1)
+    assert ("character", "10920") in characters.wanted_again()
+    _stored(store, "10920", "character", characters_wiki.ENTRY_FORMAT)
+    assert ("character", "10920") not in characters.wanted_again()
+    _stored(store, "10920", "character", None)                  # an entry kept before the format was stamped is of format 1
+    assert ("character", "10920") in characters.wanted_again()
+    _stored(store, "10949", "weapon", 1)                        # only a character's entry has tables: the others are as they were
+    _stored(store, "10760", "set", None)
+    assert characters.wanted_again() == {("character", "10920")}
+
+
+async def test_an_entry_of_an_older_format_is_read_again_once_in_the_same_version(wiki, store, clock):
+    characters, fetch, _ = wiki
+    _stored(store, "10920", "character", 1)
+    again = await characters.entry("10920", "character")
+    assert fetch.entries == ["10920"]                           # the version did not move, the format did
+    assert again.data["format"] == characters_wiki.ENTRY_FORMAT and again.data["modules"]["Talents"]["talent"]["list"][0]["attributes"]
+    assert store.wiki_entry("10920").data["format"] == characters_wiki.ENTRY_FORMAT
+    clock.advance(days=3)
+    await characters.entry("10920", "character")
+    assert fetch.entries == ["10920"]                           # once: now it is of the format
+    assert characters.wanted_again() == set()
+    _stored(store, "10949", "weapon", 1)
+    await characters.entry("10949", "weapon")
+    assert fetch.entries == ["10920"]                           # a weapon's entry of format 1 is not read again
+
+
+async def test_an_entry_of_an_older_format_stays_when_it_cannot_be_read_again(wiki, store, caplog):
+    characters, fetch, _ = wiki
+    _stored(store, "10920", "character", 1)
+    fetch.fail = urllib.error.URLError("down")
+    kept = await characters.entry("10920", "character")
+    assert kept.data.get("format") == 1 and store.wiki_entry("10920").data.get("format") == 1
+
+
+async def test_the_demo_reads_no_entry_again(store, clock):
+    characters = CharacterWiki(store, clock, None, lambda: "7.1")
+    _stored(store, "10920", "character", 1)
+    kept = await characters.entry("10920", "character")
+    assert kept.data["format"] == 1                             # no fetch seam: what is kept is served as it is

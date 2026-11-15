@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "kagotsurube-isshin:passive": {"on": true, "state": "on", "label": "Hewing Gale", "covers": [], "reason": "Her next Normal, Charged or Plunging Attack hit starts it again as soon as it ends, so its ATK bonus is up while she attacks."}
+  }
+}

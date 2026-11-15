@@ -326,7 +326,7 @@ def test_fetch_bytes_with_hosts_refuses_a_first_request_to_another_host(monkeypa
 # design, section 1): exact addresses in one table, a plain GET with Guild Board's user agent, never redirected
 
 def test_a_public_picture_is_exactly_one_of_the_table():
-    assert netpolicy.PUBLIC_PICTURE_HOSTS == ("static.wikia.nocookie.net", "i.redd.it")
+    assert netpolicy.PUBLIC_PICTURE_HOSTS == ("static.wikia.nocookie.net", "i.redd.it", "act.hoyolab.com")
     for url in netpolicy.PUBLIC_PICTURE_URLS:
         assert netpolicy.is_public_picture(url) and is_allowed(url), url
     assert netpolicy.is_public_picture(netpolicy.PUBLIC_PICTURE_URLS[1])
@@ -347,8 +347,11 @@ def test_a_public_picture_is_exactly_one_of_the_table():
         assert not netpolicy.is_public_picture(url), url
     for url in ("https://i.redd.it/other.jpg", "https://static.wikia.nocookie.net/other.png", "https://i.redd.it/"):
         assert not is_allowed(url), url
-    # The HoYoverse checks, which guard the HoYoLAB client and the reads of HoYoverse's pages, leave them out.
-    assert not any(netpolicy.is_hoyoverse(url) for url in netpolicy.PUBLIC_PICTURE_URLS)
+    # The HoYoverse checks, which guard the HoYoLAB client and the reads of HoYoverse's pages, leave out the pictures
+    # from outside HoYoverse; the Theater's marks are HoYoLAB's own, on its Battle Chronicle's host.
+    outside = [url for url in netpolicy.PUBLIC_PICTURE_URLS if not url.startswith("https://act.hoyolab.com/")]
+    assert len(outside) == 3 and not any(netpolicy.is_hoyoverse(url) for url in outside)
+    assert not netpolicy.is_public_picture("https://act.hoyolab.com/app/community-game-records-sea/images/other.png")
 
 
 def test_a_public_picture_is_fetched_with_the_user_agent_alone_and_no_redirect(monkeypatch):

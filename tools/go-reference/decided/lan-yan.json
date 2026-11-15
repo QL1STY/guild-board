@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "c4AfterBurst": {"on": false, "state": "on", "label": "Constellation 4 after the Burst", "covers": [], "reason": "A Constellation 4 party buff that starts with her Burst, so it misses hits made before it."}
+  }
+}

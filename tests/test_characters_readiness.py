@@ -6,7 +6,7 @@ import dataclasses
 import pytest
 
 from characters_samples import SHADOW, refs_sample, sandrone_build, sandrone_card
-from guildboard.characters import damage, nextsteps, readiness, stats, xray
+from guildboard.characters import nextsteps, readiness, stats, xray
 from guildboard.characters.models import Effect, Plan, Readiness, SetChoice
 from test_characters_stats import default_plan
 
@@ -16,47 +16,47 @@ def now_score(build=None, card=None, **extra) -> Readiness:
     return readiness.score(build, card, refs, stats.combat_now(build, card, refs), **extra)
 
 
-def test_her_readiness_is_89_now_and_99_with_the_plan():
+def test_her_readiness_is_90_now_and_99_with_the_plan():
     """Design 7.3. Parts now: level 90/90 = 1.0; talents 0.5 x 0.9 + 0.3 + 0.2 = 0.95; weapon 1.0 (the card's first weapon,
-    level 90). Artifacts now: 0.6 x fit + 0.25 x 2/3 + 0.15 x 1 = 0.7607, where fit = 13523.6 / 18272.8 = 0.7401 (the
-    estimate at her goals is 2600 x 1.466 x (1 + 0.91 x 2.0) x 1.7). Total now: 0.15 + 0.2375 + 0.2 + 0.4 x 0.7607 =
-    0.8918, so 89. With the plan: fit 18218.6 / 19347.7 = 0.9416, artifacts 0.6 x 0.9416 + 0.25 + 0.15 = 0.965, talents
-    1.0, total 0.15 + 0.25 + 0.2 + 0.386 = 0.986, so 99."""
+    level 90). Artifacts now: 0.6 x fit + 0.25 x 2/3 + 0.15 x 1 = 0.7758, where fit is the mean of the goals' shares reached
+    in combat: Crit Rate 1, Crit DMG 176.5 / 200, Energy Recharge 122.7 / 130, DMG Bonus 0 / 46.6 and ATK 1, so 0.7653.
+    Total now: 0.15 + 0.2375 + 0.2 + 0.4 x 0.7758 = 0.8978, so 90. With the plan: fit 0.9647, artifacts 0.9788, talents 1.0,
+    total 0.15 + 0.25 + 0.2 + 0.3915 = 0.9915, so 99."""
     build, card, refs = sandrone_build(), sandrone_card(), refs_sample()
     now = now_score()
-    assert now.total == 89
+    assert now.total == 90
     assert now.parts["level"] == pytest.approx(1.0)
     assert now.parts["talents"] == pytest.approx(0.95)
     assert now.parts["weapon"] == pytest.approx(1.0)
-    assert now.parts["artifacts"] == pytest.approx(0.7607, abs=0.001)
+    assert now.parts["artifacts"] == pytest.approx(0.7758, abs=0.001)
     plan = default_plan()
     after = stats.apply_plan(build, plan, card, refs)
     planned = readiness.score(after, card, refs, stats.combat(build, plan, card, refs), weapon_level=plan.weapon_level)
     assert planned.total == 99
     assert planned.parts["talents"] == pytest.approx(1.0)
-    assert planned.parts["artifacts"] == pytest.approx(0.965, abs=0.001)
+    assert planned.parts["artifacts"] == pytest.approx(0.9788, abs=0.001)
 
 
 def test_a_supports_fit_is_goal_attainment():
     """Jahoda-like goals: the mean of min(1, stat / goal), with Crit Rate taken in combat: Energy Recharge 122.7 / 140 =
     0.8764, Crit Rate 95.4 / 75 capped at 1, HP 20152 / 25000 = 0.806, so fit 0.8941."""
     card = dataclasses.replace(
-        sandrone_card(), roles=("healer",), keeps_alive=True, scaling="hp", goals={"er": 140.0, "cr": 75.0, "hp": 25000.0},
+        sandrone_card(), roles=("healer",), keeps_alive=True, goals={"er": 140.0, "cr": 75.0, "hp": 25000.0},
     )
     expected_fit = (122.7 / 140 + 1.0 + 20152.374 / 25000) / 3
     result = now_score(card=card)
     assert result.parts["artifacts"] == pytest.approx(0.6 * expected_fit + 0.25 * (2 / 3) + 0.15, abs=0.001)
 
 
-def test_goals_that_are_what_she_has_fit_fully_and_an_effect_that_holds_when_met_counts_once():
-    """No goal for Crit Rate: the estimate at the goals keeps her 79.4 and adds Deep Shadow's 16 once, as her own does."""
+def test_goals_that_are_what_she_has_fit_fully():
+    """Goals for ATK and Crit DMG that are what she has fit fully; a DMG Bonus goal of 0 asks for nothing."""
     build = sandrone_build()
     panel = stats.panel(build)
     card = dataclasses.replace(sandrone_card(), goals={"atk": panel["atk"], "cd": panel["cd"], "dmg": panel["dmg"]})
     assert now_score(card=card).parts["artifacts"] == pytest.approx(0.6 + 0.25 * (2 / 3) + 0.15)
 
 
-def test_a_conditional_hp_percent_counts_on_her_base_hp_at_the_goals_too():
+def test_a_conditional_hp_percent_counts_on_her_base_hp_in_the_fit():
     refs = refs_sample()
     refs = dataclasses.replace(refs, weapons={**refs.weapons, "hp-blade": dataclasses.replace(
         refs.weapons["verdict"], key="hp-blade", effects=(Effect("hp_pct", (20.0,) * 5, "met", "in a fight"),),
@@ -64,11 +64,11 @@ def test_a_conditional_hp_percent_counts_on_her_base_hp_at_the_goals_too():
     build = sandrone_build()
     build = dataclasses.replace(build, weapon=dataclasses.replace(build.weapon, key="hp-blade"))
     panel = stats.panel(build)
-    card = dataclasses.replace(sandrone_card(), scaling="hp", goals={"hp": panel["hp"] + 1000, "cd": panel["cd"], "dmg": 0.0})
-    combat = stats.combat_now(build, card, refs)
     bonus = 13226.0 * 0.2
+    card = dataclasses.replace(sandrone_card(), goals={"hp": panel["hp"] + bonus + 1000, "cd": panel["cd"], "dmg": 0.0})
+    combat = stats.combat_now(build, card, refs)
     assert combat["hp"] == pytest.approx(panel["hp"] + bonus)
-    fit = (panel["hp"] + bonus) / (panel["hp"] + 1000 + bonus)
+    fit = ((panel["hp"] + bonus) / (panel["hp"] + bonus + 1000) + 1.0) / 2
     assert readiness.score(build, card, refs, combat).parts["artifacts"] == pytest.approx(0.6 * fit + 0.25 * (2 / 3) + 0.15)
 
 
@@ -162,18 +162,18 @@ def test_the_roll_chart_counts_41_rolls():
 
 
 def test_the_next_steps_put_the_goblet_first():
-    """The goblet is replaced with an average good piece: Cryo DMG Bonus at +20 and 2 rolls each of Crit Rate and Crit DMG."""
+    """The goblet is replaced with an average good piece: Cryo DMG Bonus at +20 and 2 rolls each of Crit Rate and Crit DMG. Each
+    step is ranked by the readiness it gains; the Plume's level gains none (her ATK goal is met) and is left out."""
     steps = nextsteps.rank(sandrone_build(), sandrone_card(), refs_sample())
     assert [(s.text, s.gain) for s in steps] == [
-        ("Replace the Goblet with a Cryo DMG Bonus goblet that has Crit Rate or Crit DMG.", "about +31% damage"),
-        ("Raise her Normal Attack to 10.", "about +6% damage"),
-        ("Level the Plume from +16 to +20.", "about +3% damage"),
+        ("Replace the Goblet with a Cryo DMG Bonus goblet that has Crit Rate or Crit DMG.", "about +8 readiness"),
+        ("Raise her Normal Attack to 10.", "about +1 readiness"),
     ]
-    assert steps[0].value > steps[1].value > steps[2].value > 0
+    assert steps[0].value > steps[1].value > 0
 
 
 def test_the_next_steps_for_a_support_are_ranked_by_readiness():
-    card = dataclasses.replace(sandrone_card(), roles=("support",), scaling="atk", goals={"er": 160.0, "cr": 75.0, "atk": 2600.0})
+    card = dataclasses.replace(sandrone_card(), roles=("support",), goals={"er": 160.0, "cr": 75.0, "atk": 2600.0})
     steps = nextsteps.rank(sandrone_build(), card, refs_sample(), n=5)
     assert steps and all(s.gain.startswith("about +") and s.gain.endswith(" readiness") for s in steps)
     assert [s.value for s in steps] == sorted((s.value for s in steps), reverse=True)
@@ -190,7 +190,7 @@ def test_a_weapon_that_does_less_is_not_offered_and_a_better_one_is_offered_if_y
     assert any(t.startswith("If you have A Teaspoon of Transcendence") for t in again)
 
 
-def test_leveling_her_and_her_weapon_fill_the_list_when_nothing_else_gains_damage():
+def test_leveling_her_and_her_weapon_fill_the_list_when_nothing_else_gains():
     build, card, refs = sandrone_build(), sandrone_card(), refs_sample()
     low = dataclasses.replace(
         build, level=70, talents={"normal": 10, "skill": 10, "burst": 10},
@@ -206,10 +206,13 @@ def test_leveling_her_and_her_weapon_fill_the_list_when_nothing_else_gains_damag
     assert all(s.gain.endswith("readiness") for s in steps if "level 90" in s.text)
 
 
-def _stronger_on_paper(refs, *keys):
-    """The damage estimate rates these weapons far above the one she holds (as it does for a passive it does not count)."""
+def _alike_on_paper(refs, *keys):
+    """These weapons are the Teaspoon's in everything but their names, so that only the card's order of them gains readiness."""
+    teaspoon = refs.weapons["a-teaspoon-of-transcendence"]
     return dataclasses.replace(refs, weapons={**refs.weapons, **{
-        key: dataclasses.replace(refs.weapons[key], base_atk_90=2000.0) for key in keys
+        key: dataclasses.replace(
+            teaspoon, key=key, name=refs.weapons[key].name, icon=None,
+        ) for key in keys
     }})
 
 
@@ -220,13 +223,13 @@ def _weapon_texts(build, card, refs):
 def test_holding_the_cards_first_weapon_never_suggests_another():
     build, card = sandrone_build(), sandrone_card()
     assert card.weapons[0] == build.weapon.key
-    refs = _stronger_on_paper(refs_sample(), "verdict", "a-thousand-blazing-suns")
+    refs = _alike_on_paper(refs_sample(), "verdict", "a-thousand-blazing-suns")
     assert _weapon_texts(build, card, refs) == []
 
 
 def test_a_weapon_change_is_only_for_weapons_the_card_ranks_above_the_one_held_and_in_the_cards_order():
     build, card = sandrone_build(), sandrone_card()
-    refs = _stronger_on_paper(refs_sample(), "verdict", "a-thousand-blazing-suns", "a-teaspoon-of-transcendence")
+    refs = _alike_on_paper(refs_sample(), "verdict", "a-thousand-blazing-suns", "a-teaspoon-of-transcendence")
     second = dataclasses.replace(build, weapon=dataclasses.replace(build.weapon, key="verdict", name="Verdict"))
     assert [t.split(":")[0] for t in _weapon_texts(second, card, refs)] == ["If you have A Teaspoon of Transcendence"]
     third = dataclasses.replace(build, weapon=dataclasses.replace(

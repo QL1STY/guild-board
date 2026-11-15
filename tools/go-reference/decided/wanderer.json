@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "afterSkill": {"on": true, "state": "on", "label": "Windfavored", "covers": ["normal", "charged"], "reason": "After his Skill he is Windfavored, which raises the damage of the Normal and Charged Attacks he uses for as long as it lasts, which is while he attacks. No swap of the comparison can prove it: all his Normal rows are Anemo and the multiplier cancels in the ratio."},
+    "skillCryoContact": {"on": false, "state": "cryo", "label": "Hanega touches Cryo", "covers": [], "reason": "A passive adds 20% CRIT Rate only when the Skill comes into contact with Cryo as it is cast, which depends on the team's elements. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."},
+    "skillPyroContact": {"on": false, "state": "pyro", "label": "Hanega touches Pyro", "covers": [], "reason": "A passive adds 30% ATK only when the Skill comes into contact with Pyro as it is cast, which depends on the team's elements. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."},
+    "c2Points": {"on": false, "state": "50", "label": "Constellation 2 Kuugoryoku Points", "covers": [], "reason": "His Burst gains 4% DMG for every Kuugoryoku Point missing when it is used, up to 200%, which depends on how many points he spent before it. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

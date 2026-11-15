@@ -19,12 +19,6 @@ const TALENTS = [
   { value: 'skill', label: 'Elemental Skill' },
   { value: 'burst', label: 'Elemental Burst' },
 ] as const
-const SCALING = [
-  { value: 'atk', label: 'ATK' },
-  { value: 'hp', label: 'HP' },
-  { value: 'def', label: 'DEF' },
-  { value: 'em', label: 'Elemental Mastery' },
-] as const
 const SLOTS: readonly { key: 'sands' | 'goblet' | 'circlet'; label: string }[] = [
   { key: 'sands', label: 'Sands' },
   { key: 'goblet', label: 'Goblet' },
@@ -196,7 +190,6 @@ export function CardBody({
             {fields.keeps_alive ? 'Yes' : 'No'}
           </Switch>,
         )}
-        {field('Scaling stat', 'scaling', <Segmented label="Scaling stat" options={SCALING} value={fields.scaling} onChange={(value) => set('scaling', value)} />)}
         {field('Damage talent', 'damage_talent', <Segmented label="Damage talent" options={TALENTS} value={fields.damage_talent} onChange={(value) => set('damage_talent', value)} />)}
         {field(
           'Talent order',

@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a4Stack": {"on": true, "state": "on", "label": "Primordial Fusion", "covers": ["burst"], "reason": "His Burst gives him ten stacks that his dragon's periodic hits spend one at a time, so the bonus is on for those hits."},
+    "burstForm": {"on": false, "state": "dark", "label": "Dragon of Dark Decay form", "covers": [], "reason": "Which form his Burst takes depends on the Skill the player used before it, and the form changes only reaction damage."},
+    "c1Stacks": {"on": false, "state": "on", "label": "Constellation 1 stacks", "covers": [], "reason": "Twenty stacks his Burst gives him in its dark form; each of his Burst hits spends two of them to add 150% of his ATK. It works with the Dragon of Dark Decay form, whose switch is off. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

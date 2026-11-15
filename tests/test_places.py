@@ -5,7 +5,7 @@ def test_a_notification_kind_opens_its_place():
     assert place_of("reminder") == "achievements/timers"
     assert place_of("quick") == "board"
     assert place_of("codes") == "codes"
-    assert place_of("characters") == "week"
+    assert place_of("characters") == "plan"
     assert place_of("characters/hu-tao") == "characters/hu-tao"
     assert place_of("test") is None and place_of(None) is None
 

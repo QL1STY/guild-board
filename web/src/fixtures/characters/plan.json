@@ -1,0 +1,52 @@
+{
+  "weekday": 2,
+  "date": "2026-11-11",
+  "turns_at": "2026-11-12T03:00:00+00:00",
+  "count": 4,
+  "books": [
+    { "series": "Vagrancy", "icon": "/api/art/vagrancy", "days": [2, 5, 6], "who": ["sandrone"] }
+  ],
+  "weapons": [
+    { "series": "Far-North Scions", "icon": "/api/art/scions", "days": [2, 5, 6], "who": ["sandrone"], "weapons": ["A Teaspoon of Transcendence"] }
+  ],
+  "idle": [
+    { "key": "neuvillette", "book_next": 3, "weapon_next": 4 },
+    { "key": "odette", "book_next": null, "weapon_next": null },
+    { "key": "jahoda", "book_next": null, "weapon_next": null }
+  ],
+  "rows": [
+    {
+      "key": "sandrone", "name": "Sandrone", "icon": "/api/art/sandrone",
+      "weapon": { "name": "A Teaspoon of Transcendence", "icon": "/api/art/teaspoon" },
+      "book": { "series": "Vagrancy", "icon": "/api/art/vagrancy", "days": [2, 5, 6] },
+      "material": { "series": "Far-North Scions", "icon": "/api/art/scions", "days": [2, 5, 6] }
+    },
+    {
+      "key": "neuvillette", "name": "Neuvillette", "icon": null,
+      "weapon": { "name": "Tome of the Eternal Flow", "icon": null },
+      "book": { "series": "Equity", "icon": null, "days": [0, 3, 6] },
+      "material": { "series": "Pure Sacred Dewdrop", "icon": null, "days": [1, 4, 6] }
+    },
+    {
+      "key": "odette", "name": "Odette", "icon": null,
+      "weapon": { "name": "Exaiphanes Blade", "icon": null },
+      "book": null,
+      "material": null
+    },
+    {
+      "key": "jahoda", "name": "Jahoda", "icon": null,
+      "weapon": { "name": null, "icon": null },
+      "book": null,
+      "material": null
+    }
+  ],
+  "weekly": [
+    { "material": "Madman's Restraint", "icon": "/api/art/restraint", "who": ["sandrone"] },
+    { "material": "Everamber", "icon": null, "who": ["neuvillette"] }
+  ],
+  "discounts_left": 2,
+  "addable": [
+    { "key": "aino", "name": "Aino", "icon": null },
+    { "key": "columbina", "name": "Columbina", "icon": "/api/art/columbina" }
+  ]
+}

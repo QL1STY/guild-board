@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "a4Stacks": {"on": false, "state": "3", "label": "Wavechaser's Exploits stacks", "covers": [], "reason": "Stacks come from Nightsoul Bursts of the party, which depend on the team."}
+  }
+}

@@ -11,6 +11,7 @@ from dataclasses import replace
 from datetime import date, datetime, timedelta, timezone, tzinfo
 from typing import Any, Mapping, Sequence
 
+from guildboard.htmltext import clean_row_name
 from guildboard.records import (
     AbyssHalfRecord,
     ArchonChapter,
@@ -342,6 +343,38 @@ def _properties(raw: Mapping[str, Any]) -> tuple[PropRecord, ...]:
     return tuple(seen.values())
 
 
+def _affixes(raw: Any) -> tuple[tuple[str, str], ...]:
+    """A talent's rows at her level as (name, value) text pairs, in the answer's order, each name with its layout tokens
+    resolved to the PC wording as the wiki's rows are (`clean_row_name`); a row with no name or no value is left out."""
+    rows = []
+    for item in _items(raw):
+        name, value = item.get("name"), item.get("value")
+        if isinstance(name, str) and isinstance(value, (str, int, float)) and not isinstance(value, bool) and name.strip():
+            rows.append((clean_row_name(_text(name)), _text(str(value)).strip()))
+    return tuple(rows)
+
+
+_RECOMMENDED = {
+    "sand_main_property_list": "sands", "goblet_main_property_list": "goblet", "circlet_main_property_list": "circlet",
+    "sub_property_list": "subs",
+}
+
+
+def _recommended(raw: Any) -> dict[str, tuple[int, ...]]:
+    """HoYoLAB's recommended stats as property ids by "sands", "goblet", "circlet" and "subs": the four lists of its
+    `recommend_properties`; a list that is missing or holds no id is left out."""
+    lists = _map(_map(raw).get("recommend_properties"))
+    found: dict[str, tuple[int, ...]] = {}
+    for name, key in _RECOMMENDED.items():
+        ids = tuple(
+            ident for item in (lists.get(name) if isinstance(lists.get(name), (list, tuple)) else ())
+            if (ident := _optional_int(item)) is not None
+        )
+        if ids:
+            found[key] = ids
+    return found
+
+
 def _build(raw: Mapping[str, Any], wiki: Mapping[str, Any]) -> BuildRecord | None:
     base = _map(raw.get("base"))
     ident = _optional_int(base.get("id"))
@@ -366,11 +399,12 @@ def _build(raw: Mapping[str, Any], wiki: Mapping[str, Any]) -> BuildRecord | Non
         skills=tuple(
             SkillRecord(
                 _int(skill.get("skill_id")), _int(skill.get("skill_type")), _text(skill.get("name", "")),
-                _text(skill.get("icon", "")), _int(skill.get("level")),
+                _text(skill.get("icon", "")), _int(skill.get("level")), _affixes(skill.get("skill_affix_list")),
             )
             for skill in _items(raw.get("skills"))
         ),
         props=_properties(raw),
+        recommended=_recommended(raw.get("recommend_relic_property")),
     )
 
 
@@ -734,6 +768,8 @@ def normalize_endgame_detail(abyss_raw: Any, theater_raw: Any, stygian_raw: Any)
         stygian_seconds=best_seconds if best_seconds and best_seconds > 0 else None,
         stygian_medal=_text(best.get("icon") or ""),
         stygian_next=_next_stygian(stygian_raw, stygian),
+        theater_arcana=_int(stat.get("tarot_finished_cnt")),
+        theater_heraldry=_int(stat.get("heraldry")),
     )
 
 

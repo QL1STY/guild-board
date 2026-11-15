@@ -13,14 +13,12 @@
     "support"
   ],
   "keeps_alive": false,
-  "scaling": "def",
   "damage_talent": "skill",
   "talent_priority": [
     "skill",
     "burst",
     "normal"
   ],
-  "talent_table": "elemental",
   "goals": {},
   "mains": {
     "sands": [

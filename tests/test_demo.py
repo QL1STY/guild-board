@@ -620,7 +620,7 @@ def test_the_demo_s_current_cycle_reads_as_the_mockup_on_any_day(tmp_path):
     for record in (detail, at_the_tests):
         assert record.abyss_stars == 33
         assert (record.theater_difficulty, record.theater_acts) == ("Arcana Challenge", 10)
-        assert record.theater_medals == characters_demo.THEATER_MEDALS[0]
+        assert record.theater_medals == characters_demo.THEATER_MEDALS[0] and record.theater_arcana == 2
         assert record.stygian_difficulty == 5
     assert detail.abyss_starts.startswith("2026-10-16") and detail.theater_starts.startswith("2026-11-01")
     clock = FakeClock(november)

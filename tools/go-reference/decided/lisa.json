@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "LisaC2": {"on": false, "state": "on", "label": "Constellation 2 held Skill DEF", "covers": [], "reason": "A Constellation 2 DEF bonus while she holds her Skill, which changes none of her hits."}
+  }
+}

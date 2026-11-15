@@ -6,7 +6,6 @@ from __future__ import annotations
 import dataclasses
 import inspect
 import json
-from datetime import date
 from pathlib import Path
 
 import pytest
@@ -15,8 +14,8 @@ import characters_samples as samples
 import characters_shape
 from guildboard import records, store as store_module
 from guildboard.characters import (
-    BUILT, ELEMENTS, FOCUS_MAX, HORIZON_DAYS, RESIN_PER_DAY, SLOTS, STATS, WEAPON_TYPES, art, damage, models, needs, notices,
-    nextsteps, odds, readiness, stats, teams, theater, week, wiki, xray,
+    BUILT, ELEMENTS, PLANNED_MAX, SLOTS, STATS, WEAPON_TYPES, art, models, needs,
+    nextsteps, readiness, stats, teams, theater, wiki, xray,
 )
 from guildboard.characters.service import Characters
 from guildboard.config import AppPaths
@@ -33,10 +32,6 @@ SIGNATURES = {
         "planned": [("build", NO), ("plan", NO), ("card", NO), ("refs", NO)],
         "in_combat": [("stats", NO), ("weapon", NO), ("refinement", NO), ("set_choice", NO), ("base_atk", NO), ("refs", NO)],
     },
-    damage: {
-        "estimate": [("combat", NO), ("card", NO), ("talent_level", NO), ("refs", NO)],
-        "change": [("now", NO), ("plan", NO)],
-    },
     readiness: {"score": [("build", NO), ("card", NO), ("refs", NO), ("combat", NO), ("weapon_level", None)]},
     xray: {"verdicts": [("build", NO), ("card", NO)], "roll_chart": [("build", NO), ("card", NO)]},
     nextsteps: {"rank": [("build", NO), ("card", NO), ("refs", NO), ("n", 3)]},
@@ -46,24 +41,8 @@ SIGNATURES = {
         "held_from_calculator": [("items", NO), ("has_user_info", NO)],
         "needs": [("amounts", NO), ("held", NO), ("typed", NO), ("sources", NO), ("names", NO)],
     },
-    odds: {
-        "per_run": [("slot", NO), ("main", NO), ("crit_main", NO), ("off_set", NO), ("refs", NO)],
-        "chance": [("p", NO), ("runs", NO)],
-        "day_reaching": [("p", NO), ("runs_by_day", NO), ("q", NO)],
-    },
-    week: {
-        "plan": [
-            ("focus", NO), ("resin_now", NO), ("resin_max", NO), ("discounts_left", NO), ("today", NO), ("refs", NO),
-            ("ticks", frozenset()), ("weekly_done", frozenset()), ("horizon", 35),
-        ],
-    },
     teams: {"build_teams": [("pool", NO), ("max_teams", NO), ("lead", ())], "team_ready": [("team", NO)]},
     theater: {"elements": [("text", NO)]},
-    notices: {
-        "due": [
-            ("now", NO), ("server", NO), ("week", NO), ("names", NO), ("switches", NO), ("sent", NO), ("ready_now", NO),
-        ],
-    },
 }
 
 FIELDS = {
@@ -73,11 +52,12 @@ FIELDS = {
     models.WeaponState: ["key", "name", "icon", "type", "rarity", "level", "refinement", "base_atk", "sub", "sub_value"],
     models.Build: [
         "key", "level", "ascension", "constellation", "talents", "bonus", "weapon", "pieces", "base", "add",
+        "affixes", "recommended",   # stage 2: HoYoLAB's talent rows and its recommended stats, both with defaults
     ],
     models.SetChoice: ["sets", "pieces"],
     models.Card: [
-        "key", "name", "element", "weapon_type", "rarity", "pronouns", "roles", "keeps_alive", "scaling", "damage_talent",
-        "talent_priority", "talent_table", "goals", "mains", "weights", "sets", "weapons", "partners", "partner_roles",
+        "key", "name", "element", "weapon_type", "rarity", "pronouns", "roles", "keeps_alive", "damage_talent",
+        "talent_priority", "goals", "mains", "weights", "sets", "weapons", "partners", "partner_roles",
         "teams", "notes", "confidence", "early", "stars", "chart_size", "edited",
     ],
     models.Effect: ["stat", "values", "when", "condition"],
@@ -88,7 +68,7 @@ FIELDS = {
     models.Source: ["kind", "where", "days"],
     models.Flower: ["key", "name", "places", "per_pass"],
     models.Refs: [
-        "weapons", "sets", "yields", "mains_20", "main_odds", "sub_weights", "roll_avg", "scaling", "reactions", "flowers",
+        "weapons", "sets", "yields", "mains_20", "main_odds", "sub_weights", "roll_avg", "reactions", "flowers",
     ],
     models.TypedPiece: ["slot", "main", "subs", "use"],
     models.Plan: [
@@ -96,10 +76,6 @@ FIELDS = {
     ],
     models.Need: ["material", "name", "icon", "amount", "held", "exact", "source"],
     models.Costs: ["talent", "ascension", "weapon", "exp", "weapon_exp", "level_phase"],
-    models.FocusInput: ["key", "name", "pronouns", "goal", "needs", "luck"],
-    models.Task: ["key", "day", "kind", "who", "where", "runs", "resin", "gets", "free", "why"],
-    models.DayPlan: ["day", "start", "spent", "tasks"],
-    models.WeekPlan: ["days", "ready", "luck", "resin_by"],
     models.Member: ["key", "name", "element", "roles", "keeps_alive", "wants", "ready"],
     models.Team: ["members", "ready"],
     models.Readiness: ["total", "parts"],
@@ -114,11 +90,11 @@ FIELDS = {
     records.WeaponRecord: [
         "id", "name", "icon", "type", "rarity", "level", "refinement", "ascension", "base_atk", "sub_prop", "sub_value",
     ],
-    records.SkillRecord: ["id", "skill_type", "name", "icon", "level"],
+    records.SkillRecord: ["id", "skill_type", "name", "icon", "level", "affixes"],
     records.PropRecord: ["prop", "base", "add", "final"],
     records.BuildRecord: [
         "id", "name", "element", "rarity", "level", "ascension", "constellation", "icon", "wiki_entry", "weapon",
-        "pieces", "skills", "props", "side_icon", "image",
+        "pieces", "skills", "props", "side_icon", "image", "recommended",
     ],
     records.BuildsRecord: ["builds", "prop_names"],
     records.CalcItemRecord: ["id", "name", "icon", "amount", "lacking"],
@@ -131,7 +107,8 @@ FIELDS = {
         "stygian_difficulty", "stygian_bosses", "stygian_ends",
         "abyss_starts", "abyss_battles", "abyss_wins", "abyss_chambers", "abyss_ranks", "theater_starts", "theater_medals",
         "theater_medal_count", "theater_flowers", "theater_seconds", "theater_ranks", "stygian_season", "stygian_starts",
-        "stygian_seconds", "stygian_medal", "stygian_next",
+        "stygian_seconds", "stygian_medal", "stygian_next", "theater_arcana",
+        "theater_heraldry",
     ],
     records.CalendarDetailRecord: ["theater_text", "banners"],
     records.CalcTarget: ["character_id", "level", "weapon", "talents"],
@@ -201,7 +178,7 @@ def test_the_constants_the_stores_and_the_wiki_have_the_contracts_names():
     assert WEAPON_TYPES == ("Sword", "Claymore", "Polearm", "Bow", "Catalyst")
     assert SLOTS == ("flower", "plume", "sands", "goblet", "circlet")
     assert STATS == ("hp", "atk", "def", "hp_pct", "atk_pct", "def_pct", "em", "er", "cr", "cd", "dmg", "heal")
-    assert (FOCUS_MAX, BUILT, RESIN_PER_DAY, HORIZON_DAYS) == (4, 50, 180, 35)
+    assert (PLANNED_MAX, BUILT) == (128, 50)
     assert art.ArtCache.CAP == 8 * 1024 * 1024
     for owner, names in METHODS.items():
         for name, wanted in names.items():
@@ -264,23 +241,13 @@ def test_the_cards_and_the_references_are_made_of_the_contracts_keys():
     assert set(card.goals) <= set(STATS) and set(card.weights) <= set(STATS)
     assert set(card.weights.values()) == {"wants", "some", "none"}
     assert set(card.weapons) <= set(refs.weapons) and set(card.sets[0].sets) <= set(refs.sets)
-    assert refs.scaling["elemental"][8:10] == (1.70, 1.80)  # levels 9 and 10
-    assert len(refs.scaling["elemental"]) == 15
     assert {slot: set(odds) for slot, odds in refs.main_odds.items()}["goblet"] >= {"dmg", "atk_pct"}
     assert refs.yields == {"books": 1.17, "boss": 2.5, "artifact_5star": 1.065}
     assert refs.flowers["flockingweed"].per_pass == 14
     assert sum(refs.main_odds["sands"].values()) == pytest.approx(1.0, abs=0.001)
 
 
-def test_the_week_and_endgame_samples_are_the_mockups():
-    focus = samples.week_focus()
-    assert [f.key for f in focus] == ["sandrone", "odette", "alyosha", "jahoda"]
-    assert samples.WEEK_TODAY == date(2026, 10, 25) and samples.WEEK_TODAY.weekday() == 6  # a Sunday
-    assert (samples.WEEK_RESIN_NOW, samples.WEEK_RESIN_MAX) == (200, 200)
-    assert [(n.name, n.amount) for n in focus[0].needs] == [("Madman's Restraint", 1), ("Philosophies of Vagrancy", 7)]
-    assert focus[0].luck == (("Cryo DMG Bonus goblet", 0.00554),)
-    assert focus[3].needs[1].material == "philosophies-of-vagrancy" and focus[3].needs[1].source.days == (2, 5, 6)
-
+def test_the_endgame_samples_are_the_mockups():
     roster = samples.endgame_roster()
     assert len(roster) == 15 and roster[0].key == "sandrone" and roster[12].key == "lan-yan"
     assert [m.ready for m in roster[:4]] == [78, 64, 52, 70]
@@ -297,7 +264,7 @@ def test_the_week_and_endgame_samples_are_the_mockups():
 
 FIXTURES = Path(__file__).resolve().parents[1] / "web" / "src" / "fixtures" / "characters"
 FIXTURE_TYPES = {
-    "roster": "Roster", "profile": "Profile", "planner": "Planner", "week": "Week", "endgame": "Endgame",
+    "roster": "Roster", "profile": "Profile", "planner": "Planner", "plan": "PlanModel", "endgame": "Endgame",
 }
 
 
@@ -328,11 +295,11 @@ def test_the_fixtures_hold_the_mockups_numbers():
     assert {row["key"]: row["text"] for row in profile["stats"]}["atk"] == "2,964"
     assert profile["rolls_by"] == {"wants": 28, "some": 5, "none": 8}
     assert sum(row["rolls"] for row in profile["rolls"]) == 41
-    week = json.loads((FIXTURES / "week.json").read_text(encoding="utf-8"))
-    assert [card["key"] for card in week["focus"]] == ["sandrone", "odette", "alyosha", "jahoda"]
-    assert len(week["days"]) == 7 and week["days"][0]["today"] and week["today"] == week["days"][0]
+    plan = json.loads((FIXTURES / "plan.json").read_text(encoding="utf-8"))
+    assert [row["key"] for row in plan["rows"]] == ["sandrone", "neuvillette", "odette", "jahoda"] and plan["count"] == 4
+    assert plan["weekday"] == 2 and plan["date"] == "2026-11-11"
     planner = json.loads((FIXTURES / "planner.json").read_text(encoding="utf-8"))
-    assert planner["with_plan"]["change"] == 35 and planner["plan"]["talents"]["normal"] == 10
+    assert planner["plan"]["talents"]["normal"] == 10
     endgame = json.loads((FIXTURES / "endgame.json").read_text(encoding="utf-8"))
     assert [mode["key"] for mode in endgame["modes"]] == ["abyss", "theater", "stygian"]
     assert [element for element in endgame["theater"]["elements"]] == ["Cryo", "Electro", "Anemo"]

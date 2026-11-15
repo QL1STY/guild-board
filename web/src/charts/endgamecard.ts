@@ -22,12 +22,26 @@ export function starCells(chambers: { name: string; stars: number }[]): { floor:
   })
 }
 
+/** A season's acts: an Arcana Challenge's medal list holds its ten acts first, then its Arcana fights. */
+export const THEATER_ACTS = 10
+
+export type ActCell = { state: 'medal' | 'done' | 'off'; label: string; arcana: boolean }
+
 /**
  * The Theater's acts as circles: 'medal' where the act earned one, 'done' where it was cleared without, 'off' where it
- * was not reached. `act` is the act reached, and `medals` the season's list, one entry for each act.
+ * was not reached. `act` is the act reached, and `medals` the season's list, one entry for each act and then one for each
+ * Arcana fight, labelled A1, A2. `arcana` is the Arcana fights cleared, or null where the detail does not know it: then
+ * only an Arcana fight with its medal is known to be cleared.
  */
-export function actCells(medals: boolean[], act: number): ('medal' | 'done' | 'off')[] {
-  return medals.map((medal, at) => (at >= act ? 'off' : medal ? 'medal' : 'done'))
+export function actCells(medals: boolean[], act: number, arcana: number | null): ActCell[] {
+  return medals.map((medal, at) => {
+    if (at < THEATER_ACTS) {
+      return { state: at >= act ? 'off' : medal ? 'medal' : 'done', label: String(at + 1), arcana: false }
+    }
+    const fight = at - THEATER_ACTS
+    const cleared = medal || (arcana !== null && fight < arcana)
+    return { state: !cleared ? 'off' : medal ? 'medal' : 'done', label: `A${fight + 1}`, arcana: true }
+  })
 }
 
 /** A time in battle: "4 min 40 s", "16 min 42 s", "42 s", "2 min". */

@@ -1,7 +1,7 @@
 {
   "key": "neuvillette", "name": "Neuvillette", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "hp",
-  "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"],
   "goals": {"er": 130},
   "mains": {"sands": ["hp_pct"], "goblet": ["dmg", "hp_pct"], "circlet": ["cr", "cd", "hp_pct"]},
   "weights": {"hp_pct": "wants", "cr": "wants", "cd": "wants", "er": "some", "hp": "some", "atk_pct": "none", "atk": "none", "em": "none", "def_pct": "none", "def": "none"},

@@ -6,7 +6,7 @@ import { expect, test } from './fixtures.ts'
  * and five artifacts) has to fit that height. The windows are what the player's are, as the zoom shows them: 1,640 x 1,100 in
  * the usual window; and 2,000 x 1,125, 2,560 x 1,400 and 2,560 x 1,440 full screen (1,640 x 922, 897 and 923 CSS pixels).
  */
-test.use({ demoNow: '2026-10-25T08:00:00+00:00', weekAndEndgame: false })
+test.use({ demoNow: '2026-10-25T08:00:00+00:00', endgame: false })
 
 const WINDOWS = [
   { name: 'usual 1640 x 1100', height: 1100, device: 1 },

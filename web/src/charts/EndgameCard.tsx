@@ -1,4 +1,4 @@
-import { type CSSProperties, useState } from 'react'
+import { type CSSProperties, Fragment, useState } from 'react'
 import '../styles/endgame-card.css'
 import { num } from '../format.ts'
 import type {
@@ -28,6 +28,9 @@ const HEADER_SIZE = 1536
 
 /** A style that gives an element its place in a line of things that come in one after another. */
 const placed = (index: number): CSSProperties => ({ '--i': index }) as CSSProperties
+/** The marks' columns: the acts, then a thin line and the Arcana fights where the season has them. */
+const markColumns = (acts: number, fights: number): string =>
+  `repeat(${acts}, minmax(0, 1fr))${fights > 0 ? ` 7px repeat(${fights}, minmax(0, 1fr))` : ''}`
 
 /** What the card shows while the core has not answered yet, or could not. */
 export function EndgameWaiting({ error }: { error: string | null }) {
@@ -224,30 +227,64 @@ function Abyss({ mode }: { mode: EndgameAbyss }) {
 }
 
 function Theater({ mode }: { mode: EndgameTheater }) {
-  const acts = actCells(mode.medals ?? [], mode.act)
+  const acts = actCells(mode.medals ?? [], mode.act, mode.arcana ?? null)
   // A detail kept by 1.0.1 has no medals, flowers, time or highlights: none of them is shown, rather than a 0.
   const medals = mode.medal_count === null ? null : medalsText(mode.medal_count)
   const ranks = mode.ranks ?? []
+  const actCount = acts.filter((cell) => !cell.arcana).length
+  const fights = acts.length - actCount
+  const cleared = acts.filter((cell) => cell.arcana && cell.state !== 'off').length
+  const arcana = cleared > 0 ? `Arcana ${cleared}` : null
+  const caption = ['reached', arcana, medals].filter((part) => part !== null).join(' · ')
+  const label = [
+    `Act ${mode.act} of ${actCount} reached`,
+    fights > 0 ? `Arcana ${cleared} of ${fights}` : null,
+    medals,
+  ].filter((part) => part !== null)
+  // HoYoLAB's own medal and cleared mark, once the art cache keeps both; else the card's own circles.
+  const marks = mode.marks ?? { medal: null, cleared: null, flower: null, heraldry: null }
+  const official = marks.medal !== null && marks.cleared !== null
   return (
     <>
-      <Big figure={`Act ${mode.act}`} caption={medals === null ? 'reached' : `reached · ${medals}`} best={mode.best} />
+      <div className={marks.heraldry !== null ? 'ec-big-heraldry' : undefined}>
+        {marks.heraldry !== null && <img className="ec-heraldry" src={marks.heraldry} alt="" draggable={false} />}
+        <Big figure={`Act ${mode.act}`} caption={caption} best={mode.best} />
+      </div>
       {acts.length > 0 && (
         <>
-          <div
-            className="ec-acts"
-            style={{ '--acts': acts.length } as CSSProperties}
-            role="img"
-            aria-label={`Act ${mode.act} reached of ${acts.length}${medals === null ? '' : `, ${medals}`}`}
-          >
-            {acts.map((cell, at) => (
-              <span className={`ec-act ${cell}`} key={at} style={placed(at)}>
-                {at + 1}
-              </span>
-            ))}
-          </div>
-          <div className="ec-legend">
+          {official ? (
+            <div
+              className="ec-marks"
+              style={{ gridTemplateColumns: markColumns(actCount, fights) }}
+              role="img"
+              aria-label={label.join(', ')}
+            >
+              {acts.map((cell, at) => (
+                <Fragment key={at}>
+                  {cell.arcana && at === actCount && <span className="ec-split" />}
+                  <span className={`ec-mark ${cell.arcana ? 'arcana ' : ''}${cell.state}`} style={placed(at)}>
+                    <span className="ec-disc">
+                      {cell.state !== 'off' && (
+                        <img src={cell.state === 'medal' ? marks.medal! : marks.cleared!} alt="" draggable={false} />
+                      )}
+                    </span>
+                    {cell.label}
+                  </span>
+                </Fragment>
+              ))}
+            </div>
+          ) : (
+            <div className="ec-acts" style={{ '--acts': acts.length } as CSSProperties} role="img" aria-label={label.join(', ')}>
+              {acts.map((cell, at) => (
+                <span className={`ec-act ${cell.arcana ? 'arcana ' : ''}${cell.state}`} key={at} style={placed(at)}>
+                  {cell.label}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className={official ? 'ec-legend official' : 'ec-legend'}>
             <span>
-              <i className="medal" />
+              {official ? <img className="ec-legend-mark" src={marks.medal!} alt="" draggable={false} /> : <i className="medal" />}
               Medal
             </span>
             <span>
@@ -268,9 +305,13 @@ function Theater({ mode }: { mode: EndgameTheater }) {
           ))}
           {mode.flowers !== null && (
             <div className="ec-stat">
-              <span className="ec-glyph flower">
-                <Sign name="flower" />
-              </span>
+              {marks.flower !== null ? (
+                <img className="ec-glyph-pic" src={marks.flower} alt="" draggable={false} />
+              ) : (
+                <span className="ec-glyph flower">
+                  <Sign name="flower" />
+                </span>
+              )}
               <span className="ec-what">Fantasia Flowers used</span>
               <span className="ec-v">{num(mode.flowers)}</span>
             </div>

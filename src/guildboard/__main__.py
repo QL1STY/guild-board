@@ -151,8 +151,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="with --demo: the instant the demo clock starts at, for example 2026-10-13T08:00:00+00:00",
     )
     parser.add_argument(
-        "--week-and-endgame", action="store_true",
-        help="with --demo: show Your week and Endgame, which are hidden (the browser tests run with them shown)",
+        "--endgame", action="store_true",
+        help="with --demo: show Endgame, which is hidden (the browser tests run with it shown)",
+    )
+    parser.add_argument(
+        "--verdict", action="store_true",
+        help="accepted and does nothing: the planner's verdict has been on since 2.2.0 (kept so older scripts still start)",
     )
     args = parser.parse_args(argv)
     if args.shell and args.no_shell:
@@ -163,11 +167,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         # no window to show, and makes nothing: not even the data folder.
         print(NO_SHELL_TEXT)
         return 2
-    if args.week_and_endgame and not args.demo:
-        print("--week-and-endgame needs --demo.")
+    if args.endgame and not args.demo:
+        print("--endgame needs --demo.")
         return 2
-    if args.week_and_endgame:
-        characters.WEEK_AND_ENDGAME = True
+    if args.endgame:
+        characters.ENDGAME = True
     demo_now = None
     if args.demo_now is not None:
         if not args.demo:

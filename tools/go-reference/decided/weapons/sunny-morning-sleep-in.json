@@ -1,0 +1,7 @@
+{
+  "toggles": {
+    "sunny-morning-sleep-in:afterBurst": {"on": true, "state": "on", "label": "After her Burst hits", "covers": [], "reason": "It lasts 30 seconds after her Elemental Burst hits, longer than a Burst takes to come back, so it is up between her Bursts; a wielder whose Burst deals no damage, such as Nahida, never starts it and can switch it off."},
+    "sunny-morning-sleep-in:afterSkill": {"on": false, "state": "on", "label": "After her Skill hits", "covers": [], "reason": "It lasts 9 seconds after her Skill hits, which covers only part of her attacks."},
+    "sunny-morning-sleep-in:swirl": {"on": false, "state": "on", "label": "After a Swirl", "covers": [], "reason": "It needs a Swirl reaction, which depends on the elements of the team."}
+  }
+}

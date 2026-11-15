@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a1BedRest": {"on": true, "state": "on", "label": "Semi-Strict Bedrest", "covers": ["skill", "burst"], "reason": "Her Skill gives her an 8% Hydro DMG Bonus for 18 seconds, which covers her Skill's bubbles and a Burst cast after it."},
+    "a4TeamBond": {"on": false, "state": "10000", "label": "Party Bond of Life", "covers": [], "reason": "Adds Healing Bonus only, which none of her counted hits use."},
+    "skillTier": {"on": false, "state": "2", "label": "Skill held longer", "covers": [], "reason": "Depends on how long the player holds her Skill."}
+  }
+}

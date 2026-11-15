@@ -17,12 +17,12 @@ import math
 import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, Sequence
 
 from guildboard import netpolicy
 from guildboard.characters.models import Source
 from guildboard.clock import Clock
-from guildboard.htmltext import MAX_FIELD_CHARS, strip_tags
+from guildboard.htmltext import MAX_FIELD_CHARS, clean_row_name, strip_tags
 from guildboard.metrics import slug
 from guildboard.pulls import wiki as pulls_wiki
 from guildboard.store import Store, WikiEntryRow, WikiItemRow
@@ -44,8 +44,12 @@ NOT_FOUND = 404  # the retcode with which the wiki answers for an entry it does 
 
 # The modules of an entry that Guild Board keeps: the stories, voice-overs and videos are not read.
 _KEPT_MODULES = {"Attributes", "Ascend", "Gallery", "Talents", "Constellation", "Set"}
-# What a talent's table of levels and its pictures weigh is left out of what is kept.
-_TALENT_DROPPED = ("attributes", "talent_img", "talent_imgs", "points")
+# What a talent's pictures weigh is left out of what is kept; its table of levels is kept (the damage engine's rows).
+_TALENT_DROPPED = ("talent_img", "talent_imgs", "points")
+# The format of a stored entry: how much of the wiki's answer Guild Board keeps of it. 2 keeps each talent's table of levels
+# (`attributes`). An entry stored in a lower format (none is stamped 1) is read once more, in the background and only after
+# the player's consent, for a character's entry alone; the others lose nothing by it.
+ENTRY_FORMAT = 2
 # The entries whose costs are materials, which are named in the entry itself, not always in English.
 _WITH_COSTS = ("character", "weapon")
 # An endgame mode's Tutorial entry (the Stats design, 3.2), of which the icon and the pictures are kept.
@@ -93,6 +97,18 @@ def stat_key(text: str | None) -> str | None:
     if name.endswith("dmg bonus"):
         return "dmg"
     return None
+
+
+def _table(attributes: Any) -> list[dict[str, Any]]:
+    """A talent's table of levels as kept: its rows, each `{"key": name, "values": [text per level]}`, the first being the
+    levels' header. A row that is not of that shape is left out."""
+    rows: list[dict[str, Any]] = []
+    for row in attributes if isinstance(attributes, list) else ():
+        values = row.get("values") if isinstance(row, dict) else None
+        if not isinstance(values, list) or not isinstance(row.get("key"), str):
+            continue
+        rows.append({"key": clean_row_name(row["key"]), "values": [" ".join(str(value).split())[:200] for value in values]})
+    return rows
 
 
 def _number(value: Any) -> float | None:
@@ -162,6 +178,12 @@ def parse_source(source_text: str, type_text: str) -> Source:
 # ------------------------------------------------------------------------------------------------ the wiki
 
 
+def _outdated(kind: str, data: Mapping[str, Any]) -> bool:
+    """Whether a stored entry keeps less than the wiki's reads keep now: a character's entry of an older format."""
+    format_ = data.get("format", 1)
+    return kind == "character" and (not isinstance(format_, int) or format_ < ENTRY_FORMAT)
+
+
 class CharacterWiki:
     def __init__(self, store: Store, clock: Clock, fetch: Fetch | None, version: Callable[[], str]) -> None:
         self._store = store
@@ -171,6 +193,7 @@ class CharacterWiki:
         self._lock = asyncio.Lock()  # one read at a time, so that the one that waits finds what was just read
         self._missing: dict[str, datetime] = {}  # entries the wiki lacks, by kind and id, and when each was asked for
         self._list_tried: dict[str, datetime] = {}  # when each kind's list was last read, or failed to be
+        self.stored = 0  # how many entries were kept by a read (a new one or one that replaced another), for whoever shows them
 
     # ---------------------------------------------------------------------------------------------- lists
     async def lists(self) -> None:
@@ -226,7 +249,7 @@ class CharacterWiki:
         kept = self._store.wiki_entry(entry_page_id)
         if kept is not None and kept.kind != kind:
             kept = None
-        if kept is not None and kept.version == self._version():
+        if kept is not None and kept.version == self._version() and not _outdated(kept.kind, kept.data):
             return kept
         if self._fetch is None or not entry_page_id.isascii() or not entry_page_id.isdigit():
             return kept
@@ -250,7 +273,13 @@ class CharacterWiki:
             data["names"] = await self._english_names(data)
         row = WikiEntryRow(entry_page_id, kind, str(data["name"]), data, self._version(), now)
         self._store.put_wiki_entry(row)
+        self.stored += 1
         return row
+
+    def wanted_again(self) -> set[tuple[str, str]]:
+        """The stored character entries of a format lower than `ENTRY_FORMAT`, as (kind, entry id): each is read once more
+        when the Characters service next reads it (in the background, after consent; never in the demo). Nothing is read here."""
+        return {("character", ident) for ident in self._store.wiki_entries_below_format("character", ENTRY_FORMAT)}
 
     @staticmethod
     def _parse_entry(body: bytes, entry_page_id: str, kind: str = "") -> dict[str, Any] | None:
@@ -267,7 +296,7 @@ class CharacterWiki:
         if answer.get("retcode") != 0 or not isinstance(page, dict) or not page.get("name"):
             raise ValueError("the wiki's entry cannot be read")
         if kind == TUTORIAL:
-            return _tutorial(page, entry_page_id)
+            return {**_tutorial(page, entry_page_id), "format": ENTRY_FORMAT}
         modules: dict[str, dict[str, Any]] = {}
         for module in page.get("modules") or []:
             if not isinstance(module, dict) or module.get("name") not in _KEPT_MODULES:
@@ -281,7 +310,8 @@ class CharacterWiki:
                 if component.get("component_id") == "talent" and isinstance(value, dict):
                     for talent in value.get("list") or []:
                         if isinstance(talent, dict):
-                            talent["leveled"] = bool(talent.get("attributes"))  # only a talent with levels has a table
+                            talent["attributes"] = _table(talent.get("attributes"))
+                            talent["leveled"] = bool(talent["attributes"])  # only a talent with levels has a table
                             for field in _TALENT_DROPPED:
                                 talent.pop(field, None)
                 parsed[str(component.get("component_id"))] = value
@@ -297,6 +327,7 @@ class CharacterWiki:
                 if isinstance(item, dict)
             },
             "modules": modules,
+            "format": ENTRY_FORMAT,
         }
 
     async def _english_names(self, data: dict[str, Any]) -> dict[str, str]:
@@ -578,18 +609,35 @@ def _tutorial(page: Mapping[str, Any], entry_page_id: str) -> dict[str, Any]:
     }
 
 
-def _talents(data: Mapping[str, Any]) -> tuple[tuple[str, str, str | None, str], ...]:
-    """(kind, name, icon, text). The talents that have levels are the normal attack first, the skill second and the burst
-    last; a leveled talent between them (an alternate sprint) and every talent with no levels are passives."""
-    talents = _talent_list(data)
+def _talent_kinds(talents: Sequence[Mapping[str, Any]]) -> dict[int, str]:
+    """The index of the normal attack, the skill and the burst among an entry's talents: the leveled ones, first, second and last."""
     leveled = [index for index, talent in enumerate(talents) if talent.get("leveled")]
-    kinds = {}
+    kinds: dict[int, str] = {}
     if leveled:
         kinds[leveled[0]] = "normal"
     if len(leveled) > 1:
         kinds[leveled[1]] = "skill"
     if len(leveled) > 2:
         kinds[leveled[-1]] = "burst"
+    return kinds
+
+
+def talent_tables(data: Mapping[str, Any]) -> dict[str, list[dict[str, Any]]]:
+    """The tables of levels of a stored character entry's normal attack, skill and burst, by kind: each a list of rows
+    `{"key": name, "values": [text per level]}`, the first being the levels' header. A kind whose talent has no table (an entry
+    kept before the tables were, or a talent the wiki gives none) is missing."""
+    talents = _talent_list(data)
+    return {
+        kind: list(talents[index]["attributes"])
+        for index, kind in _talent_kinds(talents).items() if talents[index].get("attributes")
+    }
+
+
+def _talents(data: Mapping[str, Any]) -> tuple[tuple[str, str, str | None, str], ...]:
+    """(kind, name, icon, text). The talents that have levels are the normal attack first, the skill second and the burst
+    last; a leveled talent between them (an alternate sprint) and every talent with no levels are passives."""
+    talents = _talent_list(data)
+    kinds = _talent_kinds(talents)
     return tuple(
         (
             kinds.get(index, "passive"),

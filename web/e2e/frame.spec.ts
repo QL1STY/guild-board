@@ -536,7 +536,7 @@ async function railSigns(page: Page) {
 
 test('each rail link shows its sign, in the rail’s muted colour and in gold on the current page', async ({ page }) => {
   const rail = page.getByRole('navigation', { name: 'Pages' })
-  const names = ['Board', 'Achievements', 'Characters', 'Your week', 'Backlog', 'Map', 'Stats', 'Pulls', 'Ledger', 'Friends', 'Settings']
+  const names = ['Board', 'Achievements', 'Characters', 'Plan', 'Backlog', 'Map', 'Stats', 'Pulls', 'Ledger', 'Friends', 'Settings']
   await expect(rail.locator('.gb-nav')).toHaveText(names)
   const signs = await railSigns(page)
   expect(signs.map((one) => one.signs)).toEqual(names.map(() => 1))
@@ -549,7 +549,7 @@ test('each rail link shows its sign, in the rail’s muted colour and in gold on
     ['Board', GOLD],
     ['Achievements', RAIL_MUTED],
     ['Characters', RAIL_MUTED],
-    ['Your week', RAIL_MUTED],
+    ['Plan', RAIL_MUTED],
     ['Backlog', RAIL_MUTED],
     ['Map', RAIL_MUTED],
     ['Stats', RAIL_MUTED],

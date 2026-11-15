@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "offField": {"on": false, "state": "on", "label": "Constellation 1 off the field", "covers": [], "reason": "A Constellation 1 Energy Recharge bonus while she is off the field, which changes none of her hits."}
+  }
+}

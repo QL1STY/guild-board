@@ -1,7 +1,7 @@
 {
   "key": "sigewinne", "name": "Sigewinne", "element": "Hydro", "weapon_type": "Bow", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "hp",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"hp": 60000, "er": 150},
   "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct", "dmg"], "circlet": ["hp_pct", "heal", "cr", "cd"]},
   "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "cr": "some", "cd": "some", "atk_pct": "none", "atk": "none", "em": "none", "def_pct": "none", "def": "none"},

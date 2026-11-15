@@ -56,18 +56,13 @@ test("the Theater's elements come from the calendar; a pick of three is sent, ke
   expect((await api.get<Endgame>('/api/endgame')).theater).toMatchObject({ from_calendar: true, calendar_elements: ['Cryo', 'Electro', 'Anemo'] })
 })
 
-test('an action to clear everything opens a planner, or adds to the focus once there is room', async ({ page, core, api }) => {
+test('an action to clear everything opens a planner, or adds a character to the plan', async ({ page, core, api }) => {
   await page.goto(`${core.origin}/#/characters/endgame`)
   const model = await api.get<Endgame>('/api/endgame')
   const planner = model.clear.find((one) => one.action === 'planner')
   const focus = model.clear.find((one) => one.action === 'focus')
   expect(planner && focus).toBeTruthy()
-  // The focus is full, so the first press is refused in plain words.
-  await page.getByRole('button', { name: 'Add to your focus' }).first().click()
-  await expect(page.getByText('Four at most: take one out first.')).toBeVisible()
-  await api.put('/api/focus', { characters: ['sandrone', 'odette', 'alyosha'] })
-  await page.reload()
-  await page.getByRole('button', { name: 'Add to your focus' }).first().click()
+  await page.getByRole('button', { name: 'Add to the plan' }).first().click()
   await expect.poll(async () => (await api.get<{ focus: string[] }>('/api/characters')).focus).toContain(focus!.target)
   await page.getByRole('link', { name: 'Open the planner' }).first().click()
   await expect(page).toHaveURL(new RegExp(`#/characters/${planner!.target}/plan$`))

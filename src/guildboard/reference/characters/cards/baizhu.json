@@ -1,7 +1,7 @@
 {
   "key": "baizhu", "name": "Baizhu", "element": "Dendro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["he", "him", "his"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "hp",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["healer", "support"], "keeps_alive": true,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"hp": 50000, "er": 160},
   "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct"], "circlet": ["hp_pct", "heal"]},
   "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "cr": "some", "em": "some", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none", "cd": "none"},

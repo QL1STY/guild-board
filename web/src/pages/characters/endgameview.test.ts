@@ -80,8 +80,8 @@ test('a team says its weakest member in the core\'s own words, and nothing when 
   expect(weakestLine({ ...endgame.abyss[0], note: null })).toBeNull()
 })
 
-test('each action to clear everything opens the planner or adds to the focus, in words that need no pronoun', () => {
+test('each action to clear everything opens the planner or adds to the plan, in words that need no pronoun', () => {
   const [planner, focus] = endgame.clear
   expect(clearAction(planner)).toEqual({ label: 'Open the planner', href: '#/characters/sandrone/plan', focus: null })
-  expect(clearAction(focus)).toEqual({ label: 'Add to your focus', href: null, focus: 'vesna' })
+  expect(clearAction(focus)).toEqual({ label: 'Add to the plan', href: null, focus: 'vesna' })
 })

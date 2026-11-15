@@ -29,8 +29,10 @@ export type Status = {
   version: string
   /** The notes of this version, until the player has pressed Got it; null otherwise. */
   whats_new: Changes | null
-  /** Whether Your week, Endgame and the Today widget are shown; the core hides them while this is off. */
-  week_and_endgame: boolean
+  /** Whether the Endgame tab is shown; it is hidden on its own too, to be rebuilt. */
+  endgame: boolean
+  /** Whether the planner shows its verdict (and the core sends the hits it is computed from); off in a shipped build. */
+  verdict: boolean
   /** That the game's history stopped updating: what to do, and the page to do it on (freshness.py); null while it is well. */
   history_notice: { text: string; page: 'ledger' | 'settings' } | null
   /** The online account: signed in or not, and who as. */
@@ -116,10 +118,6 @@ export type Settings = {
   overlay_pinned: boolean
   /** A line over the game when a timer is ready, while the game runs (spec 10). */
   overlay_lines: boolean
-  /** The Characters notices (the Characters design, 6.6), each on by default; a value left out counts as on. */
-  characters_notice_weekly?: boolean
-  characters_notice_domain?: boolean
-  characters_notice_ready?: boolean
   /** How large the overlay draws, in percent: 100, the Board's size and the default, or 125, 150, 175 or 200. */
   overlay_size: number
   /** The game runs in full screen: the open overlay takes the clicks but never the focus, so the game is not minimized. */
@@ -795,7 +793,7 @@ export type Roster = { owned: number; all: number; focus: string[]; entries: Ros
 export type StatRow = { key: string; label: string; text: string; value: number; her: number; weapon: number; artifacts: number; scale: number; goal: number | null; goal_text: string | null; met: boolean | null; how: string }
 export type RollRow = { key: string; label: string; rolls: number; weight: Weight; where: string }
 export type SubView = { key: string; label: string; text: string; rolls: number; weight: Weight }
-export type PieceView = { slot: Slot; name: string; icon: string | null; level: number; rarity: number; main: { label: string; text: string }; subs: SubView[]; verdict: 'keep' | 'level' | 'replace'; why: string; crit_value: number; rolls_wanted: number; rolls_all: number; set_name: string }
+export type PieceView = { slot: Slot; name: string; icon: string | null; level: number; rarity: number; main: { label: string; text: string }; subs: SubView[]; verdict: 'keep' | 'level' | 'replace'; why: string; crit_value: number; cv_tier: number; rolls_wanted: number; rolls_all: number; set_name: string }
 export type WeaponView = { key: string; name: string; icon: string | null; rarity: number; level: number; refinement: number; base_atk: number; sub: { label: string; text: string } | null; passive: { name: string; text: string }; verdict: string; refinements: { label: string; values: string[] }[] }
 export type MaterialRow = { key: string; name: string; icon: string | null; held: number | null; held_exact: boolean; needed: number; state: 'ready' | 'missing' | 'unknown'; source: string; typed: boolean }
 export type Readiness = { total: number; parts: { key: 'level' | 'talents' | 'weapon' | 'artifacts'; label: string; value: number; text: string }[] }
@@ -816,7 +814,7 @@ export type Profile = {
     edited: string[]; confidence: string; early: boolean
     /** The card itself, for the Card panel (cardview.ts's CardExtra): its fields by name, tuples as arrays. */
     fields: {
-      roles: string[]; keeps_alive: boolean; scaling: 'atk' | 'hp' | 'def' | 'em'; damage_talent: 'normal' | 'skill' | 'burst'
+      roles: string[]; keeps_alive: boolean; damage_talent: 'normal' | 'skill' | 'burst'
       talent_priority: ('normal' | 'skill' | 'burst')[]; goals: Record<string, number>
       mains: Record<'sands' | 'goblet' | 'circlet', string[]>; weights: Record<string, Weight>
       sets: { sets: string[]; pieces: '4' | '2+2' }[]; weapons: string[]; partners: string[]; partner_roles: string[]
@@ -831,34 +829,133 @@ export type Profile = {
 export type Option = { key: string; name: string; icon: string | null; text: string; tag: string | null }
 export type Planner = {
   key: string; name: string; element: Element; pronouns: Pronouns; icon: string | null; damage_role: boolean
-  now_build: { level: number; refinement: number | null; weapon_level: number | null } | null   // null: not owned; the weapon's two are null without one
-  plan: PlanBody; now: { readiness: number; damage: number }; with_plan: { readiness: number; damage: number; change: number | null }
+  now_build: { level: number; constellation: number; refinement: number | null; weapon_level: number | null } | null   // null: not owned; the weapon's two are null without one
+  plan: PlanBody
   talents: { kind: 'normal' | 'skill' | 'burst'; label: string; name: string; icon: string | null; now: number; target: number; bonus: number; max: number }[]
   weapons: Option[]; refinement_note: string; sets: Option[]; set_text: string
   mains: { slot: 'sands' | 'goblet' | 'circlet'; icon: string | null; options: { key: string; label: string }[]; now: string; chosen: string }[]
   level_pieces: { slot: Slot; label: string; note: string; on: boolean }[]
   weights: { key: string; label: string; weight: Weight }[]
-  stats: { key: string; label: string; now: number; now_text: string; plan: number; plan_text: string; scale: number; goal: number | null; change_text: string; how: string }[]
-  goals_met: { label: string; text: string; met: boolean }[] | null       // supports, in place of the damage meter
   warning: string | null
-  try: { crit_value: number; rolls_wanted: number; rolls_all: number; change: number | null; against: string } | null
-  takes: { today_note: string; materials: MaterialRow[]; resin_today: { label: string; resin: number }[]; resin_cap: number; find: { label: string; icon: string | null; per_run: number; paths: { label: string; odds: string; best: boolean }[]; note: string }[] }
-  days: { points: number[]; half: string | null; most: string | null; talents_on: string | null; summary: string }
-  in_focus: number | null; sync: CharSync
+  sync: CharSync
+  sim: PlannerSim | null                                                  // null: not owned
 }
+export type PlannerSim = {
+  panel: Record<'hp' | 'atk' | 'def' | 'em' | 'er' | 'cr' | 'cd' | 'dmg' | 'heal' | 'physical', number>      // HoYoLAB's final values
+  base: Record<'hp' | 'atk' | 'def', number>; char_base_atk: number                              // base ATK less her weapon's
+  weapon: SimWeapon | null; sets: SimSet[]; pieces: SimPiece[]; cv_total: number; cv_set_tier: number
+  tables: {
+    rolls: Record<string, Record<string, number[]>>; mains: Record<string, Record<string, number[]>>; weights: Record<string, number>; start4_odds: number
+    /** The damage engine's constants (tables.json): the level multipliers (index: level - 1), the amplifying and additive reactions'
+     *  constants (by name), Lunar's and Stellar's reaction multipliers, Stellar-Conduct's by recorded hits (0 to 12), the Polestar field's Cryo and Electro DMG Bonus by the same count and the enemy. */
+    level_mult: number[]; amplifying: Record<string, number>; additive: Record<string, number>; lunar: Record<string, number>
+    stellar_conduct: number[]; polestar_dmg: number[]; enemy: { level: number; res: number }
+  }
+  /** Her hits and kit for the verdict; null while the verdict switch is off (Status.verdict). */
+  hits: PlannerHits | null
+}
+/** A hit's scaling stat (atk, hp, def or em) and its multiplier (185.76% is 1.8576). */
+export type HitTerm = { stat: string; mult: number }
+/** One damage row of a talent. `kind`: physical, elemental, lunar-bloom, lunar-charged, lunar-crystallize, stellar-conduct or
+ *  stellar-swirl. `move`: normal, charged, plunging, skill or burst. `element` is a Stellar hit's own, else null.
+ *  `alternative`: the name of the source row when a slash printed several hits (the rows share it; Low/High plunge keeps its first only), else null. `main`:
+ *  the kit names it among her main rows (every row of a kit that names none). A row that prints two hits with a slash is two rows.
+ *  `instances`: how many hits one landing of the row is (`47.4%+88.1%` is 2; a sum of ATK and Elemental Mastery is 1), so that a
+ *  flat bonus per hit (Aggravate, Spread) is added that often. */
+export type HitRow = {
+  name: string; kind: string; terms: HitTerm[]; flat: number; count: number; instances: number; move: string; element: Element | null; alternative: string | null; main: boolean
+  /** Only for a character whose damage depends on her team (`PlannerHits.party`): the row takes the team's element, dealt once for each element of the team shape; */
+  takes?: boolean
+  /** and the team shapes that deal the row (null: every one). */
+  only?: string[] | null
+}
+export type HitTalent = {
+  key: 'normal' | 'skill' | 'burst'; name: string; icon: string | null; level: number; main: boolean
+  /** Where the rows are from: HoYoLAB's own list, the wiki's table at her level, or none (no table, or a level past its last). */
+  source: 'hoyolab' | 'wiki' | null; rows: HitRow[]
+}
+/** An effect of the kit data: it adds min(rate x max(stat - over, 0), cap) to the bucket `to` while its gates hold (kits.schema.json).
+ *  The elements named inside a bucket (`dmg:cryo`) are the kit's lowercase names; every `element` field of the block is an `Element`.
+ *  A `row` effect's rate is already at the level of the talent it is a row of. A weapon's `rate` and `cap` are lists by refinement. */
+export type Effect = {
+  from: string | null; reads: 'premod' | 'final' | null; to: string; rate: number | number[]; cap: number | number[] | null
+  cap_from: 'base_atk' | null; over: number | null; pieces: 2 | 4 | null; from_ascension: number | null; from_constellation: number | null
+  talents: string[] | null; weapon_types: string[] | null; hits: string[] | null; row: { talent: 'normal' | 'skill' | 'burst'; name: string } | null
+  while: string | null; in_stats: boolean
+  /** Only for a character whose damage depends on her team: the team shapes the effect holds in (missing or null: every one). */
+  party?: string[] | null
+  /** Only for an effect that also multiplies by a second stat of hers, read as `reads` says (Kokomi's A4: 15% of Max HP times her Healing Bonus). */
+  times?: 'heal' | null
+  /** Only for an effect whose `hits` are rows of one talent when another talent has rows of the same names (Skirk's Normal Attack and her Skill both have a "1-Hit DMG"). */
+  in_talent?: 'normal' | 'skill' | 'burst' | null
+  /** Only for an effect that reads two or more of her states (Kaveh's A4: after his Burst, by its stacks): the toggles besides `while` that must be on too. */
+  also?: string[] | null
+}
+/** A team shape a character's damage depends on (kits.json `party`): its words and the elements the rows that take the team's element deal. */
+export type PartyOption = { id: string; label: string; elements: string[] }
+/** The team shapes a character's damage depends on: the usual one (`default`, and why), the rest, and the rows of the kit that take the team's
+ *  element or are dealt only by some shapes (by talent). */
+export type PartyBlock = {
+  default: string; reason: string; options: PartyOption[]
+  element_rows: Partial<Record<'normal' | 'skill' | 'burst', string[]>>
+  only_rows: Partial<Record<'normal' | 'skill' | 'burst', Record<string, string[]>>>
+}
+/** A state the kit data counts when it is on: `on` is the decided default, `state` what an effect reads it as when on. */
+export type Toggle = { name: string; label: string; on: boolean; covers: string[]; state: string }
+/** Her moves that deal `element` while `while` is on (always, with none). `party`: only for a character whose damage depends on her team,
+ *  the team shapes the infusion holds in (missing: every one). */
+export type Infusion = { talents: string[]; element: Element; while: string | null; party?: string[] }
+export type GearEffects = { effects: Effect[]; toggles: Toggle[] }
+export type PlannerHits = {
+  element: Element; weapon_type: string; level: number
+  /** Whether a person has gone through her kit's states (kits.json `checked`); false: "Her passives are not counted yet". */
+  checked: boolean
+  /** Why the comparison with Genshin Optimizer could not prove her kit (kits.json `unsure`): her verdict is "It depends" with it. */
+  unsure: string | null
+  /** The team shapes her damage depends on, or null (kits.json `party`). */
+  party: PartyBlock | null
+  /** The stats HoYoverse recommends for her, in the simulator's keys (subs first, then the three mains). */
+  recommended: string[]
+  talents: HitTalent[]
+  /** Her own effects, her constellations and ascension already held; her weapon's and sets' are in the two maps below. */
+  effects: Effect[]; toggles: Toggle[]; infused: Infusion[]
+  /** The effects of her own weapon, by weapon key (none with none), and of the sets she wears, by set key. The effects of a weapon or a set the
+   *  player tests come with the picker's choice (`WeaponChoice.gear`, `SetChoice.gear`); `simWithGear` puts them here for the engine. */
+  weapon_effects: Record<string, GearEffects>; set_effects: Record<string, GearEffects>
+}
+export type SimWeapon = { key: string; name: string; icon: string | null; type: string; rarity: number; level: number; refinement: number; base_atk: number; sub: string | null; sub_value: number }
+export type SimSet = { key: string; name: string; icon: string | null; pieces: number; two: { stat: string; value: number }[]; two_text: string; four_text: string }
+export type WeaponChoice = { key: string; name: string; icon: string | null; rarity: number; base_atk: number | null; sub: string | null; sub_value: number | null; gear?: GearEffects }     // /api/characters/{key}/weapons; gear: its effects and toggles for her, with none it is missing
+export type SetChoice = { key: string; name: string; icon: string | null; two_text: string; four_text: string; two: { stat: string; value: number }[]; gear?: GearEffects }                // /api/artifact-sets?character=<key>; gear: as WeaponChoice's
+export type SimPiece = { slot: Slot; icon: string | null; name: string; set_key: string; level: number; rarity: number; main: string; main_value: number; subs: { stat: string; value: number; tiers: number[] }[]; crit_value: number; cv_tier: number }
 export type PlanBody = { level: number; talents: { normal: number; skill: number; burst: number }; weapon: string | null; weapon_level: number; refinement: number; set: { sets: string[]; pieces: '4' | '2+2' } | null; mains: Partial<Record<'sands' | 'goblet' | 'circlet', string>>; level_pieces: Slot[]; typed: { slot: Slot; main: string; subs: [string, number][]; use: boolean } | null; weights: Record<string, Weight> }
 
-export type WeekTask = { key: string; kind: 'books' | 'forgery' | 'weekly' | 'boss' | 'ley' | 'artifacts' | 'flowers' | 'enemies' | 'level'; who: string[]; title: string; why: string; material: { name: string; icon: string | null } | null; resin: number; free: boolean; done: boolean }
-export type WeekDay = { day: string; label: string; today: boolean; start: number; spent: number; alert: { text: string; loud: boolean } | null; spare: string | null; tasks: WeekTask[] }
-export type FocusCard = { key: string; position: number; name: string; icon: string | null; goal: string; ready_text: string; pronouns: Pronouns }
-export type Week = {
-  focus: FocusCard[]; characters: { key: string; name: string; icon: string | null; owned: boolean; focus: number | null }[]
-  days: WeekDay[]
-  ready: { key: string; until: number | null; luck: { half: number | null; label: string } | null; text: string }[]   // days from today
-  resin_by: { key: string; resin: number }[]; resin_week: number; resin_week_max: number
-  how: string[]
-  today: WeekDay
-  sync: CharSync
+/** A series of talent books or of a weapon material, with the weekdays its domain is open (Monday is 0; Sunday is always one). */
+export type PlanSeries = { series: string; icon: string | null; days: number[] }
+/** A series of books open today and the keys of the planned characters who need it. */
+export type PlanBook = { series: string; icon: string | null; days: number[]; who: string[] }
+/** A weapon material open today, the planned characters who need it and their weapons' names. */
+export type PlanWeaponSeries = { series: string; icon: string | null; days: number[]; who: string[]; weapons: string[] }
+/** A planned character with nothing open today, and the next weekday her book and her weapon's material open (null: not known). */
+export type PlanIdle = { key: string; book_next: number | null; weapon_next: number | null }
+/** One planned character: her face, her weapon, and her book's and weapon material's days (null: not read from the wiki yet). */
+export type PlanRow = { key: string; name: string; icon: string | null; weapon: { name: string | null; icon: string | null }; book: PlanSeries | null; material: PlanSeries | null }
+export type PlanWeekly = { material: string; icon: string | null; who: string[] }
+export type PlanAddable = { key: string; name: string; icon: string | null }
+/** GET /api/plan and PUT /api/plan/characters: the Plan page (the Plan design, section 4). Weekdays count from Monday, 0. */
+export type PlanModel = {
+  weekday: number; date: string
+  /** The next 04:00 server time, as an instant: the day the page shows turns then. */
+  turns_at: string
+  count: number
+  books: PlanBook[]
+  weapons: PlanWeaponSeries[]
+  idle: PlanIdle[]
+  rows: PlanRow[]
+  weekly: PlanWeekly[]
+  /** Discounted weekly boss runs left this week, from the Notes read; null while there is none. */
+  discounts_left: number | null
+  addable: PlanAddable[]
 }
 
 export type TeamView = { label: string; lead_element: Element; members: { key: string; name: string; icon: string | null; role: string; ready: number }[]; ready: number; note: string | null }
@@ -925,6 +1022,12 @@ export type EndgameTheater = EndgameBase & {
   act: number
   medals: boolean[] | null
   medal_count: number | null
+  /** The Arcana fights cleared; null in a detail kept before it was read. */
+  arcana: number | null
+  /** The season's heraldry as HoYoLAB numbers it; null in a detail kept before it was read. */
+  heraldry: number | null
+  /** HoYoLAB's own pictures, each null until the art cache keeps it: the card then draws its own. */
+  marks: { medal: string | null; cleared: string | null; flower: string | null; heraldry: string | null }
   ranks: EndgameRank[] | null
   flowers: number | null
   seconds: number | null

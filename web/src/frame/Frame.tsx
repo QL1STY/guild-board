@@ -4,7 +4,6 @@ import { duration } from '../format.ts'
 import { type Live, useTick } from '../live.ts'
 import { hashOf, PAGE_TITLES, type Page } from '../route.ts'
 import type { Status } from '../types.ts'
-import { railPages, weekShown } from '../pages/characters/hidden.ts'
 import { NoteHost } from '../ui/note.tsx'
 import { Sign, type SignName } from '../ui/Sign.tsx'
 import { Plate } from './Plate.tsx'
@@ -17,7 +16,7 @@ const NAV: { page: Page; label: string; sign: SignName }[] = [
   { page: 'board', label: 'Board', sign: 'cells' },
   { page: 'achievements', label: 'Achievements', sign: 'cup' },
   { page: 'characters', label: 'Characters', sign: 'bust' },
-  { page: 'week', label: 'Your week', sign: 'book' },
+  { page: 'plan', label: 'Plan', sign: 'book' },
   { page: 'backlog', label: 'Backlog', sign: 'map' },
   { page: 'map', label: 'Map', sign: 'compass' },
   { page: 'stats', label: 'Stats', sign: 'bars' },
@@ -121,7 +120,6 @@ export function Frame({
           {status !== null && <ProfileCard status={status} />}
           {/* The Gallery only while the player has it turned on (the ledger design, section 7). */}
           {NAV.filter((item) => item.page !== 'gallery' || live.settings?.gallery_enabled === true)
-            .filter((item) => railPages([item.page], weekShown(status)).length > 0)
             .map((item) => (
             <a
               key={item.label}

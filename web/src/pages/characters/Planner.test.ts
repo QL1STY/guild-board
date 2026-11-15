@@ -1,10 +1,12 @@
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { expect, test } from 'vitest'
+import damageKits from '../../fixtures/damage-kits.json'
 import fixture from '../../fixtures/characters/planner.json'
-import type { Planner as PlannerModel } from '../../types.ts'
+import type { PlannerHits, Planner as PlannerModel } from '../../types.ts'
+import { noChoice } from './damage.ts'
 import { PlannerView } from './Planner.tsx'
-import { draftFromTyped } from './plannerview.ts'
+import { Counted } from './Verdict.tsx'
 import css from './planner.css?raw'
 
 const model = fixture as unknown as PlannerModel
@@ -16,22 +18,10 @@ function ruleOf(selector: string): string {
   return new RegExp(`(?:^|\\})\\s*${escaped}\\s*\\{([^}]*)\\}`).exec(plain)?.[1] ?? ''
 }
 
-const draw = (changed: Partial<PlannerModel> = {}, focus: string[] | null = ['sandrone'], withCard = false) => {
+const draw = (changed: Partial<PlannerModel> = {}, withCard = false) => {
   const shown = { ...model, ...changed }
   return renderToStaticMarkup(
-    createElement(PlannerView, {
-      model: shown,
-      plan: shown.plan,
-      piece: draftFromTyped(shown.plan.typed, shown.element),
-      focus,
-      error: null,
-      onPlan: () => undefined,
-      onPiece: () => undefined,
-      onFocus: () => undefined,
-      onReset: () => undefined,
-      onHeld: () => undefined,
-      onCard: withCard ? () => undefined : undefined,
-    }),
+    createElement(PlannerView, { model: shown, plan: shown.plan, error: null, onPlan: () => undefined, onCard: withCard ? () => undefined : undefined }),
   )
 }
 
@@ -42,215 +32,178 @@ test('the planner is dark and tinted by her element, with her name big behind th
   expect(ruleOf('.pp-giant')).toMatch(/color:\s*transparent/)
 })
 
-test('three columns share one height and each spreads its sections across it, with no blank space', () => {
+test('three columns: her build, her artifacts and her stats, each as tall as its own parts', () => {
   const markup = draw()
   expect(markup.match(/class="pp-col"/g)).toHaveLength(3)
-  expect(ruleOf('.pp-cols')).toMatch(/align-items:\s*stretch/)
-  expect(ruleOf('.pp-cols')).toMatch(/grid-template-columns:\s*440px 1fr 392px/)
-  expect(ruleOf('.pp-col')).toMatch(/justify-content:\s*space-between/)
-  expect(ruleOf('.pp-col')).toMatch(/display:\s*flex/)
+  expect(ruleOf('.pp-cols')).toMatch(/grid-template-columns:\s*360px 1fr 380px/)
+  expect(ruleOf('.pp-cols')).toMatch(/grid-template-columns/)
 })
 
-test('the header says her damage change, her readiness now and with the plan, and today\'s resin', () => {
+test("the header says the set's Crit Value in its tier, and the ATK change of the tested pieces until the verdict comes", () => {
   const markup = draw()
-  expect(markup).toContain('damage against now')
-  expect(markup).toContain('89% → 99%')
-  expect(markup).toContain('of her full potential')
-  expect(markup).toContain('of 200 today')
-  const same = draw({ with_plan: { ...model.with_plan, readiness: 89 } })
-  expect(same).toMatch(/<b>89%<\/b>/)
+  expect(markup).toContain('<b class="pp-cvtotal t0">130.6</b><span>Crit Value of her artifacts</span>')
+  expect(markup).toContain('Stats with the tested pieces')
+  expect(markup).toContain('<b class="same">No change</b>')
+  for (const gone of ['damage against now', 'of her full potential', 'resin', 'focus']) expect(markup).not.toContain(gone)
 })
 
-test('the damage meter is for damage roles, and goals met stand in its place for the others', () => {
-  const damage = draw()
-  expect(damage).toContain('class="pp-meter"')
-  expect(damage).not.toContain('Goals met')
-  const support = draw({
-    damage_role: false,
-    goals_met: [
-      { label: 'Energy Recharge', text: '122% of 140%', met: false },
-      { label: 'Crit Rate', text: '75% of 60%', met: true },
-    ],
-  })
-  expect(support).not.toContain('class="pp-meter"')
-  expect(support).not.toContain('damage against now')
-  expect(support).toContain('Goals met')
-  expect(support).toContain('122% of 140%')
-  expect(support.match(/class="met"/g)).toHaveLength(1)
+test('the five pieces show their slot and level, their main stat and their Crit Value in its tier', () => {
+  const markup = draw()
+  expect(markup.match(/class="pp-piece"/g)).toHaveLength(5)
+  const flower = /data-slot="flower"[\s\S]*?<\/button>/.exec(markup)?.[0] ?? ''
+  expect(flower).toContain('Flower · +20')
+  expect(flower).toMatch(/<span class="pp-cv t3">42\.8 <small>CV<\/small><\/span>/)
+  expect(/data-slot="plume"[\s\S]*?<\/button>/.exec(markup)?.[0]).toContain('Plume · +16')
+  expect(markup).toContain('under 15')
+  expect(markup).toContain('whole set: 180 · 200 · 220 · 240 · 260 · 300')
+  expect(markup).not.toContain('class="tested"') // nothing is tested yet
 })
 
-test('the talent she has at its most shows as "the most", and the others as a stepper from now to the target', () => {
+test('the weapon and the set are tiles that open a picker, and the set says its effects', () => {
+  const markup = draw()
+  expect(markup).toContain('data-open="weapon"')
+  expect(markup).toContain('A Teaspoon of Transcendence')
+  expect(markup).toContain('Level 90 · R1 · Base ATK 674 · Crit DMG 44.1%')
+  expect(markup).toContain('data-open="set"')
+  expect(markup).toContain('5 of 5 pieces')
+  expect(markup).toContain('<b>2 pieces:</b> Demo text for the 2-piece bonus.')
+  expect(markup).toContain('<b>4 pieces:</b> Demo text for the 4-piece bonus.')
+})
+
+test('her stats are a table of now, tested and change, with nothing changed before a test', () => {
+  const markup = draw()
+  expect(markup.match(/<tr data-stat=/g)).toHaveLength(8)
+  expect(markup).toContain('<th>Tested</th>')
+  expect(markup).toContain('<td>2,964</td>')
+  expect(markup.match(/<tr data-stat="[a-z]+" class="same">/g)).toHaveLength(8)
+  expect(markup).toContain('Cryo DMG Bonus')
+})
+
+test('the talent she has at its most shows as "the most", the others as a stepper, and a talent near her highest has "Raise"', () => {
   const markup = draw()
   expect(markup).toContain('aria-label="Raise the Normal Attack target"')
   expect(markup).toMatch(/9 → <b class="up">10<\/b>/)
   expect(markup.match(/the most/g)).toHaveLength(2)
+  expect(markup.match(/class="pp-raise"/g)).toHaveLength(1)
+  expect(/Normal Attack<span class="pp-raise">Raise<\/span>/.test(markup)).toBe(true)
   // The target is at its most, so its raising button rests and its lowering one does not.
   expect(markup).not.toMatch(/aria-label="Lower the Normal Attack target" disabled=""/)
   expect(markup).toMatch(/aria-label="Raise the Normal Attack target" disabled=""/)
 })
 
-test('the level, refinement and weapon level steppers start from her build now, and rest at it', () => {
-  const now = { level: 80, refinement: 3, weapon_level: 70 }
-  const plan = { ...model.plan, level: 80, refinement: 3, weapon_level: 70 }
-  const markup = draw({ now_build: now, plan })
+test('the level stepper starts from her build now, and rests at it', () => {
+  const plan = { ...model.plan, level: 80 }
+  const markup = draw({ now_build: { level: 80, constellation: 0, refinement: 3, weapon_level: 70 }, plan })
   expect(markup).toMatch(/aria-label="Lower the level target" disabled=""/)
   expect(markup).toMatch(/80 → <b[^>]*>80<\/b>/)
-  expect(markup).toMatch(/aria-label="Lower the refinement" disabled=""/)
-  expect(markup).toMatch(/3 → <b[^>]*>3<\/b>/)
-  expect(markup).toMatch(/aria-label="Lower the weapon level target" disabled=""/)
-  expect(markup).toMatch(/70 → <b[^>]*>70<\/b>/)
-  expect(markup).not.toMatch(/aria-label="Raise the weapon level target" disabled=""/)
 })
 
-test('a character who is not owned keeps the steppers from the start, and her weapon level is still editable', () => {
-  const plan = { ...model.plan, level: 50, refinement: 2, weapon_level: 40 }
-  const markup = draw({ now_build: null, plan })
-  expect(markup).not.toMatch(/aria-label="Lower the level target" disabled=""/)
-  expect(markup).not.toMatch(/aria-label="Lower the weapon level target" disabled=""/)
-  expect(markup).not.toMatch(/aria-label="Lower the refinement" disabled=""/)
-  expect(markup).not.toMatch(/\d+ → <b[^>]*>50<\/b>/)
-  expect(markup).toMatch(/<b>40<\/b>/)
-})
-
-test('the four chips of the header are one width, so the readiness one is as wide as its neighbours', () => {
-  const width = (selector: string) => /(?:^|;|\s)width:\s*(\d+px)/.exec(ruleOf(selector))?.[1]
-  expect(width('.pp-chip')).toBeDefined()
-  expect(width('.pp-focus')).toBe(width('.pp-chip'))
-})
-
-test("a long list of sets shows the card's only, with a button for every set", () => {
-  const many = Array.from({ length: 63 }, (_, index) => ({ key: `set-${index}`, name: `Set ${index}`, icon: null, text: 'a set', tag: index === 0 ? 'Hers' : null }))
-  const markup = draw({ sets: many, plan: { ...model.plan, set: { sets: ['set-0'], pieces: '4' as const } } })
-  expect(markup.match(/class="pp-set"/g)).toHaveLength(1)
-  expect(markup).toContain('Show every set, 63 in all')
-  expect(ruleOf('.pp-sets.all')).toMatch(/max-height:\s*\d+px/)
-})
-
-test('the weapon list starts with the one she has, tagged, and its choice is the plan\'s', () => {
+test("the header line has her element, weapon type, level and constellation, and the weapon's two targets step from her build", () => {
   const markup = draw()
-  const list = /<div class="pp-list-in"[\s\S]*?<\/div><\/div>/.exec(markup)?.[0] ?? ''
-  expect(list.match(/role="option"/g)).toHaveLength(4)
-  expect(list.indexOf('A Teaspoon of Transcendence')).toBeLessThan(list.indexOf('Verdict'))
-  expect(list).toContain('<em>Hers</em>')
-  expect(list).toMatch(/aria-selected="true"[^>]*><span class="pic pp-pic/)
-  // The list starts closed and out of reach of the keyboard.
-  expect(markup).toMatch(/class="pp-list" id="pp-wlist" inert=""/)
+  expect(markup).toContain('Cryo · Claymore · Level 90 · C2 · her build on HoYoLAB')
+  const plan = { ...model.plan, refinement: 3, weapon_level: 70 }
+  const stepped = draw({ now_build: { level: 90, constellation: 2, refinement: 3, weapon_level: 70 }, plan })
+  expect(stepped).toMatch(/aria-label="Lower the refinement" disabled=""/)
+  expect(stepped).toMatch(/3 → <b[^>]*>3<\/b>/)
+  expect(stepped).toMatch(/aria-label="Lower the weapon level target" disabled=""/)
+  expect(stepped).toMatch(/70 → <b[^>]*>70<\/b>/)
+  expect(stepped).not.toMatch(/aria-label="Raise the weapon level target" disabled=""/)
 })
 
-test('each main stat has its chips, the one she wears now marked, and the plan\'s chosen one pressed', () => {
+test('a character who is not owned has her talent targets and no pieces to test', () => {
+  const markup = draw({ now_build: null, sim: null })
+  expect(markup).toContain('is not on your account yet, so there are no artifacts to test')
+  expect(markup).not.toContain('pp-piece')
+  expect(markup).not.toContain('pp-chip')
+  expect(markup).not.toContain('Raise</span>')
+  expect(markup).toContain('aria-label="Lower the Normal Attack target"')
+})
+
+test('the old parts are gone: main stats, a piece to try, what it takes, the days and the focus', () => {
   const markup = draw()
-  const goblet = /Goblet<\/span><div class="pp-seg">[\s\S]*?<\/div>/.exec(markup)?.[0] ?? ''
-  expect(goblet).toMatch(/aria-pressed="true">Cryo DMG Bonus/)
-  expect(goblet).toMatch(/class="now" aria-pressed="false">ATK %/)
-  expect(ruleOf(".pp-seg button.now:not([aria-pressed='true'])::after")).toMatch(/content:\s*' now'/)
-})
-
-test('a piece below +20 has a switch for levelling it, on as the plan has it', () => {
-  const markup = draw()
-  expect(markup).toMatch(/role="switch" aria-checked="true" class="pp-toggle"/)
-  expect(markup).toContain('Level the Plume from +16 to +20')
-})
-
-test('every stat shows now, a bar with its marks, the plan and the change, and the change reads up, down or none', () => {
-  const markup = draw()
-  expect(markup.match(/class="pp-srow"/g)).toHaveLength(8)
-  expect(markup).toContain('class="dl down">−420')
-  expect(markup).toContain('class="dl up">+0.8')
-  expect(markup).toContain('class="dl same">no change')
-  expect(markup.match(/<i class="g"/g)).toHaveLength(5) // atk, cr, cd, dmg and er have goals
-})
-
-test('a warning shows only when the core gives one', () => {
-  expect(draw()).not.toContain('pp-warn')
-  expect(draw({ warning: 'In combat her Crit Rate reaches 104.2%: 4.2% is wasted. Crit DMG would serve her better.' })).toContain('4.2% is wasted')
-})
-
-test('"Try a piece" has its fields, shows what the core says of the piece, and an "Use it in her plan" switch', () => {
-  const markup = draw()
-  expect(markup).toContain('Try a piece you got')
-  expect(markup.match(/aria-label="Substat \d"/g)).toHaveLength(4)
-  expect(markup).toContain('<b>28</b><span>crit value</span>')
-  expect(markup).toContain('6 of 6')
-  expect(markup).toContain('+9%')
-  expect(markup).toContain("against the plan&#x27;s goblet")
-  expect(markup).toMatch(/role="switch" aria-checked="false" class="pp-use" disabled=""/) // nothing typed yet, so nothing to use
-})
-
-test('a typed piece that is in the plan marks the box as used, and its switch can be pressed', () => {
-  const plan = { ...model.plan, typed: { slot: 'goblet' as const, main: 'dmg', subs: [['cr', 7], ['cd', 14]] as [string, number][], use: true } }
-  const markup = draw({ plan })
-  expect(markup).toContain('class="pp-try used"')
-  expect(markup).toMatch(/role="switch" aria-checked="true" class="pp-use"/)
-  expect(markup).not.toMatch(/class="pp-use" disabled/)
-})
-
-test('without Your week the planner has no What it takes, no resin of today and no focus, and its two columns fill the page', () => {
-  const markup = renderToStaticMarkup(
-    createElement(PlannerView, {
-      model, plan: model.plan, piece: draftFromTyped(model.plan.typed, model.element), error: null, focus: ['sandrone'],
-      onPlan: () => undefined, onPiece: () => undefined, onReset: () => undefined, onFocus: () => undefined, onHeld: () => undefined,
-      takesShown: false,
-    }),
-  )
-  expect(markup).not.toContain('What it takes')
-  expect(markup).not.toContain('Add to your focus')
-  expect(markup).not.toContain('In your focus')
-  expect(markup).not.toMatch(/of 200 today/)
-  expect(markup).toContain('pp-cols two')
-  expect(css).toMatch(/\.pp-cols\.two\s*\{[^}]*grid-template-columns:\s*440px 1fr/)
-})
-
-test('what it takes names the resin it costs today and where the pieces come from', () => {
-  const markup = draw()
-  expect(markup).toContain('Today her book domain is open.')
-  expect(markup).toContain('Her book, 6 runs: 120')
-  expect(markup).toContain('The rest: 10')
-  expect(markup).toContain('About 1 in 181 runs')
-  expect(markup).toContain('Sanctifying Elixir')
-  expect(markup).toMatch(/class="best"><span>Sanctifying Elixir[^<]*<\/span><b>Certain/)
-})
-
-test('with the calculator\'s sync off the materials take what is typed, and the page says how to switch it on', () => {
-  const off = draw({ sync: { ...model.sync, calculator: 'off' } })
-  expect(off).toContain("Calculator sync is off in HoYoLAB, so Guild Board can&#x27;t see what you hold.")
-  expect(off.match(/aria-label="Amount of [^"]+ you hold"/g)).toHaveLength(5)
-  expect(draw()).not.toContain('aria-label="Amount of')
-})
-
-test('with nothing to find the box says so in one plain line, never an empty one', () => {
-  const none = draw({ takes: { ...model.takes, find: [] } })
-  expect(none).toContain('Nothing to find')
-  expect(none).toContain('main stats already match the plan.')
-  expect(none).toContain('Ready today')
-})
-
-test('the days curve has its two marks with the core\'s dates, and its summary', () => {
-  const markup = draw()
-  expect(markup).toContain('Half a chance, Sun 8 Nov')
-  expect(markup).toContain('Nine in ten, Thu 10 Dec')
-  expect(markup).toContain('<b>half a chance by Sun 8 Nov</b>')
-  expect(markup.match(/class="mark"/g)).toHaveLength(2)
-})
-
-test('a character the card calls he or they has his or their plan, never her', () => {
-  const he = draw({ pronouns: { she: 'he', her: 'him', hers: 'his' } })
-  for (const words of ['His plan', 'Back to his card&#x27;s plan', 'Use it in his plan', 'His goal', 'of his full potential', 'Substats he wants', 'on his profile']) {
-    expect(he).toContain(words)
+  for (const gone of ['Main stats', 'Try a piece you got', 'What it takes', 'Days to ready', 'Goals met', 'Substats', 'Add to your focus', 'pp-meter', 'pp-days']) {
+    expect(markup).not.toContain(gone)
   }
-  expect(he).not.toMatch(/\b[Hh]im (plan|card|goal|full|profile)\b/)
-  const they = draw({ pronouns: { she: 'they', her: 'them', hers: 'their' }, takes: { ...model.takes, find: [] } })
-  expect(they).toContain('Substats they want')
-  expect(they).toContain('rolls they want')
-  expect(they).toContain('Their main stats already match the plan.')
 })
 
-test('the focus button says whether she is in the focus and how many are', () => {
-  expect(draw({}, ['sandrone', 'odette'])).toMatch(/aria-pressed="true"[^>]*><b>In your focus<\/b><span>2 of 4 characters/)
-  expect(draw({}, ['odette'])).toMatch(/aria-pressed="false"[^>]*><b>Add to your focus<\/b><span>1 of 4 characters/)
+test('a character the card calls he or they has his or their build, never her', () => {
+  const he = draw({ pronouns: { she: 'he', her: 'him', hers: 'his' } })
+  for (const words of ['His build', 'Back to his piece', 'Crit Value of his artifacts', 'on HoYoLAB']) expect(he).toContain(words)
+  expect(he).not.toMatch(/\b[Hh]im (build|piece|card|artifacts)\b/)
+  const they = draw({ pronouns: { she: 'they', her: 'them', hers: 'their' } })
+  expect(they).toContain('Their build')
+  expect(they).toContain('Back to their piece')
 })
 
 test('the header has her card button, which opens the Card panel, with the pronoun of her card', () => {
   expect(draw()).not.toContain('card</button>')
-  expect(draw({}, ['sandrone'], true)).toMatch(/<button[^>]*class="pp-cardbtn"[^>]*>Her card<\/button>/)
-  expect(draw({ pronouns: { she: 'they', her: 'them', hers: 'their' } }, ['sandrone'], true)).toContain('Their card</button>')
+  expect(draw({}, true)).toMatch(/<button[^>]*class="pp-cardbtn"[^>]*>Her card<\/button>/)
+  expect(draw({ pronouns: { she: 'they', her: 'them', hers: 'their' } }, true)).toContain('Their card</button>')
+})
+
+test('the three columns stretch to one height, and what is in them keeps its own size, with the closing note at the foot', () => {
+  expect(ruleOf('.pp-cols')).toMatch(/align-items:\s*stretch/)
+  expect(ruleOf('.pp-stats')).toMatch(/flex:\s*none/)
+  expect(ruleOf('.pp-col > .pp-note:last-child')).toMatch(/margin-top:\s*auto/)
+  expect(ruleOf('.pp-editor')).not.toMatch(/flex:\s*1/)
+  expect(ruleOf('.pp-edhead.top')).toMatch(/flex-wrap:\s*nowrap/)
+})
+
+test('the pickers are a dialog fixed over the page, so that the page never changes height for them', () => {
+  expect(ruleOf('.pp-card.pp-scrim')).toMatch(/position:\s*fixed/)
+  expect(ruleOf('.pp-card.pp-scrim')).toMatch(/inset:\s*0/)
+  expect(ruleOf('.pp-modal')).toMatch(/max-height:\s*82vh/)
+})
+
+test('with the verdict on, the right column has the verdict, a row per main talent, what is counted and her stats; off, none of it', () => {
+  const hits = structuredClone(damageKits.kits.sandrone) as unknown as PlannerHits
+  const withHits: PlannerModel = { ...model, sim: { ...model.sim!, hits, tables: { ...model.sim!.tables, ...damageKits.tables } } as PlannerModel['sim'] }
+  const render = (verdict: boolean) =>
+    renderToStaticMarkup(createElement(PlannerView, { model: withHits, plan: withHits.plan, error: null, verdict, onPlan: () => undefined }))
+  const on = render(true)
+  expect(on).toContain('class="pp-verdict"')
+  expect(on).toContain('No change') // nothing is tested yet
+  expect(on).toContain('nothing tested yet')
+  expect(on.match(/class="pp-tal"/g)).toHaveLength(3)
+  expect(on).toContain('Stellar-Conduct')
+  expect(on).toContain('Recorded hits')
+  expect(on).toContain('Counted:')
+  expect(on).toContain('Polestar field')
+  expect(on.indexOf('class="pp-verdict"')).toBeLessThan(on.indexOf('class="pp-tals"'))
+  expect(on.indexOf('class="pp-counted"')).toBeLessThan(on.indexOf('class="pp-stats"'))
+  const off = render(false)
+  for (const gone of ['pp-verdict', 'pp-tal', 'pp-counted', 'Recorded hits']) expect(off).not.toContain(gone)
+  expect(off).toContain('Stats with the tested pieces')
+  // The core's switch on but no hits for her: stage 1's page
+  const noHits: PlannerModel = { ...model, sim: { ...model.sim!, hits: null } }
+  const stage1 = renderToStaticMarkup(createElement(PlannerView, { model: noHits, plan: noHits.plan, error: null, verdict: true, onPlan: () => undefined }))
+  expect(stage1).not.toContain('pp-verdict')
+  expect(stage1).toContain('Stats with the tested pieces')
+})
+
+test('the Counted line has one Not counted list of switches, each pressed to count it, with a hint only while it has chips', () => {
+  const draw1 = (off: { name: string; label: string; with: string[] }[]) =>
+    renderToStaticMarkup(createElement(Counted, { line: { fixed: [], on: [{ name: 'A', label: 'Paramita Papilio' }], off }, choice: noChoice(), onChoice: () => undefined }))
+  const html = draw1([{ name: 'B', label: 'HP below 50%', with: ['B'] }])
+  expect(html).toContain('Not counted:')
+  expect(html).not.toContain('Left out')
+  expect(html).toContain('title="Not counted. Press to count it."')
+  expect(html).toContain('aria-pressed="false"')
+  expect(html).toContain('Press one to count it.')
+  const none = draw1([])
+  expect(none).not.toContain('Not counted')
+  expect(none).not.toContain('Press one to count it.')
+})
+
+test('a Not counted list of more than three effects folds into one line that names how many', () => {
+  const off = ['A', 'B', 'C', 'D'].map((name) => ({ name, label: `Effect ${name}`, with: [name] }))
+  const draw = (list: typeof off) =>
+    renderToStaticMarkup(createElement(Counted, { line: { fixed: [], on: [], off: list }, choice: noChoice(), onChoice: () => undefined }))
+  const long = draw(off)
+  expect(long).toContain('4 effects. Show them')
+  expect(long).not.toContain('Effect A')
+  expect(long).not.toContain('Press one to count it.')
+  const short = draw(off.slice(0, 3))
+  expect(short).toContain('Effect C')
+  expect(short).not.toContain('Show them')
 })

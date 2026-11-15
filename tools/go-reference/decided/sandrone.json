@@ -1,0 +1,13 @@
+{
+  "main": null,
+  "stellar": "stellar-conduct",
+  "modes": {
+    "a0StellarRadianceSc": {"state": "on", "reason": "In a Cryo or Electro team her Stellar hits are Stellar-Conduct, the kind the comparison set and her guides use."}
+  },
+  "toggles": {
+    "a1Decoding": {"on": false, "state": "on", "label": "Decoding Power above 50", "covers": [], "reason": "Her second Prism Shot hits four times as hard only when Fagio's Decoding Power is above 50, which depends on what the team did before."},
+    "c1Decoding": {"on": false, "state": "on", "label": "Constellation 1 Decoding bonus", "covers": [], "reason": "A Constellation 1 window that needs Decoding Power spent first."},
+    "c2Stacks": {"on": false, "state": "3", "label": "Constellation 2 stacks", "covers": [], "reason": "Stacks that build up during the fight."},
+    "a1Tactics": {"on": false, "state": "10", "label": "Refined Tactics stacks", "covers": [], "reason": "One stack for every 10 points of Decoding Power Fagio loses, up to ten, which builds up over the fight. The bonus is for her Burst's Convective Inhibition Ray and needs the second Prism Shot's switch as well. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

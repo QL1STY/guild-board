@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "a4Heal": {"on": false, "state": "on", "label": "Healed above 70% HP", "covers": [], "reason": "Adds Elemental Mastery to the healed character only, which none of her counted hits use."}
+  }
+}

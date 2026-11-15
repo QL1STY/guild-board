@@ -1,7 +1,7 @@
 {
   "key": "raiden-shogun", "name": "Raiden Shogun", "element": "Electro", "weapon_type": "Polearm", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "support"], "keeps_alive": false,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"er": 220},
   "mains": {"sands": ["er", "atk_pct", "em"], "goblet": ["dmg", "atk_pct", "em"], "circlet": ["cr", "cd"]},
   "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

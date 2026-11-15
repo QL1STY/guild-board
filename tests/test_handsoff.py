@@ -354,6 +354,19 @@ def test_the_only_addresses_outside_hoyoverse_are_the_list_the_updates_the_cloud
         "https://static.wikia.nocookie.net/gensin-impact/images/c/ca/Domain_Spiral_Abyss_Abyssal_Moon_Spire.png/revision/latest",
         "https://i.redd.it/n427epuvp0bd1.jpg",
         "https://static.wikia.nocookie.net/gensin-impact/images/b/b0/Stygian_Onslaught_2025-10-29.png/revision/latest",
+
+        # The Imaginarium Theater's marks, HoYoLAB's own, from its Battle Chronicle (the player's choice, 2026-11-10): the
+        # medal won (42 x 42), an act cleared without it (42 x 42), the Fantasia Flower (42 x 42) and the season's heraldry,
+        # 0 to 5 (HoYoLAB gives heraldry 6 the picture of 5).
+        "https://act.hoyolab.com/app/community-game-records-sea/images/active-medal-icon.b3adc53a.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/default-medal-icon.966c006f.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/flower-icon.dd04a858.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-0.4625c4b3.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-1.4e456b5e.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-2.3b5e7c80.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-3.d3c03e1a.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-4.0097b91f.png",
+        "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-5.0ae98c9e.png",
     )
 
 
@@ -541,10 +554,10 @@ def _pulls_pages(app) -> list[str]:
 
 def _characters_pages(app) -> list[str]:
     """The Characters pages' routes the core answers (GET): the roster, a character's profile and planner (for Sandrone, in
-    the demo), the week and the endgame. Their pictures, at /api/art, are not pages."""
+    the demo), the Plan and the endgame, the weapons of her type and the artifact sets the pickers list. Their pictures, at /api/art, are not pages."""
     return sorted(
         route.path.replace("{key}", "sandrone") for route in app.routes
-        if (route.path.startswith("/api/characters") or route.path in ("/api/week", "/api/endgame"))
+        if (route.path.startswith("/api/characters") or route.path in ("/api/plan", "/api/endgame", "/api/artifact-sets"))
         and "GET" in getattr(route, "methods", ())
     )
 
@@ -570,7 +583,7 @@ def test_a_demo_session_writes_only_inside_its_data_folder(tmp_path, clock):
         with TestClient(create_app(core, PORT), base_url=BASE) as client:
             client.get("/launch", params={"k": core.launch_secret}, follow_redirects=False)
             # The Characters pages are read too: the demo's own characters, from its own data folder, nothing of the game's.
-            assert len(_characters_pages(client.app)) == 5
+            assert len(_characters_pages(client.app)) == 7
             for url in ("/api/status", "/api/backlog", "/api/stats?range=90", "/api/synclog", "/api/settings",
                         "/api/achievements", *_pulls_pages(client.app), *_characters_pages(client.app)):
                 assert client.get(url).status_code == 200, url
@@ -1066,6 +1079,19 @@ PUBLIC_PICTURES = (
     "https://static.wikia.nocookie.net/gensin-impact/images/c/ca/Domain_Spiral_Abyss_Abyssal_Moon_Spire.png/revision/latest",
     "https://i.redd.it/n427epuvp0bd1.jpg",
     "https://static.wikia.nocookie.net/gensin-impact/images/b/b0/Stygian_Onslaught_2025-10-29.png/revision/latest",
+
+    # The Imaginarium Theater's marks, HoYoLAB's own, from its Battle Chronicle (the player's choice, 2026-11-10): the
+    # medal won (42 x 42), an act cleared without it (42 x 42), the Fantasia Flower (42 x 42) and the season's heraldry,
+    # 0 to 5 (HoYoLAB gives heraldry 6 the picture of 5).
+    "https://act.hoyolab.com/app/community-game-records-sea/images/active-medal-icon.b3adc53a.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/default-medal-icon.966c006f.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/flower-icon.dd04a858.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-0.4625c4b3.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-1.4e456b5e.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-2.3b5e7c80.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-3.d3c03e1a.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-4.0097b91f.png",
+    "https://act.hoyolab.com/app/community-game-records-sea/images/heraldry-icon-5.0ae98c9e.png",
 )
 
 

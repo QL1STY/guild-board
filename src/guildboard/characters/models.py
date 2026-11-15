@@ -4,8 +4,7 @@ them; Part V gives them what HoYoLAB, the wiki and the player kept. Stat keys ar
 English name."""
 from __future__ import annotations
 
-from dataclasses import dataclass
-from datetime import date
+from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
@@ -55,6 +54,12 @@ class Build:
     pieces: dict[str, Piece]
     base: dict[str, float]    # HoYoLAB base values by stat key; base["atk"] includes the weapon's base ATK
     add: dict[str, float]     # HoYoLAB added values by stat key
+    # HoYoLAB's rows of each of the three talents at the level she has it, boosted by her constellations: (name, value as
+    # text) in its order, by "normal" | "skill" | "burst"; empty for a record kept before they were.
+    affixes: dict[str, tuple[tuple[str, str], ...]] = field(default_factory=dict)
+    # The stats HoYoLAB recommends for her, in stat keys (an element's DMG Bonus is "dmg"): "sands" | "goblet" | "circlet"
+    # mains and "subs"; a list it does not give is missing.
+    recommended: dict[str, tuple[str, ...]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -73,10 +78,8 @@ class Card:
     pronouns: tuple[str, str, str]   # ("she", "her", "her") | ("he", "him", "his") | ("they", "them", "their")
     roles: tuple[str, ...]
     keeps_alive: bool
-    scaling: str                     # "atk" | "hp" | "def" | "em"
     damage_talent: str
     talent_priority: tuple[str, str, str]
-    talent_table: str                # "elemental" | "physical"
     goals: dict[str, float]          # stat key -> goal; may omit keys
     mains: dict[str, tuple[str, ...]]   # "sands" | "goblet" | "circlet" -> stat keys, best first
     weights: dict[str, str]          # stat key -> "wants" | "some" | "none"
@@ -147,7 +150,6 @@ class Refs:
     main_odds: dict[str, dict[str, float]]   # slot -> stat key -> chance
     sub_weights: dict[str, int]
     roll_avg: dict[str, float]
-    scaling: dict[str, tuple[float, ...]]    # "elemental" | "physical" -> multipliers for levels 1..15
     reactions: dict[str, tuple[str, ...]]
     flowers: dict[str, Flower]
 
@@ -192,46 +194,6 @@ class Costs:
     exp: tuple[int, ...]                                # EXP to reach each level (index = level); from tables.json
     weapon_exp: tuple[int, ...]
     level_phase: tuple[int, ...]                        # the level each phase ends at: (20, 40, 50, 60, 70, 80)
-
-
-@dataclass(frozen=True)
-class FocusInput:
-    key: str
-    name: str
-    pronouns: tuple[str, str, str]
-    goal: str
-    needs: tuple[Need, ...]
-    luck: tuple[tuple[str, float], ...]   # (piece label, chance per run)
-
-
-@dataclass(frozen=True)
-class Task:
-    key: str
-    day: date
-    kind: str
-    who: tuple[str, ...]
-    where: str
-    runs: int
-    resin: int
-    gets: tuple[tuple[str, str | None, float], ...]   # (character, material key, expected amount)
-    free: bool
-    why: str
-
-
-@dataclass(frozen=True)
-class DayPlan:
-    day: date
-    start: int
-    spent: int
-    tasks: tuple[Task, ...]
-
-
-@dataclass(frozen=True)
-class WeekPlan:
-    days: tuple[DayPlan, ...]
-    ready: dict[str, date | None]
-    luck: dict[str, tuple[date | None, date | None]]
-    resin_by: dict[str, int]
 
 
 @dataclass(frozen=True)

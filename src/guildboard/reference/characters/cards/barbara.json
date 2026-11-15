@@ -1,7 +1,7 @@
 {
   "key": "barbara", "name": "Barbara", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["healer"], "keeps_alive": true, "scaling": "hp",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["healer"], "keeps_alive": true,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {},
   "mains": {"sands": ["hp_pct"], "goblet": ["hp_pct"], "circlet": ["heal", "hp_pct"]},
   "weights": {"hp_pct": "wants", "hp": "some", "er": "none", "cr": "none", "cd": "none", "em": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},

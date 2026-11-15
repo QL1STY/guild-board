@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { readyTime } from '../pages/timersview.ts'
-import weekFixture from '../fixtures/characters/week.json'
-import { tickBody } from '../pages/characters/weekview.ts'
-import type { BoardModel, HistoryRow, PityCard, Pulls, Timer, Week } from '../types.ts'
+import planFixture from '../fixtures/characters/plan.json'
+import type { BoardModel, HistoryRow, PityCard, PlanModel, Pulls, Timer } from '../types.ts'
 import {
   clockText, commissionsMeta, dailyNotesView, dayLine, expeditionSlots, faceTitle, fiftyRecord, forecastShort, lapRows,
   lapSplits, lastFive, LUCK_WHAT, nearTime, nextBack, periodProgress, playColumns, playFigure, playSession,
   QUICK_PRESETS, quickCountdown, quickProgress, readAt, readySince, savingsBy, savingsSet, SERVER_NAMES, serverClock,
-  stopwatchText, tickedPercent, timeLead, timerSign, timersMeta, timersShown, todayLayout, todayTick, todayView, wishShort,
+  stopwatchText, tickedPercent, timeLead, timerSign, timersMeta, timersShown, todayLayout, todayView, wishShort,
 } from './widgetview.ts'
 
 describe('the clock', () => {
@@ -532,48 +531,49 @@ describe('the Pulls widgets (the Pulls plan, Task 12)', () => {
 })
 
 describe('the Today widget', () => {
-  const week = weekFixture as unknown as Week
+  const plan = planFixture as unknown as PlanModel
 
-  it("lists today's steps that cost resin, then those on the way, as the week page does, each with who it is for and its cost", () => {
-    const view = todayView(week)
-    expect(view.rows.map((row) => row.kind)).toEqual(['weekly', 'books', 'weekly', 'books', 'flowers', 'level'])
-    expect(view.rows.map((row) => row.cost)).toEqual(['30 resin', '120 resin', '30 resin', '20 resin', 'No resin', 'Ready'])
-    expect(view.rows[0]).toMatchObject({ title: 'The Doctor, weekly boss', who: ['sandrone'], done: false })
+  it("lists today's open talent books, then weapon materials, each with the planned characters it is for", () => {
+    const view = todayView(plan)
+    expect(view.rows.map((row) => [row.kind, row.title, row.names])).toEqual([
+      ['book', 'Teachings of Vagrancy', 'Sandrone'],
+      ['weapon', 'Far-North Scions', 'Sandrone'],
+    ])
+    expect(view.rows[0].who.map((one) => one.key)).toEqual(['sandrone'])
     expect(view.line).toBeNull()
   })
 
-  it("says today's resin, and how many steps are done in the heading", () => {
-    const view = todayView(week)
-    expect(view.resin).toBe('200 of 200 resin')
-    expect(view.meta).toBe('0 of 6 done')
-    const ticked = { ...week, today: { ...week.today, tasks: week.today.tasks.map((task, index) => (index < 2 ? { ...task, done: true } : task)) } }
-    expect(todayView(ticked).meta).toBe('2 of 6 done')
-    expect(todayView(ticked).bar.slice(0, 2).map((segment) => segment.done)).toEqual([true, true])
+  it('says in the heading how many are open today', () => {
+    expect(todayView(plan).meta).toBe('2 open')
+    expect(todayView({ ...plan, books: [] }).meta).toBe('1 open')
   })
 
-  it('shares its ticks with the week: the same body goes to the same route, for the same task of the same day', () => {
-    const task = week.today.tasks[1]
-    expect(todayTick(week, task, true)).toEqual(tickBody(week.days[0], task, true))
-    expect(todayTick(week, task, true)).toEqual({ day: '2026-10-25', task: task.key, done: true })
-  })
-
-  it('says to choose a character when there is no focus, and not an empty list', () => {
-    const view = todayView({ ...week, focus: [], today: { ...week.today, tasks: [], spare: null } })
+  it('points to the Plan page when nobody is planned, and not an empty list', () => {
+    const view = todayView({ ...plan, count: 0, rows: [], books: [], weapons: [], idle: [] })
     expect(view.rows).toEqual([])
-    expect(view.line).toBe('Choose up to four characters to plan for.')
+    expect(view.line).toBe('Nobody is planned yet. Add characters on the Plan page.')
+    expect(view.meta).toBeNull()
   })
 
-  it('says that resin carries over when nothing needs it today', () => {
-    const quiet = { ...week, today: { ...week.today, tasks: [], spent: 0, start: 180, spare: null } }
-    expect(todayView(quiet).line).toBe('Nothing to farm with resin today: 180 resin carry over.')
-    const said = { ...quiet, today: { ...quiet.today, spare: 'Nothing left to farm: 180 resin carry over.' } }
-    expect(todayView(said).line).toBe('Nothing left to farm: 180 resin carry over.')
+  it('says the planned characters are not read from the wiki yet, and not that nothing is open, when none has a book or material read', () => {
+    const unread = { ...plan, books: [], weapons: [], rows: plan.rows.map((row) => ({ ...row, book: null, material: null })) }
+    const view = todayView(unread)
+    expect(view.rows).toEqual([])
+    expect(view.line).toBe('4 planned characters are not read from the wiki yet.')
+    expect(todayView({ ...unread, rows: unread.rows.slice(0, 1), count: 1 }).line).toBe('1 planned character is not read from the wiki yet.')
+    expect(view.meta).toBeNull()
   })
 
-  it('shows more of itself as it grows: faces from 4 cells wide, the reasons from 5, the resin bar from 3 cells tall', () => {
-    expect(todayLayout({ w: 3, h: 2 })).toEqual({ faces: false, why: false, bar: false })
-    expect(todayLayout({ w: 3, h: 3 })).toEqual({ faces: false, why: false, bar: true })
-    expect(todayLayout({ w: 4, h: 3 })).toEqual({ faces: true, why: false, bar: true })
-    expect(todayLayout({ w: 6, h: 5 })).toEqual({ faces: true, why: true, bar: true })
+  it('says so when nothing is open today for the planned characters', () => {
+    const view = todayView({ ...plan, books: [], weapons: [] })
+    expect(view.rows).toEqual([])
+    expect(view.line).toBe('Nothing is open today for the planned characters.')
+    expect(view.meta).toBeNull()
+  })
+
+  it('shows more of itself as it grows: faces from 4 cells wide', () => {
+    expect(todayLayout({ w: 3, h: 2 })).toEqual({ faces: false })
+    expect(todayLayout({ w: 4, h: 3 })).toEqual({ faces: true })
+    expect(todayLayout({ w: 6, h: 5 })).toEqual({ faces: true })
   })
 })

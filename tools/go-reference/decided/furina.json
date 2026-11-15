@@ -1,0 +1,9 @@
+{
+  "main": ["Gentilhomme Usher DMG", "Mademoiselle Crabaletta DMG", "Surintendante Chevalmarin DMG"],
+  "toggles": {
+    "burstFanfare": {"on": false, "state": "400", "label": "Fanfare", "covers": [], "reason": "Fanfare builds up as the party's HP changes, so its size depends on the team and the moment."},
+    "c2Overstack": {"on": false, "state": "400", "label": "Constellation 2 Fanfare over the limit", "covers": [], "reason": "A Constellation 2 effect of a buildup that depends on the team."},
+    "c6": {"on": false, "state": "on", "label": "Constellation 6 Center of Attention", "covers": [], "reason": "A Constellation 6 window for her own attacks, which are not her main damage. Its Hydro infusion and HP bonus are counted when it is switched on here."},
+    "skillHpConsumeStacks": {"on": false, "state": "4", "label": "Salon members drawing on four party members", "covers": [], "reason": "Depends on how many party members are above half HP; it scales her three Salon rows alike, so it does not change their share."}
+  }
+}

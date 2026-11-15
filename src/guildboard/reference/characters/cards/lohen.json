@@ -1,7 +1,7 @@
 {
   "key": "lohen", "name": "Lohen", "element": "Cryo", "weapon_type": "Polearm", "rarity": 5,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "physical",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"atk": 2000, "cr": 60, "cd": 175, "er": 130},
   "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg", "atk_pct"], "circlet": ["cd", "cr"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

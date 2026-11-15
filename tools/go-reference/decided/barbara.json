@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "c2": {"on": false, "state": "on", "label": "Constellation 2 during the Skill", "covers": [], "reason": "A Constellation 2 bonus for the character on the field while her Skill lasts, which covers only part of the time between casts."}
+  }
+}

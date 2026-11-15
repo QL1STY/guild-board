@@ -97,10 +97,6 @@ class Settings:
     commission_region: str = "liyue"  # the region the player chose in the game, which HoYoLAB does not report
     fishing_rule: str = "3_days"
     notifications: bool = True  # Windows notifications when a timer is ready
-    # The Characters notices (the Characters design, 6.6), each on by default: the weekly bosses, an open domain, a goal ready.
-    characters_notice_weekly: bool = True
-    characters_notice_domain: bool = True
-    characters_notice_ready: bool = True
     overlay_hotkey: str = DEFAULT_HOTKEY  # opens and closes the overlay, kept as Hotkey.text
     overlay_display: str = ""  # the display the overlay covers, by the name the shell gives it; "" is the main display
     overlay_opacity: int = 100  # percent of a pinned widget that shows over the game

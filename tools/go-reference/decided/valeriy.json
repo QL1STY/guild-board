@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c2Skill": {"on": false, "state": "on", "label": "Constellation 2 Elemental Mastery", "covers": [], "reason": "A Constellation 2 party Elemental Mastery bonus after his Skill, which changes none of his hits."},
+    "c6Hit": {"on": false, "state": "on", "label": "Constellation 6 enemy crit mark", "covers": [], "reason": "A Constellation 6 effect on enemies already hit by his special Charged Attack or Burst shells, an enemy state for 7 seconds."}
+  }
+}

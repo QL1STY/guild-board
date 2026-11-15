@@ -1,14 +1,14 @@
 export type Page =
   | 'board' | 'achievements' | 'backlog' | 'map' | 'stats' | 'pulls'
   | 'ledger' | 'friends'
-  | 'characters' | 'week'
+  | 'characters' | 'plan'
   | 'codes' | 'gallery' | 'settings'
 
 /** Every page of the window, by its address (the themes' light-patch sweep takes its list from here, so that a new page cannot escape it). */
 export const PAGES: readonly string[] = [
   'board', 'achievements', 'backlog', 'map', 'stats', 'pulls',
   'ledger', 'friends',
-  'characters', 'week',
+  'characters', 'plan',
   'codes', 'gallery', 'settings',
 ]
 
@@ -22,7 +22,7 @@ export const PAGE_TITLES: Record<Page, string> = {
   ledger: 'Ledger',
   friends: 'Friends',
   characters: 'Characters',
-  week: 'Your week',
+  plan: 'Plan',
   codes: 'Gift codes',
   gallery: 'Gallery',
   settings: 'Settings',
@@ -41,13 +41,14 @@ function pathOf(hash: string): string[] {
 /** The page a location hash names. Anything unknown is the Board, the page Guild Board opens on (spec 12.2). */
 export function pageOf(hash: string): Page {
   const name = pathOf(hash)[0]
+  if (name === 'week') return 'plan' // Your week's address, from before the Plan page, opens it
   return PAGES.includes(name) ? (name as Page) : 'board'
 }
 
 /**
  * Where a location hash goes, as the Characters plan has it: the roster at `#/characters`, the Endgame tab at
  * `#/characters/endgame`, a character's profile at `#/characters/<key>` and her planner at `#/characters/<key>/plan`, and
- * Your week at `#/week`. A key is a slug (`sandrone`, `lan-yan`). Every other page is its page alone, and anything that
+ * the Plan page at `#/plan` (`#/week` opens it). A key is a slug (`sandrone`, `lan-yan`). Every other page is its page alone, and anything that
  * is not one of the five addresses is the roster, never a page that is not there.
  */
 export type Route =
@@ -118,6 +119,11 @@ export function routeOf(hash: string): Route {
   if (!SLUG.test(second)) return roster
   if (third === undefined) return { page: 'characters', view: 'profile', key: second }
   return third === 'plan' ? { page: 'characters', view: 'plan', key: second } : roster
+}
+
+/** Where an address that has moved goes: Your week's `#/week` is the Plan page's `#/plan`. Null for any other address. */
+export function movedTo(hash: string): string | null {
+  return pathOf(hash)[0] === 'week' ? hashOf('plan') : null
 }
 
 /** The address of a page, or of a route. */

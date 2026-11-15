@@ -1,0 +1,7 @@
+{
+  "main": ["Arataki Kesagiri Combo Slash DMG", "Arataki Kesagiri Final Slash DMG"],
+  "toggles": {
+    "burst": {"on": true, "state": "on", "label": "Raging Oni King", "covers": ["normal", "charged", "plunging"], "reason": "His Charged Attack slashes are his damage and he deals them inside his Burst, which turns DEF into ATK and his attacks Geo."},
+    "constellation4": {"on": false, "state": "on", "label": "Constellation 4 after the Burst", "covers": [], "reason": "A party buff after his Burst ends, when his own damage window is over."}
+  }
+}

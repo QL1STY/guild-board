@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a4MasterCryo": {"on": false, "state": "on", "label": "After a party Cryo reaction", "covers": [], "reason": "The ATK bonus starts only after another party member triggers a Cryo reaction while he is in Masterstroke mode."},
+    "c6BurstMaster": {"on": false, "state": "on", "label": "Constellation 6 Burst crits", "covers": [], "reason": "A Constellation 6 crit bonus for a Burst unleashed in Masterstroke mode, which depends on when the player casts it."},
+    "willConsumed": {"on": false, "state": "300", "label": "Will to Win spent", "covers": [], "reason": "Will to Win builds up from the damage party members deal while he is in Masterstroke mode, so the amount depends on the team."}
+  }
+}

@@ -8,10 +8,12 @@ fetches them. Checked 2026-10-29 and 2026-10-30, for game version 7.1.
 | `schema/*.json` | One JSON Schema per file below | Task 1 |
 | `inventory.json` | 127 released characters, 252 weapons and 63 sets from the HoYoLAB wiki: keys, names, entry ids, elements, weapon types, rarities, icons; for characters also version, ascension stat, local specialty, and the art's and the chart's addresses | `inventory.py` |
 | `stars.json` | Six constellation stars per chart, C1 to C6, in the chart's pixels (119 charts) | `stars.py`, with `stars_corrections.json` |
-| `cards/<key>.json` | One card per released character: role, damage talent and its table, scaling stat, goals, main stats, weights, sets, weapons, partners, pronouns, sources and confidence (56 high, 68 medium, 3 low) | `builds.py` drafts, then four agents |
+| `cards/<key>.json` | One card per released character: role, damage talent, goals, main stats, weights, sets, weapons, partners, pronouns, sources and confidence (56 high, 68 medium, 3 low) | `builds.py` drafts, then four agents |
 | `weapons.json`, `sets.json` | Base stats at level 90 and the passives' and set bonuses' stat effects, per refinement | `weapons.py`, `sets.py`, from the hand-written `tools/research/effects/*.txt` |
-| `tables.json` | Yields per run, artifact main stats and odds, substat weights and average rolls, talent scaling, reactions, and EXP to each level (cumulative from level 1) | `tables.py` |
+| `tables.json` | Yields per run, artifact main stats and odds, substat weights and average rolls, reactions, and EXP to each level (cumulative from level 1) | `tables.py` |
 | `flowers.json` | 60 local specialties: places and how many one pass of the map's harvest route gives | `flowers.py` |
+| `kits.json` | Every character's, weapon's and set's kit from Genshin Optimizer's Waverider sheets at a pinned commit: each talent row's kind of damage, infusions, the effects of passives, constellations, states, weapons and sets (with GO's file per entry), and the comparison characters' decided toggles. Generated: do not edit | `tools/go-reference/run.py kits`, with the decision files in `tools/go-reference/decided/` |
+| `LICENSE-genshin-optimizer.txt` | Genshin Optimizer's MIT licence, which THIRD-PARTY-NOTICES.txt carries | by hand |
 
 ## Sources
 

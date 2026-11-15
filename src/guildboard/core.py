@@ -93,7 +93,7 @@ from guildboard.views.backlog import build_backlog
 from guildboard.views.ledger import build_history, build_ledger
 from guildboard.views import months, wrapped
 from guildboard.views.stats import build_stats
-from guildboard.views.endgame_card import MODE_ART, build_endgame_card
+from guildboard.views.endgame_card import MODE_ART, PUBLIC_INDEXES, build_endgame_card
 
 log = logging.getLogger(__name__)
 
@@ -102,7 +102,6 @@ DEFAULT_ADVENTURE_RANK = 60  # what the announcements are asked for before any o
 EDITABLE_SETTINGS = (
     "in_session_interval_min", "start_with_windows", "risk_acknowledged", "tray_hint_shown",
     "commission_region", "fishing_rule", "notifications",
-    "characters_notice_weekly", "characters_notice_domain", "characters_notice_ready",
     "overlay_hotkey", "overlay_display", "overlay_opacity", "overlay_pinned", "overlay_lines", "overlay_size",
     "overlay_full_screen", "gallery_enabled", "gallery_folder", "spending_currency", "spending_prices", "picture_quality",
     "sync_my_data", "page_size", "page_size_maximized", "theme", "ledger_spent_hidden",
@@ -483,8 +482,8 @@ class Core:
         self.characters = Characters(
             self.store, self.clock, self.bus, self.characters_wiki, self.art, self.pulls, self.server,
             self.pulls.account_uid, demo,
-            ready=lambda: self.settings.risk_acknowledged, sync=self._characters_sync, notify=self._characters_notify,
-            switches=self._characters_switches, cards=characters_demo.demo_card if demo else None,
+            ready=lambda: self.settings.risk_acknowledged, sync=self._characters_sync,
+            cards=characters_demo.demo_card if demo else None,
             day_resin=(lambda: characters_demo.DAY_RESIN) if demo else None,
             game_running=lambda: self.tracker.running,
         )
@@ -584,7 +583,7 @@ class Core:
 
     async def read_endgame_art(self) -> None:
         """The three modes' Tutorial entries in the HoYoLAB wiki, each read once for a game version, then their icons and the
-        three public header pictures, each fetched once into the art cache, one at a time and never while the game runs; the
+        public pictures (the three headers and the Theater's marks), each fetched once into the art cache, one at a time and never while the game runs; the
         pages are told when something new was kept. Nothing is asked before the first run's consent, and the demo asks for
         nothing. A failure leaves what was kept, and the card shows its fallbacks."""
         if self.demo or not self.settings.risk_acknowledged:
@@ -595,7 +594,7 @@ class Core:
             icons = [str(row.data["icon"]) for row in rows if row is not None and row.kind == TUTORIAL and row.data.get("icon")]
             running = lambda: self.tracker.running  # noqa: E731
             kept = await self.art.warm(icons, paused=running)
-            kept += await self.art.warm_public([spec.picture_index for spec in MODE_ART.values()], paused=running)
+            kept += await self.art.warm_public(list(PUBLIC_INDEXES), paused=running)
             if kept or rows != before:
                 self.bus.publish("stats_changed")
         except asyncio.CancelledError:
@@ -783,8 +782,10 @@ class Core:
             "savings": self._savings(),
             "codes": self.codebook.totals(self._codes_uid() or ""),
             "whats_new": self._whats_new,
-            # Whether Your week, Endgame and the Today widget are shown (`characters.WEEK_AND_ENDGAME`).
-            "week_and_endgame": characters.WEEK_AND_ENDGAME,
+            # Whether the Endgame tab is shown (`characters.ENDGAME`).
+            "endgame": characters.ENDGAME,
+            # Whether the planner shows its verdict (`characters.VERDICT`).
+            "verdict": characters.VERDICT,
             "online": self.online.view(),
             "history_notice": self._history_notice(),
         }
@@ -1239,7 +1240,7 @@ class Core:
     # ------------------------------------------------------------------ Characters (the Characters plan, the core's seams)
     def characters_changed(self) -> None:
         """Tell the pages that what the Characters pages show changed (the focus, a plan, a tick, a card, a typed amount,
-        the Theater's pick, or what HoYoLAB or the wiki gave): they read /api/characters, /api/week and /api/endgame again."""
+        the Theater's pick, or what HoYoLAB or the wiki gave): they read /api/characters, /api/plan and /api/endgame again."""
         self.bus.publish("characters_changed")
 
     def refresh_characters(self) -> dict[str, Any]:
@@ -1264,20 +1265,6 @@ class Core:
             "reading": state == "syncing", "login": not self.has_token(),
             "wait_seconds": self.scheduler.manual_wait_seconds() or self.scheduler.seconds_until_runs_count_again(),
             "blocked": state if state in ("paused", "login_needed", "verification_needed") else None,
-        }
-
-    def _characters_notify(self, kind: str, text: str) -> bool:
-        """A notice of the Characters pages, in each way the player has on. With every way off it counts as given, so that
-        turning one on brings no burst of old notices."""
-        self.remind(kind, text)
-        return True
-
-    def _characters_switches(self) -> dict[str, bool]:
-        """The Characters notices' switches, by kind (the notices' own names for them)."""
-        settings = self.settings
-        return {
-            "weekly": settings.characters_notice_weekly, "domain": settings.characters_notice_domain,
-            "ready": settings.characters_notice_ready,
         }
 
     def _game_version(self) -> str:

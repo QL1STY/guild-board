@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "a1Precise": {"on": false, "state": "on", "label": "Precise Movement", "covers": [], "reason": "The ATK bonus starts only after her Swift Stormflight hits and ends with her Nightsoul's Blessing, while her main damage is her Burst, cast before it; its Constellation 2 part goes to the active party member."},
+    "c6Extreme": {"on": false, "state": "on", "label": "Constellation 6 Extreme Force", "covers": [], "reason": "A Constellation 6 bonus for the active party member when her Nightsoul points overflow, which depends on the team."}
+  }
+}

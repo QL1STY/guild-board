@@ -1,7 +1,7 @@
 {
   "key": "razor", "name": "Razor", "element": "Electro", "weapon_type": "Claymore", "rarity": 4,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "physical",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"],
   "goals": {"atk": 2000, "cr": 80, "cd": 140, "er": 130},
   "mains": {"sands": ["atk_pct", "em"], "goblet": ["dmg", "phys", "atk_pct"], "circlet": ["cr", "cd"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

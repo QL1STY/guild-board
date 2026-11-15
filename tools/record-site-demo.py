@@ -56,8 +56,8 @@ PAGES: dict[str, tuple[str, ...]] = {
     "ledger": ("/api/ledger",) + tuple(f"/api/ledger/history?kind={kind}&limit=50" for kind in ("primogem", "crystal", "resin"))
     + ("/api/ledger/history?kind=artifact&limit=50&rank=5",),
     "friends": ("/api/friends", "/api/friends?fresh=1", "/api/profile"),
-    "characters": ("/api/characters",),
-    "week": (),
+    "characters": ("/api/characters", "/api/artifact-sets"),
+    "plan": ("/api/plan",),
     "codes": ("/api/codes",),
     "gallery": ("/api/gallery",),
     "settings": (
@@ -99,6 +99,8 @@ def _characters(get: Get) -> list[str]:
     for entry in get("/api/characters")["entries"]:
         routes.append(f"/api/characters/{entry['key']}")
         routes.append(f"/api/characters/{entry['key']}/plan")
+        routes.append(f"/api/characters/{entry['key']}/weapons")   # the planner's weapon picker
+        routes.append(f"/api/artifact-sets?character={entry['key']}")   # its set picker, which gives each set's effects for her
     return routes
 
 
@@ -130,10 +132,10 @@ def _months(get: Get) -> list[str]:
     return [f"/api/stats/month?ym={month['ym']}" for month in get("/api/stats/month")["months"]]
 
 
-# The routes of Your week and the Endgame tab, which the core answers (and the interface asks for) only while the switch that shows
-# them is on (`characters.WEEK_AND_ENDGAME`, passed on to the core below).
-WEEK_AND_ENDGAME = ("/api/week", "/api/endgame?after=0", "/api/endgame?after=1")
-OPTIONAL = {"board": ("/api/week",), "week": ("/api/week",), "characters": WEEK_AND_ENDGAME[1:]}
+# The routes of the Endgame tab, which the core answers (and the interface asks for) only while the switch that shows it is on
+# (`characters.ENDGAME`, passed on to the core below).
+ENDGAME = ("/api/endgame?after=0", "/api/endgame?after=1")
+OPTIONAL = {"characters": ENDGAME}
 
 
 # The routes that depend on an answer, made from it.
@@ -179,10 +181,10 @@ def recording_key(route: str) -> str:
     return f"{words}-{value:08x}"
 
 
-def routes_of(page: str, get: Get, week_and_endgame: bool = False) -> list[str]:
-    """Every route of a page: the common ones, its own, and those its answers lead to, without repeats, in order. The routes of Your
-    week and the Endgame are there only while the core shows them."""
-    routes = list(COMMON) + list(PAGES[page]) + (list(OPTIONAL.get(page, ())) if week_and_endgame else [])
+def routes_of(page: str, get: Get, endgame: bool = False) -> list[str]:
+    """Every route of a page: the common ones, its own, and those its answers lead to, without repeats, in order. The routes of the
+    Endgame are there only while the core shows it."""
+    routes = list(COMMON) + list(PAGES[page]) + (list(OPTIONAL.get(page, ())) if endgame else [])
     if page in EXPANDERS:
         routes.extend(EXPANDERS[page](get))
     return list(dict.fromkeys(routes))
@@ -229,12 +231,14 @@ def _environment(data_dir: Path) -> dict[str, str]:
     return {**{name: value for name, value in os.environ.items() if name.upper() not in replaced}, **own}
 
 
-def start_core(data_dir: Path, demo_now: str, week_and_endgame: bool = False) -> tuple[subprocess.Popen[str], str]:
+def start_core(data_dir: Path, demo_now: str, endgame: bool = False, verdict: bool = False) -> tuple[subprocess.Popen[str], str]:
     """The demo core of tools/site_demo_core.py (the demo, whose pictures are named by their official addresses), and its launch link
     (the first line it prints)."""
     program = [sys.executable, str(ROOT / "tools" / "site_demo_core.py"), "--demo-now", demo_now, "--data-dir", str(data_dir)]
-    if week_and_endgame:
-        program.append("--week-and-endgame")
+    if endgame:
+        program.append("--endgame")
+    if verdict:
+        program.append("--verdict")  # the planner's verdict is in the demo while it is in the app
     core = subprocess.Popen(program, cwd=ROOT, env=_environment(data_dir), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
     assert core.stdout is not None
     deadline = time.monotonic() + 60
@@ -272,7 +276,7 @@ def settled(get: Get) -> None:
     raise SystemExit("The demo's first sync did not end.")
 
 
-def record(get: Reader, out: Path, scrub: dict[str, str] | None = None, week_and_endgame: bool = False) -> dict[str, list[str]]:
+def record(get: Reader, out: Path, scrub: dict[str, str] | None = None, endgame: bool = False) -> dict[str, list[str]]:
     """Reads the routes of every page and writes them into `out`. Answers the routes of each page, by page. A route the core does not
     answer is left out and said; one of a page's own fixed routes that fails ends the run."""
     out.mkdir(parents=True, exist_ok=True)
@@ -280,12 +284,12 @@ def record(get: Reader, out: Path, scrub: dict[str, str] | None = None, week_and
     by_page: dict[str, list[str]] = {}
     for page in PAGES:
         by_page[page] = []
-        for route in routes_of(page, get, week_and_endgame):
+        for route in routes_of(page, get, endgame):
             if route not in recorded:
                 try:
                     text = json.dumps(get(route), separators=(",", ":"), ensure_ascii=False)
                 except urllib.error.HTTPError as refused:
-                    if route in COMMON or route in PAGES[page] or (week_and_endgame and route in OPTIONAL.get(page, ())):
+                    if route in COMMON or route in PAGES[page] or (endgame and route in OPTIONAL.get(page, ())):
                         raise SystemExit(f"{route} answered {refused.code}.") from refused
                     print(f"Left out, the core answered {refused.code}: {route}", file=sys.stderr)
                     continue
@@ -294,7 +298,7 @@ def record(get: Reader, out: Path, scrub: dict[str, str] | None = None, week_and
                 (out / f"{recording_key(route)}.json").write_text(text, encoding="utf-8", newline="\n")
                 recorded[route] = recording_key(route)
             by_page[page].append(route)
-    index = {"week_and_endgame": week_and_endgame, "pages": by_page, "routes": recorded}
+    index = {"endgame": endgame, "pages": by_page, "routes": recorded}
     (out / "index.json").write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     return by_page
 
@@ -330,13 +334,13 @@ def main(argv: list[str] | None = None) -> int:
             old.unlink()
     with tempfile.TemporaryDirectory(prefix="guildboard-site-demo-") as folder:
         data_dir = Path(folder) / "data"
-        shown = characters.WEEK_AND_ENDGAME  # the app as it is built: Your week and the Endgame are in the demo while they are in the app
-        core, launch = start_core(data_dir, args.demo_now, shown)
+        shown = characters.ENDGAME  # the app as it is built: the Endgame is in the demo while it is in the app
+        core, launch = start_core(data_dir, args.demo_now, shown, characters.VERDICT)
         try:
             get = Reader(launch)
             get.send("PUT", "/api/settings", {"risk_acknowledged": True})
             settled(get)
-            by_page = record(get, args.out, scrub={str(data_dir): "Guild Board's data folder"}, week_and_endgame=shown)
+            by_page = record(get, args.out, scrub={str(data_dir): "Guild Board's data folder"}, endgame=shown)
             icons = icon_addresses(data_dir / "guildboard.db")
         finally:
             stop_core(core)

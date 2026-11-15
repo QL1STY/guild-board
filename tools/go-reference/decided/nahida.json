@@ -1,0 +1,7 @@
+{
+  "main": ["Tri-Karma Purification DMG"],
+  "toggles": {
+    "c2Bloom": {"on": false, "state": "on", "label": "Constellation 2 reaction crits", "covers": [], "reason": "A Constellation 2 buff to reactions the team triggers."},
+    "c4Count": {"on": false, "state": "4", "label": "Constellation 4, four enemies marked", "covers": [], "reason": "Depends on how many enemies are near."}
+  }
+}

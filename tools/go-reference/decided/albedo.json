@@ -1,0 +1,11 @@
+{
+  "main": ["Transient Blossom DMG", "Burst DMG", "Fatal Blossom DMG"],
+  "toggles": {
+    "burstUsed": {"on": false, "state": "burstUsed", "label": "Elemental Mastery after his Burst", "covers": [], "reason": "A short party buff after his Burst."},
+    "c2Stacks": {"on": false, "state": "4", "label": "Constellation 2 stacks", "covers": [], "reason": "Constellation 2 stacks that build up during the fight."},
+    "p1EnemyHp": {"on": false, "state": "belowHp", "label": "Enemy below half HP", "covers": [], "reason": "Depends on the enemy's HP."},
+    "skillInField": {"on": false, "state": "skillInField", "label": "Constellation 4 plunging bonus", "covers": [], "reason": "A Constellation 4 bonus to plunging attacks, which are not his main damage."},
+    "lockHomework": {"on": false, "state": "on", "label": "Witch's Homework done (Hexerei)", "covers": [], "reason": "Her Hexerei effects need her Witch's Homework quest done and the party to have two Hexerei characters, which the planner cannot tell, so it is left for the player to switch on. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "c1LockAfterSkill": {"on": false, "state": "on", "label": "Constellation 1 DEF after his Skill (Hexerei)", "covers": [], "reason": "A Constellation 1 DEF bonus of his Hexerei form. It needs the Witch's Homework switch as well. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

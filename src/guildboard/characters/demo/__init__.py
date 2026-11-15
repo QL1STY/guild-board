@@ -7,6 +7,7 @@ keeps each one's key and address, for a later website); the art cache serves non
 Nothing here reaches the internet; the wiki's entries are kept in the store from `wiki.json`, and the cards are `cards.json`."""
 from __future__ import annotations
 
+import copy
 import dataclasses
 import json
 from datetime import date, datetime, timedelta
@@ -49,6 +50,12 @@ PLANS = {
     "jahoda": (75, {"normal": 7, "skill": 8, "burst": 7}),
 }
 PLENTY = 9_999_999
+# Sandrone's talent book as the first tier the Plan page reads its days from: the wiki entry of the book's last tier (kept in
+# wiki.json, as the wiki gave it) says where and on which days the book is farmed, and the three tiers share that domain, so the
+# first tier's entry is that one with its own name and picture (the picture is the one her Talents' costs give it). Nothing here
+# is made up: no weapon material is kept, since the demo holds no wiki entry that says its domain.
+FIRST_TIER = ("8588", "8590", "Teachings of Vagrancy",
+              "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/ed8dd8491845103a4857b7e6ad172739_2056995232459361537.png")
 THEATER_TEXT = "Characters of Cryo, Electro and Anemo are boosted this month."
 SECOND_HALF = ("sandrone", "ineffa", "lan-yan", "jahoda")   # the second half of floor 12, where a star was lost
 
@@ -218,6 +225,7 @@ def _endgame_detail(now: datetime, server: str, back: int, anchor: datetime | No
         theater_starts=iso(month_from),
         theater_medals=medals,
         theater_medal_count=sum(medals[:10]),
+        theater_arcana=len(medals) - 10,  # an Arcana Challenge month clears both its Arcana fights
         theater_flowers=1285 - 105 * month,
         theater_seconds=1002 - 150 * month,
         theater_ranks=(
@@ -273,6 +281,13 @@ def seed(store: Store, uid: int, now: datetime) -> None:
     with store.transaction():
         for ident, entry in _read("wiki.json")["entries"].items():
             store.put_wiki_entry(WikiEntryRow(ident, entry["kind"], entry["name"], entry["data"], "demo", now))
+        ident, last_tier, name, icon = FIRST_TIER
+        data = copy.deepcopy(_read("wiki.json")["entries"][last_tier]["data"])
+        data.update(id=ident, name=name, icon=icon)
+        for row in data["modules"]["Attributes"]["baseInfo"]["list"]:
+            if row["key"] == "Name":
+                row["value"] = [name]
+        store.put_wiki_entry(WikiEntryRow(ident, "material", name, data, "demo", now))
         records = {bridge.slug(r.name): r for r in demo_builds().builds}
         for key, (level, talents) in PLANS.items():
             card = demo_card(key)

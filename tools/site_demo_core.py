@@ -7,7 +7,7 @@ demo's own core counts only those that name a file. It serves none of them, down
 demo (`guildboard --demo` is as it was). It prints the launch link as `guildboard --no-shell` does, and starts only on a new, empty
 data folder.
 
-    uv run python tools/site_demo_core.py --data-dir DIR --demo-now 2026-10-13T08:00:00+00:00 [--week-and-endgame]
+    uv run python tools/site_demo_core.py --data-dir DIR --demo-now 2026-10-13T08:00:00+00:00 [--endgame] [--verdict]
 """
 from __future__ import annotations
 
@@ -27,12 +27,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--demo-now", required=True)
-    parser.add_argument("--week-and-endgame", action="store_true")
+    parser.add_argument("--endgame", action="store_true")
+    parser.add_argument("--verdict", action="store_true")
     args = parser.parse_args()
     if args.data_dir.exists() and any(args.data_dir.iterdir()):  # never the player's folder, nor anything else that holds files
         parser.error("--data-dir must be a new, empty folder.")
-    if args.week_and_endgame:
-        characters.WEEK_AND_ENDGAME = True
+    if args.endgame:
+        characters.ENDGAME = True
+    if args.verdict:
+        characters.VERDICT = True
     paths = AppPaths(args.data_dir)
     paths.ensure()
     core = Core(paths, demo=True, demo_now=datetime.fromisoformat(args.demo_now))

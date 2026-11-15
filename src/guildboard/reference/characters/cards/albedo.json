@@ -1,7 +1,7 @@
 {
   "key": "albedo", "name": "Albedo", "element": "Geo", "weapon_type": "Sword", "rarity": 5,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "def",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"def": 3000, "cr": 70, "cd": 140, "er": 130},
   "mains": {"sands": ["def_pct"], "goblet": ["def_pct", "dmg"], "circlet": ["cr", "cd"]},
   "weights": {"def_pct": "wants", "cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "some", "atk": "some", "def": "some", "em": "none", "hp_pct": "none", "hp": "none"},

@@ -1,0 +1,16 @@
+{
+  "main": null,
+  "toggles": {
+    "a1Stacks": {"on": false, "state": "6", "label": "Disciplinary Action, six stacks", "covers": [], "reason": "She gains a stack each time she uses Windborne Sword or her Burst, so the six that raise her Spirit Blades build up during the fight."},
+    "skillArmed": {"on": false, "state": "on", "label": "Armed for Action", "covers": [], "reason": "Her Normal Attacks are Anemo only in Armed for Action mode, which she leaves after a few Windborne Swords, and her main damage comes from her Skill and Burst."}
+  },
+  "party": {
+    "default": "none",
+    "reason": "Most teams set up no Stellar reaction. Her Spirit Blades deal their ordinary damage only then and their Stellar Swirl damage in its place when the team sets one up, so the Stellar Swirl hits are not counted unless the team is chosen.",
+    "options": [
+      {"id": "none", "label": "No Stellar reactions", "team": ["pyro", "hydro", "electro"]},
+      {"id": "ss", "label": "Stellar Swirl team", "team": ["pyro", "hydro", "electro"], "states": {"a0StellarRadiance": "ss"}}
+    ],
+    "only_rows": {"skill": {"Windborne Sword Lv. 2 Spirit Blade Stellar Swirl DMG": ["ss"], "Windborne Sword Lv. 3 Spirit Blade Stellar Swirl DMG": ["ss"], "Windborne Sword Lv. 3 Spirit Blade Final Hit Stellar Swirl DMG": ["ss"], "Windborne Sword Lv. 2 Spirit Blade DMG": ["none"], "Windborne Sword Lv. 3 Spirit Blade DMG": ["none"], "Windborne Sword Lv. 3 Spirit Blade Final Hit DMG": ["none"]}, "burst": {"Spirit Blade Stellar Swirl DMG": ["ss"], "Spirit Blade DMG": ["none"]}}
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "toggles": {
+    "flowing-purity:afterSkill": {"on": true, "state": "on", "label": "After her Skill", "covers": [], "reason": "Its Elemental DMG bonus lasts 15 seconds after her Elemental Skill and can start again every 10, so it is up while she casts her Skill when it is ready."},
+    "flowing-purity:bond": {"on": false, "state": "on", "label": "Bond of Life cleared", "covers": [], "reason": "It needs the Bond of Life the weapon gives her to be cleared by healing, which depends on the team."}
+  }
+}

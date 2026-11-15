@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a1AfterSkill": {"on": false, "state": "on", "label": "4 seconds after her Skill", "covers": [], "reason": "A window of 4 seconds after her Skill covers only part of her Normal, Charged and Plunging Attacks. It makes them Geo and adds 40%, both counted when it is switched on here; it was checked once with it on against Genshin Optimizer."},
+    "skillCharges": {"on": false, "state": "6", "label": "Crystal Shrapnel stacks", "covers": [], "reason": "How many stacks her Skill uses depends on the Crystallize shards the party makes, so a full stack is not certain."},
+    "shotsHit": {"on": false, "state": "11", "label": "Shards that hit", "covers": [], "reason": "How many of her Skill's shards hit one enemy depends on the distance and the enemy's size. The bonus to the Rosula Shardshot grows with the count and is full at eleven, and it needs the stack count of her Skill as well. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

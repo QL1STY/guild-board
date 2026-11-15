@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "a4Burning": {"on": false, "state": "on", "label": "Against Burning enemies", "covers": [], "reason": "Depends on the enemy Burning, which needs a Pyro party member."},
+    "c6Fragrance": {"on": false, "state": "on", "label": "Constellation 6 Abiding Fragrance", "covers": [], "reason": "A Constellation 6 state of up to 5 seconds that ends after four Scents covers only part of her Normal and Charged Attacks. It converts them to Dendro, which is counted when it is switched on here and it was checked once with it on against Genshin Optimizer."}
+  }
+}

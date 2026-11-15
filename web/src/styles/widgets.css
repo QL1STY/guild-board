@@ -2136,8 +2136,8 @@
   }
 }
 
-/* Today (the Characters plan): today's resin as a bar, then the steps, each with a tick box (the Pinned achievements' own, .pn-tick),
-   a face where there is room, its task and its cost. Only the widget roles are drawn with. */
+/* Today (the Plan page): the talent books and weapon materials open today, each with its picture, its name, who it is for and,
+   where there is room, their faces. Only the widget roles are drawn with. */
 .td {
   flex: 1;
   min-width: 0;
@@ -2145,37 +2145,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-.td-resin {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.td-bar {
-  flex: 1;
-  display: flex;
-  gap: 2px;
-  height: 8px;
-  overflow: hidden;
-  border-radius: 4px;
-  background: var(--w-track);
-}
-.td-bar i {
-  display: block;
-  min-width: 2px;
-  background: var(--w-fill);
-}
-.td-bar i.done {
-  background: var(--w-done);
-}
-.td-bar i.left {
-  background: transparent;
-}
-.td-resin-text {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--w-ink2);
-  white-space: nowrap;
 }
 .td-list {
   flex: 1;
@@ -2198,9 +2167,18 @@
 .td-row:first-child {
   padding-top: 0;
 }
-.td-row.done .td-text b {
-  text-decoration: line-through;
-  color: var(--w-muted);
+.td-mat {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--w-plate);
+  color: var(--w-ink2);
+}
+.td-mat img {
+  object-fit: contain;
+}
+.td-mat .sign {
+  padding: 18%;
 }
 .td-faces {
   display: flex;
@@ -2214,6 +2192,9 @@
   border-radius: 50%;
   background: var(--w-plate);
   color: var(--w-ink2);
+}
+.td-face img {
+  object-fit: cover;
 }
 .td-face + .td-face {
   margin-left: -10px;
@@ -2239,13 +2220,4 @@
   color: var(--w-muted);
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.td-cost {
-  flex: none;
-  font-size: 13px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-.td-cost.free {
-  color: var(--w-good);
 }

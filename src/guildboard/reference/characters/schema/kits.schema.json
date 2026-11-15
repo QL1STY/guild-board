@@ -1,0 +1,1608 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "kits.json: each character's, weapon's and set's kit, generated from Genshin Optimizer's Waverider sheets by tools/go-reference (see its README); do not edit it: change the decision files (tools/go-reference/decided/) and run the tool. Percentage stats are fractions (0.466 is 46.6%). An effect adds min(rate x max(stat - over, 0), cap) to its bucket `to`: `stat` is its `from` stat (read before conversions, `premod`, the panel's; or after them, `final`), `over` is in that stat's own units, `cap` is x base ATK when `cap_from` says so, no `from` adds rate itself; it holds while its gates hold: `pieces`, `from_ascension`, `from_constellation`, `talents` (the moves it reaches), `weapon_types`, `hits` (the rows it reaches) and `while` (the toggle that must be on), and, only on the effects that have them, `times` (a second stat of hers it multiplies by, read as `reads` says: Kokomi's Healing Bonus), `in_talent` (the talent whose rows `hits` names, for a row name two talents share) and `also` (the toggles besides `while` that must be on, for a term that reads two or more of her states). A list `rate` is by refinement for a weapon, and by talent level (index: level - 1) when `row` names the talent row it is. `dmg` is DMG Bonus for every hit, `mult` multiplies the hit's multiplier by 1 + rate. `in_stats`: HoYoLAB's panel already holds it for the weapon, set or character it belongs to; the engine adds it only for a tested weapon or set that is not hers. A hit's kind is in `hits`, the element of a Stellar hit in `elements`, the move of a Normal Attack row (and of a Skill or Burst row the game deals as an attack) in `moves`. `row_gates` (some characters): a row, as the planner's block names it, that is dealt only `from` a constellation or only `below` one (Yanfei's Charged Attack with four Scarlet Seals is Constellation 6's). `derived_rows` (some characters): a row of her Skill or Burst that HoYoLAB prints no row for, named in our own words, with the numbers of `from_row`, a row of `from_talent` (Sethos's Dusk Bolts have his Normal Attack's). `party` (some characters): the team shapes her damage depends on, `default` the usual one (`reason` says why), each option with the elements the rows that take the team's element deal; `element_rows` are those rows (dealt once for each element of the option) and `only_rows` the rows only some options deal; an effect with `party` holds only in those options.",
+  "type": "object",
+  "required": [
+    "go_commit",
+    "characters",
+    "weapons",
+    "sets"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "go_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "characters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "go_key",
+          "name",
+          "checked",
+          "unsure",
+          "main",
+          "stellar",
+          "element",
+          "weapon_type",
+          "hits",
+          "elements",
+          "moves",
+          "infused",
+          "effects",
+          "toggles",
+          "left_out",
+          "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "go_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "checked": {
+            "type": "boolean"
+          },
+          "unsure": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "main": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "stellar": {
+            "enum": [
+              null,
+              "stellar-conduct",
+              "stellar-swirl"
+            ]
+          },
+          "element": {
+            "type": "string",
+            "enum": [
+              "pyro",
+              "hydro",
+              "electro",
+              "cryo",
+              "anemo",
+              "geo",
+              "dendro"
+            ]
+          },
+          "weapon_type": {
+            "type": "string",
+            "enum": [
+              "sword",
+              "claymore",
+              "polearm",
+              "bow",
+              "catalyst"
+            ]
+          },
+          "hits": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "normal": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "physical",
+                    "elemental",
+                    "lunar-bloom",
+                    "lunar-charged",
+                    "lunar-crystallize",
+                    "stellar-conduct",
+                    "stellar-swirl"
+                  ]
+                }
+              },
+              "skill": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "physical",
+                    "elemental",
+                    "lunar-bloom",
+                    "lunar-charged",
+                    "lunar-crystallize",
+                    "stellar-conduct",
+                    "stellar-swirl"
+                  ]
+                }
+              },
+              "burst": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "physical",
+                    "elemental",
+                    "lunar-bloom",
+                    "lunar-charged",
+                    "lunar-crystallize",
+                    "stellar-conduct",
+                    "stellar-swirl"
+                  ]
+                }
+              }
+            }
+          },
+          "elements": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "normal": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "cryo",
+                    "electro",
+                    "anemo"
+                  ]
+                }
+              },
+              "skill": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "cryo",
+                    "electro",
+                    "anemo"
+                  ]
+                }
+              },
+              "burst": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "cryo",
+                    "electro",
+                    "anemo"
+                  ]
+                }
+              }
+            }
+          },
+          "moves": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "normal": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "normal",
+                    "charged",
+                    "plunging"
+                  ]
+                }
+              },
+              "skill": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "normal",
+                    "charged",
+                    "plunging"
+                  ]
+                }
+              },
+              "burst": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "enum": [
+                    "normal",
+                    "charged",
+                    "plunging"
+                  ]
+                }
+              }
+            }
+          },
+          "infused": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "talents",
+                "element",
+                "while"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "talents": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "normal",
+                      "charged",
+                      "plunging",
+                      "skill",
+                      "burst"
+                    ]
+                  }
+                },
+                "element": {
+                  "type": "string",
+                  "enum": [
+                    "pyro",
+                    "hydro",
+                    "electro",
+                    "cryo",
+                    "anemo",
+                    "geo",
+                    "dendro"
+                  ]
+                },
+                "while": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "from_ascension": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "from_constellation": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "party": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "from",
+                "reads",
+                "to",
+                "rate",
+                "cap",
+                "cap_from",
+                "over",
+                "pieces",
+                "from_ascension",
+                "from_constellation",
+                "talents",
+                "weapon_types",
+                "hits",
+                "row",
+                "while",
+                "in_stats"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "atk",
+                    "hp",
+                    "def",
+                    "em",
+                    "er",
+                    "cr",
+                    "cd",
+                    null
+                  ]
+                },
+                "reads": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "premod",
+                    "final",
+                    null
+                  ]
+                },
+                "to": {
+                  "type": "string",
+                  "pattern": "^(?:hp|atk|def|em|er|cr|cd|dmg|physical|hp%|atk%|def%|heal|additive|mult|dmg:(?:pyro|hydro|electro|cryo|anemo|geo|dendro|normal|charged|plunging|skill|burst)|additive:(?:pyro|hydro|electro|cryo|anemo|geo|dendro|physical|normal|charged|plunging|skill|burst|lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl|vaporize|melt|aggravate|spread)|(?:cr|cd):(?:pyro|hydro|electro|cryo|anemo|geo|dendro|physical|lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl)|(?:base|bonus|elevation):(?:lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl|vaporize|melt|aggravate|spread))$"
+                },
+                "rate": {
+                  "type": [
+                    "number",
+                    "array"
+                  ],
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 5,
+                  "maxItems": 15
+                },
+                "cap": {
+                  "type": [
+                    "number",
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 5,
+                  "maxItems": 5
+                },
+                "cap_from": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "base_atk",
+                    null
+                  ]
+                },
+                "over": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pieces": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "enum": [
+                    2,
+                    4,
+                    null
+                  ]
+                },
+                "from_ascension": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "from_constellation": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "talents": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "normal",
+                      "charged",
+                      "plunging",
+                      "skill",
+                      "burst"
+                    ]
+                  }
+                },
+                "weapon_types": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "sword",
+                      "claymore",
+                      "polearm",
+                      "bow",
+                      "catalyst"
+                    ]
+                  }
+                },
+                "hits": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "row": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "required": [
+                    "talent",
+                    "name"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "talent": {
+                      "type": "string",
+                      "enum": [
+                        "normal",
+                        "skill",
+                        "burst"
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "while": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                },
+                "in_stats": {
+                  "type": "boolean"
+                },
+                "party": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1
+                },
+                "times": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "heal",
+                    null
+                  ]
+                },
+                "in_talent": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "normal",
+                    "skill",
+                    "burst",
+                    null
+                  ]
+                },
+                "also": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          },
+          "toggles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "label",
+                "on",
+                "covers",
+                "state"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "on": {
+                  "type": "boolean"
+                },
+                "covers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "normal",
+                      "charged",
+                      "plunging",
+                      "skill",
+                      "burst"
+                    ]
+                  }
+                },
+                "state": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "left_out": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "what",
+                "why"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "what": {
+                  "type": "string"
+                },
+                "expr": {
+                  "type": "string"
+                },
+                "why": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^GO [0-9a-f]{8} libs/gi/sheets/src/\\S+/index\\.tsx$"
+          },
+          "party": {
+            "type": "object",
+            "required": [
+              "default",
+              "reason",
+              "options",
+              "element_rows",
+              "only_rows"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "default": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "options": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "label",
+                    "elements"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "elements": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "pyro",
+                          "hydro",
+                          "electro",
+                          "cryo",
+                          "anemo",
+                          "geo",
+                          "dendro"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "element_rows": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "normal": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "skill": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "burst": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "only_rows": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "normal": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "skill": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "burst": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "minItems": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "row_gates": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "normal": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "from": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 6
+                    },
+                    "below": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 6
+                    }
+                  }
+                }
+              },
+              "skill": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "from": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 6
+                    },
+                    "below": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 6
+                    }
+                  }
+                }
+              },
+              "burst": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "from": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 6
+                    },
+                    "below": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 6
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "derived_rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "talent",
+                "name",
+                "from_talent",
+                "from_row"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "talent": {
+                  "type": "string",
+                  "enum": [
+                    "skill",
+                    "burst"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "from_talent": {
+                  "type": "string",
+                  "enum": [
+                    "normal",
+                    "skill",
+                    "burst"
+                  ]
+                },
+                "from_row": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "weapons": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "go_key",
+          "effects",
+          "toggles",
+          "left_out",
+          "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "go_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "sword",
+              "claymore",
+              "polearm",
+              "bow",
+              "catalyst"
+            ]
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "from",
+                "reads",
+                "to",
+                "rate",
+                "cap",
+                "cap_from",
+                "over",
+                "pieces",
+                "from_ascension",
+                "from_constellation",
+                "talents",
+                "weapon_types",
+                "hits",
+                "row",
+                "while",
+                "in_stats"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "atk",
+                    "hp",
+                    "def",
+                    "em",
+                    "er",
+                    "cr",
+                    "cd",
+                    null
+                  ]
+                },
+                "reads": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "premod",
+                    "final",
+                    null
+                  ]
+                },
+                "to": {
+                  "type": "string",
+                  "pattern": "^(?:hp|atk|def|em|er|cr|cd|dmg|physical|hp%|atk%|def%|heal|additive|mult|dmg:(?:pyro|hydro|electro|cryo|anemo|geo|dendro|normal|charged|plunging|skill|burst)|additive:(?:pyro|hydro|electro|cryo|anemo|geo|dendro|physical|normal|charged|plunging|skill|burst|lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl|vaporize|melt|aggravate|spread)|(?:cr|cd):(?:pyro|hydro|electro|cryo|anemo|geo|dendro|physical|lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl)|(?:base|bonus|elevation):(?:lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl|vaporize|melt|aggravate|spread))$"
+                },
+                "rate": {
+                  "type": [
+                    "number",
+                    "array"
+                  ],
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 5,
+                  "maxItems": 15
+                },
+                "cap": {
+                  "type": [
+                    "number",
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 5,
+                  "maxItems": 5
+                },
+                "cap_from": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "base_atk",
+                    null
+                  ]
+                },
+                "over": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pieces": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "enum": [
+                    2,
+                    4,
+                    null
+                  ]
+                },
+                "from_ascension": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "from_constellation": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "talents": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "normal",
+                      "charged",
+                      "plunging",
+                      "skill",
+                      "burst"
+                    ]
+                  }
+                },
+                "weapon_types": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "sword",
+                      "claymore",
+                      "polearm",
+                      "bow",
+                      "catalyst"
+                    ]
+                  }
+                },
+                "hits": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "row": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "required": [
+                    "talent",
+                    "name"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "talent": {
+                      "type": "string",
+                      "enum": [
+                        "normal",
+                        "skill",
+                        "burst"
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "while": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                },
+                "in_stats": {
+                  "type": "boolean"
+                },
+                "party": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1
+                },
+                "times": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "heal",
+                    null
+                  ]
+                },
+                "in_talent": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "normal",
+                    "skill",
+                    "burst",
+                    null
+                  ]
+                },
+                "also": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          },
+          "toggles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "label",
+                "on",
+                "covers",
+                "state"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "on": {
+                  "type": "boolean"
+                },
+                "covers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "normal",
+                      "charged",
+                      "plunging",
+                      "skill",
+                      "burst"
+                    ]
+                  }
+                },
+                "state": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "left_out": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "what",
+                "why"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "what": {
+                  "type": "string"
+                },
+                "expr": {
+                  "type": "string"
+                },
+                "why": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^GO [0-9a-f]{8} libs/gi/sheets/src/\\S+/index\\.tsx$"
+          },
+          "checked": {
+            "type": "boolean"
+          },
+          "level_90": {
+            "type": "object",
+            "required": [
+              "base_atk",
+              "sub",
+              "sub_value"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "base_atk": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "sub": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "atk_pct",
+                  "cd",
+                  "cr",
+                  "def_pct",
+                  "em",
+                  "er",
+                  "hp_pct",
+                  "phys",
+                  null
+                ]
+              },
+              "sub_value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "sets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "go_key",
+          "effects",
+          "toggles",
+          "left_out",
+          "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "go_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "sword",
+              "claymore",
+              "polearm",
+              "bow",
+              "catalyst"
+            ]
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "from",
+                "reads",
+                "to",
+                "rate",
+                "cap",
+                "cap_from",
+                "over",
+                "pieces",
+                "from_ascension",
+                "from_constellation",
+                "talents",
+                "weapon_types",
+                "hits",
+                "row",
+                "while",
+                "in_stats"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "atk",
+                    "hp",
+                    "def",
+                    "em",
+                    "er",
+                    "cr",
+                    "cd",
+                    null
+                  ]
+                },
+                "reads": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "premod",
+                    "final",
+                    null
+                  ]
+                },
+                "to": {
+                  "type": "string",
+                  "pattern": "^(?:hp|atk|def|em|er|cr|cd|dmg|physical|hp%|atk%|def%|heal|additive|mult|dmg:(?:pyro|hydro|electro|cryo|anemo|geo|dendro|normal|charged|plunging|skill|burst)|additive:(?:pyro|hydro|electro|cryo|anemo|geo|dendro|physical|normal|charged|plunging|skill|burst|lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl|vaporize|melt|aggravate|spread)|(?:cr|cd):(?:pyro|hydro|electro|cryo|anemo|geo|dendro|physical|lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl)|(?:base|bonus|elevation):(?:lunar-bloom|lunar-charged|lunar-crystallize|stellar-conduct|stellar-swirl|vaporize|melt|aggravate|spread))$"
+                },
+                "rate": {
+                  "type": [
+                    "number",
+                    "array"
+                  ],
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 5,
+                  "maxItems": 15
+                },
+                "cap": {
+                  "type": [
+                    "number",
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 5,
+                  "maxItems": 5
+                },
+                "cap_from": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "base_atk",
+                    null
+                  ]
+                },
+                "over": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pieces": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "enum": [
+                    2,
+                    4,
+                    null
+                  ]
+                },
+                "from_ascension": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "from_constellation": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 6
+                },
+                "talents": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "normal",
+                      "charged",
+                      "plunging",
+                      "skill",
+                      "burst"
+                    ]
+                  }
+                },
+                "weapon_types": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "sword",
+                      "claymore",
+                      "polearm",
+                      "bow",
+                      "catalyst"
+                    ]
+                  }
+                },
+                "hits": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "row": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "required": [
+                    "talent",
+                    "name"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "talent": {
+                      "type": "string",
+                      "enum": [
+                        "normal",
+                        "skill",
+                        "burst"
+                      ]
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "while": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                },
+                "in_stats": {
+                  "type": "boolean"
+                },
+                "party": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1
+                },
+                "times": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "heal",
+                    null
+                  ]
+                },
+                "in_talent": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "normal",
+                    "skill",
+                    "burst",
+                    null
+                  ]
+                },
+                "also": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          },
+          "toggles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "label",
+                "on",
+                "covers",
+                "state"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "on": {
+                  "type": "boolean"
+                },
+                "covers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "normal",
+                      "charged",
+                      "plunging",
+                      "skill",
+                      "burst"
+                    ]
+                  }
+                },
+                "state": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "left_out": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "what",
+                "why"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "what": {
+                  "type": "string"
+                },
+                "expr": {
+                  "type": "string"
+                },
+                "why": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^GO [0-9a-f]{8} libs/gi/sheets/src/\\S+/index\\.tsx$"
+          },
+          "checked": {
+            "type": "boolean"
+          },
+          "level_90": {
+            "type": "object",
+            "required": [
+              "base_atk",
+              "sub",
+              "sub_value"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "base_atk": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "sub": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "atk_pct",
+                  "cd",
+                  "cr",
+                  "def_pct",
+                  "em",
+                  "er",
+                  "hp_pct",
+                  "phys",
+                  null
+                ]
+              },
+              "sub_value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

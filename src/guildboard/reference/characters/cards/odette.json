@@ -1,7 +1,7 @@
 {
   "key": "odette", "name": "Odette", "element": "Cryo", "weapon_type": "Sword", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage", "support"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"atk": 3000, "cr": 60, "cd": 180, "er": 145},
   "mains": {"sands": ["atk_pct"], "goblet": ["atk_pct"], "circlet": ["cr", "cd"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

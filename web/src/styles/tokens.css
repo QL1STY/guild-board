@@ -105,6 +105,8 @@
   --medal-light: #F6D98A;
   --medal: #C8962F;
   --medal-ink: #3E2A08;
+  /* An act cleared without its medal, under HoYoLAB's own white outline of the medal: a dusty lilac of the medal's family. */
+  --theater-cleared: #9C88BE;
   /* Ready text: 5.81:1, and 4.84:1 on the ready seal's tint. */
   --good: #2E6B1F;
   /* The focus ring: 4.45:1, and 3.69:1 on the page. The dark panel sets it again. */

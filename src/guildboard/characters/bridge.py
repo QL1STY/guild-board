@@ -162,13 +162,38 @@ def build_of(record: Mapping[str, Any], element: str, weapon_type: str, page: Ch
             ),
         )
     panel = _prop(record, element)
+    skills = talent_skills(record.get("skills", ()))
     return Build(
         key=key, level=int(record["level"]), ascension=ascension_of(record, page), constellation=constellation,
         talents=talents, bonus=bonus, weapon=weapon,
         pieces={slot: pieces[slot] for slot in SLOTS if slot in pieces},
         base={stat: values[0] for stat, values in panel.items()},
         add={stat: values[1] for stat, values in panel.items()},
+        affixes={kind: rows for kind, skill in skills.items() if (rows := _rows(skill.get("affixes")))},
+        recommended=_recommended(record.get("recommended")),
     )
+
+
+def _rows(raw: Any) -> tuple[tuple[str, str], ...]:
+    """A talent's rows as (name, value) pairs of text, from a record as the store keeps it (pairs as lists)."""
+    return tuple(
+        (str(row[0]), str(row[1])) for row in (raw if isinstance(raw, (list, tuple)) else ())
+        if isinstance(row, (list, tuple)) and len(row) == 2
+    )
+
+
+def _recommended(raw: Any) -> dict[str, tuple[str, ...]]:
+    """HoYoLAB's recommended property ids as stat keys, by "sands", "goblet", "circlet" and "subs". An id that is no stat of
+    ours is left out, and so is a list that has none; an element's DMG Bonus, whichever, is `dmg`."""
+    found: dict[str, tuple[str, ...]] = {}
+    for part, ids in (raw.items() if isinstance(raw, Mapping) else ()):
+        stats = tuple(dict.fromkeys(
+            stat for ident in (ids if isinstance(ids, (list, tuple)) else ())
+            if isinstance(ident, int) and (stat := PROP_KEYS.get(ident)) is not None
+        ))
+        if stats and part in ("sands", "goblet", "circlet", "subs"):
+            found[part] = stats
+    return found
 
 
 def own_stats(build: Build, page: CharacterPage | None) -> dict[str, float]:
@@ -263,10 +288,10 @@ def fallback_card(
     reacts = refs.reactions.get(element, ())
     return Card(
         key=key, name=name, element=element, weapon_type=weapon_type, rarity=rarity, pronouns=("they", "them", "their"),
-        roles=(role,), keeps_alive=role in ("healer", "protector"), scaling=scaling,
+        roles=(role,), keeps_alive=role in ("healer", "protector"),
         damage_talent="normal" if damage else "skill",
         talent_priority=("normal", "skill", "burst") if damage else ("skill", "burst", "normal"),
-        talent_table="elemental", goals=goals, mains={slot: stats for slot, stats in DEFAULT_MAINS[role].items()},
+        goals=goals, mains={slot: stats for slot, stats in DEFAULT_MAINS[role].items()},
         weights=weights, sets=(), weapons=(), partners=tuple(reacts[:2]), partner_roles=(), teams=(), notes=NONE_SENTENCE,
         confidence="none", early=early, stars=None, chart_size=None, edited=frozenset(),
     )
@@ -275,11 +300,10 @@ def fallback_card(
 # ------------------------------------------------------------------------------------------------ the player's edits to a card
 
 EDITABLE = (
-    "roles", "keeps_alive", "scaling", "damage_talent", "talent_priority", "talent_table", "goals", "mains", "weights",
+    "roles", "keeps_alive", "damage_talent", "talent_priority", "goals", "mains", "weights",
     "sets", "weapons", "partners", "partner_roles", "pronouns",
 )
 ROLES = ("damage", "support", "healer", "protector")
-SCALINGS = ("atk", "hp", "def", "em")
 PRONOUNS = (("she", "her", "her"), ("he", "him", "his"), ("they", "them", "their"))
 WEIGHTS = ("wants", "some", "none")
 PRONOUN_OBJECT_KEYS = ("she", "her", "hers")
@@ -305,16 +329,8 @@ def coerce_edit(field: str, value: Any) -> Any:
         if not isinstance(value, bool):
             raise CardRefused
         return value
-    if field == "scaling":
-        if value not in SCALINGS:
-            raise CardRefused
-        return value
     if field in ("damage_talent",):
         if value not in TALENTS:
-            raise CardRefused
-        return value
-    if field == "talent_table":
-        if value not in ("elemental", "physical"):
             raise CardRefused
         return value
     if field == "talent_priority":

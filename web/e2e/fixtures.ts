@@ -75,10 +75,10 @@ type Options = {
   /** The instant the demo core starts at; the Characters tests start it on a Sunday morning (2026-10-25). */
   demoNow: string
   /**
-   * Whether Your week and Endgame are shown (the core hides them, `characters.WEEK_AND_ENDGAME`). The tests of those pages
-   * run with them shown, as they will when the switch is back on; the tests of the hidden state set this false.
+   * Whether Endgame is shown (the core hides it, `characters.ENDGAME`). The tests of those pages
+   * run with it shown, as they will when the switch is back on; the tests of the hidden state set this false.
    */
-  weekAndEndgame: boolean
+  endgame: boolean
   /** The demo core of tools/memory_core.py, whose pictures are as large as the real ones; the memory measure uses it. */
   bigArt: boolean
   /** The folder of the real charts for the demo core of tools/stars_core.py, which the stars' proof uses; empty for none. */
@@ -106,23 +106,23 @@ export const test = base.extend<Options & { core: Core; api: Api }>({
   mode: ['demo', { option: true }],
   firstRun: [false, { option: true }],
   demoNow: [DEMO_NOW, { option: true }],
-  weekAndEndgame: [true, { option: true }],
+  endgame: [true, { option: true }],
   bigArt: [false, { option: true }],
   realCharts: ['', { option: true }],
   siteArt: [false, { option: true }],
 
-  core: async ({ mode, demoNow, weekAndEndgame, bigArt, realCharts, siteArt }, use) => {
+  core: async ({ mode, demoNow, endgame, bigArt, realCharts, siteArt }, use) => {
     const dataDir = mkdtempSync(path.join(tmpdir(), 'guildboard-e2e-'))
     const args = ['--no-shell', '--port', '0', '--data-dir', dataDir]
     if (mode === 'demo') args.unshift('--demo', '--demo-now', demoNow)
-    if (mode === 'demo' && weekAndEndgame) args.push('--week-and-endgame')
+    if (mode === 'demo' && endgame) args.push('--endgame')
     const program = (bigArt || realCharts !== '' || siteArt) && mode === 'demo' ? pythonProgram : coreProgram
     if (bigArt && mode === 'demo') {
       args.splice(0, args.length, path.join(projectRoot, 'tools', 'memory_core.py'), '--data-dir', dataDir, '--demo-now', demoNow)
-      if (weekAndEndgame) args.push('--week-and-endgame')
+      if (endgame) args.push('--endgame')
     } else if (siteArt && mode === 'demo') {
       args.splice(0, args.length, path.join(projectRoot, 'tools', 'site_demo_core.py'), '--data-dir', dataDir, '--demo-now', demoNow)
-      if (weekAndEndgame) args.push('--week-and-endgame')
+      if (endgame) args.push('--endgame')
     } else if (realCharts !== '' && mode === 'demo') {
       args.splice(0, args.length, path.join(projectRoot, 'tools', 'stars_core.py'), '--data-dir', dataDir, '--demo-now', demoNow, '--charts', realCharts)
     }

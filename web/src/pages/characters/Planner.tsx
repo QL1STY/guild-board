@@ -1,43 +1,40 @@
-import { type ReactNode, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import './cv.css'
 import './planner.css'
 import { api, messageOf } from '../../api.ts'
 import { Frame } from '../../frame/Frame.tsx'
 import { type Live, useModel } from '../../live.ts'
 import { hashOf } from '../../route.ts'
-import type { MaterialRow, PlanBody, Planner as PlannerModel, Roster, Slot } from '../../types.ts'
-import { clipReveal, CountUp, drawLine, reducedMotion, rise, SPRING_EASE } from '../../ui/motion.tsx'
+import type { PlanBody, Planner as PlannerModel, SetChoice, Slot, WeaponChoice } from '../../types.ts'
+import { clipReveal, reducedMotion, rise } from '../../ui/motion.tsx'
 import { Picture } from '../../ui/Picture.tsx'
-import { Sign } from '../../ui/Sign.tsx'
 import { Avatar } from './Avatar.tsx'
-import { elementClass } from './elements.ts'
-import {
-  changeClass, curveArea, curveMarks, curvePath, curveTicks, curveX, curveY, DAYS_BOX, dayWords, type Draft, draftBody,
-  draftFromTyped, findOdds, floorsOf, mainChips, mainOptions, nextWeight, resinParts, setDraftSlot, setsShown, setKeyOf, signed, SLOTS, stepLevel,
-  stepTarget, subOptionsFor, weaponsCardFirst, withLevelPiece, withMain, withSet, withTalent, withWeapon, withWeight,
-} from './plannerview.ts'
-import { weekShown } from './hidden.ts'
 import { CardPanel } from './CardPanel.tsx'
-import { agree, matWords, objectPronoun } from './profileview.ts'
+import { type Choice, noChoice, resolveParty } from './damage.ts'
+import { elementClass } from './elements.ts'
+import { verdictShown } from './hidden.ts'
+import { PieceEditor } from './PieceEditor.tsx'
+import { Picker, type PickTile } from './Picker.tsx'
+import { floorsOf, listStale, stepLevel, stepTarget, withTalent } from './plannerview.ts'
 import { scaleStyle, useCharactersScale } from './scale.ts'
-import { toggleFocus } from './rosterview.ts'
-import { CalculatorNote, SyncLine } from './SyncLine.tsx'
+import { SimStats } from './SimStats.tsx'
+import {
+  backToHers, buildSignature, pieceChanged, pieceCv, simWithGear, startState, swapSet, type Tested, testedStats, totalCv, withPiece, wornSets,
+} from './simstate.ts'
+import { atkHeadline, raiseKinds, raiseMains, SLOT_LABEL, SLOT_ORDER, statName, tierClass, weaponSubText } from './simview.ts'
+import { SyncLine } from './SyncLine.tsx'
 import { PageSwitch, Trail } from './Trail.tsx'
-import { Tip, useTip } from './Tip.tsx'
+import { Counted, Notes, TalentRows, Team, VerdictBox } from './Verdict.tsx'
+import { chipOf, countedLine, ENEMY_NOTE, mattersNote, nothingTested, verdictOf } from './verdictview.ts'
 
-const SLOT_LABEL: Record<Slot, string> = { flower: 'Flower', plume: 'Plume', sands: 'Sands', goblet: 'Goblet', circlet: 'Circlet' }
 const cap = (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
 
 /** A talent's own name without the line of its group: "Self-Evident Proposition" for "Formule Phenomenale: Self-Evident Proposition". */
 const shortName = (name: string) => (name.includes(': ') ? name.slice(name.indexOf(': ') + 2) : name)
 
-/** Text in which the labels of a set's bonuses ("2 pieces:", "2 and 2:") are bold. */
+/** Text in which the labels of a set's bonuses ("2 pieces:", "4 pieces:") are bold. */
 function withBoldLabels(text: string): ReactNode {
-  return text.split(/(\d pieces:|2 and 2:)/).map((part, index) => (index % 2 === 1 ? <b key={index}>{part}</b> : part))
-}
-
-/** The sentence of the days curve with its half-a-chance date in bold. */
-function emphasised(summary: string): ReactNode {
-  return summary.split(/(half a chance by [^,]+|She is ready [a-z]+)/i).map((part, index) => (index % 2 === 1 ? <b key={index}>{part}</b> : part))
+  return text.split(/(\d pieces:)/).map((part, index) => (index % 2 === 1 ? <b key={index}>{part}</b> : part))
 }
 
 /**
@@ -61,27 +58,31 @@ function Stepper({ label, now, target, next, onStep }: { label: string; now: num
   )
 }
 
-function Editor({ model, plan, onPlan, onReset, error }: {
+type Open = { kind: 'weapon' } | { kind: 'set'; target: string } | null
+
+/** Her build: her talents and the targets of the plan, the weapon and the set(s) under test, each opening a picker. */
+function Build({ model, plan, tested, error, verdict, onPlan, onOpen }: {
   model: PlannerModel
   plan: PlanBody
-  onPlan: (next: PlanBody) => void
-  onReset: () => void
+  tested: Tested | null
   error: string | null
+  /** Whether the verdict is shown: "Raise" then marks a main talent below 10 (12.3), in place of stage 1's rule. */
+  verdict: boolean
+  onPlan: (next: PlanBody) => void
+  onOpen: (open: NonNullable<Open>) => void
 }) {
-  const [listOpen, setListOpen] = useState(false)
-  const [moreSets, setMoreSets] = useState(false)
-  const weapons = weaponsCardFirst(model.weapons)
-  const chosen = weapons.find((option) => option.key === plan.weapon) ?? weapons[0]
   const her = model.pronouns.hers
   const floors = floorsOf(model.now_build)
-  const typedSlot = plan.typed !== null && plan.typed.use ? plan.typed.slot : null
-  const spring = (event: { currentTarget: HTMLElement }) => {
-    if (!reducedMotion()) event.currentTarget.animate([{ scale: 0.9 }, { scale: 1 }], { duration: 400, easing: SPRING_EASE })
-  }
+  const hits = model.sim?.hits ?? null
+  const raise =
+    model.sim === null ? new Set<string>() : verdict && hits !== null ? raiseMains(model.talents, hits) : raiseKinds(model.talents)
+  const sets = tested === null ? [] : wornSets(tested)
+  const weapon = tested?.weapon ?? null
+  const own = model.sim?.weapon ?? null
   return (
-    <section className="pp-col" aria-label={`${cap(her)} plan`}>
+    <section className="pp-col" aria-label={`${cap(her)} build`}>
       <h2>
-        {cap(her)} plan <small>Click to change</small>
+        {cap(her)} build <small>from HoYoLAB</small>
       </h2>
       {error !== null && (
         <p className="pp-error" role="alert">
@@ -97,6 +98,7 @@ function Editor({ model, plan, onPlan, onReset, error }: {
               <span className="k">
                 {talent.label}
                 {talent.bonus > 0 ? `, ${talent.bonus} more from constellations` : ''}
+                {raise.has(talent.kind) && <span className="pp-raise">Raise</span>}
               </span>
               <span className="n">{shortName(talent.name)}</span>
             </div>
@@ -129,626 +131,178 @@ function Editor({ model, plan, onPlan, onReset, error }: {
             onStep={(delta) => onPlan({ ...plan, level: stepLevel(plan.level, delta, floors.level) })}
           />
         </div>
+        {model.sim !== null && (
+          <p className="pp-note">
+            {verdict ? <>“Raise” marks one of {her} main talents that is below level 10.</> : <>“Raise” marks a talent within a level of {her} highest one, and below 10.</>}
+          </p>
+        )}
       </div>
 
-      <div className="pp-blk">
-        <h3>Weapon</h3>
-        <button type="button" className="pp-pick" aria-expanded={listOpen} aria-controls="pp-wlist" onClick={() => setListOpen((open) => !open)}>
-          <Picture src={chosen?.icon ?? null} sign="star" className="pp-pic" />
-          <div>
-            <b>{chosen?.name ?? 'No weapon'}</b>
-            <span>{chosen?.text.split('. ')[0]}</span>
+      {weapon !== null && (
+        <div className="pp-blk">
+          <h3>Weapon</h3>
+          <button type="button" className="pp-pick" data-open="weapon" onClick={() => onOpen({ kind: 'weapon' })}>
+            <Picture src={weapon.icon} sign="star" className="pp-pic" />
+            <div>
+              <b>{weapon.name}</b>
+              <span>
+                {own !== null && own.key === weapon.key ? `Level ${own.level} · R${own.refinement} · ` : 'Level 90 · R1 · '}
+                {weapon.base_atk !== null && `Base ATK ${Math.round(weapon.base_atk)}`}
+                {weaponSubText(weapon.sub, weapon.sub_value) !== '' && ` · ${weaponSubText(weapon.sub, weapon.sub_value)}`}
+              </span>
+            </div>
+            <em>Change</em>
+          </button>
+          <div className="pp-trow pp-wrow">
+            <div>
+              <span className="k">Refinement</span>
+              <span className="n">Level to reach</span>
+            </div>
+            <Stepper
+              label="refinement"
+              now={model.now_build === null || model.now_build.refinement === null ? null : floors.refinement}
+              target={plan.refinement}
+              next={(delta) => stepTarget(plan.refinement, delta, floors.refinement, 5)}
+              onStep={(delta) => onPlan({ ...plan, refinement: stepTarget(plan.refinement, delta, floors.refinement, 5) })}
+            />
           </div>
-          <Sign name="chevron" />
-        </button>
-        <div className={listOpen ? 'pp-list open' : 'pp-list'} id="pp-wlist" inert={!listOpen}>
-          <div className="pp-list-in" role="listbox" aria-label="Weapons">
-            {weapons.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                role="option"
-                className="pp-opt"
-                aria-selected={option.key === plan.weapon}
-                onClick={() => {
-                  onPlan(withWeapon(plan, option.key))
-                  setListOpen(false)
-                }}
-              >
-                <Picture src={option.icon} sign="star" className="pp-pic" />
+          <div className="pp-trow pp-wrow">
+            <div>
+              <span className="k">Weapon level</span>
+              <span className="n">Level to reach</span>
+            </div>
+            <Stepper
+              label="weapon level target"
+              now={model.now_build === null || model.now_build.weapon_level === null ? null : floors.weaponLevel}
+              target={plan.weapon_level}
+              next={(delta) => stepLevel(plan.weapon_level, delta, floors.weaponLevel)}
+              onStep={(delta) => onPlan({ ...plan, weapon_level: stepLevel(plan.weapon_level, delta, floors.weaponLevel) })}
+            />
+          </div>
+        </div>
+      )}
+
+      {tested !== null && (
+        <div className="pp-blk">
+          <h3>Artifact set{sets.length > 1 ? 's' : ''}</h3>
+          {sets.length === 0 && <p className="pp-note">No two pieces share a set, so there is no set bonus.</p>}
+          {sets.map(({ set, pieces }, index) => (
+            // Keyed by place, so that choosing a set keeps the tile that was pressed (and its focus).
+            <div key={index} className="pp-setblk">
+              <button type="button" className="pp-pick pp-artset" data-open="set" onClick={() => onOpen({ kind: 'set', target: set.key })}>
+                <Picture src={set.icon} sign="flower" className="pp-pic" />
                 <div>
-                  <b>{option.name}</b>
-                  <span>{option.text}</span>
+                  <b>{set.name}</b>
+                  <span>{pieces} of 5 pieces</span>
                 </div>
-                {option.tag !== null ? <em>{option.tag}</em> : <span />}
+                <em>Change</em>
               </button>
-            ))}
-          </div>
-        </div>
-        <div className="pp-trow" style={{ gridTemplateColumns: '1fr auto', marginTop: 6 }}>
-          <div>
-            <span className="k">Refinement, one more copy each</span>
-            <span className="n">{model.refinement_note}</span>
-          </div>
-          <Stepper
-            label="refinement"
-            now={model.now_build === null || model.now_build.refinement === null ? null : floors.refinement}
-            target={plan.refinement}
-            next={(delta) => stepTarget(plan.refinement, delta, floors.refinement, 5)}
-            onStep={(delta) => onPlan({ ...plan, refinement: stepTarget(plan.refinement, delta, floors.refinement, 5) })}
-          />
-        </div>
-        <div className="pp-trow" style={{ gridTemplateColumns: '1fr auto', marginTop: 6 }}>
-          <div>
-            <span className="k">Weapon level</span>
-            <span className="n">Level to reach</span>
-          </div>
-          <Stepper
-            label="weapon level target"
-            now={model.now_build === null || model.now_build.weapon_level === null ? null : floors.weaponLevel}
-            target={plan.weapon_level}
-            next={(delta) => stepLevel(plan.weapon_level, delta, floors.weaponLevel)}
-            onStep={(delta) => onPlan({ ...plan, weapon_level: stepLevel(plan.weapon_level, delta, floors.weaponLevel) })}
-          />
-        </div>
-      </div>
-
-      <div className="pp-blk">
-        <h3>Artifact set</h3>
-        <div className={moreSets ? 'pp-sets all' : 'pp-sets'} data-testid="planner-sets">
-          {setsShown(model.sets, setKeyOf(plan.set), moreSets).map((set) => (
-            <button key={set.key} type="button" className="pp-set" aria-pressed={setKeyOf(plan.set) === set.key} onClick={() => onPlan(withSet(plan, set.key))}>
-              <Picture src={set.icon} sign="flower" className="pp-pic" />
-              <div>
-                <b>{set.name}</b>
-                <span>{set.text}</span>
+              <div className="pp-setfx">
+                {withBoldLabels(`2 pieces: ${set.two_text}`)}
+                {pieces >= 4 && <br />}
+                {pieces >= 4 && withBoldLabels(`4 pieces: ${set.four_text}`)}
               </div>
-            </button>
+            </div>
           ))}
         </div>
-        {model.sets.length > setsShown(model.sets, setKeyOf(plan.set), false).length && (
-          <button type="button" className="pp-more" aria-expanded={moreSets} onClick={() => setMoreSets((open) => !open)}>
-            {moreSets ? 'Show fewer sets' : `Show every set, ${model.sets.length} in all`}
-          </button>
-        )}
-        <div className="pp-setfx">{withBoldLabels(model.set_text)}</div>
-      </div>
+      )}
+    </section>
+  )
+}
 
-      <div className="pp-blk end">
-        <h3>Main stats</h3>
-        {model.mains.map((main) => (
-          <div key={main.slot} className="pp-mrow">
-            <Picture src={main.icon} sign="flower" />
-            <span className="sl">{SLOT_LABEL[main.slot]}</span>
-            <div className="pp-seg">
-              {mainChips(main).map((chip) => (
-                <button
-                  key={chip.key}
-                  type="button"
-                  className={chip.now ? 'now' : undefined}
-                  aria-pressed={typedSlot !== main.slot && plan.mains[main.slot] === chip.key}
-                  onClick={(event) => {
-                    spring(event)
-                    onPlan(withMain(plan, main.slot, chip.key))
-                  }}
-                >
-                  {chip.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-        {model.level_pieces.map((piece) => {
-          const on = plan.level_pieces.includes(piece.slot)
+/** The five pieces as tiles, the Crit Value legend and the editor of the piece that is selected. */
+function Artifacts({ model, tested, slot, onSlot, onTested }: {
+  model: PlannerModel
+  tested: Tested
+  slot: Slot
+  onSlot: (slot: Slot) => void
+  onTested: (next: Tested) => void
+}) {
+  const sim = model.sim!
+  const her = model.pronouns.hers
+  return (
+    <section className="pp-col" aria-label="Artifacts">
+      <h2>
+        Artifacts <small>Crit Value = 2 × Crit Rate + Crit DMG</small>
+      </h2>
+      <div className="pp-pieces">
+        {SLOT_ORDER.map((one) => {
+          const piece = tested.pieces[one]
+          const cv = piece === undefined ? null : pieceCv(sim, piece)
+          const icon = sim.pieces.find((hers) => hers.slot === one)?.icon ?? null
           return (
-            <button key={piece.slot} type="button" role="switch" aria-checked={on} className="pp-toggle" onClick={() => onPlan(withLevelPiece(plan, piece.slot, !on))}>
-              <span>
-                {piece.note.split(':')[0]}
-                <small>{piece.note.includes(':') ? piece.note.slice(piece.note.indexOf(':') + 2) : ''}</small>
+            <button key={one} type="button" className="pp-piece" data-slot={one} aria-pressed={slot === one} onClick={() => onSlot(one)}>
+              {pieceChanged(sim, tested, one) && <span className="tested">Tested</span>}
+              <Picture src={icon} sign="flower" className="pp-pc" />
+              <span className="sl">
+                {SLOT_LABEL[one]}
+                {piece !== undefined && ` · +${piece.level}`}
               </span>
-              <span className="pp-sw" />
+              <span className="ms">{piece === undefined ? 'Empty' : statName(piece.main, model.element)}</span>
+              {cv !== null && (
+                <span className={`pp-cv ${tierClass(cv.tier)}`}>
+                  {cv.cv.toFixed(1)} <small>CV</small>
+                </span>
+              )}
             </button>
           )
         })}
-        <button type="button" className="pp-reset" style={{ marginTop: 12 }} onClick={onReset}>
-          Back to {her} card's plan
-        </button>
       </div>
-    </section>
-  )
-}
-
-/** What the plan does: the damage against now, or the goals met; her stats now and with the plan; and a piece to try. */
-function Result({ model, plan, piece, onPlan, onPiece, tipOf }: {
-  model: PlannerModel
-  plan: PlanBody
-  piece: Draft
-  onPlan: (next: PlanBody) => void
-  onPiece: (next: Draft, use: boolean) => void
-  tipOf: ReturnType<typeof useTip>['tipOf']
-}) {
-  const her = model.pronouns.hers
-  const use = plan.typed?.use ?? false
-  const change = model.with_plan.change
-  const top = Math.max(100, model.with_plan.damage, model.now.damage) * 1.1
-  const trying = model.try
-  const spring = (event: { currentTarget: HTMLElement }) => {
-    if (!reducedMotion()) event.currentTarget.animate([{ scale: 0.9 }, { scale: 1 }], { duration: 400, easing: SPRING_EASE })
-  }
-  return (
-    <section className="pp-col" aria-label={`${cap(her)} stats with the plan`}>
-      <h2>
-        With the plan <small>Hover a row for its sources</small>
-      </h2>
-      {model.damage_role ? (
-        <div className="pp-meter">
-          <div>
-            <div className="big">{change === null ? '—' : <CountUp value={change} format={signed} />}</div>
-            <div className="lab">damage against now</div>
-          </div>
-          <div className="pp-vs">
-            <div>
-              <span>Now</span>
-              <span className="bar">
-                <i style={{ width: `${(model.now.damage / top) * 100}%` }} />
-              </span>
-              <b>{Math.round(model.now.damage)}</b>
-            </div>
-            <div>
-              <span>Plan</span>
-              <span className="bar">
-                <i className="plan" style={{ width: `${(model.with_plan.damage / top) * 100}%` }} />
-              </span>
-              <b>{Math.round(model.with_plan.damage)}</b>
-            </div>
-          </div>
-        </div>
-      ) : (
-        model.goals_met !== null && (
-          <div className="pp-goals">
-            <h3>Goals met</h3>
-            {model.goals_met.map((goal) => (
-              <div key={goal.label} className={goal.met ? 'met' : undefined}>
-                <span>{goal.label}</span>
-                <b>{goal.text}</b>
-                <em>{goal.met ? 'Met' : 'Not yet'}</em>
-              </div>
-            ))}
-          </div>
-        )
-      )}
-      {model.warning !== null && (
-        <div className="pp-warn" role="status">
-          {model.warning}
-        </div>
-      )}
-      <div className="pp-skey">
-        <span>
-          <i style={{ width: 2, height: 12, background: 'rgba(241, 234, 219, .75)' }} />
-          Now
-        </span>
-        <span>
-          <i style={{ width: 14, height: 6, borderRadius: 3, background: 'var(--el)' }} />
-          With the plan
-        </span>
-        <span>
-          <i style={{ width: 2, height: 12, background: 'var(--c-gold)' }} />
-          {cap(her)} goal
-        </span>
-      </div>
-      <div>
-        {model.stats.map((stat) => (
-          <div
-            key={stat.key}
-            className="pp-srow"
-            {...tipOf(
-              <>
-                <b>{stat.label}</b>
-                {stat.how}
-              </>,
-            )}
-          >
-            <span className="lab">{stat.label}</span>
-            <span className="now">{stat.now_text}</span>
-            <span className="pp-trk">
-              <i className="p" style={{ width: `${Math.min(100, (stat.plan / stat.scale) * 100)}%` }} />
-              <i className="n" style={{ left: `${Math.min(100, (stat.now / stat.scale) * 100)}%` }} />
-              {stat.goal !== null && <i className="g" style={{ left: `${Math.min(100, (stat.goal / stat.scale) * 100)}%` }} />}
-            </span>
-            <span className="pl">{stat.plan_text}</span>
-            <span className={`dl ${changeClass(stat.change_text)}`}>{stat.change_text}</span>
-          </div>
+      <div className="pp-legend">
+        Per piece:
+        {['under 15', '15', '25', '35', '45', '50', '54.4'].map((label, tier) => (
+          <span key={label} className={`pp-cv ${tierClass(tier)}`}>
+            {label}
+          </span>
         ))}
+        · whole set: 180 · 200 · 220 · 240 · 260 · 300
       </div>
-      <div className="pp-blk">
-        <h3>Substats {agree(model.pronouns, 'wants', 'want')}</h3>
-        <div className="pp-wants">
-          {model.weights.map((weight) => {
-            const now = plan.weights[weight.key] ?? weight.weight
-            return (
-              <button
-                key={weight.key}
-                type="button"
-                data-w={now}
-                aria-label={`${weight.label}: ${{ wants: 'wanted', some: 'of some use', none: 'of no use' }[now]}. Press to change.`}
-                onClick={(event) => {
-                  spring(event)
-                  onPlan(withWeight(plan, weight.key, nextWeight(now)))
-                }}
-              >
-                <i />
-                {weight.label}
-              </button>
-            )
-          })}
-        </div>
-        <p className="pp-note">Click to cycle: wants, some use, no use. It decides how pieces are scored, here and on {her} profile.</p>
-      </div>
-      <div className={use ? 'pp-try used' : 'pp-try'}>
-        <h3>Try a piece you got</h3>
-        <p className="pp-note">Type in its stats to see what it would do for {objectPronoun(model.pronouns)}.</p>
-        <div className="pp-tp-grid">
-          <label>
-            Slot
-            <select value={piece.slot} onChange={(event) => onPiece(setDraftSlot(piece, event.target.value as Slot, model.element), use)}>
-              {SLOTS.map((slot) => (
-                <option key={slot.key} value={slot.key}>
-                  {slot.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Main stat
-            <select
-              value={piece.main}
-              onChange={(event) =>
-                onPiece(
-                  {
-                    ...piece,
-                    main: event.target.value,
-                    subs: piece.subs.map(([key, value]) => (key === event.target.value ? ['', ''] : [key, value])) as [string, string][],
-                  },
-                  use,
-                )
-              }
-            >
-              {mainOptions(piece.slot, model.element).map((option) => (
-                <option key={option.key} value={option.key}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          {piece.subs.map(([key, value], index) => (
-            <label key={index}>
-              Substat {index + 1}
-              <span className="pp-sub2">
-                <select
-                  aria-label={`Substat ${index + 1}`}
-                  value={key}
-                  onChange={(event) => onPiece({ ...piece, subs: piece.subs.map((sub, i) => (i === index ? [event.target.value, sub[1]] : sub)) as [string, string][] }, use)}
-                >
-                  <option value="">None</option>
-                  {subOptionsFor(piece.main).map((option) => (
-                    <option key={option.key} value={option.key}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  aria-label={`Value of substat ${index + 1}`}
-                  value={value}
-                  onChange={(event) => onPiece({ ...piece, subs: piece.subs.map((sub, i) => (i === index ? [sub[0], event.target.value] : sub)) as [string, string][] }, use)}
-                />
-              </span>
-            </label>
-          ))}
-        </div>
-        <div className="pp-tp-out">
-          <div>
-            <b>{trying === null ? '—' : trying.crit_value}</b>
-            <span>crit value</span>
-          </div>
-          <div>
-            <b>{trying === null ? '—' : `${trying.rolls_wanted} of ${trying.rolls_all}`}</b>
-            <span>rolls {agree(model.pronouns, 'wants', 'want')}</span>
-          </div>
-          <div>
-            <b>{trying === null || trying.change === null ? '—' : signed(trying.change)}</b>
-            <span>{trying === null ? 'damage' : trying.against}</span>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={use}
-            className="pp-use"
-            disabled={draftBody(piece, true) === null}
-            onClick={() => onPiece(piece, !use)}
-          >
-            <span className="pp-sw" />
-            Use it in {her} plan
-          </button>
-        </div>
-      </div>
+      <PieceEditor
+        key={slot}
+        sim={sim}
+        slot={slot}
+        piece={tested.pieces[slot]}
+        hers={sim.pieces.find((hers) => hers.slot === slot)}
+        icon={sim.pieces.find((hers) => hers.slot === slot)?.icon ?? null}
+        element={model.element}
+        pronouns={model.pronouns}
+        onChange={(piece) => onTested(withPiece(tested, slot, piece))}
+        onBack={() => onTested(backToHers(sim, tested, slot))}
+      />
+      <p className="pp-note">The pieces, the weapon and the set are only tested here: nothing is stored, and {her} own build is not changed.</p>
     </section>
   )
 }
 
-/** One material: its icon, what is held and needed, where it comes from, and a chip. The amount held can be typed where it is not known. */
-function Material({ material, calculatorOff, onHeld }: { material: MaterialRow; calculatorOff: boolean; onHeld: (key: string, amount: number | null) => void }) {
-  const words = matWords(material)
-  const typeable = calculatorOff || material.state === 'unknown' || material.typed
-  const [text, setText] = useState(material.held === null ? '' : String(material.held))
-  useEffect(() => setText(material.held === null ? '' : String(material.held)), [material.held])
-  const commit = () => {
-    const amount = text.trim() === '' ? null : Number(text)
-    if (amount === material.held || (amount !== null && !Number.isFinite(amount))) return
-    onHeld(material.key, amount)
-  }
-  return (
-    <div className="pp-mat">
-      <Picture src={material.icon} sign="chest" />
-      <div>
-        <div className="nm">{material.name}</div>
-        <div className="src">
-          {words.held}. {material.source}
-        </div>
-        {typeable && (
-          <label className="pp-held">
-            I hold
-            <input
-              type="number"
-              min={0}
-              max={9999999}
-              step={1}
-              value={text}
-              aria-label={`Amount of ${material.name} you hold`}
-              onChange={(event) => setText(event.target.value)}
-              onBlur={commit}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') commit()
-              }}
-            />
-            {material.typed && <small>typed by you</small>}
-          </label>
-        )}
-        <div className="mb" aria-hidden="true">
-          <i style={{ width: `${material.held === null ? 0 : Math.min(100, (material.held / Math.max(1, material.needed)) * 100)}%` }} />
-        </div>
-      </div>
-      <em className={words.ready ? 'ok' : 'go'}>{words.chip}</em>
-    </div>
-  )
-}
-
-/** What the plan takes: today's note, the materials, today's resin and the pieces to find with their odds. */
-function Takes({ model, plan, onHeld }: { model: PlannerModel; plan: PlanBody; onHeld: (key: string, amount: number | null) => void }) {
-  const { takes } = model
-  const first = takes.today_note.search(/\.\s/)
-  const parts = resinParts(takes)
-  return (
-    <section className="pp-col" aria-label="What the plan takes">
-      <h2>
-        What it takes <small>Today</small>
-      </h2>
-      <div className="pp-today">
-        {first < 0 ? (
-          takes.today_note
-        ) : (
-          <>
-            <b>{takes.today_note.slice(0, first + 1)}</b>
-            {takes.today_note.slice(first + 1)}
-          </>
-        )}
-      </div>
-      <div className="pp-blk">
-        <h3>Materials</h3>
-        <div className="pp-mats">
-          {takes.materials.length === 0 ? (
-            <p className="pp-note" style={{ margin: 0 }}>
-              Nothing to farm.
-            </p>
-          ) : (
-            takes.materials.map((material) => <Material key={material.key} material={material} calculatorOff={model.sync.calculator === 'off'} onHeld={onHeld} />)
-          )}
-        </div>
-        <CalculatorNote sync={model.sync} />
-      </div>
-      <div className="pp-blk pp-resin">
-        <h3>Resin today</h3>
-        <div className="pp-rb" role="img" aria-label={parts.map((part) => `${part.label}: ${part.resin}`).join(', ')}>
-          {parts.map((part) => (
-            <i key={part.label} className={`pp-tone-${part.tone}`} style={{ width: `${part.share}%` }} />
-          ))}
-        </div>
-        <div className="pp-rk">
-          {parts.map((part) => (
-            <span key={part.label}>
-              <i className={`pp-tone-${part.tone}`} />
-              {part.label}: {part.resin}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="pp-blk end">
-        <h3>Pieces to find</h3>
-        {takes.find.length === 0 ? (
-          <div className="pp-find done">
-            <div className="fh">
-              <Picture src={null} sign="flower" />
-              <div>
-                <b>Nothing to find</b>
-                <div className="pp-note" style={{ margin: 0 }}>
-                  {plan.typed?.use === true ? 'The piece you typed is in the plan: equip it in the game.' : `${cap(model.pronouns.hers)} main stats already match the plan.`}
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          takes.find.map((find) => (
-            <div key={find.label} className="pp-find">
-              <div className="fh">
-                <Picture src={find.icon} sign="flower" />
-                <div>
-                  <b>{find.label}</b>
-                  <div className="odds">{findOdds(find)}</div>
-                </div>
-              </div>
-              <p>{find.note}</p>
-              <div className="pp-paths">
-                {find.paths.map((path) => (
-                  <div key={path.label} className={path.best ? 'best' : undefined}>
-                    <span>{path.label}</span>
-                    <b>{path.odds}</b>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </section>
-  )
-}
-
-/** Days to ready: the chance, day by day, that the pieces that depend on luck have come, with its 50% and 90% marks. */
-function Days({ model }: { model: PlannerModel }) {
-  const { days } = model
-  const { tip, show, hide } = useTip()
-  const [cross, setCross] = useState<number | null>(null)
-  const line = useRef<SVGPathElement>(null)
-  const last = days.points.length - 1
-  const marks = curveMarks(days)
-  const ready = model.takes.find.length === 0
-  useLayoutEffect(() => {
-    if (line.current !== null) drawLine(line.current, { duration: 0.9 })
-  }, [model.key])
-  const box = DAYS_BOX
-  return (
-    <section className="pp-days" aria-label="Days until ready">
-      <div className="pp-days-head">
-        <h2>Days to ready</h2>
-        <p>{emphasised(days.summary)}</p>
-      </div>
-      <div className="pp-chart">
-        {last >= 0 && (
-          <svg viewBox={`0 0 ${box.width} ${box.height}`} role="img" aria-label="Chance that the pieces have come, by day">
-            <defs>
-              <linearGradient id="pp-area" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="var(--el)" stopOpacity=".45" />
-                <stop offset="1" stopColor="var(--el)" stopOpacity=".02" />
-              </linearGradient>
-            </defs>
-            <g className="grid">
-              {[0, 0.25, 0.5, 0.75, 1].map((chance) => (
-                <line key={chance} x1={box.left} x2={box.width - box.right} y1={curveY(chance)} y2={curveY(chance)} />
-              ))}
-            </g>
-            <g className="axis">
-              {[0, 0.5, 1].map((chance) => (
-                <text key={chance} x={box.left - 8} y={curveY(chance) + 4} textAnchor="end">
-                  {chance * 100}%
-                </text>
-              ))}
-              {curveTicks(last).map((tick) => (
-                <text key={tick.day} x={curveX(tick.day, last)} y={box.height - 6} textAnchor={tick.day === 0 ? 'start' : tick.day === last ? 'end' : 'middle'}>
-                  {tick.label}
-                </text>
-              ))}
-            </g>
-            <path className="area" d={curveArea(days.points)} />
-            <path className="line" ref={line} d={curvePath(days.points)} />
-            {marks.map((mark) => {
-              const x = curveX(mark.day, last)
-              const late = mark.day > last * 0.8
-              return (
-                <g key={mark.label} className="mark">
-                  <line x1={x} x2={x} y1={box.top} y2={box.height - box.bottom} />
-                  <text x={late ? x - 6 : x + 6} y={box.top + 12} textAnchor={late ? 'end' : 'start'}>
-                    {mark.label}
-                  </text>
-                </g>
-              )
-            })}
-            {ready && (
-              <g className="mark">
-                <text x={curveX(0, last) + 10} y={curveY(1) + 16}>
-                  Ready today
-                </text>
-              </g>
-            )}
-            <circle className="todayDot" cx={curveX(0, last)} cy={curveY(days.points[0])} r={5} />
-            {cross !== null && (
-              <>
-                <line className="cross" x1={curveX(cross, last)} x2={curveX(cross, last)} y1={box.top} y2={box.height - box.bottom} />
-                <circle cx={curveX(cross, last)} cy={curveY(days.points[cross])} r={5} fill="var(--el)" />
-              </>
-            )}
-            <rect
-              x={box.left}
-              y={box.top}
-              width={box.width - box.left - box.right}
-              height={box.height - box.top - box.bottom}
-              fill="transparent"
-              onMouseMove={(event) => {
-                const svg = event.currentTarget.ownerSVGElement
-                if (svg === null) return
-                const rect = svg.getBoundingClientRect()
-                const x = ((event.clientX - rect.left) / rect.width) * box.width
-                const day = Math.max(0, Math.min(last, Math.round(((x - box.left) / (box.width - box.left - box.right)) * last)))
-                setCross(day)
-                const chance = Math.round(days.points[day] * 100)
-                show(
-                  event.clientX,
-                  event.clientY,
-                  <>
-                    <b>{dayWords(day)}</b>
-                    {ready ? 'Ready.' : `${chance}% chance ${agree(model.pronouns, 'has', 'have')} ${model.takes.find.length === 1 ? 'the piece' : 'every piece'}.`}
-                  </>,
-                )
-              }}
-              onMouseLeave={() => {
-                setCross(null)
-                hide()
-              }}
-            />
-          </svg>
-        )}
-      </div>
-      <Tip tip={tip} />
-    </section>
-  )
-}
-
-/** The planner as the model has it (the design's section 6.3). */
-export function PlannerView({ model, plan, piece, focus, error, onPlan, onPiece, onFocus, onReset, onHeld, onCard, takesShown = true }: {
+/** The planner as the model has it (the design's section 6). */
+export function PlannerView({ model, plan, error, version = 0, verdict: verdictOn = false, onPlan, onCard }: {
   model: PlannerModel
   /** The plan as the controls show it, which a change moves at once; the model is the answer to the last one sent. */
   plan: PlanBody
-  piece: Draft
-  focus: readonly string[] | null
   error: string | null
+  /** The core's data version (`live.version`): the picker lists are read again when it changes. */
+  version?: number
+  /** Whether the verdict is shown (the core's switch `characters.VERDICT`, `Status.verdict`): her damage per talent in place of the ATK change. */
+  verdict?: boolean
   onPlan: (next: PlanBody) => void
-  onPiece: (next: Draft, use: boolean) => void
-  onFocus: () => void
-  onReset: () => void
-  onHeld: (key: string, amount: number | null) => void
   /** Opens the Card panel; the header's button for it is there while a page gives this. */
   onCard?: () => void
-  /** What it takes, today's resin and the focus go with Your week (hidden.ts): while that is hidden the planner has two columns. */
-  takesShown?: boolean
 }) {
   const page = useRef<HTMLDivElement>(null)
   const scale = useCharactersScale()
-  const { tip, tipOf } = useTip()
   const her = model.pronouns.hers
-  const inFocus = focus === null ? model.in_focus !== null : focus.includes(model.key)
-  const count = focus === null ? 0 : focus.length
-  const resin = model.takes.resin_today.reduce((sum, part) => sum + part.resin, 0)
+  const sim = model.sim
+  const [tested, setTested] = useState<Tested | null>(() => (sim === null ? null : startState(sim)))
+  const [slot, setSlot] = useState<Slot>('flower')
+  const [open, setOpen] = useState<Open>(null)
+  const [weapons, setWeapons] = useState<WeaponChoice[] | null>(null)
+  const [allSets, setAllSets] = useState<SetChoice[] | null>(null)
+  // The version of the core's data each list was read at. A list read at an older one is read again, and shown as it was meanwhile.
+  const [weaponsAt, setWeaponsAt] = useState<number | null>(null)
+  const [setsAt, setSetsAt] = useState<number | null>(null)
+  const [listError, setListError] = useState<string | null>(null)
+  // What the player chose for the verdict: the reaction and the recorded hits of each talent, and the toggles. Forgotten with the page.
+  const [choice, setChoice] = useState<Choice>(noChoice)
 
   useLayoutEffect(() => {
     const root = page.current
@@ -758,8 +312,87 @@ export function PlannerView({ model, plan, piece, focus, error, onPlan, onPiece,
     if (giant !== null) clipReveal(giant, { from: 'right', duration: 1.3 })
   }, [model.key])
 
-  const readiness =
-    model.now.readiness === model.with_plan.readiness ? `${model.now.readiness}%` : `${model.now.readiness}% → ${model.with_plan.readiness}%`
+  // The two lists the pickers show are read when one is first opened, and again when the core's data has changed (the background
+  // read fills the entries a picker queued), and kept otherwise.
+  useEffect(() => {
+    if (open === null) return
+    let live = true
+    if (open.kind === 'weapon' && listStale(weaponsAt, version)) {
+      api.get<{ weapons: WeaponChoice[] }>(`/api/characters/${model.key}/weapons`).then(
+        (answer) => {
+          if (!live) return
+          setWeapons(answer.weapons)
+          setWeaponsAt(version)
+        },
+        (failure) => live && setListError(messageOf(failure)),
+      )
+    }
+    if (open.kind === 'set' && listStale(setsAt, version)) {
+      api.get<{ sets: SetChoice[] }>(`/api/artifact-sets?character=${encodeURIComponent(model.key)}`).then(
+        (answer) => {
+          if (!live) return
+          setAllSets(answer.sets)
+          setSetsAt(version)
+        },
+        (failure) => live && setListError(messageOf(failure)),
+      )
+    }
+    return () => {
+      live = false
+    }
+  }, [open, weaponsAt, setsAt, version, model.key])
+
+  const now = sim?.panel ?? null
+  const result = useMemo(() => (sim === null || tested === null ? null : testedStats(sim, tested)), [sim, tested])
+  const total = sim === null || tested === null ? null : totalCv(sim, tested)
+  const headline = now === null || result === null ? null : atkHeadline(now, result)
+  // her hits for the team the player chose (her usual one until then): what the rows and notes below are read from
+  const hits = useMemo(() => (sim?.hits ? resolveParty(sim.hits, choice) : null), [sim, choice])
+  const shown = verdictOn && hits !== null
+  // the sim with the effects of the weapon and sets under test, which the pickers' routes brought with them
+  const geared = useMemo(() => (sim === null || tested === null ? sim : simWithGear(sim, tested)), [sim, tested])
+  const answer = useMemo(
+    () => (!shown || geared === null || tested === null || result === null ? null : verdictOf(geared, tested, result, choice, model.pronouns)),
+    [shown, geared, tested, result, choice, model.pronouns],
+  )
+  const line = useMemo(
+    () => (answer === null || geared === null || tested === null || result === null ? null : countedLine(geared, tested, result, choice, answer, cap(model.pronouns.hers))),
+    [answer, geared, tested, result, choice, model.pronouns],
+  )
+  const matters = answer === null || hits === null ? '' : mattersNote(hits, answer.talents, choice, model.pronouns)
+  const chip = answer === null || sim === null || tested === null ? null : chipOf(answer, nothingTested(sim, tested))
+
+  const weaponTiles: PickTile[] | null =
+    weapons === null
+      ? null
+      : weapons.map((weapon) => ({
+          key: weapon.key, name: weapon.name, icon: weapon.icon, rarity: weapon.rarity,
+          disabled: weapon.base_atk === null,
+          lines:
+            weapon.base_atk === null ? (
+              'Not read yet'
+            ) : (
+              <>
+                {'★'.repeat(weapon.rarity)} · Base ATK {Math.round(weapon.base_atk)}
+                <br />
+                {weaponSubText(weapon.sub, weapon.sub_value)}
+              </>
+            ),
+        }))
+  const setTiles: PickTile[] | null = allSets === null ? null : allSets.map((set) => ({ key: set.key, name: set.name, icon: set.icon, rarity: null, lines: set.two_text === '' ? '' : `2: ${set.two_text}` }))
+
+  const chooseWeapon = (key: string) => {
+    const chosen = weapons?.find((weapon) => weapon.key === key)
+    if (chosen !== undefined && tested !== null) setTested({ ...tested, weapon: chosen })
+    setOpen(null)
+  }
+  const chooseSet = (key: string) => {
+    const chosen = allSets?.find((set) => set.key === key)
+    if (chosen !== undefined && tested !== null && open?.kind === 'set') setTested(swapSet(tested, open.target, chosen))
+    setOpen(null)
+  }
+
+  const about = [model.element, sim?.weapon?.type, model.now_build === null ? null : `Level ${model.now_build.level}`, model.now_build === null ? null : `C${model.now_build.constellation}`].filter((part) => part !== null && part !== undefined)
   return (
     <div className="gb-page pp-page" ref={page} style={scaleStyle(scale)}>
       <article className={`pp-card ${elementClass(model.element)}`}>
@@ -771,7 +404,11 @@ export function PlannerView({ model, plan, piece, focus, error, onPlan, onPiece,
             <Avatar src={model.icon} element={model.element} size="76px" dark />
             <div>
               <h2 className="pp-name">{model.name}</h2>
-              <div className="pp-sub">{cap(her)} plan, starting from {her} build on HoYoLAB</div>
+              <div className="pp-sub">
+                {about.join(' · ')}
+                {about.length > 0 && ' · '}
+                {her} build on HoYoLAB
+              </div>
               {onCard !== undefined && (
                 <button type="button" className="pp-cardbtn" onClick={onCard}>
                   {cap(her)} card
@@ -779,41 +416,87 @@ export function PlannerView({ model, plan, piece, focus, error, onPlan, onPiece,
               )}
             </div>
           </div>
-          <div className="pp-sum">
-            {model.damage_role && (
-              <div className="pp-chip hero">
-                <b>{model.with_plan.change === null ? '—' : <CountUp value={model.with_plan.change} format={signed} />}</b>
-                <span>damage against now</span>
-              </div>
-            )}
-            <div className="pp-chip">
-              <b>{readiness}</b>
-              <span>of {her} full potential</span>
-            </div>
-            {takesShown && (
+          {total !== null && headline !== null && (
+            <div className="pp-sum">
               <div className="pp-chip">
-                <b>
-                  <CountUp value={resin} format={(n) => `${n} resin`} />
-                </b>
-                <span>of {model.takes.resin_cap} today</span>
+                <b className={`pp-cvtotal ${tierClass(total.tier)}`}>{total.total.toFixed(1)}</b>
+                <span>Crit Value of {her} artifacts</span>
               </div>
-            )}
-            {takesShown && (
-              <button type="button" className="pp-focus" aria-pressed={inFocus} disabled={focus === null} onClick={onFocus}>
-                <b>{inFocus ? 'In your focus' : 'Add to your focus'}</b>
-                <span>{count} of 4 characters</span>
-              </button>
-            )}
-          </div>
+              <div className="pp-chip hero" title={chip === null ? undefined : ENEMY_NOTE}>
+                {chip !== null ? (
+                  <>
+                    <b className={chip.cls}>{chip.text}</b>
+                    <span>{chip.sub}</span>
+                  </>
+                ) : (
+                  <>
+                    <b className={headline.same ? 'same' : headline.up ? 'up' : 'down'}>{headline.text}</b>
+                    <span>Stats with the tested pieces</span>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </header>
-        <div className={takesShown ? 'pp-cols' : 'pp-cols two'}>
-          <Editor model={model} plan={plan} onPlan={onPlan} onReset={onReset} error={error} />
-          <Result model={model} plan={plan} piece={piece} onPlan={onPlan} onPiece={onPiece} tipOf={tipOf} />
-          {takesShown && <Takes model={model} plan={plan} onHeld={onHeld} />}
+        <div className="pp-cols">
+          <Build
+            model={model}
+            plan={plan}
+            tested={tested}
+            error={error}
+            verdict={shown}
+            onPlan={onPlan}
+            onOpen={(next) => {
+              setListError(null)
+              setOpen(next)
+            }}
+          />
+          {sim !== null && tested !== null && result !== null && now !== null ? (
+            <>
+              <Artifacts model={model} tested={tested} slot={slot} onSlot={setSlot} onTested={setTested} />
+              <section className="pp-col" aria-label={`${cap(her)} stats with the tested pieces`}>
+                <h2>
+                  With the tested pieces <small>{answer === null ? `${cap(her)} stats` : `${cap(her)} damage and stats`}</small>
+                </h2>
+                {answer !== null && hits !== null && sim !== null && line !== null && (
+                  <>
+                    <VerdictBox verdict={answer} />
+                    <TalentRows model={model} hits={hits} tables={sim.tables} verdict={answer} choice={choice} onChoice={setChoice} />
+                    <Counted line={line} choice={choice} onChoice={setChoice} hers={her} />
+                    {sim.hits !== null && <Team hits={sim.hits} choice={choice} onChoice={setChoice} />}
+                    <Notes notes={answer.notes} />
+                    <h3 className="pp-h3">{cap(her)} stats</h3>
+                  </>
+                )}
+                <SimStats now={now} tested={result} element={model.element} />
+                {answer === null ? (
+                  <p className="pp-note">What a set or a weapon does only under a condition is not counted here.</p>
+                ) : (
+                  hits !== null && matters !== '' && <p className="pp-note">{matters}</p>
+                )}
+              </section>
+            </>
+          ) : (
+            <section className="pp-col pp-wide" aria-label="Artifacts">
+              <h2>Artifacts</h2>
+              <p className="pp-note">{cap(her)} is not on your account yet, so there are no artifacts to test.</p>
+            </section>
+          )}
         </div>
-        <Days model={model} />
       </article>
-      <Tip tip={tip} />
+      {open !== null && (
+        <Picker
+          title={open.kind === 'weapon' ? `Choose a ${(sim?.weapon?.type ?? 'weapon').toLowerCase()}` : 'Choose an artifact set'}
+          sign={open.kind === 'weapon' ? 'star' : 'flower'}
+          tiles={open.kind === 'weapon' ? weaponTiles : setTiles}
+          error={listError}
+          current={open.kind === 'weapon' ? (tested?.weapon.key ?? '') : open.target}
+          element={model.element}
+          rarities={open.kind === 'weapon'}
+          onPick={open.kind === 'weapon' ? chooseWeapon : chooseSet}
+          onClose={() => setOpen(null)}
+        />
+      )}
     </div>
   )
 }
@@ -826,10 +509,8 @@ export function PlannerView({ model, plan, piece, focus, error, onPlan, onPiece,
 export function Planner({ live, characterKey }: { live: Live; characterKey: string }) {
   const [bump, setBump] = useState(0)
   const { data, error: readError } = useModel<PlannerModel>(`/api/characters/${characterKey}/plan`, live.version + bump)
-  const roster = useModel<Roster>('/api/characters', live.version + bump)
   const [model, setModel] = useState<PlannerModel | null>(null)
   const [plan, setPlan] = useState<PlanBody | null>(null)
-  const [piece, setPiece] = useState<Draft | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [cardOpen, setCardOpen] = useState(false)
   const timer = useRef(0)
@@ -842,7 +523,6 @@ export function Planner({ live, characterKey }: { live: Live; characterKey: stri
     if (data === null || pending.current) return
     setModel(data)
     setPlan(data.plan)
-    setPiece((now) => now ?? draftFromTyped(data.plan.typed, data.element))
   }, [data])
 
   /** Sends change number `mine`, and shows the answer unless a newer change came meanwhile. */
@@ -898,53 +578,6 @@ export function Planner({ live, characterKey }: { live: Live; characterKey: stri
     }, 150)
   }
 
-  const reset = async () => {
-    window.clearTimeout(timer.current)
-    waiting.current = null
-    sent.current += 1
-    pending.current = false
-    try {
-      const answer = await api.delete<PlannerModel>(`/api/characters/${characterKey}/plan`)
-      setModel(answer)
-      setPlan(answer.plan)
-      setPiece(draftFromTyped(answer.plan.typed, answer.element))
-      setError(null)
-    } catch (failure) {
-      setError(messageOf(failure))
-    }
-  }
-
-  const held = async (key: string, amount: number | null) => {
-    try {
-      await api.put('/api/characters/held', { amounts: { [key]: amount } })
-      setError(null)
-    } catch (failure) {
-      setError(messageOf(failure))
-    }
-    setBump((count) => count + 1)
-  }
-
-  const toggle = async () => {
-    if (roster.data === null) return
-    const next = toggleFocus(roster.data.focus, characterKey)
-    if ('refused' in next) {
-      setError(next.refused)
-      return
-    }
-    try {
-      await api.put('/api/focus', { characters: next.focus })
-      setError(null)
-    } catch (failure) {
-      setError(messageOf(failure))
-    }
-    setBump((count) => count + 1)
-  }
-
-  const onPiece = (next: Draft, use: boolean) => {
-    setPiece(next)
-    if (plan !== null) send({ ...plan, typed: draftBody(next, use) })
-  }
-
   return (
     <Frame
       page="characters"
@@ -958,7 +591,7 @@ export function Planner({ live, characterKey }: { live: Live; characterKey: stri
       beside={model !== null && <PageSwitch here={model.name} characterKey={characterKey} view="plan" />}
       controls={model !== null && <SyncLine live={live} sync={model.sync} />}
     >
-      {model === null || plan === null || piece === null ? (
+      {model === null || plan === null ? (
         <div className="gb-panel gb-empty">
           {readError ?? 'Reading the planner…'}
           {readError !== null && (
@@ -970,19 +603,15 @@ export function Planner({ live, characterKey }: { live: Live; characterKey: stri
         </div>
       ) : (
         <PlannerView
-          key={model.key}
+          // Her build changing under the page (a sync) starts the test again from the new one.
+          key={`${model.key}:${model.sim === null ? '' : buildSignature(model.sim)}`}
           model={model}
           plan={plan}
-          piece={piece}
-          focus={roster.data === null ? null : roster.data.focus}
           error={error}
+          version={live.version}
+          verdict={verdictShown(live.status)}
           onPlan={send}
-          onPiece={onPiece}
-          onFocus={() => void toggle()}
-          onReset={() => void reset()}
-          onHeld={(key, amount) => void held(key, amount)}
           onCard={() => setCardOpen(true)}
-          takesShown={weekShown(live.status)}
         />
       )}
       {cardOpen && <CardPanel live={live} characterKey={characterKey} onClose={() => setCardOpen(false)} />}

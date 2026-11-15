@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "skillPrecision": {"on": false, "state": "2", "label": "Constellation 6 Hunter's Precision stacks", "covers": [], "reason": "A Constellation 6 bonus that stacks as the party activates his Hunter's Marks, which builds up during the fight."}
+  }
+}

@@ -31,8 +31,7 @@ CLEARED_KEPT = 50  # the newest of a timer's Cleared that go with it: its ready 
 # The settings that are not about this PC (the online design, section 8): the display the overlay covers, the hotkey, the folders
 # and the switches of this PC's own are left out. A setting is a row of the kind `settings`, its name the key, {"value": ...}.
 SYNCED_SETTINGS = (
-    "commission_region", "fishing_rule", "notifications", "characters_notice_weekly", "characters_notice_domain",
-    "characters_notice_ready", "spending_currency", "spending_prices",
+    "commission_region", "fishing_rule", "notifications", "spending_currency", "spending_prices",
 )
 SETTINGS = "settings"
 FIRST = "sync_first"  # how the first sync of this PC with this account stands: "asking" or "done"; nothing before it is settled

@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "c6NsConsumed": {"on": false, "state": "40", "label": "Constellation 6 points", "covers": [], "reason": "Constellation 6 points build up while Itzpapa is out and are lost when her Skill is used again, so how many she holds depends on the moment."}
+  }
+}

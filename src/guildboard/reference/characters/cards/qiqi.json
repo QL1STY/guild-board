@@ -1,7 +1,7 @@
 {
   "key": "qiqi", "name": "Qiqi", "element": "Cryo", "weapon_type": "Sword", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "atk",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"atk": 2300, "er": 200},
   "mains": {"sands": ["atk_pct", "er"], "goblet": ["atk_pct"], "circlet": ["atk_pct", "heal", "cr"]},
   "weights": {"atk_pct": "wants", "er": "wants", "atk": "some", "cr": "some", "cd": "none", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

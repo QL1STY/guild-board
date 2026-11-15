@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "c4": {"on": true, "state": "hit", "label": "Constellation 4 Electro bonus", "covers": ["skill", "burst"], "reason": "Her Sesshou Sakura hit every few seconds and renew the 5-second bonus, so it is on through her Skill's later hits and her Burst."},
+    "lockRevelation": {"on": false, "state": "on", "label": "Stellar Revelation", "covers": [], "reason": "A mode of the party that unlocks Stellar bonuses; the planner cannot tell whether it is on, so it is left for the player to switch on. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "c1": {"on": false, "state": "on", "label": "Constellation 1 Electro bonus (Stellar Revelation)", "covers": [], "reason": "A Constellation 1 Electro DMG bonus of the Stellar Revelation mode. It needs that switch as well. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "c2": {"on": false, "state": "4", "label": "Constellation 2 Elemental Mastery (Stellar Revelation)", "covers": [], "reason": "Elemental Mastery that grows with a count of Constellation 2, up to its fourth step, which depends on the party. It needs the Stellar Revelation switch as well. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it. It adds Elemental Mastery, which moves damage only through a reaction, and no case of hers has one."}
+  }
+}

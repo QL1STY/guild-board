@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c6Trigger": {"on": false, "state": "on", "label": "Constellation 6 below 25% HP", "covers": [], "reason": "A Constellation 6 window that starts when her HP falls below 25%."},
+    "underHP": {"on": false, "state": "on", "label": "HP at or below 50%", "covers": [], "reason": "Adds Healing Bonus only, which none of her counted hits use."}
+  }
+}

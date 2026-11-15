@@ -1,0 +1,16 @@
+{
+  "main": ["Exquisite Throw DMG"],
+  "toggles": {
+    "a4Stacks": {"on": false, "state": "14", "label": "Adapt With Ease", "covers": [], "reason": "It raises the active character's damage, and her Exquisite Throws hit while another character is active."},
+    "c4Stacks": {"on": false, "state": "4", "label": "Constellation 4 party HP", "covers": [], "reason": "A Constellation 4 party buff that depends on how many enemies are marked."}
+  },
+  "party": {
+    "default": "3",
+    "reason": "Her usual teams, Hydro with Pyro and Electro (National) or with Dendro and Electro (Hyperbloom), have three elements; four needs every other member to be of another element as well, which fewer teams do, so the usual team is not the one that gives her the most. A team of Hydro and one other element is in the list for the rest.",
+    "options": [
+      {"id": "2", "label": "2 elements", "team": ["pyro", "pyro", "pyro"]},
+      {"id": "3", "label": "3 elements", "team": ["pyro", "electro", "pyro"]},
+      {"id": "4", "label": "4 elements", "team": ["pyro", "electro", "cryo"]}
+    ]
+  }
+}

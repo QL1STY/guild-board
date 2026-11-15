@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c2InField": {"on": false, "state": "on", "label": "Constellation 2, attacked in the field", "covers": [], "reason": "Needs the character on the field to be attacked inside her Skill's field."},
+    "c6CritStacks": {"on": false, "state": "4", "label": "Constellation 6 stacks", "covers": [], "reason": "Stacks that build up during her Burst as its hits land critical hits."}
+  }
+}

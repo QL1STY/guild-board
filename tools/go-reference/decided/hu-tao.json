@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "GuideToAfterlifeVoyage": {"on": true, "state": "on", "label": "Paramita Papilio", "covers": ["normal", "charged", "plunging", "burst"], "reason": "Her Normal and Charged Attacks are Pyro only in Paramita Papilio, and she casts her Burst inside it, so its ATK bonus is on whenever her main talents hit."},
+    "SanguineRouge": {"on": false, "state": "on", "label": "HP below 50%", "covers": [], "reason": "Depends on keeping her HP low, which not every player does."},
+    "ButterflysEmbrace": {"on": false, "state": "on", "label": "Constellation 6 at low HP", "covers": [], "reason": "A Constellation 6 window that starts at low HP."}
+  }
+}

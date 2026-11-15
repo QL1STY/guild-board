@@ -3,6 +3,10 @@
 scans here use `str.find` and are linear, and a field is cut at MAX_FIELD_CHARS before anything reads it."""
 from __future__ import annotations
 
+import re
+from typing import Any
+
+
 MAX_FIELD_CHARS = 64 * 1024  # the longest wiki field or title read; real ones are a few thousand characters
 
 
@@ -26,3 +30,19 @@ def strip_tags(text: str) -> str:
         at = end + 1
     parts.append(text[at:])
     return "".join(parts)
+
+
+# A row's name where the wiki writes a control twice, once for each layout: "#{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press} DMG".
+_LAYOUT_RUN = re.compile(r"#?((?:\{LAYOUT_[A-Z]+#[^{}]*\})+)")
+_LAYOUT_ONE = re.compile(r"\{LAYOUT_([A-Z]+)#([^{}]*)\}")
+
+
+def clean_row_name(name: Any) -> str:
+    """A talent row's name with each layout token resolved to the PC wording (`#{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press} DMG` is
+    "Press DMG"; with no PC wording the first there is) and its spaces tidied (a no-break space too)."""
+
+    def pick(found: re.Match[str]) -> str:
+        wordings = dict(_LAYOUT_ONE.findall(found.group(1)))
+        return wordings.get("PC", next(iter(wordings.values()), ""))
+
+    return " ".join(_LAYOUT_RUN.sub(pick, str(name or "")[:MAX_FIELD_CHARS]).split())

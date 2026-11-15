@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "A4": {"on": false, "state": "on", "label": "After a weak-point shot", "covers": [], "reason": "The ATK bonus starts only after an Aimed Shot hits a weak point, which depends on the enemy and the player's aim."},
+    "C6": {"on": false, "state": "on", "label": "Constellation 6 after her Burst", "covers": [], "reason": "A Constellation 6 party ATK bonus for 10 seconds after her Burst, which covers only the hits that come after it."}
+  }
+}

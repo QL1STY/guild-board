@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "afterBurst": {"on": true, "state": "on", "label": "Painted Dome", "covers": ["normal", "charged", "plunging"], "reason": "His Normal Attacks deal Dendro damage only inside Painted Dome, which is when he uses them."},
+    "a4Stacks": {"on": true, "state": "4", "label": "Elemental Mastery from his hits", "covers": ["normal", "charged", "plunging"], "reason": "Each Normal, Charged or Plunging Attack that hits inside Painted Dome adds 25 Elemental Mastery, up to four stacks, which four hits reach. No swap of the comparison can show it: Elemental Mastery moves damage only through a reaction, and no case of his has one."}
+  }
+}

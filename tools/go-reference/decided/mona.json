@@ -1,0 +1,10 @@
+{
+  "main": null,
+  "toggles": {
+    "Omen": {"on": false, "state": "on", "label": "Constellation 4 Omen crits", "covers": [], "reason": "A Constellation 4 bonus against enemies marked with Omen, an enemy state that lasts only a few seconds after her Burst."},
+    "ProphecyOfSubmersion": {"on": false, "state": "on", "label": "Constellation 1 reaction bonus", "covers": [], "reason": "A Constellation 1 bonus to reactions against Omen-marked enemies, which depends on the team's reactions."},
+    "RhetoricsOfCalamitas": {"on": false, "state": "3", "label": "Constellation 6 sprint bonus", "covers": [], "reason": "A Constellation 6 bonus to one Charged Attack that needs seconds of her alternate sprint first."},
+    "lockHomework": {"on": false, "state": "on", "label": "Witch's Homework done (Hexerei)", "covers": [], "reason": "Her Hexerei effects need her Witch's Homework quest done and the party to have two Hexerei characters, which the planner cannot tell, so it is left for the player to switch on. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "lockC2Charged": {"on": false, "state": "on", "label": "Constellation 2 Elemental Mastery (Hexerei)", "covers": [], "reason": "A Constellation 2 Elemental Mastery bonus of her Hexerei form, which moves damage only through a reaction. It needs the Witch's Homework switch as well. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it. It adds Elemental Mastery, which moves damage only through a reaction, and no case of hers has one."}
+  }
+}

@@ -19,9 +19,32 @@ import {
 } from './endgamecard.ts'
 
 test('actCells', () => {
-  expect(actCells([true, false, true], 2)).toEqual(['medal', 'done', 'off'])
-  expect(actCells([false, false], 0)).toEqual(['off', 'off'])
-  expect(actCells([], 5)).toEqual([])
+  const states = (cells: { state: string }[]) => cells.map((cell) => cell.state)
+  expect(states(actCells([true, false, true], 2, 0))).toEqual(['medal', 'done', 'off'])
+  expect(states(actCells([false, false], 0, 0))).toEqual(['off', 'off'])
+  expect(actCells([], 5, 0)).toEqual([])
+  expect(actCells([true, false], 2, null).map((cell) => cell.label)).toEqual(['1', '2'])
+})
+
+test("actCells keeps an Arcana Challenge's two Arcana fights apart from its ten acts", () => {
+  const medals = [true, false, true, true, false, true, true, false, false, true, false, true]
+  const cells = actCells(medals, 10, 2)
+  expect(cells.map((cell) => cell.label)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'A1', 'A2'])
+  // Both Arcana fights are cleared: the first without its medal, the second with it. Neither is "not reached".
+  expect(cells.slice(10).map((cell) => cell.state)).toEqual(['done', 'medal'])
+  expect(actCells([...medals.slice(0, 10), false, false], 7, 1).slice(10).map((cell) => cell.state)).toEqual(['done', 'off'])
+  // A detail that does not know the Arcana fights cleared shows a won medal, and nothing else, as cleared.
+  expect(actCells(medals, 10, null).slice(10).map((cell) => cell.state)).toEqual(['off', 'medal'])
+})
+
+test('the Theater says the Arcana fights cleared, and counts the acts without them', () => {
+  const { abyss, theater, stygian } = columns()
+  const medals = [true, false, true, true, false, true, true, false, false, true, false, true]
+  const card = drawn([abyss, { ...theater, medals, arcana: 2 }, stygian])
+  expect(card.theater).toMatch(/<b>Act 10<\/b><span>reached · Arcana 2 · 6 medals<\/span>/)
+  expect(card.theater).toContain('aria-label="Act 10 of 10 reached, Arcana 2 of 2, 6 medals"')
+  expect(card.theater).toMatch(/class="ec-act arcana medal"[^>]*>A2</)
+  expect(card.theater).not.toContain('>11<')
 })
 
 test('starCells fills floors 9 to 12', () => {
@@ -115,7 +138,8 @@ function columns(): { abyss: EndgameAbyss; theater: EndgameTheater; stygian: End
     theater: {
       mode: 'theater', label: 'Imaginarium Theater', header, period: '1 Nov to 30 Nov', result: 'Act 10 reached', best: 'Act 10',
       played: true, line: 'November · Arcana Challenge', month: 'November', difficulty: 'Arcana Challenge', ended: false, act: 10,
-      medals: [true, false, true], medal_count: 6, ranks: [rank('damage', 'Most damage', 943229)], flowers: 1285, seconds: 1002,
+      medals: [true, false, true], medal_count: 6, arcana: 0, heraldry: 5,
+      marks: { medal: null, cleared: null, flower: null, heraldry: null }, ranks: [rank('damage', 'Most damage', 943229)], flowers: 1285, seconds: 1002,
     },
     stygian: {
       mode: 'stygian', label: 'Stygian Onslaught', header, period: 'Luminous Battlefront', result: 'Difficulty 5 cleared',
@@ -136,7 +160,7 @@ test('a detail kept by 1.0.1 shows its stars with no grey grid, and no medals, f
   const { abyss, theater, stygian } = columns()
   const card = drawn([
     { ...abyss, line: '16 Oct to 15 Nov', battles: null, wins: null, chambers: null, ranks: null },
-    { ...theater, medals: null, medal_count: null, ranks: null, flowers: null, seconds: null },
+    { ...theater, medals: null, medal_count: null, ranks: null, flowers: null, seconds: null, arcana: null },
     stygian,
   ])
   // The Abyss keeps "33 of 36 stars", with no star grid and no highlight.
@@ -150,6 +174,33 @@ test('a detail kept by 1.0.1 shows its stars with no grey grid, and no medals, f
   expect(card.theater).not.toContain('ec-acts')
   expect(card.theater).not.toContain('Fantasia Flowers used')
   expect(card.theater).not.toContain('Time in battle')
+})
+
+test("the Theater shows HoYoLAB's own marks once they are kept, with the number under each", () => {
+  const { abyss, theater, stygian } = columns()
+  const medals = [true, false, true, true, false, true, true, false, false, true, false, true]
+  const marks = { medal: '/api/art/m', cleared: '/api/art/c', flower: '/api/art/f', heraldry: '/api/art/h' }
+  const card = drawn([abyss, { ...theater, medals, act: 9, arcana: 1, marks }, stygian])
+  expect(card.theater).toContain('class="ec-heraldry" src="/api/art/h"')
+  expect(card.theater).toMatch(/class="ec-mark medal"[^>]*><span class="ec-disc"><img src="\/api\/art\/m"[^>]*><\/span>1</)
+  expect(card.theater).toMatch(/class="ec-mark done"[^>]*><span class="ec-disc"><img src="\/api\/art\/c"[^>]*><\/span>2</)
+  // Act 10 was not reached: an empty disc. A1 is cleared without its medal; A2 has its medal.
+  expect(card.theater).toMatch(/class="ec-mark off"[^>]*><span class="ec-disc"><\/span>10</)
+  expect(card.theater).toMatch(/class="ec-split"/)
+  expect(card.theater).toMatch(/class="ec-mark arcana done"[^>]*><span class="ec-disc"><img src="\/api\/art\/c"[^>]*><\/span>A1</)
+  expect(card.theater).toMatch(/class="ec-mark arcana medal"[^>]*><span class="ec-disc"><img src="\/api\/art\/m"[^>]*><\/span>A2</)
+  expect(card.theater).not.toContain('class="ec-act')
+  expect(card.theater).toMatch(/<img class="ec-legend-mark" src="\/api\/art\/m"/)
+  expect(card.theater).toMatch(/<img class="ec-glyph-pic" src="\/api\/art\/f"/)
+})
+
+test("without HoYoLAB's medal pictures the Theater keeps its own circles and no heraldry", () => {
+  const { abyss, theater, stygian } = columns()
+  const marks = { medal: null, cleared: '/api/art/c', flower: null, heraldry: null }
+  const card = drawn([abyss, { ...theater, marks }, stygian])
+  expect(card.theater).toContain('class="ec-act medal"')
+  expect(card.theater).not.toContain('ec-mark')
+  expect(card.theater).not.toContain('ec-heraldry')
 })
 
 test('a real 0 still shows: no medals, no flowers and no time are numbers read', () => {

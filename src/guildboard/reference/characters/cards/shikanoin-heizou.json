@@ -1,7 +1,7 @@
 {
   "key": "shikanoin-heizou", "name": "Shikanoin Heizou", "element": "Anemo", "weapon_type": "Catalyst", "rarity": 4,
-  "pronouns": ["he", "him", "his"], "roles": ["damage", "support"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["damage", "support"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "normal", "burst"],
   "goals": {"er": 130},
   "mains": {"sands": ["atk_pct", "er", "em"], "goblet": ["dmg", "em"], "circlet": ["cr", "cd", "em"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "wants", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

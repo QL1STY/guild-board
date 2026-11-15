@@ -1082,10 +1082,9 @@ test('topbar: the note on the Board, full screen', { tag: TOPBAR }, async ({ bro
  * part, with the window scrolled to it. The demo's characters and pictures are made up.
  */
 test.describe('characters', () => {
-  // Your week and Endgame are hidden (characters.WEEK_AND_ENDGAME, hidden.ts), so these are the pictures of the shipped build: the
-  // rail without Your week, the roster without the Endgame tab. Those two pages' pictures are taken only on request, with
-  // GB_SCREENS_WEEK=1, which shows them (they and the Today widget are in `week` below).
-  test.use({ demoNow: '2026-10-25T08:00:00+00:00', weekAndEndgame: false })
+  // Endgame is hidden (characters.ENDGAME, hidden.ts), so these are the pictures of the shipped build: the roster without the
+  // Endgame tab. Its pictures are taken only on request, with GB_SCREENS_WEEK=1, which shows it (it is in `week` below).
+  test.use({ demoNow: '2026-10-25T08:00:00+00:00', endgame: false })
   const week = process.env.GB_SCREENS_WEEK === '1' ? test.describe : test.describe.skip
 
   /** What the window shows, scrolled to `part` (12 pixels under the window's top) or to the page's top. */
@@ -1126,9 +1125,9 @@ test.describe('characters', () => {
       name: 'planner',
       hash: '#/characters/sandrone/plan',
       ready: async (page) => {
-        await expect(page.locator('.pp-chip.hero b .sr-only')).toHaveText('+35%')
+        await expect(page.locator('.pp-piece[data-slot="flower"]')).toContainText('42.8')
       },
-      parts: [['planner-days', (page) => page.locator('.pp-days').first()]],
+      parts: [['planner-editor', (page) => page.locator('.pp-editor').first()]],
     },
   ]
 
@@ -1169,7 +1168,7 @@ test.describe('characters', () => {
         await expect(full.locator('.pf-name')).toHaveText('Sandrone')
         await characters(full, `profile-whole-${width}x${height}`)
         await full.goto(`${core.origin}/#/characters/sandrone/plan`)
-        await expect(full.locator('.pp-chip.hero b .sr-only')).toHaveText('+35%')
+        await expect(full.locator('.pp-piece[data-slot="flower"]')).toContainText('42.8')
         await characters(full, `planner-${width}x${height}`)
       })
     })
@@ -1233,20 +1232,12 @@ test.describe('characters', () => {
     })
   })
 
-  // Your week, Endgame and the Today widget are hidden (characters.WEEK_AND_ENDGAME): their pictures are taken on request, with
-  // GB_SCREENS_WEEK=1, and are not in the folder while they are hidden.
-  week('Your week and Endgame, and the Today widget', () => {
-    test.use({ weekAndEndgame: true })
+  // Endgame is hidden (characters.ENDGAME): its pictures are taken on request, with GB_SCREENS_WEEK=1, and are not in the folder
+  // while it is hidden.
+  week('Endgame', () => {
+    test.use({ endgame: true })
 
     const WEEK_PAGES: CharactersPage[] = [
-    {
-      name: 'week',
-      hash: '#/week',
-      ready: async (page) => {
-        await expect(page.locator('.wk-sec[data-sec="0"] .wk-step').first()).toBeVisible()
-      },
-      parts: [['week-grid', (page) => page.locator('.wk-week')]],
-    },
     {
       name: 'endgame',
       hash: '#/characters/endgame',
@@ -1275,17 +1266,27 @@ test.describe('characters', () => {
       })
     }
 
-  test("your week's focus with its Add a character list open, and the list searched", { tag: CHARACTERS }, async ({ page, core }) => {
-    await page.setViewportSize({ width: 1640, height: 1100 })
-    await page.goto(`${core.origin}/#/week`)
-    await expect(page.locator('.wk-sec[data-sec="0"] .wk-step').first()).toBeVisible()
-    await page.getByRole('button', { name: 'Add a character' }).click()
-    const list = page.getByRole('dialog', { name: 'Add a character' })
-    await expect(list.locator('.wk-opt').first()).toBeVisible()
-    await characters(page, 'week-add-1640', page.locator('.wk-top'))
-    await list.getByRole('searchbox').fill('fl')
-    await expect(list.locator('.wk-opt')).not.toHaveCount(0)
-    await characters(page, 'week-add-search-1640', page.locator('.wk-top'))
+  // The Plan page (the Plan design, section 4; mockup plan.html): on Wednesday 11 November, with its Add a character sheet open.
+  test.describe('the Plan page', () => {
+    test.use({ demoNow: '2026-11-11T08:00:00+00:00' })
+    const plan = (page: Page) => expect(page.getByTestId('plan-grid').locator('.pln-tr[data-key]').first()).toBeVisible()
+
+    test('plan in the usual window', { tag: CHARACTERS }, async ({ page, core }) => {
+      await page.setViewportSize({ width: 1640, height: 1100 })
+      await page.goto(`${core.origin}/#/plan`)
+      await plan(page)
+      await characters(page, 'plan-1640')
+      await page.getByRole('button', { name: 'Add a character' }).click()
+      await expect(page.getByTestId('plan-sheet')).toBeVisible()
+      await characters(page, 'plan-add-1640', page.getByTestId('plan-grid'))
+    })
+    test('plan full screen at 2560', { tag: CHARACTERS }, async ({ browser, core }) => {
+      await zoomedPage(browser, core, async (zoomed) => {
+        await zoomed.goto(`${core.origin}/#/plan`)
+        await plan(zoomed)
+        await characters(zoomed, 'plan-2560')
+      })
+    })
   })
 
   test('the endgame after the plans', { tag: CHARACTERS }, async ({ page, core }) => {

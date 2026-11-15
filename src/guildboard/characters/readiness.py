@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import math
 
-from guildboard.characters import damage, stats
+from guildboard.characters import stats
 from guildboard.characters.models import Build, Card, Readiness, Refs
 
 WEIGHTS = {"level": 0.15, "talents": 0.25, "weapon": 0.20, "artifacts": 0.40}
@@ -17,11 +17,6 @@ WEAPON_TIERS = (1.0, 0.9, 0.85)
 def raw(parts: dict[str, float]) -> float:
     """The total from its parts, before rounding to a whole number."""
     return sum(WEIGHTS[key] * parts[key] for key in WEIGHTS)
-
-
-def talent_level(build: Build, card: Card) -> int:
-    """The level her damage talent has, constellation bonus counted."""
-    return build.talents.get(card.damage_talent, 1) + build.bonus.get(card.damage_talent, 0)
 
 
 def _weapon_part(build: Build, card: Card, weapon_level: int | None) -> float:
@@ -65,30 +60,11 @@ def _mains_right(build: Build, card: Card) -> float:
     return right / 3
 
 
-def _goal_estimate(build: Build, card: Card, refs: Refs, combat: dict[str, float]) -> float:
-    """The estimate at the card's goals for the scaling stat, DMG Bonus, Crit Rate and Crit DMG, with the same talent level
-    and the same effects that hold when met. A stat the card gives no goal for stays as it is."""
-    weapon = build.weapon
-    key, refinement = (weapon.key, weapon.refinement) if weapon else (None, 1)
-    choice, base_atk = stats.worn_choice(build), build.base.get("atk", 0.0)
-    zero = {name: 0.0 for name in ("atk", "hp", "def", "em")}
-    zero.update({name: combat[name] for name in ("base_hp", "base_def") if name in combat})
-    met = stats.in_combat(zero, key, refinement, choice, base_atk, refs)
-    # what the effects that hold when met add to each stat, taken off so that they are counted once, after the goals
-    goal_stats = {name: value - (met.get(name, 0.0) - zero.get(name, 0.0)) for name, value in combat.items()}
-    for name, value in card.goals.items():
-        goal_stats[name] = value
-    return damage.estimate(stats.in_combat(goal_stats, key, refinement, choice, base_atk, refs), card, talent_level(build, card), refs)
-
-
-def _fit(build: Build, card: Card, refs: Refs, combat: dict[str, float]) -> float:
-    if "damage" in card.roles:
-        ideal = _goal_estimate(build, card, refs, combat)
-        if ideal <= 0:
-            return 1.0
-        return min(1.0, damage.estimate(combat, card, talent_level(build, card), refs) / ideal)
+def _fit(card: Card, combat: dict[str, float]) -> float:
+    """How far her stats in combat are from the card's goals, each goal counted as the share of it reached (1 at the goal or
+    over), averaged. DMG Bonus is her element's or Physical DMG Bonus, whichever is higher. A card without goals fits."""
     attained = [
-        min(1.0, (damage.dmg_bonus(combat, card) if name == "dmg" else combat.get(name, 0.0)) / goal)
+        min(1.0, (max(combat.get("dmg", 0.0), combat.get("phys", 0.0)) if name == "dmg" else combat.get(name, 0.0)) / goal)
         for name, goal in card.goals.items() if goal > 0
     ]
     return sum(attained) / len(attained) if attained else 1.0
@@ -104,7 +80,7 @@ def score(
     talents = sum(
         weight * min(1.0, build.talents.get(kind, 1) / 10) for weight, kind in zip(TALENT_WEIGHTS, card.talent_priority)
     )
-    artifacts = 0.6 * _fit(build, card, refs, combat) + 0.25 * _mains_right(build, card) + 0.15 * _set_part(build, card)
+    artifacts = 0.6 * _fit(card, combat) + 0.25 * _mains_right(build, card) + 0.15 * _set_part(build, card)
     parts = {
         "level": min(1.0, build.level / 90), "talents": talents, "weapon": _weapon_part(build, card, weapon_level),
         "artifacts": artifacts,

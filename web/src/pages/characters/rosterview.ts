@@ -1,14 +1,14 @@
 import { dayMonth } from '../../format.ts'
 import type { Element, Roster, RosterEntry, WeaponType } from '../../types.ts'
-import { FOUR_AT_MOST, NOT_YOURS } from './words.ts'
+import { NOT_YOURS } from './words.ts'
 
 /**
  * What the roster's filters hold (the design's section 6.1): an element, a weapon type and a rarity (a player's ask after
- * the launch), owned only, and in focus only.
+ * the launch), and owned only.
  */
-export type Filters = { element: Element | null; weapon: WeaponType | null; rarity: 4 | 5 | null; owned: boolean; inFocus: boolean }
+export type Filters = { element: Element | null; weapon: WeaponType | null; rarity: 4 | 5 | null; owned: boolean }
 
-export const NO_FILTERS: Filters = { element: null, weapon: null, rarity: null, owned: false, inFocus: false }
+export const NO_FILTERS: Filters = { element: null, weapon: null, rarity: null, owned: false }
 
 /** The rarities a character has, the highest first. */
 export const RARITIES = [5, 4] as const
@@ -44,8 +44,7 @@ export function visible(entries: readonly RosterEntry[], filters: Filters, searc
       (filters.element === null || entry.element === filters.element) &&
       (filters.weapon === null || entry.weapon === filters.weapon) &&
       (filters.rarity === null || entry.rarity === filters.rarity) &&
-      (!filters.owned || entry.owned) &&
-      (!filters.inFocus || entry.focus !== null),
+      (!filters.owned || entry.owned),
   )
 }
 
@@ -80,26 +79,6 @@ export function neighbours(order: readonly string[], key: string): { previous: s
 /** "15 of 16 owned" */
 export function countLine(roster: Roster): string {
   return `${roster.owned} of ${roster.all} owned`
-}
-
-/** The characters in the focus, in the order the core numbered them (1 to 4). */
-export function focusCards(roster: Roster): RosterEntry[] {
-  return roster.entries
-    .filter((entry) => entry.focus !== null)
-    .sort((a, b) => (a.focus ?? 0) - (b.focus ?? 0))
-}
-
-/** The most characters the focus holds. */
-export const FOCUS_MAX = 4
-
-/**
- * The focus after a press on a character's toggle: she goes in after the others, or out leaving them in their order. A
- * fifth is refused, with the sentence the core gives too.
- */
-export function toggleFocus(focus: readonly string[], key: string): { focus: string[] } | { refused: string } {
-  if (focus.includes(key)) return { focus: focus.filter((one) => one !== key) }
-  if (focus.length >= FOCUS_MAX) return { refused: FOUR_AT_MOST }
-  return { focus: [...focus, key] }
 }
 
 /** "Level 90 · C2", or "Not yours yet". */

@@ -23,7 +23,7 @@ export type Group = { key: 'role' | 'goals' | 'mains' | 'substats' | 'sets' | 'w
 
 /** The panel's groups, in the design's order, and the fields of a card each one holds. */
 export const GROUPS: readonly Group[] = [
-  { key: 'role', label: 'Role', fields: ['roles', 'keeps_alive', 'scaling', 'damage_talent', 'talent_priority'] },
+  { key: 'role', label: 'Role', fields: ['roles', 'keeps_alive', 'damage_talent', 'talent_priority'] },
   { key: 'goals', label: 'Goals', fields: ['goals'] },
   { key: 'mains', label: 'Main stats', fields: ['mains'] },
   { key: 'substats', label: 'Substats', fields: ['weights'] },
@@ -97,9 +97,9 @@ const GOAL_LABELS: Record<string, { label: string; unit: string }> = {
 
 export type GoalRow = { key: string; label: string; unit: string; text: string }
 
-/** The goals the panel lists: Crit Rate, Crit DMG, Energy Recharge, Elemental Mastery, her scaling stat and DMG Bonus, each as typed. */
-export function goalRows(fields: Pick<CardFields, 'goals' | 'scaling'>): GoalRow[] {
-  const keys = ['cr', 'cd', 'er', 'em', ...(fields.scaling === 'em' ? [] : [fields.scaling]), 'dmg']
+/** The goals the panel lists: Crit Rate, Crit DMG, Energy Recharge, Elemental Mastery, ATK, HP, DEF and DMG Bonus, each as typed. */
+export function goalRows(fields: Pick<CardFields, 'goals'>): GoalRow[] {
+  const keys = ['cr', 'cd', 'er', 'em', 'atk', 'hp', 'def', 'dmg']
   return keys.map((key) => ({ key, ...GOAL_LABELS[key], text: fields.goals[key] === undefined ? '' : String(fields.goals[key]) }))
 }
 

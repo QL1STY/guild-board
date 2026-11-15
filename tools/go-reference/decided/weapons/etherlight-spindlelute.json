@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "etherlight-spindlelute:condPassive": {"on": true, "state": "on", "label": "After her Skill", "covers": [], "reason": "It lasts 20 seconds after her Elemental Skill, longer than most Skills take to come back, so it is up while she casts her Skill when it is ready."}
+  }
+}

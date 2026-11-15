@@ -3,15 +3,20 @@ service gathers what is known of a character, and these builders put it into the
 factual; a pronoun comes from the card, "they" where it has none."""
 from __future__ import annotations
 
-import dataclasses
-import math
-from datetime import date, datetime, timedelta, timezone
+import copy
+import re
+from datetime import date, datetime, timezone
 from typing import TYPE_CHECKING, Any, Sequence
 
-from guildboard.characters import SLOTS, bridge, damage, nextsteps, odds, readiness, stats, xray
+from guildboard import characters
+from guildboard.characters import (
+    SLOTS, bridge, constants, kits, nextsteps, readiness, reference, rolls, simhits, stats, wiki, xray,
+)
 from guildboard.characters.bridge import TALENT_LABELS, TALENTS, stat_text
 from guildboard.characters.models import Build, Card, Need, Plan, Source
 from guildboard.characters.stats import label as stat_label
+from guildboard.characters.wiki import stat_key
+from guildboard.metrics import slug
 
 if TYPE_CHECKING:  # the service builds these models; it is not imported here
     from guildboard.characters.service import Char, Characters
@@ -20,9 +25,6 @@ STAT_ORDER = ("hp", "atk", "def", "em", "cr", "cd", "er", "dmg")
 SCALES = {"hp": 40000, "atk": 4000, "def": 2000, "em": 500, "cr": 100, "cd": 300, "er": 200, "dmg": 100, "heal": 100, "phys": 100}
 WEEKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 PART_LABELS = {"level": "Level", "talents": "Talents", "weapon": "Weapon", "artifacts": "Artifacts"}
-MINUS = "\N{MINUS SIGN}"
-CURVE_DAYS = 50
-ELIXIR = "Sanctifying Elixir: you choose its main stat and two substats"
 
 
 # ------------------------------------------------------------------------------------------------ small helpers
@@ -56,10 +58,6 @@ def label_of(stat: str, element: str | None = None) -> str:
 def day_text(day: date) -> str:
     """A day as the pages say it: "Sun 8 Nov"."""
     return f"{day:%a} {day.day} {day:%b}"
-
-
-def long_day(day: date) -> str:
-    return f"{WEEKDAYS[day.weekday()]} {day.day} {day:%B}"
 
 
 def and_list(items: Sequence[str]) -> str:
@@ -173,7 +171,7 @@ def _stat_keys(char: "Char", panel: dict[str, float]) -> list[str]:
     keys = list(STAT_ORDER)
     if "heal" in char.card.goals or panel.get("heal", 0) > 0:
         keys.append("heal")
-    if char.card.talent_table == "physical" or panel.get("phys", 0) > 0:
+    if panel.get("phys", 0) > 0:
         keys.append("phys")
     return keys
 
@@ -287,9 +285,203 @@ def _pieces(svc: "Characters", char: "Char") -> list[dict[str, Any]]:
                 for sub in piece.subs
             ],
             "verdict": verdict.verdict, "why": verdict.why, "crit_value": round(verdict.crit_value, 1),
+            "cv_tier": rolls.cv_tier(round(verdict.crit_value, 1), piece.main in CRIT_MAINS),
             "rolls_wanted": verdict.rolls_wanted, "rolls_all": verdict.rolls_all, "set_name": piece.set_name,
         })
     return pieces
+
+
+CRIT_MAINS = ("cr", "cd")
+SIM_PANEL = ("hp", "atk", "def", "em", "er", "cr", "cd", "dmg", "heal", "physical")
+SIM_KEY = {"phys": "physical"}   # the roll tables call Physical DMG Bonus "physical"; the build's and the references' key is "phys"
+
+
+def _sim_key(stat: str | None) -> str | None:
+    return SIM_KEY.get(stat, stat) if stat else stat
+
+
+ELEMENT_BONUS = re.compile(r"^(\w+) DMG Bonus, for an? (\w+) character$")
+
+
+def set_two(ref: Any, element: str | None) -> list[dict[str, Any]]:
+    """A set's 2-piece plain stats for the simulator's tested stats: the ones that hold for everyone and, for a character (`element`), the
+    DMG Bonus of her own element that some sets give "for a Pyro character" (the game's panel holds it only for that element). A stat that holds
+    for one move or one state (Plunging Attack DMG, a state) is no plain stat and is left to the effects."""
+    out = []
+    for effect in ref.two:
+        if not effect.values:
+            continue
+        match = ELEMENT_BONUS.match(effect.condition) if effect.when == "met" else None
+        if effect.when == "always" or (match is not None and element is not None and match.group(1) == match.group(2) == element.capitalize()):
+            out.append({"stat": _sim_key(effect.stat), "value": effect.values[0]})
+    return out
+
+
+def _sim_set(svc: "Characters", key: str, count: int, build: Build, element: str | None = None) -> dict[str, Any]:
+    ref = svc.refs.sets.get(key)
+    here = next(piece for piece in build.pieces.values() if piece.set_key == key)
+    two_text, four_text = _set_texts(svc, key)
+    icon = (ref.icons.get(here.slot) or ref.icons.get("flower")) if ref and ref.icons else here.icon
+    return {
+        "key": key, "name": ref.name if ref else here.set_name, "icon": svc.address(icon), "pieces": count,
+        "two": set_two(ref, element) if ref else [], "two_text": two_text, "four_text": four_text,
+    }
+
+
+def _gear(kind: str, key: str, char: "Char") -> dict[str, Any] | None:
+    """A weapon's or a set's effects and toggles for her, as the planner reads a tested one (`kits.gear_of`), or None: with the
+    verdict switch off, with no build of hers, or when the item has neither."""
+    build = char.build
+    if build is None or not characters.VERDICT:
+        return None
+    gear = kits.gear_of(kind, key, build.constellation, build.ascension, char.weapon_type.casefold())
+    return gear if gear["effects"] or gear["toggles"] else None
+
+
+def build_weapon_choices(svc: "Characters", char: "Char") -> list[dict[str, Any]]:
+    """The weapons of her type, 3 stars and up, at level 90: the reference's, then the wiki's list rows it does not hold, whose
+    numbers come from their stored entries (null until then). A listed weapon whose entry is not stored has no known type, so it
+    is left out until its entry is read. A weapon with effects or toggles for her carries them as `gear` (the planner's answer
+    holds her own weapon's alone)."""
+    found: dict[str, dict[str, Any]] = {}
+    for key, ref in svc.refs.weapons.items():
+        if ref.type == char.weapon_type and ref.rarity >= 3:
+            found[key] = {
+                "key": key, "name": ref.name, "icon": svc.address(ref.icon), "rarity": ref.rarity,
+                "base_atk": ref.base_atk_90, "sub": _sim_key(ref.sub), "sub_value": ref.sub_90 if ref.sub else None,
+            }
+    for (kind, name), row in svc.store.wiki_items().items():
+        key = slug(name)
+        if kind != "weapon" or key in svc.refs.weapons:
+            continue
+        page = svc.weapon_page_at(row.entry_page_id)
+        rarity = (page.rarity if page else 0) or row.rank
+        if page is None or page.type != char.weapon_type or rarity < 3:
+            continue
+        sub = _sim_key(stat_key(page.sub)) if page.sub else None
+        base_atk, sub_value = page.base_atk_90 or None, page.sub_90 if sub and page.sub_90 else None
+        # kits.json's numbers at level 90 (GO's curves) when it has the weapon with this substat: the entry's are the wiki's, rounded
+        exact = reference.load_weapon_levels().get(key)
+        if exact and _sim_key(exact["sub"]) == sub:
+            base_atk = exact["base_atk"]
+            if sub is not None and exact["sub_value"] is not None:
+                sub_value = exact["sub_value"] if sub == "em" else round(exact["sub_value"] * 100, 6)
+        found[key] = {
+            "key": key, "name": name, "icon": svc.address(row.icon_url or page.icon), "rarity": rarity,
+            "base_atk": base_atk, "sub": sub, "sub_value": sub_value,
+        }
+    for key, weapon in found.items():
+        if (gear := _gear("weapons", key, char)) is not None:
+            weapon["gear"] = gear
+    return sorted(found.values(), key=lambda w: (-w["rarity"], w["name"]))
+
+
+def build_set_choices(svc: "Characters", char: "Char | None" = None) -> list[dict[str, Any]]:
+    """Every artifact set, by name: the reference's, then the wiki's list rows it does not hold, which have no 2-piece numbers
+    until the reference gains them. For a character (the planner's picker) a set with effects or toggles for her carries them as
+    `gear`."""
+    found: dict[str, dict[str, Any]] = {}
+    for key, ref in svc.refs.sets.items():
+        two_text, four_text = _set_texts(svc, key)
+        found[key] = {
+            "key": key, "name": ref.name, "icon": svc.address(ref.icons.get("flower") or next(iter(ref.icons.values()), None)),
+            "two_text": two_text, "four_text": four_text,
+            "two": set_two(ref, char.element if char is not None else None),
+        }
+    for (kind, name), row in svc.store.wiki_items().items():
+        key = slug(name)
+        if kind != "set" or key in found:
+            continue
+        page = svc.set_page_at(row.entry_page_id)
+        two_text, four_text = (page.two_text, page.four_text) if page is not None else ("", "")
+        found[key] = {"key": key, "name": name, "icon": svc.address(row.icon_url or None), "two_text": two_text,
+                      "four_text": four_text, "two": []}
+    if char is not None:
+        for key, item in found.items():
+            if (gear := _gear("sets", key, char)) is not None:
+                item["gear"] = gear
+    return sorted(found.values(), key=lambda s: s["name"])
+
+
+def _sim_tables() -> dict[str, Any]:
+    tables = reference.load_tables()
+    return {
+        "rolls": {str(r): {stat: list(values) for stat, values in rolls.ROLLS[r].items()} for r in (5, 4)},
+        "mains": {str(r): {stat: list(values) for stat, values in tables[f"mains_by_level_{r}"].items()} for r in (5, 4)},
+        "weights": dict(tables["sub_weights"]), "start4_odds": float(tables["start4_odds"]["5"]),
+        **copy.deepcopy(constants.tables()),   # the damage engine's constants: a copy, the cached dicts are never handed out
+    }
+
+
+def _sim_hits(svc: "Characters", char: "Char") -> dict[str, Any] | None:
+    """The hits block of the simulator (the Plan design, 7.4 and 14): her talents' damage rows, her kit's effects and toggles,
+    and the effects of her weapon and of the sets she wears (the pickers' routes carry the others'). None while the verdict
+    switch (`characters.VERDICT`) is off."""
+    build = char.build
+    if build is None or not characters.VERDICT:
+        return None
+    levels = {kind: build.talents[kind] + build.bonus.get(kind, 0) for kind in TALENTS}
+    kit = kits.kit_of(char.key, build.constellation, build.ascension, "", 1, {}, element=char.element)   # hers alone: gear has its own maps
+    kind = char.weapon_type.casefold()
+    # her own weapon's and the sets she wears: the effects of a weapon or a set the player tests come from the pickers' routes
+    weapons = {key: gear for key in ([build.weapon.key] if build.weapon else [])
+               if (gear := kits.gear_of("weapons", key, build.constellation, build.ascension, kind))["effects"] or gear["toggles"]}
+    sets = {key: gear for key, count in stats.set_counts(build).items()
+            if count >= 2 and ((gear := kits.gear_of("sets", key, build.constellation, build.ascension, kind))["effects"] or gear["toggles"])}
+    row = svc.store.wiki_entry(char.page.entry) if char.page is not None else None
+    recommended = dict.fromkeys(
+        _sim_key(stat) for part in ("subs", "sands", "goblet", "circlet") for stat in build.recommended.get(part, ()))
+    return simhits.hits_block(
+        element=char.element, weapon_type=char.weapon_type, level=build.level, levels=levels, raised=build.talents, affixes=build.affixes,
+        tables=wiki.talent_tables(row.data) if row is not None else {},
+        names={k: (_talent_name(char, k), _talent_icon(svc, char, k)) for k in TALENTS}, kit=kit, recommended=list(recommended),
+        weapon_effects=weapons, set_effects=sets,
+    )
+
+
+def _sim(svc: "Characters", char: "Char") -> dict[str, Any] | None:
+    """What the simulator starts from: HoYoLAB's panel, her weapon, the sets she wears and each piece with its substats cut
+    into the roll tiers that can make them (a value no roll can make keeps its value and has no tiers)."""
+    build = char.build
+    if build is None:
+        return None
+    panel = stats.panel(build)
+    weapon = build.weapon
+    ref = svc.refs.weapons.get(weapon.key) if weapon else None
+    pieces = []
+    for slot in SLOTS:
+        piece = build.pieces.get(slot)
+        if piece is None:
+            continue
+        crit_value = round(xray.crit_value(piece), 1)
+        subs = [
+            {
+                "stat": sub.stat, "value": sub.value,
+                "tiers": list(rolls.split_rolls(sub.stat, sub.value, sub.rolls, piece.rarity) or ())
+                if piece.rarity in rolls.ROLLS and sub.stat in rolls.ROLLS[piece.rarity] else [],
+            }
+            for sub in piece.subs
+        ]
+        pieces.append({
+            "slot": slot, "icon": svc.address(piece.icon), "name": piece.name, "set_key": piece.set_key, "level": piece.level,
+            "rarity": piece.rarity, "main": _sim_key(piece.main), "main_value": piece.main_value, "subs": subs,
+            "crit_value": crit_value, "cv_tier": rolls.cv_tier(crit_value, piece.main in CRIT_MAINS),
+        })
+    total = round(sum(p["crit_value"] for p in pieces), 1)
+    return {
+        "panel": {stat: panel.get("phys" if stat == "physical" else stat, 0.0) for stat in SIM_PANEL},
+        "base": {stat: build.base.get(stat, 0.0) for stat in ("hp", "atk", "def")},
+        "char_base_atk": round(build.base.get("atk", 0.0) - (weapon.base_atk if weapon else 0.0), 4),
+        "weapon": None if weapon is None else {
+            "key": weapon.key, "name": ref.name if ref else weapon.name,
+            "icon": svc.address(weapon.icon or (ref.icon if ref else None)), "type": ref.type if ref else weapon.type,
+            "rarity": ref.rarity if ref else weapon.rarity, "level": weapon.level, "refinement": weapon.refinement,
+            "base_atk": weapon.base_atk, "sub": _sim_key(weapon.sub), "sub_value": weapon.sub_value,
+        },
+        "sets": [_sim_set(svc, key, count, build, char.element) for key, count in stats.set_counts(build).items() if count >= 2],
+        "pieces": pieces, "cv_total": total, "cv_set_tier": rolls.set_tier(total), "tables": _sim_tables(),
+        "hits": _sim_hits(svc, char),
+    }
 
 
 def _sets(svc: "Characters", char: "Char") -> list[dict[str, Any]]:
@@ -404,7 +596,7 @@ def _about(char: "Char") -> list[dict[str, str]]:
 def _card_fields(card: Card) -> dict[str, Any]:
     """The card's own fields, as the Card panel edits them: tuples as arrays, and every slot of the main stats there."""
     return {
-        "roles": list(card.roles), "keeps_alive": card.keeps_alive, "scaling": card.scaling,
+        "roles": list(card.roles), "keeps_alive": card.keeps_alive,
         "damage_talent": card.damage_talent, "talent_priority": list(card.talent_priority),
         "goals": {stat: goal for stat, goal in card.goals.items()},
         "mains": {slot: list(card.mains.get(slot, ())) for slot in bridge.CHOOSABLE}, "weights": dict(card.weights),
@@ -467,57 +659,6 @@ def build_profile(svc: "Characters", char: "Char") -> dict[str, Any]:
 
 
 # ------------------------------------------------------------------------------------------------ the planner
-
-def luck_slots(svc: "Characters", char: "Char", plan: Plan) -> list[tuple[str, str]]:
-    """The pieces her plan asks for that she does not wear: (slot, main stat) for each of the Sands, Goblet and Circlet whose
-    planned main stat is not the one on her, unless a piece typed in the plan stands in for it. Someone who is not owned has
-    no pieces to find."""
-    build = char.build
-    if build is None:
-        return []
-    typed = plan.typed.slot if plan.typed is not None and plan.typed.use else None
-    found = []
-    for slot in bridge.CHOOSABLE:
-        wanted = plan.mains.get(slot)
-        piece = build.pieces.get(slot)
-        if wanted and slot != typed and (piece is None or piece.main != wanted):
-            found.append((slot, wanted))
-    return found
-
-
-def luck_label(char: "Char", slot: str, main: str) -> str:
-    return f"{label_of(main, char.element)} {slot}"
-
-
-def _chance_text(per_run: float, unit: str) -> str:
-    return f"1 in {max(1, round(1 / per_run))} {unit}" if per_run > 0 else "Never"
-
-
-def _find(svc: "Characters", char: "Char", plan: Plan) -> list[dict[str, Any]]:
-    refs = svc.refs
-    icons = {}
-    if plan.set and plan.set.sets and plan.set.sets[0] in refs.sets:
-        icons = refs.sets[plan.set.sets[0]].icons
-    found = []
-    for slot, main in luck_slots(svc, char, plan):
-        crit = main in ("cr", "cd")
-        anywhere = odds.per_run(slot, main, crit, True, refs)
-        theirs = odds.per_run(slot, main, crit, False, refs)
-        box = odds.per_strongbox(slot, main, crit, refs)
-        found.append({
-            "label": f"A {label_of(main, char.element)} {slot} with a crit substat" if not crit else f"A {label_of(main, char.element)} {slot} with the other crit substat",
-            "icon": svc.address(icons.get(slot)), "per_run": round(anywhere, 5),
-            "paths": [
-                {"label": ELIXIR, "odds": "Certain", "best": True},
-                {"label": "Any artifact domain", "odds": _chance_text(anywhere, "runs"), "best": False},
-                {"label": f"{char.card.pronouns[2].capitalize()} set's domain only", "odds": _chance_text(theirs, "runs"), "best": False},
-                {"label": f"Strongbox, {char.card.pronouns[2]} set, 3 artifacts a try", "odds": _chance_text(box, "tries"), "best": False},
-            ],
-            "note": f"Any artifact domain works: one piece from another set keeps {char.card.pronouns[2]} 4-piece bonus."
-            if plan.set is not None and plan.set.pieces == "4" else "",
-        })
-    return found
-
 
 def _weapon_options(svc: "Characters", char: "Char") -> list[dict[str, Any]]:
     refs, card, build = svc.refs, char.card, char.build
@@ -650,206 +791,26 @@ def _weights(card: Card) -> list[dict[str, str]]:
     return [{"key": key, "label": label_of(key, card.element), "weight": card.weights.get(key, "none")} for key in keys]
 
 
-def _change_text(key: str, delta: float) -> str:
-    percent = key in bridge.PERCENT_STATS
-    if abs(delta) < (0.05 if percent else 0.5):
-        return "no change"
-    sign = "+" if delta > 0 else MINUS
-    return f"{sign}{abs(delta):.1f}" if percent else f"{sign}{round(abs(delta)):,}"
-
-
-def _planner_stats(
-    char: "Char", now: dict[str, float], planned: dict[str, float], combat: dict[str, float]
-) -> list[dict[str, Any]]:
-    card = char.card
-    keys = list(dict.fromkeys([card.scaling if card.scaling != "em" else "em", "cr", "cd", "dmg", "er", "em", "hp", "atk", "def"]))
-    if "heal" in card.goals or now.get("heal", 0) > 0:
-        keys.append("heal")
-    if card.talent_table == "physical" or now.get("phys", 0) > 0:
-        keys.append("phys")
-    rows = []
-    for key in keys:
-        before, after, goal = now.get(key, 0.0), planned.get(key, 0.0), card.goals.get(key)
-        how = f"Now {stat_text(key, before)}, with the plan {stat_text(key, after)}."
-        if goal is not None:
-            how += f" {card.pronouns[2].capitalize()} goal: {_goal_text(key, goal)}."
-        if key == "cr" and abs(combat.get("cr", after) - after) >= 0.05:
-            how += f" In combat, with set effects met: {combat['cr']:.1f}%."
-        rows.append({
-            "key": key, "label": label_of(key, card.element), "now": round(before, 2), "now_text": stat_text(key, before),
-            "plan": round(after, 2), "plan_text": stat_text(key, after), "scale": SCALES.get(key, 100), "goal": goal,
-            "change_text": _change_text(key, after - before), "how": how,
-        })
-    return rows
-
-
-def _goals_met(char: "Char", planned: dict[str, float], combat: dict[str, float]) -> list[dict[str, Any]]:
-    card = char.card
-    rows = []
-    for key in [k for k in (*STAT_ORDER, "heal", "phys") if k in card.goals]:
-        goal = card.goals[key]
-        value = combat.get("cr", 0.0) if key == "cr" else damage.dmg_bonus(combat, card) if key == "dmg" else planned.get(key, 0.0)
-        rows.append({
-            "label": label_of(key, card.element), "text": f"{stat_text(key, value)} of {_goal_text(key, goal)}",
-            "met": value >= goal,
-        })
-    return rows
-
-
-def _typed_view(svc: "Characters", char: "Char", plan: Plan, est: Any) -> dict[str, Any] | None:
-    typed = plan.typed
-    if typed is None:
-        return None
-    refs, card = svc.refs, char.card
-    subs = [(stat, value) for stat, value in typed.subs if stat and value]
-    crit = sum(2 * value if stat == "cr" else value if stat == "cd" else 0.0 for stat, value in subs)
-    rolls = [(stat, max(1, round(value / refs.roll_avg[stat])) if refs.roll_avg.get(stat) else 1) for stat, value in subs]
-    wanted = sum(count for stat, count in rolls if card.weights.get(stat) == "wants")
-    change = None
-    if char.build is not None and "damage" in card.roles:
-        without = est(dataclasses.replace(plan, typed=None))
-        with_it = est(dataclasses.replace(plan, typed=dataclasses.replace(typed, use=True)))
-        change = damage.change(without, with_it) if without > 0 else None
-    return {
-        "crit_value": round(crit, 1), "rolls_wanted": wanted, "rolls_all": sum(count for _, count in rolls),
-        "change": change, "against": f"against the plan's {typed.slot}",
-    }
-
-
-def _curve(svc: "Characters", char: "Char", plan: Plan, pieces: list[tuple[str, str]]) -> dict[str, Any]:
-    """The chance that the pieces to find are all in, day by day, from the runs the week plan gives her (or all the resin,
-    when she is not in the focus), and the day her talents are ready."""
-    today, refs = svc.today(), svc.refs
-    focus = svc.focus()
-    chances = [
-        odds.per_run(slot, main, main in ("cr", "cd"), True, refs) for slot, main in pieces
-    ]
-    runs_by_day: list[int] = []
-    ready_text = None
-    if char.key in focus:
-        week_plan, inputs, _ = svc.week_plan(horizon=CURVE_DAYS)
-        total = 0
-        for day in week_plan.days:
-            total += sum(task.runs for task in day.tasks if task.kind == "artifacts" and char.key in task.who[:1])
-            runs_by_day.append(total)
-        ready = week_plan.ready.get(char.key)
-        ready_text = "today" if ready == today else day_text(ready) if ready else None
-    else:
-        resin = svc.resin()
-        total, carry = 0, 0
-        for index in range(CURVE_DAYS):
-            have = resin.now if index == 0 else min(resin.top, carry + 180)
-            runs = have // 20
-            carry = have - runs * 20
-            total += runs
-            runs_by_day.append(total)
-    points = []
-    for runs in runs_by_day:
-        together = 1.0
-        for p in chances:
-            together *= odds.chance(p, runs)
-        points.append(round(together, 4))
-    half = next((i for i, p in enumerate(points) if p >= 0.5), None) if chances else None
-    most = next((i for i, p in enumerate(points) if p >= 0.9), None) if chances else None
-    per_day = round((runs_by_day[7] - runs_by_day[0]) / 7) if len(runs_by_day) > 7 else 9
-    if not chances:
-        she = char.card.pronouns[0]
-        summary = f"Nothing {she} {'need' if she == 'they' else 'needs'} depends on luck."
-    else:
-        tail = f"half a chance by {day_text(today + timedelta(days=half))}" if half is not None else "less than half a chance in 50 days"
-        if most is not None:
-            tail += f", nine in ten by {day_text(today + timedelta(days=most))}"
-        summary = f"{'The new piece' if len(chances) == 1 else 'All new pieces'}: {tail}, at {per_day} runs a day."
-    if ready_text:
-        summary = f"Talents {ready_text}. " + summary
-    return {
-        "points": points if chances else [], "half": day_text(today + timedelta(days=half)) if half is not None else None,
-        "most": day_text(today + timedelta(days=most)) if most is not None else None, "talents_on": ready_text,
-        "summary": summary,
-    }
-
-
-def _takes(svc: "Characters", char: "Char", plan: Plan, resin_top: int) -> tuple[dict[str, Any], int | None]:
-    from guildboard.views.week import task_title
-
-    needs = svc.needs_of(char, plan)
-    focus = svc.focus()
-    position = focus.index(char.key) + 1 if char.key in focus else None
-    resin_today: list[dict[str, Any]] = []
-    note = f"Add {char.card.pronouns[1]} to your focus to have this planned across the week."
-    if position is not None:
-        week_plan, _inputs, _chars = svc.week_plan(horizon=1)
-        tasks = [t for t in week_plan.days[0].tasks if not t.free and t.who[:1] == (char.key,) or (not t.free and char.key in t.who)]
-        spent = sum(t.resin for t in tasks)
-        resin_today = [{"label": task_title(task, {n.material: n for n in needs}), "resin": task.resin} for task in tasks]
-        day = week_plan.days[0]
-        if tasks:
-            names = and_list([task_title(task, {n.material: n for n in needs}) for task in tasks])
-            note = f"Today: {names}. {spent} of your {day.start} resin today"
-            # The rest is what the bar shows as not hers: the other characters' runs, and what nobody spends.
-            others = [t for t in day.tasks if not t.free and char.key not in t.who]
-            elsewhere = sum(t.resin for t in others)
-            whose = [other.name for key in dict.fromkeys(k for t in others for k in t.who) if (other := svc.char(key)) is not None]
-            if elsewhere and whose:
-                note += f"; the other {elsewhere} go to {and_list(whose)}"
-            note += "."
-            if day.start - day.spent > 0:
-                note += f" {day.start - day.spent} carries over."
-        else:
-            note = f"Nothing to farm for {char.card.pronouns[1]} with resin today."
-    return {
-        "today_note": note, "materials": material_rows(svc, needs), "resin_today": resin_today, "resin_cap": resin_top,
-        "find": _find(svc, char, plan),
-    }, position
-
-
 def build_planner(svc: "Characters", char: "Char") -> dict[str, Any]:
-    card, build, refs = char.card, char.build, svc.refs
+    card, build = char.card, char.build
     plan = svc.plan_of(char)
     damage_role = "damage" in card.roles
-    owned = build is not None
-    now_ready = svc.readiness_now(char).total
-    plan_ready = svc.readiness_after(char, plan).total
-    est_now = est_plan = 0.0
-    change: int | None = None
-    now_panel: dict[str, float] = {}
-    plan_panel: dict[str, float] = {}
-    plan_combat: dict[str, float] = {}
-
-    def estimate_of(p: Plan) -> float:
-        assert build is not None
-        after = stats.apply_plan(build, p, card, refs)
-        return damage.estimate(stats.combat(build, p, card, refs), card, readiness.talent_level(after, card), refs)
-
-    if owned:
-        now_panel = stats.panel(build)
-        plan_panel = stats.planned(build, plan, card, refs)
-        plan_combat = stats.combat(build, plan, card, refs)
-        if damage_role:
-            est_now = damage.estimate(stats.combat_now(build, card, refs), card, readiness.talent_level(build, card), refs)
-            est_plan = estimate_of(plan)
-            change = damage.change(est_now, est_plan) if est_now > 0 else None
-    index_plan = round(100 * est_plan / est_now) if est_now > 0 else 0
-    takes, position = _takes(svc, char, plan, svc.resin().top)
-    cr_combat = plan_combat.get("cr", 0.0)
+    cr_combat = stats.combat(build, plan, card, svc.refs).get("cr", 0.0) if build is not None else 0.0
     warning = None
-    if owned and cr_combat > 100.0:
+    if build is not None and cr_combat > 100.0:
         warning = (
             f"{card.pronouns[2].capitalize()} Crit Rate with conditions met is {cr_combat:.1f}%, so "
             f"{cr_combat - 100:.1f} points of it do nothing."
         )
-    luck = luck_slots(svc, char, plan)
     held_now = build.talents if build else {kind: 1 for kind in TALENTS}
     return {
         "key": char.key, "name": char.name, "element": char.element, "pronouns": pronouns(card),
         "icon": svc.address(char.icon), "damage_role": damage_role,
         "now_build": None if build is None else {
-            "level": build.level, "refinement": build.weapon.refinement if build.weapon else None,
+            "level": build.level, "constellation": build.constellation, "refinement": build.weapon.refinement if build.weapon else None,
             "weapon_level": build.weapon.level if build.weapon else None,
         },
         "plan": {**bridge.plan_to_json(plan), "weights": dict(card.weights)},
-        "now": {"readiness": now_ready, "damage": 100 if damage_role and est_now > 0 else 0},
-        "with_plan": {"readiness": plan_ready, "damage": index_plan, "change": change},
         "talents": [
             {
                 "kind": kind, "label": TALENT_LABELS[kind], "name": _talent_name(char, kind),
@@ -861,8 +822,5 @@ def build_planner(svc: "Characters", char: "Char") -> dict[str, Any]:
         "weapons": _weapon_options(svc, char), "refinement_note": _refinement_note(svc, char, plan),
         "sets": _set_options(svc, char), "set_text": _set_text(svc, plan), "mains": _mains(svc, char, plan),
         "level_pieces": _level_pieces(char, plan, svc), "weights": _weights(card),
-        "stats": _planner_stats(char, now_panel, plan_panel, plan_combat) if owned else [],
-        "goals_met": None if damage_role or not owned else _goals_met(char, plan_panel, plan_combat),
-        "warning": warning, "try": _typed_view(svc, char, plan, estimate_of) if owned else None,
-        "takes": takes, "days": _curve(svc, char, plan, luck), "in_focus": position, "sync": svc.sync_view(),
+        "warning": warning, "sync": svc.sync_view(), "sim": _sim(svc, char),
     }

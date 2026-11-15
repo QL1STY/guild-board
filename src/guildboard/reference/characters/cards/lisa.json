@@ -1,7 +1,7 @@
 {
   "key": "lisa", "name": "Lisa", "element": "Electro", "weapon_type": "Catalyst", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support", "damage"], "keeps_alive": false,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"er": 160},
   "mains": {"sands": ["atk_pct", "em", "er"], "goblet": ["dmg", "em"], "circlet": ["cr", "cd", "em"]},
   "weights": {"cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "some", "em": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

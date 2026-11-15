@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a4BondChanges": {"on": false, "state": "2", "label": "Bond of Life at full HP", "covers": [], "reason": "Each stack needs her Bond of Life to be at or above her Max HP when it changes, which depends on how her Skill, her Burst and the healing she gets line up."},
+    "c4BondPercent": {"on": false, "state": "100", "label": "Constellation 4 Bond of Life bonus", "covers": [], "reason": "A Constellation 4 bonus that grows with her Bond of Life, which depends on the moment."},
+    "c6AfterSkill": {"on": true, "state": "on", "label": "Constellation 6 after her Skill", "covers": ["skill", "burst"], "reason": "Her Skill raises her CRIT Rate and CRIT DMG for 12 seconds, longer than her Night Vigil lasts, so it covers her Skill's attacks and a Burst cast during them."}
+  }
+}

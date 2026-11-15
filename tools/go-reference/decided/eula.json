@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "LightfallSword": {"on": false, "state": "30", "label": "Lightfall Sword at 30 stacks", "covers": [], "reason": "The sword gains a stack from her own Normal Attacks, Skill and Burst while it is up, so how many it holds depends on how many hits she lands; 30 is the most. Checked once with it on against Genshin Optimizer."},
+    "Grimheart": {"on": false, "state": "stack1", "label": "Grimheart stacks", "covers": [], "reason": "Stacks of her Skill that raise DEF, which none of her counted hits use."},
+    "LightfallSwordC4": {"on": false, "state": "on", "label": "Constellation 4, enemy below 50% HP", "covers": [], "reason": "Depends on the enemy's HP."},
+    "TidalIllusion": {"on": true, "state": "on", "label": "Constellation 1 Physical bonus", "covers": ["normal", "charged", "plunging", "burst"], "reason": "Her held Skill spends her Grimheart stacks before her Burst, and the bonus lasts long enough to cover her attacks and the Lightfall Sword."}
+  }
+}

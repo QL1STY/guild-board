@@ -391,6 +391,42 @@ test('the Stygian bosses are rows with no framed box, and the acts follow the se
   expect(columns).toBe(8)
 })
 
+/** A stand-in for one of HoYoLAB's Theater marks: a disc of its own colour, drawn here. */
+const markPicture = (fill: string): string =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42"><circle cx="21" cy="21" r="18" fill="${fill}"/></svg>`
+
+test("HoYoLAB's Theater marks sit in one row, the Arcana fights after a line, and every column ends level", async ({ page }, info) => {
+  const pictures: Record<string, string> = { medal: '#8E6BE8', cleared: '#FFFFFF', flower: '#7A4FD8', heraldry: '#E6A8D8' }
+  await page.route('**/api/art/theater-*', (route) => {
+    const name = route.request().url().split('theater-')[1]
+    return route.fulfill({ contentType: 'image/svg+xml', body: markPicture(pictures[name] ?? '#000000') })
+  })
+  await changeAnswer<EndgameCardModel>(page, '/api/stats/endgame', (data) => {
+    const theater = data.modes[1]
+    if (theater.mode !== 'theater') return
+    Object.assign(theater, {
+      act: 10, arcana: 2, heraldry: 5,
+      medals: [true, false, true, true, false, true, true, false, false, true, false, true],
+      marks: Object.fromEntries(Object.keys(pictures).map((name) => [name, `/api/art/theater-${name}`])),
+    })
+  })
+  await page.reload()
+  const theater = page.getByTestId('ec-theater')
+  await expect(theater.locator('.ec-mark')).toHaveCount(12)
+  await expect(theater.locator('.ec-split')).toHaveCount(1)
+  await expect(theater.locator('.ec-act')).toHaveCount(0)
+  await expect.poll(() => shownBroken(theater), { message: 'every mark has loaded' }).toEqual([])
+  const tops = await theater.locator('.ec-mark').evaluateAll((all) => all.map((one) => Math.round(one.getBoundingClientRect().top)))
+  expect(new Set(tops).size).toBe(1) // one row
+  const box = await theater.locator('.ec-marks').boundingBox()
+  const body = await theater.locator('.ec-body').boundingBox()
+  expect(box!.x + box!.width).toBeLessThanOrEqual(body!.x + body!.width + 0.5)
+  await expect(theater.locator('.ec-heraldry')).toBeVisible()
+  const bottoms = await page.locator('.ec-mode').evaluateAll((all) => all.map((one) => Math.round(one.getBoundingClientRect().bottom)))
+  expect(new Set(bottoms).size).toBe(1)
+  await theater.screenshot({ path: info.outputPath('theater-marks.png'), animations: 'disabled' })
+})
+
 test('the star grid shares one column of labels', async ({ page }) => {
   const lefts = await page.getByTestId('ec-abyss').locator('.ec-stars').evaluateAll((all) => all.slice(0, 12).map((one) => Math.round(one.getBoundingClientRect().left)))
   for (let at = 0; at < 3; at += 1) expect(new Set([0, 1, 2, 3].map((floor) => lefts[floor * 3 + at])).size).toBe(1)

@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c1AfterSkillOrBurst": {"on": true, "state": "on", "label": "Constellation 1 Elemental Mastery", "covers": ["burst"], "reason": "Casting her Burst raises her Elemental Mastery at Constellation 1, so the bonus is on while the Burst's water balls hit."},
+    "c6AfterBurst": {"on": false, "state": "on", "label": "Constellation 6 reaction bonus", "covers": [], "reason": "A Constellation 6 bonus to reactions of the active character, which reaches none of her counted hits."}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "main": null,
+  "toggles": {
+    "QiqiC2": {"on": false, "state": "on", "label": "Constellation 2 against Cryo-affected enemies", "covers": [], "reason": "Depends on the enemy being affected by Cryo."},
+    "QiqiLk": {"on": false, "state": "on", "label": "Locked passive bonus to Stellar damage", "covers": [], "reason": "A bonus to her Stellar-Conduct and Stellar Swirl damage from a passive that is only unlocked after her Revelation, whose condition the planner cannot confirm."}
+  },
+  "party": {
+    "default": "none",
+    "reason": "Most teams of hers set up no Stellar reaction, so the Stellar-Conduct hit and the Coordinated Attack, which need one, are not counted unless the team is chosen; the Stellar-Conduct hit is dealt besides her ordinary Burst damage.",
+    "options": [
+      {"id": "none", "label": "No Stellar reactions", "team": []},
+      {"id": "sc", "label": "Stellar-Conduct team", "team": [], "states": {"lockRevelation": "on", "lockStellarRadianceSc": "on"}}
+    ],
+    "only_rows": {"skill": {"Herald of Frost Coordinated Attack DMG": ["sc"]}, "burst": {"Stellar-Conduct DMG": ["sc"]}}
+  }
+}

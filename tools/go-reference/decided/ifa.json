@@ -1,0 +1,29 @@
+{
+  "main": null,
+  "toggles": {
+    "a1Essentials": {"on": false, "state": "200", "label": "Rescue Essentials", "covers": [], "reason": "Built from the party's Nightsoul points, and it raises only reaction damage."},
+    "a4NsBurst": {"on": false, "state": "on", "label": "After a party Nightsoul Burst", "covers": [], "reason": "Needs another party member to trigger a Nightsoul Burst."},
+    "c4AfterBurst": {"on": false, "state": "on", "label": "Constellation 4 after the Burst", "covers": [], "reason": "A Constellation 4 Elemental Mastery bonus that none of his counted hits use."}
+  },
+  "party": {
+    "default": "pyro",
+    "reason": "His passives reward Swirl and Electro-Charged reactions, so his team has a Pyro, Hydro, Cryo or Electro partner, and Pyro is the commonest of them. If the team has several, the planner shares the Sedation Mark equally among them (a choice of the model).",
+    "options": [
+      {"id": "pyro", "label": "Pyro", "team": ["pyro", "geo", "geo"], "elements": ["pyro"]},
+      {"id": "hydro", "label": "Hydro", "team": ["hydro", "geo", "geo"], "elements": ["hydro"]},
+      {"id": "electro", "label": "Electro", "team": ["electro", "geo", "geo"], "elements": ["electro"]},
+      {"id": "cryo", "label": "Cryo", "team": ["cryo", "geo", "geo"], "elements": ["cryo"]},
+      {"id": "pyro-hydro", "label": "Pyro, Hydro", "team": ["pyro", "hydro", "geo"], "elements": ["pyro", "hydro"]},
+      {"id": "pyro-electro", "label": "Pyro, Electro", "team": ["pyro", "electro", "geo"], "elements": ["pyro", "electro"]},
+      {"id": "pyro-cryo", "label": "Pyro, Cryo", "team": ["pyro", "cryo", "geo"], "elements": ["pyro", "cryo"]},
+      {"id": "hydro-electro", "label": "Hydro, Electro", "team": ["hydro", "electro", "geo"], "elements": ["hydro", "electro"]},
+      {"id": "hydro-cryo", "label": "Hydro, Cryo", "team": ["hydro", "cryo", "geo"], "elements": ["hydro", "cryo"]},
+      {"id": "electro-cryo", "label": "Electro, Cryo", "team": ["electro", "cryo", "geo"], "elements": ["electro", "cryo"]},
+      {"id": "pyro-hydro-electro", "label": "Pyro, Hydro, Electro", "team": ["pyro", "hydro", "electro"], "elements": ["pyro", "hydro", "electro"]},
+      {"id": "pyro-hydro-cryo", "label": "Pyro, Hydro, Cryo", "team": ["pyro", "hydro", "cryo"], "elements": ["pyro", "hydro", "cryo"]},
+      {"id": "pyro-electro-cryo", "label": "Pyro, Electro, Cryo", "team": ["pyro", "electro", "cryo"], "elements": ["pyro", "electro", "cryo"]},
+      {"id": "hydro-electro-cryo", "label": "Hydro, Electro, Cryo", "team": ["hydro", "electro", "cryo"], "elements": ["hydro", "electro", "cryo"]}
+    ],
+    "element_rows": {"burst": ["Sedation Mark DMG"]}
+  }
+}

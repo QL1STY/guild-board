@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "scion-of-the-blazing-sun:afterHit": {"on": true, "state": "on", "label": "Heartsearer", "covers": ["charged"], "reason": "Her Charged Attack hit marks the opponent for 10 seconds and the mark can be renewed every 10, so her later Charged Attacks on that opponent get it."}
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "main": ["Birgitta Discharge DMG"],
+  "toggles": {
+    "a4AfterBurst": {"on": true, "state": "on", "label": "Panoramic Permutation Protocol", "covers": ["skill"], "reason": "It lasts 20 seconds after her Burst, which covers her Skill's Birgitta for the rotation."},
+    "c1AfterShield": {"on": false, "state": "on", "label": "Constellation 1 after the shield", "covers": [], "reason": "A Constellation 1 window."}
+  }
+}

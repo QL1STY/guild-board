@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c4BelowEner": {"on": false, "state": "belowEner", "label": "Constellation 4 at low Energy", "covers": [], "reason": "Adds Energy Recharge only, to the character connected to the Jinni, which none of her counted hits use."},
+    "c6AfterSkill": {"on": false, "state": "on", "label": "Constellation 6 after her Skill", "covers": [], "reason": "A Constellation 6 window of 3 seconds after her Skill that gives her Normal, Charged and Plunging Attacks an Electro infusion; it covers only part of her Normal and Charged Attacks. It is counted when it is switched on here, which agrees with Genshin Optimizer when checked with it on."}
+  }
+}

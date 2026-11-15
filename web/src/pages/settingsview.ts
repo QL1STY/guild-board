@@ -105,18 +105,3 @@ export function opensSyncLog(hash: string): boolean {
 export function overlayLine(hotkey: string): string {
   return `A small panel over the game · ${hotkey}`
 }
-
-/** The settings of the three Characters notices (the design's section 6.6): each kind can be switched off, and all are on to begin with. */
-export type NoticeKey = 'characters_notice_weekly' | 'characters_notice_domain' | 'characters_notice_ready'
-export type NoticeSwitches = Partial<Record<NoticeKey, boolean>>
-
-const NOTICES: readonly { key: NoticeKey; name: string; sentence: string }[] = [
-  { key: 'characters_notice_weekly', name: 'Characters: weekly bosses', sentence: 'A notification on Sunday at 18:00 server time while a weekly boss in your plan is not done' },
-  { key: 'characters_notice_domain', name: 'Characters: domains', sentence: 'A notification when the day opens a domain that your plan uses' },
-  { key: 'characters_notice_ready', name: 'Characters: level-ups', sentence: 'A notification when everything for a goal of your plan is in' },
-]
-
-/** The notices' rows for Settings, each with whether it is on. */
-export function noticeSwitches(settings: NoticeSwitches): { key: NoticeKey; name: string; sentence: string; on: boolean }[] {
-  return NOTICES.map((notice) => ({ ...notice, on: settings[notice.key] !== false }))
-}

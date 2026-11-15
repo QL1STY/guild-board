@@ -1,0 +1,1996 @@
+{
+ "affixes": {
+  "sandrone": {
+   "normal": [
+    [
+     "1-Hit DMG",
+     "150.8%"
+    ],
+    [
+     "2-Hit DMG",
+     "132.8%"
+    ],
+    [
+     "3-Hit DMG",
+     "203.2%"
+    ],
+    [
+     "Charged Attack Sweeping Fire DMG",
+     "85.0%"
+    ],
+    [
+     "Charged Attack Condensed Beam DMG",
+     "242.2%"
+    ],
+    [
+     "Charged Attack Condensed Beam Stellar-Conduct DMG",
+     "161.5%"
+    ],
+    [
+     "Charged Attack Condensed Beam Stellar Swirl DMG",
+     "242.2%"
+    ],
+    [
+     "DMG When in Power Overdrive",
+     "85.0%"
+    ],
+    [
+     "Plunge DMG",
+     "147.4%"
+    ],
+    [
+     "Low/High Plunge DMG",
+     "294.82%/368.245%"
+    ]
+   ],
+   "skill": [
+    [
+     "Prism Shot DMG",
+     "58.3%"
+    ],
+    [
+     "Prism Shot Stellar-Conduct DMG",
+     "38.9%"
+    ],
+    [
+     "Prism Shot Stellar Swirl DMG",
+     "58.3%"
+    ],
+    [
+     "CD",
+     "4.0s"
+    ]
+   ],
+   "burst": [
+    [
+     "Bombardment DMG",
+     "158.8% ×3"
+    ],
+    [
+     "Convective Inhibition Ray DMG",
+     "595.4%"
+    ],
+    [
+     "Convective Inhibition Ray Stellar-Conduct DMG",
+     "397.0%"
+    ],
+    [
+     "Convective Inhibition Ray Stellar Swirl DMG",
+     "595.4%"
+    ],
+    [
+     "CD",
+     "15.0s"
+    ],
+    [
+     "Energy Cost",
+     "60"
+    ]
+   ]
+  },
+  "lauma": {
+   "normal": [
+    [
+     "1-Hit DMG",
+     "60.7%"
+    ],
+    [
+     "2-Hit DMG",
+     "57.2%"
+    ],
+    [
+     "3-Hit DMG",
+     "80.1%"
+    ],
+    [
+     "Spirit Envoy Form Movement Stamina Cost",
+     "25.0/s"
+    ],
+    [
+     "Spirit Envoy Form Jumping Stamina Cost",
+     "10.0"
+    ],
+    [
+     "Spirit Envoy Form Max Duration",
+     "10.0s"
+    ],
+    [
+     "Spirit Envoy Metamorphosis CD",
+     "4.0s"
+    ],
+    [
+     "Spiritcall Prayer Stamina Cost",
+     "50.0"
+    ],
+    [
+     "Spiritcall Prayer DMG",
+     "232.3%"
+    ],
+    [
+     "Plunge DMG",
+     "112.3%"
+    ],
+    [
+     "Low/High Plunge DMG",
+     "224.624%/280.568%"
+    ]
+   ],
+   "skill": [
+    [
+     "Press DMG",
+     "218.9%"
+    ],
+    [
+     "1-Hit Hold DMG",
+     "284.5%"
+    ],
+    [
+     "2-Hit Hold DMG",
+     "273.6% Elemental Mastery Per Verdant Dew"
+    ],
+    [
+     "Frostgrove Sanctuary Attack DMG",
+     "172.8% ATK+345.6% Elemental Mastery"
+    ],
+    [
+     "Frostgrove Sanctuary Duration",
+     "15.0s"
+    ],
+    [
+     "Moon Song Duration",
+     "15.0s"
+    ],
+    [
+     "Elemental RES Decrease",
+     "25.0%"
+    ],
+    [
+     "Elemental RES Decrease Duration",
+     "10.0s"
+    ],
+    [
+     "CD",
+     "12.0s"
+    ]
+   ],
+   "burst": [
+    [
+     "Pale Hymn Stacks Gained From Elemental Burst",
+     "18"
+    ],
+    [
+     "Moon Song to Pale Hymn Conversion",
+     "6 Stacks Per Moon Song"
+    ],
+    [
+     "Bloom, Hyperbloom, and Burgeon DMG Increase",
+     "500.0% Elemental Mastery"
+    ],
+    [
+     "Lunar-Bloom DMG Increase",
+     "400.0% Elemental Mastery"
+    ],
+    [
+     "Pale Hymn Duration",
+     "15.0s"
+    ],
+    [
+     "CD",
+     "15.0s"
+    ],
+    [
+     "Energy Cost",
+     "60"
+    ]
+   ]
+  },
+  "hu-tao": {
+   "normal": [
+    [
+     "1-Hit DMG",
+     "83.6%"
+    ],
+    [
+     "2-Hit DMG",
+     "86.1%"
+    ],
+    [
+     "3-Hit DMG",
+     "108.9%"
+    ],
+    [
+     "4-Hit DMG",
+     "117.1%"
+    ],
+    [
+     "5-Hit DMG",
+     "59.4%+62.8%"
+    ],
+    [
+     "6-Hit DMG",
+     "153.4%"
+    ],
+    [
+     "Charged Attack",
+     "242.6%"
+    ],
+    [
+     "Charged Attack Stamina Cost",
+     "25.0"
+    ],
+    [
+     "Plunge DMG",
+     "116.7%"
+    ],
+    [
+     "Low/High Plunge DMG",
+     "233.378%/291.502%"
+    ]
+   ],
+   "skill": [
+    [
+     "Activation Cost",
+     "30% Current HP"
+    ],
+    [
+     "ATK Increase",
+     "6.26% Max HP"
+    ],
+    [
+     "Blood Blossom DMG",
+     "115.2%"
+    ],
+    [
+     "Blood Blossom Duration",
+     "8.0s"
+    ],
+    [
+     "Duration",
+     "9.0s"
+    ],
+    [
+     "CD",
+     "16.0s"
+    ]
+   ],
+   "burst": [
+    [
+     "Skill DMG",
+     "493.952%"
+    ],
+    [
+     "Low HP Skill DMG",
+     "617.44%"
+    ],
+    [
+     "Skill HP Regeneration",
+     "10.20% Max HP"
+    ],
+    [
+     "Low HP Skill Regeneration",
+     "13.60% Max HP"
+    ],
+    [
+     "CD",
+     "15.0s"
+    ],
+    [
+     "Energy Cost",
+     "60"
+    ]
+   ]
+  }
+ },
+ "tables": {
+  "level_mult": [
+   17.165606,
+   18.535048,
+   19.904854,
+   21.274902,
+   22.6454,
+   24.649612,
+   26.640642,
+   28.868587,
+   31.36768,
+   34.143345,
+   37.201,
+   40.66,
+   44.446667,
+   48.56352,
+   53.74848,
+   59.081898,
+   64.420044,
+   69.72446,
+   75.12314,
+   80.58478,
+   86.11203,
+   91.70374,
+   97.24463,
+   102.812645,
+   108.40956,
+   113.20169,
+   118.102905,
+   122.97932,
+   129.72733,
+   136.29291,
+   142.67085,
+   149.02902,
+   155.41699,
+   161.8255,
+   169.10631,
+   176.51808,
+   184.07274,
+   191.70952,
+   199.55692,
+   207.38205,
+   215.3989,
+   224.16566,
+   233.50217,
+   243.35057,
+   256.06308,
+   268.5435,
+   281.52606,
+   295.01364,
+   309.0672,
+   323.6016,
+   336.75754,
+   350.5303,
+   364.4827,
+   378.61917,
+   398.6004,
+   416.39825,
+   434.387,
+   452.95105,
+   472.60623,
+   492.8849,
+   513.56854,
+   539.1032,
+   565.51056,
+   592.53876,
+   624.4434,
+   651.47015,
+   679.4968,
+   707.79407,
+   736.67145,
+   765.64026,
+   794.7734,
+   824.67737,
+   851.1578,
+   877.74207,
+   914.2291,
+   946.74677,
+   979.4114,
+   1011.223,
+   1044.7917,
+   1077.4437,
+   1109.9976,
+   1142.9766,
+   1176.3695,
+   1210.1844,
+   1253.8357,
+   1288.9528,
+   1325.4841,
+   1363.4569,
+   1405.0974,
+   1446.8535,
+   1462.788,
+   1475.6956,
+   1497.9644,
+   1516.9423,
+   1561.468,
+   1593.5062,
+   1621.0258,
+   1643.8679,
+   1662.1382,
+   1674.8092
+  ],
+  "amplifying": {
+   "vaporize-hydro": 2.0,
+   "vaporize-pyro": 1.5,
+   "melt-pyro": 2.0,
+   "melt-cryo": 1.5
+  },
+  "additive": {
+   "aggravate": 1.15,
+   "spread": 1.25
+  },
+  "lunar": {
+   "lunar-bloom": 1,
+   "lunar-charged": 3,
+   "lunar-crystallize": 1.6,
+   "stellar-swirl": 1
+  },
+  "stellar_conduct": [
+   1,
+   1.45,
+   1.5,
+   1.55,
+   1.6,
+   1.65,
+   1.7,
+   1.75,
+   1.8,
+   1.85,
+   1.9,
+   1.95,
+   2
+  ],
+  "polestar_dmg": [
+   0.2,
+   0.29,
+   0.3,
+   0.31,
+   0.32,
+   0.33,
+   0.34,
+   0.35,
+   0.36,
+   0.37,
+   0.38,
+   0.39,
+   0.4
+  ],
+  "enemy": {
+   "level": 100,
+   "res": 0.1
+  }
+ },
+ "kits": {
+  "sandrone": {
+   "element": "Cryo",
+   "weapon_type": "Claymore",
+   "level": 90,
+   "checked": true,
+   "unsure": null,
+   "party": null,
+   "recommended": [],
+   "talents": [
+    {
+     "key": "normal",
+     "name": "Normal Attack",
+     "icon": null,
+     "level": 10,
+     "main": true,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "1-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.508
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "2-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.328
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "3-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.032
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Charged Attack Sweeping Fire DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.85
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "charged",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Charged Attack Condensed Beam DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.422
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "charged",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Charged Attack Condensed Beam Stellar-Conduct DMG",
+       "kind": "stellar-conduct",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.615
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "charged",
+       "element": "Cryo",
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Charged Attack Condensed Beam Stellar Swirl DMG",
+       "kind": "stellar-swirl",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.422
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "charged",
+       "element": "Cryo",
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "DMG When in Power Overdrive",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.85
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "charged",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Plunge DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.474
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "plunging",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Low/High Plunge DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.9482
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "plunging",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      }
+     ]
+    },
+    {
+     "key": "skill",
+     "name": "Elemental Skill",
+     "icon": null,
+     "level": 10,
+     "main": true,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "Prism Shot DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.583
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Prism Shot Stellar-Conduct DMG",
+       "kind": "stellar-conduct",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.389
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": "Cryo",
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Prism Shot Stellar Swirl DMG",
+       "kind": "stellar-swirl",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.583
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": "Cryo",
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      }
+     ]
+    },
+    {
+     "key": "burst",
+     "name": "Elemental Burst",
+     "icon": null,
+     "level": 10,
+     "main": true,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "Bombardment DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.588
+        }
+       ],
+       "flat": 0.0,
+       "count": 3,
+       "move": "burst",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Convective Inhibition Ray DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 5.954
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "burst",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Convective Inhibition Ray Stellar-Conduct DMG",
+       "kind": "stellar-conduct",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 3.97
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "burst",
+       "element": "Cryo",
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Convective Inhibition Ray Stellar Swirl DMG",
+       "kind": "stellar-swirl",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 5.954
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "burst",
+       "element": "Cryo",
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      }
+     ]
+    }
+   ],
+   "effects": [
+    {
+     "from": "atk",
+     "reads": "final",
+     "to": "base:stellar-conduct",
+     "rate": 7e-05,
+     "cap": 0.14,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": null,
+     "in_stats": false
+    },
+    {
+     "from": "atk",
+     "reads": "final",
+     "to": "base:stellar-swirl",
+     "rate": 7e-05,
+     "cap": 0.14,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": null,
+     "in_stats": false
+    },
+    {
+     "from": "atk",
+     "reads": "premod",
+     "to": "em",
+     "rate": 0.08,
+     "cap": 160.0,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 4,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": null,
+     "in_stats": false
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "mult",
+     "rate": 1.0,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Convective Inhibition Ray Stellar Swirl DMG",
+      "Convective Inhibition Ray Stellar-Conduct DMG"
+     ],
+     "row": null,
+     "while": "a1Decoding",
+     "in_stats": false,
+     "also": [
+      "a1Tactics"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "mult",
+     "rate": 3.0,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Prism Shot Stellar Swirl DMG",
+      "Prism Shot Stellar-Conduct DMG"
+     ],
+     "row": null,
+     "while": "a1Decoding",
+     "in_stats": false
+    }
+   ],
+   "toggles": [
+    {
+     "name": "a1Decoding",
+     "label": "Decoding Power above 50",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "a1Tactics",
+     "label": "Refined Tactics stacks",
+     "on": false,
+     "covers": [],
+     "state": "10"
+    }
+   ],
+   "infused": [],
+   "weapon_effects": {
+    "wolf-s-gravestone": {
+     "effects": [
+      {
+       "from": null,
+       "reads": null,
+       "to": "atk%",
+       "rate": [
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": true
+      }
+     ],
+     "toggles": []
+    }
+   },
+   "set_effects": {
+    "gladiator-s-finale": {
+     "effects": [
+      {
+       "from": null,
+       "reads": null,
+       "to": "atk%",
+       "rate": 0.18,
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": 2,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": true
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:normal",
+       "rate": 0.35,
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": 4,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": [
+        "claymore",
+        "polearm",
+        "sword"
+       ],
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": false
+      }
+     ],
+     "toggles": []
+    }
+   }
+  },
+  "lauma": {
+   "element": "Dendro",
+   "weapon_type": "Catalyst",
+   "level": 90,
+   "checked": true,
+   "unsure": null,
+   "party": null,
+   "recommended": [],
+   "talents": [
+    {
+     "key": "normal",
+     "name": "Normal Attack",
+     "icon": null,
+     "level": 10,
+     "main": false,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "1-Hit DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.607
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "2-Hit DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.572
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "3-Hit DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.801
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "Spiritcall Prayer DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.323
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "charged",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "Plunge DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.123
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "plunging",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "Low/High Plunge DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.24624
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "plunging",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      }
+     ]
+    },
+    {
+     "key": "skill",
+     "name": "Elemental Skill",
+     "icon": null,
+     "level": 10,
+     "main": true,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "Press DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.189
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "1-Hit Hold DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.845
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": false
+      },
+      {
+       "name": "2-Hit Hold DMG",
+       "kind": "lunar-bloom",
+       "terms": [
+        {
+         "stat": "em",
+         "mult": 2.736
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Frostgrove Sanctuary Attack DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.728
+        },
+        {
+         "stat": "em",
+         "mult": 3.456
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      }
+     ]
+    },
+    {
+     "key": "burst",
+     "name": "Elemental Burst",
+     "icon": null,
+     "level": 10,
+     "main": false,
+     "source": "hoyolab",
+     "rows": []
+    }
+   ],
+   "effects": [
+    {
+     "from": "em",
+     "reads": "final",
+     "to": "dmg:skill",
+     "rate": 0.0004,
+     "cap": 0.32,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 4,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": null,
+     "in_stats": false
+    },
+    {
+     "from": "em",
+     "reads": "final",
+     "to": "additive:lunar-bloom",
+     "rate": 4.00032,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": {
+      "talent": "burst",
+      "name": "Lunar-Bloom DMG Increase"
+     },
+     "while": "burstPaleHymn",
+     "in_stats": false
+    },
+    {
+     "from": "em",
+     "reads": "final",
+     "to": "base:lunar-bloom",
+     "rate": 0.000175,
+     "cap": 0.14,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": null,
+     "in_stats": false
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "mult",
+     "rate": 2.0,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "2-Hit Hold DMG"
+     ],
+     "row": null,
+     "while": "skillVerdantDew",
+     "in_stats": false
+    }
+   ],
+   "toggles": [
+    {
+     "name": "burstPaleHymn",
+     "label": "Pale Hymn",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "skillVerdantDew",
+     "label": "Three Verdant Dew",
+     "on": false,
+     "covers": [],
+     "state": "3"
+    }
+   ],
+   "infused": [],
+   "weapon_effects": {
+    "lost-prayer-to-the-sacred-winds": {
+     "effects": [
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:anemo",
+       "rate": [
+        0.32,
+        0.4,
+        0.48,
+        0.56,
+        0.64
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:geo",
+       "rate": [
+        0.32,
+        0.4,
+        0.48,
+        0.56,
+        0.64
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:electro",
+       "rate": [
+        0.32,
+        0.4,
+        0.48,
+        0.56,
+        0.64
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:hydro",
+       "rate": [
+        0.32,
+        0.4,
+        0.48,
+        0.56,
+        0.64
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:pyro",
+       "rate": [
+        0.32,
+        0.4,
+        0.48,
+        0.56,
+        0.64
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:cryo",
+       "rate": [
+        0.32,
+        0.4,
+        0.48,
+        0.56,
+        0.64
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:dendro",
+       "rate": [
+        0.32,
+        0.4,
+        0.48,
+        0.56,
+        0.64
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "in_stats": false
+      }
+     ],
+     "toggles": [
+      {
+       "name": "lost-prayer-to-the-sacred-winds:BoundlessBlessing",
+       "label": "Elemental DMG at 4 stacks from time in battle",
+       "on": false,
+       "covers": [],
+       "state": "4"
+      }
+     ]
+    }
+   },
+   "set_effects": {
+    "gilded-dreams": {
+     "effects": [
+      {
+       "from": null,
+       "reads": null,
+       "to": "em",
+       "rate": 80.0,
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": 2,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": true
+      }
+     ],
+     "toggles": []
+    }
+   }
+  },
+  "hu-tao": {
+   "element": "Pyro",
+   "weapon_type": "Polearm",
+   "level": 90,
+   "checked": true,
+   "unsure": null,
+   "party": null,
+   "recommended": [],
+   "talents": [
+    {
+     "key": "normal",
+     "name": "Normal Attack",
+     "icon": null,
+     "level": 10,
+     "main": true,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "1-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.836
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "2-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 0.861
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "3-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.089
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "4-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.171
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "5-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.222
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 2,
+       "main": true
+      },
+      {
+       "name": "6-Hit DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.534
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "normal",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Charged Attack",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.426
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "charged",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Plunge DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.167
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "plunging",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Low/High Plunge DMG",
+       "kind": "physical",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 2.33378
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "plunging",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      }
+     ]
+    },
+    {
+     "key": "skill",
+     "name": "Elemental Skill",
+     "icon": null,
+     "level": 10,
+     "main": true,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "Blood Blossom DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 1.152
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "skill",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      }
+     ]
+    },
+    {
+     "key": "burst",
+     "name": "Elemental Burst",
+     "icon": null,
+     "level": 10,
+     "main": true,
+     "source": "hoyolab",
+     "rows": [
+      {
+       "name": "Skill DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 4.93952
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "burst",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      },
+      {
+       "name": "Low HP Skill DMG",
+       "kind": "elemental",
+       "terms": [
+        {
+         "stat": "atk",
+         "mult": 6.1744
+        }
+       ],
+       "flat": 0.0,
+       "count": 1,
+       "move": "burst",
+       "element": null,
+       "alternative": null,
+       "instances": 1,
+       "main": true
+      }
+     ]
+    }
+   ],
+   "effects": [
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:pyro",
+     "rate": 0.33,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 4,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "SanguineRouge",
+     "in_stats": false
+    },
+    {
+     "from": "hp",
+     "reads": "premod",
+     "to": "atk",
+     "rate": 0.06256,
+     "cap": 4.0,
+     "cap_from": "base_atk",
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": {
+      "talent": "skill",
+      "name": "ATK Increase"
+     },
+     "while": "GuideToAfterlifeVoyage",
+     "in_stats": false
+    }
+   ],
+   "toggles": [
+    {
+     "name": "GuideToAfterlifeVoyage",
+     "label": "Paramita Papilio",
+     "on": true,
+     "covers": [
+      "normal",
+      "charged",
+      "plunging",
+      "burst"
+     ],
+     "state": "on"
+    },
+    {
+     "name": "SanguineRouge",
+     "label": "HP below 50%",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    }
+   ],
+   "infused": [
+    {
+     "talents": [
+      "normal",
+      "charged",
+      "plunging"
+     ],
+     "element": "Pyro",
+     "while": "GuideToAfterlifeVoyage"
+    }
+   ],
+   "weapon_effects": {
+    "staff-of-homa": {
+     "effects": [
+      {
+       "from": null,
+       "reads": null,
+       "to": "hp%",
+       "rate": [
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": true
+      },
+      {
+       "from": "hp",
+       "reads": "premod",
+       "to": "atk",
+       "rate": [
+        0.008,
+        0.01,
+        0.012,
+        0.014,
+        0.016
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": false
+      },
+      {
+       "from": "hp",
+       "reads": "premod",
+       "to": "atk",
+       "rate": [
+        0.01,
+        0.012,
+        0.014,
+        0.016,
+        0.018
+       ],
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": null,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "staff-of-homa:RecklessCinnabar",
+       "in_stats": false
+      }
+     ],
+     "toggles": [
+      {
+       "name": "staff-of-homa:RecklessCinnabar",
+       "label": "More ATK from Max HP below 50% HP",
+       "on": false,
+       "covers": [],
+       "state": "on"
+      }
+     ]
+    }
+   },
+   "set_effects": {
+    "crimson-witch-of-flames": {
+     "effects": [
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:pyro",
+       "rate": 0.15,
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": 2,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": true
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "dmg:pyro",
+       "rate": 0.225,
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": 4,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": "crimson-witch-of-flames:stack",
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "bonus:vaporize",
+       "rate": 0.15,
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": 4,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": false
+      },
+      {
+       "from": null,
+       "reads": null,
+       "to": "bonus:melt",
+       "rate": 0.15,
+       "cap": null,
+       "cap_from": null,
+       "over": null,
+       "pieces": 4,
+       "from_ascension": null,
+       "from_constellation": null,
+       "talents": null,
+       "weapon_types": null,
+       "hits": null,
+       "row": null,
+       "while": null,
+       "in_stats": false
+      }
+     ],
+     "toggles": [
+      {
+       "name": "crimson-witch-of-flames:stack",
+       "label": "Pyro DMG bonus at 3 stacks from Skill use",
+       "on": false,
+       "covers": [],
+       "state": "3"
+      }
+     ]
+    }
+   }
+  }
+ }
+}

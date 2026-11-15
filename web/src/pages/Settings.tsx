@@ -25,10 +25,8 @@ import { ThemePicker } from './ThemePicker.tsx'
 import { choiceGoesTo, shownTheme } from './themepickerview.ts'
 import { hashOf } from '../route.ts'
 import { setSiteTheme, siteTheme, subscribeSiteTheme, type ThemeSetting } from '../theme.ts'
-import { weekShown } from './characters/hidden.ts'
 import {
-  accountLine, backupLine, BOTH_HOLD_DATA, cloudSpace, galleryFolderMissing, KEEP_REPLACES, KEEP_THIS_PC, type NoticeKey, type NoticeSwitches,
-  noticeSwitches, onlineLine, opensSyncLog, overlayLine, syncDataLine, USE_REPLACES, USE_THE_ACCOUNT,
+  accountLine, backupLine, BOTH_HOLD_DATA, cloudSpace, galleryFolderMissing, KEEP_REPLACES, KEEP_THIS_PC, onlineLine, opensSyncLog, overlayLine, syncDataLine, USE_REPLACES, USE_THE_ACCOUNT,
 } from './settingsview.ts'
 import { REGION_NAMES } from './timersview.ts'
 
@@ -494,21 +492,6 @@ function StartWithWindows({ live, status, settings }: { live: Live; status: Stat
   )
 }
 
-/** One of the Characters notices (the design's section 6.6): a switch for its kind, on until the player switches it off. */
-function NoticeSwitchRow({ live, settings, name, sentence, notice: key }: { live: Live; settings: SettingsModel; name: string; sentence: string; notice: NoticeKey }) {
-  const { notice, run } = useAction(live)
-  const [value, choose] = useSetting(live, settings as SettingsModel & NoticeSwitches, key, run)
-  const on = value !== false
-  return (
-    <>
-      <Row name={name} sentence={sentence}>
-        <Switch on={on} label={name} className="set-switch" onPress={() => choose(!on)} />
-      </Row>
-      <Notice text={notice} />
-    </>
-  )
-}
-
 /** Spec 10: Windows notifications when a timer is ready, and a test notification from the tray icon. */
 function Notifications({ live, settings }: { live: Live; settings: SettingsModel }) {
   const { notice, run } = useAction(live)
@@ -527,9 +510,6 @@ function Notifications({ live, settings }: { live: Live; settings: SettingsModel
         <Switch on={on} label="Notifications" className="set-switch" onPress={() => choose(!on)} />
       </Row>
       <Notice text={notice} />
-      {(weekShown(live.status) ? noticeSwitches(settings as SettingsModel & NoticeSwitches) : []).map((row) => (
-        <NoticeSwitchRow key={row.key} live={live} settings={settings} name={row.name} sentence={row.sentence} notice={row.key} />
-      ))}
     </>
   )
 }

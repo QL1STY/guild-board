@@ -411,7 +411,7 @@ test.describe('the fade', () => {
  * The light-patch sweep. On a dark theme no box larger than 40 x 20 pixels may have a background lighter than 0.35 (relative
  * luminance), and on a light theme none darker than 0.08, outside what the design leaves alone: the overlay, the dark panels
  * (.on-dark), a character's profile and planner, the Year tab's poster (.yr-stage), the Pulls page's night strip (.pl-sky), the
- * pictures and their frames, the rail on a light theme, and the dark tip of Your week (.cx-tip, dark on every theme).
+ * pictures and their frames, the rail on a light theme, and the dark tip of the profile and the planner (.cx-tip, dark on every theme).
  */
 const LEFT_ALONE = [
   '.on-dark', '.yr-stage', '.pl-sky', '.pf-card', '.pp-card', '.cx-tip', '.pic', 'img', 'canvas', 'svg', 'video',

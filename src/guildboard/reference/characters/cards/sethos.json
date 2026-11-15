@@ -1,7 +1,7 @@
 {
   "key": "sethos", "name": "Sethos", "element": "Electro", "weapon_type": "Bow", "rarity": 4,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
-  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"],
   "goals": {"em": 300, "cr": 70, "cd": 150, "er": 160},
   "mains": {"sands": ["em", "er"], "goblet": ["dmg", "em"], "circlet": ["cr", "cd"]},
   "weights": {"em": "wants", "cr": "wants", "cd": "wants", "er": "wants", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

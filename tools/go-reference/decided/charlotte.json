@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "c2Hit": {"on": false, "state": "3", "label": "Constellation 2, three enemies hit", "covers": [], "reason": "Depends on how many enemies her Skill hits."},
+    "c4Marked": {"on": false, "state": "on", "label": "Constellation 4 against marked enemies", "covers": [], "reason": "Depends on her Burst hitting enemies her Skill has marked."}
+  }
+}

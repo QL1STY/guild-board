@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "calamity-queller:stack": {"on": true, "state": "6", "label": "Consummation at 6 stacks", "covers": [], "reason": "Her Elemental Skill starts it, it reaches six stacks in six seconds and lasts twenty, so it is full for most of her damage after a Skill."}
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "a4Stacks": {"on": false, "state": "2", "label": "Hunter's Experience stacks", "covers": [], "reason": "Stacks come from Nightsoul Bursts of the party, which depend on the team."},
+    "c2FirstHit": {"on": false, "state": "on", "label": "Constellation 2 first Cannon", "covers": [], "reason": "A Constellation 2 bonus for only the first Scalespiker Cannon after he enters Nightsoul's Blessing."}
+  }
+}

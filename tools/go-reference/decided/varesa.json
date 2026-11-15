@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "a1Rainbow": {"on": true, "state": "on", "label": "Rainbow Crash after the Skill", "covers": ["plunging"], "reason": "Her Skill gives Rainbow Crash for 5 seconds and her plunging attack, which she makes straight after it, lands inside it, so its ground impact deals the extra damage. Her Aggravate case shows its Ascension 1 part; its Constellation 1 parts are on in her Constellation 4 cases, but no swap shows them."},
+    "c4Diligent": {"on": false, "state": "on", "label": "Constellation 4 Diligent Refinement", "covers": [], "reason": "It only comes when she casts the Burst with neither Fiery Passion nor Apex Drive up, and the planner counts her Burst in Fiery Passion, which is Constellation 4's other bonus. No swap of the comparison can show it (a flat bonus that scales with ATK cancels in them, and her Aggravate case is at Constellation 0)."},
+    "a4NsBurst": {"on": true, "state": "1", "label": "After a Nightsoul Burst, one stack", "covers": ["normal", "charged", "plunging", "skill", "burst"], "reason": "Her own Nightsoul-aligned attacks trigger a Nightsoul Burst, which gives one 12-second ATK stack through her combo; a second stack depends on the team."},
+    "c4FpApex": {"on": true, "state": "on", "label": "Constellation 4 Burst in Fiery Passion", "covers": ["burst", "plunging"], "reason": "She casts her Burst in Fiery Passion, its stronger form, so with Constellation 4 that Burst deals the extra damage."}
+  }
+}

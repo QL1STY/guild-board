@@ -25,7 +25,8 @@ export function coreCommand(args: ShellArgs, folder: string, packaged: boolean, 
   const channel = ['--shell', '--data-dir', folder]
   if (args.demo) channel.push('--demo')
   if (args.demoNow) channel.push('--demo-now', args.demoNow)
-  if (args.weekAndEndgame) channel.push('--week-and-endgame')
+  if (args.endgame) channel.push('--endgame')
+  if (args.verdict) channel.push('--verdict')
   if (packaged) {
     const cwd = path.join(resourcesPath, 'core')
     return { program: path.join(cwd, 'guildboard-core.exe'), args: channel, cwd }

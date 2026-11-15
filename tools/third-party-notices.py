@@ -8,7 +8,7 @@ Run it from the repository, with the Python packages synced (uv sync) and the in
 The Python packages are those uv.lock locks for Guild Board itself (its dependencies and theirs, not the dev or package
 groups), read from the installed copies with importlib.metadata. The interface's are the packages of web/package-lock.json that
 are not dev dependencies, read from web/node_modules. What those cannot say (Electron and Chromium, PyInstaller's bootloader, Paimon.moe's
-data) is written below in `manual_sections`. The output depends on nothing else, so it is the same on any PC."""
+data, Genshin Optimizer's kit data) is written below in `manual_sections`. The output depends on nothing else, so it is the same on any PC."""
 from __future__ import annotations
 
 import argparse
@@ -26,6 +26,8 @@ WEB = ROOT / "web"
 OUT = ROOT / "THIRD-PARTY-NOTICES.txt"
 SHELL = ROOT / "shell"
 PAIMON = ROOT / "src" / "guildboard" / "reference" / "LICENSE-paimon-moe.txt"
+GO = ROOT / "src" / "guildboard" / "reference" / "characters" / "LICENSE-genshin-optimizer.txt"
+KITS = ROOT / "src" / "guildboard" / "reference" / "characters" / "kits.json"
 
 LICENCE_FILE = re.compile(r"(?i)^(licen[cs]es?|copying|notice)([._-].*)?$")
 RULE = "=" * 78
@@ -126,6 +128,11 @@ def chromium_version() -> str:
     return CHROMIUM_OF[electron]
 
 
+def _go_commit() -> str:
+    """The Genshin Optimizer commit kits.json was generated from."""
+    return json.loads(KITS.read_text("utf-8"))["go_commit"]
+
+
 def manual_sections() -> str:
     """What the package metadata cannot say. Each part opens as the generated ones do: `== name version ==`."""
     parts = [
@@ -173,6 +180,15 @@ The list of achievements, with their names and descriptions, comes from Paimon.m
 Paimon.moe is not affiliated with Guild Board. Its licence:
 
 {_clean(PAIMON.read_text("utf-8"))}""",
+        f"""== Genshin Optimizer's kit data ==
+Licence: MIT
+
+The characters', weapons' and sets' kit data (which hits are Lunar or Stellar, the passives' and constellations' effects, the
+weapons' and sets' effects) is derived from Genshin Optimizer's sheets (https://github.com/frzyc/genshin-optimizer), commit
+{_go_commit()}, by a tool that runs at build time; Guild Board keeps the facts in its own file, kits.json. Genshin
+Optimizer's code is not shipped. Genshin Optimizer is not affiliated with Guild Board. Its licence:
+
+{_clean(GO.read_text("utf-8"))}""",
         """== Alegreya Sans ==
 Licence: SIL Open Font License, Version 1.1
 
@@ -196,7 +212,7 @@ the version, the licence and the licence's text. This file is written by tools/t
 Guild Board is an unofficial, fan-made tool. It is not affiliated with or endorsed by HoYoverse or COGNOSPHERE. Genshin
 Impact is a trademark of its owner.
 
-Part 1: Electron, Chromium, PyInstaller, Paimon.moe's data and the typeface
+Part 1: Electron, Chromium, PyInstaller, Paimon.moe's data, Genshin Optimizer's kit data and the typeface
 Part 2: Python packages
 Part 3: the interface's packages
 """
@@ -204,7 +220,7 @@ Part 3: the interface's packages
     part3 = ("\n\n" + RULE + "\n").join(_block(entry) for entry in node_entries())
     sections = [
         intro.rstrip("\n"),
-        "PART 1: ELECTRON, CHROMIUM, PYINSTALLER, PAIMON.MOE AND THE TYPEFACE\n\n" + manual_sections(),
+        "PART 1: ELECTRON, CHROMIUM, PYINSTALLER, PAIMON.MOE, GENSHIN OPTIMIZER AND THE TYPEFACE\n\n" + manual_sections(),
         "PART 2: PYTHON PACKAGES\n\n" + part2,
         "PART 3: THE INTERFACE'S PACKAGES\n\n" + part3,
     ]

@@ -1,0 +1,6 @@
+{
+  "toggles": {
+    "fractured-halo:afterSkillBurst": {"on": true, "state": "on", "label": "After her Skill or Burst", "covers": [], "reason": "Its ATK bonus lasts 20 seconds after her Elemental Skill or Burst, so it is up while she casts either when it is ready."},
+    "fractured-halo:afterShield": {"on": false, "state": "on", "label": "Shield made", "covers": [], "reason": "It needs her to make a shield while the ATK bonus is up, and it only raises Lunar-Charged DMG."}
+  }
+}

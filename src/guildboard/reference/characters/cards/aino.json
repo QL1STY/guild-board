@@ -1,7 +1,7 @@
 {
   "key": "aino", "name": "Aino", "element": "Hydro", "weapon_type": "Claymore", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false, "scaling": "em",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"em": 800, "er": 130, "cr": 70, "cd": 120},
   "mains": {"sands": ["em", "er"], "goblet": ["em", "dmg"], "circlet": ["cr", "cd", "em"]},
   "weights": {"em": "wants", "er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

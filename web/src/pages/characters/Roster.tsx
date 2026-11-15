@@ -1,6 +1,5 @@
-import { memo, type ReactNode, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { memo, type ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './roster.css'
-import { api, messageOf } from '../../api.ts'
 import { Frame } from '../../frame/Frame.tsx'
 import type { Live } from '../../live.ts'
 import { hashOf } from '../../route.ts'
@@ -11,64 +10,23 @@ import { Sign } from '../../ui/Sign.tsx'
 import { Avatar } from './Avatar.tsx'
 import { ELEMENTS, elementClass, WEAPON_TYPES, weaponSign } from './elements.ts'
 import { ElementChip } from './ElementChip.tsx'
-import { weekShown } from './hidden.ts'
+import { endgameShown } from './hidden.ts'
 import { entranceDone, rosterMemory, saveRosterScroll, setRosterView, takeEntrance, useRoster, useRosterMemory } from './memory.ts'
 import { rosterScale, scaleStyle, useCharactersScale } from './scale.ts'
 import { ReadinessRing } from './ReadinessRing.tsx'
 import {
-  bannerLine, countLine, FOCUS_MAX, type Filters, focusCards, levelLine, RARITIES, type Sort, SORTS, sorted, toggleFocus, visible,
+  bannerLine, countLine, type Filters, levelLine, RARITIES, type Sort, SORTS, sorted, visible,
 } from './rosterview.ts'
 import { SyncLine } from './SyncLine.tsx'
 import { CharactersTabs } from './Tabs.tsx'
 import { ROSTER_HEADING } from './words.ts'
 
-/** The focus strip, the week page's focus cards: the characters in the player's focus in their order, and a plain line in each slot left. */
-export function FocusStrip({ cards, onToggle }: { cards: readonly RosterEntry[]; onToggle: (key: string) => void }) {
-  const empty = Math.max(0, FOCUS_MAX - cards.length)
-  return (
-    <div className="cr-focus-wrap">
-      {cards.length === 0 && <p className="cr-focus-hint">Choose up to four characters to plan for.</p>}
-      <div className="cr-focus" data-testid="focus-strip">
-        {cards.map((entry, index) => (
-          <div key={entry.key} className={`cr-fc ${elementClass(entry.element)}`}>
-            <Avatar src={entry.icon} element={entry.element} size="56px" />
-            <div className="cr-fc-text">
-              <b>
-                {index + 1}. {entry.name}
-              </b>
-              <span className="cr-fc-goal">{levelLine(entry)}</span>
-              <span className="cr-fc-when">{entry.readiness}% ready</span>
-            </div>
-            <button type="button" className="cr-fc-x" aria-label={`Take ${entry.name} out of the focus`} onClick={() => onToggle(entry.key)}>
-              <Sign name="cross" />
-            </button>
-          </div>
-        ))}
-        {Array.from({ length: empty }, (_, index) => (
-          <div key={`empty-${index}`} className="cr-fc empty">
-            Choose a character below
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-/** One character's card: a link to her profile, and a button of its own for the focus; without the focus the whole card is the link. */
-const RosterCard = memo(function RosterCard({
-  entry,
-  onToggle,
-  focusShown,
-}: {
-  entry: RosterEntry
-  onToggle: (key: string) => void
-  focusShown: boolean
-}) {
+/** One character's card: the whole card is a link to her profile. */
+const RosterCard = memo(function RosterCard({ entry }: { entry: RosterEntry }) {
   const banner = entry.owned || entry.early ? null : bannerLine(entry.banner)
-  const inFocus = entry.focus !== null
   return (
     <article
-      className={`cr-card ${elementClass(entry.element)}${entry.owned ? '' : ' not-owned'}${focusShown ? '' : ' whole'}`}
+      className={`cr-card ${elementClass(entry.element)}${entry.owned ? '' : ' not-owned'} whole`}
       data-key={entry.key}
       data-glide={entry.key}
       data-rise
@@ -84,43 +42,21 @@ const RosterCard = memo(function RosterCard({
               {entry.rarity}★ {entry.weapon}
             </span>
           </span>
-          {!focusShown && banner !== null && <span className="cr-banner">{banner}</span>}
+          {banner !== null && <span className="cr-banner">{banner}</span>}
         </span>
         {entry.owned && <ReadinessRing value={entry.readiness} size="46px" />}
       </a>
-      {focusShown && (
-        <div className="cr-foot">
-          <button
-            type="button"
-            className={inFocus ? 'cr-focus-btn on' : 'cr-focus-btn'}
-            aria-pressed={inFocus}
-            onClick={() => onToggle(entry.key)}
-          >
-            {inFocus ? `In focus, ${entry.focus}` : 'Add to focus'}
-          </button>
-          {banner !== null && <span className="cr-banner">{banner}</span>}
-        </div>
-      )}
     </article>
   )
 })
 
 /** The grid of characters, one card each, in the order given. It reaches both edges of the page. */
-export const RosterGrid = memo(function RosterGrid({
-  entries,
-  onToggle,
-  focusShown = true,
-}: {
-  entries: readonly RosterEntry[]
-  onToggle: (key: string) => void
-  /** The focus goes with Your week (hidden.ts): while that is hidden a card is its link alone. */
-  focusShown?: boolean
-}) {
+export const RosterGrid = memo(function RosterGrid({ entries }: { entries: readonly RosterEntry[] }) {
   if (entries.length === 0) return <div className="gb-panel gb-empty">No characters match this search and these filters.</div>
   return (
     <div className="cr-grid" data-testid="roster-grid">
       {entries.map((entry) => (
-        <RosterCard key={entry.key} entry={entry} onToggle={onToggle} focusShown={focusShown} />
+        <RosterCard key={entry.key} entry={entry} />
       ))}
     </div>
   )
@@ -165,7 +101,6 @@ function SearchBox({ search, onSearch }: { search: string; onSearch: (next: stri
 }
 
 function Filtering({
-  focusShown,
   filters,
   sort,
   reversed,
@@ -175,7 +110,6 @@ function Filtering({
   onReverse,
   onSearch,
 }: {
-  focusShown: boolean
   filters: Filters
   sort: Sort
   reversed: boolean
@@ -233,11 +167,6 @@ function Filtering({
             {rarity}★
           </Pill>
         ))}
-        {focusShown && (
-          <Pill on={filters.inFocus} onPress={() => onFilters({ ...filters, inFocus: !filters.inFocus })}>
-            In focus
-          </Pill>
-        )}
         <span className="cr-grow" />
         <span className="cr-lab">Sort</span>
         <Segmented label="Sort by" options={SORTS} value={sort} onChange={onSort} onRepeat={onReverse} way={reversed ? 'up' : 'down'} />
@@ -246,15 +175,13 @@ function Filtering({
   )
 }
 
-/** The roster page (the design's section 6.1): the focus, the filters and every character. */
+/** The roster page (the design's section 6.1): the filters and every character. */
 export function Roster({ live }: { live: Live }) {
   const scale = rosterScale(useCharactersScale())
-  const [changed, setChanged] = useState(0)
-  const { data, error } = useRoster(live.version + changed, live.status)
+  const { data, error } = useRoster(live.version, live.status)
   // The window remembers the search, the filters, the sort and the scroll (memory.ts): coming back shows them at once.
   const { view } = useRosterMemory()
   const { filters, sort, reversed, search } = view
-  const [refusal, setRefusal] = useState<string | null>(null)
   const page = useRef<HTMLDivElement>(null)
   const grid = useRef<HTMLDivElement>(null)
 
@@ -298,26 +225,6 @@ export function Roster({ live }: { live: Live }) {
   // A card that a filter or the sort moves glides to its place.
   useGlide(grid, 'data-glide', shown.map((entry) => entry.key).join())
 
-  const toggle = async (key: string) => {
-    if (data === null) return
-    const next = toggleFocus(data.focus, key)
-    if ('refused' in next) {
-      setRefusal(next.refused)
-      return
-    }
-    setRefusal(null)
-    try {
-      await api.put('/api/focus', { characters: next.focus })
-    } catch (failure) {
-      setRefusal(messageOf(failure))
-    }
-    setChanged((count) => count + 1)
-  }
-  // The cards are drawn again only when their character changed: the handler they hold stays the same one.
-  const latest = useRef(toggle)
-  latest.current = toggle
-  const onToggle = useCallback((key: string) => void latest.current(key), [])
-
   return (
     <Frame page="characters" live={live} controls={data !== null && <SyncLine live={live} sync={data.sync} />}>
       {data === null ? (
@@ -328,36 +235,23 @@ export function Roster({ live }: { live: Live }) {
             <div className="cr-head">
               <h2>{ROSTER_HEADING}</h2>
               <span className="cr-count">{countLine(data)}</span>
-              {refusal !== null && (
-                <span className="cr-refusal" role="status">
-                  {refusal}
-                </span>
-              )}
               <span className="cr-grow" />
-              {weekShown(live.status) && <CharactersTabs view="roster" />}
+              {endgameShown(live.status) && <CharactersTabs view="roster" />}
             </div>
-            {weekShown(live.status) && <FocusStrip cards={focusCards(data)} onToggle={onToggle} />}
           </section>
           <Filtering
-            focusShown={weekShown(live.status)}
             filters={filters}
             sort={sort}
             reversed={reversed}
             search={search}
-            onFilters={(next) => {
-              setRefusal(null)
-              setRosterView({ filters: next })
-            }}
+            onFilters={(next) => setRosterView({ filters: next })}
             // Another sort starts in its usual order; a second press on the chosen one turns it round.
             onSort={(next) => setRosterView({ sort: next, reversed: false })}
             onReverse={() => setRosterView({ reversed: !reversed })}
-            onSearch={(next) => {
-              setRefusal(null)
-              setRosterView({ search: next })
-            }}
+            onSearch={(next) => setRosterView({ search: next })}
           />
           <div ref={grid}>
-            <RosterGrid entries={shown} onToggle={onToggle} focusShown={weekShown(live.status)} />
+            <RosterGrid entries={shown} />
           </div>
         </div>
       )}

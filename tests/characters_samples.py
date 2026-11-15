@@ -5,10 +5,8 @@ changes what every engine test expects. Pictures are None: a model carries an ad
 Stat keys are the contract's STATS: the mockup's atkp, hpp and defp are atk_pct, hp_pct and def_pct."""
 from __future__ import annotations
 
-from datetime import date
-
 from guildboard.characters.models import (
-    Build, Card, Effect, Flower, FocusInput, Member, Need, Piece, Refs, SetChoice, SetRef, Source, Sub, WeaponRef,
+    Build, Card, Effect, Flower, Member, Piece, Refs, SetChoice, SetRef, Source, Sub, WeaponRef,
     WeaponState,
 )
 from guildboard.metrics import slug
@@ -66,8 +64,8 @@ def sandrone_card() -> Card:
     """Her researched card as the mockups use it: planner.html's goals, WANTS and main stats."""
     return Card(
         key="sandrone", name="Sandrone", element="Cryo", weapon_type="Claymore", rarity=5,
-        pronouns=("she", "her", "her"), roles=("damage",), keeps_alive=False, scaling="atk",
-        damage_talent="normal", talent_priority=("normal", "skill", "burst"), talent_table="elemental",
+        pronouns=("she", "her", "her"), roles=("damage",), keeps_alive=False,
+        damage_talent="normal", talent_priority=("normal", "skill", "burst"),
         goals={"cr": 75.0, "cd": 200.0, "er": 130.0, "dmg": 46.6, "atk": 2600.0},
         mains={"sands": ("atk_pct",), "goblet": ("dmg",), "circlet": ("cr", "cd")},
         weights={
@@ -83,9 +81,6 @@ def sandrone_card() -> Card:
 
 # ------------------------------------------------------------------------------------------------ the references
 
-# Elemental DMG multipliers for levels 1 to 15. The mockup gives only levels 9 and 10 (TAL: 1.70 and 1.80); the others
-# continue them in steps of 0.1, as stand-ins that no test pins.
-SCALING = tuple(round(0.9 + 0.1 * index, 2) for index in range(15))  # index 8 is level 9: 1.70, then level 10: 1.80
 # Elements that react with each, from endgame.html's REACTS.
 REACTIONS = {
     "Cryo": ("Electro", "Hydro", "Anemo", "Pyro"),
@@ -174,57 +169,17 @@ def refs_sample() -> Refs:
         weapons=weapons, sets=sets,
         yields={"books": 1.17, "boss": 2.5, "artifact_5star": 1.065},
         mains_20=mains_20, main_odds=main_odds, sub_weights=sub_weights, roll_avg=roll_avg,
-        scaling={"elemental": SCALING, "physical": SCALING}, reactions=REACTIONS, flowers=flowers,
+        reactions=REACTIONS, flowers=flowers,
     )
 
 
-# ------------------------------------------------------------------------------------------------ the week
+# ------------------------------------------------------------------------------------------------ where materials come from
 
-WEEK_TODAY = date(2026, 10, 25)  # a Sunday
-WEEK_RESIN_NOW = 200
-WEEK_RESIN_MAX = 200
-
-# Where each material comes from, as week.html's MATS has it. Weekdays are Python's (Monday 0), and a book's domain
+# Where each material comes from, as the mockups have it. Weekdays are Python's (Monday 0), and a book's domain
 # opens on Sundays too, as the wiki's text says.
 VAGRANCY = Source("books", "Overturned Roost", (2, 5, 6))
 CHARITY = Source("books", "Relics of the Frozen Grace", (0, 3, 6))
 DOCTOR = Source("weekly", "The Doctor", ())
-IL_DOTTORE = Source("weekly", "Il Dottore", ())
-GATE = Source("weekly", "The Game Before the Gate", ())
-LIONS = Source("boss", "Chimeric Winged Lions", ())
-FELLFROST = Source("flowers", "Fellfrost Peak", ())
-
-
-def _need(name: str, amount: int, source: Source) -> Need:
-    """What is still missing for a goal, with nothing known about what is held."""
-    return Need(material=slug(name), name=name, icon=None, amount=amount, held=None, exact=True, source=source)
-
-
-def week_focus() -> tuple[FocusInput, ...]:
-    """The four FocusInputs of week.html's default focus. Play them from WEEK_TODAY with WEEK_RESIN_NOW of WEEK_RESIN_MAX."""
-    return (
-        FocusInput(
-            key="sandrone", name="Sandrone", pronouns=("she", "her", "her"),
-            goal="Normal Attack 10, and a Cryo DMG Bonus goblet",
-            needs=(_need("Madman's Restraint", 1, DOCTOR), _need("Philosophies of Vagrancy", 7, VAGRANCY)),
-            luck=(("Cryo DMG Bonus goblet", 0.00554),),
-        ),
-        FocusInput(
-            key="odette", name="Odette", pronouns=("she", "her", "her"), goal="Elemental Skill and Burst 9",
-            needs=(_need("Twisted Withered Branch", 1, IL_DOTTORE), _need("Philosophies of Charity", 14, CHARITY)),
-            luck=(),
-        ),
-        FocusInput(
-            key="alyosha", name="Alyosha", pronouns=("she", "her", "her"), goal="Level 80",
-            needs=(_need("Severed Tail of the Sky-Roamer", 7, LIONS), _need("Flockingweed", 23, FELLFROST)),
-            luck=(),
-        ),
-        FocusInput(
-            key="jahoda", name="Jahoda", pronouns=("she", "her", "her"), goal="Elemental Skill 8",
-            needs=(_need("Ascended Sample: Knight", 1, GATE), _need("Philosophies of Vagrancy", 10, VAGRANCY)),
-            luck=(),
-        ),
-    )
 
 
 # ------------------------------------------------------------------------------------------------ the endgame

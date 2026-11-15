@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "afterBurst": {"on": true, "state": "afterBurst", "label": "DEF bonus after his Burst", "covers": ["burst"], "reason": "His Burst raises his DEF by 25% for 12 seconds, longer than the Burst lasts, so the bonus is on whenever his Burst hits."}
+  }
+}

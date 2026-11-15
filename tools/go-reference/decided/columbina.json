@@ -1,0 +1,12 @@
+{
+  "main": ["Gravity Interference: Lunar-Charged DMG", "Gravity Interference: Lunar-Bloom DMG", "Gravity Interference: Lunar-Crystallize DMG"],
+  "toggles": {
+    "a1Stacks": {"on": true, "state": "3", "label": "Lunacy at 3 stacks", "covers": ["skill"], "reason": "Re-decided as Neuvillette's A1 was: her own Gravity Interference makes the stacks, with no setup by anyone else, and each lasts 10 seconds and is renewed by the next trigger, so in sustained play her Gravity Interference hits at the most stacks after the first few triggers."},
+    "burstDomain": {"on": false, "state": "on", "label": "Lunar Domain", "covers": [], "reason": "A party buff while her Burst's domain lasts, shorter than her Skill's time on the field."},
+    "c2Brilliance": {"on": false, "state": "on", "label": "Constellation 2 Brilliance", "covers": [], "reason": "A Constellation 2 window."},
+    "c4Buff": {"on": false, "state": "on", "label": "Constellation 4 bonus", "covers": [], "reason": "A Constellation 4 window."},
+    "c6Lunarbloom": {"on": false, "state": "lunarbloom", "label": "Constellation 6 Lunar-Bloom", "covers": [], "reason": "A Constellation 6 party buff that depends on the team's reactions."},
+    "c6Lunarcharged": {"on": false, "state": "lunarcharged", "label": "Constellation 6 Lunar-Charged", "covers": [], "reason": "A Constellation 6 party buff that depends on the team's reactions."},
+    "c6Lunarcrystallize": {"on": false, "state": "lunarcrystallize", "label": "Constellation 6 Lunar-Crystallize", "covers": [], "reason": "A Constellation 6 party buff that depends on the team's reactions."}
+  }
+}

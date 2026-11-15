@@ -1,0 +1,11 @@
+{
+  "main": ["\"Plume\" Dance Move Stellar-Conduct/Stellar Swirl DMG"],
+  "stellar": "stellar-conduct",
+  "modes": {
+    "a0StellarRadiance": {"state": "sc", "reason": "She is Cryo: in a Cryo or Electro team her Stellar hits are Stellar-Conduct, as Sandrone's are, and Genshin Optimizer deals them only in that state."}
+  },
+  "toggles": {
+    "burst": {"on": true, "state": "on", "label": "Snow Swan's Dream", "covers": ["skill"], "reason": "Her Burst's Stellar Glimmer bonus lasts while her Skill's dance moves hit."},
+    "a1TeamSplendor": {"on": false, "state": "6", "label": "Marvelous Splendor stacks", "covers": [], "reason": "How many Splendor stacks she has depends on the team, so what it adds is not counted. Her A4 multiplier names only the first Stellar-Conduct/Swirl row, because GO has no Swirl hit for it. Checked once with it on against Genshin Optimizer."}
+  }
+}

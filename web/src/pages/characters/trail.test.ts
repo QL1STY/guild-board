@@ -59,7 +59,7 @@ test('with a character the trail carries her face', () => {
 
 test('the profile card has no Planner link of its own and no arrows to the character beside her', () => {
   const markup = renderToStaticMarkup(
-    createElement(ProfileView, { profile, focus: ['sandrone'], onFocus: () => undefined, refusal: null }),
+    createElement(ProfileView, { profile }),
   )
   expect(markup).not.toContain('>Planner<')
   expect(markup).not.toContain('Previous character')

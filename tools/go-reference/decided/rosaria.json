@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "RosariaA1": {"on": false, "state": "on", "label": "Crit Rate after a Skill from behind", "covers": [], "reason": "Her Skill's Crit Rate bonus lasts 5 seconds, which covers her Burst's first hits but not its whole Ice Lance."},
+    "RosariaC1": {"on": false, "state": "on", "label": "Constellation 1 after a critical hit", "covers": [], "reason": "A Constellation 1 window of 4 seconds after a critical hit that reaches only her Normal Attacks."}
+  }
+}

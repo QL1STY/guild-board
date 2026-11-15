@@ -1,0 +1,9 @@
+{
+  "main": ["Steady State Core Gradient Beacon Consumption DMG", "Steady State Core Detonation DMG"],
+  "toggles": {
+    "a1Beacons": {"on": false, "state": "5", "label": "Gradient Beacons for the party", "covers": [], "reason": "Elemental Mastery per Gradient Beacon, which build up during the fight."},
+    "a4Stacks": {"on": true, "state": "4", "label": "CRIT Rate per Gradient Beacon made", "covers": ["skill"], "reason": "Re-decided as Neuvillette's A1 was: her own Detection Core makes the Gradient Beacons, each stack lasts 15 seconds (longer than a beacon's 10), and her main hits consume those beacons, so they land at the most stacks once the core has made four."},
+    "c1Core": {"on": false, "state": "on", "label": "Constellation 1 core bonus", "covers": [], "reason": "A Constellation 1 window."},
+    "c2CoreType": {"on": false, "state": "steady", "label": "Constellation 2 core bonus", "covers": [], "reason": "A Constellation 2 buff that depends on the core's state."}
+  }
+}

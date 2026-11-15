@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "aqua-simulacra:passive": {"on": true, "state": "on", "label": "Opponents nearby", "covers": [], "reason": "Its DMG bonus holds whenever opponents are near her, which is whenever she fights."}
+  }
+}

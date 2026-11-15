@@ -11,12 +11,14 @@ from guildboard.achievements.notes import AchievementNotes, wiki_link
 from guildboard.store import ProgressRow, Store, iso
 
 VIEWS = ("left", "done", "all")
+# The category that shows every category's achievements, within the view. The list's own keys are numbers.
+EVERY_CATEGORY = "all"
 
 
 @dataclass(frozen=True)
 class Query:
     view: str = "left"            # one of VIEWS
-    category: str | None = None   # a Category.key; None opens on the first category with something left
+    category: str | None = None   # a Category.key or EVERY_CATEGORY; None opens on the first category with something left
     pinned: bool = False          # the pinned achievements, from every category, whatever the view
     search: str = ""              # names and descriptions, from every category, within the view
     unlisted: bool = False        # instead of achievements, the progress on stages the list does not hold
@@ -32,7 +34,7 @@ def _when(moment: datetime | None) -> str | None:
 def _category(catalog: Catalog, wanted: str | None, left: Mapping[str, int]) -> str | None:
     """The category asked for when the list has it, or else the first with something left, or else the first."""
     keys = [category.key for category in catalog.categories]
-    if wanted in keys:
+    if wanted == EVERY_CATEGORY or wanted in keys:
         return wanted
     return next((key for key in keys if left.get(key)), keys[0] if keys else None)
 
@@ -68,7 +70,7 @@ def _chosen(
             stages for stages in groups
             if any(needle in stage.name.casefold() or needle in stage.description.casefold() for stage in stages)
         ]
-    if query.pinned:
+    if query.pinned or category == EVERY_CATEGORY:
         return groups
     return [stages for stages in groups if stages[0].category == category]
 

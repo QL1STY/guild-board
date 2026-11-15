@@ -35,9 +35,9 @@ test('the development command runs the venv’s python in the repository', () =>
 })
 
 test('the demo’s switches reach the core', () => {
-  const args = parseArgs(['--demo', '--demo-now', '2026-10-13T08:00:00+00:00', '--week-and-endgame'])
+  const args = parseArgs(['--demo', '--demo-now', '2026-10-13T08:00:00+00:00', '--endgame', '--verdict'])
   expect(coreCommand(args, 'D', true, 'R', 'X').args).toEqual(
-    ['--shell', '--data-dir', 'D', '--demo', '--demo-now', '2026-10-13T08:00:00+00:00', '--week-and-endgame'])
+    ['--shell', '--data-dir', 'D', '--demo', '--demo-now', '2026-10-13T08:00:00+00:00', '--endgame', '--verdict'])
 })
 
 test('the app’s icon, the tray’s and every window’s, is a file beside the asar when packaged, so that Electron copies nothing out of the asar', () => {

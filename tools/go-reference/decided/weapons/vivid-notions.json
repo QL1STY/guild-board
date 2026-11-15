@@ -1,0 +1,6 @@
+{
+  "toggles": {
+    "vivid-notions:dawn": {"on": true, "state": "on", "label": "Plunging Attack used", "covers": ["plunging"], "reason": "Each Plunging Attack she makes starts it before it lands, so every plunge gets it."},
+    "vivid-notions:twilight": {"on": false, "state": "on", "label": "After her Skill or Burst", "covers": [], "reason": "The first plunge after her Skill or Burst uses it up, so most of her plunges miss it."}
+  }
+}

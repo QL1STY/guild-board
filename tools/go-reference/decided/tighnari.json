@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "c2EnemyField": {"on": false, "state": "on", "label": "Constellation 2, enemies in the field", "covers": [], "reason": "Depends on enemies staying inside his Skill's field."},
+    "c4": {"on": false, "state": "after", "label": "Constellation 4 after the Burst", "covers": [], "reason": "A Constellation 4 party buff for a few seconds after his Burst."},
+    "p1AfterWreath": {"on": true, "state": "on", "label": "After a Wreath Arrow", "covers": ["charged", "burst"], "reason": "He fires Wreath Arrows one after another, so the Elemental Mastery from the last one is on while the next ones and his Burst hit."}
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "main": null,
+  "toggles": {
+    "a4SkillStack": {"on": false, "state": "3", "label": "Skill stacks", "covers": [], "reason": "Each Skill raises only the next ones for 7 seconds, so the full three stacks need several Skills in a row first."},
+    "c4BelowHP": {"on": false, "state": "c4BelowHP", "label": "Constellation 4 at low HP", "covers": [], "reason": "A Constellation 4 DEF bonus below half HP, which not every player keeps and which changes none of his hits."},
+    "inBurst": {"on": true, "state": "inBurst", "label": "Bane of All Evil", "covers": ["normal", "charged", "plunging"], "reason": "His Normal, Charged and Plunging Attacks deal their main damage inside his Burst, which makes them Anemo and adds its DMG bonus."},
+    "offField": {"on": false, "state": "on", "label": "Constellation 2 off the field", "covers": [], "reason": "A Constellation 2 Energy Recharge bonus while he is off the field, when none of his hits land."},
+    "a1BurstStack": {"on": false, "state": "4", "label": "Bane of All Evil, full bonus", "covers": [], "reason": "The DMG bonus grows by 5% every 3 seconds of the Burst up to 25%, so the full amount comes only in its last seconds. It needs the Bane of All Evil switch as well. It was checked once with it and its other switch on against Genshin Optimizer and agreed; no case commits it."}
+  }
+}

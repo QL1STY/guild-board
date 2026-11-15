@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "a4Phec": {"on": false, "state": "on", "label": "Elemental Mastery from party hits", "covers": [], "reason": "Depends on other party members hitting with Pyro, Hydro, Cryo or Electro while she is in Dreamdrifter."},
+    "c1Awaiting": {"on": false, "state": "on", "label": "Constellation 1 Swirl bonus", "covers": [], "reason": "A Constellation 1 bonus to Swirl reactions, which reaches none of her counted hits."},
+    "lockRevelation": {"on": false, "state": "on", "label": "Stellar Revelation", "covers": [], "reason": "A mode of the party that unlocks Stellar bonuses; the planner cannot tell whether it is on, so it is left for the player to switch on. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "skillDream": {"on": false, "state": "on", "label": "Dreamdrifter bonuses", "covers": [], "reason": "Constellation bonuses for the party's elemental damage and Swirl reactions, which reach none of her counted hits."}
+  }
+}

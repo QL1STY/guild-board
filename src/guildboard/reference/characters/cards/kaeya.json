@@ -14,14 +14,12 @@
     "damage"
   ],
   "keeps_alive": false,
-  "scaling": "atk",
   "damage_talent": "burst",
   "talent_priority": [
     "burst",
     "normal",
     "skill"
   ],
-  "talent_table": "elemental",
   "goals": {
     "dmg": 46.6
   },

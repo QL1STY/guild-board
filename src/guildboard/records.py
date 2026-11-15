@@ -1,7 +1,7 @@
 """Guild Board's own normalized records, the Source seam, and the errors a source may raise."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, ClassVar, Protocol, Union
 
@@ -200,6 +200,9 @@ class SkillRecord:
     name: str
     icon: str
     level: int
+    # The rows of the talent at the level she has it (`skill_affix_list`: HoYoLAB's name and its value as text, in its order);
+    # a passive and a record from before this was kept have none.
+    affixes: tuple[tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -228,6 +231,9 @@ class BuildRecord:
     # HoYoLAB's other pictures of the character: the one stands for her where the inventory has none (the Traveler, the Manekins).
     side_icon: str = ""
     image: str = ""
+    # HoYoLAB's recommended stats for her (`recommend_relic_property`): property ids by "sands", "goblet", "circlet" and "subs";
+    # a list it does not give is left out, and a record from before this was kept has none.
+    recommended: dict[str, tuple[int, ...]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -329,6 +335,10 @@ class EndgameDetailRecord:
     stygian_seconds: int | None = None  # the best's total time
     stygian_medal: str = ""  # the best's medal, by the name of its picture, such as UI_LeyLineChallenge_Medal_5
     stygian_next: tuple[str, str] | None = None  # (name, starts) of a newer season with no data yet
+    # The Arcana fights cleared (HoYoLAB's tarot_finished_cnt). An Arcana Challenge season's medal list holds its acts
+    # first and then its Arcana fights, which are not acts.
+    theater_arcana: int = 0
+    theater_heraldry: int = 0  # the season's heraldry, as HoYoLAB numbers it (0 to 6)
 
 
 @dataclass(frozen=True)

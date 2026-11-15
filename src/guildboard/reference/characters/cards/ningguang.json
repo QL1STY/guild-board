@@ -1,7 +1,7 @@
 {
   "key": "ningguang", "name": "Ningguang", "element": "Geo", "weapon_type": "Catalyst", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "normal", "talent_priority": ["normal", "burst", "skill"],
   "goals": {"er": 130},
   "mains": {"sands": ["atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
   "weights": {"cr": "wants", "cd": "wants", "atk_pct": "wants", "er": "some", "atk": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

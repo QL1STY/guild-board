@@ -518,7 +518,7 @@ def test_sync_now_reads_the_account_and_sends_what_waits(tmp_path, clock):
         "GET /rest/v1/sync_rows", "GET /rest/v1/sync_rows", "POST /rest/v1/rpc/sync_push",  # the first look, the read, the send
     ]
     pushed = [row["kind"] for row in cloud.body(-1)["p_rows"]]
-    assert "layouts" in pushed and pushed.count("settings") == 8  # an empty account takes this PC's data without asking
+    assert "layouts" in pushed and pushed.count("settings") == 5  # an empty account takes this PC's data without asking
 
 
 def test_sync_now_signed_out_sends_nothing(page):

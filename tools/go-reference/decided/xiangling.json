@@ -1,0 +1,7 @@
+{
+  "main": ["Flame DMG", "Pyronado DMG"],
+  "toggles": {
+    "afterChili": {"on": false, "state": "afterChili", "label": "Chili pepper picked up", "covers": [], "reason": "Needs the chili Guoba drops to be picked up."},
+    "afterPyronado": {"on": false, "state": "duringPyronado", "label": "Constellation 6 during Pyronado", "covers": [], "reason": "A Constellation 6 party buff."}
+  }
+}

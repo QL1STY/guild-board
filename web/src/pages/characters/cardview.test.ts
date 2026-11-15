@@ -12,7 +12,7 @@ const card: CardExtra = profile.card
 test('each group of the panel has the fields of a card that belong to it, and every field of a card is in one group', () => {
   expect(GROUPS.map((group) => group.key)).toEqual(['role', 'goals', 'mains', 'substats', 'sets', 'weapons', 'partners', 'pronouns'])
   const fields = Object.fromEntries(GROUPS.map((group) => [group.key, group.fields]))
-  expect(fields.role).toEqual(['roles', 'keeps_alive', 'scaling', 'damage_talent', 'talent_priority'])
+  expect(fields.role).toEqual(['roles', 'keeps_alive', 'damage_talent', 'talent_priority'])
   expect(fields.goals).toEqual(['goals'])
   expect(fields.mains).toEqual(['mains'])
   expect(fields.substats).toEqual(['weights'])
@@ -49,14 +49,16 @@ test("a goal is sent alone: a number, with or without its percent sign, and an e
   expect(goalBody('cr', '1000000')).toBeNull()
 })
 
-test('the goals listed are Crit Rate, Crit DMG, Energy Recharge, Elemental Mastery, her scaling stat and DMG Bonus', () => {
+test('the goals listed are Crit Rate, Crit DMG, Energy Recharge, Elemental Mastery, ATK, HP, DEF and DMG Bonus', () => {
   const rows = goalRows(card.fields)
-  expect(rows.map((row) => row.key)).toEqual(['cr', 'cd', 'er', 'em', 'atk', 'dmg'])
-  expect(rows.map((row) => row.text)).toEqual(['75', '200', '130', '', '2600', '46.6'])
-  expect(rows.map((row) => row.unit)).toEqual(['%', '%', '%', '', '', '%'])
-  const hp = goalRows({ ...card.fields, scaling: 'hp' }).map((row) => row.key)
-  expect(hp).toEqual(['cr', 'cd', 'er', 'em', 'hp', 'dmg'])
-  expect(goalRows({ ...card.fields, scaling: 'em' }).map((row) => row.key)).toEqual(['cr', 'cd', 'er', 'em', 'dmg'])
+  expect(rows.map((row) => row.key)).toEqual(['cr', 'cd', 'er', 'em', 'atk', 'hp', 'def', 'dmg'])
+  expect(rows.map((row) => row.text)).toEqual(['75', '200', '130', '', '2600', '', '', '46.6'])
+  expect(rows.map((row) => row.unit)).toEqual(['%', '%', '%', '', '', '', '', '%'])
+  // a card with no ATK goal (an HP or DEF scaler) still has boxes for all three
+  const hp = goalRows({ goals: { hp: 25000, cr: 50 } })
+  expect(hp.map((row) => row.key)).toEqual(['cr', 'cd', 'er', 'em', 'atk', 'hp', 'def', 'dmg'])
+  expect(hp.map((row) => row.text)).toEqual(['50', '', '', '', '', '25000', '', ''])
+  expect(goalRows({ goals: { def: 3000 } }).find((row) => row.key === 'def')?.text).toBe('3000')
 })
 
 test('an ordered list moves one place, loses an item or gains one at its end, and never holds one twice', () => {

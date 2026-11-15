@@ -214,7 +214,10 @@ export function unlistedDetails(row: Pick<Achievements['unlisted_rows'][number],
   return details.length === 0 ? null : details.join(' · ')
 }
 
-const SPECIAL_TITLES: Record<SpecialPlace, string> = { timers: 'Timers', commissions: 'Daily commissions' }
+/** The category that shows every category's achievements, within the view (the core's EVERY_CATEGORY). */
+export const EVERY_CATEGORY = 'all'
+
+const SPECIAL_TITLES:Record<SpecialPlace, string> = { timers: 'Timers', commissions: 'Daily commissions' }
 
 /**
  * The heading over what the page shows: one category, a search of every category, or a special category. In Timers or
@@ -229,6 +232,7 @@ export function contentTitle(
   if (query.unlisted) return 'Not in the current list'
   if (query.pinned) return 'Pinned'
   if (query.search.trim() !== '') return 'Search results'
+  if (query.category === EVERY_CATEGORY) return 'All achievements'
   return model.categories.find((category) => category.key === query.category)?.name ?? ''
 }
 

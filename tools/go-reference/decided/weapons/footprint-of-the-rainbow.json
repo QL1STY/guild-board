@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "footprint-of-the-rainbow:afterSkill": {"on": true, "state": "on", "label": "After her Skill", "covers": [], "reason": "Its DEF bonus lasts 15 seconds after her Elemental Skill, so it is up while she casts her Skill when it is ready. No swap of the comparison can show it: no polearm character it compares has counted rows that scale on DEF."}
+  }
+}

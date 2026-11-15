@@ -1,4 +1,4 @@
-"""Task V1: the Characters service and the page models for the roster, profile, planner, week and endgame, from a store seeded
+"""Task V1: the Characters service and the page models for the roster, profile, planner and endgame, from a store seeded
 with the samples, the wiki's recorded entries and a Pulls planner with fixed 5-stars. Every model is held to types.ts."""
 from __future__ import annotations
 
@@ -71,6 +71,34 @@ def test_talents_all_of_skill_type_1_are_read_in_order_with_the_burst_last_and_t
     assert asked <= {101, 102, 103}
 
 
+def test_a_build_keeps_the_rows_of_her_three_talents_and_the_stats_hoyolab_recommends(store, clock, tmp_path):
+    from guildboard.records import SkillRecord
+
+    build = samples.sandrone_build()
+    record = dataclasses.replace(build_record(build), skills=(
+        SkillRecord(101, 1, "Normal Attack", "", 9, (("1-Hit DMG", "140.2%"),)),
+        SkillRecord(102, 1, "Skill", "", 10, (("Prism Shot DMG", "58.3%"), ("CD", "4.0s"))),
+        SkillRecord(109, 1, "Alternate sprint", "", 1),                          # a type 1 skill that is none of the three
+        SkillRecord(103, 1, "Burst", "", 10, (("Bombardment DMG", "158.8% ×3"), ("Energy Cost", "60"))),
+        SkillRecord(104, 2, "First passive", "", 1),
+    ), recommended={"sands": (6,), "goblet": (40,), "circlet": (20, 22, 26, 30), "subs": (20, 22, 6, 2, 28, 999)})
+    keep_builds(store, clock.now(), [record], calculator())
+    keep_notes(store, clock.now())
+    kept = make_service(store, clock, tmp_path).char("sandrone").build
+    assert kept.affixes == {
+        "normal": (("1-Hit DMG", "140.2%"),), "skill": (("Prism Shot DMG", "58.3%"), ("CD", "4.0s")),
+        "burst": (("Bombardment DMG", "158.8% ×3"), ("Energy Cost", "60")),
+    }                                                           # through JSON and back: tuples of text pairs, by kind
+    assert kept.recommended["sands"] == ("atk_pct",) and kept.recommended["goblet"] == ("dmg",)   # an element's bonus is `dmg`
+    assert kept.recommended["circlet"] == ("cr", "cd", "heal", "phys")
+    assert kept.recommended["subs"] == ("cr", "cd", "atk_pct", "hp", "em")      # an id no stat has is left out
+    assert kept.talents == build.talents and kept.base == build.base           # nothing else changed
+    keep_builds(store, clock.now(), [build_record(build)], calculator())
+    plain = make_service(store, clock, tmp_path).char("sandrone").build
+    assert plain.affixes == {} and plain.recommended == {}                       # a record from before: none kept
+    assert plain == build
+
+
 def test_the_roster_lists_every_wiki_character_with_the_owned_first_and_the_focus_numbered(store, clock, tmp_path):
     service = sandrone(store, clock, tmp_path)
     service.put_focus(["odette", "sandrone"])
@@ -80,17 +108,20 @@ def test_the_roster_lists_every_wiki_character_with_the_owned_first_and_the_focu
     assert roster["all"] == len(roster["entries"]) == len(inventory) and roster["owned"] == 1
     first = roster["entries"][0]
     assert (first["key"], first["owned"], first["level"], first["constellation"], first["focus"]) == ("sandrone", True, 90, 2, 2)
-    assert first["readiness"] == 89
+    assert first["readiness"] == 90
     assert roster["focus"] == ["odette", "sandrone"]
     odette = next(entry for entry in roster["entries"] if entry["key"] == "odette")
     assert (odette["owned"], odette["readiness"], odette["focus"]) == (False, 0, 1)
     assert not any(entry["owned"] for entry in roster["entries"][1:])
 
 
-def test_a_fifth_character_in_the_focus_is_refused_and_an_unknown_one_is_not_a_character(store, clock, tmp_path):
+def test_a_129th_character_in_the_plan_is_refused_and_an_unknown_one_is_not_a_character(store, clock, tmp_path):
     service = sandrone(store, clock, tmp_path)
-    with pytest.raises(CharactersRefused, match="Four at most: take one out first."):
-        service.put_focus(["sandrone", "odette", "alyosha", "jahoda", "nefer"])
+    service.put_focus(["sandrone", "odette", "alyosha", "jahoda", "nefer"])   # more than four are planned now
+    assert len(service.focus()) == 5
+    service.put_focus([])
+    with pytest.raises(CharactersRefused, match="The plan holds 128 characters at most: take one out first."):
+        service.put_focus([f"c{n}" for n in range(129)])
     with pytest.raises(UnknownCharacter):
         service.put_focus(["nobody"])
     assert service.focus() == []
@@ -112,8 +143,8 @@ async def test_the_profile_of_her_example_build_matches_the_mockup(store, clock,
     atk = next(row for row in profile["stats"] if row["key"] == "atk")
     assert (round(atk["her"]), round(atk["weapon"]), round(atk["artifacts"])) == (342, 958, 1664)
     assert sum(profile["rolls_by"].values()) == sum(row["rolls"] for row in profile["rolls"]) == 41
-    assert profile["readiness"]["total"] == 89
-    assert [step["gain"] for step in profile["next_steps"]] == ["about +31% damage", "about +6% damage", "about +3% damage"]
+    assert profile["readiness"]["total"] == 90
+    assert [step["gain"] for step in profile["next_steps"]] == ["about +8 readiness", "about +1 readiness"]
     assert profile["next_steps"][0]["text"] == "Replace the Goblet with a Cryo DMG Bonus goblet that has Crit Rate or Crit DMG."
     assert [(p["at"], p["pity"], p["result"], p["after"]) for p in profile["pity"]] == [
         ("2026-07-02", 71, "won", None), ("2026-07-09", 44, "guaranteed", "Qiqi"), ("2026-07-14", 62, "won", None),
@@ -126,22 +157,17 @@ async def test_the_profile_of_her_example_build_matches_the_mockup(store, clock,
     assert (vagrancy["held"], vagrancy["needed"], vagrancy["state"], vagrancy["held_exact"]) == (9, 16, "missing", True)
 
 
-async def test_the_planner_with_the_default_plan_shows_35_percent_and_readiness_89_to_99(store, clock, tmp_path):
+async def test_the_planner_with_the_default_plan(store, clock, tmp_path):
     service = sandrone(store, clock, tmp_path)
     await keep_wiki(service._wiki)
     planner = service.planner("sandrone")
     check(planner, "Planner")
-    assert planner["now"] == {"readiness": 89, "damage": 100}
-    assert planner["with_plan"] == {"readiness": 99, "damage": 135, "change": 35}
-    assert planner["now_build"] == {"level": 90, "refinement": 1, "weapon_level": 90}
+    assert not {"now", "with_plan", "takes", "days", "in_focus", "try", "stats", "goals_met"} & set(planner)
+    assert planner["now_build"] == {"level": 90, "constellation": 2, "refinement": 1, "weapon_level": 90}
     assert planner["plan"]["mains"] == {"sands": "atk_pct", "goblet": "dmg", "circlet": "cr"}
     assert planner["plan"]["level_pieces"] == ["plume"] and planner["damage_role"] is True and planner["warning"] is None
     assert [(t["now"], t["target"]) for t in planner["talents"]] == [(9, 10), (10, 10), (10, 10)]
     assert planner["weapons"][0]["key"] == samples.TEASPOON and planner["weapons"][0]["tag"] == "Hers"
-    find = planner["takes"]["find"][0]
-    assert find["per_run"] == pytest.approx(0.00554, abs=1e-5)
-    assert [path["odds"] for path in find["paths"]] == ["Certain", "1 in 181 runs", "1 in 361 runs", "1 in 192 tries"]
-    assert planner["days"]["half"] is not None and len(planner["days"]["points"]) == 50
 
 
 async def test_the_planner_keeps_a_put_plan_and_its_typed_piece(store, clock, tmp_path):
@@ -156,7 +182,6 @@ async def test_the_planner_keeps_a_put_plan_and_its_typed_piece(store, clock, tm
     check(again, "Planner")
     assert again["plan"]["typed"] == body["typed"] and again["plan"]["refinement"] == 2
     assert again["plan"]["weights"]["em"] == "wants"
-    assert again["try"]["crit_value"] == 42.0 and again["try"]["change"] is not None
     assert service.profile("sandrone")["card"]["edited"] == ["weights"]
     service.drop_plan("sandrone")
     assert service.planner("sandrone")["plan"]["refinement"] == 1
@@ -184,23 +209,14 @@ async def test_the_planner_says_sync_is_off_and_takes_typed_amounts(store, clock
         "Calculator sync is off in HoYoLAB, so Guild Board can't see what you hold. Switch it on in HoYoLAB's Enhancement "
         "Progression Calculator, or type what you hold here."
     )
-    rows = {row["key"]: row for row in planner["takes"]["materials"]}
+    rows = {row["key"]: row for row in service.profile("sandrone")["next_level"]["materials"]}
     assert (rows["philosophies-of-vagrancy"]["held"], rows["philosophies-of-vagrancy"]["state"]) == (None, "unknown")
     assert rows["philosophies-of-vagrancy"]["needed"] == 16
     service.put_held({"philosophies-of-vagrancy": 4})
-    row = next(r for r in service.planner("sandrone")["takes"]["materials"] if r["key"] == "philosophies-of-vagrancy")
+    row = next(r for r in service.profile("sandrone")["next_level"]["materials"] if r["key"] == "philosophies-of-vagrancy")
     assert (row["held"], row["state"], row["typed"]) == (4, "missing", True)
     service.put_held({"philosophies-of-vagrancy": None})
     assert service.store.held(UID) == {}
-
-
-async def test_the_planners_resin_note_speaks_of_the_character_with_the_pronouns_of_the_card(store, clock, tmp_path):
-    he = dataclasses.replace(samples.sandrone_card(), pronouns=("he", "him", "his"))
-    service = sandrone(store, clock, tmp_path, cards=lambda key: he if key == "sandrone" else None)
-    keep_notes(store, clock.now(), resin=0, discounts=0)
-    await keep_wiki(service._wiki)
-    service.put_focus(["sandrone"])
-    assert service.planner("sandrone")["takes"]["today_note"] == "Nothing to farm for him with resin today."
 
 
 async def test_the_profile_and_planner_speak_of_him_with_his_cards_pronouns(store, clock, tmp_path):
@@ -213,25 +229,10 @@ async def test_the_profile_and_planner_speak_of_him_with_his_cards_pronouns(stor
     assert next(part["text"] for part in profile["readiness"]["parts"] if part["key"] == "weapon") == "His best, R1"
     assert [option["tag"] for option in planner["weapons"] if option["tag"] is not None][0] == "His"
     assert "His" in [option["tag"] for option in planner["sets"]]
-    assert [path["label"] for path in planner["takes"]["find"][0]["paths"][2:]] == [
-        "His set's domain only", "Strongbox, his set, 3 artifacts a try",
-    ]
     they = dataclasses.replace(he, pronouns=("they", "them", "their"))
     service = sandrone(store, clock, tmp_path, cards=lambda key: they if key == "sandrone" else None)
-    body = dict(service.planner("sandrone")["plan"], mains={"sands": "atk_pct", "goblet": "atk_pct", "circlet": "cr"})
-    service.put_plan("sandrone", body)   # the main stats she wears: no piece to find
     planner = service.planner("sandrone")
     assert [option["tag"] for option in planner["weapons"] if option["tag"] is not None][0] == "Theirs"
-    assert planner["days"]["summary"].endswith("Nothing they need depends on luck.")
-    service.put_plan("sandrone", dict(body, mains={"sands": "er", "goblet": "dmg", "circlet": "cr"}))
-    assert "All new pieces: " in service.planner("sandrone")["days"]["summary"]   # two to find, as planner.html says it
-
-
-def test_the_weeks_lines_on_how_it_plans_speak_of_any_character_as_they():
-    from guildboard.views.week import HOW
-
-    assert "A character is ready the day everything their goal needs is in." in HOW[3]
-    assert not any(word in line.split() for line in HOW for word in ("her", "she", "hers"))
 
 
 def test_a_character_without_a_card_falls_back_and_says_so(store, clock, tmp_path):
@@ -279,48 +280,6 @@ def test_the_sync_view_says_what_blocks_the_sync(store, clock, tmp_path, state):
 def test_the_sync_view_has_no_blocked_word_when_nothing_blocks_the_sync(store, clock, tmp_path):
     assert sandrone(store, clock, tmp_path, sync=lambda: {}).sync_view()["blocked"] is None
     assert sandrone(store, clock, tmp_path, sync=lambda: {"blocked": None}).sync_view()["blocked"] is None
-
-
-def test_the_week_has_seven_days_today_first_and_sundays_loud_alert(store, clock, tmp_path):
-    service = sandrone(store, clock, tmp_path)
-    service.put_focus(["sandrone"])
-    week = service.week()
-    check(week, "Week")
-    assert len(week["days"]) == 7 and week["days"][0]["today"] and not any(d["today"] for d in week["days"][1:])
-    assert week["days"][0]["label"] == "Sunday 25 October" and week["days"][0]["start"] == 200
-    assert week["days"][0]["alert"] == {"text": "Weekly bosses reset tomorrow at 04:00: do them today.", "loud": True}
-    assert week["days"][1]["alert"]["loud"] is False and week["days"][2]["alert"] is None
-    assert week["today"] == week["days"][0]
-    assert week["focus"][0]["key"] == "sandrone" and week["focus"][0]["position"] == 1
-    assert week["resin_week_max"] == 200 + 6 * 180
-
-
-def test_the_week_with_no_focus_says_to_choose_one(store, clock, tmp_path):
-    service = sandrone(store, clock, tmp_path)
-    week = service.week()
-    check(week, "Week")
-    assert week["focus"] == [] and week["ready"] == [] and week["resin_by"] == []
-    assert all(day["tasks"] == [] and day["spare"] == "Choose up to four characters to plan for." for day in week["days"])
-    assert week["today"]["spare"] == "Choose up to four characters to plan for."
-
-
-async def test_a_tick_marks_a_task_done_and_only_todays_tasks_can_be_ticked(store, clock, tmp_path):
-    service = sandrone(store, clock, tmp_path)
-    await keep_wiki(service._wiki)
-    service.put_focus(["sandrone"])
-    today = service.week()["today"]
-    assert today["tasks"], "she has something to do today"
-    key = today["tasks"][0]["key"]
-    service.put_tick("2026-10-25", key, True)
-    after = service.week()
-    assert [t["done"] for t in after["today"]["tasks"]][0] is True
-    assert [t["key"] for t in after["today"]["tasks"]] == [t["key"] for t in today["tasks"]]
-    with pytest.raises(CharactersRefused, match="Only today's tasks can be ticked."):
-        service.put_tick("2026-10-26", key, True)
-    with pytest.raises(CharactersRefused, match="Only today's tasks can be ticked."):
-        service.put_tick("2026-10-25", "no such task", True)
-    service.put_tick("2026-10-25", key, False)
-    assert service.week()["today"]["tasks"][0]["done"] is False
 
 
 # ------------------------------------------------------------------------------------------------ the endgame
@@ -457,14 +416,14 @@ def test_the_calendars_elements_stay_beside_the_pick_and_dropping_the_pick_bring
 
 def test_an_edited_card_changes_readiness_at_once_and_back_to_the_card_restores_it(store, clock, tmp_path):
     service = sandrone(store, clock, tmp_path)
-    assert service.profile("sandrone")["readiness"]["total"] == 89
+    assert service.profile("sandrone")["readiness"]["total"] == 90
     service.put_card("sandrone", {"mains": {"sands": ["er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]}})
     edited = service.profile("sandrone")
-    assert edited["card"]["edited"] == ["mains"] and edited["readiness"]["total"] < 89
+    assert edited["card"]["edited"] == ["mains"] and edited["readiness"]["total"] < 90
     with pytest.raises(CharactersRefused, match="That is not a field of a card."):
         service.put_card("sandrone", {"name": "Someone"})
     service.put_card("sandrone", {"mains": None})
-    assert service.profile("sandrone")["card"]["edited"] == [] and service.profile("sandrone")["readiness"]["total"] == 89
+    assert service.profile("sandrone")["card"]["edited"] == [] and service.profile("sandrone")["readiness"]["total"] == 90
     service.put_card("sandrone", {"roles": ["support"]})
     assert service.char("sandrone").card.roles == ("support",)
     service.drop_card("sandrone")

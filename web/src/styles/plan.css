@@ -1,0 +1,107 @@
+/*
+ * The Plan page (the Plan design, section 4; mockup plan.html): the app's parchment frame and its tokens, so that it follows
+ * the theme. Pictures come through the core's art cache (ui/Picture.tsx); the drawn signs stand in while there are none.
+ */
+.pln { display: grid; gap: 14px; }
+.pln-panel { padding: 18px 20px; }
+.pln-h { margin: 0 0 10px; font-size: 17px; font-weight: 800; color: var(--ink); }
+.pln-none { margin: 6px 0 0; color: var(--ink2); font-size: 14px; }
+.pln-end { margin-left: auto; color: var(--ink2); font-size: 14px; }
+
+/* ---------- Today ---------- */
+.pln-day { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 14px; }
+.pln-day h2 { margin: 0; font-size: 28px; font-weight: 800; color: var(--ink); }
+.pln-day span { color: var(--ink2); }
+.pln-today { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.pln-t { padding: 14px 16px; border: 1px solid var(--hairline); border-radius: 14px; background: var(--ledger-light); }
+.pln-t h3 { margin: 0 0 6px; font-size: 13.5px; font-weight: 800; color: var(--gold-ink); }
+.pln-list { margin: 0; padding: 0; list-style: none; }
+.pln-row { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--hairline); }
+.pln-row:first-child { border-top: 0; }
+.pln-row b { display: block; color: var(--ink); overflow-wrap: anywhere; }
+.pln-row small { display: block; color: var(--ink2); font-size: 13px; overflow-wrap: anywhere; }
+.pln-mat { width: 52px; height: 52px; padding: 3px; border-radius: 12px; background: var(--gold-soft); }
+.pln-mat img { object-fit: contain; }
+.pln-mat .sign { padding: 20%; color: var(--gold-ink); }
+.pln-faces { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.pln-faces a, .pln-row > a, .pln-who-link { color: inherit; text-decoration: none; border-radius: 50%; }
+
+/* A face on a ring: the name always comes beside it, so that colour never tells two characters apart. */
+.pln-face { width: 30px; height: 30px; border-radius: 50%; background: var(--tint); border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--border); overflow: hidden; }
+.pln-face img { object-fit: cover; }
+.pln-face .sign { padding: 20%; color: var(--ink2); }
+.pln-face.large { width: 46px; height: 46px; border-width: 2px; }
+.pln-row > a .pln-face.large { width: 52px; height: 52px; }
+
+/* ---------- The week ---------- */
+.pln-scroll { overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; border-radius: 14px; }
+.pln-grid { min-width: 960px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--ledger-light); }
+.pln-tr { display: grid; grid-template-columns: 250px repeat(7, minmax(0, 1fr)); }
+.pln-tr + .pln-tr { border-top: 1px solid var(--hairline); }
+.pln-tr > div { min-width: 0; padding: 8px; border-left: 1px solid var(--hairline); }
+.pln-tr > div:first-child { border-left: 0; }
+.pln-head > div { padding: 10px 8px; text-align: center; font-size: 14px; font-weight: 800; color: var(--ink2); }
+.pln-h-day.now, .pln-c.now { background: color-mix(in srgb, var(--done) 13%, transparent); }
+.pln-h-day.now { color: var(--done); }
+.pln-who { display: flex; align-items: center; gap: 10px; min-height: 70px; }
+.pln-who-link { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+.pln-who-link:hover b { text-decoration: underline; }
+.pln-who-text { display: grid; gap: 1px; min-width: 0; }
+.pln-who-text b { color: var(--ink); overflow-wrap: anywhere; }
+.pln-who-text small { color: var(--ink2); font-size: 12.5px; overflow-wrap: anywhere; }
+.pln-who-text .pln-unread { color: var(--muted); font-weight: 700; }
+.pln-x {
+  display: grid; place-items: center; flex: none; width: 28px; height: 28px; padding: 0; border: 1px solid transparent; border-radius: 8px;
+  background: transparent; color: var(--muted); cursor: pointer;
+}
+.pln-x .sign { width: 14px; height: 14px; }
+.pln-x:hover { border-color: var(--border); background: var(--surface); color: var(--gold-ink); }
+.pln-x:disabled { opacity: .5; cursor: default; }
+.pln-c { display: flex; flex-direction: column; gap: 4px; }
+.pln-tag {
+  display: flex; align-items: center; gap: 6px; padding: 2px 6px 2px 2px; border: 1px solid var(--hairline); border-radius: 9px;
+  background: var(--surface); color: var(--ink); font-size: 12.5px; font-weight: 700; line-height: 1.2;
+}
+.pln-c.now .pln-tag { border-color: color-mix(in srgb, var(--done) 55%, transparent); }
+.pln-tag-pic { width: 24px; height: 24px; }
+.pln-tag-pic img { object-fit: contain; }
+.pln-tag-pic .sign { padding: 12%; color: var(--gold-ink); }
+
+.pln-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+.pln-btn {
+  padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--button); color: var(--button-text);
+  font: inherit; font-weight: 700; cursor: pointer;
+}
+.pln-btn:hover { background: var(--button-hover, var(--button)); }
+.pln-note { color: var(--ink2); font-size: 14px; }
+.pln-refusal { color: var(--gold-ink); font-size: 14px; font-weight: 700; }
+.pln-sheet { display: grid; gap: 10px; margin-top: 10px; }
+.pln-find {
+  width: min(360px, 100%); height: 38px; padding: 0 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface);
+  color: var(--ink); font: inherit; font-size: 14px;
+}
+.pln-find:hover { border-color: var(--r1); }
+.pln-find:focus-visible { outline: 2px solid var(--fill); outline-offset: 1px; }
+.pln-pills { display: flex; flex-wrap: wrap; gap: 8px; max-height: 260px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+.pln-pill {
+  display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px 0 4px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--ink); font: inherit; cursor: pointer;
+}
+.pln-pill .pln-face { width: 30px; height: 30px; }
+.pln-pill:hover { border-color: var(--fill); }
+.pln-pill:disabled { opacity: .5; cursor: default; }
+
+/* ---------- Weekly bosses ---------- */
+.pln-boss { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pln-b {
+  display: flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; border: 1px solid var(--hairline); border-radius: 12px;
+  background: var(--ledger-light); color: var(--ink); font-size: 13.5px;
+}
+.pln-b small { color: var(--ink2); }
+.pln-b-pic { width: 32px; height: 32px; }
+.pln-b-pic img { object-fit: contain; }
+.pln-b-pic .sign { padding: 14%; color: var(--gold-ink); }
+
+@media (max-width: 1100px) {
+  .pln-today { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,0 +1,10 @@
+{
+  "main": null,
+  "toggles": {
+    "asc1": {"on": false, "state": "field", "label": "Inside the Burst's field", "covers": [], "reason": "A bonus for the character on the field inside her Burst, while she usually leaves the field after casting it."},
+    "asc4": {"on": false, "state": "press", "label": "After a pressed Skill", "covers": [], "reason": "A party buff that starts after her pressed Skill and covers her Burst, but switched on it would also count for the Skill hit it misses."},
+    "asc4Hold": {"on": false, "state": "hold", "label": "After a held Skill", "covers": [], "reason": "A party buff for Normal, Charged and Plunging Attacks, which are not her damage."},
+    "c4": {"on": false, "state": "50", "label": "Constellation 4 stacks", "covers": [], "reason": "Stacks that the party builds up by using her Icy Quill."},
+    "quill": {"on": false, "state": "quill", "label": "Icy Quill", "covers": [], "reason": "A party buff with a limited number of uses, which the party's hits spend before hers."}
+  }
+}

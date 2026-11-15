@@ -1,0 +1,11 @@
+{
+  "unsure": "Some of his hits are two strikes in one row, one Anemo and one of a party member's element, which the planner counts as one hit.",
+  "main": null,
+  "toggles": {
+    "a4Stacks": {"on": false, "state": "4", "label": "Azure Fang's Oath stacks", "covers": [], "reason": "He gains a stack when party members trigger Swirls, which depends on the team's elements."},
+    "c4Swirlcryo": {"on": false, "state": "cryo", "label": "Constellation 4 after a Cryo Swirl", "covers": [], "reason": "A Constellation 4 party bonus after a Cryo Swirl, which depends on the team's elements."},
+    "c4Swirlelectro": {"on": false, "state": "electro", "label": "Constellation 4 after an Electro Swirl", "covers": [], "reason": "A Constellation 4 party bonus after an Electro Swirl, which depends on the team's elements."},
+    "c4Swirlhydro": {"on": false, "state": "hydro", "label": "Constellation 4 after a Hydro Swirl", "covers": [], "reason": "A Constellation 4 party bonus after a Hydro Swirl, which depends on the team's elements."},
+    "c4Swirlpyro": {"on": false, "state": "pyro", "label": "Constellation 4 after a Pyro Swirl", "covers": [], "reason": "A Constellation 4 party bonus after a Pyro Swirl, which depends on the team's elements."}
+  }
+}

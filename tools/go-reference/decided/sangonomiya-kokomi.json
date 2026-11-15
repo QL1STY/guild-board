@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "burst": {"on": true, "state": "on", "label": "Ceremonial Garment", "covers": ["normal", "charged", "skill"], "reason": "She makes her Normal and Charged Attacks inside her Burst, which adds to them and to her jellyfish's hits."},
+    "c6": {"on": false, "state": "on", "label": "Constellation 6 healing at 80% HP", "covers": [], "reason": "Depends on her healing a party member who is at 80% HP or more."}
+  }
+}

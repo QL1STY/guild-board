@@ -1,0 +1,6 @@
+{
+  "toggles": {
+    "memory-of-dust:GoldenMajesty": {"on": true, "state": "5", "label": "5 stacks from her hits", "covers": [], "reason": "Her own hits fill its five stacks in a couple of seconds and keep them while she keeps hitting."},
+    "memory-of-dust:WithShield": {"on": false, "state": "protected", "label": "Shielded", "covers": [], "reason": "Doubling its stacks needs a shield on her, which depends on the team."}
+  }
+}

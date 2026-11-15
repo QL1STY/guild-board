@@ -23,7 +23,7 @@ import { expect, test, type Core } from '../e2e/fixtures.ts'
  * window itself (shell/measure/; the Characters design, 11.7, was written for the Qt window).
  */
 const TAG = '@memory'
-test.use({ demoNow: '2026-10-25T08:00:00+00:00', bigArt: true, weekAndEndgame: false })
+test.use({ demoNow: '2026-10-25T08:00:00+00:00', bigArt: true, endgame: false })
 
 const WEB = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const CARDS = 10

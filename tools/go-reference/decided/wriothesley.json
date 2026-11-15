@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "a4EdictStacks": {"on": true, "state": "5", "label": "Prosecution Edict stacks", "covers": ["normal", "charged", "burst"], "reason": "His Normal Attacks in Chilling Penalty drain his own HP, which fills the five stacks quickly, and he deals those attacks and his Burst inside it."}
+  }
+}

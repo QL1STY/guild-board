@@ -17,7 +17,7 @@ FOLDER = Path(__file__).resolve().parents[1] / "src" / "guildboard" / "reference
 SCHEMAS = FOLDER / "schema"
 FILES = {
     "inventory.json": "inventory", "stars.json": "stars", "weapons.json": "weapons", "sets.json": "sets",
-    "tables.json": "tables", "flowers.json": "flowers",
+    "tables.json": "tables", "flowers.json": "flowers", "kits.json": "kits",
 }
 
 
@@ -48,8 +48,8 @@ def test_the_schemas_refuse_what_does_not_fit_them():
     card = _schema("card")
     good = {
         "key": "sandrone", "name": "Sandrone", "element": "Cryo", "weapon_type": "Claymore", "rarity": 5,
-        "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": False, "scaling": "atk",
-        "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"], "talent_table": "elemental",
+        "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": False,
+        "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"],
         "goals": {"cr": 75}, "mains": {"sands": ["atk_pct"]}, "weights": {"cr": "wants"},
         "sets": [{"sets": ["disenchantment-in-deep-shadow"], "pieces": "4"}],
         "weapons": ["a-teaspoon-of-transcendence"], "partners": ["Electro"], "partner_roles": [], "teams": [],
@@ -109,15 +109,15 @@ def test_a_missing_card_gives_none_and_the_files_load_into_the_contracts_models(
     assert isinstance(reference.load_stars(), dict)
     refs = reference.load_refs()
     assert isinstance(refs, Refs)
-    assert all(isinstance(part, dict) for part in (refs.weapons, refs.sets, refs.flowers, refs.yields, refs.scaling))
+    assert all(isinstance(part, dict) for part in (refs.weapons, refs.sets, refs.flowers, refs.yields))
     assert reference.load_refs() is reference.load_refs()  # read once
 
 
 def test_a_card_file_is_read_into_a_card_with_its_stars():
     raw = {
         "key": "sandrone", "name": "Sandrone", "element": "Cryo", "weapon_type": "Claymore", "rarity": 5,
-        "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": False, "scaling": "atk",
-        "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"], "talent_table": "elemental",
+        "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": False,
+        "damage_talent": "normal", "talent_priority": ["normal", "skill", "burst"],
         "goals": {"cr": 75, "cd": 200, "er": 130, "dmg": 46.6, "atk": 2600},
         "mains": {"sands": ["atk_pct"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
         "weights": {
@@ -154,7 +154,7 @@ def test_the_tables_weapons_sets_and_flowers_are_read_into_the_references():
         }}, "checked": None, "sources": []},
         tables={
             "yields": {"books": 1.17}, "mains_20": {"cr": 31.1}, "main_odds": {"goblet": {"dmg": 0.05}},
-            "sub_weights": {"cr": 3}, "roll_avg": {"cr": 3.3}, "scaling": {"elemental": [1.0] * 15},
+            "sub_weights": {"cr": 3}, "roll_avg": {"cr": 3.3},
             "reactions": {"Cryo": ["Electro"]}, "exp": [], "weapon_exp": {}, "checked": None, "sources": [],
         },
         flowers={"flowers": {"flockingweed": {"name": "Flockingweed", "places": "Fellfrost Peak", "per_pass": 14}},
@@ -164,6 +164,59 @@ def test_the_tables_weapons_sets_and_flowers_are_read_into_the_references():
     assert (weapon.key, weapon.base_atk_90, weapon.effects[0].values) == ("verdict", 674.0, (20.0, 25.0, 30.0, 35.0, 40.0))
     assert weapon.icon == "https://example.test/verdict.png"  # the wiki's address; the service gives the app's
     assert refs.sets["scarlet-proof"].two[0].stat == "atk_pct" and refs.sets["scarlet-proof"].icons["flower"].endswith("f.png")
-    assert refs.yields == {"books": 1.17} and refs.scaling == {"elemental": (1.0,) * 15}
+    assert refs.yields == {"books": 1.17}
     assert refs.reactions == {"Cryo": ("Electro",)} and refs.main_odds == {"goblet": {"dmg": 0.05}}
     assert refs.flowers["flockingweed"].per_pass == 14
+
+
+def test_a_weapons_exact_numbers_at_level_90_replace_the_wikis_rounded_ones():
+    # kits.json's `level_90` (GO's curves): the planner, its sim and the weapon picker read the weapon's numbers from the references
+    weapon = {"name": "Compound Bow", "type": "Bow", "rarity": 4, "base_atk_90": 454, "sub": "phys", "sub_90": 69.0, "effects": []}
+    tables = {"yields": {}, "mains_20": {}, "main_odds": {}, "sub_weights": {}, "roll_avg": {}, "reactions": {}, "exp": [],
+              "weapon_exp": {}}
+    plain = dict(weapons={"weapons": {"compound-bow": weapon, "other": {**weapon, "name": "Other"}}}, sets={"sets": {}}, tables=tables,
+                 flowers={"flowers": {}})
+    exact = {"compound-bow": {"base_atk": 454.3632, "sub": "phys", "sub_value": 0.689711},
+             "other": {"base_atk": 500.0, "sub": "cd", "sub_value": 0.5}}   # a substat that is not the reference's: its numbers are kept
+    refs = reference.parse_refs(**plain, level_90=exact)
+    assert (refs.weapons["compound-bow"].base_atk_90, refs.weapons["compound-bow"].sub_90) == (454.3632, 68.9711)
+    assert (refs.weapons["other"].base_atk_90, refs.weapons["other"].sub_90) == (454.0, 69.0)
+    assert reference.parse_refs(**plain).weapons["compound-bow"].base_atk_90 == 454.0
+    em = reference.parse_refs(**{**plain, "weapons": {"weapons": {"m": {**weapon, "sub": "em", "sub_90": 265.0}}}},
+                              level_90={"m": {"base_atk": 541.8298, "sub": "em", "sub_value": 264.6144}}).weapons["m"]
+    assert (em.base_atk_90, em.sub_90) == (541.8298, 264.6144)   # Elemental Mastery is a number, not a fraction
+    # the app's own references read kits.json's
+    real = reference.load_refs().weapons["compound-bow"]
+    assert (real.base_atk_90, real.sub_90) == (454.3632, 68.9711)
+
+
+def test_the_references_read_the_small_levels_file_and_not_the_whole_of_kits_json(monkeypatch):
+    # kits.json is 1 MB: the references read only the weapons' numbers at level 90, which `run.py kits` writes beside it
+    from guildboard.characters import kits
+
+    def refuse():
+        raise AssertionError("kits.json was read")
+
+    monkeypatch.setattr(kits, "load_kits", refuse)
+    reference.load_refs.cache_clear()
+    try:
+        real = reference.load_refs().weapons["compound-bow"]
+        assert (real.base_atk_90, real.sub_90) == (454.3632, 68.9711)
+    finally:
+        reference.load_refs.cache_clear()
+
+
+def test_the_levels_file_is_what_kits_json_holds_at_level_90():
+    from guildboard.characters import kits
+
+    expected = {key: w["level_90"] for key, w in kits.load_kits()["weapons"].items() if w.get("level_90")}
+    assert reference.load_weapon_levels() == expected and len(expected) > 100
+
+
+def test_the_tables_schema_asks_for_the_verdicts_constants_and_names_the_reactions():
+    tables, schema = _read(FOLDER / "tables.json"), _schema("tables")
+    for key in ("level_mult", "amplifying", "additive", "lunar", "stellar_conduct", "enemy", "polestar_dmg"):
+        assert json_schema.problem_with({k: v for k, v in tables.items() if k != key}, schema) is not None, key
+    for key in ("amplifying", "additive", "lunar"):
+        assert json_schema.problem_with({**tables, key: {**tables[key], "invented": 1}}, schema) is not None, key
+        assert json_schema.problem_with({**tables, key: dict(list(tables[key].items())[1:])}, schema) is not None, key

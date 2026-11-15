@@ -53,6 +53,15 @@ def test_search_looks_through_names_and_descriptions_in_every_category(store):
     assert _build(store, search="nothing like this")["groups"] == []
 
 
+def test_the_all_category_shows_every_category_within_the_view(store):
+    _done(store, *WONDERS)
+    model = _build(store, category="all")
+    assert model["query"]["category"] == "all"
+    assert [g["id"] for g in model["groups"]] == [82055, 80001, 81222]
+    assert len(_build(store, category="all", view="all")["groups"]) == 7
+    assert [g["id"] for g in _build(store, category="all", view="done")["groups"]] == [84508, 84512, 81732, 80127]
+
+
 def test_pinned_shows_the_pinned_achievements_from_every_category(store):
     store.put_progress([
         ProgressRow(84508, "in_progress", None, True, "", "player", NOW),

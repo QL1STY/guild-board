@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "c2AfterSkillHit": {"on": false, "state": "on", "label": "Constellation 2 after the Skill hits", "covers": [], "reason": "A Constellation 2 HP bonus that starts after her Skill hits and covers her Burst, but switched on it would also count for the Skill hit it misses."}
+  }
+}

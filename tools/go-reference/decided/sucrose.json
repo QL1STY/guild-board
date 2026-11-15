@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "absorption": {"on": false, "state": "hydro", "label": "Constellation 6 absorbed element", "covers": [], "reason": "A Constellation 6 bonus to the element her Burst absorbs, which depends on the party and reaches none of her counted hits."}
+  }
+}

@@ -364,7 +364,7 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
     async def launch(k: str = "", to: str = "") -> Response:
         """Exchange the launch secret for the session cookie, and open the page, on the place `to` names when it is
         one the shell asks for. A click on a reminder asks for the Timers category, and one on a Characters notice for
-        Your week or a character."""
+        the Plan page or a character."""
         if not _same(k, core.launch_secret):
             return _error(403, "This launch link is not valid.")
         response = RedirectResponse(launch_target(to),status_code=303)
@@ -1407,7 +1407,7 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         core.pulls_changed()
         return JSONResponse({"id": entry_id})
 
-    # ------------------------------------------------------------------ Characters: the pages, the plans, the week and the art
+    # ------------------------------------------------------------------ Characters: the pages, the plans, the Plan and the art
     def _change_characters(change: Callable[[], Any], answer: Callable[[], Any]) -> Response:
         """Make a change to what the Characters pages keep and tell the pages, or say why it is refused."""
         try:
@@ -1419,9 +1419,9 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         core.characters_changed()
         return JSONResponse(answer())
 
-    def _week_and_endgame_hidden() -> Response | None:
-        """Your week and Endgame are hidden while `characters.WEEK_AND_ENDGAME` is off: their routes are not there."""
-        return None if characters.WEEK_AND_ENDGAME else _error(404, "Your week and Endgame are turned off.")
+    def _endgame_hidden() -> Response | None:
+        """Endgame is hidden while `characters.ENDGAME` is off: its routes are not there."""
+        return None if characters.ENDGAME else _error(404, "Endgame is turned off.")
 
     def _character(make: Callable[[str], Any], key: str) -> Response:
         core.characters.wanted(key)  # the wiki's entries it needs are read in the background, after consent
@@ -1468,6 +1468,20 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
     async def characters_plan(key: str) -> Response:
         return _character(core.characters.planner, key)
 
+    @app.get("/api/characters/{key}/weapons")
+    async def characters_weapons(key: str) -> Response:
+        try:   # her own entries and the lists' missing ones are queued by the service, once she is known
+            return JSONResponse({"weapons": core.characters.weapon_choices(key)})
+        except UnknownCharacter:
+            return _error(404, NO_SUCH_CHARACTER)
+
+    @app.get("/api/artifact-sets")
+    async def artifact_sets(character: str | None = None) -> Response:
+        try:   # with a character, each set's effects for her (the planner's picker)
+            return JSONResponse({"sets": core.characters.set_choices(character)})
+        except UnknownCharacter:
+            return _error(404, NO_SUCH_CHARACTER)
+
     @app.put("/api/characters/{key}/plan")
     async def characters_put_plan(key: str, body: dict[str, Any] = Body(...)) -> Response:
         return _change_characters(lambda: core.characters.put_plan(key, body), lambda: core.characters.planner(key))
@@ -1486,28 +1500,26 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
 
     @app.put("/api/focus")
     async def characters_focus(body: dict[str, Any] = Body(...)) -> Response:
-        # The answer is the week's, which the Your week page takes; with the week hidden it is the roster.
-        answer = core.characters.week if characters.WEEK_AND_ENDGAME else core.characters.roster
-        return _change_characters(lambda: core.characters.put_focus(body.get("characters")), answer)
+        return _change_characters(lambda: core.characters.put_focus(body.get("characters")), core.characters.roster)
 
-    @app.get("/api/week")
-    async def characters_week() -> Response:
-        if (hidden := _week_and_endgame_hidden()) is not None:
-            return hidden
+    @app.get("/api/plan")
+    async def plan_page() -> Response:
         core.characters.wanted(*core.characters.focus())
-        return JSONResponse(core.characters.week())
+        return JSONResponse(core.characters.plan_page())
 
-    @app.put("/api/week/ticks")
-    async def characters_tick(body: dict[str, Any] = Body(...)) -> Response:
-        if (hidden := _week_and_endgame_hidden()) is not None:
-            return hidden
-        return _change_characters(
-            lambda: core.characters.put_tick(body.get("day"), body.get("task"), body.get("done")), core.characters.week
-        )
+    @app.put("/api/plan/characters")
+    async def plan_characters(body: dict[str, Any] = Body(...)) -> Response:
+        def change() -> None:
+            try:
+                core.characters.put_focus(body.get("characters"))
+            except UnknownCharacter:
+                raise CharactersRefused(NO_SUCH_CHARACTER) from None
+
+        return _change_characters(change, core.characters.plan_page)
 
     @app.get("/api/endgame")
     async def characters_endgame(after: int = 0) -> Response:
-        if (hidden := _week_and_endgame_hidden()) is not None:
+        if (hidden := _endgame_hidden()) is not None:
             return hidden
         if after not in (0, 1):
             return _error(422, UNEXPECTED_REQUEST)
@@ -1515,7 +1527,7 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
 
     @app.put("/api/endgame/theater")
     async def characters_theater(body: dict[str, Any] = Body(...)) -> Response:
-        if (hidden := _week_and_endgame_hidden()) is not None:
+        if (hidden := _endgame_hidden()) is not None:
             return hidden
         return _change_characters(
             lambda: core.characters.put_theater(body.get("elements")), lambda: core.characters.endgame(False)
@@ -1524,7 +1536,7 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
     @app.delete("/api/endgame/theater")
     async def characters_theater_back() -> Response:
         """The player's pick for the month goes, and the calendar's elements show again."""
-        if (hidden := _week_and_endgame_hidden()) is not None:
+        if (hidden := _endgame_hidden()) is not None:
             return hidden
         return _change_characters(core.characters.drop_theater, lambda: core.characters.endgame(False))
 

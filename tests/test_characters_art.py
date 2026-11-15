@@ -286,7 +286,7 @@ async def test_the_public_pictures_are_fetched_ahead_once_and_kept_tells_what_is
         rests.append(seconds)
 
     art.sleep = rest
-    assert await art.warm_public([0, 2, 7], paused=lambda: next(running, False)) == 2  # 7 is no place in the table
+    assert await art.warm_public([0, 2, 99], paused=lambda: next(running, False)) == 2  # 99 is no place in the table
     assert rests[:2] == [art.game_pause, art.game_pause]  # it waited for the game to close first
     assert [url for url, _ in downloads.asked] == [netpolicy.PUBLIC_PICTURE_URLS[0], netpolicy.PUBLIC_PICTURE_URLS[2]]
     assert downloads.hosts == [ART_HOSTS + netpolicy.PUBLIC_PICTURE_HOSTS] * 2

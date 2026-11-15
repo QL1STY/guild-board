@@ -1,11 +1,13 @@
 import type { CSSProperties, ReactNode } from 'react'
-import type { Profile } from '../../types.ts'
+import './cv.css'
+import type { PieceView, Profile } from '../../types.ts'
 import { Picture } from '../../ui/Picture.tsx'
 import { weaponSign } from './elements.ts'
 import {
   agree, goalMark, matWords, objectPronoun, ownLabel, type PaneKey, pieceBar, piecesByCrit, pityBar, pityStory, rollsHeading, rollsSummary, rollUnits, setsView,
   statShares, statTip, talentText, tally, usesCrit, verdictChip, verdictLabel, weaponVerdict,
 } from './profileview.ts'
+import { tierClass } from './simview.ts'
 import { CalculatorNote } from './SyncLine.tsx'
 import type { TipProps } from './Tip.tsx'
 
@@ -19,6 +21,15 @@ export type PaneProps = {
 }
 
 const SLOT_LABEL: Record<string, string> = { flower: 'Flower', plume: 'Plume', sands: 'Sands', goblet: 'Goblet', circlet: 'Circlet' }
+/** A piece's Crit Value in the colour of its tier (the Plan design, section 5), one decimal as the game shows a value. */
+function CvPill({ piece }: { piece: PieceView }) {
+  return (
+    <span className={`pp-cv ${tierClass(piece.cv_tier)}`}>
+      {piece.crit_value.toFixed(1)} <small>CV</small>
+    </span>
+  )
+}
+
 const index = (i: number) => ({ '--i': i }) as CSSProperties
 
 /** Attributes: each bar cut by where the stat comes from, with the card's goals in gold, and where her substat rolls went. */
@@ -244,12 +255,13 @@ function Artifacts(props: PaneProps) {
               <small>
                 {piece.main.label} {piece.main.text}, +{piece.level}
               </small>
+              {!crit && <CvPill piece={piece} />}
             </span>
             <span className="pf-cvbar" aria-hidden="true">
               <i style={{ width: `${pieceBar(piece, crit)}%` }} />
             </span>
             <span className="pf-cvval">
-              <b>{crit ? piece.crit_value : `${piece.rolls_wanted} of ${piece.rolls_all}`}</b>
+              {crit ? <CvPill piece={piece} /> : <b>{`${piece.rolls_wanted} of ${piece.rolls_all}`}</b>}
               <em className={`pf-verdict ${verdictChip(piece.verdict)}`}>{verdictLabel(piece.verdict)}</em>
             </span>
           </button>

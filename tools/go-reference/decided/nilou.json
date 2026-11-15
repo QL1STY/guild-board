@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "c4AfterPirHit": {"on": false, "state": "on", "label": "Constellation 4 after the third dance step", "covers": [], "reason": "A Constellation 4 window after her third dance step, which covers her Burst only when it is cast in that order."}
+  }
+}

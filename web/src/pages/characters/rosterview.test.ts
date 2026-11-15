@@ -1,8 +1,7 @@
 import { expect, test } from 'vitest'
 import fixture from '../../fixtures/characters/roster.json'
 import type { Roster, RosterEntry } from '../../types.ts'
-import { bannerLine, countLine, focusCards, levelLine, neighbours, NO_FILTERS, searched, sorted, toggleFocus, visible } from './rosterview.ts'
-import { FOUR_AT_MOST } from './words.ts'
+import { bannerLine, countLine, levelLine, neighbours, NO_FILTERS, searched, sorted, visible } from './rosterview.ts'
 
 const roster = fixture as unknown as Roster
 const names = (entries: RosterEntry[]) => entries.map((entry) => entry.name)
@@ -16,11 +15,9 @@ test('the element filter keeps one element, and every element when none is chose
   expect(names(visible(roster.entries, { ...NO_FILTERS, element: 'Anemo' }))).toEqual(['Jahoda', 'Lan Yan', 'Vesna'])
 })
 
-test('the weapon filter, the owned filter and the focus filter each narrow the list, and together', () => {
+test('the weapon filter and the owned filter each narrow the list, and together', () => {
   expect(names(visible(roster.entries, { ...NO_FILTERS, weapon: 'Polearm' }))).toEqual(['Ineffa', 'Iansan', 'Escoffier'])
   expect(names(visible(roster.entries, { ...NO_FILTERS, weapon: 'Polearm', owned: true }))).toEqual(['Ineffa', 'Iansan'])
-  expect(names(visible(roster.entries, { ...NO_FILTERS, inFocus: true }))).toEqual(['Sandrone', 'Odette', 'Alyosha', 'Jahoda'])
-  expect(names(visible(roster.entries, { ...NO_FILTERS, inFocus: true, element: 'Cryo' }))).toEqual(['Sandrone', 'Odette'])
   expect(visible(roster.entries, { ...NO_FILTERS, element: 'Geo', weapon: 'Sword' })).toEqual([])
 })
 
@@ -75,25 +72,6 @@ test('sorting leaves the list it was given as it was', () => {
   expect(names(roster.entries)).toEqual(before)
 })
 
-test('the focus strip lists the focus in its order, by the numbers the core gave', () => {
-  expect(names(focusCards(roster))).toEqual(['Sandrone', 'Odette', 'Alyosha', 'Jahoda'])
-  expect(focusCards({ ...roster, entries: [...roster.entries].reverse() }).map((entry) => entry.focus)).toEqual([1, 2, 3, 4])
-})
-
-test('a character goes into the focus after the others, and out of it leaving the others in order', () => {
-  expect(toggleFocus(['sandrone'], 'odette')).toEqual({ focus: ['sandrone', 'odette'] })
-  expect(toggleFocus(['sandrone', 'odette', 'alyosha'], 'odette')).toEqual({ focus: ['sandrone', 'alyosha'] })
-  expect(toggleFocus([], 'nefer')).toEqual({ focus: ['nefer'] })
-})
-
-test('a fifth character is refused with "Four at most: take one out first."', () => {
-  const four = ['sandrone', 'odette', 'alyosha', 'jahoda']
-  expect(toggleFocus(four, 'nefer')).toEqual({ refused: FOUR_AT_MOST })
-  expect(FOUR_AT_MOST).toBe('Four at most: take one out first.')
-  // The refusal is only for a fifth: one of the four can still be taken out.
-  expect(toggleFocus(four, 'jahoda')).toEqual({ focus: ['sandrone', 'odette', 'alyosha'] })
-})
-
 test('a card says her level and constellation, and a character not owned says so', () => {
   const [sandrone] = roster.entries
   expect(levelLine(sandrone)).toBe('Level 90 · C2')
@@ -134,7 +112,6 @@ test('the search works with the filters, and the sort orders what is left', () =
   const shown = visible(roster.entries, { ...NO_FILTERS, owned: true }, 'polearm')
   expect(names(shown)).toEqual(['Ineffa', 'Iansan'])
   expect(names(sorted(shown, 'name'))).toEqual(['Iansan', 'Ineffa'])
-  expect(names(visible(roster.entries, { ...NO_FILTERS, inFocus: true }, 'cryo'))).toEqual(['Sandrone', 'Odette'])
   expect(visible(roster.entries, { ...NO_FILTERS, element: 'Anemo' }, 'polearm')).toEqual([])
 })
 

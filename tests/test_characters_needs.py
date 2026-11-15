@@ -1,12 +1,10 @@
-"""Task E3: needs from the wiki's tables with held amounts from HoYoLAB, and the odds of an artifact."""
+"""Task E3: needs from the wiki's tables with held amounts from HoYoLAB."""
 from __future__ import annotations
 
 import dataclasses
 
-import pytest
-
-from characters_samples import CHARITY, DOCTOR, SHADOW, TEASPOON, VAGRANCY, refs_sample, sandrone_build, sandrone_card
-from guildboard.characters import needs, odds
+from characters_samples import CHARITY, DOCTOR, SHADOW, TEASPOON, VAGRANCY, sandrone_build, sandrone_card
+from guildboard.characters import needs
 from guildboard.characters.models import Costs, Need, Plan, SetChoice, Source
 from guildboard.metrics import slug
 from guildboard.records import CalcItemRecord
@@ -125,30 +123,3 @@ def test_the_calculators_held_amount_comes_before_what_was_typed():
     assert (result[VAGRANCY_KEY].held, result[VAGRANCY_KEY].exact) == (9, True)
     assert (result[SHAFT].held, result[SHAFT].exact) == (12, False)
     assert result[SHAFT].name == SHAFT
-
-
-def test_a_cryo_goblet_with_a_crit_substat_is_about_1_in_181_runs():
-    """1.065 x 0.2 x 0.05 x 0.52 a run, with an off-set piece as good as one from her set."""
-    refs = refs_sample()
-    p = odds.per_run("goblet", "dmg", False, True, refs)
-    assert p == pytest.approx(1.065 * 0.2 * 0.05 * 0.52)
-    assert round(1 / p) == 181
-
-
-def test_her_sets_domain_is_1_in_361_and_the_strongbox_1_in_192():
-    refs = refs_sample()
-    assert round(1 / odds.per_run("goblet", "dmg", False, False, refs)) == 361
-    assert round(1 / odds.per_strongbox("goblet", "dmg", False, refs)) == 192
-    # a crit main stat has one crit substat fewer to roll
-    assert odds.per_run("circlet", "cr", True, True, refs) == pytest.approx(1.065 * 0.2 * 0.10 * 0.32)
-
-
-def test_half_a_chance_comes_on_day_14_and_nine_in_ten_on_day_46():
-    """Two runs today and nine a day after: the runs made by the end of each day are 2, 11, 20 ..."""
-    p = odds.per_run("goblet", "dmg", False, True, refs_sample())
-    runs_by_day = [2 + 9 * day for day in range(50)]
-    assert odds.day_reaching(p, runs_by_day, 0.5) == 14
-    assert odds.day_reaching(p, runs_by_day, 0.9) == 46
-    assert odds.day_reaching(p, runs_by_day[:20], 0.9) is None
-    assert odds.chance(p, 0) == 0.0 and odds.chance(1.0, 1) == 1.0
-    assert odds.chance(p, 125) == pytest.approx(1 - (1 - p) ** 125)

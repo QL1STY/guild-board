@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "A1": {"on": true, "state": "on", "label": "ATK bonus from Coil", "covers": ["normal"], "reason": "Her Skill's bomblets give her Coil, which raises her ATK by 16% for 10 seconds, the time she spends on Normal Attacks after it."},
+    "A4": {"on": false, "state": "10", "label": "Rushing Ice, full Cryo bonus", "covers": [], "reason": "The Cryo bonus grows by 3.5% a second during Rushing Ice and reaches its full size only at the end."},
+    "coil": {"on": true, "state": "rush", "label": "Rushing Ice", "covers": ["normal"], "reason": "Four Coil stacks from her Skill's bomblets put her in Rushing Ice, the state in which she deals her Normal Attacks."}
+  }
+}

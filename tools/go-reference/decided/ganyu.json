@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "A1": {"on": true, "state": "on", "label": "After a Frostflake Arrow", "covers": ["charged"], "reason": "She fires Frostflake Arrows one after another, so the CRIT Rate from the last one is on while the next ones hit."},
+    "A4": {"on": false, "state": "on", "label": "Inside the Burst's field", "covers": [], "reason": "A bonus for the character on the field inside her Burst, which depends on whether she stays on the field after casting it."},
+    "C4": {"on": false, "state": "5", "label": "Constellation 4, enemies in the Burst", "covers": [], "reason": "Builds up while enemies stay inside her Burst."}
+  }
+}

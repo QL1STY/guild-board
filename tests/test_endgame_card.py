@@ -20,7 +20,9 @@ from guildboard.metrics import ENDGAME_KEYS, Point
 from guildboard.records import EndgameRecord
 from guildboard.sources import hoyolab_normalize as norm
 from guildboard.store import WikiEntryRow
-from guildboard.views.endgame_card import MODE_ART, ModeArt, build_endgame_card, header_art, short_name
+from guildboard.views.endgame_card import (
+    MODE_ART, PUBLIC_INDEXES, THEATER_MARKS, ModeArt, build_endgame_card, header_art, short_name, theater_marks,
+)
 from support import AccountSource, FakeClock, FakeSleep
 
 NOW = datetime(2026, 11, 6, 12, 0, tzinfo=timezone.utc)  # the Stygian season has ended, and the next opens on 11 Nov
@@ -124,7 +126,7 @@ async def test_header_art_falls_back_from_the_public_picture_to_the_wiki_then_no
     assert downloads.asked == []  # the model asks for nothing
     # Once the cache keeps the public pictures, they are the headers', with the Stygian banner's crop.
     assert await art.warm_public([spec.picture_index for spec in MODE_ART.values()]) == 3
-    assert downloads.asked == list(netpolicy.PUBLIC_PICTURE_URLS)
+    assert downloads.asked == list(netpolicy.PUBLIC_PICTURE_URLS[:3])
     stygian = header_art("stygian", art, rows["stygian"])
     assert stygian == {"icon": art.address(ICONS["7786"]), "picture": art.public_address(2), "crop": [0.0, 0.0, 0.48, 0.84]}
     assert header_art("abyss", art, rows["abyss"])["picture"] == art.public_address(0)
@@ -191,6 +193,7 @@ def test_the_theater_shows_its_month_acts_medals_and_highlights(store, art):
     assert theater["line"] == "November · Arcana Challenge"
     assert len(theater["medals"]) == 12 and theater["medals"][:4] == [True, False, True, True]
     assert theater["medal_count"] == 6  # HoYoLAB's own count, not the medals of the Arcana acts
+    assert theater["arcana"] == 2  # the Arcana fights cleared
     assert (theater["flowers"], theater["seconds"]) == (1285, 1002)
     assert [(rank["label"], rank["value"]) for rank in theater["ranks"]] == [
         ("Most damage", 943229), ("Most defeats", 11), ("Most damage taken", 68942),
@@ -285,7 +288,7 @@ def test_a_detail_kept_by_1_0_1_shows_no_made_up_zero(store, art):
     assert [boss["seconds"] for boss in styg["bosses"]] == [119, 42, 119]
     # What it did not keep is None, never a 0 or an empty list that the card would show as a result.
     assert [abyss[name] for name in ("battles", "wins", "chambers", "ranks")] == [None] * 4
-    assert [theater[name] for name in ("medals", "medal_count", "ranks", "flowers", "seconds")] == [None] * 5
+    assert [theater[name] for name in ("medals", "medal_count", "ranks", "flowers", "seconds", "arcana")] == [None] * 6
     assert (styg["seconds"], styg["next"], styg["dimmed"]) == (None, None, False)
     assert abyss["line"] == "16 Oct to 15 Nov"  # no battles to tell
     assert theater["line"] == "November · Arcana Challenge"
@@ -386,7 +389,7 @@ def _live_core(tmp_path, clock, monkeypatch, *, consent: bool):
     return core, sent
 
 
-async def test_after_consent_a_live_core_reads_the_three_entries_and_fetches_the_six_pictures(tmp_path, clock, monkeypatch):
+async def test_after_consent_a_live_core_reads_the_three_entries_and_fetches_the_pictures(tmp_path, clock, monkeypatch):
     core, sent = _live_core(tmp_path, clock, monkeypatch, consent=True)
     try:
         await core.read_endgame_art()
@@ -396,16 +399,18 @@ async def test_after_consent_a_live_core_reads_the_three_entries_and_fetches_the
             *netpolicy.PUBLIC_PICTURE_URLS,
         ]
         # A public picture goes out as a plain GET with Guild Board's user agent and nothing else.
-        for method, url, headers in sent[-3:]:
+        for method, url, headers in sent[-len(netpolicy.PUBLIC_PICTURE_URLS):]:
             assert (method, headers) == ("GET", {"User-agent": netpolicy.USER_AGENT}), url
         # Read once for the game's version, and fetched once.
         await core.read_endgame_art()
-        assert len(sent) == 9
+        assert len(sent) == 6 + len(netpolicy.PUBLIC_PICTURE_URLS)
         keep_endgame(core.store, real_record())
         headers = [column["header"] for column in core.stats_endgame()["modes"]]
         assert [header["picture"] for header in headers] == [core.art.public_address(i) for i in range(3)]
         assert [header["icon"] for header in headers] == [core.art.address(icon) for icon in ICONS.values()]
         assert modes(core.stats_endgame())["stygian"]["medal"] == core.art.address(FEARLESS)
+        marks = modes(core.stats_endgame())["theater"]["marks"]
+        assert marks["medal"] == core.art.public_address(3) and marks["heraldry"] == core.art.public_address(11)
     finally:
         core.store.close()
 
@@ -416,7 +421,7 @@ async def test_the_card_asked_for_reads_ahead_at_most_once_an_hour_and_tells_the
     try:
         core.endgame_art_wanted()
         await core._endgame_art_task
-        assert len(sent) == 9
+        assert len(sent) == 6 + len(netpolicy.PUBLIC_PICTURE_URLS)
         events = [heard.get_nowait()["type"] for _ in range(heard.qsize())]
         assert events == ["stats_changed"]  # the card reads its model again, with the pictures now kept
         clock.advance(minutes=59)
@@ -425,7 +430,7 @@ async def test_the_card_asked_for_reads_ahead_at_most_once_an_hour_and_tells_the
         clock.advance(minutes=2)
         core.endgame_art_wanted()
         await core._endgame_art_task
-        assert len(sent) == 9 and heard.empty()  # everything is kept: nothing asked, nothing new to tell
+        assert len(sent) == 6 + len(netpolicy.PUBLIC_PICTURE_URLS) and heard.empty()  # everything is kept: nothing asked, nothing new to tell
     finally:
         core.bus.unsubscribe(heard)
         await core.stop()
@@ -451,3 +456,38 @@ async def test_before_consent_and_in_the_demo_nothing_is_asked(tmp_path, clock, 
         assert sent == []
     finally:
         demo.store.close()
+
+
+# ------------------------------------------------------------------------------------------------ the Theater's marks
+
+
+def test_the_theaters_marks_are_hoyolabs_own_at_their_places_in_the_table():
+    table = netpolicy.PUBLIC_PICTURE_URLS
+    assert [table[THEATER_MARKS[name]].rsplit("/", 1)[-1] for name in ("medal", "cleared", "flower")] == [
+        "active-medal-icon.b3adc53a.png", "default-medal-icon.966c006f.png", "flower-icon.dd04a858.png",
+    ]
+    assert [table[index].rsplit("/", 1)[-1].split(".")[0] for index in THEATER_MARKS["heraldry"]] == [
+        f"heraldry-icon-{level}" for level in range(6)
+    ]
+    assert sorted(PUBLIC_INDEXES) == list(range(len(table)))  # the warm-up asks for every picture of the table
+
+
+async def test_the_theater_shows_hoyolabs_marks_once_kept_and_none_before(store, clock, tmp_path):
+    downloads = Downloads()
+    art = ArtCache(store, AppPaths(tmp_path / "data"), clock, downloads, False)
+    art.warm_pause = 0
+    assert theater_marks(art, 5) == {"medal": None, "cleared": None, "flower": None, "heraldry": None}
+    await art.warm_public(list(PUBLIC_INDEXES))
+    marks = theater_marks(art, 5)
+    assert marks["medal"] == art.public_address(THEATER_MARKS["medal"])
+    assert marks["heraldry"] == art.public_address(THEATER_MARKS["heraldry"][5])
+    assert theater_marks(art, 6)["heraldry"] == marks["heraldry"]  # HoYoLAB's heraldry 6 is the picture of 5
+    assert theater_marks(art, 0)["heraldry"] == art.public_address(THEATER_MARKS["heraldry"][0])
+    assert theater_marks(art, -1)["heraldry"] is None and theater_marks(art, None)["heraldry"] is None
+
+
+def test_the_theater_column_carries_its_heraldry_and_marks(store, art):
+    keep_endgame(store, real_record())
+    theater = modes(card(store, art, {}))["theater"]
+    assert theater["heraldry"] == 5
+    assert theater["marks"] == {"medal": None, "cleared": None, "flower": None, "heraldry": None}  # none kept yet

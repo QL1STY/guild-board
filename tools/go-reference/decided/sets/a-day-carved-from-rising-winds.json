@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "a-day-carved-from-rising-winds:set4": {"on": true, "state": "on", "label": "After her hits", "covers": [], "reason": "Any Normal Attack, Charged Attack, Skill or Burst hit of hers starts its six seconds again, so its ATK bonus is up while she fights."}
+  }
+}

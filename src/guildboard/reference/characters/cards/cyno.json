@@ -1,7 +1,7 @@
 {
   "key": "cyno", "name": "Cyno", "element": "Electro", "weapon_type": "Polearm", "rarity": 5,
-  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false, "scaling": "em",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "physical",
+  "pronouns": ["he", "him", "his"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"atk": 1800, "em": 500, "er": 140, "cr": 70, "cd": 175, "dmg": 46.6},
   "mains": {"sands": ["em", "atk_pct", "er"], "goblet": ["dmg", "em"], "circlet": ["cd", "cr", "em"]},
   "weights": {"em": "wants", "er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "some", "atk": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

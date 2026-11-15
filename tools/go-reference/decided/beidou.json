@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "Ascension4": {"on": false, "state": "on", "label": "After a perfect counter", "covers": [], "reason": "Her Normal and Charged Attack bonus starts only after her Skill counters a hit at its maximum bonus, which depends on timing and on being attacked."}
+  }
+}

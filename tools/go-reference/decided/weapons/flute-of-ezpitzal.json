@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "flute-of-ezpitzal:afterSkill": {"on": true, "state": "on", "label": "After her Skill", "covers": [], "reason": "Its DEF bonus lasts 15 seconds after her Elemental Skill, so it is up while she casts her Skill when it is ready."}
+  }
+}

@@ -13,9 +13,11 @@ TYPES_TS = Path(__file__).resolve().parents[1] / "web" / "src" / "types.ts"
 NAMES = (
     "Element", "WeaponType", "Slot", "Weight", "Pronouns", "CharSync", "RosterEntry", "Roster", "StatRow", "RollRow",
     "SubView", "PieceView", "WeaponView", "MaterialRow", "Readiness", "Profile", "Option", "Planner", "PlanBody",
-    "WeekTask", "WeekDay", "FocusCard", "Week", "TeamView", "Endgame",
+    "PlannerSim", "HitTerm", "HitRow", "HitTalent", "Effect", "PartyOption", "PartyBlock", "Toggle", "Infusion", "GearEffects", "PlannerHits", "SimWeapon", "SimSet", "SimPiece", "WeaponChoice", "SetChoice", "PlanSeries", "PlanBook", "PlanWeaponSeries", "PlanIdle", "PlanRow", "PlanWeekly", "PlanAddable", "PlanModel",
+    "TeamView", "Endgame",
 )
-FIELD = re.compile(r"([A-Za-z_]\w*)\s*:\s*")
+FIELD = re.compile(r"([A-Za-z_]\w*)(\?)?\s*:\s*")
+OPTIONAL = ("optional",)   # a field written `name?: type` may be missing: its union holds this marker
 TERM = re.compile(r"'[^']*'|-?\d+(?:\.\d+)?|[A-Za-z_]\w*")
 NUMBER = re.compile(r"-?\d+(?:\.\d+)?")
 PRIMITIVES = {
@@ -46,6 +48,8 @@ def _object(text: str, i: int) -> tuple[dict[str, list[Any]], int]:
         if match is None:
             raise ValueError(f"types.ts cannot be read at {text[i:i + 40]!r}")
         fields[match.group(1)], i = _union(text, match.end())
+        if match.group(2):
+            fields[match.group(1)].append(OPTIONAL)
 
 
 def _tuple(text: str, i: int) -> tuple[tuple[Any, ...], int]:
@@ -158,10 +162,11 @@ def _fits(value: Any, term: Any, types: dict[str, list[Any]], where: str) -> str
     if isinstance(term, dict):
         if not isinstance(value, dict):
             return f"{where}: {value!r} is not an object"
-        if set(value) != set(term):
-            return f"{where}: the keys {sorted(value)} are not the type's {sorted(term)}"
-        for key, union in term.items():
-            problem = _fits_union(value[key], union, types, f"{where}.{key}")
+        required = {key for key, union in term.items() if OPTIONAL not in union}
+        if not required <= set(value) <= set(term):
+            return f"{where}: the keys {sorted(value)} are not the type's {sorted(term)} ({sorted(set(term) - required)} may be missing)"
+        for key in value:
+            problem = _fits_union(value[key], term[key], types, f"{where}.{key}")
             if problem is not None:
                 return problem
         return None
@@ -226,6 +231,7 @@ def _fits(value: Any, term: Any, types: dict[str, list[Any]], where: str) -> str
 
 
 def _fits_union(value: Any, union: list[Any], types: dict[str, list[Any]], where: str) -> str | None:
+    union = [term for term in union if term != OPTIONAL]
     problems = [_fits(value, term, types, where) for term in union]
     if any(problem is None for problem in problems):
         return None
@@ -234,6 +240,6 @@ def _fits_union(value: Any, union: list[Any], types: dict[str, list[Any]], where
 
 def problem_with(value: Any, name: str, path: Path = TYPES_TS, names: Sequence[str] = NAMES) -> str | None:
     """Why `value` is not of the page's type `name`, or None when it is: the keys of every object are the type's, no more
-    and no fewer. `path` and `names` say where to read the types, for models that keep them in another file."""
+    and no fewer (a field written `name?: type` may be missing). `path` and `names` say where to read the types, for models that keep them in another file."""
     types = read_types(path, names)
     return _fits_union(value, types[name], types, name)

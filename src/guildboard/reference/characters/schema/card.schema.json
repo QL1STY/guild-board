@@ -3,8 +3,8 @@
   "title": "A researched card (cards/<key>.json): the fields of the Characters plan's Card, with the sources and the day checked",
   "type": "object",
   "required": [
-    "key", "name", "element", "weapon_type", "rarity", "pronouns", "roles", "keeps_alive", "scaling", "damage_talent",
-    "talent_priority", "talent_table", "goals", "mains", "weights", "sets", "weapons", "partners", "partner_roles",
+    "key", "name", "element", "weapon_type", "rarity", "pronouns", "roles", "keeps_alive", "damage_talent",
+    "talent_priority", "goals", "mains", "weights", "sets", "weapons", "partners", "partner_roles",
     "teams", "notes", "confidence", "early", "sources", "checked"
   ],
   "additionalProperties": false,
@@ -17,10 +17,8 @@
     "pronouns": {"type": "array", "items": {"type": "string"}, "minItems": 3, "maxItems": 3},
     "roles": {"type": "array", "items": {"enum": ["damage", "support", "healer", "protector"]}},
     "keeps_alive": {"type": "boolean"},
-    "scaling": {"enum": ["atk", "hp", "def", "em"]},
     "damage_talent": {"enum": ["normal", "skill", "burst"]},
     "talent_priority": {"type": "array", "items": {"enum": ["normal", "skill", "burst"]}, "minItems": 3, "maxItems": 3},
-    "talent_table": {"enum": ["elemental", "physical"]},
     "goals": {
       "type": "object",
       "additionalProperties": false,

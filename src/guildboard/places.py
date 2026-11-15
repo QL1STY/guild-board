@@ -7,13 +7,13 @@ import re
 # the overlay's window opens the overlay's page.
 LAUNCH_PLACES = {
     "achievements/timers": "/#/achievements/timers", "board": "/#/board", "friends": "/#/friends", "overlay": "/#/overlay",
-    "week": "/#/week", "codes": "/#/codes",
+    "plan": "/#/plan", "week": "/#/plan", "codes": "/#/codes",  # "week": an older link to the page that became the Plan page
 }
 # A click on a Characters notice about a goal that is ready opens that character's profile: "characters/<slug>".
 CHARACTER_PLACE = re.compile(r"characters/[a-z0-9]+(?:-[a-z0-9]+)*")
-# The notifications a click opens a place for. A Characters notice opens Your week; one about a goal that is ready has the
+# The notifications a click opens a place for. A Characters notice opens the Plan page; one about a goal that is ready has the
 # character in its kind, "characters/<slug>", and opens her profile (see place_of).
-PLACES_BY_KIND = {"reminder": "achievements/timers", "quick": "board", "codes": "codes", "characters": "week"}
+PLACES_BY_KIND = {"reminder": "achievements/timers", "quick": "board", "codes": "codes", "characters": "plan"}
 
 
 def place_of(kind: str | None) -> str | None:

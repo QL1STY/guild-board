@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "withMirrors": {"on": true, "state": "on", "label": "Chisel-Light Mirror", "covers": ["normal", "charged", "plunging"], "reason": "His Normal and Charged Attacks are his damage, dealt while his Chisel-Light Mirrors are up, which makes them Dendro."},
+    "debateStacks": {"on": false, "state": "4", "label": "Constellation 2 stacks", "covers": [], "reason": "Constellation 2 stacks that build up during the fight."},
+    "excessMirror": {"on": false, "state": "on", "label": "Constellation 6 mirror overflow", "covers": [], "reason": "A Constellation 6 window."}
+  }
+}

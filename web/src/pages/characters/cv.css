@@ -1,0 +1,11 @@
+/*
+ * The Crit Value pill and its tier colours (the Plan design, section 5), shared by the planner's piece tiles and the profile's
+ * artifacts. The tiers' colours are the same on every theme and on the dark card and the parchment (themetokens.test.ts leaves
+ * this sheet alone). Tier 6 is the rainbow.
+ */
+:root { --cv0: #9aa0ae; --cv1: #6fa8ff; --cv2: #b98cff; --cv3: #ffa65c; --cv4: #ffd84d; --cv5: #5ef0f0; }
+.pp-cv { display: inline-flex; align-items: baseline; gap: 4px; padding: 2px 9px; border-radius: 999px; color: #0d0712; font-size: 13px; font-weight: 800; }
+.pp-cv small { font-size: 11px; font-weight: 700; opacity: .75; }
+.pp-cv.t0 { background: var(--cv0); } .pp-cv.t1 { background: var(--cv1); } .pp-cv.t2 { background: var(--cv2); } .pp-cv.t3 { background: var(--cv3); }
+.pp-cv.t4 { background: var(--cv4); } .pp-cv.t5 { background: var(--cv5); }
+.pp-cv.t6 { background: linear-gradient(90deg, #ff7a7a, #ffd84d, #7cf29a, #6fa8ff, #d08cff); }

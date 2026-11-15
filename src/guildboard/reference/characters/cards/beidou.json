@@ -1,7 +1,7 @@
 {
   "key": "beidou", "name": "Beidou", "element": "Electro", "weapon_type": "Claymore", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false, "scaling": "atk",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["damage"], "keeps_alive": false,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"er": 140, "dmg": 46.6},
   "mains": {"sands": ["atk_pct", "er"], "goblet": ["dmg"], "circlet": ["cr", "cd"]},
   "weights": {"er": "wants", "cr": "wants", "cd": "wants", "atk_pct": "wants", "atk": "some", "em": "some", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "cinnabar-spindle:SpotlessHeart": {"on": true, "state": "on", "label": "Spotless Heart", "covers": ["skill"], "reason": "It is ready again 1.5 seconds after each Elemental Skill hit it raises, so Skill hits that come further apart than that, such as Albedo's blossoms, each get it."}
+  }
+}

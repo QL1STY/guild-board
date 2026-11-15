@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "thundering-pulse:RuleByThunder": {"on": true, "state": "3", "label": "3 Thunder Emblem stacks", "covers": ["normal"], "reason": "Her Normal Attack hits, her Skill cast and Energy below full each give a stack, so a Normal Attacker who opens with her Skill has all three while her Normal Attacks hit."}
+  }
+}

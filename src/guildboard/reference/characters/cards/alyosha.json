@@ -1,7 +1,7 @@
 {
   "key": "alyosha", "name": "Alyosha", "element": "Electro", "weapon_type": "Polearm", "rarity": 4,
-  "pronouns": ["he", "him", "his"], "roles": ["support", "healer"], "keeps_alive": true, "scaling": "atk",
-  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"], "talent_table": "elemental",
+  "pronouns": ["he", "him", "his"], "roles": ["support", "healer"], "keeps_alive": true,
+  "damage_talent": "burst", "talent_priority": ["burst", "skill", "normal"],
   "goals": {"er": 180, "atk": 3000, "cr": 60},
   "mains": {"sands": ["er", "atk_pct"], "goblet": ["atk_pct"], "circlet": ["atk_pct", "heal", "cr"]},
   "weights": {"er": "wants", "atk_pct": "wants", "atk": "some", "cr": "some", "cd": "some", "em": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "iron-sting:InfusionStinger": {"on": true, "state": "2", "label": "2 stacks from Elemental DMG", "covers": [], "reason": "Any Elemental DMG she deals fills its two stacks within a second and keeps them while she keeps dealing it."}
+  }
+}

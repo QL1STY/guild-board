@@ -1,0 +1,19 @@
+{
+  "main": null,
+  "toggles": {
+    "a1Moonfall": {"on": false, "state": "on", "label": "Selenic Descent", "covers": [], "reason": "The bonus to her Spirit Steed's Stride lasts 4 seconds after her Skill or a party member's Moondrift Harmony, and her Stride usually comes later than that."},
+    "c1FirstStride": {"on": false, "state": "on", "label": "Constellation 1 first Stride", "covers": [], "reason": "A Constellation 1 bonus for only the first Spirit Steed's Stride of each Lunar Phase Shift."},
+    "c2ShiftMode": {"on": true, "state": "on", "label": "Constellation 2 Lunar Phase Shift", "covers": ["skill", "burst"], "reason": "With Constellation 2 her Lunar-Crystallize damage is higher while she is in Lunar Phase Shift, the mode of her Skill in which she deals those hits."},
+    "c4Splendor": {"on": false, "state": "on", "label": "Constellation 4 Scattermoon Splendor", "covers": [], "reason": "A Constellation 4 bonus for one Normal Attack after each Stride hits."},
+    "c6Point": {"on": false, "state": "30", "label": "Constellation 6 Phase Shift Radiance spent", "covers": [], "reason": "A Constellation 6 bonus that depends on how much Phase Shift Radiance she has when her Stride hits."}
+  },
+  "party": {
+    "default": "moonsign",
+    "reason": "She is built for Lunar-Crystallize teams, which have a second Moonsign character; only there is her Lunar Phase Shift 4-Hit Additional hit dealt.",
+    "options": [
+      {"id": "moonsign", "label": "With another Moonsign character", "team": ["hydro", "dendro", "electro"], "moonsign": 1},
+      {"id": "none", "label": "No other Moonsign character", "team": ["hydro", "dendro", "electro"]}
+    ],
+    "only_rows": {"skill": {"Lunar Phase Shift 4-Hit Additional DMG": ["moonsign"]}}
+  }
+}

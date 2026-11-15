@@ -1023,8 +1023,7 @@ async def test_stopping_the_loop_stops_the_sync_loop_too(tmp_path, clock):
 # ------------------------------------------------------------------------------------------------------------ the settings
 def test_what_syncs_of_the_settings_is_what_is_not_about_this_pc():
     assert SYNCED_SETTINGS == (
-        "commission_region", "fishing_rule", "notifications", "characters_notice_weekly", "characters_notice_domain",
-        "characters_notice_ready", "spending_currency", "spending_prices",
+        "commission_region", "fishing_rule", "notifications", "spending_currency", "spending_prices",
     )
 
 

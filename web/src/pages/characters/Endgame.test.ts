@@ -92,7 +92,7 @@ test('each action to clear everything has its number, its words and one button o
   const markup = draw()
   expect(markup).toContain('Finish Sandrone&#x27;s plan')
   expect(markup).toContain('href="#/characters/sandrone/plan"')
-  expect(markup).toMatch(/<button type="button" class="eg-go">Add to your focus<\/button>/)
+  expect(markup).toMatch(/<button type="button" class="eg-go">Add to the plan<\/button>/)
   expect(markup.match(/class="eg-act"/g)).toHaveLength(3)
   expect(ruleOf('.eg-go')).toMatch(/min-width:\s*170px/)
   expect(ruleOf('.eg-go')).toMatch(/height:\s*38px/)
@@ -101,8 +101,8 @@ test('each action to clear everything has its number, its words and one button o
   expect(empty).not.toContain('class="eg-act"')
 })
 
-test('a refusal, such as a fifth character for the focus, is said under the heading of the actions', () => {
-  expect(draw(endgame, endgame.theater.elements, 'Four at most: take one out first.')).toContain('Four at most: take one out first.')
+test('a refusal, such as a plan that is full, is said under the heading of the actions', () => {
+  expect(draw(endgame, endgame.theater.elements, 'The plan holds 128 characters at most: take one out first.')).toContain('The plan holds 128 characters at most: take one out first.')
 })
 
 test('the columns end level: the left one shares its height between its sheets, and the Theater spreads its sections', () => {

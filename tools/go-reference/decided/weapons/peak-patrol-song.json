@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "peak-patrol-song:odeStacks": {"on": true, "state": "2", "label": "2 stacks from her attacks", "covers": [], "reason": "Her Normal or Plunging Attack hits fill its two stacks at once and keep them while she attacks."}
+  }
+}

@@ -16,8 +16,7 @@ function ruleOf(selector: string): string {
   return new RegExp(`(?:^|\\})\\s*${escaped}\\s*\\{([^}]*)\\}`).exec(plain)?.[1] ?? ''
 }
 
-const draw = (model: Profile, focus: string[] | null = ['sandrone'], onCard?: () => void) =>
-  renderToStaticMarkup(createElement(ProfileView, { profile: model, focus, onFocus: () => undefined, refusal: null, onCard }))
+const draw = (model: Profile, onCard?: () => void) => renderToStaticMarkup(createElement(ProfileView, { profile: model, onCard }))
 
 test('the card has six pages in its sidebar, the first of them shown, each a button with its name', () => {
   const markup = draw(profile)
@@ -111,7 +110,7 @@ test('the readiness sheet sits below the card with her parts and the three steps
   expect(markup.indexOf('pf-sheet')).toBeGreaterThan(markup.indexOf('pf-card'))
 })
 
-test('a character not owned shows her art and kit, marked "Not yours yet", with Pre-farm in place of Add to focus', () => {
+test('a character not owned shows her art and kit, marked "Not yours yet"', () => {
   const unowned: Profile = {
     ...profile,
     owned: false,
@@ -126,7 +125,7 @@ test('a character not owned shows her art and kit, marked "Not yours yet", with 
   }
   const markup = draw(unowned)
   expect(markup).toContain('Not yours yet')
-  expect(markup).toContain('Pre-farm')
+  expect(markup).not.toContain('Pre-farm')
   expect(markup).not.toContain('Add to focus')
   expect(markup).not.toContain('class="pf-strip"') // no build to show
   expect(markup).not.toContain('class="pf-ready"')
@@ -152,16 +151,12 @@ test('a pane keeps room for its scrollbar away from the text, and shows none whi
   expect(ruleOf('.pf-pane.settling')).toContain('overflow-y: hidden')
 })
 
-test('without the focus the card has no focus button', () => {
-  const markup = renderToStaticMarkup(createElement(ProfileView, { profile, focus: [], onFocus: () => undefined, refusal: null, focusShown: false }))
+test('the card has no focus button: the planned list is managed on the Plan page alone', () => {
+  const markup = draw(profile)
   expect(markup).not.toContain('Add to focus')
+  expect(markup).not.toContain('In focus')
   expect(markup).not.toContain('aria-pressed')
-})
-
-test('the focus button shows whether she is in it, and waits for the focus to be read', () => {
-  expect(draw(profile, ['sandrone'])).toMatch(/aria-pressed="true"[^>]*>In focus</)
-  expect(draw(profile, [])).toMatch(/aria-pressed="false"[^>]*>Add to focus</)
-  expect(draw(profile, null)).toMatch(/aria-pressed="false" disabled=""/)
+  expect(markup).not.toContain('pf-actions')
 })
 
 test("the Weapon page's verdict is green only when the card says to keep it", () => {
@@ -198,10 +193,8 @@ test('a character the card calls he or they is told so on every page of the card
   expect(they).toContain('How ready they are')
 })
 
-test('the planner is not a link of the card: the switch in the title holds it, and the focus button keeps its size', () => {
-  const markup = draw(profile)
-  expect(markup).not.toContain('href="#/characters/sandrone/plan"')
-  expect(ruleOf('.pf-btn')).toMatch(/width:\s*150px/)
+test('the planner is not a link of the card: the switch in the title holds it', () => {
+  expect(draw(profile)).not.toContain('href="#/characters/sandrone/plan"')
 })
 
 test('a constellation text longer than its row takes two lines, so that the six fit the panel, and shows whole when it is pointed at', () => {
@@ -216,8 +209,8 @@ test('a constellation text longer than its row takes two lines, so that the six 
 
 test('the readiness sheet has her card button beside what to do next, with the pronoun of her card, once a page can open the panel', () => {
   expect(draw(profile)).not.toContain('card</button>')
-  const markup = draw(profile, ['sandrone'], () => undefined)
+  const markup = draw(profile, () => undefined)
   expect(markup).toMatch(/<h3>What to do next<\/h3><button[^>]*>Her card<\/button>/)
   const they = { ...profile, pronouns: { she: 'they', her: 'them', hers: 'their' } }
-  expect(draw(they, ['sandrone'], () => undefined)).toContain('Their card</button>')
+  expect(draw(they, () => undefined)).toContain('Their card</button>')
 })

@@ -8,7 +8,7 @@ characters' art at 2048 x 2048 with a see-through border; `bigchartNN`, their co
 (web/screens/memory.spec.ts). The sizes are what the player described (2048-pixel art) and a guess for the rest. It prints the
 launch link as `guildboard --no-shell` does.
 
-    uv run python tools/memory_core.py --data-dir DIR --demo-now 2026-10-25T08:00:00+00:00 [--week-and-endgame]
+    uv run python tools/memory_core.py --data-dir DIR --demo-now 2026-10-25T08:00:00+00:00 [--endgame] [--verdict]
 """
 from __future__ import annotations
 
@@ -50,12 +50,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--demo-now", required=True)
-    parser.add_argument("--week-and-endgame", action="store_true")
+    parser.add_argument("--endgame", action="store_true")
+    parser.add_argument("--verdict", action="store_true")
     args = parser.parse_args()
     if args.data_dir.exists() and any(args.data_dir.iterdir()):  # never the player's folder, nor anything else that holds files
         parser.error("--data-dir must be a new, empty folder.")
-    if args.week_and_endgame:
-        characters.WEEK_AND_ENDGAME = True
+    if args.endgame:
+        characters.ENDGAME = True
+    if args.verdict:
+        characters.VERDICT = True
     paths = AppPaths(args.data_dir)
     paths.ensure()
     core = Core(paths, demo=True, demo_now=datetime.fromisoformat(args.demo_now))

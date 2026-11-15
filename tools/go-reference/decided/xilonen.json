@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "c4Blooming": {"on": false, "state": "on", "label": "Constellation 4 Blooming Blessing", "covers": [], "reason": "A Constellation 4 party buff after her Skill, limited to a number of hits."},
+    "c6Imperishable": {"on": false, "state": "on", "label": "Constellation 6 Imperishable Night", "covers": [], "reason": "A Constellation 6 window of a few seconds that does not last through her rotation."},
+    "nsBurst": {"on": false, "state": "on", "label": "After a party Nightsoul Burst", "covers": [], "reason": "Her DEF bonus needs a Nightsoul Burst from another party member or her Nightsoul points filled first."}
+  }
+}

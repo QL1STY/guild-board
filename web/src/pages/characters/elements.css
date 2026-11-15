@@ -2,7 +2,7 @@
  * The seven element palettes of the profile mockup,
  * as classes: a card, a ring or a chip that carries `el-cryo` draws in her colours. The dark card of a character's own pages
  * (the profile and the planner) uses --card-bg, --card-glow, --el, --el2, --el-glow, --el-soft and --giant; the parchment
- * pages (the roster, Your week, Endgame) use --el-ink, her colour deepened to reach 3:1 on a card (contrast.test.ts).
+ * pages (the roster, Endgame) use --el-ink, her colour deepened to reach 3:1 on a card (contrast.test.ts).
  * Colour is never the only thing that tells two characters apart: a face and a name always come with it.
  */
 :root {

@@ -278,7 +278,7 @@ def test_a_detail_answer_becomes_builds_with_rolls_and_base_and_added_values():
     )
     assert flower.subs[0].prop == 22 and flower.subs[0].value == "21.8%" and flower.subs[0].times == 2
     assert record.prop_names[22] == "CRIT DMG"  # the no-break space in HoYoLAB's name is a plain space
-    assert [skill.level for skill in sandrone.skills] == [9, 10, 10]
+    assert [skill.level for skill in sandrone.skills] == [9, 10, 10, 1]  # the three talents, then a passive
     by_prop = {prop.prop: prop for prop in sandrone.props}
     assert (by_prop[2001].base, by_prop[2001].add, by_prop[2001].final) == ("1016", "1948.1", "2964.1")
     assert 46 in by_prop  # the element's bonus comes with the rest
@@ -458,6 +458,8 @@ def test_the_theater_keeps_the_seasons_start_its_medal_count_and_each_face():
     detail = _real_detail()
     assert (detail.theater_starts, detail.theater_ends) == (_stamp(1793502000), _stamp(1796093999))
     assert len(detail.theater_medals) == 12 and detail.theater_medal_count == 6  # the Arcana acts' medals are not counted
+    assert detail.theater_arcana == 2  # both Arcana fights cleared: the list's last two, after the ten acts
+    assert detail.theater_heraldry == 5  # the season's heraldry, as HoYoLAB numbers it
     damage, defeats, taken = detail.theater_ranks
     assert (damage.kind, damage.value, damage.avatar_id) == ("damage", 943229, 10000120)  # HoYoLAB sends these as text
     assert (defeats.value, taken.value) == (11, 68942)
@@ -512,3 +514,42 @@ def test_an_endgame_without_data_gives_the_new_fields_their_defaults():
     abyss["floors"][0]["levels"][0]["top_half_floor_monster"] = [{"name": "Thunder Manifestation"}]
     foe = norm.normalize_endgame_detail(abyss, {}, []).abyss_halves[0].foes[0]
     assert (foe.name, foe.level, foe.icon) == ("Thunder Manifestation", 0, "")
+
+
+def test_the_rows_of_each_talent_and_the_recommended_stats_are_kept():
+    record = norm.normalize_builds(samples.CHARACTER_DETAIL)
+    sandrone = next(build for build in record.builds if build.id == samples.SANDRONE_ID)
+    actives = [skill for skill in sandrone.skills if skill.skill_type == 1]
+    assert [skill.level for skill in actives] == [9, 10, 10]
+    assert actives[0].affixes == (("1-Hit DMG", "140.2%"), ("2-Hit DMG", "123.5%"), ("3-Hit DMG", "188.9%"))   # in its order
+    assert actives[1].affixes[0] == ("Prism Shot DMG", "58.3%") and actives[1].affixes[-1] == ("CD", "4.0s")
+    assert actives[2].affixes[0] == ("Bombardment DMG", "158.8% ×3") and ("Energy Cost", "60") in actives[2].affixes
+    assert all(skill.affixes == () for skill in sandrone.skills if skill.skill_type == 2)   # a passive has no rows
+    assert sandrone.recommended == {
+        "sands": (6,), "goblet": (40,), "circlet": (20,), "subs": (20, 22, 6),
+    }
+    ayaka = next(build for build in record.builds if build.id == samples.AYAKA_ID)
+    assert ayaka.recommended == {} and all(skill.affixes == () for skill in ayaka.skills)  # none in the answer: none kept
+
+
+def test_rows_and_recommendations_the_answer_words_oddly_are_left_out_not_guessed():
+    answer = copy.deepcopy(samples.CHARACTER_DETAIL)
+    detail = answer["list"][0]
+    detail["skills"][0]["skill_affix_list"] = [{"name": "1-Hit DMG", "value": "140.2%"}, {"name": "x"}, "y", {"value": "1%"}]
+    detail["recommend_relic_property"] = {
+        "recommend_properties": {"sand_main_property_list": [6, "x", None], "goblet_main_property_list": "40"},
+        "custom_properties": None, "has_set_recommend_prop": False,
+    }
+    sandrone = norm.normalize_builds(answer).builds[0]
+    assert sandrone.skills[0].affixes == (("1-Hit DMG", "140.2%"),)
+    assert sandrone.recommended == {"sands": (6,)}
+
+
+def test_a_rows_layout_tokens_take_the_pc_wording_here_too():
+    # A parser input (the wiki's own token form, which a row of HoYoLAB's answer may carry too), not an answer of either.
+    answer = copy.deepcopy(samples.CHARACTER_DETAIL)
+    answer["list"][0]["skills"][0]["skill_affix_list"] = [
+        {"name": "#{LAYOUT_MOBILE#Tap}{LAYOUT_PC#Press} DMG", "value": "140.2%"}, {"name": "2-Hit DMG", "value": "123.5%"},
+    ]
+    sandrone = norm.normalize_builds(answer).builds[0]
+    assert sandrone.skills[0].affixes == (("Press DMG", "140.2%"), ("2-Hit DMG", "123.5%"))

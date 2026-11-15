@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "heart-of-depth:skill": {"on": true, "state": "cast", "label": "After her Skill", "covers": ["normal", "charged"], "reason": "Its bonus lasts 15 seconds after her Elemental Skill, so the Normal and Charged Attacks she makes after a Skill are inside it."}
+  }
+}

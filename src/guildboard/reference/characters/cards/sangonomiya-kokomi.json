@@ -1,7 +1,7 @@
 {
   "key": "sangonomiya-kokomi", "name": "Sangonomiya Kokomi", "element": "Hydro", "weapon_type": "Catalyst", "rarity": 5,
-  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true, "scaling": "hp",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["healer", "support"], "keeps_alive": true,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"er": 260},
   "mains": {"sands": ["hp_pct", "er"], "goblet": ["hp_pct", "dmg"], "circlet": ["heal", "hp_pct"]},
   "weights": {"hp_pct": "wants", "er": "wants", "hp": "some", "em": "some", "cr": "none", "cd": "none", "atk_pct": "none", "atk": "none", "def_pct": "none", "def": "none"},

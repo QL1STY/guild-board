@@ -1,0 +1,11 @@
+{
+  "main": null,
+  "toggles": {
+    "a1Judication": {"on": true, "state": "on", "label": "Judication", "covers": ["skill"], "reason": "In his Burst he casts his Skill when the Endseer stance is up, which is how it is played, so its damage bonus is on for those casts."},
+    "afterBurst": {"on": true, "state": "on", "label": "Pactsworn Pathclearer Elemental Mastery", "covers": ["burst"], "reason": "His Burst raises his Elemental Mastery for as long as it lasts, which is when its attacks hit."},
+    "c2NormHitStacks": {"on": false, "state": "5", "label": "Constellation 2 stacks", "covers": [], "reason": "Stacks that build up as his Normal Attacks hit."},
+    "lockRevelation": {"on": false, "state": "on", "label": "Stellar Revelation", "covers": [], "reason": "A mode of the party that unlocks Stellar bonuses; the planner cannot tell whether it is on, so it is left for the player to switch on. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "lockStellarRadianceSc": {"on": false, "state": "on", "label": "Stellar Radiance, Stellar-Conduct", "covers": [], "reason": "The kind of Stellar hits the party's mode makes; the planner cannot tell it, so it is left for the player to switch on. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it."},
+    "c1Together": {"on": false, "state": "on", "label": "Constellation 1 with the party", "covers": [], "reason": "Part of a Constellation 1 Elemental Mastery bonus of the Stellar Revelation mode. It needs the two switches above as well. It was checked once with it and its other switches on against Genshin Optimizer and agreed; no case commits it. It adds Elemental Mastery, which moves damage only through a reaction, and no case of hers has one."}
+  }
+}

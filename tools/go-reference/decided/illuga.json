@@ -1,0 +1,7 @@
+{
+  "main": null,
+  "toggles": {
+    "burstSong": {"on": false, "state": "on", "label": "Nightingale's Song", "covers": [], "reason": "His Burst's song raises the Geo damage the party deals while it lasts, a buff meant for the team whose size also depends on the party's elements."},
+    "c4BurstActive": {"on": false, "state": "on", "label": "Constellation 4 DEF during the Burst", "covers": [], "reason": "A Constellation 4 DEF bonus for the active party member while his Burst lasts, which reaches him only when he is on the field then."}
+  }
+}

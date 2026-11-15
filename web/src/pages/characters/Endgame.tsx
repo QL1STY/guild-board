@@ -5,7 +5,7 @@ import './endgame.css'
 import { api, messageOf } from '../../api.ts'
 import { Frame } from '../../frame/Frame.tsx'
 import { type Live, useModel } from '../../live.ts'
-import type { Element, Endgame as EndgameModel, Roster, TeamView, Week } from '../../types.ts'
+import type { Element, Endgame as EndgameModel, PlanModel, Roster, TeamView } from '../../types.ts'
 import { rise } from '../../ui/motion.tsx'
 import { Picture } from '../../ui/Picture.tsx'
 import { Segmented } from '../../ui/Segmented.tsx'
@@ -15,7 +15,6 @@ import { ReadinessRing } from './ReadinessRing.tsx'
 import {
   BUILT, backLabel, clearAction, closeLine, closeShown, endgamePath, faceOf, modeCards, pickKept, theaterBody, theaterNote, theaterPick, weakestLine,
 } from './endgameview.ts'
-import { toggleFocus } from './rosterview.ts'
 import { SyncLine } from './SyncLine.tsx'
 import { Trail } from './Trail.tsx'
 import { CharactersTabs } from './Tabs.tsx'
@@ -322,16 +321,11 @@ export function Endgame({ live }: { live: Live }) {
       setRefusal(messageOf(failure))
     }
   }
-  // An action that adds a character to the focus: the focus is read first, since this page does not hold it.
+  // An action that adds a character to the plan: the planned list is read first, since this page does not hold it.
   const addToFocus = async (key: string) => {
     try {
       const roster = await api.get<Roster>('/api/characters')
-      const next = toggleFocus(roster.focus.filter((one) => one !== key), key)
-      if ('refused' in next) {
-        setRefusal(next.refused)
-        return
-      }
-      await api.put<Week>('/api/focus', { characters: next.focus })
+      await api.put<PlanModel>('/api/plan/characters', { characters: [...roster.focus.filter((one) => one !== key), key] })
       setRefusal(null)
       setBump((count) => count + 1)
     } catch (failure) {
@@ -368,7 +362,7 @@ export function Endgame({ live }: { live: Live }) {
             </div>
             <p className="eg-note">
               Guild Board builds your teams by itself from your characters, their readiness, their roles and the partners their cards ask for, and checks them
-              against this month&apos;s Imaginarium Theater elements, the Spiral Abyss and the Stygian Onslaught bosses. Switch to &quot;After your plans&quot; to see what your focus
+              against this month&apos;s Imaginarium Theater elements, the Spiral Abyss and the Stygian Onslaught bosses. Switch to &quot;After your plans&quot; to see what your plan
               plans will change.
             </p>
           </section>

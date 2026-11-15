@@ -38,6 +38,7 @@ const SAME_EVERYWHERE: Record<string, string> = {
   '--medal-light': 'the gold of a medal and the dark ink on it are a pair of their own, a mark and not a surface',
   '--medal': 'the gold of a medal and the dark ink on it are a pair of their own, a mark and not a surface',
   '--medal-ink': 'the gold of a medal and the dark ink on it are a pair of their own, a mark and not a surface',
+  '--theater-cleared': "the lilac under HoYoLAB's own white outline of a medal, a mark of the Theater's and not a surface",
   '--brand': "the signs' gold, on the rail's title and the first run's name, reads on a dark ground and is the brand",
   '--emblem-ink': "the cream knocked out of a nation's disc, whose colour is fixed on every theme (ui/emblem.ts)",
   '--w-emblem-ink': "the same cream on the widgets' roles on every page theme (the overlay's panel sets its own dark, as it always had)",

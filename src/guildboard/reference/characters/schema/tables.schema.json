@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "tables.json: yields per run, main stat values and odds, substat weights and average rolls, talent scaling, reactions and EXP",
+  "title": "tables.json: yields per run, main stat values and odds, substat weights and average rolls, reactions and EXP",
   "type": "object",
   "required": [
-    "yields", "mains_20", "main_odds", "sub_weights", "roll_avg", "scaling", "reactions", "exp", "weapon_exp", "checked",
-    "sources"
+    "yields", "mains_20", "main_odds", "sub_weights", "roll_avg", "reactions", "exp", "weapon_exp", "checked",
+    "sources", "level_mult", "amplifying", "additive", "lunar", "stellar_conduct", "enemy", "polestar_dmg"
   ],
   "additionalProperties": false,
   "properties": {
@@ -19,15 +19,39 @@
     },
     "sub_weights": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
     "roll_avg": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}},
-    "scaling": {
+    "rolls_5": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "number", "minimum": 0}, "minItems": 4, "maxItems": 4}},
+    "rolls_4": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "number", "minimum": 0}, "minItems": 4, "maxItems": 4}},
+    "mains_by_level_5": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "number", "minimum": 0}, "minItems": 21, "maxItems": 21}},
+    "mains_by_level_4": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "number", "minimum": 0}, "minItems": 17, "maxItems": 17}},
+    "start4_odds": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}},
+    "reactions": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}},
+    "level_mult": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}, "minItems": 100, "maxItems": 100},
+    "amplifying": {
       "type": "object",
       "additionalProperties": false,
-      "properties": {
-        "elemental": {"type": "array", "items": {"type": "number"}, "minItems": 15, "maxItems": 15},
-        "physical": {"type": "array", "items": {"type": "number"}, "minItems": 15, "maxItems": 15}
-      }
+      "required": ["vaporize-hydro", "vaporize-pyro", "melt-pyro", "melt-cryo"],
+      "properties": {"vaporize-hydro": {"type": "number", "exclusiveMinimum": 0}, "vaporize-pyro": {"type": "number", "exclusiveMinimum": 0}, "melt-pyro": {"type": "number", "exclusiveMinimum": 0}, "melt-cryo": {"type": "number", "exclusiveMinimum": 0}}
     },
-    "reactions": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}},
+    "additive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["aggravate", "spread"],
+      "properties": {"aggravate": {"type": "number", "exclusiveMinimum": 0}, "spread": {"type": "number", "exclusiveMinimum": 0}}
+    },
+    "lunar": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lunar-bloom", "lunar-charged", "lunar-crystallize", "stellar-swirl"],
+      "properties": {"lunar-bloom": {"type": "number", "exclusiveMinimum": 0}, "lunar-charged": {"type": "number", "exclusiveMinimum": 0}, "lunar-crystallize": {"type": "number", "exclusiveMinimum": 0}, "stellar-swirl": {"type": "number", "exclusiveMinimum": 0}}
+    },
+    "stellar_conduct": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}, "minItems": 13, "maxItems": 13},
+    "polestar_dmg": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}, "minItems": 13, "maxItems": 13},
+    "enemy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "res"],
+      "properties": {"level": {"type": "integer", "minimum": 1}, "res": {"type": "number", "minimum": 0, "maximum": 1}}
+    },
     "exp": {"type": "array", "items": {"type": "integer", "minimum": 0}},
     "weapon_exp": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "integer", "minimum": 0}}},
     "checked": {"type": ["string", "null"]},

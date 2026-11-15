@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "afterBurst": {"on": false, "state": "afterBurst", "label": "After her Burst", "covers": [], "reason": "The crit bonus lasts 8 seconds after her Burst, which covers the Burst but only part of her Normal Attacks and Skill."},
+    "afterReact": {"on": false, "state": "afterReact", "label": "Constellation 4 after a reaction", "covers": [], "reason": "A Constellation 4 ATK bonus after an Electro reaction, which depends on the team's elements."},
+    "c6Stack": {"on": true, "state": "3", "label": "Constellation 6, three stacks", "covers": ["normal", "skill", "burst"], "reason": "With Constellation 6 her own Normal Attacks, Charged Attacks, Skill and Burst each start an 8-second Electro bonus, so three stacks are up through her usual string."},
+    "afterRecast": {"on": true, "state": "afterRecast", "label": "Electro infusion after her Skill", "covers": ["normal", "charged", "plunging"], "reason": "Recasting Stellar Restoration gives her weapon an Electro infusion for 5 seconds, which she renews with her Skill and throws her Normal and Charged Attacks inside; charging into the stiletto instead of recasting gives no infusion."}
+  }
+}

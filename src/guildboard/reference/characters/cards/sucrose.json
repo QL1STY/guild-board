@@ -1,7 +1,7 @@
 {
   "key": "sucrose", "name": "Sucrose", "element": "Anemo", "weapon_type": "Catalyst", "rarity": 4,
-  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false, "scaling": "em",
-  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"], "talent_table": "elemental",
+  "pronouns": ["she", "her", "her"], "roles": ["support"], "keeps_alive": false,
+  "damage_talent": "skill", "talent_priority": ["skill", "burst", "normal"],
   "goals": {"em": 800, "er": 160},
   "mains": {"sands": ["em"], "goblet": ["em"], "circlet": ["em"]},
   "weights": {"em": "wants", "er": "wants", "cr": "none", "cd": "none", "atk_pct": "none", "atk": "none", "hp_pct": "none", "hp": "none", "def_pct": "none", "def": "none"},

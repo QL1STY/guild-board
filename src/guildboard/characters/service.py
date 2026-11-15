@@ -1,5 +1,5 @@
 """The Characters service (the Characters plan, Part V): the page models, the changes the player makes, the reads the pages
-wait for and the loop of notices.
+wait for and the loop that keeps the wiki's entries.
 
 The service gathers what the pages need, and the builders in `views/` make the models of the plan's TypeScript contract:
 - from HoYoLAB, the group "characters"'s latest document (every build and what the calculator said), the notes and the
@@ -15,21 +15,19 @@ has consented."""
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import math
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from typing import Any, Awaitable, Callable, Iterator, Mapping, Sequence
+from typing import Any, Awaitable, Callable, Iterable, Iterator, Mapping, Sequence
 
 from guildboard import characters
-from guildboard.characters import ELEMENTS, FOCUS_MAX, HORIZON_DAYS, RESIN_PER_DAY, bridge, notices, readiness
+from guildboard.characters import ELEMENTS, PLANNED_MAX, bridge, readiness
 from guildboard.characters import needs as needs_engine
 from guildboard.characters import reference, stats
-from guildboard.characters import week as week_engine
 from guildboard.characters.art import ArtCache
-from guildboard.characters.models import Build, Card, Costs, FocusInput, Need, Plan, Refs, Source, WeekPlan
+from guildboard.characters.models import Build, Card, Costs, Need, Plan, Refs, Source
 from guildboard.characters.wiki import CharacterPage, CharacterWiki, SetPage, WeaponPage, materials_of
 from guildboard.clock import Clock
 from guildboard.events import EventBus
@@ -49,13 +47,12 @@ SYNC_OFF = (
     "Progression Calculator, or type what you hold here."
 )
 LOGIN_FIRST = "Log in to HoYoLAB to see your builds."
-FOUR_AT_MOST = "Four at most: take one out first."
+PLAN_FULL = "The plan holds 128 characters at most: take one out first."
 NO_SUCH_CHARACTER = "There is no such character."
 CHOOSE_THREE = "Choose three different elements."
 BAD_AMOUNTS = "Give amounts as whole numbers from 0 to 9,999,999."
 NOT_A_FIELD = "That is not a field of a card."
 NOT_A_VALUE = "That is not a value the card can hold."
-NOT_TODAYS_TASK = "Only today's tasks can be ticked."
 BAD_SHAPE = "This request does not have the expected shape."
 MAX_AMOUNT = 9_999_999
 
@@ -71,8 +68,8 @@ EXP_BOOKS = {
     needs_engine.CHARACTER_EXP: {"hero-s-wit": 20000, "adventurer-s-experience": 5000, "wanderer-s-advice": 1000},
     needs_engine.WEAPON_EXP: {"mystic-enhancement-ore": 10000, "fine-enhancement-ore": 2000, "enhancement-ore": 400},
 }
-LONGEST_WAIT = 900.0  # the notices loop looks again at least this often, in seconds
-NOTICE_KIND = "characters"  # the kind the shell is given with a notification
+ENTRY_RETRY = timedelta(minutes=15)  # a picker's entry that was asked for waits this long before it is asked for again
+LONGEST_WAIT = 900.0  # the loop looks again at least this often, in seconds
 
 
 class CharactersRefused(ValueError):
@@ -108,13 +105,6 @@ class Char:
         return self.build is not None
 
 
-@dataclass(frozen=True)
-class Resin:
-    now: int
-    top: int
-    discounts: int
-
-
 class Characters:
     # Whether the wiki is read by itself once the player has consented: when a page asks for a character, and after a sync.
     # This is the Characters design's H6, which the hands-off change (Task V5) approved, and which `tests/test_handsoff.py`
@@ -138,8 +128,6 @@ class Characters:
         meta: Callable[[str], tuple[tuple[str, ...], str | None]] | None = None,
         ready: Callable[[], bool] = lambda: False,
         sync: Callable[[], Mapping[str, Any]] | None = None,
-        notify: Callable[[str, str], bool] | None = None,
-        switches: Callable[[], Mapping[str, bool]] = lambda: {},
         sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
         day_resin: Callable[[], tuple[int, int, int] | None] | None = None,
         game_running: Callable[[], bool] = lambda: False,
@@ -158,10 +146,8 @@ class Characters:
         self._meta = meta or reference.load_card_meta   # a card's sources and the day it was checked
         self._ready = ready                # whether the wiki may be asked: the player has given the first run's consent
         self._sync = sync or (lambda: {})   # the sync's state, which only the core knows
-        self._notify = notify               # shows a notification: (kind, text) -> shown
-        self._switches = switches           # the notices' switches: weekly, domain, ready
         self._sleep = sleep
-        self._day_resin = day_resin         # the demo's own start of a game day, in place of the first Notes read
+        self._day_resin = day_resin         # the demo's own start of a game day, in place of the Notes read
         self._game_running = game_running   # whether the game runs, from the Windows process list: the warm-up waits for it
         self._pages: dict[str, tuple[str, str, CharacterPage]] = {}
         self._weapon_pages: dict[str, tuple[str, str, WeaponPage]] = {}
@@ -170,9 +156,11 @@ class Characters:
         self._memo: dict[str, Any] | None = None
         self._woken = asyncio.Event()
         self._wanted: set[str] = set()
+        self._wanted_entries: set[tuple[str, str]] = set()   # (kind, entry id) the pickers' lists are missing
+        self._entries_tried: dict[tuple[str, str], datetime] = {}   # when each was last asked for, so a failing one waits
+        self._none_outdated_at: int | None = None   # `_wiki.stored` when the store was last found to hold no entry of an old format
         self._filler: asyncio.Task[None] | None = None
         self._warmer: asyncio.Task[None] | None = None   # the art cache's warm-up after a sync, while it runs
-        self._announced: set[str] = set()   # goals already told as ready, until they are not ready any more
 
     # ------------------------------------------------------------------------------------------ one look at the store
     @contextmanager
@@ -309,7 +297,10 @@ class Characters:
         return page
 
     def weapon_page(self, key: str | None) -> WeaponPage | None:
-        entry = self._weapon_entry(key) if key else None
+        return self.weapon_page_at(self._weapon_entry(key) if key else None)
+
+    def weapon_page_at(self, entry: str | None) -> WeaponPage | None:
+        """The wiki's page of a weapon from its entry's id, once the entry is read; None until then."""
         found = self._store.wiki_entry_stamp(entry) if entry else None
         if found is None or found[0] != "weapon":
             return None
@@ -330,7 +321,9 @@ class Characters:
 
     def set_page(self, key: str | None) -> SetPage | None:
         """The wiki's page of an artifact set, once its entry has been read; None until then."""
-        entry = self._set_entry(key) if key else None
+        return self.set_page_at(self._set_entry(key) if key else None)
+
+    def set_page_at(self, entry: str | None) -> SetPage | None:
         found = self._store.wiki_entry_stamp(entry) if entry else None
         if found is None or found[0] != "set":
             return None
@@ -564,47 +557,21 @@ class Characters:
         """The materials whose held amount is what the player typed: the calculator does not say."""
         return set(self.typed()) - set(self._held())
 
-    # ------------------------------------------------------------------------------------------ resin
-    def resin(self) -> Resin:
-        """The resin today's plan starts from: the game day's first Notes read, so that a tick and the next sync never count
-        the same resin twice. Without a read, a day's worth."""
+    # ------------------------------------------------------------------------------------------ boss discounts
+    def boss_discounts(self) -> int | None:
+        """The weekly bosses' discounted runs left. The demo's hook is asked first; else the latest Notes read gives its count, and a read of an
+        earlier game week says 3, the discounts being back since the weekly reset on Monday at 04:00. None without a read."""
         if self._day_resin is not None:
             given = self._day_resin()
             if given is not None:
-                return Resin(*given)
-        today = self.today()
-        kept = self._store.meta("characters_day_resin")
-        if kept is not None:
-            try:
-                base = json.loads(kept)
-                if base.get("day") == today.isoformat():
-                    return Resin(int(base["resin"]), int(base["max"]), int(base["discounts"]))
-            except (ValueError, KeyError, TypeError):
-                pass
+                return int(given[2])
         doc = self._store.latest_doc("notes")
         if doc is None:
-            return Resin(200, 200, 3)
+            return None
         read_at, notes = doc
-        found = Resin(
-            self._resin_at(notes, read_at, self._clock.now()), int(notes["resin_max"]), int(notes["boss_discounts_left"])
-        )
-        if game_day(read_at, self._server()) == today:
-            self._store.set_meta("characters_day_resin", json.dumps({
-                "day": today.isoformat(), "resin": found.now, "max": found.top, "discounts": found.discounts,
-                "read_at": read_at.isoformat(),
-            }))
-        return found
-
-    @staticmethod
-    def _resin_at(notes: Mapping[str, Any], read_at: datetime, now: datetime) -> int:
-        resin, top = int(notes["resin"]), int(notes["resin_max"])
-        if resin >= top:
-            return resin
-        full_at = notes.get("resin_full_at")
-        if full_at:
-            left = (datetime.fromisoformat(full_at) - now).total_seconds()
-            return top if left <= 0 else max(resin, top - math.ceil(left / (8 * 60)))
-        return max(resin, min(top, resin + int((now - read_at).total_seconds() // (8 * 60))))
+        if week_start(game_day(read_at, self._server())) < week_start(self.today()):
+            return 3
+        return int(notes["boss_discounts_left"])
 
     # ------------------------------------------------------------------------------------------ the sync
     def sync_view(self) -> dict[str, Any]:
@@ -688,32 +655,47 @@ class Characters:
                 raise UnknownCharacter(key)
             return build_planner(self, char)
 
-    def week_plan(
-        self, horizon: int = HORIZON_DAYS, *, ticks: bool = True
-    ) -> tuple[WeekPlan, list[FocusInput], list[Char]]:
-        """The plan of the focus (up to four), from the resin the day began with, and the focus it was made for."""
-        chars = [c for c in (self.char(key) for key in self.focus()) if c is not None]
-        inputs = [self.focus_input(char) for char in chars]
-        today = self.today()
-        resin = self.resin()
-        ticked = self._store.ticks(self.uid(), week_start(today))
-        done_today = frozenset(task for day, task in ticked if day == today)
-        weekly = frozenset(task for _, task in ticked if _is_weekly(task))
-        plan = week_engine.plan(
-            inputs, resin.now, resin.top, resin.discounts, today, self.refs,
-            ticks=done_today if ticks else frozenset(), weekly_done=weekly, horizon=horizon,
-        )
-        return plan, inputs, chars
-
-    def week(self) -> dict[str, Any]:
-        from guildboard.views.week import build_week
+    def weapon_choices(self, key: str) -> list[dict[str, Any]]:
+        """The weapons her picker lists. The wiki's weapons newer than the reference files are listed from their stored
+        entries; those not stored yet are queued for the background read (never read here)."""
+        from guildboard.views.characters import build_weapon_choices
 
         with self.scope():
-            return build_week(self)
+            char = self.char(key)
+            if char is None:
+                raise UnknownCharacter(key)
+            self.wanted(key)
+            self.wanted_entries(
+                ("weapon", row.entry_page_id) for (kind, name), row in self._store.wiki_items().items()
+                if kind == "weapon" and slug(name) not in self.refs.weapons
+            )
+            return build_weapon_choices(self, char)
 
-    def today_model(self) -> dict[str, Any]:
-        """The Today widget's model: the week's own first day."""
-        return self.week()["today"]
+    def set_choices(self, character: str | None = None) -> list[dict[str, Any]]:
+        """Every set the sets picker lists, with the texts of those whose entry is stored; the others are queued. For a
+        character, each set's effects and toggles for her (`gear`)."""
+        from guildboard.views.characters import build_set_choices
+
+        with self.scope():
+            char = None
+            if character is not None:
+                char = self.char(character)
+                if char is None:
+                    raise UnknownCharacter(character)
+            entries = {item["key"]: str(item["entry"]) for item in reference.load_inventory()["sets"]}
+            self.wanted_entries(
+                ("set", entries.get(slug(name)) or row.entry_page_id)
+                for (kind, name), row in self._store.wiki_items().items() if kind == "set"
+            )
+            self.wanted_entries(("set", entry) for key, entry in entries.items() if key in self.refs.sets)
+            return build_set_choices(self, char)
+
+    def plan_page(self) -> dict[str, Any]:
+        """The Plan page's model: what is open today and each day of the week for the planned characters."""
+        from guildboard.views.plan import build_plan
+
+        with self.scope():
+            return build_plan(self)
 
     def endgame(self, after: bool = False) -> dict[str, Any]:
         from guildboard.views.endgame import build_endgame
@@ -721,22 +703,13 @@ class Characters:
         with self.scope():
             return build_endgame(self, after)
 
-    def focus_input(self, char: Char) -> FocusInput:
-        from guildboard.views.week import goal_text, luck_pieces
-
-        plan = self.plan_of(char)
-        return FocusInput(
-            key=char.key, name=char.name, pronouns=char.card.pronouns, goal=goal_text(self, char, plan),
-            needs=self.needs_of(char, plan), luck=luck_pieces(self, char, plan),
-        )
-
     # ------------------------------------------------------------------------------------------ changes the player makes
     def put_focus(self, keys: Any) -> None:
         if not isinstance(keys, (list, tuple)) or not all(isinstance(key, str) for key in keys):
             raise CharactersRefused(BAD_SHAPE)
         kept = list(dict.fromkeys(keys))
-        if len(kept) > FOCUS_MAX:
-            raise CharactersRefused(FOUR_AT_MOST)
+        if len(kept) > PLANNED_MAX:
+            raise CharactersRefused(PLAN_FULL)
         known = set(self.keys())
         for key in kept:
             if key not in known:
@@ -828,22 +801,6 @@ class Characters:
         self._store.put_held(self.uid(), amounts, self._clock.now())
         self.wake()
 
-    def put_tick(self, day: Any, task: Any, done: Any) -> None:
-        if not isinstance(day, str) or not isinstance(task, str) or not isinstance(done, bool):
-            raise CharactersRefused(BAD_SHAPE)
-        try:
-            when = date.fromisoformat(day)
-        except ValueError:
-            raise CharactersRefused(NOT_TODAYS_TASK) from None
-        if when != self.today():
-            raise CharactersRefused(NOT_TODAYS_TASK)
-        with self.scope():
-            plan, _, _ = self.week_plan(horizon=1)
-        if task not in {t.key for t in plan.days[0].tasks}:
-            raise CharactersRefused(NOT_TODAYS_TASK)
-        self._store.put_tick(self.uid(), when, task, done, self._clock.now())
-        self.wake()
-
     def theater_month(self) -> str:
         today = self.today()
         return f"{today.year:04d}-{today.month:02d}"
@@ -890,7 +847,7 @@ class Characters:
 
     # ------------------------------------------------------------------------------------------ reading the wiki
     def wake(self) -> None:
-        """Look again now: something changed that the notices depend on."""
+        """Look again now: something changed that the loop depends on."""
         self._woken.set()
 
     def wanted(self, *keys: str) -> None:
@@ -905,16 +862,60 @@ class Characters:
             except RuntimeError:  # no loop: a test calling the service by hand
                 self._filler = None
 
+    def wanted_entries(self, entries: Iterable[tuple[str, str]]) -> None:
+        """The pickers' lists wait for these wiki entries, (kind, entry id): those not stored yet are read in the background by
+        the same read as the characters' (once the player has consented; never in the demo; never on the request)."""
+        if self._demo or not self.AUTOMATIC_READS or not self._ready():
+            return
+        now = self._clock.now()
+        missing = {
+            (kind, entry) for kind, entry in entries
+            if entry and ((found := self._store.wiki_entry_stamp(entry)) is None or found[0] != kind)
+            and not ((tried := self._entries_tried.get((kind, entry))) is not None
+                     and 0 <= (now - tried).total_seconds() < ENTRY_RETRY.total_seconds())
+        }
+        if not missing:
+            return
+        self._entries_tried.update(dict.fromkeys(missing, now))
+        self._wanted_entries.update(missing)
+        self.wanted()
+
+    def wanted_again(self) -> None:
+        """The stored character entries of an older format (`wiki.ENTRY_FORMAT`) wait to be read once more, in the background by
+        the same read as the others (once the player has consented; never in the demo; never on a request). An entry that was
+        read in the new format is not asked for again; one that could not be read waits a quarter of an hour."""
+        if self._demo or not self.AUTOMATIC_READS or not self._ready():
+            return
+        if self._none_outdated_at == self._wiki.stored:
+            return   # nothing was kept since the store was last found without one: it is not scanned again on every wake
+        now = self._clock.now()
+        outdated = self._wiki.wanted_again()
+        self._none_outdated_at = None if outdated else self._wiki.stored
+        again = {
+            (kind, entry) for kind, entry in outdated
+            if not ((tried := self._entries_tried.get((kind, entry))) is not None
+                    and 0 <= (now - tried).total_seconds() < ENTRY_RETRY.total_seconds())
+        }
+        if not again:
+            return
+        self._entries_tried.update(dict.fromkeys(again, now))
+        self._wanted_entries.update(again)
+        self.wanted()
+
     async def _fill(self) -> None:
         try:
             while True:
                 keys = sorted(self._wanted)
                 self._wanted.clear()
-                before = self._wiki_size()
+                entries = sorted(self._wanted_entries)
+                self._wanted_entries.clear()
+                before, stored = self._wiki_size(), self._wiki.stored
                 await self.read(keys)
-                if self._wiki_size() != before:
+                for kind, entry in entries:
+                    await self._wiki.entry(entry, kind)
+                if self._wiki_size() != before or self._wiki.stored != stored:   # a new entry, or one that replaced another
                     self._bus.publish("characters_changed")
-                if not self._wanted:
+                if not self._wanted and not self._wanted_entries:
                     return
         except asyncio.CancelledError:
             raise
@@ -1004,66 +1005,24 @@ class Characters:
             for ident in sorted(wanted):
                 await self._wiki.entry(ident, "material")
 
-    # ------------------------------------------------------------------------------------------ the notices
-    def note_day(self) -> None:
-        """Remember the game day's first Notes read, when a sync has just brought it."""
-        self.resin()
-
-    def check(self) -> list[str]:
-        """Send the notices that are due now, each at most once a game day, and say which kinds were sent. While Your week
-        is hidden (`WEEK_AND_ENDGAME`) none is sent."""
-        if not characters.WEEK_AND_ENDGAME:
-            return []
-        uid, now, today = self.uid(), self._clock.now(), self.today()
-        with self.scope():
-            plan, inputs, chars = self.week_plan(ticks=False)
-        names = {char.key: char.name for char in chars}
-        switches = {kind: bool(on) for kind, on in self._switches().items()}
-        sent = self._store.notices_sent(uid, today - timedelta(days=1))
-        ready_all = [
-            (item.key, task.where)
-            for task in plan.days[0].tasks if task.kind == "level" for item in inputs
-            if item.key == task.who[0] and item.goal and plan.ready.get(item.key) == today
-        ]
-        fresh = [pair for pair in ready_all if f"{pair[0]}:{pair[1]}" not in self._announced]
-        due = notices.due(now, self._server(), plan, names, switches, sent, fresh)
-        kinds: list[str] = []
-        for notice in due:
-            # A click on a notice opens Your week; on a ready goal's alone, her profile: the shell reads it from the kind.
-            kind = f"{NOTICE_KIND}/{fresh[0][0]}" if notice.kind == "ready" and len(fresh) == 1 else NOTICE_KIND
-            shown = self._notify is None or self._notify(kind, f"{notice.title}. {notice.body}")
-            if shown:
-                self._store.add_notice_sent(uid, notice.kind, today, now)
-                kinds.append(notice.kind)
-        current = {f"{key}:{text}" for key, text in ready_all}
-        told = {f"{key}:{text}" for key, text in fresh} if "ready" in kinds else set()
-        self._announced = (self._announced & current) | told
-        return kinds
-
+    # ------------------------------------------------------------------------------------------ the loop
     def next_wait(self) -> float:
-        """Seconds until the notices need a look again: the next Sunday at 18:00 or the next 04:00 reset, whichever is
-        sooner, and never longer than the longest wait."""
-        now = self._clock.now()
-        local = now.astimezone(server_tz(self._server()))
+        """Seconds until the loop needs another look: the next 04:00 reset, and never longer than the longest wait."""
         reset = game_day_start(self.today() + timedelta(days=1), self._server())
-        sunday = local.replace(hour=18, minute=0, second=0, microsecond=0) + timedelta(days=(6 - local.weekday()) % 7)
-        if sunday <= local:
-            sunday += timedelta(days=7)
-        return max(1.0, min(LONGEST_WAIT, (reset - now).total_seconds(), (sunday - local).total_seconds()))
+        return max(1.0, min(LONGEST_WAIT, (reset - self._clock.now()).total_seconds()))
 
     async def run(self) -> None:
-        """Look at the notices, then sleep until the next time one can be due, or until something changes."""
+        """Queue the planned characters' entries, then sleep until the next day's start,
+        until something changes, or until a sync has finished."""
         queue = self._bus.subscribe()
         try:
             while True:
                 self._woken.clear()
                 try:
-                    self.note_day()
-                    if characters.WEEK_AND_ENDGAME:
-                        self.check()
                     self.wanted(*self.focus())
+                    self.wanted_again()
                 except Exception:  # a failed look must not end the loop
-                    log.exception("the Characters notices could not be checked")
+                    log.exception("the Characters loop could not look")
                 sleeping = asyncio.ensure_future(self._sleep(self.next_wait()))
                 woken = asyncio.ensure_future(self._woken.wait())
                 heard = asyncio.ensure_future(self._synced(queue))
@@ -1092,8 +1051,3 @@ class Characters:
                 task.cancel()
                 await asyncio.gather(task, return_exceptions=True)
         self._filler = self._warmer = None
-
-
-def _is_weekly(task: str) -> bool:
-    parts = task.split(":")
-    return len(parts) >= 4 and parts[1] == "weekly"

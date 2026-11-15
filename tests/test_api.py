@@ -61,7 +61,7 @@ def test_the_launch_link_can_open_the_timers_category(core):
     # anything else opens the page as before.
     expected = {
         "achievements/timers": "/#/achievements/timers", "board": "/#/board", "https://example.com/": "/",
-        "settings": "/", "week": "/#/week", "characters/sandrone": "/#/characters/sandrone",
+        "settings": "/", "plan": "/#/plan", "week": "/#/plan", "characters/sandrone": "/#/characters/sandrone",
         "characters/lan-yan": "/#/characters/lan-yan", "characters/../x": "/", "characters/Sandrone": "/",
     }
     for place, location in expected.items():

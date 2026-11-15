@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  categoryName, categoryTicked, changedStages, changesListing, checkLine, chipsFit, type Clicked, contentTitle, countText, currentStage,
+  categoryName, categoryTicked, EVERY_CATEGORY,changedStages, changesListing, checkLine, chipsFit, type Clicked, contentTitle, countText, currentStage,
   emptyLine, fileLine, type FocusControl, goBackOffered, importSummary, keptAfter, lastTicked, listLine,
   listLineParts, matchingControl, modelPath, moreLine, newStages, nextTarget, numeral, panelSummary,
   pinnedAt, pipsOf, type Place, placeAfter, reachedLine, sentSearch, shareGroups, sharedWiki, stillShown, takesPlace,
@@ -313,6 +313,7 @@ describe('what the page shows', () => {
     expect(contentTitle({ query: { ...query, search: 'zoo' }, categories })).toBe('Search results')
     expect(contentTitle({ query: { ...query, pinned: true, search: 'zoo' }, categories })).toBe('Pinned')
     expect(contentTitle({ query: { ...query, unlisted: true }, categories })).toBe('Not in the current list')
+    expect(contentTitle({ query: { ...query, category: EVERY_CATEGORY }, categories })).toBe('All achievements')
   })
 
   it('names a special category, whatever the query the page reads its counts with', () => {

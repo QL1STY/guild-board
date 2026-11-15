@@ -1,0 +1,9 @@
+{
+  "main": null,
+  "toggles": {
+    "afterSprint": {"on": true, "state": "afterSprint", "label": "Kamisato Art: Senho", "covers": ["normal", "charged", "plunging"], "reason": "Her sprint makes her Normal and Charged Attacks Cryo, and she sprints before every string of attacks."},
+    "afterApplySprint": {"on": true, "state": "afterApplySprint", "label": "Cryo DMG bonus after Senho", "covers": ["normal", "charged", "plunging"], "reason": "It follows the same sprint and lasts through the attacks after it."},
+    "afterSkillA1": {"on": true, "state": "afterSkill", "label": "After Hyouka", "covers": ["normal", "charged"], "reason": "She casts her Skill before her Normal and Charged Attacks, which it raises for the time they take."},
+    "C6": {"on": false, "state": "c6", "label": "Constellation 6 Charged Attack bonus", "covers": [], "reason": "A Constellation 6 bonus that comes back only every few seconds."}
+  }
+}

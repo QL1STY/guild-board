@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a4AfterShatter": {"on": false, "state": "on", "label": "After a Shatter", "covers": [], "reason": "Depends on the enemy being Frozen so that he can Shatter it, which needs a Hydro party member."},
+    "c4C6Stacks": {"on": false, "state": "3", "label": "Constellation 4 and 6 stacks", "covers": [], "reason": "Stacks from Frozen, Shatter or Superconduct reactions, which depend on the party."},
+    "stalk": {"on": true, "state": "on", "label": "Subnautical Hunter mode", "covers": ["skill"], "reason": "His Burst puts him in Subnautical Hunter mode, where his Skill is used most, and doubles the frost of his Skill there."}
+  }
+}

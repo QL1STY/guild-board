@@ -1,0 +1,13 @@
+{
+  "main": null,
+  "derived_rows": [
+    {"talent": "burst", "name": "Dusk Bolt 1-Hit DMG", "from_talent": "normal", "from_row": "1-Hit DMG", "hits": ["burst.dusk_0"]},
+    {"talent": "burst", "name": "Dusk Bolt 2-Hit DMG", "from_talent": "normal", "from_row": "2-Hit DMG", "hits": ["burst.dusk_1", "burst.dusk_2"]},
+    {"talent": "burst", "name": "Dusk Bolt 3-Hit DMG", "from_talent": "normal", "from_row": "3-Hit DMG", "hits": ["burst.dusk_3"]}
+  ],
+  "toggles": {
+    "a4Sandshade": {"on": true, "state": "on", "label": "Scorching Sandshade", "covers": ["charged"], "reason": "His own passive is ready for his first Shadowpiercing Shots of each rotation and returns 15 seconds after it is used."},
+    "c2Stacks": {"on": false, "state": "2", "label": "Constellation 2 stacks", "covers": [], "reason": "Stacks that build up during the fight."},
+    "c4Strike": {"on": false, "state": "on", "label": "Constellation 4, two enemies hit", "covers": [], "reason": "Needs two or more enemies hit at once."}
+  }
+}

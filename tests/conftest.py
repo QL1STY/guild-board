@@ -146,12 +146,12 @@ def no_global_hotkey(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def week_and_endgame_on(monkeypatch):
-    """Your week and Endgame are hidden in a shipped build (`characters.WEEK_AND_ENDGAME` is False), and their tests run
-    with the switch on, as they will when it is turned back on. A test of the hidden state sets it False itself."""
+def endgame_on(monkeypatch):
+    """Endgame is hidden in a shipped build (`characters.ENDGAME` is False), and its tests run with the switch on, as they
+    will when it is turned back on. A test of the hidden state sets it False itself."""
     from guildboard import characters
 
-    monkeypatch.setattr(characters, "WEEK_AND_ENDGAME", True)
+    monkeypatch.setattr(characters, "ENDGAME", True)
 
 
 @pytest.fixture

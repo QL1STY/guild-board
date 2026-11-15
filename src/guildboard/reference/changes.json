@@ -1,4 +1,46 @@
 {
+  "2.2.0": [
+    {
+      "kind": "new",
+      "title": "The Plan page",
+      "text": "The new Plan page shows which talent books and weapon materials are open today, a week of open days for each character in your plan, and your weekly bosses with the discounted runs left. Use Add a character to put one in your plan, and the × to take one off. A character whose entry has not been read from the wiki yet says so, and no day is guessed for it."
+    },
+    {
+      "kind": "new",
+      "title": "Crit Value",
+      "text": "Each artifact on a character's Profile and in the planner shows its Crit Value (Crit Rate × 2 + Crit DMG) in a colour for its tier, and the planner shows the whole set's total."
+    },
+    {
+      "kind": "new",
+      "title": "A stat simulator in the planner",
+      "text": "In a character's planner, choose another weapon or artifact set and edit any piece: its main stat, its substats and their rolls, and its level. The stats now and the stats with the tested pieces are shown side by side, with what changed. A value that no roll can make turns red. What you test stays on the page: nothing is saved, and the character's own build is not changed."
+    },
+    {
+      "kind": "new",
+      "title": "The planner's damage verdict",
+      "text": "With a weapon or artifact set under test, the planner says whether the build Hits harder, Hits softer or It depends, with a row for each of the character's talents. Effects that only apply under a condition are counted, and you can leave any of them out. A Not counted line lists the rest, so you can count more. For a character whose damage depends on the team, a Team setting lets you say who stands beside them. Every character's numbers were checked against Genshin Optimizer. Varka still shows It depends, and Somnia has no verdict yet."
+    },
+    {
+      "kind": "better",
+      "title": "Exact weapon numbers",
+      "text": "A weapon's base ATK and its secondary stat are now exact at level 90, in the planner and in the weapon picker."
+    },
+    {
+      "kind": "fixed",
+      "title": "A set's own-element bonus",
+      "text": "A tested artifact set whose 2-piece gives the character's own element's DMG Bonus is now counted in the tested stats."
+    },
+    {
+      "kind": "better",
+      "title": "Achievements in one list",
+      "text": "Achievements has an All category, which shows every category's achievements together, within the view you chose."
+    },
+    {
+      "kind": "better",
+      "title": "Readiness from your goals",
+      "text": "A character's readiness now comes from how close the character's stats are to the goals on the card, for every role. The next steps on the Profile say how many readiness points each one adds, and the card's goals always offer ATK, HP and DEF."
+    }
+  ],
   "2.1.1": [
     {
       "kind": "fixed",

@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "primordial-jade-winged-spear:stack": {"on": true, "state": "7", "label": "7 stacks from her hits", "covers": [], "reason": "Her own hits fill its seven stacks in about two seconds and keep them while she keeps hitting."}
+  }
+}

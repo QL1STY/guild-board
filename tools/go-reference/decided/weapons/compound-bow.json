@@ -1,0 +1,5 @@
+{
+  "toggles": {
+    "compound-bow:InfusionArrow": {"on": true, "state": "4", "label": "4 stacks from her attacks", "covers": [], "reason": "Her own Normal and Charged Attack hits fill its four stacks in about a second and keep them while she attacks."}
+  }
+}

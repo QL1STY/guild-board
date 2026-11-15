@@ -1,0 +1,8 @@
+{
+  "main": null,
+  "toggles": {
+    "a1HpStatus": {"on": false, "state": "below", "label": "Active character below half HP", "covers": [], "reason": "Adds Healing Bonus only, which none of his counted hits use."},
+    "a4AfterHeal": {"on": false, "state": "on", "label": "Healed by his shield", "covers": [], "reason": "A bonus to reactions of the characters his shields heal, which reaches none of his counted hits."},
+    "c4AfterBurst": {"on": false, "state": "on", "label": "Constellation 4 Elemental Mastery", "covers": [], "reason": "Adds Elemental Mastery only, which none of his counted hits use."}
+  }
+}

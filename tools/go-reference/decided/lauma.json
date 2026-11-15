@@ -1,0 +1,7 @@
+{
+  "main": ["Frostgrove Sanctuary Attack DMG", "2-Hit Hold DMG"],
+  "toggles": {
+    "burstPaleHymn": {"on": false, "state": "on", "label": "Pale Hymn", "covers": [], "reason": "A party buff from her Burst whose stacks the whole team spends."},
+    "skillVerdantDew": {"on": false, "state": "3", "label": "Three Verdant Dew", "covers": [], "reason": "The count of Verdant Dew multiplies one row only and depends on the team's Lunar-Bloom reactions; the row shows one."}
+  }
+}

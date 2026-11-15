@@ -12,10 +12,10 @@ test('the command line', () => {
 test('every switch and its default', () => {
   expect(parseArgs([])).toEqual({
     demo: false, dataDir: null, hidden: false, quit: false, demoNow: null,
-    acknowledged: false, weekAndEndgame: false, invite: null, refused: [],
+    acknowledged: false, endgame: false, verdict: false, invite: null, refused: [],
   })
-  expect(parseArgs(['--demo', '--demo-now', '2026-10-13T08:00:00+00:00', '--acknowledged', '--week-and-endgame', '--quit']))
-    .toMatchObject({ demoNow: '2026-10-13T08:00:00+00:00', acknowledged: true, weekAndEndgame: true, quit: true })
+  expect(parseArgs(['--demo', '--demo-now', '2026-10-13T08:00:00+00:00', '--acknowledged', '--endgame', '--verdict', '--quit']))
+    .toMatchObject({ demoNow: '2026-10-13T08:00:00+00:00', acknowledged: true, endgame: true, verdict: true, quit: true })
   expect(parseArgs(['--data-dir=E:\\h']).dataDir).toBe('E:\\h')
   expect(parseArgs(['--data-dir']).dataDir).toBeNull()
 })

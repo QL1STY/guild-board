@@ -1,4 +1,4 @@
-"""R6: the tables (yields per run, artifact odds and values, talent scaling, reactions, level EXP).
+"""R6: the tables (yields per run, artifact odds and values, reactions, level EXP).
 
 Run: uv run python tools/research/tables.py   (build time only; fetches, writes out/tables.json)
 Fetched pages are kept in out/raw_tables/ so a second run asks for nothing; delete the folder to read everything again.
@@ -8,7 +8,7 @@ Sources (each fetched today, see CHECKED):
       tables do not change from version to version):
       https://gitlab.com/Dimbreath/AnimeGameData/-/raw/master/ExcelBinOutput/<file>.json
         AvatarLevelExcelConfigData (character EXP), WeaponLevelExcelConfigData (weapon EXP by rarity),
-        ProudSkillExcelConfigData (talent multipliers by level), ReliquaryLevelExcelConfigData (main stats at +20),
+        ReliquaryLevelExcelConfigData (main stats at +20),
         ReliquaryAffixExcelConfigData (substat rolls)
   GW  The Genshin Impact fandom wiki, through its MediaWiki API (https://genshin-impact.fandom.com/api.php?action=parse):
         Loot_System/Material_Drop_Distribution, Loot_System/Artifact_Drop_Distribution (both from the Genshin Data
@@ -16,12 +16,10 @@ Sources (each fetched today, see CHECKED):
         Character_EXP, Weapon_EXP/<n>-Star_Weapons
   GO  Genshin Optimizer's own tables: https://github.com/frzyc/genshin-optimizer/blob/master/libs/gi/upopt/src/consts.ts
         (substat weights and main stat odds)
-  HW  The HoYoLAB wiki's talent texts, read for R3 into out/kits/*.json (checks the scaling tables)
 Every number below is read or computed from those; a check that fails stops the script.
 """
 from __future__ import annotations
 
-import glob
 import html
 import json
 import re
@@ -273,61 +271,6 @@ def artifacts() -> tuple[dict, dict, dict, dict, list[str]]:
     return mains, main_odds, weights, roll_avg, notes
 
 
-# ---------------------------------------------------------------- scaling
-
-PHYSICAL = (1.0, 1.081, 1.163, 1.279, 1.36, 1.453, 1.581, 1.709, 1.837, 1.977, 2.116, 2.256, 2.395, 2.535, 2.674)
-ELEMENTAL = (1.0, 1.075, 1.15, 1.25, 1.325, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.125, 2.25, 2.375)
-
-
-def scaling() -> tuple[dict, dict]:
-    """The two commonest multiplier curves among talents that have levels 1 to 15 in ProudSkillExcelConfigData, averaged."""
-    groups: dict[int, dict[int, list[float]]] = {}
-    for row in datamine("ProudSkillExcelConfigData"):
-        groups.setdefault(row["proudSkillGroupId"], {})[row["level"]] = row["paramList"]
-    sums = {"physical": [[] for _ in range(15)], "elemental": [[] for _ in range(15)]}
-    for levels in groups.values():
-        if not all(n in levels for n in range(1, 16)):
-            continue
-        lists = [levels[n] for n in range(1, 16)]
-        for index in range(len(lists[0])):
-            base = lists[0][index]
-            if not (0 < base < 20) or not all(len(x) > index for x in lists):
-                continue
-            ratios = [x[index] / base for x in lists]
-            rounded = tuple(round(r, 3) for r in ratios)
-            for name, ref in (("physical", PHYSICAL), ("elemental", ELEMENTAL)):
-                if rounded == ref:
-                    for i, r in enumerate(ratios):
-                        sums[name][i].append(r)
-    table = {name: tuple(round(sum(v) / len(v), 4) for v in cols) for name, cols in sums.items()}
-    counts = {name: len(cols[0]) for name, cols in sums.items()}
-    need(all(c > 100 for c in counts.values()), f"too few talents match: {counts}")
-    # the wiki's talent texts (out/kits, read by R3) show the same ratios at levels 1 to 11
-    matched = {"physical": 0, "elemental": 0, "neither": 0}
-    for path in glob.glob(str(OUT / "kits" / "*.json")):
-        kit = json.loads(Path(path).read_text(encoding="utf-8"))
-        for talent in kit["talents"]:
-            for line in talent.get("scaling", []):
-                values = []
-                for item in line["values"]:
-                    m = re.fullmatch(r"([\d.,]+)%", item.strip())
-                    values.append(float(m.group(1).replace(",", "")) if m else None)
-                if None in values or len(values) < 10 or not values[0]:
-                    continue
-                ratios = [v / values[0] for v in values]
-
-                def close(ref):
-                    return all(abs(ratios[i] - ref[i]) <= 0.0006 * ref[i] + 0.055 * (1 + ref[i]) / values[0] for i in range(len(ratios)))
-
-                if close(table["physical"]):
-                    matched["physical"] += 1
-                elif close(table["elemental"]):
-                    matched["elemental"] += 1
-                else:
-                    matched["neither"] += 1
-    return table, {"talents_in_datamine_with_this_curve": counts, "hoyolab_wiki_lines_matching": matched}
-
-
 # ---------------------------------------------------------------- reactions
 
 ELEMENTS = ("Pyro", "Hydro", "Electro", "Cryo", "Dendro", "Anemo", "Geo")
@@ -384,13 +327,12 @@ def exp_tables() -> tuple[list[int], list[int], dict[str, list[int]]]:
 def main() -> int:
     y, y_detail, y_notes = yields()
     mains, main_odds, sub_weights, roll_avg, a_notes = artifacts()
-    scale, scale_check = scaling()
     partners, pairs = reactions()
     exp, exp_step, weapon_exp = exp_tables()
     sources = [
         {"id": "DM", "url": GITLAB + "<file>.json", "checked": CHECKED,
          "what": "the game's data tables as the community datamine (Dimbreath/AnimeGameData) mirrors them; its last data commit is 2026-05-23 (game 6.6), and these tables do not change between versions",
-         "used_for": ["exp", "weapon_exp", "scaling", "mains_20", "roll_avg"]},
+         "used_for": ["exp", "weapon_exp", "mains_20", "roll_avg"]},
         {"id": "GW-loot", "url": "https://genshin-impact.fandom.com/wiki/Loot_System/Material_Drop_Distribution", "checked": CHECKED,
          "what": "community drop counts (Genshin Data Gathering team): talent books, weapon materials, world boss and weekly boss materials",
          "used_for": ["yields.books", "yields.forgery", "yields.boss", "yields.weekly"]},
@@ -408,8 +350,6 @@ def main() -> int:
          "what": "level EXP tables (check of DM)", "used_for": ["exp", "weapon_exp"]},
         {"id": "GO", "url": "https://github.com/frzyc/genshin-optimizer/blob/master/libs/gi/upopt/src/consts.ts", "checked": CHECKED,
          "what": "Genshin Optimizer's substat weights and main stat odds (check of GW-distribution)", "used_for": ["main_odds", "sub_weights"]},
-        {"id": "HW", "url": "https://sg-wiki-api.hoyolab.com/hoyowiki/genshin/wapi/entry_page (each character's Talents module, via out/kits)", "checked": CHECKED,
-         "what": "the game's own talent texts (check of scaling)", "used_for": ["scaling"]},
     ]
     not_confirmed = [
         "yields.weekly: the sources give 2.4 weekly materials per claim in all (at world level 8) but not how they split among the boss's three materials; 0.8 each is 2.4 / 3, assumed. The mockup's 1 per claim is not used because three of them would exceed the sourced total.",
@@ -426,8 +366,6 @@ def main() -> int:
         "slot_odds": 0.2,
         "sub_weights": sub_weights,
         "roll_avg": roll_avg,
-        "scaling": {"elemental": list(scale["elemental"]), "physical": list(scale["physical"])},
-        "scaling_check": scale_check,
         "reactions": {k: list(v) for k, v in partners.items()},
         "reaction_pairs": pairs,
         "exp": exp,
@@ -439,13 +377,12 @@ def main() -> int:
             "weapon_exp": "by rarity '1' to '5': total EXP to reach each level from level 1, index = level; 1 and 2 star weapons stop at level 70 and 3 star and up at 90",
             "mains_20": "5-star main stat values at +20; percentages as percent points (46.6 is 46.6%)",
             "roll_avg": "mean substat roll of a 5-star artifact; percentages as percent points",
-            "scaling": "multiplier of a talent at level n over level 1, n = 1 to 15; levels 11 to 15 need constellation bonuses",
             "reactions": "each element -> the elements it has a reaction with",
         },
         "not_confirmed": not_confirmed,
         "notes": y_notes + a_notes,
         "confidence": {"yields": "medium", "mains_20": "high", "main_odds": "high", "sub_weights": "high", "roll_avg": "high",
-                       "scaling": "high", "reactions": "high", "exp": "high", "weapon_exp": "high",
+                       "reactions": "high", "exp": "high", "weapon_exp": "high",
                        "yields.weekly": "low", "yields.forgery": "medium"},
     }
     OUT.mkdir(exist_ok=True)
@@ -453,19 +390,18 @@ def main() -> int:
     # The schema's shape (reference/characters/schema/tables.schema.json): no other top-level keys; what it has no place
     # for is folded into `notes`, which it leaves free. The fuller file stays in out/tables.json.
     shaped = {key: document[key] for key in (
-        "yields", "mains_20", "main_odds", "sub_weights", "roll_avg", "scaling", "reactions", "exp", "weapon_exp",
+        "yields", "mains_20", "main_odds", "sub_weights", "roll_avg", "reactions", "exp", "weapon_exp",
         "checked", "sources")}
     shaped["notes"] = {
         "slot_odds": document["slot_odds"], "yields_detail": document["yields_detail"],
         "not_confirmed": document["not_confirmed"], "confidence": document["confidence"], "units": document["units"],
         "exp_step": document["exp_step"], "reaction_pairs": document["reaction_pairs"],
-        "scaling_check": document["scaling_check"], "remarks": document["notes"],
+        "remarks": document["notes"],
     }
     target = REFERENCE / "tables.json"
     target.write_text(json.dumps(shaped, indent=2, ensure_ascii=False) + chr(10), encoding="utf-8")
     print("wrote", target)
     print("yields", y)
-    print("scaling check", scale_check)
     print("exp 90:", exp[90], " weapon 5-star 90:", weapon_exp["5"][90])
     return 0
 

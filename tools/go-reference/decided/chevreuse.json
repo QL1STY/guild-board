@@ -1,0 +1,6 @@
+{
+  "main": null,
+  "toggles": {
+    "c6AfterHealStacks": {"on": false, "state": "3", "label": "Constellation 6 healing stacks", "covers": [], "reason": "A Constellation 6 bonus that stacks as her Skill heals the party, which builds up during the fight."}
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "main": ["Charged Attack: Equitable Judgment"],
+  "toggles": {
+    "a1Stacks": {"on": true, "state": "3", "label": "Past Draconic Glories at 3 stacks", "covers": ["charged"], "reason": "In his usual teams the party triggers Hydro reactions all the time, so his Charged Attack runs at the most stacks."},
+    "a4Hp": {"on": false, "state": "50", "label": "HP above 30%", "covers": [], "reason": "Depends on how much HP he has at the moment, which the team moves up and down."}
+  }
+}
