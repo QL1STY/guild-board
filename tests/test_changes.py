@@ -42,9 +42,18 @@ def test_every_shipped_item_is_valid():
     assert ChangeItem  # the type is public
 
 
+def test_2_2_1_tells_of_the_plan_pages_materials():
+    notes = load_changes()
+    assert next(iter(notes)) == "2.2.1"
+    assert [(item["kind"], item["title"]) for item in notes["2.2.1"]] == [
+        ("fixed", "Materials on the Plan page"), ("better", "The verdict at every constellation"),
+    ]
+    assert "Xiao" in notes["2.2.1"][0]["text"]
+
+
 def test_2_2_0_tells_of_the_plan_page_the_stat_simulator_and_the_verdict():
     notes = load_changes()
-    assert next(iter(notes)) == "2.2.0"
+    assert "2.2.0" in notes
     assert [(item["kind"], item["title"]) for item in notes["2.2.0"]] == [
         ("new", "The Plan page"),
         ("new", "Crit Value"),

@@ -1,7 +1,8 @@
 {
   "main": null,
   "toggles": {
-    "c6FatalRounds": {"on": false, "state": "on", "label": "Constellation 6 Fatal Rounds", "covers": [], "reason": "A Constellation 6 state that follows a conversion only party members of other elements make possible, and lasts for one Multitarget Fire."}
+    "c6FatalRounds": {"on": false, "state": "on", "label": "Constellation 6 Fatal Rounds", "covers": [], "reason": "A Constellation 6 state that follows a conversion only party members of other elements make possible, and lasts for one Multitarget Fire."},
+    "a1InMultitarget": {"on": true, "state": "on", "label": "Spirit of the Radiant Shadow in Multitarget Fire", "covers": ["skill"], "reason": "Her Shining Shadowhunt Shells are fired only in her Skill's Multitarget Fire, where each element of the team gives her a stack that raises their damage, so the bonus is on whenever they hit; the team shape sets how many stacks."}
   },
   "party": {
     "default": "pyro-hydro-electro",

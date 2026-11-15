@@ -56,7 +56,9 @@ def test_every_entry_names_the_pinned_commit_and_its_sheet():
 
 def test_every_character_weapon_and_set_go_has_is_there():
     raw = _raw()
-    assert len(raw["characters"]) >= 130 and len(raw["weapons"]) >= 250 and len(raw["sets"]) >= 60
+    # GO's 130 characters less Somnia, who is in its data but not in the game (`kitgen.NOT_IN_GAME`)
+    assert len(raw["characters"]) >= 129 and len(raw["weapons"]) >= 250 and len(raw["sets"]) >= 60
+    assert "somnia" not in raw["characters"]
     assert {"traveler-anemo", "hu-tao", "raiden-shogun", "kamisato-ayaka", "mitya"} <= set(raw["characters"])
     assert {"staff-of-homa", "engulfing-lightning", "wolf-s-gravestone"} <= set(raw["weapons"])
     assert {"emblem-of-severed-fate", "gladiator-s-finale", "crimson-witch-of-flames"} <= set(raw["sets"])
@@ -152,6 +154,12 @@ def test_checked_is_true_for_exactly_the_decided_characters():
     assert {key for key, c in raw["characters"].items() if c["checked"]} == set(decided)
 
 
+# The toggles that lifting the Constellation 2 boundary gave decided characters (2026-11-15), which no decision file decides yet: kits.json
+# holds them off, `run.py kits` lists them, and the next task of the plan (verdict-c3-to-c6, Task 2) decides each in her file and empties
+# this table. A toggle of a decided character that is in neither her file nor this table fails the tests below.
+AWAITING: dict[str, set[str]] = {}
+
+
 def test_kits_json_holds_every_decision_file_as_written():
     # the testable form of "kits.json is what the decision files make": a decision changed without `run.py kits` fails here
     import importlib.util
@@ -165,7 +173,15 @@ def test_kits_json_holds_every_decision_file_as_written():
     decided = kitgen.load_decided(tool / "decided")
     raw = _raw()["characters"]
     for key, kept in raw.items():
-        assert kitgen.decision_differences(decided["characters"].get(key), decided["unsure"].get(key), kept) == [], key
+        differs = kitgen.decision_differences(decided["characters"].get(key), decided["unsure"].get(key), kept)
+        if key in AWAITING:
+            # her file does not decide the toggles of the table yet: kits.json has them, off, and no other difference
+            assert differs == ["toggles"], key
+            names = {t["name"] for t in kept["toggles"]}
+            assert names - set(decided["characters"][key]["toggles"]) == AWAITING[key], key
+            assert all(not t["on"] for t in kept["toggles"] if t["name"] in AWAITING[key]), key
+        else:
+            assert differs == [], key
 
 
 def test_every_decision_file_is_named_for_a_character_and_its_unsure_sentence_is_in_the_kits():
@@ -192,7 +208,7 @@ def test_every_decided_toggle_has_our_label_and_a_reason():
     raw = _raw()
     for key, mine in decided.items():
         names = {t["name"] for t in raw["characters"][key]["toggles"]}
-        assert names == set(mine.get("toggles") or {}), key
+        assert names == set(mine.get("toggles") or {}) | AWAITING.get(key, set()), key
         for name, toggle in (mine.get("toggles") or {}).items():
             assert toggle["label"] and toggle["reason"], (key, name)
             assert not toggle["on"] or toggle["covers"], (key, name)  # an on toggle says which talents it covers

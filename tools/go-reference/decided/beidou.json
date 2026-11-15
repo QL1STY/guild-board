@@ -1,6 +1,9 @@
 {
   "main": null,
   "toggles": {
-    "Ascension4": {"on": false, "state": "on", "label": "After a perfect counter", "covers": [], "reason": "Her Normal and Charged Attack bonus starts only after her Skill counters a hit at its maximum bonus, which depends on timing and on being attacked."}
+    "Ascension4": {"on": false, "state": "on", "label": "After a perfect counter", "covers": [], "reason": "Her Normal and Charged Attack bonus starts only after her Skill counters a hit at its maximum bonus, which depends on timing and on being attacked."},
+    "burst": {"on": false, "state": "on", "label": "Constellation 6 Elemental Mastery in her Burst (Stellar-Conduct)", "covers": [], "reason": "A Constellation 6 Elemental Mastery bonus while her Burst lasts in a Stellar-Conduct party, which moves her damage only through a reaction. It needs the two Stellar switches as well."},
+    "lockRevelation": {"on": false, "state": "on", "label": "Stellar Revelation", "covers": [], "reason": "A mode of the party that unlocks Stellar bonuses; the planner cannot tell whether it is on, so it is left for the player to switch on."},
+    "lockStellarRadianceSc": {"on": false, "state": "on", "label": "Stellar Radiance, Stellar-Conduct", "covers": [], "reason": "The kind of Stellar hits the party's mode makes; the planner cannot tell it, so it is left for the player to switch on."}
   }
 }

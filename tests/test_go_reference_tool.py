@@ -551,3 +551,63 @@ def test_a_gear_toggle_no_decision_file_decides_takes_its_label_from_the_label_t
         kitgen.gear_label("brave-heart:hp", labels)            # a table that lacks one stops the run: write the label
     decided = kitgen.load_decided(TOOL / "decided")
     assert decided["gear_labels"] and all(label.strip() for label in decided["gear_labels"].values())
+
+
+# ----------------------------------------------------------------------------------------------- a character who is not in the game, and a toggle nobody has decided yet
+
+
+def _two_characters(decided_toggles=None, effects=None):
+    """Somnia and Yanfei as GO's data holds them: Somnia is in the data at the pinned commit and not in the game."""
+    def char(name):
+        return {"sheet": name, "name": name, "element": "pyro", "weapon_type": "catalyst", "rows": {}, "params": {}, "hits": []}
+    kit = {"characters": {"Somnia": {"effects": {}, "hit_data": {}},
+                          "Yanfei": {"effects": effects or {}, "hit_data": {}}}, "weapons": {}, "sets": {}}
+    decided = {"about": "", "checked": "", "unsure": {}, "characters": {"yanfei": {"toggles": decided_toggles}} if decided_toggles is not None else {}}
+    return kit, {"Somnia": char("Somnia"), "Yanfei": char("Yanfei")}, decided
+
+
+def _build_two(kit, match, decided, notes=None):
+    return kitgen.build(kit, match, decided, "0" * 40, lambda name: name.lower(), lambda *a: "elemental", notes=notes)
+
+
+def test_a_character_of_the_not_in_the_game_table_is_left_out_and_named():
+    assert set(kitgen.NOT_IN_GAME) == {"Somnia"} and "2026-11-15" in kitgen.NOT_IN_GAME["Somnia"]
+    kit, match, decided = _two_characters()
+    notes: dict = {}
+    built = _build_two(kit, match, decided, notes)
+    assert set(built["characters"]) == {"yanfei"}
+    assert notes["not_in_game"] == {"Somnia": kitgen.NOT_IN_GAME["Somnia"]}
+    assert set(_build_two(kit, match, decided)["characters"]) == {"yanfei"}   # without notes the character is left out all the same
+
+
+def test_the_real_kits_json_has_no_somnia_and_no_decision_file_names_her():
+    kits_json = json.loads((ROOT / "src" / "guildboard" / "reference" / "characters" / "kits.json").read_text(encoding="utf-8"))
+    assert "somnia" not in kits_json["characters"]
+    assert not (TOOL / "decided" / "somnia.json").exists()
+    # Mitya and Valeriy are in the game though the app's inventory file lacks them: nothing drops by that file
+    assert {"mitya", "valeriy"} <= set(kits_json["characters"])
+
+
+STATE = {"conditional": {"Yanfei": {}}}
+
+
+def _toggled(name="burst"):
+    gate_a = {"op": "match", "x": [{"op": "read", "p": f"conditional.Yanfei.{name}"}, {"op": "const", "v": "on"}, {"op": "const", "v": 0.2}, {"op": "const", "v": 0}]}
+    return {"premod": {"all_dmg_": {"op": "threshold", "x": [{"op": "read", "p": "constellation"}, {"op": "const", "v": 6}, gate_a, {"op": "const", "v": 0}]}}}
+
+
+def test_a_toggle_a_decided_character_has_no_decision_for_is_listed_when_the_run_asks_and_stops_it_otherwise():
+    kit, match, decided = _two_characters({}, _toggled())
+    with pytest.raises(SystemExit, match="does not decide the toggles"):
+        _build_two(kit, match, decided)
+    notes: dict = {}
+    built = _build_two(kit, match, decided, notes)["characters"]["yanfei"]
+    assert notes["awaiting"] == {"yanfei": ["burst"]}
+    # it is there, off, with its code name in words, and the character stays checked
+    assert built["checked"] is True
+    assert [(t["name"], t["on"], t["label"]) for t in built["toggles"]] == [("burst", False, "Burst")]
+    # a decided one is not listed
+    kit, match, decided = _two_characters({"burst": {"on": False, "label": "Her Burst", "state": "on", "reason": "r"}}, _toggled())
+    notes = {}
+    built = _build_two(kit, match, decided, notes)["characters"]["yanfei"]
+    assert "yanfei" not in notes.get("awaiting", {}) and built["toggles"][0]["label"] == "Her Burst"

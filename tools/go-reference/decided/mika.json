@@ -1,4 +1,8 @@
 {
   "main": null,
-  "toggles": {}
+  "toggles": {
+    "inSoulwind": {"on": false, "state": "on", "label": "Soulwind", "covers": [], "reason": "His Skill gives Soulwind to the active character, a buff meant for the Physical carry he switches to."},
+    "a1DetectorStacks": {"on": false, "state": "5", "label": "Detector stacks", "covers": [], "reason": "Stacks of Soulwind that need more than one enemy hit, his Skill's shards and a crit from a character in both his Burst and Soulwind, so they build up during the fight; it needs the Soulwind switch as well."},
+    "c6Crit": {"on": false, "state": "on", "label": "Constellation 6 Physical CRIT DMG", "covers": [], "reason": "A Constellation 6 bonus of Soulwind, a buff meant for the active character he switches to; it needs the Soulwind switch as well."}
+  }
 }

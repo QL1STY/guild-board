@@ -491,11 +491,13 @@ def test_a_stack_term_whose_lists_differ_in_length_is_left_out_with_the_reason()
         "a state adds to the talent's multiplier (stacks), with lists of different lengths by talent level"]
 
 
-def test_a_term_left_out_for_every_ground_impact_hit_is_listed_once():
-    # Albedo's and Furina's impact bonuses read two states at once: the sheet's term is given to each impact hit and is left out by each
-    for key in ("albedo", "furina"):
-        left = [(item["what"], item["expr"]) for item in KITS[key]["left_out"] if "plunging_impact" in item["what"]]
-        assert len(left) == 1 and len(set(left)) == 1, key
+def test_an_impact_bonus_of_two_states_is_one_effect_not_one_for_each_ground_impact_hit():
+    # Albedo's and Furina's impact bonuses read two states at once (Albedo's from Constellation 4, Furina's from 6): the sheet's term is given to
+    # each impact hit, and merges into one effect on the Low/High Plunge row, off until a person decides its toggles
+    for key, to in (("albedo", "dmg:plunging"), ("furina", "additive:plunging")):
+        assert not [item for item in KITS[key]["left_out"] if "plunging_impact" in item["what"]], key
+        found = [e for e in KITS[key]["effects"] if e["to"] == to and e.get("also")]
+        assert len(found) == 1 and found[0]["hits"] == ["Low/High Plunge DMG"] and found[0]["from_constellation"] >= 4, key
 
 
 # ------------------------------------------------------------------------------------------------ a term of two states at once
@@ -569,18 +571,77 @@ def test_a_term_whose_states_are_all_off_for_the_chosen_ones_adds_nothing():
     assert found.effects == [] and found.toggles == {} and found.left_out == []
 
 
-def test_a_term_of_two_states_that_starts_above_constellation_2_is_left_out_with_the_reason():
-    # Albedo's C6: while the Skill is in the field, a bonus when a Crystallize happens (two states of her own)
+def test_a_term_of_two_states_is_an_effect_behind_both_whatever_the_constellation_it_starts_at():
+    # Albedo's C6: while the Skill is in the field, a bonus when a Crystallize happens (two states of her own): off until a person decides
     term = threshold("constellation", 6, _match("conditional.Albedo.skillInField", "on", _match("conditional.Albedo.c6Crystallize", "on", c(0.17))))
     found = kitgen.Found()
     kitgen._add(term, ("dmg", None), kitgen.Context(), found, {}, name_of, None, "premod.all_dmg_")
-    assert found.effects == []
-    assert [item["why"] for item in found.left_out] == [kitgen.WHY_HIGH_CONSTELLATION.format(n=6)]
-    # the same two states from Constellation 2 are an effect
+    [effect] = found.effects
+    assert (effect["from_constellation"], effect["while"], effect["also"], effect["rate"]) == (6, "skillInField", ["c6Crystallize"], 0.17)
+    assert found.left_out == [] and set(found.toggles) == {"conditional.Albedo.skillInField", "conditional.Albedo.c6Crystallize"}
+    # the same two states from Constellation 2 are an effect too
     low = threshold("constellation", 2, _match("conditional.Ororon.c2Supersense", "on", _match("conditional.Ororon.stack", "4", c(0.32))))
     kept = kitgen.Found()
     kitgen._add(low, ("dmg:electro", None), kitgen.Context(), kept, {}, name_of, None, "premod.electro_dmg_")
     assert [(e["from_constellation"], e["also"]) for e in kept.effects] == [(2, ["stack"])] and kept.left_out == []
+    assert not hasattr(kitgen, "WHY_HIGH_CONSTELLATION") and not hasattr(kitgen, "HIGHEST_COUNTED_CONSTELLATION")
+
+
+# ----------------------------------------------------------------------------------------- a gate that counts by constellation
+
+
+def eq_gate(path, k, yes, no=0):
+    return {"op": "match", "x": [r(path), c(k), yes, c(no)]}
+
+
+def eq_gate_of(left, k, yes, no=0):
+    return {"op": "match", "x": [left, c(k), yes, c(no)]}
+
+
+def test_a_gate_on_constellation_equal_to_6_is_a_gate_from_6():
+    # Alhaitham's C6 Dendro bonus inside his C4 gate: `constellation >= 4 ? (constellation == 6 ? 0.3 : 0) : 0`
+    term = threshold("constellation", 4, eq_gate("constellation", 6, c(0.3)))
+    found = kitgen.Found()
+    kitgen._add(term, ("dmg:dendro", None), kitgen.Context(), found, {}, name_of, None, "premod.dendro_dmg_")
+    [effect] = found.effects
+    assert (effect["from_constellation"], effect["rate"]) == (6, 0.3) and found.left_out == []
+
+
+def test_a_flag_that_is_one_from_a_constellation_is_that_gate():
+    # Xingqiu's C4: `(constellation >= 4 ? 1 : 0) == 1 ? 0.5 : 0`
+    term = eq_gate_of(threshold("constellation", 4, c(1)), 1, c(0.5))
+    found = kitgen.Found()
+    kitgen._add(term, ("dmg", None), kitgen.Context(), found, {}, name_of, None, "premod.all_dmg_")
+    [effect] = found.effects
+    assert (effect["from_constellation"], effect["rate"]) == (4, 0.5) and found.left_out == []
+
+
+def test_a_count_that_is_at_least_one_whatever_the_constellation_is_no_gate():
+    # Nicole's and Vodyanitsa's `add(constellation >= 6 ? 1 : 0, 1.0) >= 1`: always true; what it gates is read as it is
+    count = {"op": "add", "x": [threshold("constellation", 6, c(1)), c(1.0)]}
+    term = {"op": "threshold", "x": [count, c(1), threshold("constellation", 2, c(0.5)), c(0)]}
+    found = kitgen.Found()
+    kitgen._add(term, ("cd:hydro", None), kitgen.Context(), found, {}, name_of, None, "premod.hydro_critDMG_")
+    [effect] = found.effects
+    assert (effect["from_constellation"], effect["rate"]) == (2, 0.5) and found.left_out == []
+
+
+def test_a_list_read_by_a_count_that_grows_with_the_constellation_is_a_step_at_each_change():
+    # Chasca's bonus by a count: the list's 0.15 at one, 0.35 at two, the count 1 below Constellation 2 and 2 from it
+    count = {"op": "min", "x": [{"op": "add", "x": [threshold("constellation", 2, c(1)), c(1.0)]}, c(3.0)]}
+    listed = {"op": "subscript", "x": [count], "list": [-1, 0.15, 0.35, 0.5]}
+    term = {"op": "threshold", "x": [count, c(1), listed, c(0)]}
+    found = kitgen.Found()
+    kitgen._add(term, ("dmg", None), kitgen.Context(), found, {}, name_of, None, "premod.charged_dmg_")
+    assert sorted((e["from_constellation"] or 0, round(e["rate"], 6)) for e in found.effects) == [(0, 0.15), (2, 0.2)]
+    assert found.left_out == []
+
+
+def test_a_gate_that_holds_only_between_two_constellations_stays_left_out():
+    term = eq_gate("constellation", 4, c(0.3))
+    found = kitgen.Found()
+    kitgen._add(term, ("dmg", None), kitgen.Context(), found, {}, name_of, None, "premod.all_dmg_")
+    assert found.effects == [] and len(found.left_out) == 1 and "a gate on" in found.left_out[0]["why"]
 
 
 def test_a_mode_that_gives_her_hits_one_kind_or_another_is_not_all_of_them_at_once():
@@ -668,7 +729,9 @@ def test_the_terms_left_out_for_two_states_say_why_and_none_says_two_states_at_o
     assert not any("not model" in item["why"] for character in KITS.values() for item in character["left_out"])
     assert any(item["why"] == kitgen.WHY_OTHER_ELEMENT for item in KITS["durin"]["left_out"])
     assert any(item["why"] == kitgen.WHY_NOT_ALL_NEEDED for item in KITS["durin"]["left_out"] + KITS["skirk"]["left_out"])
-    assert any(item["why"].startswith("it reads two of her states and starts at Constellation 6") for item in KITS["albedo"]["left_out"])
+    # nothing is left out for starting at a high constellation any more: Albedo's C6 is an effect behind her two toggles
+    assert not any("above the C0-C2" in item["why"] for character in KITS.values() for item in character["left_out"])
+    assert any(e["from_constellation"] == 6 and e["also"] == ["c6Crystallize"] for e in KITS["albedo"]["effects"] if e.get("also"))
 
 
 def test_the_new_states_that_are_on_say_what_a_case_shows_and_the_off_ones_claim_only_what_was_checked():

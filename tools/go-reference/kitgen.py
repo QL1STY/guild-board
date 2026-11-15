@@ -727,8 +727,6 @@ def _all_needed(term: Any, states_of: dict[str, tuple[list[str], str]]) -> bool:
 
 
 WHY_OTHER_ELEMENT = "it reads two of her states and is a DMG bonus to an element that none of her rows deals"
-WHY_HIGH_CONSTELLATION = "it reads two of her states and starts at Constellation {n}, above the C0-C2 the plan counts"
-HIGHEST_COUNTED_CONSTELLATION = 2
 
 # an undecided weapon or set whose states are different bonuses the game gives at random or by turns: no one state is the honest one for
 # every character (which gives the most depends on her rows), so it is left out, with its reason (the toggle is not made).
@@ -856,28 +854,78 @@ def _add(term, target, ctx, found, chosen, toggle_name, hits, label, derived=Fal
         if is_const(piece) and _num(value_of(piece)) == 0:
             continue
         # a count that only her constellation changes (Odette's A1) is a step at each constellation it changes at: effects that add up
-        made_all: list[dict] = []
-        for step in _expand_steps(_peel_and_distribute(piece)):
+        try:
+            made_all = _made_of(piece, ctx, to, talents, hits, while_, also)
+        except NotLinear as why:
+            made_all = []   # all the parts or none: no part of a count stays beside the entry that says it is left out
             try:
-                numbers = linear(step, ctx)
-            except NotLinear as why:
+                # a gate or a list that her constellation alone decides, in a form the plain gate does not say (`constellation == 6`,
+                # a count of constellations): read as the gates and steps it comes to
+                again = by_constellation(piece)
+                if again == piece:
+                    raise why
+                for part in terms_of(normalise(again)):
+                    if is_const(part) and _num(value_of(part)) == 0:
+                        continue
+                    made_all += _made_of(part, ctx, to, talents, hits, while_, also)
+            except NotLinear:
+                made_all = []
                 found.left_out.append({"what": label, "expr": show(piece), "why": str(why)})
-                made_all = []   # all the steps or none: no part of a count stays beside the entry that says it is left out
-                break
-            made = effect(numbers, to, talents, hits, while_, also)
-            if derived:
+        if derived:
+            for made in made_all:
                 made["_derived"] = True   # read from the team: never on the panel (`mark_in_stats` takes it out)
-            made_all.append(made)
-        if also and made_all and all((m.get("from_constellation") or 0) > HIGHEST_COUNTED_CONSTELLATION for m in made_all):
-            # two states and a constellation the plan leaves (C3 and above): not made a toggle, listed with the reason
-            found.left_out.append({"what": label, "expr": show(piece),
-                                   "why": WHY_HIGH_CONSTELLATION.format(n=min(m["from_constellation"] for m in made_all))})
-            continue
         if team_mode and made_all and not label.startswith("hit ") and not any(reaches(m, ctx) for m in made_all):
             # a team mode's term that adds nothing to a row of hers: left for a team-mode decision, no toggle for it
             found.left_out.append({"what": label, "expr": show(piece), "why": WHY_TEAM_MODE})
             continue
         found.effects += made_all
+
+
+def _made_of(piece: Any, ctx: "Context", to: str, talents: Any, hits: Any, while_: Any, also: list[str]) -> list[dict]:
+    """The effects one term comes to (a count that only her constellation changes is one for each step), or NotLinear."""
+    return [effect(linear(step, ctx), to, talents, hits, while_, also) for step in _expand_steps(_peel_and_distribute(piece))]
+
+
+def _truth_by_constellation(node: dict) -> list[bool] | None:
+    """Whether a gate (`threshold` or `match`) that reads her constellation and nothing else holds at each of the seven, or None when
+    it does not come to a yes or no at one."""
+    out = []
+    for level in range(7):
+        got = simplify({**node, "x": [node["x"][0], node["x"][1], const(1), const(0)]}, {"constellation": level})
+        if not is_const(got) or value_of(got) not in (0, 1):
+            return None
+        out.append(value_of(got) == 1)
+    return out
+
+
+def by_constellation(node: Any) -> Any:
+    """`node` with each gate that her constellation alone decides, in a form other than `constellation >= N`, written as that gate, and each
+    list read by a count of her constellation written as its steps. A gate that holds from some constellation on (`constellation == 6`,
+    `(constellation >= 4 ? 1 : 0) == 1`) is `constellation >= N`; one that always holds (`add(constellation >= 6 ? 1 : 0, 1.0) >= 1`) is
+    its yes branch and one that never does is its no; one that holds only between two constellations is left as it is, for the reason
+    `linear` gives. A list by such a count (Chasca's) is its value at the lowest constellation and a step at each one it changes at."""
+    if not isinstance(node, dict) or "op" not in node:
+        return node
+    op, x = node["op"], node.get("x") or []
+    if op in ("threshold", "match") and len(x) == 4:
+        plain = op == "threshold" and _read_path(x[0]) == "constellation" and is_const(x[1])
+        if not plain and reads(x[0]) | reads(x[1]) == {"constellation"}:
+            truth = _truth_by_constellation(node)
+            first = truth.index(True) if truth and True in truth else None
+            if truth is not None and truth == [level >= (first if first is not None else 7) for level in range(7)]:
+                yes, no = by_constellation(x[2]), by_constellation(x[3])
+                if first is None:
+                    return no
+                return yes if first == 0 else {"op": "threshold", "x": [{"op": "read", "p": "constellation"}, const(first), yes, no]}
+    if op == "subscript" and x and reads(node) == {"constellation"}:
+        steps = constellation_steps(node)
+        if steps is not None:
+            parts = [const(change) if level == 0 else {"op": "threshold", "x": [{"op": "read", "p": "constellation"}, const(level), const(change), const(0)]}
+                     for level, change in steps]
+            return parts[0] if len(parts) == 1 else {"op": "add", "x": parts} if parts else const(0)
+    if "x" in node:
+        return {**node, "x": [by_constellation(n) for n in x]}
+    return node
 
 
 def constellation_steps(node: Any) -> list[tuple[int, float]] | None:
@@ -1558,19 +1606,25 @@ def gear_label(name: str, labels: dict[str, str] | None) -> str:
 
 
 def _toggles(found: Found, toggle_name, decided: dict[str, dict] | None, where: str, who: str = "her",
-             labels: dict[str, str] | None = None) -> list[dict]:
+             labels: dict[str, str] | None = None, awaiting: dict[str, list[str]] | None = None) -> list[dict]:
+    """The toggles of an entry. A decision file that misses a toggle stops the build, unless `awaiting` is given (a run of kits.json that is
+    to go on, so that a new toggle of a decided character can be seen and decided): then the toggle is written off, with its code name in
+    words, the character is added to `awaiting` with its names, and she waits for a person to decide them."""
     out = []
     names = {toggle_name(path): path for path in found.toggles}
+    undecided: list[str] = []
     if decided is not None:
         unknown = sorted(set(decided) - set(names))
         if unknown:
             raise SystemExit(f"{where}: {who} decision file names toggles the kit does not have: {unknown} (it has {sorted(names)})")
-        missing = sorted(set(names) - set(decided))
-        if missing:
-            raise SystemExit(f"{where}: {who} decision file does not decide the toggles {missing}")
+        undecided = sorted(set(names) - set(decided))
+        if undecided and awaiting is None:
+            raise SystemExit(f"{where}: {who} decision file does not decide the toggles {undecided}")
+        if undecided:
+            awaiting[where] = undecided
     for name, path in sorted(names.items()):
         info = found.toggles[path]
-        if decided is not None:
+        if decided is not None and name not in undecided:
             d = decided[name]
             out.append({"name": name, "label": d["label"], "on": bool(d["on"]), "covers": list(d.get("covers", [])),
                         "state": str(info["chosen"])})
@@ -1986,12 +2040,28 @@ def gear_differences(mine: dict | None, kept: dict, labels: dict[str, str] | Non
     return out
 
 
-def build(kit: dict, match: dict, decided: dict, commit: str, slug, kind_by_name, is_damage=lambda name: True) -> dict:
-    """kits.json from gb-kit.json, gb-match.json and the decisions (`load_decided`)."""
+# GO's characters that its data holds at the pinned commit and the game does not: kits.json leaves them out, and the run says whom. {GO's key: why}
+# A table and not a filter on the app's inventory file, which lacks Mitya and Valeriy, who are in the game.
+NOT_IN_GAME = {"Somnia": "In Genshin Optimizer's data at the pinned commit, but not in the game (the player, 2026-11-15)."}
+
+
+def build(kit: dict, match: dict, decided: dict, commit: str, slug, kind_by_name, is_damage=lambda name: True,
+          notes: dict | None = None) -> dict:
+    """kits.json from gb-kit.json, gb-match.json and the decisions (`load_decided`).
+
+    `notes` (a run that goes on with what is waiting for a person, `run.py kits`): given, it is filled with `not_in_game` ({GO's key: why}, the
+    characters of `NOT_IN_GAME` the data has and kits.json leaves out) and `awaiting` ({key: the names of toggles her decision file does not
+    decide yet}: they are written off and she stays checked). Without it a toggle her file does not decide stops the build."""
     short = commit[:8]
     characters: dict[str, Any] = {}
     decided_characters = decided.get("characters", {})
+    awaiting: dict[str, list[str]] | None = {} if notes is not None else None
+    if notes is not None:
+        notes["not_in_game"] = {go_key: why for go_key, why in NOT_IN_GAME.items() if go_key in match}
+        notes["awaiting"] = awaiting
     for go_key, char in sorted(match.items()):
+        if go_key in NOT_IN_GAME:
+            continue
         key = character_key(go_key, char.get("name"), slug)
         if key in characters:
             raise SystemExit(f"two GO characters give the key {key}")
@@ -2067,7 +2137,7 @@ def build(kit: dict, match: dict, decided: dict, commit: str, slug, kind_by_name
         # a state whose every effect was left out is no switch: only the states some effect or infusion reads
         used = {e["while"] for e in found.effects} | {n for e in found.effects for n in e.get("also") or ()} | {i["while"] for i in infused}
         found.toggles = {path: info for path, info in found.toggles.items() if toggle_name(path) in used}
-        toggles = _toggles(found, toggle_name, mine.get("toggles", {}) if mine else None, key)
+        toggles = _toggles(found, toggle_name, mine.get("toggles", {}) if mine else None, key, awaiting=awaiting)
         main = (mine or {}).get("main")
         if main:
             known = {name for rows in hits.values() for name in rows}

@@ -47,19 +47,27 @@ fixture keeps every case's answers, ours and GO's.
 
 The cases above are at Constellation 0. A character with a state decided on whose effects start at a constellation (Mavuika's
 Flame Form, Keqing's Constellation 6 stacks), a row only a constellation deals (`row_gates` in kits.json: Yanfei's Charged Attack
-with four Scarlet Seals, GO's `charged.4` behind Constellation 6), an infusion of a state decided on that starts at a constellation, or an
-effect no state gates that starts at Constellation 1 or 2
-(Sandrone's Crit DMG, Hu Tao's Skill bonus) has the same two swaps again at the highest constellation those need
-(`compare.constellation_of`), as `<key>:sands@c6` and `<key>:goblet@c6`, on her kit at that constellation (`kit_of` at it, named
-`<key>@c6` in the fixture), with GO at the same constellation and the states that hold there. Where a constellation gives CRIT Rate or
-CRIT DMG a third swap, the circlet's CRIT DMG to CRIT Rate, is made at 0 and at that constellation: a CRIT bonus on every counted row
+with four Scarlet Seals, GO's `charged.4` behind Constellation 6), an infusion that starts at a constellation, or an
+effect no state gates that starts at any constellation from 1 to 6 (Sandrone's Crit DMG, Hu Tao's Skill bonus, Mualani's Burst DMG
+Bonus at 4, Odette's Stellar elevation at 6) has the same two swaps again at each constellation those start at, each once
+(`compare.constellations_of`), as `<key>:sands@c6` and `<key>:goblet@c6`, on her kit at that constellation (`kit_of` at it, named
+`<key>@c6` in the fixture), with GO at the same constellation and the states that hold there. The comparison has no boundary at a
+constellation (it stopped at Constellation 2 until 2.2.1). Her Skill and Burst (or Normal Attack) are 3 levels higher at Constellation 3
+and 3 more at 5: the cases hand GO talent levels of 10 and GO adds those itself (`input.total.skillIndex`...), and the fixture reads the
+levels GO's hits are at from its answer (`levels`, `compare.fixture`), makes her rows' text at them (`affixes`) and gives the block
+(`block(..., levels)`) the same, so both sides count the raised talent alike; `tests/test_compare_cases.py` holds each `@cN` kit's raise to
+3 for each of Constellation 3 and 5 it has. A character has a set of cases for each constellation an effect, row or infusion of hers starts at (Sandrone's at 2 and 6, Varesa's at 1, 4
+and 6, Columbina's at all six), not only the highest: at the highest, both sides apply every lower effect, so a gate read at the wrong start
+(Constellation 4 where it is 2) would agree at 0 and at 6 and never be caught. The kit at each holds everything it gives from the lower ones.
+Where a constellation gives CRIT Rate or
+CRIT DMG a third swap, the circlet's CRIT DMG to CRIT Rate, is made at that constellation, and at 0 once any of her constellations gives it: a CRIT bonus on every counted row
 cancels in the sands and goblet ratios. A disagreement at one is fixed in the data or the engine, or its state is switched off in her
 decision file with the reason, or she gets an `unsure`.
 
-Left uncompared: effects no state gates that start at Constellation 3 or above (`compare.ungated_above_limit()`: the plan's boundary is
-Constellation 2). And three characters whose answers at their constellation no swap tells from their answers at 0, named with the
-reason in `INVISIBLE` of tests/test_compare_cases.py: Columbina (her Constellation 1 and 2 elevation raises every row alike), Qiqi
-(her Constellation 2 ATK bonus is in a team shape that is not her usual one) and the Traveler (Anemo) (Energy Recharge).
+Seven characters whose answers at their constellation no swap tells from their answers at 0 are named with the reason in `INVISIBLE` of
+tests/test_compare_cases.py: Columbina (her Lunar elevation raises every row alike), Mitya (her Stellar-Conduct elevation does), Qiqi (her
+Constellation 2 ATK bonus is in a team shape that is not her usual one), Vesna (the same for her Constellation 4), Chasca (the same for her
+Constellation 2 stack), Xingqiu (his Constellation 4 multiplies his Skill's one counted row) and the Traveler (Anemo) (Energy Recharge).
 
 ### A batch of decisions: `compare --only`
 
@@ -227,7 +235,12 @@ The specs and these scripts are Guild Board's own (MIT); they import GO's librar
   Two more shapes are read: an effect that also multiplies by her Healing Bonus (`times: "heal"`, Kokomi's A4 is 15% of Max HP times it,
   read before or after the conversions as its first stat is), and a count that only her constellation changes (Odette's A1 is 4 below
   Constellation 1, 0 from 1 and 6 from 6), which is one effect for each constellation it changes at, gated there, each adding the change
-  (`kitgen.constellation_steps`), so that they add up to the count at every constellation.
+  (`kitgen.constellation_steps`), so that they add up to the count at every constellation. A gate that her constellation alone decides, in a
+  form other than `constellation >= N`, is read as that gate when `linear` cannot read the term as it is (`kitgen.by_constellation`):
+  `constellation == 6` (Alhaitham's C6), `(constellation >= 4 ? 1 : 0) == 1` (Xingqiu's C4) and a count that is 1 or more at every
+  constellation (`add(constellation >= 6 ? 1 : 0, 1.0) >= 1`, Nicole's and Vodyanitsa's) are a gate from where they start (or none), and
+  a list read by a count of her constellation (Chasca's A1 by the elements of the team and Constellation 2) is a step at each constellation
+  it changes at. A gate that holds only between two constellations stays left out, with `linear`'s reason.
 - **Infusions.** GO's own infusions (`infusion.overridableSelf` and `nonOverridableSelf`; the party's `team` ones are left out) make her
   Normal, Charged and Plunging hits an element while the state that gives it is on, or always. Each is `{talents, element, while}` in
   kits.json's `infused`, and `from_ascension` or `from_constellation` for a gate (Chiori's A1, Dori's C6), which `kits.kit_of` checks
@@ -254,7 +267,7 @@ The specs and these scripts are Guild Board's own (MIT); they import GO's librar
   Illusion's). A row whose alternatives are hits dealt by a state (Mualani's Sharky's Bite by Wave Momentum, Wriothesley's Charged Attack
   with and without his Rebuke) is the first hit's in the engine and in the comparison, and an effect only the others have is left out.
 - **The ground impact of a plunge.** GO's `plunging_impact_dmg_`, `_dmgInc`, `_critRate_` and `_critDMG_` (Varesa's A1 and Constellation 4,
-  Xianyun's A4, Albedo's and Furina's, those of two states and a constellation above 2 still left out) are the engine's plunging buckets for the rows of the hits whose
+  Xianyun's A4, Albedo's and Furina's) are the engine's plunging buckets for the rows of the hits whose
   move is `plunging_impact`: the sheet's is given to each of those hits (`read_effects`' `impact_found`), a hit's own data keeps it only for
   an impact hit (the Plunge DMG hit of Varesa carries hers, and is a collision, which GO's formula does not read it for), and the rows
   merge as any hit's effect does. The Plunge DMG row (the collision) is not reached; the Low/High Plunge rows and a Skill's or Burst's
@@ -271,7 +284,8 @@ The specs and these scripts are Guild Board's own (MIT); they import GO's librar
   effect `while` the mode's toggle and `also` hers (off by default, with our own label and reason) when it reaches a row of hers
   (`kitgen.reaches`, the engine's `reachesRow` over every row she has, her elements being those her rows can deal: `elements_dealt`); when it
   reaches none it is left out for a team-mode decision (Cyno's C2 and Valeriy's, Wriothesley's and Yae Miko's Stellar-Conduct bonuses, since
-  none of their rows is one). Left out, each with its reason: a term that starts at Constellation 3 or above (32, mostly C6), a term that gives
+  none of their rows is one). A term of two states that starts at Constellation 3 or above (Albedo's, Beidou's, Furina's, Mika's... mostly C6) is an
+  effect behind both toggles like any other, off until a person decides them. Left out, each with its reason: a term that gives
   something when one of its states is off (13) and a DMG bonus to an element none of her rows deals (Durin's C2 for the others; the Traveler
   (Dendro)'s C6). The decision sheet measures a toggle alone and, for an effect that needs other states, with them beside it.
 - **One entry, two hits by a constellation.** A display entry of GO's sheet with a damage node in more than one branch of a gate (Nefer's
@@ -291,13 +305,12 @@ The specs and these scripts are Guild Board's own (MIT); they import GO's librar
   from the decision file. His Burst is a counted talent when he has levelled it to within one level of his highest talent (spec 12.2).
 - **Left out on purpose (5c-2), with the characters each touches.** Each is listed in the character's `left_out` with its reason.
   A team-mode decision (4 terms): Cyno's C2 and Valeriy's, Wriothesley's and Yae Miko's Stellar-Conduct bonuses, which no row of theirs takes.
-  Constellation 3 and above with two states (32: Albedo, Alyosha, Beidou, Faruzan, Furina, Klee, Kujou Sara, Mika, Mona, Razor, Valeriy, Venti,
-  Wriothesley). A sum of states any of which is enough or a factor that is 1 without its state (13: Durin's C2 Pyro bonus, Skirk's Burst by her A4
+  A sum of states any of which is enough or a factor that is 1 without its state (13: Durin's C2 Pyro bonus, Skirk's Burst by her A4
   stacks, Mavuika's A4, Columbina's C6, Diona's, Klee's, Valeriy's, Venti's and Wriothesley's): an effect behind "any of" several toggles. Varka: his
   Skill's and Burst's rows are two strikes in one row, the first of the element his team has (Pyro before Hydro, Electro and Cryo, Physical with none)
   and the second Anemo; counting them needs a row with an element for each part and the team's priority, a model the planner does not have (his
   `unsure` stays). The Traveler (Electro)'s Constellation 6 third thunder is a hit of the Falling Thunder row shown from Constellation 6 (a row
-  count that changes with the constellation, above the plan's C0-C2). Nefer's Constellation 6 Lunar-Bloom second Phantasm hit prints no row of
+  count that changes with the constellation). Nefer's Constellation 6 Lunar-Bloom second Phantasm hit prints no row of
   HoYoLAB's. Gear: nine weapons (Vortex Vanquisher, The Unforged, Summit Shaper, Memory of Dust, Azurelight, A Thousand Blazing Suns, Starsealed
   Edict, Fractured Halo, Hymn of the Maelstrom) and two sets (Vermillion Hereafter's 4-piece, Nighttime Whispers in the Echoing Woods) have an effect
   behind two toggles now. Five of them have a decision file now (the stacks of Vortex Vanquisher, The Unforged, Summit Shaper and Memory of
@@ -317,8 +330,13 @@ The specs and these scripts are Guild Board's own (MIT); they import GO's librar
   "panel question"). **The engine's rule:** an `in_stats` effect is never added for her own weapon or her own sets; it is added
   only for a tested weapon or set that is not hers (and hers taken out), because the panel holds hers and not the
   tested one's.
-- **Decided toggles.** Every toggle of a character with a decision file must be decided there, or the run stops; a
-  character there gets `checked: true`.
+- **Decided toggles.** Every toggle of a character with a decision file must be decided there, or the build stops; a
+  character there gets `checked: true`. `run.py kits` does not stop for it: a toggle her sheet has that her file does not decide (a
+  state her new effects read, as when the C0-C2 boundary went) is written off, with its code name in words, and the run lists the
+  character and the toggle ("decided characters have toggles that await a decision") until a person decides it in her file.
+- **Characters GO has and the game does not (`kitgen.NOT_IN_GAME`).** A table of GO's key to why: kits.json leaves them out, no decision
+  file may name them, and the run prints whom it left out (Somnia, the player, 2026-11-15). It is not a filter on the app's inventory file,
+  which lacks Mitya and Valeriy, who are in the game.
 - **Gear decisions.** A weapon's or set's toggles are off, and offered in the planner's "Not counted:" line (when they reach a counted row), until a file decides them (next section). The label of every such toggle is ours, in `decided/_gear-labels.json` (`<key>:<name>` to a phrase, shown as "<item>: <label>"); `kits` stops if one is missing, so a refresh that brings a new item says so. Only labels are decided there: the toggles stay off.
 
 ## Refresh for a new game version

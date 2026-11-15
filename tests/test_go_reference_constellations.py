@@ -167,37 +167,41 @@ def test_a_talent_whose_every_row_is_absent_is_no_main_talent():
 
 def _wanted() -> dict[str, int]:
     """The characters with a case at a constellation: a toggle decided on whose effects need one, a row only one deals, or an effect no
-    toggle gates that starts at Constellation 1 or 2 (the plan's C0-C2 boundary)."""
+    toggle gates that starts at any constellation (the C0-C2 boundary is gone)."""
     out = {}
     for key, c in KITS["characters"].items():
         on = {t["name"] for t in c["toggles"] if t["on"]}
         need = [e["from_constellation"] for e in c["effects"]
                 if e.get("while") in on and all(n in on for n in e.get("also") or ()) and e.get("from_constellation")]
-        need += [e["from_constellation"] for e in c["effects"] if not e.get("while") and 0 < (e.get("from_constellation") or 0) <= 2]
+        need += [e["from_constellation"] for e in c["effects"] if not e.get("while") and e.get("from_constellation")]
         need += [g["from"] for rows in (c.get("row_gates") or {}).values() for g in rows.values() if g.get("from")]
         need += [i["from_constellation"] for i in c.get("infused", []) if i.get("from_constellation") and (
-            i["while"] in on if i.get("while") else i["from_constellation"] <= 2)]
+            i["while"] in on if i.get("while") else True)]
         if need:
-            out[key] = max(need)
+            out[key] = sorted(set(need))
     return out
 
 
 def test_the_constellation_a_character_is_compared_at_is_the_highest_one_her_decided_states_or_rows_need():
     wanted = _wanted()
     assert {"yanfei", "yae-miko", "mavuika", "keqing", "arlecchino", "wriothesley"} <= set(wanted)
-    assert wanted["skirk"] == 2           # her Constellation 2 state is on: the ATK is her Seven-Phase Flash's, as the planner can tell now
-    for key, constellation in wanted.items():
-        assert compare.constellation_of(key) == constellation, key
-    assert compare.constellation_of("hu-tao") == 2 and compare.constellation_of("odette") is None
+    assert wanted["skirk"] == [2]         # her Constellation 2 state is on: the ATK is her Seven-Phase Flash's, as the planner can tell now
+    for key, constellations in wanted.items():
+        assert compare.constellations_of(key) == constellations, key
+    assert compare.constellations_of("hu-tao") == [2] and compare.constellations_of("odette") == [6]
+    # a character is compared at each constellation an effect starts at, not only the highest: a gate read at the wrong start (C4 for C2)
+    # agrees at 0 and at 6, where both sides apply every lower effect
+    assert compare.constellations_of("sandrone") == [2, 6] and compare.constellations_of("varesa") == [1, 4, 6]
+    assert compare.constellations_of("columbina") == [1, 2, 3, 4, 5, 6] and compare.constellations_of("yanfei") == [6]
 
 
-def test_an_effect_no_state_gates_is_compared_from_constellation_1_and_2_and_not_above():
-    # Sandrone's Crit DMG (C2), Columbina's Lunar-Charged elevation (C1 and C2), Hu Tao's Skill additive (C2): ungated, compared at 2.
-    # Mualani's Burst DMG Bonus (C4), Odette's Stellar elevation (C6): the runtime applies them, the comparison does not reach them.
-    assert {k: compare.constellation_of(k) for k in ("sandrone", "columbina", "hu-tao")} == {"sandrone": 2, "columbina": 2, "hu-tao": 2}
-    assert compare.constellation_of("mualani") is None and compare.constellation_of("odette") is None
-    above = compare.ungated_above_limit()
-    assert {"mualani", "odette", "sandrone", "columbina", "flins"} <= set(above) and "hu-tao" not in above
+def test_an_effect_no_state_gates_is_compared_at_the_constellation_it_starts_at_whichever_it_is():
+    # Hu Tao's Skill additive (C2): ungated, compared at 2. Sandrone's Crit DMG (C2) is compared at 2 and at 6, where her Constellation 6
+    # effects are; Mualani's Burst DMG Bonus (C4) and Odette's Stellar elevation (C6) too: the boundary at Constellation 2 is gone.
+    assert {k: compare.constellations_of(k) for k in ("sandrone", "columbina", "hu-tao")} == {
+        "sandrone": [2, 6], "columbina": [1, 2, 3, 4, 5, 6], "hu-tao": [2]}
+    assert compare.constellations_of("mualani") == [4] and compare.constellations_of("odette") == [6]
+    assert not hasattr(compare, "UNGATED_LIMIT") and not hasattr(compare, "ungated_above_limit")
 
 
 @needs_go
@@ -216,8 +220,9 @@ def test_a_constellation_that_gives_crit_also_has_the_circlet_swap_at_0_and_ther
 def test_a_case_at_a_constellation_has_its_own_id_kit_and_the_constellation_on_both_sides():
     plan = compare.cases(only=["yanfei", "odette"])
     by_id = {c["id"]: c for c in plan["cases"]}
-    assert {"yanfei:sands", "yanfei:goblet", "yanfei:sands@c6", "yanfei:goblet@c6", "odette:sands", "odette:goblet"} <= set(by_id)
-    assert not any(i.endswith("@c0") or "odette" in i and "@" in i for i in by_id)
+    assert {"yanfei:sands", "yanfei:goblet", "yanfei:sands@c6", "yanfei:goblet@c6", "odette:sands", "odette:goblet",
+            "odette:sands@c6", "odette:goblet@c6"} <= set(by_id)
+    assert not any(i.endswith("@c0") for i in by_id)
     low, high = by_id["yanfei:sands"], by_id["yanfei:sands@c6"]
     assert low["constellation"] == 0 and low["kit"] == "yanfei"
     assert high["constellation"] == 6 and high["kit"] == "yanfei@c6" and high["character"] == "yanfei"

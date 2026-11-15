@@ -132,8 +132,8 @@ def _app_functions():
     return slug, kind_by_name, is_damage
 
 
-def make_kits(source: Path, commit: str, decided: dict) -> dict:
-    """kits.json's content from an extraction in `source` and the decisions, nothing written."""
+def make_kits(source: Path, commit: str, decided: dict, notes: dict | None = None) -> dict:
+    """kits.json's content from an extraction in `source` and the decisions, nothing written. `notes`: see `kitgen.build`."""
     slug, kind_by_name, is_damage = _app_functions()
     kit = json.loads((source / "gb-kit.json").read_text(encoding="utf-8"))
     match = json.loads((source / "gb-match.json").read_text(encoding="utf-8"))
@@ -141,7 +141,7 @@ def make_kits(source: Path, commit: str, decided: dict) -> dict:
     if stale:
         raise SystemExit(f"gb-match.json in {source} has no `ele_tree` on the hits of {', '.join(stale[:5])}...: it is from an older extraction. "
                          "Run `run.py kits` without --from to read the element a state decides for a hit (Aloy's Rushing Ice, Yoimiya's Niwabi Fire-Dance).")
-    return kitgen.build(kit, match, decided, commit, slug, kind_by_name, is_damage)
+    return kitgen.build(kit, match, decided, commit, slug, kind_by_name, is_damage, notes)
 
 
 def weapon_levels(kits: dict) -> dict:
@@ -156,8 +156,19 @@ def save_kits(kits: dict) -> None:
 
 
 def write_kits(source: Path, commit: str) -> dict:
-    kits = make_kits(source, commit, kitgen.load_decided(DECIDED))
+    """Builds and writes kits.json, and says what the build left out or is waiting for: the characters of GO's data that are not in the game
+    (`kitgen.NOT_IN_GAME`), and the characters with a decision file that does not decide a toggle her sheet now has (they are written with it
+    off and stay checked, until a person decides it in her file and runs this again)."""
+    notes: dict = {}
+    kits = make_kits(source, commit, kitgen.load_decided(DECIDED), notes)
     save_kits(kits)
+    for go_key, why in sorted(notes["not_in_game"].items()):
+        print(f"Left out, not in the game: {go_key}: {why}")
+    awaiting = notes["awaiting"]
+    if awaiting:
+        print(f"{len(awaiting)} decided characters have toggles that await a decision (written off):")
+        for key, names in sorted(awaiting.items()):
+            print(f"  {key}: {', '.join(names)}")
     return kits
 
 

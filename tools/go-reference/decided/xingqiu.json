@@ -1,4 +1,6 @@
 {
   "main": null,
-  "toggles": {}
+  "toggles": {
+    "burst": {"on": true, "state": "on", "label": "Constellation 4 Skill inside his Burst", "covers": ["skill"], "reason": "With Constellation 4 he casts his Burst first and his Skill inside it, as he is played, and the Burst lasts long enough for the Skill's hits to deal the extra damage. No swap of the comparison can prove it: it multiplies his Skill's one counted row, which cancels in the ratio."}
+  }
 }

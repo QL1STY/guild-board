@@ -1,6 +1,7 @@
 {
   "main": null,
   "toggles": {
-    "burstBenefit": {"on": false, "state": "on", "label": "Burst Anemo DMG bonus", "covers": [], "reason": "Her Burst gives its Anemo DMG Bonus to party members inside its field after it lands, a buff meant for the team, and her own Skill hits are counted with it only when she stays in the field."}
+    "burstBenefit": {"on": false, "state": "on", "label": "Burst Anemo DMG bonus", "covers": [], "reason": "Her Burst gives its Anemo DMG Bonus to party members inside its field after it lands, a buff meant for the team, and her own Skill hits are counted with it only when she stays in the field."},
+    "c6Crit": {"on": false, "state": "on", "label": "Constellation 6 Anemo CRIT DMG", "covers": [], "reason": "A Constellation 6 bonus that comes with her Burst's Anemo buff, a buff meant for the team; it needs that switch as well."}
   }
 }

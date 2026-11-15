@@ -327,6 +327,73 @@
     {
      "from": null,
      "reads": null,
+     "to": "dmg",
+     "rate": 0.17,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "skillInField",
+     "in_stats": false,
+     "also": [
+      "c6Crystallize"
+     ]
+    },
+    {
+     "from": "def",
+     "reads": "final",
+     "to": "additive:burst",
+     "rate": 2.5,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Fatal Blossom DMG"
+     ],
+     "row": null,
+     "while": "lockHomework",
+     "in_stats": false,
+     "also": [
+      "c6LockAfterDestroy"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:plunging",
+     "rate": 0.3,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 4,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Low/High Plunge DMG"
+     ],
+     "row": null,
+     "while": "lockHomework",
+     "in_stats": false,
+     "also": [
+      "c4LockAfterJump"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
      "to": "dmg:skill",
      "rate": 0.25,
      "cap": null,
@@ -366,6 +433,27 @@
      "on": false,
      "covers": [],
      "state": "4"
+    },
+    {
+     "name": "c4LockAfterJump",
+     "label": "Constellation 4 plunging bonus after a jump (Hexerei)",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "c6Crystallize",
+     "label": "Constellation 6 with a Crystallize shield",
+     "on": false,
+     "covers": [],
+     "state": "c6Crystallize"
+    },
+    {
+     "name": "c6LockAfterDestroy",
+     "label": "Constellation 6 Fatal Blossom bonus (Hexerei)",
+     "on": false,
+     "covers": [],
+     "state": "on"
     },
     {
      "name": "lockHomework",
@@ -456,24 +544,9 @@
      "why": "depends on the party"
     },
     {
-     "what": "premod.all_dmg_",
-     "expr": "(constellation >= 6 ? 0.17 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "premod.plunging_impact_dmg_",
-     "expr": "(constellation >= 4 ? 0.3 : 0)",
-     "why": "it reads two of her states and starts at Constellation 4, above the C0-C2 the plan counts"
-    },
-    {
      "what": "hit skill.blossom: premod.skill_dmgInc",
      "expr": "(asc >= 1 ? (conditional.Albedo.lockHomework == \"on\" ? (tally.hexerei >= 2 ? (conditional.Albedo.a1LockSilver == \"on\" ? mul(total.def, 2.4) : 0) : 0) : 0) : 0)",
      "why": "depends on the party"
-    },
-    {
-     "what": "hit burst.blossom: premod.burst_dmgInc",
-     "expr": "(constellation >= 6 ? mul(total.def, 2.5) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Albedo/index.tsx"
@@ -533,6 +606,24 @@
     }
    ],
    "effects": [
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:dendro",
+     "rate": 0.3,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "mirrorsConsumed",
+     "in_stats": false
+    },
     {
      "from": null,
      "reads": null,
@@ -646,6 +737,13 @@
      "state": "on"
     },
     {
+     "name": "mirrorsConsumed",
+     "label": "Dendro bonus from the mirrors his Burst makes",
+     "on": false,
+     "covers": [],
+     "state": "3"
+    },
+    {
      "name": "withMirrors",
      "label": "Chisel-Light Mirror",
      "on": true,
@@ -658,11 +756,6 @@
     }
    ],
    "left_out": [
-    {
-     "what": "premod.dendro_dmg_",
-     "expr": "(constellation >= 4 ? (constellation == 6 ? 0.3 : 0) : 0)",
-     "why": "a gate on constellation == 6"
-    },
     {
      "what": "premod.lunarcharged_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Alhaitham\" ? (tally.moonsign >= 2 ? (conditional.Alhaitham.moonsignAfterSkillBurst == \"on\" ? min(mul(total.eleMas, 0.000225), 0.36) : 0) : 0) : 0)",
@@ -1014,7 +1107,7 @@
     {
      "what": "premod.stellarconduct_dmg_",
      "expr": "(constellation >= 6 ? mul(0.2, 2) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
+     "why": "it needs a team-mode decision (a Hexerei, Stellar or Traveler team, which the party sets) as well as one of her states, and nothing it adds reaches a row of hers"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Alyosha/index.tsx"
@@ -1993,12 +2086,55 @@
      "row": null,
      "while": "Ascension4",
      "in_stats": false
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "em",
+     "rate": 200.0,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "lockRevelation",
+     "in_stats": false,
+     "also": [
+      "lockStellarRadianceSc",
+      "burst"
+     ]
     }
    ],
    "toggles": [
     {
      "name": "Ascension4",
      "label": "After a perfect counter",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "burst",
+     "label": "Constellation 6 Elemental Mastery in her Burst (Stellar-Conduct)",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "lockRevelation",
+     "label": "Stellar Revelation",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "lockStellarRadianceSc",
+     "label": "Stellar Radiance, Stellar-Conduct",
      "on": false,
      "covers": [],
      "state": "on"
@@ -2027,11 +2163,6 @@
      "what": "premod.lunarcrystallize_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Beidou\" ? (tally.moonsign >= 2 ? (conditional.Beidou.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
      "why": "depends on the party"
-    },
-    {
-     "what": "premod.eleMas",
-     "expr": "(constellation >= 6 ? 200 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Beidou/index.tsx"
@@ -2460,9 +2591,152 @@
      "row": null,
      "while": "c6FatalRounds",
      "in_stats": false
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:charged",
+     "rate": 0.2,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": 2,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Shining Shadowhunt Shell DMG"
+     ],
+     "row": null,
+     "while": "a1InMultitarget",
+     "in_stats": false,
+     "party": [
+      "pyro",
+      "hydro",
+      "electro",
+      "cryo"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:charged",
+     "rate": 0.15,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Shining Shadowhunt Shell DMG"
+     ],
+     "row": null,
+     "while": "a1InMultitarget",
+     "in_stats": false,
+     "party": [
+      "pyro",
+      "hydro",
+      "electro",
+      "cryo"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:charged",
+     "rate": 0.3,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": 2,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Shining Shadowhunt Shell DMG"
+     ],
+     "row": null,
+     "while": "a1InMultitarget",
+     "in_stats": false,
+     "party": [
+      "pyro-hydro",
+      "pyro-electro",
+      "pyro-cryo",
+      "hydro-electro",
+      "hydro-cryo",
+      "electro-cryo"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:charged",
+     "rate": 0.35,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Shining Shadowhunt Shell DMG"
+     ],
+     "row": null,
+     "while": "a1InMultitarget",
+     "in_stats": false,
+     "party": [
+      "pyro-hydro",
+      "pyro-electro",
+      "pyro-cryo",
+      "hydro-electro",
+      "hydro-cryo",
+      "electro-cryo"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:charged",
+     "rate": 0.65,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Shining Shadowhunt Shell DMG"
+     ],
+     "row": null,
+     "while": "a1InMultitarget",
+     "in_stats": false,
+     "party": [
+      "pyro-hydro-electro",
+      "pyro-hydro-cryo",
+      "pyro-electro-cryo",
+      "hydro-electro-cryo"
+     ]
     }
    ],
    "toggles": [
+    {
+     "name": "a1InMultitarget",
+     "label": "Spirit of the Radiant Shadow in Multitarget Fire",
+     "on": true,
+     "covers": [
+      "skill"
+     ],
+     "state": "on"
+    },
     {
      "name": "c6FatalRounds",
      "label": "Constellation 6 Fatal Rounds",
@@ -2486,66 +2760,6 @@
      "what": "premod.lunarcrystallize_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Chasca\" ? (tally.moonsign >= 2 ? (conditional.Chasca.moonsignAfterSkillBurst == \"on\" ? min(mul(total.eleMas, 0.000225), 0.36) : 0) : 0) : 0)",
      "why": "depends on the party; it adds nothing for the team shapes given (it needs another team)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_hydro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_pyro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_cryo: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_electro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 1.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_hydro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_pyro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_cryo: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_electro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 2.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_hydro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_pyro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_cryo: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)"
-    },
-    {
-     "what": "hit skill.shiningShellDmg_electro: premod.charged_dmg_",
-     "expr": "(asc >= 1 ? (min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0) >= 1 ? [-1, 0.15, 0.35, …][min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)] : 0) : 0)",
-     "why": "a gate on min(add((constellation >= 2 ? 1 : 0), 3.0), 3.0)"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Chasca/index.tsx",
@@ -5953,12 +6167,40 @@
      },
      "while": "burstBenefit",
      "in_stats": false
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "cd:anemo",
+     "rate": 0.4,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "burstBenefit",
+     "in_stats": false,
+     "also": [
+      "c6Crit"
+     ]
     }
    ],
    "toggles": [
     {
      "name": "burstBenefit",
      "label": "Burst Anemo DMG bonus",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "c6Crit",
+     "label": "Constellation 6 Anemo CRIT DMG",
      "on": false,
      "covers": [],
      "state": "on"
@@ -5984,11 +6226,6 @@
      "what": "premod.anemo_dmgInc",
      "expr": "(asc >= 4 ? mul(base.atk, 0.32) : 0)",
      "why": "a share of base ATK"
-    },
-    {
-     "what": "premod.anemo_critDMG_",
-     "expr": "(constellation >= 6 ? 0.4 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Faruzan/index.tsx"
@@ -6544,6 +6781,27 @@
     {
      "from": "hp",
      "reads": "final",
+     "to": "additive:charged",
+     "rate": 0.25,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "c6",
+     "in_stats": false,
+     "also": [
+      "c6Pneuma"
+     ]
+    },
+    {
+     "from": "hp",
+     "reads": "final",
      "to": "additive:plunging",
      "rate": 0.18,
      "cap": null,
@@ -6600,6 +6858,32 @@
      "from": "hp",
      "reads": "final",
      "to": "additive:normal",
+     "rate": 0.25,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "1-Hit DMG",
+      "2-Hit DMG",
+      "3-Hit DMG",
+      "4-Hit DMG"
+     ],
+     "row": null,
+     "while": "c6",
+     "in_stats": false,
+     "also": [
+      "c6Pneuma"
+     ]
+    },
+    {
+     "from": "hp",
+     "reads": "final",
+     "to": "additive:normal",
      "rate": 0.18,
      "cap": null,
      "cap_from": null,
@@ -6619,6 +6903,29 @@
      "row": null,
      "while": "c6",
      "in_stats": false
+    },
+    {
+     "from": "hp",
+     "reads": "final",
+     "to": "additive:plunging",
+     "rate": 0.25,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Low/High Plunge DMG"
+     ],
+     "row": null,
+     "while": "c6",
+     "in_stats": false,
+     "also": [
+      "c6Pneuma"
+     ]
     },
     {
      "from": "hp",
@@ -6688,6 +6995,13 @@
      "state": "on"
     },
     {
+     "name": "c6Pneuma",
+     "label": "Constellation 6 in Pneuma",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
      "name": "skillHpConsumeStacks",
      "label": "Salon members drawing on four party members",
      "on": false,
@@ -6696,11 +7010,6 @@
     }
    ],
    "left_out": [
-    {
-     "what": "premod.charged_dmgInc",
-     "expr": "(constellation >= 6 ? mul(total.hp, 0.25) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
     {
      "what": "premod.lunarcharged_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Furina\" ? (tally.moonsign >= 2 ? (conditional.Furina.moonsignAfterSkillBurst == \"on\" ? min(mul(total.hp, 6e-06), 0.36) : 0) : 0) : 0)",
@@ -6715,31 +7024,6 @@
      "what": "premod.lunarcrystallize_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Furina\" ? (tally.moonsign >= 2 ? (conditional.Furina.moonsignAfterSkillBurst == \"on\" ? min(mul(total.hp, 6e-06), 0.36) : 0) : 0) : 0)",
      "why": "depends on the party"
-    },
-    {
-     "what": "premod.plunging_impact_dmgInc",
-     "expr": "(constellation >= 6 ? mul(total.hp, 0.25) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit normal.0: premod.normal_dmgInc",
-     "expr": "(constellation >= 6 ? mul(total.hp, 0.25) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit normal.1: premod.normal_dmgInc",
-     "expr": "(constellation >= 6 ? mul(total.hp, 0.25) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit normal.2: premod.normal_dmgInc",
-     "expr": "(constellation >= 6 ? mul(total.hp, 0.25) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit normal.3: premod.normal_dmgInc",
-     "expr": "(constellation >= 6 ? mul(total.hp, 0.25) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Furina/index.tsx"
@@ -9931,6 +10215,27 @@
     {
      "from": null,
      "reads": null,
+     "to": "dmg:pyro",
+     "rate": 0.5,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "BlazingDelight",
+     "in_stats": false,
+     "also": [
+      "lockHomework"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
      "to": "atk%",
      "rate": 0.6,
      "cap": null,
@@ -9952,6 +10257,13 @@
    ],
    "toggles": [
     {
+     "name": "BlazingDelight",
+     "label": "Constellation 6 Pyro bonus after her Burst (Hexerei)",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
      "name": "lockC1",
      "label": "Constellation 1 ATK (Hexerei)",
      "on": false,
@@ -9967,11 +10279,6 @@
     }
    ],
    "left_out": [
-    {
-     "what": "premod.pyro_dmg_",
-     "expr": "(constellation >= 6 ? 0.5 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
     {
      "what": "premod.lunarcharged_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Klee\" ? (tally.moonsign >= 2 ? (conditional.Klee.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
@@ -10039,8 +10346,45 @@
     }
    },
    "infused": [],
-   "effects": [],
-   "toggles": [],
+   "effects": [
+    {
+     "from": null,
+     "reads": null,
+     "to": "cd:electro",
+     "rate": 0.6,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "TenguJuuraiAmbush",
+     "in_stats": false,
+     "also": [
+      "c6"
+     ]
+    }
+   ],
+   "toggles": [
+    {
+     "name": "TenguJuuraiAmbush",
+     "label": "ATK from Tengu Juurai",
+     "on": false,
+     "covers": [],
+     "state": "TenguJuuraiAmbush"
+    },
+    {
+     "name": "c6",
+     "label": "Constellation 6 Electro CRIT DMG",
+     "on": false,
+     "covers": [],
+     "state": "c6"
+    }
+   ],
    "left_out": [
     {
      "what": "premod.lunarcharged_dmg_",
@@ -10056,11 +10400,6 @@
      "what": "premod.lunarcrystallize_dmg_",
      "expr": "(nonStacking.moonsignascend == \"KujouSara\" ? (tally.moonsign >= 2 ? (conditional.KujouSara.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
      "why": "depends on the party"
-    },
-    {
-     "what": "premod.electro_critDMG_",
-     "expr": "(constellation >= 6 ? 0.6 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     },
     {
      "what": "total.atk",
@@ -12028,8 +12367,73 @@
     }
    },
    "infused": [],
-   "effects": [],
-   "toggles": [],
+   "effects": [
+    {
+     "from": null,
+     "reads": null,
+     "to": "physical",
+     "rate": 0.5,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": 4,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "inSoulwind",
+     "in_stats": false,
+     "also": [
+      "a1DetectorStacks"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "cd:physical",
+     "rate": 0.6,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "inSoulwind",
+     "in_stats": false,
+     "also": [
+      "c6Crit"
+     ]
+    }
+   ],
+   "toggles": [
+    {
+     "name": "a1DetectorStacks",
+     "label": "Detector stacks",
+     "on": false,
+     "covers": [],
+     "state": "5"
+    },
+    {
+     "name": "c6Crit",
+     "label": "Constellation 6 Physical CRIT DMG",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "inSoulwind",
+     "label": "Soulwind",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    }
+   ],
    "left_out": [
     {
      "what": "premod.lunarcharged_dmg_",
@@ -12045,16 +12449,6 @@
      "what": "premod.lunarcrystallize_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Mika\" ? (tally.moonsign >= 2 ? (conditional.Mika.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
      "why": "depends on the party"
-    },
-    {
-     "what": "premod.physical_dmg_",
-     "expr": "(asc >= 1 ? (constellation >= 6 ? (asc >= 4 ? 0.5 : 0) : 0) : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "premod.physical_critDMG_",
-     "expr": "(constellation >= 6 ? 0.6 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Mika/index.tsx"
@@ -12489,6 +12883,29 @@
      "also": [
       "lockC2Charged"
      ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "mult",
+     "rate": 1.0,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Charged Attack DMG"
+     ],
+     "row": null,
+     "while": "Omen",
+     "in_stats": false,
+     "also": [
+      "lockHomework"
+     ]
     }
    ],
    "toggles": [
@@ -12553,11 +12970,6 @@
      "what": "premod.critDMG_",
      "expr": "(target.flags.isHexerei == 1 ? (constellation >= 4 ? (conditional.Mona.lockHomework == \"on\" ? (conditional.Mona.Omen == \"on\" ? 0.15 : 0) : 0) : 0) : 0)",
      "why": "depends on the party"
-    },
-    {
-     "what": "hit charged.dmg multiplier",
-     "expr": "(constellation >= 6 ? 1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Mona/index.tsx"
@@ -13545,6 +13957,27 @@
      "cap_from": null,
      "over": null,
      "pieces": null,
+     "from_ascension": 1,
+     "from_constellation": null,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "skillGraceActive",
+     "in_stats": false,
+     "also": [
+      "a1GuidanceActive"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "atk",
+     "rate": 300.0,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
      "from_ascension": null,
      "from_constellation": 2,
      "talents": null,
@@ -13556,6 +13989,13 @@
     }
    ],
    "toggles": [
+    {
+     "name": "a1GuidanceActive",
+     "label": "Guidance of Theosis",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
     {
      "name": "c4Pathfinder",
      "label": "Constellation 4 Pathfinder's Blessing",
@@ -13626,11 +14066,6 @@
      "what": "total.atk",
      "expr": "min(mul([0.0825, 0.09, 0.0975, …][total.skillIndex], premod.atk), [330, 360, 390, …][total.skillIndex])",
      "why": "a min with no cap the engine reads"
-    },
-    {
-     "what": "total.atk",
-     "expr": "(add((constellation >= 6 ? 1 : 0), 1.0) >= 1 ? (asc >= 1 ? 300 : 0) : 0)",
-     "why": "a gate on add((constellation >= 6 ? 1 : 0), 1.0)"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Nicole/index.tsx"
@@ -15716,6 +16151,48 @@
      "in_stats": false
     },
     {
+     "from": null,
+     "reads": null,
+     "to": "cr",
+     "rate": 0.1,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "lockHomework",
+     "in_stats": false,
+     "also": [
+      "lockC6Sigil"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "cd",
+     "rate": 0.5,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "lockHomework",
+     "in_stats": false,
+     "also": [
+      "lockC6Sigil"
+     ]
+    },
+    {
      "from": "atk",
      "reads": "final",
      "to": "additive:burst",
@@ -15766,6 +16243,13 @@
      "state": "3"
     },
     {
+     "name": "lockC6Sigil",
+     "label": "Constellation 6 crits from Electro Sigils (Hexerei)",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
      "name": "lockHomework",
      "label": "Witch's Homework done",
      "on": false,
@@ -15774,16 +16258,6 @@
     }
    ],
    "left_out": [
-    {
-     "what": "premod.critRate_",
-     "expr": "(constellation >= 6 ? 0.1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "premod.critDMG_",
-     "expr": "(constellation >= 6 ? 0.5 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
     {
      "what": "premod.lunarcharged_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Razor\" ? (tally.moonsign >= 2 ? (conditional.Razor.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
@@ -17896,215 +18370,6 @@
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Skirk/index.tsx"
-  },
-  "somnia": {
-   "go_key": "Somnia",
-   "name": "Somnia",
-   "checked": false,
-   "unsure": null,
-   "main": null,
-   "stellar": null,
-   "element": "electro",
-   "weapon_type": "catalyst",
-   "hits": {},
-   "elements": {},
-   "moves": {},
-   "infused": [],
-   "effects": [
-    {
-     "from": null,
-     "reads": null,
-     "to": "cr",
-     "rate": 0.24,
-     "cap": null,
-     "cap_from": null,
-     "over": null,
-     "pieces": null,
-     "from_ascension": null,
-     "from_constellation": 6,
-     "talents": null,
-     "weapon_types": null,
-     "hits": null,
-     "row": null,
-     "while": "c6Stacks",
-     "in_stats": false
-    },
-    {
-     "from": null,
-     "reads": null,
-     "to": "cd",
-     "rate": 0.4,
-     "cap": null,
-     "cap_from": null,
-     "over": null,
-     "pieces": null,
-     "from_ascension": null,
-     "from_constellation": 6,
-     "talents": null,
-     "weapon_types": null,
-     "hits": null,
-     "row": null,
-     "while": "c6Stacks",
-     "in_stats": false
-    },
-    {
-     "from": "em",
-     "reads": "premod",
-     "to": "em",
-     "rate": 0.25,
-     "cap": null,
-     "cap_from": null,
-     "over": null,
-     "pieces": null,
-     "from_ascension": 4,
-     "from_constellation": null,
-     "talents": null,
-     "weapon_types": null,
-     "hits": null,
-     "row": null,
-     "while": "cycloneActive",
-     "in_stats": false,
-     "also": [
-      "a4EnemiesHit"
-     ]
-    }
-   ],
-   "toggles": [
-    {
-     "name": "a4EnemiesHit",
-     "label": "A4 enemies hit",
-     "on": false,
-     "covers": [],
-     "state": "5"
-    },
-    {
-     "name": "c6Stacks",
-     "label": "C6 stacks",
-     "on": false,
-     "covers": [],
-     "state": "8"
-    },
-    {
-     "name": "cycloneActive",
-     "label": "Cyclone active",
-     "on": false,
-     "covers": [],
-     "state": "on"
-    }
-   ],
-   "left_out": [
-    {
-     "what": "hit normal.0",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit normal.1",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit normal.2",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit normal.3",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit charged.dmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit plunging.dmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit plunging.low",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit plunging.high",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit skill.pressDmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit burst.initialDmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit burst.multDotDmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit burst.addDotDmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit burst.subDotDmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit burst.sunderDmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "hit burst.supernovaDmg",
-     "why": "no talent row prints its multiplier"
-    },
-    {
-     "what": "premod.normal_dmgInc",
-     "expr": "mul([2.2168, 2.38306, 2.54932, …][total.skillIndex], total.eleMas)",
-     "why": "a rate by talent level that matches no row"
-    },
-    {
-     "what": "premod.normal_dmgInc",
-     "expr": "mul([0.1488, 0.15996, 0.17112, …][total.burstIndex], total.eleMas)",
-     "why": "a rate by talent level that matches no row"
-    },
-    {
-     "what": "premod.normal_dmgInc",
-     "expr": "(constellation >= 2 ? mul([2.2168, 2.38306, 2.54932, …][total.skillIndex], total.eleMas) : 0)",
-     "why": "a rate by talent level that matches no row"
-    },
-    {
-     "what": "premod.charged_dmgInc",
-     "expr": "mul([2.2168, 2.38306, 2.54932, …][total.skillIndex], total.eleMas)",
-     "why": "a rate by talent level that matches no row"
-    },
-    {
-     "what": "premod.charged_dmgInc",
-     "expr": "mul([0.1488, 0.15996, 0.17112, …][total.burstIndex], total.eleMas)",
-     "why": "a rate by talent level that matches no row"
-    },
-    {
-     "what": "premod.charged_dmgInc",
-     "expr": "(constellation >= 2 ? mul([2.2168, 2.38306, 2.54932, …][total.skillIndex], total.eleMas) : 0)",
-     "why": "a rate by talent level that matches no row"
-    },
-    {
-     "what": "premod.lunarcharged_dmg_",
-     "expr": "(nonStacking.moonsignascend == \"Somnia\" ? (tally.moonsign >= 2 ? (conditional.Somnia.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
-     "why": "depends on the party"
-    },
-    {
-     "what": "premod.lunarbloom_dmg_",
-     "expr": "(nonStacking.moonsignascend == \"Somnia\" ? (tally.moonsign >= 2 ? (conditional.Somnia.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
-     "why": "depends on the party"
-    },
-    {
-     "what": "premod.lunarcrystallize_dmg_",
-     "expr": "(nonStacking.moonsignascend == \"Somnia\" ? (tally.moonsign >= 2 ? (conditional.Somnia.moonsignAfterSkillBurst == \"on\" ? min(mul(total.atk, 9e-05), 0.36) : 0) : 0) : 0)",
-     "why": "depends on the party"
-    },
-    {
-     "what": "total.eleMas",
-     "expr": "mul([0.1488, 0.15996, 0.17112, …][total.burstIndex], premod.eleMas)",
-     "why": "a rate by talent level that matches no row"
-    }
-   ],
-   "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Somnia/index.tsx"
   },
   "sucrose": {
    "go_key": "Sucrose",
@@ -21589,7 +21854,7 @@
     {
      "what": "premod.stellarconduct_dmgInc",
      "expr": "(asc >= 4 ? (constellation >= 4 ? mul(premod.atk, 0.009, 130) : 0) : 0)",
-     "why": "it reads two of her states and starts at Constellation 4, above the C0-C2 the plan counts"
+     "why": "it needs a team-mode decision (a Hexerei, Stellar or Traveler team, which the party sets) as well as one of her states, and nothing it adds reaches a row of hers"
     },
     {
      "what": "premod.stellarconduct_electro_critDMG_",
@@ -22312,23 +22577,78 @@
     }
    },
    "infused": [],
-   "effects": [],
-   "toggles": [],
+   "effects": [
+    {
+     "from": null,
+     "reads": null,
+     "to": "dmg:anemo",
+     "rate": 0.25,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 4,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "lockHomework",
+     "in_stats": false,
+     "also": [
+      "lockC4SkillBurst"
+     ]
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "cd",
+     "rate": 1.0,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 6,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "lockHomework",
+     "in_stats": false,
+     "also": [
+      "c6"
+     ]
+    }
+   ],
+   "toggles": [
+    {
+     "name": "c6",
+     "label": "Constellation 6 CRIT DMG (Hexerei)",
+     "on": false,
+     "covers": [],
+     "state": "takeDmg"
+    },
+    {
+     "name": "lockC4SkillBurst",
+     "label": "Constellation 4 Anemo bonus (Hexerei)",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    },
+    {
+     "name": "lockHomework",
+     "label": "Witch's Homework done (Hexerei)",
+     "on": false,
+     "covers": [],
+     "state": "on"
+    }
+   ],
    "left_out": [
     {
      "what": "premod.anemo_dmg_",
      "expr": "(constellation >= 4 ? (conditional.Venti.lockHomework == \"on\" ? 0 : (conditional.Venti.c4 == \"pickup\" ? 0.25 : 0)) : 0)",
      "why": "it reads several of her states, and it still gives something when one of them is off (any of them is enough, or it is a factor that is 1 without it)"
-    },
-    {
-     "what": "premod.anemo_dmg_",
-     "expr": "(constellation >= 4 ? 0.25 : 0)",
-     "why": "it reads two of her states and starts at Constellation 4, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "premod.critDMG_",
-     "expr": "(constellation >= 6 ? 1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     },
     {
      "what": "premod.lunarcharged_dmg_",
@@ -22769,6 +23089,42 @@
     {
      "from": null,
      "reads": null,
+     "to": "cd:hydro",
+     "rate": 0.5,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 2,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "c2State",
+     "in_stats": false
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "cd:cryo",
+     "rate": 0.5,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 2,
+     "talents": null,
+     "weapon_types": null,
+     "hits": null,
+     "row": null,
+     "while": "c2State",
+     "in_stats": false
+    },
+    {
+     "from": null,
+     "reads": null,
      "to": "elevation:stellar-swirl",
      "rate": 0.25,
      "cap": null,
@@ -22888,6 +23244,13 @@
      "state": "on"
     },
     {
+     "name": "c2State",
+     "label": "Constellation 2 Two Voices in Black and White",
+     "on": false,
+     "covers": [],
+     "state": "voice"
+    },
+    {
      "name": "c4State",
      "label": "Constellation 4 Max HP stacks",
      "on": false,
@@ -22938,16 +23301,6 @@
      "what": "premod.stellarswirl_dmgInc",
      "expr": "(asc >= 4 ? min(max(mul(add(total.hp, -40000.0), 0.26), 0.0), 6500.0) : 0)",
      "why": "a sum the engine does not read: max(mul(add(total.hp, -40000.0), 0.26), 0.0)"
-    },
-    {
-     "what": "premod.hydro_critDMG_",
-     "expr": "(add((constellation >= 6 ? 1 : 0), 1.0) >= 1 ? (constellation >= 2 ? 0.5 : 0) : 0)",
-     "why": "a gate on add((constellation >= 6 ? 1 : 0), 1.0)"
-    },
-    {
-     "what": "premod.cryo_critDMG_",
-     "expr": "(add((constellation >= 6 ? 1 : 0), 1.0) >= 1 ? (constellation >= 2 ? 0.5 : 0) : 0)",
-     "why": "a gate on add((constellation >= 6 ? 1 : 0), 1.0)"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Vodyanitsa/index.tsx"
@@ -23303,29 +23656,9 @@
      "why": "it reads several of her states, and it still gives something when one of them is off (any of them is enough, or it is a factor that is 1 without it)"
     },
     {
-     "what": "hit skill.enhanced_0: premod.critRate_",
-     "expr": "(constellation >= 6 ? 0.1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit skill.enhanced_0: premod.critDMG_",
-     "expr": "(constellation >= 6 ? 0.8 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
      "what": "hit skill.enhanced_0",
      "expr": "mul([1.431695, 1.457545, 1.483395, …][total.skillIndex], add(1, (constellation >= 2 ? (conditional.Wriothesley.lockRevelation == \"on\" ? (conditional.Wriothesley.lockStellarRadianceSc == \"on\" ? 0 : (conditional.Wriothesley.a4EdictStacks == \"5\" ? 0.25 : 0)) : 0) : 0)))",
      "why": "a multiplier the engine does not read"
-    },
-    {
-     "what": "hit skill.enhanced_1: premod.critRate_",
-     "expr": "(constellation >= 6 ? 0.1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit skill.enhanced_1: premod.critDMG_",
-     "expr": "(constellation >= 6 ? 0.8 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     },
     {
      "what": "hit skill.enhanced_1",
@@ -23333,44 +23666,14 @@
      "why": "a multiplier the engine does not read"
     },
     {
-     "what": "hit skill.enhanced_2: premod.critRate_",
-     "expr": "(constellation >= 6 ? 0.1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit skill.enhanced_2: premod.critDMG_",
-     "expr": "(constellation >= 6 ? 0.8 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
      "what": "hit skill.enhanced_2",
      "expr": "mul([1.431695, 1.457545, 1.483395, …][total.skillIndex], add(1, (constellation >= 2 ? (conditional.Wriothesley.lockRevelation == \"on\" ? (conditional.Wriothesley.lockStellarRadianceSc == \"on\" ? 0 : (conditional.Wriothesley.a4EdictStacks == \"5\" ? 0.25 : 0)) : 0) : 0)))",
      "why": "a multiplier the engine does not read"
     },
     {
-     "what": "hit skill.enhanced_3: premod.critRate_",
-     "expr": "(constellation >= 6 ? 0.1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit skill.enhanced_3: premod.critDMG_",
-     "expr": "(constellation >= 6 ? 0.8 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
      "what": "hit skill.enhanced_3",
      "expr": "mul([1.431695, 1.457545, 1.483395, …][total.skillIndex], add(1, (constellation >= 2 ? (conditional.Wriothesley.lockRevelation == \"on\" ? (conditional.Wriothesley.lockStellarRadianceSc == \"on\" ? 0 : (conditional.Wriothesley.a4EdictStacks == \"5\" ? 0.25 : 0)) : 0) : 0)))",
      "why": "a multiplier the engine does not read"
-    },
-    {
-     "what": "hit skill.enhanced_4: premod.critRate_",
-     "expr": "(constellation >= 6 ? 0.1 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
-    },
-    {
-     "what": "hit skill.enhanced_4: premod.critDMG_",
-     "expr": "(constellation >= 6 ? 0.8 : 0)",
-     "why": "it reads two of her states and starts at Constellation 6, above the C0-C2 the plan counts"
     },
     {
      "what": "hit skill.enhanced_4",
@@ -23381,6 +23684,56 @@
      "what": "hit charged.dmg multiplier",
      "expr": "(constellation >= 2 ? (conditional.Wriothesley.lockRevelation == \"on\" ? (conditional.Wriothesley.lockStellarRadianceSc == \"on\" ? 0 : (conditional.Wriothesley.a4EdictStacks == \"5\" ? 0.3 : 0)) : 0) : 0)",
      "why": "it reads several of her states, and it still gives something when one of them is off (any of them is enough, or it is a factor that is 1 without it)"
+    },
+    {
+     "what": "row 1-Hit DMG",
+     "expr": "cr 0.1",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 1-Hit DMG",
+     "expr": "cd 0.8",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 2-Hit DMG",
+     "expr": "cr 0.1",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 2-Hit DMG",
+     "expr": "cd 0.8",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 3-Hit DMG",
+     "expr": "cr 0.1",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 3-Hit DMG",
+     "expr": "cd 0.8",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 4-Hit DMG",
+     "expr": "cr 0.1",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 4-Hit DMG",
+     "expr": "cd 0.8",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 5-Hit DMG",
+     "expr": "cr 0.1",
+     "why": "only some of the hits this row prints have it"
+    },
+    {
+     "what": "row 5-Hit DMG",
+     "expr": "cd 0.8",
+     "why": "only some of the hits this row prints have it"
     },
     {
      "what": "row Charged Attack DMG",
@@ -24356,9 +24709,39 @@
      "row": null,
      "while": null,
      "in_stats": true
+    },
+    {
+     "from": null,
+     "reads": null,
+     "to": "mult",
+     "rate": 0.5,
+     "cap": null,
+     "cap_from": null,
+     "over": null,
+     "pieces": null,
+     "from_ascension": null,
+     "from_constellation": 4,
+     "talents": null,
+     "weapon_types": null,
+     "hits": [
+      "Skill DMG"
+     ],
+     "row": null,
+     "while": "burst",
+     "in_stats": false
     }
    ],
-   "toggles": [],
+   "toggles": [
+    {
+     "name": "burst",
+     "label": "Constellation 4 Skill inside his Burst",
+     "on": true,
+     "covers": [
+      "skill"
+     ],
+     "state": "on"
+    }
+   ],
    "left_out": [
     {
      "what": "premod.lunarcharged_dmg_",
@@ -24374,16 +24757,6 @@
      "what": "premod.lunarcrystallize_dmg_",
      "expr": "(nonStacking.moonsignascend == \"Xingqiu\" ? (tally.moonsign >= 2 ? (conditional.Xingqiu.moonsignAfterSkillBurst == \"on\" ? min(mul(total.hp, 6e-06), 0.36) : 0) : 0) : 0)",
      "why": "depends on the party"
-    },
-    {
-     "what": "hit skill.press1 multiplier",
-     "expr": "((constellation >= 4 ? 1 : 0) == 1 ? 0.5 : 0.0)",
-     "why": "a gate on (constellation >= 4 ? 1 : 0) == 1"
-    },
-    {
-     "what": "hit skill.press2 multiplier",
-     "expr": "((constellation >= 4 ? 1 : 0) == 1 ? 0.5 : 0.0)",
-     "why": "a gate on (constellation >= 4 ? 1 : 0) == 1"
     }
    ],
    "source": "GO 2c13fc40 libs/gi/sheets/src/Characters/Xingqiu/index.tsx"

@@ -47,9 +47,11 @@ _KEPT_MODULES = {"Attributes", "Ascend", "Gallery", "Talents", "Constellation", 
 # What a talent's pictures weigh is left out of what is kept; its table of levels is kept (the damage engine's rows).
 _TALENT_DROPPED = ("talent_img", "talent_imgs", "points")
 # The format of a stored entry: how much of the wiki's answer Guild Board keeps of it. 2 keeps each talent's table of levels
-# (`attributes`). An entry stored in a lower format (none is stamped 1) is read once more, in the background and only after
-# the player's consent, for a character's entry alone; the others lose nothing by it.
-ENTRY_FORMAT = 2
+# (`attributes`); 3 keeps the English name of every material the costs name by entry alone, read from the material's own
+# entry (an older character's entry, Xiao's, names none, so her costs were empty). An entry stored in a lower format (none is
+# stamped 1) is read once more, in the background and only after the player's consent, for a character's entry alone; a
+# weapon's is read again when the game's version moves.
+ENTRY_FORMAT = 3
 # The entries whose costs are materials, which are named in the entry itself, not always in English.
 _WITH_COSTS = ("character", "weapon")
 # An endgame mode's Tutorial entry (the Stats design, 3.2), of which the icon and the pictures are kept.
@@ -154,14 +156,16 @@ def parse_source(source_text: str, type_text: str) -> Source:
     unknown."""
     text = " ".join(str(source_text or "")[:MAX_FIELD_CHARS].split())
     kind = str(type_text or "")
-    domain = re.match(r"Domain of (Mastery|Forgery)\s*:\s*(.+?)\s*(?:\(([^()]*)\))?\s*$", text)
+    # The domain's days are in the brackets after its name; the wiki often writes after them how else the material is had
+    # ("Crafted", "Exchanged in the Gift Shop"), which is not the domain's.
+    domain = re.match(r"Domain of (Mastery|Forgery)\s*:\s*([^()]+?)\s*(?:\(([^()]*)\)|$)", text)
     if domain:
         kinds = {"Mastery": "books", "Forgery": "forgery"}
         return Source(kinds[domain.group(1)], domain.group(2).strip(), _days(domain.group(3) or ""))
-    weekly = re.match(r"Lv\.?\s*\d+\+?\s+(.+?)\s+Challenge Reward", text)
+    weekly = re.match(r"Lv\.?\s*\d+\+?\s+(.+?)\s+Chall[ae]nge Reward", text)   # the wiki misspells one boss's
     if weekly:
         return Source("weekly", weekly.group(1).strip(), ())
-    dropped = re.match(r"Dropped by\s+(?:Lv\.?\s*\d+\+?\s+)?(.+)$", text)
+    dropped = re.search(r"(?:^|\s)Dropped by\s+(?:Lv\.?\s*\d+\+?\s+)?(.+)$", text)
     if dropped:
         # A world boss's drops are the level-up materials; every other drop is an enemy's.
         return Source("boss" if "Level-Up Material" in kind else "enemies", dropped.group(1).strip(), ())
@@ -496,14 +500,16 @@ def _cost_texts(data: Mapping[str, Any]) -> list[Any]:
 
 
 def _material_texts(data: Mapping[str, Any]) -> dict[str, str]:
-    """Every material an entry names in its costs, by the wiki's id, with the name the wiki wrote for it there."""
+    """Every material an entry names in its costs, by the wiki's id, with the name the wiki wrote for it there: "" where it
+    wrote none, as it does in an older character's entry (Xiao's), which names each material by its entry alone."""
     found: dict[str, str] = {}
     for texts in _cost_texts(data):
         for text in texts or []:
             for item in _entries(text):
                 name = str(item.get("name") or item.get("nickname") or "").strip()
-                if item.get("ep_id") is not None and name:
-                    found.setdefault(str(item["ep_id"]), name)
+                ident = str(item["ep_id"]) if item.get("ep_id") is not None else ""
+                if ident and (name or ident not in found):
+                    found[ident] = found.get(ident) or name
     return found
 
 

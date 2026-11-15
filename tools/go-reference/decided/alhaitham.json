@@ -3,6 +3,7 @@
   "toggles": {
     "withMirrors": {"on": true, "state": "on", "label": "Chisel-Light Mirror", "covers": ["normal", "charged", "plunging"], "reason": "His Normal and Charged Attacks are his damage, dealt while his Chisel-Light Mirrors are up, which makes them Dendro."},
     "debateStacks": {"on": false, "state": "4", "label": "Constellation 2 stacks", "covers": [], "reason": "Constellation 2 stacks that build up during the fight."},
-    "excessMirror": {"on": false, "state": "on", "label": "Constellation 6 mirror overflow", "covers": [], "reason": "A Constellation 6 window."}
+    "excessMirror": {"on": false, "state": "on", "label": "Constellation 6 mirror overflow", "covers": [], "reason": "A Constellation 6 window."},
+    "mirrorsConsumed": {"on": false, "state": "3", "label": "Dendro bonus from the mirrors his Burst makes", "covers": [], "reason": "With Constellation 6 his Burst makes three mirrors about 2 seconds after it is cast, which gives him a Dendro DMG Bonus for 15 seconds; most of the Burst's own hits land before it and it runs out before his next Burst, so it covers only part of his main talents."}
   }
 }

@@ -6,6 +6,7 @@ import pytest
 import characters_samples as samples
 from characters_service_support import SUNDAY, build_record, calculator, keep_builds, keep_notes
 from characters_shape import problem_with
+from guildboard.characters import wiki as characters_wiki
 from guildboard.characters.wiki import CharacterWiki
 from guildboard.store import WikiEntryRow, WikiItemRow
 from support import FakeClock
@@ -282,7 +283,7 @@ async def test_an_entry_of_an_older_format_is_read_again_in_the_background_once(
     assert {"type": "characters_changed"} in published                  # the entry was replaced, not added: the pages are told
     entries = lambda: [url.rsplit("=", 1)[1] for url in counting.asked if "entry_page_id=" in url]   # noqa: E731
     assert entries() == ["10920"]                                        # the lists are asked too, as for every read
-    assert store.wiki_entry("10920").data["format"] == 2
+    assert store.wiki_entry("10920").data["format"] == characters_wiki.ENTRY_FORMAT
     service.wanted_again()
     assert service._wanted_entries == set()                             # it is of the format now: nothing more is queued
     assert entries() == ["10920"]

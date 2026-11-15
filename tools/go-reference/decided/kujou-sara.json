@@ -1,4 +1,7 @@
 {
   "main": null,
-  "toggles": {}
+  "toggles": {
+    "TenguJuuraiAmbush": {"on": false, "state": "TenguJuuraiAmbush", "label": "ATK from Tengu Juurai", "covers": [], "reason": "Her Skill's crow gives its ATK bonus to the active character where it strikes, a buff meant for the character she switches to; it needs the Constellation 6 switch as well."},
+    "c6": {"on": false, "state": "c6", "label": "Constellation 6 Electro CRIT DMG", "covers": [], "reason": "A Constellation 6 bonus for the character her Tengu Juurai's ATK bonus reaches, a buff meant for the team; it needs the Tengu Juurai switch as well."}
+  }
 }

@@ -2,6 +2,7 @@
   "main": null,
   "toggles": {
     "c1Heal": {"on": false, "state": "on", "label": "Constellation 1 ATK after healing", "covers": [], "reason": "A Constellation 1 party ATK bonus for 5 seconds after her Song heals, which depends on when the party is healed."},
+    "c2State": {"on": false, "state": "voice", "label": "Constellation 2 Two Voices in Black and White", "covers": [], "reason": "A Constellation 2 CRIT DMG bonus her Skill's Horn gives the active character only, until Constellation 6, and that turns into a Stellar Swirl bonus while a Wandering Vortex is up, so whom it reaches depends on the team."},
     "c4State": {"on": false, "state": "above1", "label": "Constellation 4 Max HP stacks", "covers": [], "reason": "A Constellation 4 Max HP bonus that stacks as her Song heals party members at 40% HP or more, which builds up during the fight."},
     "skillSong": {"on": true, "state": "on", "label": "Constellation 6 Song of Ages Past", "covers": ["normal", "charged", "plunging", "skill", "burst"], "reason": "With Constellation 6 her Skill starts the Song of Ages Past, which raises Hydro DMG while it lasts, so her Skill's later hits and the Burst cast inside it are counted with it, and the Burst deals more damage inside it."}
   }

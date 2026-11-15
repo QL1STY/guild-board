@@ -47,8 +47,9 @@ def test_every_character_with_a_kit_has_two_swaps():
 
 def test_the_builds_follow_the_rules():
     for case in CASES["cases"]:
-        # constellation 0, or the one her extra cases are at (a decided state or a row that needs one: `constellation_of`)
-        assert case["constellation"] == (0 if case["kit"] == case["character"] else compare.constellation_of(case["character"])), case["id"]
+        # constellation 0, or one her extra cases are at (a decided state, a row or an effect that starts there: `constellations_of`)
+        assert case["constellation"] == 0 or case["constellation"] in compare.constellations_of(case["character"]), case["id"]
+        assert (case["kit"] == case["character"]) == (case["constellation"] == 0), case["id"]
         assert case["kit"] == compare.kit_key(case["character"], case["constellation"]), case["id"]
         assert case["talents"] == {"auto": 10, "skill": 10, "burst": 10}, case["id"]
         assert case["weapon"] == compare.WEAPONS[case["weapon_type"]], case["id"]
@@ -82,29 +83,45 @@ def test_the_decided_states_are_gos_states_too():
 
 def test_the_constellation_cases_stand_beside_the_constellation_0_ones():
     # every character with a decided state on that needs a constellation, or a row only a constellation deals, is compared at it as well
-    extra = {c["character"]: c["constellation"] for c in CASES["cases"] if c["constellation"]}
-    assert extra == {key: compare.constellation_of(key) for key in KITS["characters"] if compare.constellation_of(key)
-                     and key not in CASES["skipped"]}
+    extra: dict[str, list[int]] = {}
+    for c in CASES["cases"]:
+        if c["constellation"] and c["constellation"] not in extra.setdefault(c["character"], []):
+            extra[c["character"]].append(c["constellation"])
+    assert {k: sorted(v) for k, v in extra.items()} == {
+        key: compare.constellations_of(key) for key in KITS["characters"] if compare.constellations_of(key) and key not in CASES["skipped"]}
     assert len(extra) >= 15 and {"yanfei", "mavuika", "keqing", "arlecchino", "yae-miko", "varesa"} <= set(extra)
-    for key, constellation in extra.items():
-        ids = {c["id"] for c in CASES["cases"] if c["character"] == key and c["constellation"]}
-        base = {f"{key}:sands@c{constellation}", f"{key}:goblet@c{constellation}"}
+    # each constellation an effect starts at has its own cases: a gate read at the wrong start agrees at 0 and at 6 and is caught only here
+    assert extra["sandrone"] == [2, 6] and extra["varesa"] == [1, 4, 6] and extra["columbina"] == [1, 2, 3, 4, 5, 6]
+    for key, constellations in extra.items():
+        zero = {c["id"] for c in CASES["cases"] if c["character"] == key and not c["constellation"]}
         # a constellation that gives CRIT also has the circlet swap, at that constellation and at 0 (the sands and goblet ratios cancel a
         # CRIT bonus that reaches every row)
-        crit = compare.reaches_crit(FIXTURE["kits"][f"{key}@c{constellation}"])
-        assert ids == base | ({f"{key}:circlet@c{constellation}"} if crit else set()), key
-        zero = {c["id"] for c in CASES["cases"] if c["character"] == key and not c["constellation"]}
-        assert {f"{key}:sands", f"{key}:goblet"} <= zero and (f"{key}:circlet" in zero) == crit, key
+        crit_any = False
+        for constellation in constellations:
+            ids = {c["id"] for c in CASES["cases"] if c["character"] == key and c["constellation"] == constellation}
+            base = {f"{key}:sands@c{constellation}", f"{key}:goblet@c{constellation}"}
+            crit = compare.reaches_crit(FIXTURE["kits"][f"{key}@c{constellation}"])
+            crit_any = crit_any or crit
+            assert ids == base | ({f"{key}:circlet@c{constellation}"} if crit else set()), (key, constellation)
+        assert {f"{key}:sands", f"{key}:goblet"} <= zero and (f"{key}:circlet" in zero) == crit_any, key
     assert {"lyney", "neuvillette", "clorinde", "arlecchino"} <= {k for k in extra if f"{k}:circlet" in {c["id"] for c in CASES["cases"]}}
 
 
 # a character whose answers at her constellation the comparison cannot tell from the ones at 0 (columbina today): named here, with the reason, and in the README
 INVISIBLE: dict[str, str] = {
-    "columbina": "Her Constellation 1 and 2 Lunar-Charged elevation raises every counted row alike, so the ratios of the sands and goblet swaps "
+    "chasca": "Her Constellation 2 stack of Spirit of the Radiant Shadow adds to her Shining Shadowhunt Shells only in team shapes with one "
+              "or two of the converting elements, and her usual team has all three, where the stacks are already at their most.",
+    "columbina": "Her Constellation 1 to 6 Lunar elevation raises every counted row alike, so the ratios of the sands and goblet swaps "
                  "cancel it, and no swap of the comparison's separates it from her answers at 0.",
+    "mitya": "Her Constellation 6 Stellar-Conduct elevation raises every counted row alike and its 15% on Steady State Core's hits is a share "
+             "of rows with the same scaling, so the ratios of the sands and goblet swaps cancel them: GO's answers at 6 are its answers at 0.",
     "qiqi": "Her Constellation 2 ATK bonus holds only in the Stellar-Conduct team shape, and her usual team is the one with no Stellar team; "
             "the rest of her Constellation 2 is a state that is off.",
     "traveler-anemo": "Her Constellation 2 is Energy Recharge, which none of her counted rows scales on.",
+    "vesna": "Her Constellation 4 ATK and Mastery bonus holds only in the Stellar Swirl team shape, and her usual team is the one with no Stellar "
+             "reaction; her Constellation 6 Stellar Swirl elevation raises rows only that shape deals: GO's answers at 6 are its answers at 0.",
+    "xingqiu": "His Constellation 4 bonus inside his Burst multiplies his Skill's one counted row, so the ratios of the sands and goblet swaps "
+               "cancel it.",
 }
 
 
@@ -205,6 +222,23 @@ def test_the_fixtures_blocks_are_what_the_core_makes_now():
     assert all(name.split("@")[0] == name or "@c" in name for name in FIXTURE["levels"])
 
 
+def test_a_case_at_a_constellation_gives_both_sides_the_talent_levels_that_constellation_raises():
+    # The game adds 3 levels to one of her talents at Constellation 3 and 3 more at 5 (the one each names: her Normal Attack, Skill or
+    # Burst), which GO does itself (the cases hand it 10 each) and HoYoLAB's rows show: our block is read at the levels GO's hits are at
+    # (`levels`, from GO's own talent indexes), never at a fixed 10; the block itself is held to them by the test above
+    seen = 0
+    for name in FIXTURE["kits"]:
+        if "@c" not in name:
+            continue
+        constellation = int(name.split("@c")[1])
+        raised = FIXTURE["levels"].get(name) or {"normal": 10, "skill": 10, "burst": 10}
+        assert sum(raised.values()) - 30 == 3 * ((constellation >= 3) + (constellation >= 5)), name
+        seen += 1
+    assert seen >= 40
+    assert FIXTURE["levels"]["mualani@c4"] == {"normal": 10, "skill": 13, "burst": 10}     # Constellation 3 raises her Skill, and 4 nothing
+    assert FIXTURE["levels"]["sandrone@c6"] == {"normal": 13, "skill": 10, "burst": 13}    # her Constellation 3 raises the Normal Attack, 5 the Burst
+
+
 def test_only_hit_rows_of_the_games_text_are_kept():
     for affixes in (CASES["affixes"], FIXTURE["affixes"]):
         assert all(is_damage(name) for rows in affixes.values() for talent in rows.values() for name, _ in talent)
@@ -285,10 +319,8 @@ def test_every_infusion_decided_on_is_compared_with_its_state_on():
         for item in c["infused"]:
             if item.get("party") or (item.get("while") and item["while"] not in on):
                 continue
-            if (item.get("from_constellation") or 0) > compare.UNGATED_LIMIT and not item.get("while"):
-                continue   # an ungated one above Constellation 2 is not compared (compare.UNGATED_LIMIT)
             found.setdefault(key, []).append(item)
-            at = compare.constellation_of(key) if item.get("from_constellation") else 0
+            at = item.get("from_constellation") or 0   # its own constellation has a case of its own
             case = next(x for x in CASES["cases"] if x["id"] == f"{key}:goblet" + (f"@c{at}" if at else ""))
             assert case["constellation"] >= item.get("from_constellation", 0), key
             block = FIXTURE["kits"][case["kit"]]
@@ -414,7 +446,7 @@ def test_an_undecided_toggle_of_three_states_is_compared_on_at_the_third_and_mov
 
 
 def test_the_gear_cases_stand_beside_the_others_and_leave_them_as_they_were():
-    assert not {c["id"] for c in CASES["cases"]} & GEAR_IDS and len(CASES["cases"]) == 358 and len(FIXTURE["cases"]) == 358
+    assert not {c["id"] for c in CASES["cases"]} & GEAR_IDS and len(CASES["cases"]) == len(FIXTURE["cases"]) >= 406
 
 
 def test_a_gear_cases_two_builds_differ_in_one_weapon_or_one_set_and_are_at_the_same_states():

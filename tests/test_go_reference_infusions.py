@@ -200,11 +200,17 @@ def test_a_character_whose_decided_infusion_needs_a_constellation_is_compared_at
                                   "infused": [{"talents": MOVES, "element": "electro", "while": "t", "from_constellation": 6},
                                               {"talents": MOVES, "element": "geo", "while": "u", "from_constellation": 6}]}}}
     monkeypatch.setattr(compare.kits, "load_kits", lambda: data)
-    assert compare.constellation_of("x") == 6
+    assert compare.constellations_of("x") == [6]
     data["characters"]["x"]["toggles"][0]["on"] = False
-    assert compare.constellation_of("x") is None
+    assert compare.constellations_of("x") == []
     data["characters"]["x"]["infused"][1] = {"talents": MOVES, "element": "geo", "while": None, "from_constellation": 2}
-    assert compare.constellation_of("x") == 2
+    assert compare.constellations_of("x") == [2]
+    data["characters"]["x"]["infused"][1]["from_constellation"] = 4   # an infusion no state gates is compared at any constellation
+    assert compare.constellations_of("x") == [4]
+    data["characters"]["x"]["toggles"][0]["on"] = True   # the lower and the higher one are each a constellation to compare at, once each
+    assert compare.constellations_of("x") == [4, 6]
+    data["characters"]["x"]["infused"][1]["from_constellation"] = 6
+    assert compare.constellations_of("x") == [6]
 
 
 def test_an_extraction_without_ele_tree_stops_the_build_instead_of_reading_no_infusion(tmp_path):

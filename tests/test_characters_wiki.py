@@ -97,6 +97,59 @@ async def test_a_character_page_gives_her_art_chart_talents_constellations_and_c
     assert wanted <= set(page.material_names)  # every material above has its name, picture and entry
 
 
+def _nameless(answer: bytes) -> tuple[bytes, dict[str, str]]:
+    """An entry's answer with its costs' materials written as the wiki writes an older character's: by entry and amount alone,
+    no name and no picture; and the names that were taken out, by entry."""
+    whole = json.loads(answer)
+    names: dict[str, str] = {}
+
+    def strip(text):
+        items = characters_wiki._entries(text)
+        if not items:
+            return text
+        for item in items:
+            names.setdefault(str(item["ep_id"]), item.get("name") or item.get("nickname"))
+        return "$" + json.dumps([{"ep_id": item["ep_id"], "amount": item["amount"]} for item in items]) + "$"
+
+    def walk(value):
+        if isinstance(value, list):
+            return [walk(item) for item in value]
+        if isinstance(value, dict):
+            return {key: walk(item) for key, item in value.items()}
+        return strip(value) if isinstance(value, str) and value.startswith("$[") else value
+
+    for module in whole["data"]["page"]["modules"]:
+        for component in module.get("components") or []:
+            if module.get("name") in ("Ascend", "Talents"):
+                component["data"] = json.dumps(walk(json.loads(component["data"])))
+    return json.dumps(whole).encode("utf-8"), names
+
+
+async def test_an_entry_whose_materials_have_no_names_takes_them_from_their_own_entries(store, clock):
+    """The wiki writes an older character's costs by entry alone (Xiao's, Zhongli's): each material's name is read from its own
+    entry, once, so that her talent books, weekly boss material and the rest have their keys."""
+    answer, names = _nameless(samples.wiki_entry_answer("10920"))
+    asked: list[str] = []
+
+    def fetch(url, *, headers=None, body=None):
+        ident = url[len(ENTRY_URL):]
+        asked.append(ident)
+        if ident == "10920":
+            return answer
+        page = {"id": ident, "name": names[ident], "icon_url": "", "menu_id": "9", "filter_values": {}, "modules": []}
+        return json.dumps({"retcode": 0, "message": "OK", "data": {"page": page}}).encode("utf-8")
+
+    characters = CharacterWiki(store, clock, fetch, lambda: "7.1")
+    page = characters.character_page(await characters.entry("10920", "character"))
+    assert dict(page.talent_costs[10]) == {
+        "mora": 700000, "philosophies-of-vagrancy": 16, "precision-drive-shaft": 12, "madman-s-restraint": 2,
+        "crown-of-insight": 1,
+    }
+    assert sorted(page.ascension_costs) == [1, 2, 3, 4, 5, 6]
+    assert page.material_names["philosophies-of-vagrancy"][0] == "Philosophies of Vagrancy"
+    assert sorted(asked) == sorted(["10920", *names])   # each material's entry read once, for its name
+
+
 async def test_her_own_stats_are_kept_at_the_levels_each_phase_starts_and_ends(wiki):
     characters, _, _ = wiki
     page = characters.character_page(await characters.entry("10920", "character"))
@@ -164,6 +217,19 @@ async def test_a_material_page_gives_its_type_and_where_it_comes_from(wiki):
          Source("enemies", "Landcruisers Stardust Exchange", ())),
         ("Domain of Forgery: Cecilia Garden (Monday/Thursday/Sunday)", "Weapon Ascension Material",
          Source("forgery", "Cecilia Garden", (0, 3, 6))),
+        # The wiki writes more after a domain's days (how else the material is had): the days are still the domain's.
+        ("Domain of Mastery: Myriad Illusions (Tuesday/Friday/Sunday) Exchanged in the Gift Shop", "Character Talent Material",
+         Source("books", "Myriad Illusions", (1, 4, 6))),
+        ("Domain of Forgery: Ruins of Thirsting Capital (Wednesday/Saturday/Sunday) Purchase from the Souvenir Shop in Mondstadt",
+         "Weapon Ascension Material", Source("forgery", "Ruins of Thirsting Capital", (2, 5, 6))),
+        ("Domain of Mastery: Frosted Altar (Monday/Thursday/Sunday) Crafted", "Character Talent Material",
+         Source("books", "Frosted Altar", (0, 3, 6))),
+        # The wiki misspells the reward of one weekly boss.
+        ("Lv. 70+ Shouki no Kami, the Prodigal Challange Reward", "Character Level-Up Material",
+         Source("weekly", "Shouki no Kami, the Prodigal", ())),
+        # A drop that the wiki names after another way of having it.
+        ("Stardust Exchange Dropped by Lv. 40+ Natlan Saurians Crafted", "Character and Weapon Enhancement Material",
+         Source("enemies", "Natlan Saurians Crafted", ())),
         ("Ley Line Outcrops", "Character EXP Material", Source("ley", "Ley Line Outcrops", ())),
         ("Crafted at the Crafting Bench", "Cooking Ingredient", Source("crafted", "Crafted at the Crafting Bench", ())),
         ("A gift from a traveller", "Other", Source("unknown", "A gift from a traveller", ())),
@@ -438,7 +504,7 @@ def _stored(store, ident: str, kind: str, fmt: int | None) -> None:
 
 def test_an_entry_of_an_older_format_is_wanted_once_more(wiki, store):
     characters, _, _ = wiki
-    assert characters_wiki.ENTRY_FORMAT == 2
+    assert characters_wiki.ENTRY_FORMAT == 3
     _stored(store, "10920", "character", 1)
     assert ("character", "10920") in characters.wanted_again()
     _stored(store, "10920", "character", characters_wiki.ENTRY_FORMAT)

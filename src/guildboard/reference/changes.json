@@ -1,4 +1,16 @@
 {
+  "2.2.1": [
+    {
+      "kind": "fixed",
+      "title": "Materials on the Plan page",
+      "text": "Most characters on the Plan page had no talent book, weapon material or weekly boss material. The days of a domain are now read even when the wiki writes more after them, the weekly boss whose name the wiki misspells is found, and the materials of older characters, such as Xiao and Zhongli, are read by their own entries. Each character's entry is read once more from the wiki, in the background."
+    },
+    {
+      "kind": "better",
+      "title": "The verdict at every constellation",
+      "text": "The planner's verdict now counts the effects of Constellations 3 to 6 too, each checked against Genshin Optimizer at the constellation it starts at. Effects that need the team, the enemy or another setup stay off, and you can still count any of them with the Not counted line."
+    }
+  ],
   "2.2.0": [
     {
       "kind": "new",
@@ -18,7 +30,7 @@
     {
       "kind": "new",
       "title": "The planner's damage verdict",
-      "text": "With a weapon or artifact set under test, the planner says whether the build Hits harder, Hits softer or It depends, with a row for each of the character's talents. Effects that only apply under a condition are counted, and you can leave any of them out. A Not counted line lists the rest, so you can count more. For a character whose damage depends on the team, a Team setting lets you say who stands beside them. Every character's numbers were checked against Genshin Optimizer. Varka still shows It depends, and Somnia has no verdict yet."
+      "text": "With a weapon or artifact set under test, the planner says whether the build Hits harder, Hits softer or It depends, with a row for each of the character's talents. Effects that only apply under a condition are counted, and you can leave any of them out. A Not counted line lists the rest, so you can count more. For a character whose damage depends on the team, a Team setting lets you say who stands beside them. Every character's numbers were checked against Genshin Optimizer. Varka still shows It depends."
     },
     {
       "kind": "better",

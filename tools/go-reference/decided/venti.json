@@ -1,4 +1,8 @@
 {
   "main": null,
-  "toggles": {}
+  "toggles": {
+    "lockHomework": {"on": false, "state": "on", "label": "Witch's Homework done (Hexerei)", "covers": [], "reason": "His Hexerei effects need his Witch's Homework quest done and the party to have two Hexerei characters, which the planner cannot tell, so it is left for the player to switch on."},
+    "lockC4SkillBurst": {"on": false, "state": "on", "label": "Constellation 4 Anemo bonus (Hexerei)", "covers": [], "reason": "A Constellation 4 Anemo DMG Bonus of his Hexerei form. It needs the Witch's Homework switch as well."},
+    "c6": {"on": false, "state": "takeDmg", "label": "Constellation 6 CRIT DMG (Hexerei)", "covers": [], "reason": "A Constellation 6 CRIT DMG bonus of his Hexerei form. It needs the Witch's Homework switch as well."}
+  }
 }

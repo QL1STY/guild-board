@@ -185,33 +185,23 @@ def block(key: str, affixes: dict[str, list[list[str]]], levels: dict[str, int] 
     return out
 
 
-# The plan's boundary: a constellation effect no state gates is compared from here down (C3 and above are left, as the C0-C2 owner is
-# the one the planner is for); a decided state or a row only a constellation deals is compared at any constellation it needs.
-UNGATED_LIMIT = 2
-
-
-def constellation_of(key: str) -> int | None:
-    """The constellation her extra cases are at, or None for a character with none: the highest that the effects of the states decided on
-    need (a toggle that is on, with effects from a constellation), the rows only a constellation deals (`row_gates`) need, an infusion of a state that is on (or of no state, from Constellation 1 or 2) behind
-    a constellation, or an effect no state gates (the runtime applies it at the player's constellation) that starts at Constellation 1 or 2. Her kit at that
-    constellation holds everything it gives from the lower ones, on both sides of the comparison."""
+def constellations_of(key: str) -> list[int]:
+    """The constellations her extra cases are at, each once and in order, or none for a character with none: every one that the effects of the
+    states decided on start at (a toggle that is on, with effects from a constellation), the rows only a constellation deals (`row_gates`)
+    start at, an infusion of a state that is on (or of no state) behind a constellation starts at, or an effect no state gates (the runtime
+    applies it at the player's constellation) starts at, from 1 to 6. Each one has cases of its own: her kit at the highest holds everything
+    it gives from the lower ones on both sides of the comparison, so a gate read at the wrong start (Constellation 4 for 2) would agree at 0
+    and at 6 and be caught at neither."""
     character = kits.load_kits()["characters"][key]
     on = {t["name"] for t in character["toggles"] if t["on"]}
     need = [e["from_constellation"] for e in character["effects"]
             if e.get("while") in on and all(name in on for name in e.get("also") or ()) and e.get("from_constellation")]
-    need += [e["from_constellation"] for e in character["effects"]
-             if not e.get("while") and e.get("from_constellation") and e["from_constellation"] <= UNGATED_LIMIT]
+    need += [e["from_constellation"] for e in character["effects"] if not e.get("while") and e.get("from_constellation")]
     need += [gate["from"] for rows in (character.get("row_gates") or {}).values() for gate in rows.values() if gate.get("from")]
-    # an infusion behind a constellation (Dori's C6) is the same as an effect: a state decided on needs it, an ungated one from 1 or 2
+    # an infusion behind a constellation (Dori's C6) is the same as an effect: a state decided on needs it, an ungated one from where it starts
     need += [i["from_constellation"] for i in character.get("infused") or []
-             if i.get("from_constellation") and (i["while"] in on if i.get("while") else i["from_constellation"] <= UNGATED_LIMIT)]
-    return max(need) if need else None
-
-
-def ungated_above_limit() -> list[str]:
-    """The characters with an effect no state gates that starts at Constellation 3 or above: not compared (the C0-C2 boundary)."""
-    return sorted(key for key, c in kits.load_kits()["characters"].items()
-                  if any(not e.get("while") and (e.get("from_constellation") or 0) > UNGATED_LIMIT for e in c["effects"]))
+             if i.get("from_constellation") and (i["while"] in on if i.get("while") else True)]
+    return sorted(set(need))
 
 
 def reaches_crit(hits: dict) -> bool:
@@ -401,11 +391,10 @@ def cases(only: list[str] | None = None) -> dict:
                 common["conds_plain"] = {sheet: states for sheet, states in plain.items() if states}
             return common, a, swaps
 
-        # a character with a CRIT bonus from a constellation also has the circlet swap (CRIT DMG to CRIT Rate), at 0 and at that constellation
-        high = constellation_of(key)
-        at = block(key, rows, None, high) if high else None
-        crit = at is not None and counted(at) != [] and reaches_crit(at)
-        common, a, swaps = common_of(hits, 0, crit)
+        # a character with a CRIT bonus from a constellation also has the circlet swap, at 0 and at each constellation that gives it
+        at_of = {c: block(key, rows, None, c) for c in constellations_of(key)}
+        crit_at = {c: counted(b) != [] and reaches_crit(b) for c, b in at_of.items()}
+        common, a, swaps = common_of(hits, 0, any(crit_at.values()))
         for swap, b in swaps.items():
             for reaction in [None, *(reactions if swap == "sands" else [])]:
                 out.append({
@@ -413,10 +402,10 @@ def cases(only: list[str] | None = None) -> dict:
                     **common, "swap": swap, "reaction": reaction, "mains_a": a, "mains_b": b,
                     "a": {"pieces": _pieces(set_go, **a)}, "b": {"pieces": _pieces(set_go, **b)},
                 })
-        # the same swaps at the constellation her decided states, rows and constellation effects need, beside the ones at Constellation 0
-        if at is not None:
+        # the same swaps at each constellation her decided states, rows and constellation effects start at, beside the ones at Constellation 0
+        for high, at in at_of.items():
             if counted(at):
-                common_c, a_c, swaps_c = common_of(at, high, crit)
+                common_c, a_c, swaps_c = common_of(at, high, crit_at[high])
                 for swap, b in swaps_c.items():
                     out.append({
                         "id": f"{key}:{swap}@c{high}", **common_c, "swap": swap, "reaction": None, "mains_a": a_c, "mains_b": b,
