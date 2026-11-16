@@ -140,6 +140,8 @@ export type GameState = {
   /** The length of the last session in minutes, which the status gives; null before the first. */
   last: number | null
   week: BoardModel['playtime']['week']
+  /** The play in all that Guild Board counted, in minutes, and the day it began; none before a session. */
+  total?: { minutes: number; since: string } | null
 }
 
 /**
@@ -157,6 +159,8 @@ export async function playAs(page: Page, state: GameState): Promise<void> {
       session_started_at: state.started,
       today_minutes: state.week.at(-1)?.minutes ?? 0,
       week: state.week,
+      total_minutes: state.total?.minutes ?? null,
+      counting_since: state.total?.since ?? null,
     }
   })
   await changeAnswer<Status>(page, '/api/status', (status) => {

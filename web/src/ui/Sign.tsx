@@ -54,6 +54,13 @@ export type SignName =
   | 'stars'
   | 'crown'
   | 'people'
+  | 'next'
+  | 'calendar'
+  | 'tower'
+  | 'flag'
+  | 'abyss'
+  | 'theater'
+  | 'stygian'
 
 /**
  * What each sign draws, on a 20 by 20 square with its lines about 2 units inside the edge. The drawings have no colour,
@@ -340,6 +347,31 @@ const DRAWINGS: Record<SignName, ReactElement> = {
       <circle cx="13.8" cy="7.5" r="2.2" />
       <path d="M12.9 11.8c2-.3 3.6 1.1 4.2 3.6" />
     </>
+  ),
+  // The five widgets' plan, Task 3, after the mockup's symbols (16 by 16, drawn here on 20 by 20). Next up: a list with the
+  // next line's mark; the Calendar: a page with its two rings; Endgame resets: the Abyss's tower.
+  next: (
+    <>
+      <path d="M3.8 3.8h12.4M3.8 10h8.8M3.8 16.2h5" />
+      <circle cx="15.3" cy="14.8" r="2.5" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="2.5" y="4" width="15" height="13.5" rx="2.5" />
+      <path d="M2.5 8h15M6.9 2.3v3.4M13.1 2.3v3.4" />
+    </>
+  ),
+  tower: <path d="M6.25 17.5V7.5L10 2.5l3.75 5v10M3.75 17.5h12.5M8.75 17.5v-3.75h2.5v3.75" />,
+  // The widgets polish, after the mockup's symbols (16 by 16, drawn here on 20 by 20). An event Next up lists: a flag on its pole.
+  flag: <path d="M4.4 18.1V2.5M4.4 3.3h10.6l-2.5 4 2.5 4H4.4" />,
+  // The three endgame modes: the Spiral Abyss's spiral, the Imaginarium Theater's mask and the Stygian Onslaught's flame.
+  abyss: (
+    <path d="M10 10a1.25 1.25 0 0 1 2.5 0 2.5 2.5 0 0 1-5 0 3.75 3.75 0 0 1 7.5 0 5 5 0 0 1-10 0 6.25 6.25 0 0 1 12.5 0" />
+  ),
+  theater: <path d="M3.5 3.1h13v5.75a6.5 6.5 0 0 1-13 0zM6.5 7.75h2.25M11.25 7.75h2.25M7.5 12c1.4 1.1 3.6 1.1 5 0" />,
+  stygian: (
+    <path d="M10 1.9c1 3.25 5.4 5 5.4 10.25a5.4 5.4 0 0 1-10.8 0c0-2.5 1.25-4 2.5-5 0 2.1 1 3.5 2.4 3.5C9.5 7.5 8.75 5 10 1.9z" />
   ),
 }
 

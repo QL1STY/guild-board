@@ -28,7 +28,7 @@ from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable, Sequence
-from urllib.parse import quote, unquote, urlsplit
+from urllib.parse import unquote, urlsplit
 
 from guildboard import netpolicy
 from guildboard.clock import Clock
@@ -122,11 +122,6 @@ _NEVER_READ = datetime(2000, 1, 1, tzinfo=timezone.utc)
 # How often a picture's read is noted, at most. Each note is a write to the database, and a roster asks for about a hundred
 # pictures at every start; a day is as fine as the cache needs to tell what the player looks at from what they do not.
 READ_NOTED_EVERY = timedelta(days=1)
-
-
-def _sendable(url: str) -> str:
-    """An address as it is sent: the wiki writes spaces and letters of other scripts into its pictures' paths."""
-    return quote(url, safe=":/?&=%#+@,;~!*'()$")
 
 
 def live_download() -> FetchBytes:
@@ -473,7 +468,7 @@ class ArtCache:
             return None
         try:
             data = await asyncio.to_thread(
-                self._fetch_bytes, _sendable(url), max_bytes=self.CAP, hosts=ART_HOSTS + netpolicy.PUBLIC_PICTURE_HOSTS
+                self._fetch_bytes, netpolicy.sendable(url), max_bytes=self.CAP, hosts=ART_HOSTS + netpolicy.PUBLIC_PICTURE_HOSTS
             )
         except netpolicy.ResponseTooLarge:
             self._refused.add(key)

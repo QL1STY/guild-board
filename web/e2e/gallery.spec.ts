@@ -1,9 +1,11 @@
 import type { Page } from '@playwright/test'
-import type { GalleryModel } from '../src/pages/galleryview.ts'
+import { countText, type GalleryModel, videoCount } from '../src/pages/galleryview.ts'
 import { expect, test } from './fixtures.ts'
 
-/** The demo's pictures (gallery.py, fill_demo_folder): 24 over the three months before the demo's now. */
-const DEMO_COUNT = 24
+/** The demo's items (gallery.py): 24 pictures from fill_demo_folder over the three months before the demo's now, and fill_demo_extra_folder's. */
+const DEMO_COUNT = 28
+/** What the page counts: 24 pictures of the game's folder, and the extra folder's three and one video. */
+const DEMO_TEXT = '27 photos, 1 video'
 
 /**
  * Waits until the thumbnails in sight have loaded: the core makes them on request, and a core stopped while it writes
@@ -39,7 +41,7 @@ test('gallery hidden in the rail until switched on', async ({ page, core, api })
   expect(names.indexOf('Gallery')).toBe(names.indexOf('Settings') - 1)
   await rail.getByRole('link', { name: 'Gallery' }).click()
   await expect(page).toHaveURL(/#\/gallery$/)
-  await expect(page.getByTestId('gallery-count')).toHaveText(`${DEMO_COUNT} photos`, { timeout: 20_000 })
+  await expect(page.getByTestId('gallery-count')).toHaveText(DEMO_TEXT, { timeout: 20_000 })
   await thumbnailsLoaded(page)
 })
 
@@ -49,7 +51,7 @@ test.describe('with the gallery on', () => {
     await page.reload() // the page fixture loaded the page before the gallery was on
     await page.goto(`${core.origin}/#/gallery`)
     // The demo makes its pictures the first time its gallery looks, which takes a moment with other cores running.
-    await expect(page.getByTestId('gallery-count')).toHaveText(`${DEMO_COUNT} photos`, { timeout: 20_000 })
+    await expect(page.getByTestId('gallery-count')).toHaveText(DEMO_TEXT, { timeout: 20_000 })
   })
 
   test.afterEach(async ({ page }) => {
@@ -57,14 +59,16 @@ test.describe('with the gallery on', () => {
   })
 
   test('grid shows demo photos by month', async ({ page, api }) => {
-    await expect(page.getByTestId('gallery-count')).toHaveText(`${DEMO_COUNT} photos`)
+    await expect(page.getByTestId('gallery-count')).toHaveText(DEMO_TEXT)
     const model = await api.get<GalleryModel>('/api/gallery')
     if (!model.enabled) throw new Error('the gallery is off')
     expect(model.months.length).toBeGreaterThanOrEqual(3)
     const headings = page.locator('.ga-month-h')
     await expect(headings).toHaveCount(model.months.length)
     await expect(headings.first()).toContainText(model.months[0].label)
-    await expect(headings.first()).toContainText(`${model.months[0].pictures.length} photo`)
+    await expect(headings.first()).toContainText(
+      countText(model.months[0].pictures.length, videoCount(model.months[0].pictures)),
+    )
     await expect(page.getByTestId('gallery-tile')).toHaveCount(DEMO_COUNT)
     // Newest first, and a thumbnail of the core's, loaded.
     const first = page.getByTestId('gallery-tile').first()
@@ -120,6 +124,54 @@ test.describe('with the gallery on', () => {
     await page.getByRole('radio', { name: 'Favourites' }).click()
     await expect(page.getByTestId('gallery-tile')).toHaveCount(1)
     await expect(page.getByTestId('gallery-tile')).toHaveAttribute('data-id', id ?? '')
+  })
+
+  test("a video's tile shows its first frame, a play mark and its length, and opens in a player that seeks", async ({
+    page,
+  }) => {
+    const tile = page.locator('[data-testid="gallery-tile"].video')
+    await expect(tile).toHaveCount(1)
+    await tile.scrollIntoViewIfNeeded()
+    await expect(tile.locator('.ga-play')).toBeVisible()
+    await expect(tile).toHaveAttribute('aria-label', /^Video taken /)
+    // The window draws the first frame itself: a video of the tile's size that holds a frame, and its length from the file.
+    await expect(tile.getByTestId('gallery-duration')).toHaveText('0:03')
+    await expect
+      .poll(() => tile.locator('video').evaluate((video: HTMLVideoElement) => video.readyState >= 2 && video.videoWidth))
+      .toBe(320)
+    const asked = page.waitForResponse((response) => response.url().includes('/full') && response.request().resourceType() === 'media')
+    await tile.click()
+    const view = page.getByTestId('gallery-view')
+    await expect(view).toHaveAttribute('aria-label', 'Video')
+    const video = view.getByTestId('gallery-video')
+    await expect(video).toHaveJSProperty('controls', true)
+    // The core answers a media request's Range with the bytes asked for, as a video that seeks needs.
+    expect((await asked).status()).toBe(206)
+    await expect(page.getByTestId('gallery-size')).toHaveText('320 × 180')
+    await expect(page.getByTestId('gallery-length')).toHaveText('0:03')
+    await expect(page.getByTestId('gallery-folder')).toHaveText('demo-extra-screenshots')
+    await expect(view.getByRole('button', { name: 'Copy picture' })).toHaveCount(0)
+    await expect(view.getByRole('button', { name: /Favourite/ })).toBeVisible()
+    // Seeking to the second second lands there, and plays on from it.
+    await video.evaluate(async (element: HTMLVideoElement) => {
+      await new Promise<void>((resolve) => {
+        element.addEventListener('seeked', () => resolve(), { once: true })
+        element.currentTime = 2
+      })
+    })
+    await expect(video).toHaveJSProperty('currentTime', 2)
+    await video.evaluate((element: HTMLVideoElement) => {
+      element.muted = true
+      return element.play()
+    })
+    await expect.poll(() => video.evaluate((element: HTMLVideoElement) => element.currentTime)).toBeGreaterThan(2.05)
+    // The arrow keys move on to the next item while the close button has the focus, and the video stops with it.
+    await view.getByRole('button', { name: 'Close' }).focus()
+    await page.keyboard.press('ArrowRight')
+    await expect(view.getByTestId('gallery-video')).toHaveCount(0)
+    await expect(view).toHaveAttribute('aria-label', 'Photo')
+    await page.keyboard.press('Escape')
+    await expect(view).toHaveCount(0)
   })
 
   test('copy picture puts a PNG on the clipboard', async ({ page, context, core }) => {

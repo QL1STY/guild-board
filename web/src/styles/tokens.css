@@ -210,6 +210,27 @@
   --emblem-ink: #F7F2E7;
   /* The same on the widgets' roles (the look emblem): the dark panel sets it again to the dark it knocked the emblem out in before, so the overlay is as it was. */
   --w-emblem-ink: #F7F2E7;
+  /* The five widgets' marks (the five widgets plan, Task 3): never text; 3:1 on the card. The Ledger's sources, as the page draws them (--src-*), for Primogems and the Calendar's Events lane. */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #B6803F;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #978A6E;
+  /* The Endgame modes, as the Endgame card draws them (--mode-*): Endgame resets and the Calendar's Endgame lane. */
+  --w-mode-abyss: #3E5A9E;
+  --w-mode-theater: #9C3B52;
+  --w-mode-stygian: #2D6E6A;
+  /* The Calendar's Wishes lane: a blue of its own, 4.0:1 on the card. */
+  --w-wish: #4F78B8;
+  /* The widgets polish: a colour for each kind Next up lists (its signs, rails and rings): marks, never text; 3:1 on the card. Near the Ledger's sources. */
+  --w-kind-timer: #8A6E4B;
+  --w-kind-resin: #4470B4;
+  --w-kind-exp: #3F7F7A;
+  --w-kind-realm: #B6803F;
+  --w-kind-trans: #7B6AA8;
+  --w-kind-reset: #6A6659;
+  --w-kind-banner: #A6751F;
+  --w-kind-event: #B0573F;
 }
 
 /*
@@ -249,4 +270,22 @@
   --w-five: #E2C98F;
   --focus: #F1EADB;
   --w-emblem-ink: #2B3142;
+  /* The same marks over the game, 3:1 on the panel over a white one and a black one: Slate's lightened sources (Midnight's violet, blue and teal fall under 3:1 over white), Midnight's events, others and modes. */
+  --w-src-commissions: #728EB6;
+  --w-src-welkin: #9385B8;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #549994;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #7C9BE8;
+  --w-mode-theater: #E07A96;
+  --w-mode-stygian: #55B5AE;
+  --w-wish: #8FB0E0;
+  --w-kind-timer: #D2B48A;
+  --w-kind-resin: #8FB0E0;
+  --w-kind-exp: #7CC4BE;
+  --w-kind-realm: #E0AE6C;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #A9B0C0;
+  --w-kind-banner: #E2C98F;
+  --w-kind-event: #E89A84;
 }

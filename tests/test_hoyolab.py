@@ -494,8 +494,10 @@ async def test_the_endgame_and_calendar_groups_carry_their_details_beside_their_
     assert endgame.detail.abyss_stars == 36 and len(endgame.detail.abyss_halves) == 3
     assert endgame.detail.stygian_bosses[0].advantage == ("Cryo", "Dendro")
     calendar = (await source.fetch("calendar", now=NOW)).record
-    assert (calendar.banners, calendar.events) == (3, 3)
+    assert (calendar.banners, calendar.events) == (3, 6)
     assert calendar.detail.theater_text.startswith("Cryo, Pyro and Anemo") and len(calendar.detail.banners) == 2
+    assert [banner.kind for banner in calendar.board.banners] == ["character", "character", "weapon"]
+    assert [event.name for event in calendar.board.events] == ["An Event", "Done Event", "Coming Event"]
 
 
 async def test_a_detail_that_cannot_be_read_never_costs_the_summary(tokens, monkeypatch, caplog):
@@ -504,12 +506,13 @@ async def test_a_detail_that_cannot_be_read_never_costs_the_summary(tokens, monk
 
     monkeypatch.setattr(hoyolab.norm, "normalize_endgame_detail", explode)
     monkeypatch.setattr(hoyolab.norm, "normalize_calendar_detail", explode)
+    monkeypatch.setattr(hoyolab.norm, "normalize_calendar_board", explode)
     source = _source(tokens, FakeClient())
     with caplog.at_level(logging.WARNING, logger="guildboard.sources.hoyolab"):
         endgame = (await source.fetch("endgame", now=NOW)).record
         calendar = (await source.fetch("calendar", now=NOW)).record
     assert endgame.detail is None and [mode.score for mode in endgame.modes] == [36.0, 10.0, 5.0]
-    assert calendar.detail is None and calendar.banners == 3
+    assert calendar.detail is None and calendar.board is None and calendar.banners == 3  # the counts stay
     assert "endgame detail could not be read (OverflowError)" in caplog.text
 
 

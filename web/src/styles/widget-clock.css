@@ -1,0 +1,484 @@
+/*
+ * The Clock's styles (the widgets polish mockup, section 4): Figures, Flip, the Astrolabe, Time and reset and Words, and
+ * the picker of Settings. Istaroth's dial is widgets.css's. A style is laid out at the frame's size by Clock.tsx (one cell
+ * wide, one tall, two tall), not by container queries, so that the picture of each style in Settings, drawn at 2 x 2 in a
+ * frame of its own, is the one the Board shows at that size. Only the widget roles are drawn with.
+ */
+
+/* Istaroth's plate with AM or PM: small after the minutes. */
+.clock-dial .fig small {
+  margin-left: 2px;
+  font-size: 0.62em;
+  font-weight: 700;
+  color: var(--w-muted);
+}
+.clock .rst,
+.ck-side .rst {
+  color: var(--w-ink2);
+}
+/* Two cells across and two down, the dial over its lines: a third line, so a smaller dial. */
+@container (max-width: 499px) and (min-height: 180px) {
+  .clock.rst-on {
+    --dial: min(calc(100cqh - 112px), calc(100cqw - 28px), 240px);
+  }
+}
+@container (max-width: 300px) {
+  .clock .rst {
+    display: none;
+  }
+}
+
+.ck {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.ck.ck-stack {
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  text-align: center;
+}
+.ck.ck-stack.ck-flush {
+  align-items: stretch;
+  text-align: left;
+  gap: 3px;
+}
+.ck-side {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+  line-height: 1.2;
+}
+.ck-side > span,
+.ck-side > b {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ck-side b {
+  color: var(--w-ink);
+}
+.ck-side .mut {
+  color: var(--w-muted);
+  white-space: normal;
+}
+.ck-gap {
+  margin-top: 6px;
+}
+.ck-dial {
+  position: relative;
+  flex: none;
+}
+.ck-dial svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Figures */
+.ck-dg {
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+}
+.ck-dg small {
+  margin-left: 3px;
+  font-size: 0.42em;
+  font-weight: 700;
+  color: var(--w-muted);
+  letter-spacing: 0;
+}
+.ck-dg small.ck-ap {
+  font-size: 0.34em;
+  font-weight: 800;
+  color: var(--w-gold-ink);
+  letter-spacing: 0.04em;
+}
+
+/* Flip */
+.ck-flip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+}
+.ck-flip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ck-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--w-border);
+  border-radius: 7px;
+  background: linear-gradient(to bottom, var(--w-plate) 50%, color-mix(in srgb, var(--w-ink) 5%, var(--w-plate)) 50%);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--w-ink) 7%, transparent);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.ck-tile::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--w-border);
+}
+.ck-tile::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  width: 3px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 1px;
+  background: var(--w-border);
+}
+.ck-tile.sec {
+  color: var(--w-gold-ink);
+}
+.ck-colon {
+  display: grid;
+  gap: 5px;
+}
+.ck-colon::before,
+.ck-colon::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--w-icon);
+  transform: rotate(45deg);
+}
+.ck-ampm {
+  color: var(--w-gold-ink);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* Astrolabe */
+.ast-day {
+  fill: color-mix(in srgb, var(--w-fill) 22%, transparent);
+}
+.ast-night {
+  fill: color-mix(in srgb, var(--w-wish) 20%, transparent);
+}
+.ast-ring {
+  fill: none;
+  stroke: var(--w-icon);
+  stroke-width: 2.5;
+}
+.ast-ring.thin {
+  stroke-width: 1;
+}
+.ast-tick {
+  stroke: var(--w-icon);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.ast-gold {
+  fill: var(--w-icon);
+}
+.ast-lbl {
+  fill: var(--w-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.ast-sun {
+  fill: var(--w-fill);
+}
+.ast-ray {
+  stroke: var(--w-fill);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.ast-moon {
+  fill: var(--w-wish);
+}
+.ast-reset {
+  fill: var(--w-ink2);
+}
+.ast-time {
+  fill: var(--w-ink);
+  font-family: inherit;
+  font-size: 34px;
+  font-weight: 800;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.ast-time.long {
+  font-size: 27px;
+}
+.ast-ap {
+  fill: var(--w-gold-ink);
+  font-size: 0.45em;
+  letter-spacing: 0.04em;
+}
+.ast-sub {
+  fill: var(--w-muted);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.ast-hand {
+  stroke: var(--w-fill);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 4;
+}
+
+/* Time and reset */
+.ck-line {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 1.2;
+  color: var(--w-ink2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ck-line b {
+  color: var(--w-ink);
+}
+.ck-bar {
+  flex: none;
+  position: relative;
+  display: block;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--w-track);
+}
+.ck-bar u {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  border-radius: 4px;
+  background: var(--w-fill);
+  text-decoration: none;
+}
+.ck-two {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto 1px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: center;
+}
+.ck-two > i {
+  align-self: stretch;
+  background: var(--w-line);
+}
+.ck-lbl {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.ck-rs {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.ck-big {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ck-big small {
+  margin-left: 2px;
+  font-size: 0.55em;
+  font-weight: 700;
+  color: var(--w-muted);
+}
+.ck.ck-stack.ck-tall {
+  align-items: stretch;
+  gap: 10px;
+}
+.ck-top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.ck-block {
+  display: grid;
+  gap: 5px;
+}
+.ck-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--w-ink2);
+}
+.ck-row b {
+  font-size: 16px;
+  color: var(--w-ink);
+  font-variant-numeric: tabular-nums;
+}
+.ck-row.small {
+  font-size: 11.5px;
+  color: var(--w-muted);
+}
+.ck-row.small span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Words */
+.ck-words {
+  display: grid;
+  grid-template-columns: repeat(11, 15px);
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 13.6px;
+  text-align: center;
+  color: var(--w-track);
+}
+.ck-words .on {
+  color: var(--w-ink);
+}
+.ck-words .on.gold {
+  color: var(--w-gold-ink);
+}
+.ck-dots {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  margin-top: 4px;
+}
+.ck-dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--w-track);
+  transform: rotate(45deg);
+}
+.ck-dots i.on {
+  background: var(--w-fill);
+}
+.ck-phrase {
+  display: block;
+  min-width: 0;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.ck-phrase small {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--w-muted);
+}
+.ck-phrase em {
+  font-style: normal;
+  color: var(--w-gold-ink);
+}
+.ck.ck-stack .ck-phrase {
+  font-size: 18px;
+}
+
+/* The settings: the style's picture and name, then the switches (widget-primogems.css draws the rows). */
+.ck-set {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.ck-styles {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.ck-styles legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.ck-picks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  max-width: 480px;
+}
+.ck-pick {
+  position: relative;
+  display: block;
+  min-width: 0;
+  padding: 6px 6px 5px;
+  border: 1px solid var(--w-border);
+  border-radius: 10px;
+  background: var(--w-plate);
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.ck-pick.on {
+  border-color: var(--w-fill);
+  box-shadow: 0 0 0 1px var(--w-fill);
+}
+.ck-pick:focus-visible {
+  outline: 2px solid var(--w-focus);
+  outline-offset: 2px;
+}
+.ck-thumb {
+  display: block;
+  width: 148px;
+  max-width: 100%;
+  height: 86px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 6px;
+  pointer-events: none;
+}
+.ck-thumb-w {
+  width: 348px;
+  height: 204px;
+  transform: scale(0.4229);
+  transform-origin: 0 0;
+}
+.ck-pick-name {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.ck-pick-name small {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--w-muted);
+}
+.ck-off {
+  opacity: 0.6;
+}

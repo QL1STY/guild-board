@@ -1,11 +1,16 @@
 import { expect, test } from 'vitest'
 import {
+  bodyOf,
+  clock,
+  countText,
   type GalleryMonth,
   inOrder,
   photos,
   pictureUrl,
   step,
   stepShown,
+  videoCount,
+  videosText,
   visibleMonths,
   withFavourite,
 } from './galleryview.ts'
@@ -72,4 +77,34 @@ test('a picture count and a picture address read right', () => {
   expect([photos(0), photos(1), photos(214), photos(1200)]).toEqual(['0 photos', '1 photo', '214 photos', '1,200 photos'])
   expect(pictureUrl('Photo (2).jpg', 'thumb')).toBe('/api/gallery/Photo%20(2).jpg/thumb')
   expect(pictureUrl('..\\x.png', 'full')).toBe('/api/gallery/..%5Cx.png/full')
+})
+
+test('an id of an added folder keeps its tilde in the address, and a video counts apart from the photos', () => {
+  expect(pictureUrl('ab12cd34~Clip 2026-10-05 20-00-00.webm', 'full')).toBe(
+    '/api/gallery/ab12cd34~Clip%202026-10-05%2020-00-00.webm/full',
+  )
+  expect([countText(24, 0), countText(28, 1), countText(3, 3), countText(1, 1), countText(0, 0)]).toEqual([
+    '24 photos',
+    '27 photos, 1 video',
+    '3 videos',
+    '1 video',
+    '0 photos',
+  ])
+  const month = [picture('a.jpg'), { ...picture('ab12cd34~b.webm'), video: true, folder: 'Clips' }]
+  expect(videoCount(month)).toBe(1)
+  expect(videosText(2)).toBe('2 videos')
+})
+
+test('a video length reads as a clock', () => {
+  expect([clock(0), clock(2.6), clock(65), clock(600), clock(3723)]).toEqual(['0:00', '0:03', '1:05', '10:00', '1:02:03'])
+  expect([clock(NaN), clock(Infinity), clock(-1)]).toEqual(['', '', ''])
+})
+
+test('the game folder missing is said only while no added folder is there', () => {
+  const base = { enabled: true as const, count: 0, videos: 0, months: [] }
+  expect(bodyOf({ enabled: false })).toBe('off')
+  expect(bodyOf({ ...base, folder_missing: true, added: 0 })).toBe('missing')
+  expect(bodyOf({ ...base, folder_missing: true, added: 1 })).toBe('empty')
+  expect(bodyOf({ ...base, folder_missing: false, added: 0 })).toBe('empty')
+  expect(bodyOf({ ...base, folder_missing: true, added: 1, count: 3 })).toBe('grid')
 })

@@ -21,6 +21,10 @@ from guildboard.records import (
     GROUPS,
     ArchonChapter,
     Area,
+    CalendarBanner,
+    CalendarBoardRecord,
+    CalendarEvent,
+    CalendarFace,
     CalendarRecord,
     CharactersRecord,
     DiaryEntry,
@@ -350,6 +354,57 @@ def _diary(now: datetime, first_time: bool) -> DiaryRecord:
     return DiaryRecord(tuple(months), entries, DEMO_ACCOUNT.uid)
 
 
+def _utc_text(moment: datetime) -> str:
+    return moment.astimezone(timezone.utc).replace(microsecond=0).isoformat(timespec="seconds")
+
+
+def _faces(*names: tuple[str, int]) -> tuple[CalendarFace, ...]:
+    """Made-up faces for the demo's banners: no address, so the widget draws its own mark."""
+    return tuple(CalendarFace(name, rarity, "") for name, rarity in names)
+
+
+def _calendar_board(now: datetime) -> CalendarBoardRecord:
+    """The demo's Calendar (the widgets mockup, section 3), relative to `now`: the banners of the demo's Pulls page at
+    their own start and end, moved as Pulls' are (`_shift`), the next phase from where they end, and four events."""
+    shift = _shift(now)
+    starts, ends = BANNERS_START + shift, BANNERS_END + shift
+    phase = timedelta(days=21)
+    banners = (
+        CalendarBanner(
+            "character", ("Skirk", "Escoffier"), _utc_text(starts), _utc_text(ends),
+            _faces(("Skirk", 5), ("Escoffier", 5), ("Xiangling", 4), ("Layla", 4), ("Kaeya", 4)),
+        ),
+        CalendarBanner(
+            "weapon", ("Azurelight", "Symphonist of Scents"), _utc_text(starts), _utc_text(ends),
+            _faces(("Azurelight", 5), ("Symphonist of Scents", 5), ("The Flute", 4), ("Rainslasher", 4)),
+        ),
+        CalendarBanner(  # the next phase
+            "character", ("Furina", "Zhongli"), _utc_text(ends), _utc_text(ends + phase),
+            _faces(("Furina", 5), ("Zhongli", 5), ("Bennett", 4), ("Fischl", 4), ("Sucrose", 4)),
+        ),
+        CalendarBanner(
+            "weapon", ("Splendor of Tranquil Waters", "Vortex Vanquisher"), _utc_text(ends), _utc_text(ends + phase),
+            _faces(("Splendor of Tranquil Waters", 5), ("Vortex Vanquisher", 5), ("Favonius Sword", 4)),
+        ),
+    )
+    moment = now.replace(microsecond=0)
+
+    def event(ident: int, name: str, begins: float, finishes: float, **more: Any) -> CalendarEvent:
+        return CalendarEvent(
+            ident, name, _utc_text(moment + timedelta(days=begins)), _utc_text(moment + timedelta(days=finishes)),
+            more.pop("finished", False), more.pop("primogems", None), None, more.pop("left", None), more.pop("total", None),
+            status=more.pop("status", 2), dated=True,
+        )
+
+    events = (
+        event(9001, "Moonlit Trials", -8, 6, primogems=1000),
+        event(9002, "Lantern Rite Rehearsal", -13, 1, finished=True, primogems=420),
+        event(9003, "Twin Fortunes", 1, 15, left=3, total=3, status=1),
+        event(9004, "Stargazer's Vigil", 6, 20, primogems=280, status=1),
+    )
+    return CalendarBoardRecord(banners, events)
+
+
 def build(group: str, now: datetime, first_time: bool = False, anchor: datetime | None = None) -> Record:
     """The record a sync of `group` reads at `now`. `anchor` is the core's now when the record is of a past sync (the history
     the demo starts with): the endgame's cycles are told from the one that holds it."""
@@ -364,7 +419,11 @@ def build(group: str, now: datetime, first_time: bool = False, anchor: datetime 
     if group == "diary":
         return _diary(now, first_time)
     if group == "calendar":
-        return CalendarRecord(banners=4, events=5, detail=characters_demo.demo_calendar_detail(now, DEMO_SERVER))
+        board = _calendar_board(now)
+        return CalendarRecord(
+            banners=len(board.banners), events=len(board.events),
+            detail=characters_demo.demo_calendar_detail(now, DEMO_SERVER), board=board,
+        )
     raise ValueError(f"unknown group: {group}")
 
 

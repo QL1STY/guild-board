@@ -48,6 +48,14 @@ const SAME_EVERYWHERE: Record<string, string> = {
 /** The Ledger's six sources, each a mark that has to read on the card in every theme but Parchment's own mockup values. */
 const LEDGER_SOURCES = ['--src-welkin', '--src-commissions', '--src-events', '--src-endgame', '--src-other', '--src-shop']
 
+/** The widget roles that are marks: the nine of the five widgets (the plan's open question 3), the Ledger's sources, the endgame modes and the wishes, and the eight kinds of Next up (the widgets polish). */
+const WIDGET_MARKS = [
+  '--w-src-commissions', '--w-src-welkin', '--w-src-events', '--w-src-endgame', '--w-src-other',
+  '--w-mode-abyss', '--w-mode-theater', '--w-mode-stygian', '--w-wish',
+  // The widgets polish: the eight kinds Next up lists (a mark on the widget's ground in every theme, as the sources are).
+  '--w-kind-timer', '--w-kind-resin', '--w-kind-exp', '--w-kind-realm', '--w-kind-trans', '--w-kind-reset', '--w-kind-banner', '--w-kind-event',
+]
+
 const SETS = Object.fromEntries(OTHERS.map((name) => [name, tokenValues(themesCss, name)])) as Record<OtherName, Record<string, string>>
 const { midnight, slate, mist, liyue, inazuma, fontaine, natlan, snezhnaya } = SETS
 
@@ -197,6 +205,8 @@ describe.each(OTHERS)('%s', (name) => {
       ['--w-done', '--w-bg'],
       ['--w-outline', '--w-bg'],
       ['--w-focus', '--w-bg'],
+      // The widget roles of the sources, the modes and the wishes: marks on the widget's own ground, never text.
+      ...WIDGET_MARKS.map((token) => [token, '--w-bg']),
       ['--gold', '--rail'], // the AR badge's text, large and bold, on the rail's colour
       ['--button-mark', '--button'], // the chosen achievement category's bar on its plate
       ['--series', '--surface'],
@@ -413,6 +423,16 @@ describe("the Ledger's tokens (the Ledger revamp design, section 8)", () => {
         expect(Math.abs(hueOf(SETS[name][token]) - hueOf(parchment[token])), `${name} ${token}`).toBeLessThanOrEqual(6)
         expect(contrast(SETS[name][token], '#000000'), `${name} ${token}`).toBeGreaterThanOrEqual(contrast(parchment[token], '#000000'))
       }
+  })
+
+  test("the widget roles of the sources and the modes are the theme's own --src-* and --mode-*, so a widget draws what the page draws", () => {
+    for (const name of OTHERS) {
+      for (const [role, page] of [
+        ['--w-src-commissions', '--src-commissions'], ['--w-src-welkin', '--src-welkin'], ['--w-src-events', '--src-events'],
+        ['--w-src-endgame', '--src-endgame'], ['--w-src-other', '--src-other'],
+        ['--w-mode-abyss', '--mode-abyss'], ['--w-mode-theater', '--mode-theater'], ['--w-mode-stygian', '--mode-stygian'],
+      ]) expect(SETS[name][role], `${name} ${role}`).toBe(SETS[name][page])
+    }
   })
 
   test("the peel's edge is gold in every theme, never the accent: the hue of Parchment's gold, whatever the look", () => {

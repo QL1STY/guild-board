@@ -1,4 +1,51 @@
 {
+  "2.2.2": [
+    {
+      "kind": "new",
+      "title": "More folders and videos in the Gallery",
+      "text": "In Settings, under the screenshot gallery, you can now add any folder of your PC with Add a folder, and take it out again with Remove. The pictures and videos directly inside it show in the Gallery beside the game's own photos. MP4 and WebM videos have a play mark and play in the large view, where you can skip through them. Guild Board only looks at these files, and never moves, changes or deletes one."
+    },
+    {
+      "kind": "fixed",
+      "title": "Every weapon's icon",
+      "text": "About half the weapons, such as Black Tassel and Favonius Lance, had no icon on the Pulls page, in the planner's choices and in the wish history. The wiki names their pictures in Chinese, and those addresses are now sent as a browser sends them."
+    },
+    {
+      "kind": "new",
+      "title": "Next up",
+      "text": "A new widget lists what is ready and what happens next, soonest first: timers, Resin, expeditions, realm currency, the transformer, the daily and weekly resets, the end of each banner, the endgame resets and the events you have not finished. A switch for each kind is in its settings. It can be drawn three ways, chosen in its settings: a rail with a sign and a colour for each kind and what is ready as chips on top (the default), gauges with a ring that fills as each thing comes, or cards grouped by day."
+    },
+    {
+      "kind": "new",
+      "title": "Calendar",
+      "text": "A new widget shows the game's banners, events and endgame over two weeks, or as a list in a small space. A finished event says Done. An event that is announced without dates says Coming soon, or shows the dates the Genshin Impact Wiki on Fandom gives for it."
+    },
+    {
+      "kind": "new",
+      "title": "Endgame resets",
+      "text": "A new widget shows your Spiral Abyss, Imaginarium Theater and Stygian Onslaught results and when each resets. By default it shows the pictures the Stats page's Endgame card uses, with the time to each reset over the picture: a tile for each mode when it is one cell tall, a band for each when it is two cells wide and two tall, and a column for each when it is three wide and two tall. A mode you have not played this cycle, or have not read since its reset, is dimmed. In its settings you can also pick Medallions, Season bars or In order."
+    },
+    {
+      "kind": "new",
+      "title": "Friends online",
+      "text": "A new widget shows which friends are in the game now, and when the others were last seen."
+    },
+    {
+      "kind": "better",
+      "title": "Savings is now Primogems",
+      "text": "The Savings widget shows your primogems and fates with your pulls now and by the end of the version. In its settings you can also show what you earned today and this week, and this month's primogems by source, from the Ledger."
+    },
+    {
+      "kind": "better",
+      "title": "Clock styles",
+      "text": "The Clock has six styles to choose from in its settings: the Istaroth dial it has always been, large Figures, Flip tiles, an Astrolabe of the whole day, the time beside the daily reset, and the time in Words. You can also choose 12 or 24 hours, the seconds, the date, the server's time and the time to the daily reset."
+    },
+    {
+      "kind": "better",
+      "title": "Playtime in all",
+      "text": "The Playtime widget now shows the time in the game in all, and the day Guild Board began counting it. Guild Board counts only the time it saw the game running, so it cannot know any play from before that day. In its settings the total can sit in quiet figures beside the session, or on a gold plate."
+    }
+  ],
   "2.2.1": [
     {
       "kind": "fixed",

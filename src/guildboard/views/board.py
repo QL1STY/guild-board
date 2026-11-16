@@ -30,18 +30,22 @@ def _resets(server: str, now: datetime) -> dict[str, str]:
 
 
 def _playtime(
-    history: History, server: str, today: date, running: bool, session_started_at: datetime | None
+    history: History, server: str, today: date, now: datetime, running: bool, session_started_at: datetime | None
 ) -> dict[str, Any]:
     """Whether the game runs and since when, and the minutes played on each of the last seven game days, today's
-    last, for the Playtime widget's columns (look pass spec 9.10). A day with no play counts 0."""
+    last, for the Playtime widget's columns (look pass spec 9.10). A day with no play counts 0. `total_minutes` is the
+    play in all that Guild Board counted and `counting_since` when it began counting; both None before any session."""
     first = today - timedelta(days=PLAY_WEEK_DAYS - 1)
     minutes = history.playtime_minutes(first, today, server)
     week = [{"day": day.isoformat(), "minutes": int(minutes.get(day, 0.0))} for day in days_inclusive(first, today)]
+    total = history.total_playtime(now, running)
     return {
         "running": running,
         "session_started_at": iso(session_started_at) if session_started_at is not None else None,
         "today_minutes": week[-1]["minutes"],
         "week": week,
+        "total_minutes": None if total is None else total[0],
+        "counting_since": None if total is None else iso(total[1]),
     }
 
 
@@ -86,7 +90,7 @@ def build_board(
     return {
         "server": {"key": server, "utc_offset_hours": SERVER_UTC_OFFSET_HOURS[server]},
         "resets": _resets(server, now),
-        "playtime": _playtime(history, server, today, running, session_started_at),
+        "playtime": _playtime(history, server, today, now, running, session_started_at),
         "achievements": {
             **achievement_totals(catalog, store),
             "hoyolab": None if counted is None else {"count": int(counted[0]), "at": iso(counted[1])},

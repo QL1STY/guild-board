@@ -38,6 +38,10 @@ test('the set holds the signs of spec 7.2, each once, and the Pulls widgets\' fi
       ...['bust', 'sword', 'claymore', 'polearm', 'bow', 'catalyst', 'flower', 'stars', 'crown'],
       // The online plan, Task B6: Friends, in the rail, and the Friends page's own: two people.
       'people',
+      // The five widgets' plan, Task 3: Next up, the Calendar and Endgame resets (the Spiral Abyss's tower).
+      ...['next', 'calendar', 'tower'],
+      // The widgets polish: the flag of an event in Next up, and the three endgame modes' own signs.
+      ...['flag', 'abyss', 'theater', 'stygian'],
     ].sort(),
   )
 })

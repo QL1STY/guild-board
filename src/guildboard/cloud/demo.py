@@ -29,6 +29,9 @@ DEMO_USAGE = {
 }
 HOUR = 3600
 DAY = 24 * HOUR
+# The page tells time by the core's clock as /api/status last gave it, a moment older than a read of the friends. Seeded exactly
+# on a minute, "for 42 min" would read "for 41 min" for that moment, and "3 h ago" "2 h ago"; the demo's times are this much past.
+MARGIN = 20
 
 
 def _months(now: datetime, *earned: int) -> list[dict[str, Any]]:
@@ -245,7 +248,8 @@ class DemoOnline:
 
     def _row(self, friend: Mapping[str, Any], now: datetime) -> dict[str, Any]:
         state, began, seen = friend["presence"]
-        presence = {"state": state, "since": iso(now - timedelta(seconds=began)), "seen_seconds": seen}
+        seen += MARGIN if seen >= 60 else 0  # a heartbeat of seconds ago stays one: it is what says the friend is in game
+        presence = {"state": state, "since": iso(now - timedelta(seconds=began + MARGIN)), "seen_seconds": seen}
         stats = _uploaded(friend["stats"], now)
         return {**friend, "presence": presence, "stats": stats, "compare": bool(self._both_share(friend))}
 

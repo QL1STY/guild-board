@@ -523,24 +523,64 @@ HARD_CHALLENGE_BOSSES = [
     },
 ]
 
-# The calendar's two challenge entries and a pool of each kind. Descriptions carry the text with an escaped newline.
+# The calendar's answer as HoYoLAB gives it (the widgets plan's probe result; every name and value here is made up): the
+# timestamps are text, an announced event has none ("0"), `status` 2 runs and 1 is announced, and the Stygian
+# Onslaught is an `act_list` entry of its own type. The two challenge entries and a pool of each kind carry the text, and
+# a description holds an escaped newline.
 ACT_CALENDAR_DETAIL = {
     "avatar_card_pool_list": [
         {
-            "pool_id": 1, "pool_name": "Epitome Invocation", "start_timestamp": 1790000000, "end_timestamp": 1791000000,
+            "pool_id": 1, "pool_name": "Epitome Invocation", "pool_type": 1, "pool_status": 2, "version_name": "9.9",
+            "start_timestamp": "1790000000", "end_timestamp": "1791000000", "countdown_seconds": 1000,
+            "jump_url": "", "start_time": None, "end_time": None,
             "avatars": [
-                {"id": 10000114, "name": "Sandrone", "element": "Cryo", "rarity": 5},
-                {"id": 10000021, "name": "Amber", "element": "Pyro", "rarity": 4},
+                {"id": 10000114, "name": "Sandrone", "element": "Cryo", "rarity": 5, "icon": "", "is_invisible": False},
+                {"id": 10000021, "name": "Amber", "element": "Pyro", "rarity": 4, "icon": "", "is_invisible": False},
             ],
         },
         {
-            "pool_id": 2, "pool_name": "Second", "start_timestamp": 1791000000, "end_timestamp": 1792000000,
-            "avatars": [{"id": 10000052, "name": "Raiden Shogun", "element": "Electro", "rarity": 5}],
+            "pool_id": 2, "pool_name": "Second", "pool_type": 1, "pool_status": 1, "version_name": "9.9",
+            "start_timestamp": "1791000000", "end_timestamp": "1792000000", "countdown_seconds": 0,
+            "avatars": [{"id": 10000052, "name": "Raiden Shogun", "element": "Electro", "rarity": 5, "icon": ""}],
         },
     ],
-    "weapon_card_pool_list": [{"pool_id": 3, "weapon": [{"id": 1, "name": "A Weapon", "rarity": 5}], "start_timestamp": 1, "end_timestamp": 2}],
+    "weapon_card_pool_list": [
+        {
+            "pool_id": 3, "pool_name": "Epitome Invocation", "pool_type": 2, "pool_status": 2, "version_name": "9.9",
+            "start_timestamp": "1790000000", "end_timestamp": "1791000000",
+            "weapon": [
+                {"id": 1, "name": "A Weapon", "rarity": 5, "icon": "", "wiki_url": ""},
+                {"id": 2, "name": "A Sword", "rarity": 4, "icon": "", "wiki_url": ""},
+            ],
+        }
+    ],
     "mixed_card_pool_list": [],
-    "act_list": [{"id": 1, "name": "An Event", "desc": "Fun."}],
+    "act_list": [
+        {
+            "id": 1, "name": "An Event", "desc": "Fun.", "strategy": "", "type": "ActTypeSign", "status": 2,
+            "is_finished": False, "start_timestamp": "1790000000", "end_timestamp": "1791000000",
+            "start_time": None, "end_time": None, "countdown_seconds": 1000,
+            "reward_list": [
+                {"item_id": 201, "name": "Primogem", "num": 420, "rarity": 4, "icon": "", "wiki_url": "", "homepage_show": True},
+                {"item_id": 202, "name": "Mora", "num": 40000, "rarity": 1, "icon": "", "wiki_url": "", "homepage_show": False},
+            ],
+            "double_detail": {"left": 2, "total": 3},
+        },
+        {
+            "id": 2, "name": "Done Event", "desc": "", "strategy": "", "type": "ActTypeSign", "status": 2,
+            "is_finished": True, "start_timestamp": "1789000000", "end_timestamp": "1790500000", "reward_list": [],
+        },
+        {
+            "id": 3, "name": "Coming Event", "desc": "", "strategy": "", "type": "ActTypeSign", "status": 1,
+            "is_finished": False, "start_timestamp": "0", "end_timestamp": "0", "start_time": None, "end_time": None,
+            "countdown_seconds": 0, "reward_list": [],
+        },
+        {
+            "id": 4, "name": "Stygian Stand-in", "desc": "", "strategy": "", "type": "ActTypeHardChallenge", "status": 2,
+            "is_finished": False, "start_timestamp": "1790000000", "end_timestamp": "1791000000",
+            "hard_challenge_detail": {"has_data": True}, "reward_list": [],
+        },
+    ],
     "fixed_act_list": [
         {"id": 8, "name": "Spiral Abyss", "desc": "Floors 1 to 12.", "strategy": "", "tower_detail": {"is_unlock": True}},
         {

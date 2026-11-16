@@ -339,9 +339,9 @@ test('Add a widget puts it in the first free place', async ({ page, api }) => {
   await edit(page)
   await page.getByRole('button', { name: 'Add a widget' }).click()
   const sheet = page.getByRole('region', { name: 'Add a widget' })
-  // The fourteen of spec 13.3, the Pulls plan's six, the Characters plan's Today widget and the daily check-in.
-  await expect(sheet.getByRole('listitem')).toHaveCount(22)
-  await expect(sheet.locator('li svg.sign')).toHaveCount(22) // each type with its sign
+  // The fourteen of spec 13.3, the Pulls plan's six, the Characters plan's Today widget, the daily check-in, Friends online, Next up, the Calendar and Endgame resets.
+  await expect(sheet.getByRole('listitem')).toHaveCount(26)
+  await expect(sheet.locator('li svg.sign')).toHaveCount(26) // each type with its sign
   await sheet.getByRole('button', { name: 'Add Clock' }).click()
   await expect(page.locator('[data-widget]')).toHaveCount(3)
   const added = (await widgetIds(page)).find((id) => id.startsWith('clock-') && id !== 'clock-a')!
@@ -643,7 +643,7 @@ test("a widget's Settings change it: the clock shows seconds", async ({ page, ap
   await edit(page)
   await widgetById(page, 'clock-a').getByRole('button', { name: 'Settings of Clock' }).click()
   const sheet = page.getByRole('region', { name: 'Settings of Clock' })
-  await sheet.getByRole('checkbox', { name: 'Show seconds' }).check()
+  await sheet.getByRole('button', { name: 'Seconds' }).click()
   await sheet.getByRole('button', { name: 'Close' }).click()
   await done(page)
   await expect(widgetById(page, 'clock-a').locator('[data-centre]')).toHaveText(/^\d{2}:\d{2}:\d{2}$/)

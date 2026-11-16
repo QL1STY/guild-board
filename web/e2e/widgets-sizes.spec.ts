@@ -23,6 +23,10 @@ type Kind = {
   start: Cells
   /** What its widget needs to draw real content, apart from the demo's data: the settings it is saved with. */
   prepare?: (api: Api) => Promise<Record<string, unknown>>
+  /** The settings at the largest size, where they are not the smallest's (`prepare`'s): the Primogems widget with its four parts on. */
+  largest?: Record<string, unknown>
+  /** What the heading says, where it is not the type's name: Primogems says "Savings" with no settings. */
+  heading?: string
   /** The widget's own data, kept in the core under its id once the widget is on the Board. */
   data?: Record<string, unknown>
   /**
@@ -36,6 +40,9 @@ type Kind = {
 
 /** The demo's longest timer name, which a One timer has to fit in a header and in its body. */
 const LONG_TIMER = 'Fishing spot · Luhua Pool, Liyue'
+
+/** The Endgame resets widget's four drawings, as its setting `style` names them (the registry is React, so they are written out here). */
+const ENDGAME_STYLES = ['pictures', 'medallions', 'bars', 'order'] as const
 
 const TYPES: readonly Kind[] = [
   {
@@ -115,8 +122,11 @@ const TYPES: readonly Kind[] = [
     loaded: (frame) => expect(frame.locator('.ring')).toBeVisible(),
   },
   {
-    // The demo's estimate is the pulls its balance gives, with the diary's income of the day it was set.
-    id: 'savings', name: 'Savings', min: [2, 2], max: [4, 3], start: [2, 2],
+    // The demo's estimate is the pulls its balance gives, with the diary's income of the day it was set. At its smallest it
+    // has no settings, as a saved Savings widget (Savings and Pulls); at its largest all four parts (Earned and By source
+    // read the demo's Ledger).
+    id: 'savings', name: 'Primogems', heading: 'Savings', min: [2, 2], max: [4, 3], start: [2, 2],
+    largest: { savings: true, pulls: true, earned: true, sources: true },
     loaded: (frame) => expect(frame).toContainText(/\d+ pulls/),
   },
   {
@@ -131,6 +141,46 @@ const TYPES: readonly Kind[] = [
     id: 'luck', name: 'Luck', min: [1, 2], max: [3, 2], start: [1, 2],
     loaded: (frame) => expect(frame).toContainText('average 5★ pity'),
   },
+  // The five widgets (Build 1), Task 7. The demo's day: ready timers and expeditions first, then what is coming.
+  {
+    id: 'next-up', name: 'Next up', min: [2, 2], max: [3, 6], start: [2, 3],
+    loaded: (frame) => expect(frame).toContainText('Daily reset'),
+  },
+  // Task 8. The demo's banners, events and endgame; the largest size is the two-week grid, the smallest the list.
+  {
+    id: 'calendar', name: 'Calendar', min: [2, 2], max: [8, 5], start: [6, 4],
+    loaded: (frame) => expect(frame).toContainText('Moonlit Trials'),
+  },
+  // The five widgets (Build 1), Task 5. The demo's friends: Riley in game, Kira and Milo offline.
+  {
+    id: 'friends-online', name: 'Friends online', min: [2, 1], max: [3, 4], start: [2, 2],
+    loaded: (frame) => expect(frame).toContainText('Riley'),
+  },
+  // Task 4. The demo's endgame: Abyss, Theater and Stygian, each with its time to reset.
+  {
+    id: 'endgame-resets', name: 'Endgame resets', min: [2, 1], max: [3, 2], start: [2, 1],
+    loaded: (frame) => expect(frame).toContainText('Stygian'),
+  },
+]
+
+/**
+ * The polish pass: each of the Endgame resets widget's four drawings at its smallest and largest size, and at the two sizes between,
+ * 3 × 1 and 2 × 2, where With pictures changes its layout. They are held to their frame by the loop below, apart from TYPES, whose
+ * widgets the other tests put on one Board together (a layout holds at most 60).
+ */
+const ENDGAME_DRAWINGS: readonly Kind[] = [
+  ...ENDGAME_STYLES.flatMap((style) => [
+    {
+      id: 'endgame-resets', name: `Endgame resets, ${style} (2 × 1 and 3 × 2)`, min: [2, 1], max: [3, 2], start: [2, 1],
+      prepare: async () => ({ style }),
+      loaded: (frame: Locator) => expect(frame).toContainText('Stygian'),
+    } satisfies Kind,
+    {
+      id: 'endgame-resets', name: `Endgame resets, ${style} (3 × 1 and 2 × 2)`, min: [3, 1], max: [2, 2], start: [2, 1],
+      prepare: async () => ({ style }),
+      loaded: (frame: Locator) => expect(frame).toContainText('Stygian'),
+    } satisfies Kind,
+  ]),
 ]
 
 /**
@@ -229,13 +279,15 @@ function misfit(frame: Locator): Promise<string[]> {
 }
 
 test.describe('every widget type at its smallest and largest size keeps its content inside its frame', () => {
-  for (const kind of TYPES) {
+  for (const kind of [...TYPES, ...ENDGAME_DRAWINGS]) {
     test(kind.name, async ({ page, api }) => {
       await page.setViewportSize({ width: 2560, height: 1440 }) // thirteen columns: the window cuts no size
       await kind.show?.(page)
       const settings = (await kind.prepare?.(api)) ?? {}
       for (const [label, size] of [['smallest', kind.min], ['largest', kind.max]] as const) {
-        await setBoard(api, page, [{ id: PROBE, type: kind.id, w: size[0], h: size[1], settings }])
+        await setBoard(api, page, [
+          { id: PROBE, type: kind.id, w: size[0], h: size[1], settings: label === 'largest' ? (kind.largest ?? settings) : settings },
+        ])
         if (kind.data !== undefined && label === 'smallest') {
           await api.put(`/api/widgets/${PROBE}/data`, { data: kind.data })
           await page.reload()
@@ -258,6 +310,34 @@ test.describe('every widget type at its smallest and largest size keeps its cont
 })
 
 /**
+ * Next up in each of its three styles (the widgets polish): at its smallest and largest size, the size it starts at and the
+ * widest and the tallest it takes alone, nothing spills out of the frame and the visual centre is drawn inside the body.
+ */
+test.describe('Next up in each of its styles keeps its content inside its frame at its smallest and largest size', () => {
+  const SIZES: readonly Cells[] = [[2, 2], [2, 3], [3, 2], [2, 6], [3, 6]]
+  for (const style of ['rail', 'gauges', 'cards']) {
+    test(style, async ({ page, api }) => {
+      await page.setViewportSize({ width: 2560, height: 1440 })
+      for (const size of SIZES) {
+        const label = `${style} at ${size[0]} × ${size[1]}`
+        await setBoard(api, page, [{ id: PROBE, type: 'next-up', w: size[0], h: size[1], settings: { style } }])
+        const frame = widgetById(page, PROBE)
+        await expect(frame.locator('.w-head'), label).toBeVisible()
+        await expect(frame.locator(`.nu[data-style="${style}"]`), label).toBeVisible()
+        await expect(frame, label).toContainText('Daily reset')
+        await page.evaluate(async () => {
+          await document.fonts.ready
+        })
+        expect(await sizeOf(frame), `${label} size`).toEqual(size)
+        expect(await spill(frame), label).toEqual([])
+        await expect(frame.locator('[data-centre]'), `${label} visual centre`).toBeVisible()
+        expect(await misfit(frame), label).toEqual([])
+      }
+    })
+  }
+})
+
+/**
  * Playtime with the game running has the session so far in large figures where the other state has the last one, and
  * here a session of nearly twelve hours, the widest figures it is likely to show, over a week of days of many hours.
  * They fit at both sizes too.
@@ -267,21 +347,63 @@ test('Playtime with the game running keeps its content inside its frame at its s
   const { now } = await api.get<Status>('/api/status')
   const started = new Date(Date.parse(now) - (11 * 60 + 59) * 60_000).toISOString() // a session of 11 h 59 min
   const week = PLAY_WEEK.map((day) => ({ ...day, minutes: day.minutes + 1_000 }))
-  await playAs(page, { running: true, started, last: 93, week })
-  for (const [label, size] of [['smallest', [2, 1]], ['largest', [4, 2]]] as const) {
-    await setBoard(api, page, [{ id: PROBE, type: 'playtime', w: size[0], h: size[1], settings: {} }])
-    const frame = widgetById(page, PROBE)
-    await expect(frame, label).toContainText('Playing now')
-    await expect(frame.locator('[data-centre] .fig'), label).toContainText('11 h')
-    await page.evaluate(async () => {
-      await document.fonts.ready
-    })
-    expect(await sizeOf(frame), `${label} size`).toEqual(size)
-    expect(await spill(frame), label).toEqual([])
-    await expect(frame.locator('[data-centre]'), `${label} visual centre`).toBeVisible()
-    expect(await misfit(frame), label).toEqual([])
+  // Guild Board has counted 12,345 hours, the longest total likely, in both styles of the widget.
+  await playAs(page, { running: true, started, last: 93, week, total: { minutes: 12_345 * 60 + 59, since: '2025-10-03T12:00:00Z' } })
+  for (const style of ['quiet', 'plate']) {
+    for (const [label, size] of [['smallest', [2, 1]], ['wide', [3, 1]], ['tall', [2, 2]], ['largest', [4, 2]]] as const) {
+      const name = `${style} at ${label}`
+      await setBoard(api, page, [{ id: PROBE, type: 'playtime', w: size[0], h: size[1], settings: { style } }])
+      const frame = widgetById(page, PROBE)
+      await expect(frame, name).toContainText('Playing now')
+      await expect(frame.locator('[data-centre] .fig').first(), name).toContainText('11 h')
+      await expect(frame, name).toContainText('12,345')
+      await page.evaluate(async () => {
+        await document.fonts.ready
+      })
+      expect(await sizeOf(frame), `${name} size`).toEqual(size)
+      expect(await spill(frame), name).toEqual([])
+      await expect(frame.locator('[data-centre]'), `${name} visual centre`).toBeVisible()
+      expect(await misfit(frame), name).toEqual([])
+    }
   }
 })
+
+/**
+ * The Clock in each of its six styles keeps its content inside its frame at every size it takes, 1 × 1 to 3 × 2, with its
+ * options as the widget has them and with every one on at the longest the words are: 12 hours, the seconds, the date, the
+ * server and the reset, at 10:35:36, when the Words say "twenty-five to eleven".
+ */
+const CLOCK_STYLES = ['istaroth', 'digital', 'flip', 'astro', 'reset', 'words'] as const
+const CLOCK_SIZES = [[1, 1], [1, 2], [2, 1], [2, 2], [3, 1], [3, 2]] as const
+for (const style of CLOCK_STYLES) {
+  test(`the Clock in the ${style} style keeps its content inside its frame at every size`, async ({ page, api }) => {
+    test.setTimeout(120_000) // twelve sizes, each a reload
+    await page.setViewportSize({ width: 2560, height: 1440 })
+    const from = new Date(2026, 10, 15, 10, 35, 36).getTime()
+    const asked = Date.now()
+    await page.route('**/api/events', (route) => route.abort())
+    await changeAnswer<Status>(page, '/api/status', (status) => {
+      status.now = new Date(from + (Date.now() - asked)).toISOString()
+    })
+    for (const [label, options] of [
+      ['its defaults', {}],
+      ['every option on', { twelve: true, seconds: true, date: true, server: true, reset: true }],
+    ] as const) {
+      for (const size of CLOCK_SIZES) {
+        const name = `${style} with ${label} at ${size[0]} × ${size[1]}`
+        await setBoard(api, page, [{ id: PROBE, type: 'clock', w: size[0], h: size[1], settings: { style, ...options } }])
+        const frame = widgetById(page, PROBE)
+        await expect(frame.locator('[data-centre]'), `${name}: visual centre`).toBeVisible()
+        await page.evaluate(async () => {
+          await document.fonts.ready
+        })
+        expect(await sizeOf(frame), `${name}: size`).toEqual(size)
+        expect(await spill(frame), name).toEqual([])
+        expect(await misfit(frame), name).toEqual([])
+      }
+    }
+  })
+}
 
 /**
  * A One timer whose achievement is counted with − and + (a teapot field's items, the fish caught) has the count in its
@@ -365,7 +487,7 @@ test("each widget's heading shows its sign and its name", async ({ page, api }) 
     const head = frame.locator('.w-head')
     await expect(head.locator('svg')).toBeVisible()
     await expect(head.locator('.w-name')).toBeVisible()
-    await expect(head.locator('.w-name')).toHaveText(kind.name)
+    await expect(head.locator('.w-name')).toHaveText(kind.heading ?? kind.name)
     await expect(frame).toHaveAttribute('aria-label', kind.name) // the widget is named by its type
     signs.set(kind.id, await head.locator('svg').innerHTML())
   }
@@ -458,7 +580,8 @@ test("a saved size outside its type's range shows at the nearest size inside it"
     page,
     TYPES.flatMap((kind) => [
       { id: `${kind.id}-below`, type: kind.id, w: Math.max(1, kind.min[0] - 1), h: Math.max(1, kind.min[1] - 1), settings: {} },
-      { id: `${kind.id}-above`, type: kind.id, w: kind.max[0] + 1, h: kind.max[1] + 1, settings: {} },
+      // A layout holds a widget of at most 8 cells either way (layouts.py, MAX_CELLS): the Calendar's largest is that.
+      { id: `${kind.id}-above`, type: kind.id, w: Math.min(8, kind.max[0] + 1), h: Math.min(8, kind.max[1] + 1), settings: {} },
     ]),
   )
   for (const kind of TYPES) {

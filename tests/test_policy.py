@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from guildboard.records import GROUPS
 from guildboard.store import GroupState
-from guildboard.sync.policy import DAILY_CAP, Decision, PolicyState, decide, due_groups
+from guildboard.sync.policy import CADENCE, DAILY_CAP, Decision, PolicyState, decide, due_groups
 
 UTC = timezone.utc
 NOW = datetime(2026, 10, 13, 8, 0, tzinfo=UTC)
@@ -72,11 +72,19 @@ def test_game_day_groups():
     fetched = datetime(2026, 10, 13, 1, 0, tzinfo=UTC)  # 02:00 server time: game day 12 October
     groups = _all_ok(NOW - timedelta(minutes=10))
     groups["diary"] = GroupState(fetched, False)
-    groups["calendar"] = GroupState(fetched, False)
     same_day = replace(BASE, now=datetime(2026, 10, 13, 2, 30, tzinfo=UTC), groups=groups)  # 03:30 server time
     assert "diary" not in due_groups(same_day)
     next_day = replace(BASE, now=datetime(2026, 10, 13, 4, 0, tzinfo=UTC), groups=groups)  # 05:00 server time
-    assert due_groups(next_day)[-2:] == ("diary", "calendar")
+    assert "diary" in due_groups(next_day)  # and the diary alone is a game-day group now (below)
+    assert CADENCE["calendar"] == timedelta(minutes=30) and [g for g, c in CADENCE.items() if c == "game_day"] == ["diary"]
+
+
+def test_the_calendar_group_is_due_again_after_thirty_minutes_and_not_after_twenty_nine():
+    groups = _all_ok(NOW - timedelta(minutes=10))
+    groups["calendar"] = GroupState(NOW - timedelta(minutes=29), False)
+    assert due_groups(replace(BASE, groups=groups)) == ("overview", "notes")
+    groups["calendar"] = GroupState(NOW - timedelta(minutes=30), False)
+    assert due_groups(replace(BASE, groups=groups)) == ("overview", "notes", "calendar")
 
 
 def test_a_failed_group_is_retried_regardless_of_cadence():

@@ -116,6 +116,8 @@ class Settings:
     codes_login_done: bool = False  # a login has finished: HoYoverse's first code of an account needs a fresh one
     gallery_enabled: bool = False  # the screenshot gallery (the ledger design, section 7): off, nothing of it is read
     gallery_folder: str = ""  # the game's ScreenShot folder, found or pasted; "" before either
+    # The folders the player added to the gallery: the pictures and videos directly inside each are shown. They stay on this PC.
+    gallery_folders: list[str] = field(default_factory=list)
     picture_quality: str = "high"  # how large the Characters pages' big pictures are fetched: one of PICTURE_QUALITIES (the Characters design, 11.7)
     spending_currency: str = "USD"  # the Ledger's prices: one of CURRENCIES
     # The player's corrections to the price list, by currency and then pack id (the ledger design, section 6).
@@ -129,6 +131,7 @@ class Settings:
 
 
 MAX_FOLDER_CHARS = 1000  # a pasted folder's path, at most
+MAX_GALLERY_FOLDERS = 20  # folders the player may add to the gallery, at most
 MAX_PRICE = 100_000  # a pack's corrected price, at most
 
 # The settings that hold one of a few words.
@@ -171,6 +174,22 @@ def is_network_path(text: str) -> bool:
     return len(text) >= 2 and text[0] in "\\/" and text[1] in "\\/"
 
 
+def _folders(value: Any) -> list[str] | None:
+    """The gallery's added folders as kept: a short list of whole paths of this PC, no one twice; None for anything else."""
+    if not isinstance(value, list) or len(value) > MAX_GALLERY_FOLDERS:
+        return None
+    kept: list[str] = []
+    for path in value:
+        if not isinstance(path, str) or not path or len(path) > MAX_FOLDER_CHARS or not _writable(path):
+            return None
+        if is_network_path(path) or not Path(path).is_absolute():
+            return None
+        if os.path.normcase(path) in (os.path.normcase(one) for one in kept):
+            return None
+        kept.append(path)
+    return kept
+
+
 def _coerce(name: str, value: Any, default: Any) -> Any:
     if isinstance(default, bool):
         return value if isinstance(value, bool) else default
@@ -183,6 +202,9 @@ def _coerce(name: str, value: Any, default: Any) -> Any:
     if name == "gallery_folder":
         fits = isinstance(value, str) and len(value) <= MAX_FOLDER_CHARS and _writable(value)
         return value if fits and not is_network_path(value) else default
+    if name == "gallery_folders":
+        folders = _folders(value)
+        return folders if folders is not None else default
     if name == "spending_prices":
         prices = _prices(value)
         return prices if prices is not None else default

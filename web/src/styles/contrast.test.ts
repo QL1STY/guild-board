@@ -231,6 +231,28 @@ const roles: [role: string, parchment: string, dark: string, stands: string | nu
   // The fix round of the themes plan, Task 3: the cream knocked out of a nation's disc on the pages; in the dark panel the
   // dark it was knocked out in before (its --w-gap), so that the overlay is as it was.
   ['--w-emblem-ink', '#F7F2E7', '#2B3142', '--emblem-ink'],
+  // The five widgets' plan, Task 3 (open question 3): the Ledger's sources, the endgame modes and the Calendar's Wishes lane,
+  // as marks on a widget. On parchment the page's own colours; on the dark panel those of Midnight, lightened where a mark
+  // would not reach 3:1 over a white game (the sources' violet, blue and teal, as Slate's lightened ones).
+  ['--w-src-commissions', '#5677A6', '#728EB6', '--src-commissions'],
+  ['--w-src-welkin', '#7B6AA8', '#9385B8', '--src-welkin'],
+  ['--w-src-events', '#B6803F', '#C08A4A', '--src-events'],
+  ['--w-src-endgame', '#4C8A86', '#549994', '--src-endgame'],
+  ['--w-src-other', '#978A6E', '#A79C84', '--src-other'],
+  ['--w-mode-abyss', '#3E5A9E', '#7C9BE8', '--mode-abyss'],
+  ['--w-mode-theater', '#9C3B52', '#E07A96', '--mode-theater'],
+  ['--w-mode-stygian', '#2D6E6A', '#55B5AE', '--mode-stygian'],
+  ['--w-wish', '#4F78B8', '#8FB0E0', null],
+  // The widgets polish (2026-11-15): a colour for each kind Next up lists, as marks (its signs, its rails and its rings), never text.
+  // On parchment near the Ledger's sources; on the dark panel as light as the sources' lightened ones.
+  ['--w-kind-timer', '#8A6E4B', '#D2B48A', null],
+  ['--w-kind-resin', '#4470B4', '#8FB0E0', null],
+  ['--w-kind-exp', '#3F7F7A', '#7CC4BE', null],
+  ['--w-kind-realm', '#B6803F', '#E0AE6C', null],
+  ['--w-kind-trans', '#7B6AA8', '#A898D6', null],
+  ['--w-kind-reset', '#6A6659', '#A9B0C0', null],
+  ['--w-kind-banner', '#A6751F', '#E2C98F', null],
+  ['--w-kind-event', '#B0573F', '#E89A84', null],
 ]
 
 test("the soft pity's mark reaches 3:1 on the ring's track, on parchment and over a white and a black game", () => {
@@ -245,6 +267,18 @@ test("a 4★'s purple frame reaches 3:1 on the card, on parchment and over a whi
   expect(contrast(t['--w-four'], t['--w-bg'])).toBeGreaterThanOrEqual(3)
   for (const game of ['#FFFFFF', '#000000']) {
     expect(contrast('#B9A2E0', over('#2B3142', 0.93, game))).toBeGreaterThanOrEqual(3)
+  }
+})
+
+// Marks, never text: each reaches 3:1 on the card on parchment, and over a white and a black game on the dark panel.
+test('the widget roles of the sources, the modes, the wishes and the kinds reach 3:1 as marks, on parchment and on the dark panel', () => {
+  const marks = roles.filter(([role]) => /^--w-(src|mode|kind)-|^--w-wish$/.test(role))
+  expect(marks.length).toBe(17)
+  for (const [role, parchment, dark] of marks) {
+    expect(contrast(parchment, t['--w-bg']), `${role} on parchment`).toBeGreaterThanOrEqual(3)
+    for (const game of ['#FFFFFF', '#000000']) {
+      expect(contrast(dark, over('#2B3142', 0.93, game)), `${role} over a ${game} game`).toBeGreaterThanOrEqual(3)
+    }
   }
 })
 

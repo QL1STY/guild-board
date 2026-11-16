@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Mapping
 from urllib.parse import urlsplit
 
-from guildboard.records import CharactersRecord, DiaryRecord, EndgameRecord, NotesRecord, OverviewRecord
+from guildboard.records import CalendarRecord, CharactersRecord, DiaryRecord, EndgameRecord, NotesRecord, OverviewRecord
 
 if TYPE_CHECKING:  # the store imports this module for Label and Point
     from guildboard.store import Store
@@ -128,6 +128,24 @@ def notes_labels(record: NotesRecord) -> list[Label]:
         if key is not None and key not in labels:
             name = _side_name(expedition.icon_url) or "Character"
             labels[key] = Label(key, name, "character", None, expedition.icon_url, 0)
+    return list(labels.values())
+
+
+def calendar_face_key(icon_url: str) -> str:
+    return "calendar.face." + hashlib.sha256(icon_url.encode()).hexdigest()[:16]
+
+
+def calendar_labels(record: CalendarRecord) -> list[Label]:
+    """One icon label for each address of a banner's faces, so that the icon cache serves it: the same address is one
+    label, and a face with no address has none."""
+    labels: dict[str, Label] = {}
+    if record.board is None:
+        return []
+    for banner in record.board.banners:
+        for face in banner.faces:
+            if face.icon_url:
+                key = calendar_face_key(face.icon_url)
+                labels.setdefault(key, Label(key, face.name, "character", None, face.icon_url, 0))
     return list(labels.values())
 
 

@@ -23,13 +23,6 @@ export function clockText(at: Date, seconds: boolean): string {
   return seconds ? `${time}:${two(at.getSeconds())}` : time
 }
 
-/** The server's time, at its fixed offset from UTC (gameday.py): Europe's is UTC+1 all year. */
-export function serverClock(now: Date, offsetHours: number, seconds: boolean): string {
-  const at = new Date(now.getTime() + offsetHours * 3_600_000)
-  const time = `${two(at.getUTCHours())}:${two(at.getUTCMinutes())}`
-  return seconds ? `${time}:${two(at.getUTCSeconds())}` : time
-}
-
 /** "Tue 13 Oct" */
 export function dayLine(at: Date): string {
   return `${WEEKDAYS[at.getDay()]} ${at.getDate()} ${MONTHS[at.getMonth()]}`
@@ -367,20 +360,6 @@ export function savingsSet(set: NonNullable<Pulls['savings']['set']>, now: Date)
 /** The forecast in short, under the pulls: "86 by 3 Nov". */
 export function forecastShort(forecast: Pulls['savings']['forecast']): string {
   return `${num(forecast.pulls)} by ${dayMonth(forecast.by)}`
-}
-
-/**
- * The Savings widget's second line (the second pass, spec 7): the card's total, the pulls by the next version's end,
- * "172 by 16 Dec". With no total, which is with no balance, today's line: the forecast by its day.
- */
-export function savingsBy(savings: {
-  by_next_end: number | null
-  next: Pick<Pulls['savings']['next'], 'ends_on'>
-  forecast: Pulls['savings']['forecast']
-}): string {
-  return savings.by_next_end === null
-    ? forecastShort(savings.forecast)
-    : `${num(savings.by_next_end)} by ${dayMonth(savings.next.ends_on)}`
 }
 
 /** The Luck widget's label under its figure: the first tile of the Pulls history counts the character event's 5★ alone. */

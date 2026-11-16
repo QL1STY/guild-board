@@ -847,7 +847,82 @@ function Gallery({ live, settings }: { live: Live; settings: SettingsModel }) {
       </Row>
       <Notice text={notice} />
       {settings.gallery_enabled && <GalleryFolder live={live} settings={settings} />}
+      {settings.gallery_enabled && <GalleryFolders live={live} settings={settings} />}
     </>
+  )
+}
+
+/**
+ * The folders the player added to the gallery: each with Remove, and a path to paste with Add a folder. The pictures and
+ * videos directly inside each show in the Gallery. The core checks the path and says why it cannot be added.
+ */
+function GalleryFolders({ live, settings }: { live: Live; settings: SettingsModel }) {
+  const { notice, run } = useAction(live)
+  const [path, setPath] = useState('')
+  const id = useId()
+  const add = () =>
+    run(async () => {
+      if (path.trim() === '') return 'Paste the path of a folder.'
+      await api.post('/api/gallery/folders', { path: path.trim() })
+      setPath('')
+      return null
+    })
+  const remove = (folder: string) =>
+    run(async () => {
+      await api.post('/api/gallery/folders/remove', { path: folder })
+      return null
+    })
+  return (
+    <div className="set-more" data-testid="gallery-folders">
+      <p>
+        <b className="set-fh">Folders</b>
+        The pictures and videos (PNG, JPEG, MP4 and WebM) directly inside each folder you add show in the Gallery. Guild
+        Board only looks at them, never moves or deletes one.
+      </p>
+      {settings.gallery_folders.length > 0 && (
+        <ul className="set-folders">
+          {settings.gallery_folders.map((folder) => (
+            <li key={folder}>
+              <span className="set-folder" title={folder}>
+                {folder}
+              </span>
+              <button
+                type="button"
+                className="gb-btn quiet set-fbtn"
+                aria-label={`Remove ${folder}`}
+                onClick={() => void remove(folder)}
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          void add()
+        }}
+      >
+        <label htmlFor={id} className="set-k">
+          Path of a folder on this PC
+        </label>
+        <span className="set-field set-path">
+          <input
+            id={id}
+            type="text"
+            spellCheck={false}
+            placeholder="D:\Videos"
+            value={path}
+            onChange={(event) => setPath(event.target.value)}
+          />
+          <button type="submit" className="gb-btn quiet set-fbtn">
+            Add a folder
+          </button>
+        </span>
+      </form>
+      <Notice text={notice} />
+    </div>
   )
 }
 

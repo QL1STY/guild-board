@@ -99,11 +99,13 @@
   .w-tool .sign { width: 12px; height: 12px; }
 }
 
-/* Add a widget and a widget's Settings, above the grid; the text keeps 1,440 pixels at most (spec 12.1). Add a widget's
+/* Add a widget and a widget's Settings, above the grid; the text keeps 1,440 pixels at most (spec 12.1); a widget's Settings are narrower still (640). Add a widget's
    list is as wide as the Board: its lines are in columns of 330 pixels or more, never longer, and a wider Board, as a
    maximized window at a smaller page size has, takes more of them. */
 .board-sheet { max-width: 1440px; margin-top: 6px; padding: 10px 14px; font-size: 13px; }
 .board-sheet.board-add { max-width: none; }
+/* A widget's settings are a short form: a switch and its line, a few choices. They keep the width of that, not the page's. */
+.board-sheet:not(.board-add) { width: fit-content; min-width: min(420px, 100%); max-width: min(640px, 100%); }
 .board-sheet-buttons { display: flex; gap: 8px; margin-top: 10px; }
 .board-types {
   display: grid;

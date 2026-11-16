@@ -1,0 +1,323 @@
+/*
+ * The Calendar widget (the widgets and Friends design, 2.3; mockup 3). On the Board at five cells across and three down or more,
+ * a grid of fourteen days with three lanes of bars; under that, and on the overlay, a list with a coloured edge for each lane.
+ * Drawn with the widget roles alone, which the overlay's dark panel sets again. A lane, a mode or a source is named by a data
+ * attribute and the stylesheet picks its role, held in --c: a mark (an edge, a bar's left side), never the text's colour.
+ */
+.cal {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cal [data-lane='wish'] {
+  --c: var(--w-wish);
+}
+.cal [data-lane='event'] {
+  --c: var(--w-src-events);
+}
+.cal [data-lane='endgame'][data-mode='abyss'] {
+  --c: var(--w-mode-abyss);
+}
+.cal [data-lane='endgame'][data-mode='theater'] {
+  --c: var(--w-mode-theater);
+}
+.cal [data-lane='endgame'][data-mode='stygian'] {
+  --c: var(--w-mode-stygian);
+}
+
+/* The wide drawing: the day heads, and the lanes under them in one grid of fourteen columns that scrolls if they do not fit. */
+.cal-frame {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cal-today {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(100% / 14 * 2);
+  width: calc(100% / 14);
+  border-radius: 6px;
+  background: var(--w-plate);
+}
+.cal-days {
+  position: relative;
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+}
+.cal-day {
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.15;
+  padding: 2px 0 3px;
+  color: var(--w-muted);
+}
+.cal-day b {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-ink2);
+}
+.cal-day[data-today] b {
+  font-weight: 800;
+  color: var(--w-gold-ink);
+}
+.cal-lanes {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+  grid-auto-rows: min-content;
+  row-gap: 4px;
+  align-content: start;
+}
+.cal-lane {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-muted);
+}
+.cal-lane::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--w-line);
+}
+
+/* A bar: its name, its reward or result, and the time at its right; a flat side where it runs past the window. */
+.cal-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  height: 28px;
+  margin: 0 2px;
+  padding: 0 9px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+  border: 1px solid var(--w-line);
+  border-left: 3px solid var(--c, var(--w-fill));
+  border-radius: 8px;
+  background: var(--w-bg);
+}
+.cal-bar[data-lane='wish'] {
+  height: 36px;
+}
+.cal-bar[data-from] {
+  margin-left: 0;
+  border-left-width: 1px;
+  border-radius: 0 8px 8px 0;
+}
+.cal-bar[data-to] {
+  margin-right: 0;
+  border-radius: 8px 0 0 8px;
+}
+.cal-bar[data-from][data-to] {
+  border-radius: 0;
+}
+/* A bar of one or two days has room for its name alone: its time is in its title, and a face or two. */
+.cal-bar[data-narrow] {
+  padding: 0 6px;
+  gap: 5px;
+}
+.cal-bar[data-narrow] .cal-end,
+.cal-bar[data-narrow] .cal-words {
+  display: none;
+}
+.cal-bar[data-narrow] .cal-face:not(:first-child) {
+  display: none;
+}
+/* "+2 more": the Wishes bars left out below this one; its time and title say which. */
+.cal-more {
+  flex: none;
+  padding-left: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-gold-ink);
+}
+.cal-bar[data-narrow] .cal-more span {
+  display: none;
+}
+.cal-bar[data-done] {
+  opacity: 0.62;
+}
+.cal-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  color: var(--w-ink);
+}
+.cal-bar .cal-end {
+  flex: none;
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 12px;
+  color: var(--w-muted);
+}
+.cal-end b {
+  color: var(--w-ink);
+}
+.cal-words {
+  flex: 0 100 auto;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-gold-ink);
+}
+.cal-words[data-tone='ok'] {
+  color: var(--w-good);
+}
+.cal-words[data-tone='plain'] {
+  font-weight: 500;
+  color: var(--w-ink2);
+}
+.cal-words .sign {
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+
+/* The faces on a wish bar, the 5-stars larger and in front, the 4-stars smaller; a face with no picture shows the sign. */
+.cal-faces {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+}
+.cal-face {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin-left: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--w-gap);
+  background: var(--w-quiet);
+  color: var(--w-ink2);
+  overflow: hidden;
+}
+.cal-face:first-child {
+  margin-left: 0;
+}
+.cal-face.s4 {
+  width: 22px;
+  height: 22px;
+  align-self: center;
+}
+.cal-face .sign {
+  width: 70%;
+  height: 70%;
+}
+
+/* What HoYoLAB announced with no dates: one line under the lanes. */
+.cal-soon {
+  flex: none;
+  margin-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--w-ink2);
+}
+.cal-soon b {
+  margin-right: 8px;
+  font-size: 11px;
+  color: var(--w-muted);
+}
+
+.cal-foot {
+  flex: none;
+  margin: 4px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--w-muted);
+}
+
+/* The list: a coloured edge, the name over its words, and the time at the right. */
+.cl {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: 0;
+  list-style: none;
+}
+.cl-r {
+  display: grid;
+  grid-template-columns: 4px minmax(0, 1fr) auto;
+  column-gap: 9px;
+  align-items: center;
+  padding: 5px 0;
+  border-top: 1px solid var(--w-line);
+  font-size: 13.5px;
+}
+.cl-r:first-child {
+  padding-top: 1px;
+  border-top: 0;
+}
+.cl-r i {
+  align-self: stretch;
+  border-radius: 2px;
+  background: var(--c, var(--w-fill));
+}
+.cl-r[data-done] .cl-n {
+  opacity: 0.62;
+}
+.cl-n {
+  min-width: 0;
+}
+.cl-n b {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--w-ink);
+}
+.cl-n span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--w-muted);
+}
+.cl-n .cl-ok {
+  font-weight: 700;
+  color: var(--w-good);
+}
+.cl-e {
+  text-align: right;
+  font-size: 12px;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.cl-e b {
+  display: block;
+  font-size: 14px;
+  color: var(--w-ink);
+}
+.cl-r[data-soon] .cl-e b {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--w-muted);
+}

@@ -383,7 +383,7 @@ export function useArrangement(
   const letGo = useRef<{ element: HTMLElement; x: number; y: number } | null>(null) // a dragged widget's centre, let go
   const grid = useRef<HTMLDivElement>(null)
   const { columns, rows } = useCells(area, bounded) // rows: Infinity, but on a place with a last row
-  const ctx: WidgetContext = { live, version, board: board.data, change }
+  const ctx: WidgetContext = { live, version, board: board.data, change, place }
 
   const current = saved !== null && (layout.data === null || saved.revision > layout.data.revision) ? saved : layout.data
   // The Board in a maximized window shows its arrangement for it (boardview.ts, toFull); the overlay has one alone.

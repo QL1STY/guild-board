@@ -38,7 +38,7 @@ from guildboard.checkin import CheckInRefused
 from guildboard.codes import MAX_PRIMOGEMS
 from guildboard.core import CodesRefused, Core, SettingRefused
 from guildboard.events import EventBus
-from guildboard.gallery import PictureMissing
+from guildboard.gallery import VIDEO_CHUNK, PictureMissing, RangeNotSatisfiable, VideoFile, byte_range
 from guildboard.places import launch_target
 from guildboard.ledger import KINDS as LEDGER_KINDS
 from guildboard.pulls import POOLS
@@ -145,6 +145,41 @@ NO_NOTICES = "The list of open-source licences is not next to the program."
 
 def _error(status: int, message: str) -> JSONResponse:
     return JSONResponse({"error": message}, status_code=status)
+
+
+def _video_response(video: VideoFile, range_header: str | None) -> Response:
+    """A listed video, sent in pieces, with HTTP Range so that the window can seek in it: 206 for the bytes a Range asks,
+    200 for the whole file, 416 for a range past the end. The file is closed when the last piece is sent, or the player
+    leaves."""
+    headers = {"Cache-Control": "no-cache", "Accept-Ranges": "bytes"}
+    try:
+        wanted = byte_range(range_header, video.size)
+    except RangeNotSatisfiable:
+        video.file.close()
+        return JSONResponse({"error": "That part of the video is not there."}, status_code=416,
+                            headers={**headers, "Content-Range": f"bytes */{video.size}"})
+    first, last = wanted if wanted is not None else (0, video.size - 1)
+    length = last - first + 1 if video.size else 0
+    if wanted is not None:
+        headers["Content-Range"] = f"bytes {first}-{last}/{video.size}"
+
+    async def pieces():
+        try:
+            video.file.seek(first)
+            left = length
+            while left > 0:
+                chunk = await asyncio.to_thread(video.file.read, min(VIDEO_CHUNK, left))
+                if not chunk:
+                    break
+                left -= len(chunk)
+                yield chunk
+        finally:
+            video.file.close()
+
+    return StreamingResponse(
+        pieces(), status_code=206 if wanted is not None else 200, media_type=video.media_type,
+        headers={**headers, "Content-Length": str(length)},
+    )
 
 
 def _refused(request: Request, in_body: bool) -> JSONResponse:
@@ -1351,6 +1386,31 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         """The Ledger page: spending, this month's primogems, the last 30 days' artifacts, and the import's state."""
         return JSONResponse(core.ledger())
 
+    @app.get("/api/primogems")
+    async def primogems() -> Response:
+        """The Primogems widget: the primogems earned today, this week and on each of the last seven days, and this month's
+        by source; `imported` false before the game's primogem log was read."""
+        return JSONResponse(core.primogems_model())
+
+    @app.get("/api/calendar")
+    async def calendar() -> Response:
+        """The Calendar widget: the banners with their faces and the events the last read of HoYoLAB's calendar kept, the
+        endgame lane and `left`, the events still to finish; `read` false before a read with a board."""
+        return JSONResponse(core.calendar_model())
+
+    @app.get("/api/endgame-resets")
+    async def endgame_resets() -> Response:
+        """The Endgame resets widget: each mode's result and the time to its reset. Never gated by the Characters pages'
+        hidden features. Its pictures are the Stats card's, so the modes' entries and pictures are read ahead as the card
+        asks for them (after consent, never in the demo)."""
+        core.endgame_art_wanted()
+        return JSONResponse(core.endgame_resets_model())
+
+    @app.get("/api/next-up")
+    async def next_up() -> Response:
+        """The Next up widget: what is ready and what happens next, soonest first, put together in the core."""
+        return JSONResponse(core.next_up_model())
+
     @app.get("/api/ledger/history")
     async def ledger_history(kind: str, before: str | None = None, limit: int = LEDGER_ROWS, rank: int = 0) -> Response:
         """A kind's entries, newest first, older than the entry `before` (its id, as text) when it is given; 1 to 100. A
@@ -1573,12 +1633,30 @@ def create_app(core: "Core", port: int, web_dir: Path | None = None) -> FastAPI:
         return Response(content=data, media_type="image/jpeg", headers={"Cache-Control": "no-cache"})
 
     @app.get("/api/gallery/{picture_id}/full")
-    async def gallery_full(picture_id: str) -> Response:
+    async def gallery_full(picture_id: str, request: Request) -> Response:
         try:
-            data, media_type = await asyncio.to_thread(core.gallery.full, picture_id)
+            video = await asyncio.to_thread(core.gallery.open_video, picture_id)
+            if video is None:
+                data, media_type = await asyncio.to_thread(core.gallery.full, picture_id)
         except PictureMissing:
             return _error(404, NO_PICTURE)
+        if video is not None:
+            return _video_response(video, request.headers.get("range"))
         return Response(content=data, media_type=media_type, headers={"Cache-Control": "no-cache"})
+
+    @app.post("/api/gallery/folders")
+    async def gallery_add_folder(body: dict[str, Any] = Body(...)) -> Response:
+        try:
+            return JSONResponse({"folders": await asyncio.to_thread(core.add_gallery_folder, body.get("path"))})
+        except SettingRefused as error:
+            return _error(422, str(error))
+
+    @app.post("/api/gallery/folders/remove")
+    async def gallery_remove_folder(body: dict[str, Any] = Body(...)) -> Response:
+        try:
+            return JSONResponse({"folders": await asyncio.to_thread(core.remove_gallery_folder, body.get("path"))})
+        except SettingRefused as error:
+            return _error(422, str(error))
 
     @app.put("/api/gallery/{picture_id}/favourite")
     async def gallery_favourite(picture_id: str, body: dict[str, Any] = Body(...)) -> Response:

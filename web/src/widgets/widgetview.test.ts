@@ -5,7 +5,7 @@ import type { BoardModel, HistoryRow, PityCard, PlanModel, Pulls, Timer } from '
 import {
   clockText, commissionsMeta, dailyNotesView, dayLine, expeditionSlots, faceTitle, fiftyRecord, forecastShort, lapRows,
   lapSplits, lastFive, LUCK_WHAT, nearTime, nextBack, periodProgress, playColumns, playFigure, playSession,
-  QUICK_PRESETS, quickCountdown, quickProgress, readAt, readySince, savingsBy, savingsSet, SERVER_NAMES, serverClock,
+  QUICK_PRESETS, quickCountdown, quickProgress, readAt, readySince, savingsSet, SERVER_NAMES,
   stopwatchText, tickedPercent, timeLead, timerSign, timersMeta, timersShown, todayLayout, todayView, wishShort,
 } from './widgetview.ts'
 
@@ -14,11 +14,6 @@ describe('the clock', () => {
     const at = new Date(2026, 9, 13, 9, 5, 7)
     expect(clockText(at, false)).toBe('09:05')
     expect(clockText(at, true)).toBe('09:05:07')
-  })
-
-  it("shows the server's time at its fixed offset, across midnight", () => {
-    expect(serverClock(new Date('2026-10-13T03:30:00Z'), -5, false)).toBe('22:30')
-    expect(serverClock(new Date('2026-10-13T08:00:00Z'), 1, true)).toBe('09:00:00')
   })
 
   it('names the day and the server', () => {
@@ -102,7 +97,7 @@ describe("the stopwatch's laps", () => {
 describe('the Playtime widget', () => {
   const now = new Date('2026-10-13T08:00:00Z')
   const play = (over: Partial<BoardModel['playtime']> = {}): BoardModel['playtime'] => ({
-    running: false, session_started_at: null, today_minutes: 0, week: [], ...over,
+    running: false, session_started_at: null, today_minutes: 0, week: [], total_minutes: null, counting_since: null, ...over,
   })
 
   it('measures the session while the game runs, from when it started on the core\'s clock', () => {
@@ -471,18 +466,6 @@ describe('the Pulls widgets (the Pulls plan, Task 12)', () => {
     expect(savingsSet({ primogems: 9840, fates: 14, set_at: local(9, 24, 7, 30).toISOString() }, now)).toBe('set today')
     expect(savingsSet({ primogems: 9840, fates: 14, set_at: local(9, 20, 21).toISOString() }, now)).toBe('set 20 Oct')
     expect(forecastShort({ by: '2026-11-03', pulls: 86, default_by: true, days: 10 })).toBe('86 by 3 Nov')
-  })
-
-  it("say the pulls by the next version's end under the Savings widget's pulls, as the ledger's total says them", () => {
-    const savings = (byNextEnd: number | null) => ({
-      by_next_end: byNextEnd,
-      next: { ends_on: '2026-12-16' },
-      forecast: { by: '2026-11-03', pulls: 86, default_by: true, days: 10 },
-    })
-    expect(savingsBy(savings(172))).toBe('172 by 16 Dec')
-    expect(savingsBy(savings(1234))).toBe('1,234 by 16 Dec')
-    // With no total, which is with no balance, today's line: the forecast by its day.
-    expect(savingsBy(savings(null))).toBe('86 by 3 Nov')
   })
 
   it("name the Luck widget's figure as the history's first tile does: the character event's", () => {

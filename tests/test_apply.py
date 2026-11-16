@@ -124,6 +124,25 @@ def test_the_endgame_and_calendar_documents_hold_their_details_beside_the_summar
     assert document["banners"] == 3 and document["detail"]["banners"][0][0] == ["Sandrone"]
 
 
+def test_a_calendars_banner_faces_are_kept_as_icon_labels_and_a_face_with_no_address_gives_none(store):
+    from guildboard.metrics import calendar_labels
+    from guildboard.records import CalendarBanner, CalendarBoardRecord, CalendarFace, CalendarRecord
+
+    url = "https://act-webstatic.hoyoverse.com/face-one.png"
+    banner = CalendarBanner("character", ("Furina",), None, None, (CalendarFace("Furina", 5, url), CalendarFace("Amber", 4, "")))
+    board = CalendarBoardRecord((banner, CalendarBanner("weapon", ("A",), None, None, (CalendarFace("Furina", 5, url),))))
+    run = store.start_run("manual", NOW)
+    apply_result(store, run, FetchResult("calendar", NOW, (), CalendarRecord(3, 2, None, board)), "os_euro")
+    (key, label), = store.labels("character").items()  # the same address once, the face with none not at all
+    assert key == calendar_labels(CalendarRecord(3, 2, None, board))[0].key and key.startswith("calendar.face.")
+    assert (len(key), label.icon_url, label.kind, label.label) == (len("calendar.face.") + 16, url, "character", "Furina")
+    again = calendar_labels(CalendarRecord(3, 2, None, board))
+    assert [l.key for l in again] == [key]  # stable: the address decides it
+    assert calendar_labels(CalendarRecord(3, 2)) == []  # a doc kept before the board has none
+    document = store.latest_doc("calendar")[1]
+    assert document["board"]["banners"][0]["faces"][1] == {"name": "Amber", "rarity": 4, "icon_url": ""}
+
+
 def _raw_rows(store):
     return store._conn.execute("SELECT grp, endpoint, fetched_at FROM raw_responses ORDER BY id").fetchall()
 

@@ -2,7 +2,8 @@
 requests: fetch_bytes, which downloads a file (the achievement list, HoYoverse's pictures, and the public pictures of
 PUBLIC_PICTURE_URLS), fetch_hoyoverse, which reads HoYoverse's own pages, fetch_authkey, which
 asks HoYoverse for the login's read-only history key, fetch_latest_release and download_installer, which bring the
-installed copy's updates, and fetch_cloud, which talks to the player's online account."""
+installed copy's updates, fetch_cloud, which talks to the player's online account, and fetch_fandom_upcoming and
+fetch_fandom_pages, which read the dates of upcoming events from the Genshin Impact Wiki on Fandom."""
 from __future__ import annotations
 
 import email.utils
@@ -15,7 +16,7 @@ import urllib.request
 from datetime import timezone
 from pathlib import Path
 from typing import Any, Callable, Collection, Mapping
-from urllib.parse import urlsplit
+from urllib.parse import parse_qsl, quote, urlencode, urlsplit
 
 ALLOWED_DOMAINS = ("hoyolab.com", "hoyoverse.com", "mihoyo.com")
 # The one address outside those domains (stage 2A spec, section 4), for a direct download only. The HoYoLAB
@@ -72,6 +73,24 @@ MINT_COOKIES = ("account_id_v2", "account_mid_v2", "cookie_token_v2", "lrsag")
 CLOUD_HOST = "tspjpcyhpkfetwzolzvi.supabase.co"
 CLOUD_PATHS = ("/auth/v1/", "/rest/v1/")
 _NEVER_IN_A_CLOUD_PATH = ("//", "..", "\\", "@")
+# The dates of upcoming events, from the Genshin Impact Wiki on Fandom (the player's choice, 2026-11-15; the widgets plan, Task 2b):
+# the MediaWiki API's one path, asked in two shapes only: the category of upcoming content, and the text of up to
+# FANDOM_MAX_TITLES of its pages. The address has a query, which _exactly_one_of refuses, so these have a check of their own
+# (is_fandom_query): the host, the path and the parameter names are fixed, and so are all values but the titles. A plain GET with
+# Guild Board's user agent and nothing of the player's, never redirected, held to the caller's size.
+FANDOM_API = "https://genshin-impact.fandom.com/api.php"
+FANDOM_CATEGORY_LIMIT = 100  # the titles the category is asked for (cmlimit), and the most the app keeps
+FANDOM_UPCOMING_QUERY: tuple[tuple[str, str], ...] = (
+    ("action", "query"), ("list", "categorymembers"), ("cmtitle", "Category:Upcoming_Content"), ("cmlimit", str(FANDOM_CATEGORY_LIMIT)),
+    ("format", "json"), ("formatversion", "2"),
+)
+FANDOM_PAGES_QUERY: tuple[tuple[str, str], ...] = (
+    ("action", "query"), ("prop", "revisions"), ("rvprop", "content"), ("rvslots", "main"), ("format", "json"),
+    ("formatversion", "2"),
+)  # and `titles`, the pages' titles joined by "|"
+FANDOM_MAX_TITLES = 50
+FANDOM_MAX_TITLE_LENGTH = 200
+_NO_TITLE_CHARACTER = re.compile(r"[\x00-\x1f\x7f|<>\[\]{}#]")
 
 
 class HostNotAllowed(Exception):
@@ -87,6 +106,12 @@ def what_failed(error: BaseException) -> str:
     which can hold the address it was sent to, and with it a key."""
     code = getattr(error, "code", None)
     return f"{type(error).__name__}, HTTP {code}" if isinstance(code, int) else type(error).__name__
+
+
+def sendable(url: str) -> str:
+    """An address as a browser sends it: the wiki writes spaces and letters of other scripts into its pictures' paths (half its
+    weapons' icons are named in Chinese), which urllib cannot send as they are. What is already encoded stays as it is."""
+    return quote(url, safe=":/?&=%#+@,;~!*'()$")
 
 
 def _host(url: str) -> str:
@@ -144,6 +169,80 @@ def is_allowed(url: str) -> bool:
 def check(url: str) -> None:
     if not is_allowed(url):
         raise HostNotAllowed(_host(url) or "(no host)")
+
+
+def _fandom_titles(titles: Collection[str]) -> list[str]:
+    """The pages' titles, when they can be asked for in one request; ValueError when they cannot."""
+    listed = list(titles)
+    if not 1 <= len(listed) <= FANDOM_MAX_TITLES:
+        raise ValueError("a request asks for 1 to 50 pages")
+    for title in listed:
+        if (
+            not isinstance(title, str) or not title.strip() or len(title) > FANDOM_MAX_TITLE_LENGTH
+            or _NO_TITLE_CHARACTER.search(title)
+        ):
+            raise ValueError("a page's title cannot be asked for")
+    return listed
+
+
+def fandom_upcoming_url() -> str:
+    """The address that lists the pages of the wiki's category of upcoming content."""
+    return f"{FANDOM_API}?{urlencode(FANDOM_UPCOMING_QUERY, quote_via=quote)}"
+
+
+def fandom_pages_url(titles: Collection[str]) -> str:
+    """The address that gives the text of `titles` (1 to FANDOM_MAX_TITLES pages); ValueError when they cannot be asked for."""
+    query = (*FANDOM_PAGES_QUERY, ("titles", "|".join(_fandom_titles(titles))))
+    return f"{FANDOM_API}?{urlencode(query, quote_via=quote)}"
+
+
+def is_fandom_query(url: str) -> bool:
+    """Exactly the wiki's API address with one of its two query shapes: the same scheme, host and path, no user, port or
+    fragment, the parameter names of the shape each once and no other, every value as the shape fixes it and, for the pages'
+    text, 1 to FANDOM_MAX_TITLES titles of the kind a page can have."""
+    try:
+        parts = urlsplit(url)
+        port = parts.port
+        query = parse_qsl(parts.query, keep_blank_values=True, strict_parsing=True)
+    except ValueError:
+        return False
+    fixed = urlsplit(FANDOM_API)
+    if parts.scheme != "https" or parts.username is not None or parts.password is not None or port is not None:
+        return False
+    if parts.fragment or (parts.hostname, parts.path) != (fixed.hostname, fixed.path):
+        return False
+    if query == list(FANDOM_UPCOMING_QUERY):
+        return True
+    shape = list(FANDOM_PAGES_QUERY)
+    if len(query) != len(shape) + 1 or query[:len(shape)] != shape or query[-1][0] != "titles":
+        return False
+    try:
+        _fandom_titles(query[-1][1].split("|"))
+    except ValueError:
+        return False
+    return True
+
+
+def check_fandom(url: str) -> None:
+    if not is_fandom_query(url):
+        raise HostNotAllowed(_host(url) or "(no host)")
+
+
+def _fandom_get(url: str, timeout: float, max_bytes: int) -> bytes:
+    check_fandom(url)
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    request.follow_redirects = False  # read by _CheckedRedirects
+    return _read(request, timeout, max_bytes)
+
+
+def fetch_fandom_upcoming(*, timeout: float = 20.0, max_bytes: int = 200_000) -> bytes:
+    """The wiki's list of the pages of upcoming content, from FANDOM_API alone and never redirected."""
+    return _fandom_get(fandom_upcoming_url(), timeout, max_bytes)
+
+
+def fetch_fandom_pages(titles: Collection[str], *, timeout: float = 30.0, max_bytes: int = 3_000_000) -> bytes:
+    """The text of up to FANDOM_MAX_TITLES pages of the wiki, from FANDOM_API alone and never redirected."""
+    return _fandom_get(fandom_pages_url(titles), timeout, max_bytes)
 
 
 def _is_download_host(url: str) -> bool:
@@ -214,7 +313,7 @@ def fetch_bytes(
     """Download a file from an address the policy allows. With `hosts`, the address and every address it is redirected to
     must be one of those hosts (HostNotAllowed), which is how a caller holds a download to fewer than the policy allows."""
     check(url)
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    request = urllib.request.Request(sendable(url), headers={"User-Agent": USER_AGENT})
     if hosts is not None:
         if _host(url) not in hosts:
             raise HostNotAllowed(_host(url) or "(no host)")

@@ -14,6 +14,8 @@ export function Switch({
   children,
   className,
   testId,
+  locked,
+  title,
 }: {
   on: boolean
   onPress: () => void
@@ -24,6 +26,9 @@ export function Switch({
   children?: ReactNode
   className?: string
   testId?: string
+  /** The switch cannot be changed now: it is `aria-disabled`, and `title` says why. It still takes the press, which the page ignores. */
+  locked?: boolean
+  title?: string
 }) {
   return (
     <button
@@ -32,6 +37,8 @@ export function Switch({
       aria-pressed={on}
       aria-label={label}
       data-testid={testId}
+      aria-disabled={locked || undefined}
+      title={title}
       onClick={onPress}
     >
       <span className="pl-knob" aria-hidden="true" />

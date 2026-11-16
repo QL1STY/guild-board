@@ -8,6 +8,7 @@ from guildboard import metrics
 from guildboard.gameday import game_day
 from guildboard.metrics import DIARY_PREFIX, Label, Point
 from guildboard.records import (
+    CalendarRecord,
     CharactersRecord,
     DiaryRecord,
     EndgameRecord,
@@ -34,6 +35,8 @@ def _points_for(store: Store, record: Record) -> tuple[list[Point], list[Label]]
         return metrics.endgame(record), []
     if isinstance(record, DiaryRecord):
         return metrics.diary(record, store.latest_values(DIARY_PREFIX)), []
+    if isinstance(record, CalendarRecord):
+        return [], metrics.calendar_labels(record)
     return [], []
 
 

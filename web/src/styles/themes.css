@@ -102,6 +102,24 @@
 
   --five: #E6C778;
   --w-five: #E6C778;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #7C9BE8;
+  --w-mode-theater: #E07A96;
+  --w-mode-stygian: #55B5AE;
+  --w-wish: #7FA3DE;
+  --w-kind-timer: #C9A97C;
+  --w-kind-resin: #7FA3DE;
+  --w-kind-exp: #55B5AE;
+  --w-kind-realm: #D29A55;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #8F98AD;
+  --w-kind-banner: #D9B467;
+  --w-kind-event: #E08770;
   --scrim: rgba(3, 5, 12, .6);
   --shadow-deep: rgba(0, 0, 0, .55);
   --shadow-warm: rgba(0, 0, 0, .45);
@@ -216,6 +234,24 @@
 
   --five: #DDBB72;
   --w-five: #DDBB72;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #728EB6;
+  --w-src-welkin: #9385B8;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #549994;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #86A3EA;
+  --w-mode-theater: #E683A0;
+  --w-mode-stygian: #5EBAB3;
+  --w-wish: #88AAE2;
+  --w-kind-timer: #C9A97C;
+  --w-kind-resin: #7FA3DE;
+  --w-kind-exp: #55B5AE;
+  --w-kind-realm: #D29A55;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #8F98AD;
+  --w-kind-banner: #D9B467;
+  --w-kind-event: #E08770;
   --scrim: rgba(10, 13, 20, .6);
   --shadow-deep: rgba(0, 0, 0, .5);
   --shadow-warm: rgba(0, 0, 0, .4);
@@ -342,6 +378,24 @@
 
   --five: #E8BD6A;
   --w-five: #E8BD6A;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5778A8;
+  --w-src-welkin: #7E6DAA;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #839FE6;
+  --w-mode-theater: #E3809A;
+  --w-mode-stygian: #5DB9B1;
+  --w-wish: #86A6DD;
+  --w-kind-timer: #C9A97C;
+  --w-kind-resin: #7FA3DE;
+  --w-kind-exp: #55B5AE;
+  --w-kind-realm: #D29A55;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #8F98AD;
+  --w-kind-banner: #D9B467;
+  --w-kind-event: #E08770;
   --scrim: rgba(12, 8, 4, .6);
   --shadow-deep: rgba(0, 0, 0, .55);
   --shadow-warm: rgba(0, 0, 0, .45);
@@ -452,6 +506,24 @@
   /* Gold, as on Parchment: it reaches 3:1 on this card, and means a 5★ whatever the accent is. */
   --five: #A6751F;
   --w-five: #A6751F;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #B6803F;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #978A6E;
+  --w-mode-abyss: #3E5A9E;
+  --w-mode-theater: #9C3B52;
+  --w-mode-stygian: #2D6E6A;
+  --w-wish: #4F78B8;
+  --w-kind-timer: #8A6E4B;
+  --w-kind-resin: #4470B4;
+  --w-kind-exp: #3F7F7A;
+  --w-kind-realm: #B6803F;
+  --w-kind-trans: #7B6AA8;
+  --w-kind-reset: #6A6659;
+  --w-kind-banner: #A6751F;
+  --w-kind-event: #B0573F;
   --scrim: rgba(38, 48, 74, .45);
   --shadow-deep: rgba(24, 32, 52, .35);
   --shadow-warm: rgba(40, 48, 70, .2);
@@ -568,6 +640,24 @@
 
   --five: #A6751F;
   --w-five: #A6751F;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #B6803F;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #978A6E;
+  --w-mode-abyss: #3E5A9E;
+  --w-mode-theater: #9C3B52;
+  --w-mode-stygian: #2D6E6A;
+  --w-wish: #4F78B8;
+  --w-kind-timer: #8A6E4B;
+  --w-kind-resin: #4470B4;
+  --w-kind-exp: #3F7F7A;
+  --w-kind-realm: #B6803F;
+  --w-kind-trans: #7B6AA8;
+  --w-kind-reset: #6A6659;
+  --w-kind-banner: #A6751F;
+  --w-kind-event: #B0573F;
   --scrim: rgba(31, 58, 62, .45);
   --shadow-deep: rgba(31, 58, 62, .35);
   --shadow-warm: rgba(31, 58, 62, .2);
@@ -678,6 +768,24 @@
 
   --five: #E8C070;
   --w-five: #E8C070;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #7C9BE8;
+  --w-mode-theater: #E07A96;
+  --w-mode-stygian: #55B5AE;
+  --w-wish: #7FA3DE;
+  --w-kind-timer: #C9A97C;
+  --w-kind-resin: #7FA3DE;
+  --w-kind-exp: #55B5AE;
+  --w-kind-realm: #D29A55;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #8F98AD;
+  --w-kind-banner: #D9B467;
+  --w-kind-event: #E08770;
   --scrim: rgba(12, 8, 7, 0.6);
   --shadow-deep: rgba(0, 0, 0, .55);
   --shadow-warm: rgba(0, 0, 0, .45);
@@ -789,6 +897,24 @@
 
   --five: #E6C778;
   --w-five: #E6C778;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #7C9BE8;
+  --w-mode-theater: #E07A96;
+  --w-mode-stygian: #55B5AE;
+  --w-wish: #7FA3DE;
+  --w-kind-timer: #C9A97C;
+  --w-kind-resin: #7FA3DE;
+  --w-kind-exp: #55B5AE;
+  --w-kind-realm: #D29A55;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #8F98AD;
+  --w-kind-banner: #D9B467;
+  --w-kind-event: #E08770;
   --scrim: rgba(10, 8, 15, 0.6);
   --shadow-deep: rgba(0, 0, 0, .55);
   --shadow-warm: rgba(0, 0, 0, .45);
@@ -898,6 +1024,24 @@
 
   --five: #A6751F;
   --w-five: #A6751F;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #B6803F;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #978A6E;
+  --w-mode-abyss: #3E5A9E;
+  --w-mode-theater: #9C3B52;
+  --w-mode-stygian: #2D6E6A;
+  --w-wish: #4F78B8;
+  --w-kind-timer: #8A6E4B;
+  --w-kind-resin: #4470B4;
+  --w-kind-exp: #3F7F7A;
+  --w-kind-realm: #B6803F;
+  --w-kind-trans: #7B6AA8;
+  --w-kind-reset: #6A6659;
+  --w-kind-banner: #A6751F;
+  --w-kind-event: #B0573F;
   --scrim: rgba(42, 58, 32, .45);
   --shadow-deep: rgba(42, 58, 32, .35);
   --shadow-warm: rgba(42, 58, 32, .2);
@@ -1008,6 +1152,24 @@
 
   --five: #E6C778;
   --w-five: #E6C778;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #587AA9;
+  --w-src-welkin: #7F6FAB;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #7C9BE8;
+  --w-mode-theater: #E07A96;
+  --w-mode-stygian: #55B5AE;
+  --w-wish: #7FA3DE;
+  --w-kind-timer: #C9A97C;
+  --w-kind-resin: #7FA3DE;
+  --w-kind-exp: #55B5AE;
+  --w-kind-realm: #D29A55;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #8F98AD;
+  --w-kind-banner: #D9B467;
+  --w-kind-event: #E08770;
   --scrim: rgba(6, 10, 19, 0.6);
   --shadow-deep: rgba(0, 0, 0, .55);
   --shadow-warm: rgba(0, 0, 0, .45);
@@ -1118,6 +1280,24 @@
 
   --five: #E6C778;
   --w-five: #E6C778;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #C08A4A;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #A79C84;
+  --w-mode-abyss: #7C9BE8;
+  --w-mode-theater: #E07A96;
+  --w-mode-stygian: #55B5AE;
+  --w-wish: #7FA3DE;
+  --w-kind-timer: #C9A97C;
+  --w-kind-resin: #7FA3DE;
+  --w-kind-exp: #55B5AE;
+  --w-kind-realm: #D29A55;
+  --w-kind-trans: #A898D6;
+  --w-kind-reset: #8F98AD;
+  --w-kind-banner: #D9B467;
+  --w-kind-event: #E08770;
   --scrim: rgba(11, 8, 8, 0.6);
   --shadow-deep: rgba(0, 0, 0, .55);
   --shadow-warm: rgba(0, 0, 0, .45);
@@ -1228,6 +1408,24 @@
 
   --five: #A6751F;
   --w-five: #A6751F;
+  /* The five widgets' marks: this theme's own sources and modes, and the Calendar's Wishes blue (the plan's Task 3). */
+  --w-src-commissions: #5677A6;
+  --w-src-welkin: #7B6AA8;
+  --w-src-events: #B6803F;
+  --w-src-endgame: #4C8A86;
+  --w-src-other: #978A6E;
+  --w-mode-abyss: #3E5A9E;
+  --w-mode-theater: #9C3B52;
+  --w-mode-stygian: #2D6E6A;
+  --w-wish: #4F78B8;
+  --w-kind-timer: #8A6E4B;
+  --w-kind-resin: #4470B4;
+  --w-kind-exp: #3F7F7A;
+  --w-kind-realm: #B6803F;
+  --w-kind-trans: #7B6AA8;
+  --w-kind-reset: #6A6659;
+  --w-kind-banner: #A6751F;
+  --w-kind-event: #B0573F;
   --scrim: rgba(29, 40, 56, .45);
   --shadow-deep: rgba(29, 40, 56, .35);
   --shadow-warm: rgba(29, 40, 56, .2);

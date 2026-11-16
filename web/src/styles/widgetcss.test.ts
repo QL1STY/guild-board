@@ -1,12 +1,17 @@
 import { expect, test } from 'vitest'
 import { columnsFor, columnWidth } from '../pages/boardview.ts'
 import { rangeOf } from '../widgets/registry.ts'
-import { ONE_CELL_ACROSS } from '../widgets/widget.ts'
+import { FIVE_CELLS_ACROSS, ONE_CELL_ACROSS, THREE_CELLS_DOWN } from '../widgets/widget.ts'
 import checkin from './checkin.css?raw'
 import marks from './marks.css?raw'
 import pulls from './pulls.css?raw'
 import tokens from './tokens.css?raw'
 import widgets from './widgets.css?raw'
+
+// Each widget past the first twenty has a stylesheet of its own, widget-<name>.css. They are found here by their name, so that
+// a later task adds a stylesheet and no line to this file: each is held to the colour check and to the width-query sweep.
+const WIDGET_SHEET_FILES = import.meta.glob<string>('./widget-*.css', { query: '?raw', import: 'default', eager: true })
+const WIDGET_SHEETS = Object.values(WIDGET_SHEET_FILES)
 
 // Stylesheets are read as text with Vite's ?raw (vite.config.ts lets those through), as contrast.test.ts reads them: a
 // test under src cannot import node:fs, since the app's tsconfig has no Node types and `npm run build` checks the tests.
@@ -95,10 +100,12 @@ function allowedProperties(...sheets: string[]): Set<string> {
 }
 
 test('the widget roles are the colours of tokens.css that the widget stylesheets may use', () => {
-  const allowed = allowedProperties(widgets, marks)
+  const allowed = allowedProperties(widgets, marks, ...WIDGET_SHEETS)
   // --w-gold-ink and --w-four: the Pulls plan, Tasks 11 and 12; --w-five-wash, --w-four-wash and --w-shade: its review;
-  // --w-five: the themes plan, Task 2; --w-emblem-ink: its Task 3; --w-pity-mark: its fix round.
-  expect([...allowed].filter((name) => name.startsWith('--w-')).length).toBe(26)
+  // --w-five: the themes plan, Task 2; --w-emblem-ink: its Task 3; --w-pity-mark: its fix round; the nine of the five widgets
+  // (Task 3): --w-src-commissions, -welkin, -events, -endgame and -other, --w-mode-abyss, -theater and -stygian, and --w-wish;
+  // the eight of Next up's kinds (the widgets polish): --w-kind-timer, -resin, -exp, -realm, -trans, -reset, -banner and -event.
+  expect([...allowed].filter((name) => name.startsWith('--w-')).length).toBe(43)
   for (const own of ['--fade', '--size', '--line']) expect(allowed.has(own), own).toBe(true)
   for (const page of ['--ink', '--ink2', '--muted', '--surface', '--border', '--hairline', '--fill', '--track', '--accent']) {
     expect(allowed.has(page), page).toBe(false) // a colour of the pages, which the dark panel does not set again
@@ -134,11 +141,45 @@ test('the declarations of a stylesheet are found inside at-rules too, and commen
 })
 
 test('widgets.css draws with the widget roles and no colour of its own', () => {
-  expect(problemsIn(widgets, allowedProperties(widgets, marks))).toEqual([])
+  expect(problemsIn(widgets, allowedProperties(widgets, marks, ...WIDGET_SHEETS))).toEqual([])
 })
 
 test('marks.css draws with the widget roles and no colour of its own', () => {
-  expect(problemsIn(marks, allowedProperties(widgets, marks))).toEqual([])
+  expect(problemsIn(marks, allowedProperties(widgets, marks, ...WIDGET_SHEETS))).toEqual([])
+})
+
+test('each widget-<name>.css draws with the widget roles and no colour of its own', () => {
+  // The five widgets' sheets are written by later tasks; any that exist are held here, and a role is the colour of a mark.
+  for (const [path, sheet] of Object.entries(WIDGET_SHEET_FILES)) {
+    expect(problemsIn(sheet, allowedProperties(widgets, marks, ...WIDGET_SHEETS)), path).toEqual([])
+  }
+})
+
+test('--w-fill is a fill and never the colour of text: gold words are --w-gold-ink (the fill reads about 3.6:1 at 12 px)', () => {
+  const asText = (css: string) =>
+    declarationsOf(css).filter((one) => one.name === 'color' && /var\(--w-fill\b/.test(one.value)).map((one) => one.selector)
+  expect(asText('.a { color: var(--w-fill) } .b { background: var(--w-fill); color: var(--w-ink) }')).toEqual(['.a'])
+  for (const [path, sheet] of Object.entries(WIDGET_SHEET_FILES)) expect(asText(sheet), path).toEqual([])
+})
+
+const SIGN_GLYPHS = ['.egx-sign', '.nu-node', '.nu-ic', '.nu-now-lines .sign', '.nu-ics > span', '.nu-card .sign']
+
+test('a mark role (--w-mode-*, --w-kind-*, --w-src-*, --w-wish) is never the colour of text, nor an alias of one (3:1 only)', () => {
+  // These roles are marks: a sign, a border, a ring, a dot. Words are set in --w-ink or --w-ink2. A custom property that
+  // holds such a role (--c, --k) is followed, so `color: var(--c)` is caught too. A glyph drawn with currentColor is no text
+  // and is listed here by its selector.
+  const role = /var\(--w-(?:mode|kind|src)-[a-z]+|var\(--w-wish\b/
+  const asText = (css: string, glyphs: string[] = []) => {
+    const all = declarationsOf(css)
+    const aliases = new Set(all.filter((one) => one.name.startsWith('--') && role.test(one.value)).map((one) => one.name))
+    const uses = (value: string) => role.test(value) || [...aliases].some((name) => value.includes(`var(${name})`))
+    return all.filter((one) => one.name === 'color' && uses(one.value) && !glyphs.includes(one.selector)).map((one) => one.selector)
+  }
+  expect(asText('.a { --c: var(--w-mode-abyss); color: var(--c) } .b { color: var(--w-mode-theater) } .c { color: var(--w-ink) }')).toEqual(['.a', '.b'])
+  expect(asText('.a { --k: var(--w-kind-timer) } .b { color: var(--k) } .c { color: var(--w-src-events) } .d { color: var(--w-wish) }')).toEqual(['.b', '.c', '.d'])
+  expect(asText('.a { color: var(--w-ink) } .b { background: var(--w-mode-abyss) }')).toEqual([])
+  const found = Object.entries(WIDGET_SHEET_FILES).flatMap(([path, sheet]) => asText(sheet, SIGN_GLYPHS).map((selector) => `${path} ${selector}`))
+  expect(found).toEqual([])
 })
 
 test("the Pulls page's washes are roles of tokens.css, which the dark panel sets again, and no colour of its own", () => {
@@ -226,11 +267,17 @@ function frameWidths(cells: number): number[] {
 }
 
 test("a query on a widget's width tells its sizes apart however wide the Board's columns are, as one cell across does", () => {
-  const queries = [...widthQueries(widgets), ...widthQueries(checkin)]
+  const queries = [...widthQueries(widgets), ...widthQueries(checkin), ...WIDGET_SHEETS.flatMap(widthQueries)]
   expect(queries.length).toBeGreaterThan(10) // the stylesheets' queries are found
   expect(Math.max(...frameWidths(1))).toBeGreaterThan(210) // one cell is up to 213 pixels wide on the Board
-  // useOneCell's `narrow`, a frame's width without its border at most ONE_CELL_ACROSS, splits as a max-width does.
-  for (const { feature, px } of [...queries, { feature: 'max-width' as const, px: ONE_CELL_ACROSS }]) {
+  // useOneCell's `narrow`, a frame's width without its border at most ONE_CELL_ACROSS, splits as a max-width does, and so
+  // does calendarFrame's: a frame five cells across or more is at least FIVE_CELLS_ACROSS, so up to the pixel below
+  // it (885.99, as frameWidths measures) it is fewer, on the Board as on the overlay (open question 6).
+  for (const { feature, px } of [
+    ...queries,
+    { feature: 'max-width' as const, px: ONE_CELL_ACROSS },
+    { feature: 'max-width' as const, px: FIVE_CELLS_ACROSS - 0.01 },
+  ]) {
     const holds = (width: number) => (feature === 'min-width' ? width >= px : width <= px)
     for (let cells = 1; cells <= 6; cells += 1) {
       const widths = frameWidths(cells)
@@ -260,7 +307,7 @@ const SHAPES: readonly { text: string; type: string }[] = [
 ]
 
 test("a query on a widget's shape tells the widget's sizes apart however wide the Board's columns are", () => {
-  const found = [...shapeQueries(widgets), ...shapeQueries(checkin)]
+  const found = [...shapeQueries(widgets), ...shapeQueries(checkin), ...WIDGET_SHEETS.flatMap(shapeQueries)]
   expect(found.map(({ text }) => text).sort()).toEqual(SHAPES.map(({ text }) => text).sort()) // each one is swept below
   for (const { text, type } of SHAPES) {
     const { ratio } = found.find((one) => one.text === text)!
@@ -276,4 +323,10 @@ test("a query on a widget's shape tells the widget's sizes apart however wide th
       }
     }
   }
+})
+
+test('three cells down are at least THREE_CELLS_DOWN pixels and two cells fewer, the rows being 96 pixels on both places', () => {
+  const height = (rows: number) => rows * 96 + (rows - 1) * 12 - 2
+  expect(height(3)).toBeGreaterThanOrEqual(THREE_CELLS_DOWN)
+  expect(height(2)).toBeLessThan(THREE_CELLS_DOWN)
 })

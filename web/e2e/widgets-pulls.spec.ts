@@ -134,11 +134,19 @@ test('the other widgets show the savings, the wishlist, the last pulls and the l
     { id: 'luck', type: 'luck', w: 1, h: 2, settings: {}, x: 8, y: 0 },
   ])
   const savings = widgetById(page, 'savings')
+  // With no settings it has Savings and Pulls and says "Savings" (the five widgets plan, Task 6): the balance as Pulls moves it
+  // on to now, large, and two cells, the pulls now and the pulls by the end of the next version (the Pulls page's total).
   await expect(savings.locator('.w-meta')).toHaveText('set today')
-  await expect(savings).toContainText(`${model.savings.pulls} pulls`)
-  // The second line is the Pulls page's total: the pulls by the end of the next version (the second pass).
+  await expect(savings.locator('.w-name')).toHaveText('Savings')
+  expect(model.savings.estimated).not.toBeNull()
   expect(model.savings.by_next_end).not.toBeNull()
-  await expect(savings.locator('.sv-by')).toHaveText(`${num(model.savings.by_next_end!)} by 16 Dec`)
+  await expect(savings.locator('.pm-big')).toHaveText(num(model.savings.estimated!.primogems))
+  await expect(savings.locator('.pm-sub')).toHaveText(`primogems and ${model.savings.estimated!.fates} fates`)
+  const cells = savings.locator('.pm-cell')
+  await expect(cells).toHaveCount(2)
+  await expect(cells.nth(0)).toHaveText(`${model.savings.pulls} pullsnow`)
+  await expect(cells.nth(1)).toHaveText(`${num(model.savings.by_next_end!)} pullsby the end of ${model.savings.next.number}`)
+  await expect(savings.locator('.pm-part')).toHaveCount(0) // Earned and By source are off: nothing of the Ledger is drawn
   // The player's own wishlist alone, each a face in its rarity's frame: the running banners stay on the Pulls page's
   // planner (the player, 2026-10-24: "i don't want skirk and escoffier").
   const wishes = widgetById(page, 'wishlist').getByRole('listitem')
@@ -165,14 +173,14 @@ test('the other widgets show the savings, the wishlist, the last pulls and the l
   await expect(luck.locator('.lk-bar i')).toHaveCount(2)
 })
 
-test('the Savings widget keeps its look with no total, and says the forecast then', async ({ page, api }) => {
+test('the Savings widget with no total says where to set one', async ({ page, api }) => {
   // With no balance there is no total, and the widget says where to set one, as it did.
   await changeAnswer<Pulls>(page, '/api/pulls', (data) => {
     Object.assign(data.savings, { set: null, pulls: null, estimated: null, by_next_end: null })
   })
   await setBoard(api, page, [{ id: 'savings', type: 'savings', w: 2, h: 2, settings: {}, x: 0, y: 0 }])
   await expect(widgetById(page, 'savings')).toContainText('Set the balance on the Pulls page.')
-  await expect(widgetById(page, 'savings').locator('.sv-by')).toHaveCount(0)
+  await expect(widgetById(page, 'savings').locator('.pm-big, .pm-cell')).toHaveCount(0)
 })
 
 test("the Luck widget's label fits at its smallest size", async ({ page, api }) => {
@@ -251,7 +259,7 @@ test("the widgets show on the overlay's list", async ({ page, core, api }) => {
   await page.getByRole('region', { name: 'Overlay' }).getByRole('button', { name: 'Edit', exact: true }).click()
   await page.getByRole('button', { name: 'Add a widget' }).click()
   const sheet = page.getByRole('region', { name: 'Add a widget' })
-  for (const name of ['Wishing now', 'Pity', 'Savings', 'Wishlist', 'Last pulls', 'Luck']) {
+  for (const name of ['Wishing now', 'Pity', 'Primogems', 'Wishlist', 'Last pulls', 'Luck']) {
     await expect(sheet.getByRole('button', { name: `Add ${name}`, exact: true })).toBeVisible()
   }
 })

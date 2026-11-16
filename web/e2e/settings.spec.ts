@@ -1,3 +1,6 @@
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 import type { Page } from '@playwright/test'
 import { localTime } from '../src/format.ts'
 import type { Ledger } from '../src/ledgertypes.ts'
@@ -623,9 +626,64 @@ test('the gallery switch saves gallery_enabled, and the gallery is not asked whi
   await page.reload()
   await expect(gallery).toHaveAttribute('aria-pressed', 'true')
   // A gallery that cannot be read, as before it is built, asks for no folder.
-  await expect(extras(page).getByRole('textbox')).toHaveCount(0)
+  await expect(
+    extras(page).getByRole('textbox', { name: "Guild Board could not find the game's screenshot folder. Paste its path:" }),
+  ).toHaveCount(0)
   await gallery.click()
   await expect.poll(async () => (await api.get<Settings>('/api/settings')).gallery_enabled).toBe(false)
+  // The list of added folders is there only while the gallery is on.
+  await expect(page.getByTestId('gallery-folders')).toHaveCount(0)
+})
+
+/** A picture of one pixel, as the game's PNGs begin: enough for the gallery to list. */
+const ONE_PIXEL_PNG =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+
+test('a folder is added to the gallery, listed with Remove, and taken out again', async ({ page, api }) => {
+  const folder = mkdtempSync(path.join(tmpdir(), 'guildboard-added-'))
+  try {
+    writeFileSync(path.join(folder, '20261001100000.png'), Buffer.from(ONE_PIXEL_PNG, 'base64'))
+    await api.put('/api/settings', { gallery_enabled: true })
+    await page.reload()
+    const folders = page.getByTestId('gallery-folders')
+    await expect(folders).toBeVisible()
+    await expect(folders.getByRole('listitem')).toHaveCount(0)
+    const field = folders.getByRole('textbox', { name: 'Path of a folder on this PC' })
+    const add = folders.getByRole('button', { name: 'Add a folder' })
+    // What cannot be added is said in plain words, and nothing is kept.
+    await field.fill(path.join(folder, 'nothing here'))
+    await add.click()
+    await expect(folders.getByRole('status')).toHaveText('That folder is not on this PC.')
+    await field.fill('Clips')
+    await add.click()
+    await expect(folders.getByRole('status')).toHaveText('Paste the whole path of a folder on this PC, such as D:\\Videos.')
+    expect((await api.get<Settings>('/api/settings')).gallery_folders).toEqual([])
+    // A folder of this PC is kept, shown with Remove, and its pictures are in the gallery.
+    await field.fill(folder)
+    await add.click()
+    const remove = folders.getByRole('button', { name: `Remove ${folder}` })
+    await expect(remove).toBeVisible()
+    await expect(field).toHaveValue('')
+    await expect(folders.getByRole('listitem')).toHaveText([`${folder}Remove`])
+    expect((await api.get<Settings>('/api/settings')).gallery_folders).toEqual([folder])
+    const model = await api.get<{ count: number; added: number }>('/api/gallery')
+    expect(model.added).toBe(2) // the demo's own extra folder, and this one
+    expect(model.count).toBe(29) // the demo's 28 and this one
+    await page.reload()
+    await expect(folders.getByRole('button', { name: `Remove ${folder}` })).toBeVisible()
+    // The same twice is refused; both buttons are one size.
+    await field.fill(folder.toUpperCase())
+    await add.click()
+    await expect(folders.getByRole('status')).toHaveText('That folder is already in the list.')
+    const sizes = await Promise.all([remove, add].map((button) => button.boundingBox()))
+    expect(sizes[0]?.width).toBe(sizes[1]?.width)
+    await remove.click()
+    await expect(folders.getByRole('listitem')).toHaveCount(0)
+    expect((await api.get<Settings>('/api/settings')).gallery_folders).toEqual([])
+    expect((await api.get<{ count: number }>('/api/gallery')).count).toBe(28)
+  } finally {
+    rmSync(folder, { recursive: true, force: true })
+  }
 })
 
 test("when the gallery cannot find the game's screenshot folder, a pasted path is saved", async ({ page, api }) => {

@@ -2,11 +2,13 @@
 design, section 2.4; the plan's calls, item 13).
 
 The lists are read whole, 50 entries a page, when a name the page shows is not kept: a 5★ or 4★ of the history, a
-featured name of a banner, or a name on the wishlist. They are read after an import, and, at most once a day, after a
-banners read that kept a new featured name and after an entry was added to the wishlist. A name the wiki lacks (a
-character newer than the wiki's list, or a name spelt otherwise) is asked for once more, and then not before a day has
-passed since the last read; the page shows its drawn sign meanwhile. Each icon is kept as the label
-wish.<kind>.<slug>, which the icon cache serves. The wiki's request is a POST that asks for a list; it changes nothing.
+featured name of a banner, or a name on the wishlist: after an import, after a banners read that kept a new featured name
+and after an entry was added to the wishlist. Each list is read at most once a day (CLAUDE.md), counted from the newest of
+its rows the database keeps, which the Characters pages' wiki writes too (`characters.wiki.CharacterWiki.lists`), so neither
+reader reads a list the other read that day, and a start of Guild Board does not reset it (the audit of 2026-11-09, H1). A
+name the wiki lacks waits for the next day's read; the page shows its drawn sign meanwhile. A list that could not be read
+is tried again a quarter of an hour later. Each icon is kept as the label wish.<kind>.<slug>, which the icon cache serves,
+whichever reader read the list. The wiki's request is a POST that asks for a list; it changes nothing.
 """
 from __future__ import annotations
 
@@ -38,8 +40,8 @@ HEADERS = {
     "Content-Type": "application/json;charset=UTF-8",
     "Accept": "application/json, text/plain, */*",
 }
-MISSING_ASKED_AGAIN_AFTER = timedelta(days=1)
-DAILY = timedelta(days=1)  # the reads after a banners read or a wishlist add come at most this often
+LIST_EVERY = timedelta(days=1)  # a kind's list is read at most this often, by either reader (characters.wiki's own)
+LIST_RETRY = timedelta(minutes=15)  # after a list could not be read, it is tried again no sooner than this
 ITEM_KINDS = {"Character": "character", "Weapon": "weapon"}  # a wish's item_type, as HoYoverse names it in English
 RANK = re.compile(r"[0-9]")
 
@@ -112,57 +114,65 @@ class WikiIcons:
         self._store = store
         self._clock = clock
         self._fetch = fetch  # netpolicy.fetch_hoyoverse; None in the demo, which contacts nothing
-        self.missing: set[tuple[str, str]] = set()  # the names the last read did not find
+        self.missing: set[tuple[str, str]] = set()  # the names the lists kept did not hold, at the last refresh
         self._lock = asyncio.Lock()  # one read at a time: the one that waits finds the items just read
-        # When the last of the reads held to once a day was made (`daily`), in this run of Guild Board: a start may make
-        # one more, as the start's banners read asks for the icons of the names it kept.
-        self._daily_read_at: datetime | None = None
+        self._tried: dict[str, datetime] = {}  # when each kind's list last failed to be read, in this run
 
     def icon(self, kind: str, name: str) -> str | None:
         """Where the page finds an item's icon; None while the wiki's lists do not hold it."""
         return f"/api/icon/{icon_key(kind, name)}" if (kind, name) in self._store.wiki_items() else None
 
-    async def refresh(self, names: Iterable[tuple[str, str]] = (), force: bool = False, *, daily: bool = False) -> bool:
-        """Read the wiki's lists whole when a name of `names` is not kept, unless every such name was missing at the
-        last read and that read is younger than a day. `force` reads them whatever is kept. `daily` holds the read to
-        once a day among the reads asked for so: those after a banners read that kept a new featured name and after an
-        entry was added to the wishlist. Whether a list was read."""
+    def _due(self, kind: str, kept: dict[tuple[str, str], WikiItemRow], now: datetime) -> bool:
+        """Whether a kind's list may be read now: its newest kept row is a day old or more (or none is kept), and it did
+        not fail to be read in the last quarter of an hour."""
+        newest = max((row.read_at for (item_kind, _), row in kept.items() if item_kind == kind), default=None)
+        if newest is not None and 0 <= (now - newest).total_seconds() < LIST_EVERY.total_seconds():
+            return False
+        tried = self._tried.get(kind)
+        return tried is None or not 0 <= (now - tried).total_seconds() < LIST_RETRY.total_seconds()
+
+    async def refresh(self, names: Iterable[tuple[str, str]] = ()) -> bool:
+        """Read the lists when a name of `names` is not kept, each list at most once a day; the names the lists kept hold get
+        their icons' labels, whichever reader kept them. Whether a list was read or an icon labelled."""
         if self._fetch is None:
             return False
         async with self._lock:
             wanted = {(kind, name) for kind, name in names if kind in MENUS and name}
             kept = self._store.wiki_items()
-            lacking = {pair for pair in wanted if pair not in kept}
-            if not force:
-                newest = max((row.read_at for row in kept.values()), default=None)
-                young = newest is not None and self._clock.now() - newest < MISSING_ASKED_AGAIN_AFTER
-                if not lacking or (young and lacking <= self.missing):
-                    return False
             now = self._clock.now()
-            if daily:
-                if self._daily_read_at is not None and now - self._daily_read_at < DAILY:
-                    return False
-                self._daily_read_at = now
-            read: set[str] = set()
+            changed = False
             for kind, menu in MENUS.items():
+                if not any(pair not in kept for pair in wanted) or not self._due(kind, kept, now):
+                    continue
                 try:
                     rows = await self._read_list(kind, menu, now)
                 except Exception as error:  # offline, or a page it cannot read: the items kept of that kind stay
+                    self._tried[kind] = now
                     log.warning(
                         "The HoYoLAB wiki's %s list could not be read (%s). The icons kept stay.",
                         kind, netpolicy.what_failed(error),
                     )
                     continue
+                self._tried.pop(kind, None)
                 with self._store.transaction():
                     self._store.replace_wiki_items(kind, rows)
-                    self._store.upsert_labels(
-                        [Label(icon_key(kind, row.name), row.name, "wish", None, row.icon_url) for row in rows], now
-                    )
-                read.add(kind)
+                changed = True
             kept = self._store.wiki_items()
-            # A name of a list that could not be read was not looked for: it is asked for again at the next refresh.
-            self.missing = {pair for pair in wanted if pair not in kept and pair[0] in read}
-        return bool(read)
+            # The icons of the names wanted that the lists hold, labelled where they are not: a list the Characters pages'
+            # wiki read has no labels of its own.
+            labels = [
+                Label(icon_key(kind, name), name, "wish", None, kept[(kind, name)].icon_url)
+                for kind, name in sorted(wanted) if (kind, name) in kept
+                and (self._store.label(icon_key(kind, name)) or Label("", "", "", None, "")).icon_url != kept[(kind, name)].icon_url
+            ]
+            if changed:   # a list read: every icon it holds is labelled, as the page may show any of them
+                labels = [Label(icon_key(kind, name), name, "wish", None, row.icon_url) for (kind, name), row in kept.items()
+                          if kind in MENUS]
+            if labels:
+                self._store.upsert_labels(labels, now)
+            # A name of a list that could not be read was not looked for: it is not counted missing.
+            self.missing = {pair for pair in wanted if pair not in kept and pair[0] not in self._tried}
+        return changed or bool(labels)
 
     async def _read_list(self, kind: str, menu: str, now: datetime) -> list[WikiItemRow]:
         """Every page of a kind's list, fifty entries a page. A list with no entry is not the game's: ValueError, so

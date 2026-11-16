@@ -42,9 +42,23 @@ def test_every_shipped_item_is_valid():
     assert ChangeItem  # the type is public
 
 
+def test_2_2_2_tells_of_the_weapons_icons_and_the_gallery_s_folders_and_videos():
+    notes = load_changes()
+    assert next(iter(notes)) == "2.2.2"
+    assert [(item["kind"], item["title"]) for item in notes["2.2.2"]] == [
+        ("new", "More folders and videos in the Gallery"), ("fixed", "Every weapon's icon"), ("new", "Next up"),
+        ("new", "Calendar"), ("new", "Endgame resets"), ("new", "Friends online"), ("better", "Savings is now Primogems"),
+        ("better", "Clock styles"), ("better", "Playtime in all"),
+    ]
+    by_title = {item["title"]: item["text"] for item in notes["2.2.2"]}
+    assert "three ways" in by_title["Next up"] and "gauges" in by_title["Next up"]
+    assert "tile for each mode" in by_title["Endgame resets"] and "dimmed" in by_title["Endgame resets"]
+    assert "MP4 and WebM" in notes["2.2.2"][0]["text"] and "Add a folder" in notes["2.2.2"][0]["text"]
+
+
 def test_2_2_1_tells_of_the_plan_pages_materials():
     notes = load_changes()
-    assert next(iter(notes)) == "2.2.1"
+    assert "2.2.1" in notes
     assert [(item["kind"], item["title"]) for item in notes["2.2.1"]] == [
         ("fixed", "Materials on the Plan page"), ("better", "The verdict at every constellation"),
     ]

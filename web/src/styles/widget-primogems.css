@@ -1,0 +1,291 @@
+/*
+ * The Primogems widget (the widgets and Friends design, 2.2; mockup 2): up to four parts one under the other, drawn with the
+ * widget roles alone, which the overlay's dark panel sets again. A source is named by a data attribute; the colour is
+ * chosen here (--w-src-*). The body stays inside the frame at every size: with three parts or more at two cells tall the
+ * month's legend goes, and with all four its bar goes too.
+ */
+.pmw {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  max-width: 520px; /* a part is not stretched across a wide frame */
+  width: 100%;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 9px;
+}
+.pm-part {
+  min-width: 0;
+}
+.pm-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pm-top > div {
+  min-width: 0;
+}
+.pm-top p,
+.pm-cell,
+.pm-v,
+.pm-h {
+  margin: 0;
+}
+.pm-gem {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  color: var(--w-five);
+}
+.pm-big {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.pm-sub {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--w-muted);
+}
+.pm-two {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+.pm-cell {
+  min-width: 0;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: var(--w-plate);
+}
+.pm-cell b {
+  display: block;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pm-cell span {
+  display: block;
+  font-size: 11.5px;
+  color: var(--w-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pm-h {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--w-muted);
+}
+.pm-h span {
+  font-variant-numeric: tabular-nums;
+}
+.pm-earn {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 3px;
+}
+.pm-v b {
+  display: block;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--w-good);
+  font-variant-numeric: tabular-nums;
+}
+.pm-v span {
+  display: block;
+  font-size: 11.5px;
+  color: var(--w-muted);
+}
+.pm-days {
+  flex: 1;
+  min-width: 60px;
+  height: 36px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+.pm-days i {
+  flex: 1;
+  min-height: 2px; /* a day with nothing is a line, not a gap */
+  border-radius: 2px 2px 0 0;
+  background: var(--w-track);
+}
+.pm-days i[data-known] {
+  background: var(--w-icon);
+}
+.pm-days i[data-now] {
+  background: var(--w-fill);
+}
+.pm-days i:not([data-known]) {
+  opacity: 0.5; /* a day the Ledger does not cover: not "none earned" */
+}
+.pm-seg {
+  display: flex;
+  height: 9px;
+  margin-top: 5px;
+  gap: 2px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.pm-seg i {
+  display: block;
+  flex: none;
+}
+.pm-leg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 12px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--w-ink2);
+}
+.pm-leg li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.pm-leg i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.pm-leg b {
+  font-weight: 700;
+  color: var(--w-ink);
+  font-variant-numeric: tabular-nums;
+}
+.pm-seg i[data-source='commissions'],
+.pm-leg i[data-source='commissions'] {
+  background: var(--w-src-commissions);
+}
+.pm-seg i[data-source='welkin'],
+.pm-leg i[data-source='welkin'] {
+  background: var(--w-src-welkin);
+}
+.pm-seg i[data-source='events'],
+.pm-leg i[data-source='events'] {
+  background: var(--w-src-events);
+}
+.pm-seg i[data-source='endgame'],
+.pm-leg i[data-source='endgame'] {
+  background: var(--w-src-endgame);
+}
+.pm-seg i[data-source='other'],
+.pm-leg i[data-source='other'] {
+  background: var(--w-src-other);
+}
+
+/* Three cells tall and more: the big number is larger. */
+@container (min-height: 300px) {
+  .pmw {
+    gap: 12px;
+  }
+  .pm-big {
+    font-size: 36px;
+  }
+  .pm-gem {
+    width: 40px;
+    height: 40px;
+  }
+  .pm-days {
+    height: 52px;
+  }
+}
+
+/* Two cells tall with three parts or more: the month's legend goes, and with all four its bar goes too. */
+@container (max-height: 260px) {
+  .pmw[data-parts='3'] .pm-leg,
+  .pmw[data-parts='4'] .pm-leg,
+  .pmw[data-parts='4'] .pm-seg {
+    display: none;
+  }
+  /* The four parts' heights alone (164 pixels) are nearly all the room the body has (173, less its padding): with the bar and legend gone, the gaps close up. */
+  .pmw[data-parts='4'] {
+    gap: 2px;
+  }
+}
+
+/* The switches of its settings (the form in Edit): the knob alone, drawn with the widget roles. */
+.pm-set {
+  display: grid;
+  gap: 2px;
+  max-width: 460px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.pm-set legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.pm-set-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 6px 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.pm-set-row small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--w-muted);
+}
+.pm-set .pm-switch.pl-switch {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 999px;
+}
+.pm-set .pm-switch .pl-knob {
+  width: 40px;
+  height: 22px;
+  background: var(--w-track);
+  box-shadow: inset 0 0 0 1px var(--w-outline);
+}
+.pm-set .pm-switch .pl-knob::after {
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: var(--w-muted);
+  box-shadow: none;
+}
+.pm-set .pm-switch.pl-switch[aria-pressed='true'] {
+  background: none;
+}
+.pm-set .pm-switch[aria-pressed='true'] .pl-knob {
+  background: var(--w-fill);
+  box-shadow: none;
+}
+.pm-set .pm-switch[aria-pressed='true'] .pl-knob::after {
+  background: var(--w-bg);
+  transform: translateX(18px);
+}
+.pm-set .pm-switch[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.pm-set .pm-switch:focus-visible {
+  outline: 2px solid var(--w-focus);
+  outline-offset: 2px;
+}

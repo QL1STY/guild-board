@@ -21,7 +21,11 @@ from guildboard.records import (
     CalcItemRecord,
     CalcTarget,
     CalculatorRecord,
+    CalendarBanner,
+    CalendarBoardRecord,
     CalendarDetailRecord,
+    CalendarEvent,
+    CalendarFace,
     CalendarRecord,
     CharactersRecord,
     DiaryEntry,
@@ -847,6 +851,75 @@ def normalize_calendar(raw: Mapping[str, Any]) -> CalendarRecord:
     )
     events = len(_items(raw.get("act_list"))) + len(_items(raw.get("fixed_act_list")))
     return CalendarRecord(banners=banners, events=events)
+
+
+def _faces(pool: Mapping[str, Any]) -> list[CalendarFace]:
+    """A pool's characters and weapons as faces. The answer holds the weapons as a list under "weapon"."""
+    out = []
+    for key in ("avatars", "weapon"):
+        for item in _items(pool.get(key)):
+            name = _text(item.get("name") or "")
+            if name:
+                out.append(CalendarFace(name, _int(item.get("rarity")), _text(item.get("icon") or "")))
+    return out
+
+
+def _banner(kind: str, pools: Sequence[Mapping[str, Any]]) -> CalendarBanner:
+    """One banner from the pools that share its dates: the faces once each, 5-stars first, and the 5-stars' names."""
+    seen: dict[tuple[str, int], CalendarFace] = {}
+    for pool in pools:
+        for face in _faces(pool):
+            seen.setdefault((face.name, face.rarity), face)
+    faces = sorted(seen.values(), key=lambda face: -face.rarity)  # a stable sort: the answer's order within a rarity
+    names = tuple(face.name for face in faces if face.rarity >= 5) or tuple(face.name for face in faces)
+    first = pools[0]
+    return CalendarBanner(
+        kind, names, _timestamp(first.get("start_timestamp")), _timestamp(first.get("end_timestamp")), tuple(faces)
+    )
+
+
+def _banners(raw: Mapping[str, Any]) -> tuple[CalendarBanner, ...]:
+    out: list[CalendarBanner] = []
+    by_dates: dict[tuple[str | None, str | None], list[Mapping[str, Any]]] = {}
+    for pool in _items(raw.get("avatar_card_pool_list")):  # character pools of the same dates are one banner
+        by_dates.setdefault((_timestamp(pool.get("start_timestamp")), _timestamp(pool.get("end_timestamp"))), []).append(pool)
+    out.extend(_banner("character", pools) for pools in by_dates.values())
+    out.extend(_banner("weapon", [pool]) for pool in _items(raw.get("weapon_card_pool_list")))
+    out.extend(_banner("chronicled", [pool]) for pool in _items(raw.get("mixed_card_pool_list")))
+    return tuple(out)
+
+
+PRIMOGEM_ITEM = 201  # the id of Primogems in an event's reward list
+CHALLENGE_EVENT = "ActTypeHardChallenge"  # the Stygian Onslaught: an `act_list` entry that belongs to the Endgame lane
+
+
+def _event(raw: Mapping[str, Any]) -> CalendarEvent:
+    starts, ends = _timestamp(raw.get("start_timestamp")), _timestamp(raw.get("end_timestamp"))
+    dated = starts is not None and ends is not None  # status 1 is announced with no dates: "0" or none
+    rewards = [_map(item) for item in _items(raw.get("reward_list")) if _int(item.get("item_id")) == PRIMOGEM_ITEM]
+    explore = _number(_map(raw.get("explore_detail")).get("explore_percent"))
+    double = _map(raw.get("double_detail"))
+    return CalendarEvent(
+        id=_int(raw.get("id")),
+        name=_text(raw.get("name") or ""),
+        starts=starts if dated else None,
+        ends=ends if dated else None,
+        finished=raw.get("is_finished") is True,
+        primogems=sum(_int(item.get("num")) for item in rewards) if rewards else None,
+        explored=explore,
+        double_left=_int(double.get("left")) if _number(double.get("left")) is not None else None,
+        double_total=_int(double.get("total")) if _number(double.get("total")) is not None else None,
+        status=_int(raw.get("status")),
+        dated=dated,
+    )
+
+
+def normalize_calendar_board(raw: Mapping[str, Any]) -> CalendarBoardRecord:
+    """What the Calendar widget draws: the banners with their faces, and the events of `act_list` (the challenges of
+    `fixed_act_list` and the Stygian entry are the Endgame lane's, from the endgame summaries). Tolerant of a missing field."""
+    raw = _map(raw)
+    events = (_event(entry) for entry in _items(raw.get("act_list")) if entry.get("type") != CHALLENGE_EVENT)
+    return CalendarBoardRecord(_banners(raw), tuple(event for event in events if event.name))
 
 
 def _is_theater(entry: Mapping[str, Any]) -> bool:

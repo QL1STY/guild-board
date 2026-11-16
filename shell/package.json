@@ -1,6 +1,6 @@
 {
   "name": "guild-board-shell",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "private": true,
   "description": "Guild Board's Electron shell",
   "main": "dist/main.js",

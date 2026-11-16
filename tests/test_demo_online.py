@@ -320,3 +320,19 @@ async def test_the_demo_holds_no_client(clock):
     with pytest.raises(OnlineRefused):
         await online.friend_profile("00000000-0000-4000-8000-00000000dead")
     assert await online.friend_picture(RILEY) is None  # the page falls back to its sign, and nothing is fetched
+
+
+def test_the_demos_friends_are_a_little_past_a_whole_minute_so_a_slower_clock_reads_the_same_words(demo):
+    # The page tells time by the core's clock as /api/status last gave it, a moment older than this read: seeded on the dot,
+    # "for 42 min" would show as "for 41 min" for that moment, and "3 h ago" as "2 h ago" (the widgets' e2e flaked on it).
+    from datetime import datetime
+
+    now = datetime.fromisoformat("2026-10-13T08:00:00+00:00")
+    riley, kira, milo = _friend(demo, "Riley"), _friend(demo, "Kira"), _friend(demo, "Milo")
+    ages = {
+        "Riley": (now - datetime.fromisoformat(riley["since"])).total_seconds() - 42 * 60,
+        "Kira": (now - datetime.fromisoformat(kira["last_seen"])).total_seconds() - 3 * 3600,
+        "Milo": (now - datetime.fromisoformat(milo["last_seen"])).total_seconds() - 2 * 86400,
+    }
+    for name, past in ages.items():
+        assert 10 <= past <= 40, (name, past)

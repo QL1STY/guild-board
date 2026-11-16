@@ -1,0 +1,553 @@
+/*
+ * The Endgame resets widget's drawings that have no pictures (the polish pass, mockup 2 A, B and C): Medallions (egm), Season
+ * bars (egb) and In order (egl, egv), with the parts all four drawings share (egx). Drawn with the widget roles alone, which the
+ * overlay's dark panel sets again; a mode's colour is the role --w-mode-*, chosen here from data-mode and held in --c: a ring, a
+ * bar, a diamond, a name. The result and the time are the widget's ink. The pictures' drawing is widget-endgame-pictures.css.
+ */
+.eg {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.eg [data-mode='abyss'] {
+  --c: var(--w-mode-abyss);
+}
+.eg [data-mode='theater'] {
+  --c: var(--w-mode-theater);
+}
+.eg [data-mode='stygian'] {
+  --c: var(--w-mode-stygian);
+}
+.eg [data-centre] {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+.eg b {
+  font-weight: 800;
+}
+
+/* ---------- Shared parts ---------- */
+.egx-star {
+  color: var(--w-gold-ink);
+  font-size: 0.85em;
+  line-height: 1;
+}
+.egx-shield {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+.egx-shield svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.egx-shield path {
+  fill: color-mix(in srgb, var(--c) 16%, var(--w-bg));
+  stroke: var(--c);
+  stroke-width: 1.4;
+}
+.egx-shield b {
+  position: relative;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-ink);
+}
+.egx-med {
+  position: relative;
+  flex: none;
+  display: inline-block;
+}
+.egx-med > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.egx-tr {
+  fill: none;
+  stroke: var(--w-track);
+  stroke-width: 3;
+}
+.egx-arc {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.egx-in {
+  fill: color-mix(in srgb, var(--c) 14%, var(--w-bg));
+  stroke: color-mix(in srgb, var(--c) 45%, transparent);
+  stroke-width: 1;
+}
+.egx-sign {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--c);
+}
+.egx-sign .sign {
+  width: 46%;
+  height: 46%;
+}
+/* The mode's icon (the Stats card's) fills the medallion's inner disc where its sign would sit; the sign shows through only
+   where the icon cannot load. The picture is asked for at the size the screen draws it at, so it is as sharp at 2x. */
+.egx-mi {
+  width: 60%;
+  height: 60%;
+}
+.egx-mi .sign {
+  width: 76%;
+  height: 76%;
+}
+.egx-acts {
+  display: flex;
+  gap: 2px;
+}
+.egx-acts u {
+  display: block;
+  flex: 1;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--w-track);
+  text-decoration: none;
+}
+.egx-acts u.on {
+  background: var(--c);
+}
+.egx-mk {
+  position: relative;
+  flex: none;
+  display: inline-block;
+  vertical-align: middle;
+}
+.egx-mk img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.egx-mk.fb {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--w-gold-ink), var(--w-fill));
+}
+
+/* ---------- Medallions: one cell tall, three cells side by side; from two cells tall, a plate for each mode ---------- */
+.egm3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+}
+.egm-c {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 0 6px 0 8px;
+  border-left: 1px solid var(--w-line);
+}
+.egm-c:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.egm-x {
+  min-width: 0;
+}
+.egm-k {
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--w-ink);
+}
+.egm-v {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 21px;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-ink);
+  white-space: nowrap;
+}
+.egm-v small {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--w-muted);
+}
+.egm-v.egm-stack {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  height: auto;
+  margin: 1px 0 2px;
+}
+.egm-in {
+  min-height: 1.1em;
+  font-size: 11.5px;
+  line-height: 1.1;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.egm-in b {
+  color: var(--w-ink);
+}
+.egm-plates {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.egm-p {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 5px 6px;
+  border-radius: 9px;
+  text-align: center;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--c) 13%, var(--w-plate)), var(--w-plate) 70%);
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+  border-top: 3px solid var(--c);
+}
+.egm-name {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--w-ink);
+}
+.egm-time {
+  min-height: 1.05em;
+  margin-top: 3px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--w-ink);
+  white-space: nowrap;
+}
+.egm-time small {
+  margin-left: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--w-muted);
+}
+.egm-sep {
+  width: 70%;
+  height: 1px;
+  margin: 5px 0 4px;
+  background: color-mix(in srgb, var(--c) 30%, var(--w-line));
+}
+.egm-res {
+  margin-top: auto;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  width: 100%;
+}
+.egm-fig {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-ink);
+}
+.egm-cap {
+  font-size: 11.5px;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.egm-cap b {
+  color: var(--w-ink);
+}
+.egm-cap.egm-note {
+  white-space: normal;
+  line-height: 1.15;
+}
+
+/* ---------- Season bars: a bar for each mode, filling as its cycle goes, with a mark at now ---------- */
+.egb {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+}
+.egb-r {
+  display: grid;
+  grid-template-columns: 94px minmax(0, 1fr) 40px;
+  column-gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+.egb-k {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  white-space: nowrap;
+  font-weight: 800;
+  color: var(--w-ink);
+}
+.egb-v {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 800;
+  color: var(--w-ink);
+}
+.egb-t {
+  text-align: right;
+  font-weight: 800;
+  white-space: nowrap;
+  color: var(--w-ink);
+}
+.egb-bar {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--w-track);
+}
+.egb-bar u {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  text-decoration: none;
+  background: color-mix(in srgb, var(--c) 55%, var(--w-track));
+}
+.egb-bar i {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--c);
+  box-shadow: 0 0 0 1.5px var(--w-bg);
+}
+.egb2 {
+  display: grid;
+  align-content: space-between;
+}
+.egb2-r {
+  display: grid;
+  gap: 3px;
+}
+.egb2-h {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12.5px;
+}
+.egb2-k {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 800;
+  color: var(--w-ink);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.egb2-v {
+  margin-left: auto;
+  font-size: 11.5px;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.egb2-v b {
+  font-size: 13.5px;
+  color: var(--w-ink);
+}
+.egb2 .egb-bar {
+  height: 15px;
+  border-radius: 5px;
+}
+.egb2 .egb-bar u {
+  border-radius: 5px;
+}
+.egb-flag {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 17px;
+  padding: 0 6px;
+  border-radius: 5px;
+  background: var(--w-bg);
+  border: 1px solid var(--c);
+  color: var(--w-ink);
+  font-size: 11.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.egb2-f {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--w-muted);
+}
+.egb2-f b {
+  color: var(--w-ink);
+}
+
+/* ---------- In order: one cell tall, the resets on one line, the soonest first; from two cells tall, upright ---------- */
+.egl {
+  position: relative;
+}
+.egl-axis {
+  position: absolute;
+  inset: 50% 4px auto;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 1px;
+  background: linear-gradient(to right, var(--w-fill), var(--w-line) 40%);
+}
+.egl-m {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.egl-m.l {
+  align-items: flex-start;
+}
+.egl-m.r {
+  align-items: flex-end;
+}
+.egl-d {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: var(--c);
+  box-shadow: 0 0 0 2px var(--w-bg);
+}
+.egl-m.l .egl-d {
+  left: 5.5px;
+}
+.egl-m.r .egl-d {
+  left: auto;
+  right: 0;
+}
+.egl-up,
+.egl-dn {
+  white-space: nowrap;
+  font-size: 11.5px;
+  line-height: 1.1;
+}
+.egl-up {
+  font-weight: 800;
+  color: var(--w-ink);
+}
+.egl-up span {
+  color: var(--w-ink);
+}
+.egl-dn {
+  min-height: 1.1em;
+  color: var(--w-muted);
+}
+.egl-dn b {
+  font-size: 13px;
+  color: var(--w-ink);
+}
+.egv {
+  position: relative;
+  display: grid;
+  align-content: start;
+}
+.egv::before {
+  content: '';
+  position: absolute;
+  left: 33px;
+  top: 12px;
+  bottom: 14px;
+  width: 2px;
+  border-radius: 1px;
+  background: linear-gradient(to bottom, var(--w-fill), var(--w-line));
+}
+.egv-r {
+  position: relative;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: center;
+  min-height: 47px;
+}
+.egv-t {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+  color: var(--w-ink);
+}
+.egv-t::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-top: -5.5px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: var(--c);
+  box-shadow: 0 0 0 3px var(--w-bg);
+}
+.egv-n {
+  min-width: 0;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: var(--w-plate);
+  border-left: 3px solid var(--c);
+}
+.egv-n b {
+  display: block;
+  overflow: hidden;
+  font-size: 12.5px;
+  color: var(--w-ink);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.egv-n > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--w-ink);
+  white-space: nowrap;
+}
+.egv-n small {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--w-muted);
+}
+.egv-now {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  column-gap: 8px;
+  align-items: center;
+  height: 16px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--w-gold-ink);
+}
+.egv-now span:first-child {
+  padding-right: 12px;
+  text-align: right;
+}

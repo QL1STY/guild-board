@@ -102,6 +102,31 @@ def test_each_group_builds_its_record_type():
     assert endgame.modes[0].period_end == "2026-10-16T02:59:59+00:00"
 
 
+def test_the_demos_calendar_has_the_made_up_board_the_mockup_draws_relative_to_now():
+    for now in (NOW, NOW + timedelta(days=40)):
+        board = build("calendar", now).board
+        assert [(banner.kind, banner.names) for banner in board.banners[:2]] == [
+            ("character", ("Skirk", "Escoffier")), ("weapon", ("Azurelight", "Symphonist of Scents")),
+        ]
+        shift = timedelta(seconds=(now - demo.DEMO_PULLS_NOW) // timedelta(seconds=1))
+        assert board.banners[0].starts == (demo.BANNERS_START + shift).isoformat(timespec="seconds")
+        assert board.banners[0].ends == (demo.BANNERS_END + shift).isoformat(timespec="seconds")
+        assert board.banners[2].starts == board.banners[0].ends  # the next phase begins where this one ends
+        assert all(not face.icon_url for banner in board.banners for face in banner.faces)  # no address in the demo
+        assert board.banners[0].faces[0].rarity == 5
+        days = lambda text: (datetime.fromisoformat(text) - now).total_seconds() / 86400
+        first, finished, double, later = board.events
+        assert (first.primogems, first.finished, round(days(first.ends))) == (1000, False, 6)
+        assert (finished.finished, round(days(finished.ends))) == (True, 1)
+        assert (double.double_left, double.double_total, round(days(double.starts))) == (3, 3, 1)
+        assert (later.primogems, round(days(later.starts))) == (280, 6)
+        assert all(event.dated and event.source == "hoyolab" for event in board.events)
+        assert sum(event.finished for event in board.events) == 1
+        record = build("calendar", now)
+        assert (record.banners, record.events) == (len(board.banners), len(board.events))
+        assert record.detail is not None
+
+
 def test_unknown_group_is_rejected():
     with pytest.raises(ValueError):
         build("inventory", NOW)

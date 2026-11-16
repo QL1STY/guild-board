@@ -635,5 +635,7 @@ class HoyolabSource:
     async def _calendar(self, client: Any, token: StoredToken, now: datetime, first_time: bool) -> Callable[[], Any]:
         raw = await raw_of(client, "get_genshin_event_calendar", token.uid)
         return lambda: replace(
-            norm.normalize_calendar(raw), detail=_detail_of("calendar", norm.normalize_calendar_detail, raw)
+            norm.normalize_calendar(raw),
+            detail=_detail_of("calendar", norm.normalize_calendar_detail, raw),
+            board=_detail_of("calendar", norm.normalize_calendar_board, raw),  # the Calendar's own part never costs the counts
         )

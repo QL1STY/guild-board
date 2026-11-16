@@ -1010,6 +1010,7 @@ async def test_the_histories_update_with_the_login_after_the_first_sync_and_ever
         return None
 
     core.banners.run = no_banners
+    core.fandom_events.run = no_banners  # nor are the Fandom wiki's dates of upcoming events
     core.characters.wanted = lambda *keys: None  # the wiki's reads are another test's (the hands-off tests')
     core.characters.warm_art = lambda: None  # so are the pictures kept ahead after a sync
     core.start()

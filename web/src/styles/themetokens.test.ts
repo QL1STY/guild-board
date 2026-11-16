@@ -49,7 +49,12 @@ const RULES_LEFT_ALONE = [
 const STAYS: Record<string, string> = {
   'styles/gallery.css | .ga-time | color': 'white time over a screenshot, with a black shadow for a light sky',
   'styles/gallery.css | .ga-star | color': 'a gold star over a screenshot',
-  'styles/gallery.css | .ga-big | background': 'the letterbox behind a large screenshot, the dark every picture is shown on',
+  'styles/gallery.css | .ga-play | background': 'a black disc behind the play mark, over a video\'s first frame',
+  'styles/gallery.css | .ga-play | color': 'a white play mark over a video\'s first frame',
+  'styles/gallery.css | .ga-tile:hover .ga-play | background': 'the same disc, darker, on hover',
+  'styles/gallery.css | .ga-dur | color': 'a white length over a video\'s first frame, with a black shadow for a light sky',
+  'styles/gallery.css | .ga-big video | background': 'the black a video is shown on, as a player draws it',
+  'styles/gallery.css | .ga-big | background':'the letterbox behind a large screenshot, the dark every picture is shown on',
   'styles/gallery.css | .ga-nav | background': 'a black shade behind the arrows, over the screenshot',
   'styles/gallery.css | .ga-nav | color': 'white arrows over the screenshot',
   'styles/gallery.css | .ga-nav:not(:disabled):hover | background': 'the same shade, darker, on hover',

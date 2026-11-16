@@ -46,6 +46,10 @@ PAGES: dict[str, tuple[str, ...]] = {
     "board": (
         "/api/board", "/api/layouts/board", "/api/commissions", "/api/timers", "/api/quick-timers", "/api/checkin",
         "/api/pulls", "/api/achievements?view=all&pinned=true",
+        "/api/primogems",  # the Primogems widget, once its Earned or By source is on
+        "/api/next-up",  # the Next up widget
+        "/api/endgame-resets",  # the Endgame resets widget
+        "/api/calendar",  # the Calendar widget
     ),
     "achievements": ("/api/timers", "/api/commissions"),
     "backlog": tuple(f"/api/backlog?sort={sort}" for sort in ("least", "closest", "game")),
@@ -64,7 +68,8 @@ PAGES: dict[str, tuple[str, ...]] = {
         "/api/synclog?limit=50", "/api/overlay", "/api/ledger", "/api/achievements?unlisted=true", "/api/backups",
         "/api/whats-new", "/api/notices", "/api/gallery",
     ),
-    "overlay": ("/api/overlay", "/api/layouts/overlay", "/api/board", "/api/timers", "/api/commissions", "/api/quick-timers"),
+    "overlay": ("/api/overlay", "/api/layouts/overlay", "/api/board", "/api/timers", "/api/commissions", "/api/quick-timers",
+                "/api/next-up", "/api/endgame-resets", "/api/calendar"),
 }
 
 

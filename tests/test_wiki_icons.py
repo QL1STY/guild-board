@@ -15,6 +15,7 @@ from guildboard.api.app import create_app
 from guildboard.config import AppPaths
 from guildboard.core import Core
 from guildboard.metrics import Label
+from guildboard.characters.wiki import CharacterWiki
 from guildboard.pulls.wiki import HEADERS, MENUS, PAGE_SIZE, WIKI_URL, WikiIcons, parse_items, wanted_names
 from guildboard.store import BannerRow, WikiItemRow, WishRow
 from pulls_history import keep_demo_like
@@ -121,62 +122,75 @@ async def test_every_name_kept_reads_nothing(store):
     assert wiki.asked == []
 
 
-async def test_a_name_the_wiki_lacks_asks_once_more_and_then_waits_a_day(store):
+async def test_a_name_the_wiki_lacks_waits_for_the_next_day_s_read(store):
+    # Each list is read at most once a day (CLAUDE.md), whatever is asked: a name the wiki lacks, or one newer than the
+    # last read, waits for the next day's.
     clock, wiki = FakeClock(NOW), Wiki()
     icons = WikiIcons(store, clock, wiki)
     await icons.refresh([("character", "Skirk")])
     reads = len(wiki.asked)
-    # A name the wiki lacks: it is read again once, and the name is remembered as missing.
-    await icons.refresh([("character", "Somebody New"), ("character", "Skirk")])
-    assert len(wiki.asked) == 2 * reads
-    assert icons.missing == {("character", "Somebody New")}
-    await icons.refresh([("character", "Somebody New")])
+    assert await icons.refresh([("character", "Somebody New"), ("character", "Skirk")]) is False
     clock.advance(hours=23, minutes=59)
-    await icons.refresh([("character", "Somebody New")])
-    assert len(wiki.asked) == 2 * reads
-    # Another missing name asks once more.
     await icons.refresh([("weapon", "Another Blade")])
-    assert len(wiki.asked) == 3 * reads
-    assert icons.missing == {("weapon", "Another Blade")}
-    # A day after the last read, the missing names are asked for again.
-    clock.advance(days=1, minutes=1)
-    await icons.refresh([("weapon", "Another Blade")])
-    assert len(wiki.asked) == 4 * reads
-    # Once the wiki has the name, it is kept and never asked for again.
+    assert len(wiki.asked) == reads
+    # A day after the last read, the lists are read again, and a name the wiki has now is kept.
     wiki.entries["4"] = [*WEAPONS, {**WEAPONS[0], "entry_page_id": "99999", "name": "Another Blade"}]
+    clock.advance(minutes=2)
+    assert await icons.refresh([("weapon", "Another Blade"), ("character", "Somebody New")]) is True
+    assert len(wiki.asked) == 2 * reads
+    assert icons.missing == {("character", "Somebody New")} and ("weapon", "Another Blade") in store.wiki_items()
     clock.advance(days=1, minutes=1)
     await icons.refresh([("weapon", "Another Blade")])
-    assert icons.missing == set() and ("weapon", "Another Blade") in store.wiki_items()
-    asked = len(wiki.asked)
-    await icons.refresh([("weapon", "Another Blade")])
-    assert len(wiki.asked) == asked
+    assert len(wiki.asked) == 2 * reads  # nothing lacks its icon: nothing is read
 
 
-async def test_the_reads_after_a_banners_read_or_a_wishlist_add_are_made_at_most_once_a_day(store):
-    # Those reads (daily=True) read only when a wanted name lacks its icon, as every read does, and at most once a day,
-    # so that adding a few names in a row, or banners read again and again, reads the lists once.
+async def test_a_list_read_by_the_characters_wiki_is_not_read_again_the_same_day(store):
+    # The audit of 2026-11-09, H1: the Characters pages' wiki reads the same lists; after its read, the icons' reader asks
+    # for none within the day, and neither does a new one on the same store (a start of Guild Board). The names it lacks
+    # take their icons from the lists that read kept.
+    clock, wiki = FakeClock(NOW), Wiki()
+    characters = CharacterWiki(store, clock, lambda url, **kwargs: wiki(url, **kwargs) if kwargs.get("body") and
+                               json.loads(kwargs["body"])["menu_id"] in wiki.entries else wiki_page([], 0), lambda: "7.1")
+    await characters.lists()
+    reads = len(wiki.asked)
+    assert reads > 0 and store.labels("wish") == {}
+    clock.advance(hours=2)
+    icons = WikiIcons(store, clock, wiki)
+    assert await icons.refresh([("character", "Skirk"), ("character", "Not Yet Listed")]) is True  # its icon is labelled
+    assert store.labels("wish")["wish.character.skirk"].icon_url == SKIRK_ICON
+    assert await WikiIcons(store, clock, wiki).refresh([("character", "Not Yet Listed")]) is False
+    assert len(wiki.asked) == reads
+
+
+async def test_two_imports_with_new_lacking_names_read_the_lists_once_a_day(store):
     clock, wiki = FakeClock(NOW), Wiki()
     icons = WikiIcons(store, clock, wiki)
-    assert await icons.refresh([("character", "Skirk")], daily=True) is True
+    assert await icons.refresh([("character", "Nobody One")]) is True
     reads = len(wiki.asked)
-    clock.advance(hours=3)
-    assert await icons.refresh([("character", "Somebody New")], daily=True) is False  # a day has not passed
-    assert await icons.refresh([("character", "Skirk")], daily=True) is False  # and nothing lacks its icon here
+    clock.advance(hours=1)
+    assert await icons.refresh([("character", "Nobody Two")]) is False
+    clock.advance(hours=1)
+    assert await WikiIcons(store, clock, wiki).refresh([("weapon", "Nothing Three")]) is False   # a start between them
     assert len(wiki.asked) == reads
-    # A read after an import is not held to it, and does not count for it.
-    assert await icons.refresh([("character", "Somebody New")]) is True
-    assert len(wiki.asked) == 2 * reads
-    clock.advance(hours=21, minutes=1)  # a day after the last read that counts
-    assert await icons.refresh([("weapon", "Another Blade")], daily=True) is True
-    assert len(wiki.asked) == 3 * reads
-    # Two at once make one read: the second finds the day's read made, under the wiki's lock.
-    clock.advance(days=1, minutes=1)
-    both = await asyncio.gather(
-        icons.refresh([("weapon", "Blade One")], daily=True), icons.refresh([("weapon", "Blade Two")], daily=True)
-    )
-    assert sorted(both) == [False, True] and len(wiki.asked) == 4 * reads
-    # The demo reads nothing.
-    assert await WikiIcons(store, clock, None).refresh([("character", "Nobody")], daily=True) is False
+    # Two at once make one read: the second finds the day's read made, under the reader's lock.
+    clock.advance(days=1)
+    both = await asyncio.gather(icons.refresh([("weapon", "Blade One")]), icons.refresh([("weapon", "Blade Two")]))
+    assert sorted(both) == [False, True] and len(wiki.asked) == 2 * reads
+
+
+async def test_a_list_that_could_not_be_read_is_tried_again_a_quarter_of_an_hour_later(store):
+    clock, wiki = FakeClock(NOW), Wiki()
+    icons = WikiIcons(store, clock, wiki)
+    wiki.fail_at = ("2", 1)
+    await icons.refresh([("character", "Skirk")])
+    assert ("character", "Skirk") not in store.wiki_items()
+    wiki.fail_at, asked = None, len(wiki.asked)
+    clock.advance(minutes=14)
+    await icons.refresh([("character", "Skirk")])
+    assert wiki.asked[asked:] == []   # the weapons were read; the characters wait out the quarter of an hour
+    clock.advance(minutes=2)
+    await icons.refresh([("character", "Skirk")])
+    assert ("character", "Skirk") in store.wiki_items()
 
 
 async def test_a_failed_read_keeps_what_was_kept(store):
@@ -187,7 +201,7 @@ async def test_a_failed_read_keeps_what_was_kept(store):
     # The weapons' second page fails: the characters, read whole, are new; the weapons stay as they were.
     wiki.entries["2"] = [*CHARACTERS, {**CHARACTERS[2], "entry_page_id": "99998", "name": "Somebody New"}]
     wiki.fail_at = ("4", 2)
-    clock.advance(minutes=5)
+    clock.advance(days=1, minutes=1)
     await icons.refresh([("character", "Somebody New")])
     items = store.wiki_items()
     assert ("character", "Somebody New") in items
@@ -215,7 +229,7 @@ async def test_an_empty_list_keeps_what_was_kept(store, caplog):
 
 async def test_the_demo_reads_nothing(store):
     icons = WikiIcons(store, FakeClock(NOW), None)
-    await icons.refresh([("character", "Skirk")], force=True)
+    await icons.refresh([("character", "Skirk")])
     assert store.wiki_items() == {} and icons.icon("character", "Skirk") is None
 
 

@@ -1478,6 +1478,13 @@ class Store:
         ).fetchall()
         return [SessionRow(r[0], parse_iso(r[1]), parse_iso(r[2]), bool(r[3])) for r in rows]
 
+    def all_sessions(self) -> list[SessionRow]:
+        """Every session Guild Board recorded, the oldest first."""
+        rows = self._conn.execute(
+            "SELECT id, started_at, ended_at, started_before_tool FROM sessions ORDER BY started_at, id"
+        ).fetchall()
+        return [SessionRow(r[0], parse_iso(r[1]), parse_iso(r[2]), bool(r[3])) for r in rows]
+
     def first_session(self) -> SessionRow | None:
         row = self._conn.execute(
             "SELECT id, started_at, ended_at, started_before_tool FROM sessions ORDER BY started_at, id LIMIT 1"

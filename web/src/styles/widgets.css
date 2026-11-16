@@ -1920,51 +1920,6 @@
   }
 }
 
-/* Savings: the pulls large in the widget's centre, on a soft gold glow, with the pulls by the next version's end on a
-   plate under them. */
-.sv {
-  flex: 1;
-  min-height: 0;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: 9px;
-  border-radius: 10px;
-  background: radial-gradient(closest-side, var(--w-five-wash), transparent 90%);
-  text-align: center;
-}
-.sv-big {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 30px;
-  font-weight: 800;
-  line-height: 1.05;
-  white-space: nowrap;
-}
-.sv-gem {
-  width: 28px;
-  height: 28px;
-  color: var(--w-five);
-}
-.sv-by {
-  padding: 3px 12px;
-  border-radius: 999px;
-  background: var(--w-plate);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--w-ink2);
-}
-@container (min-height: 300px) {
-  .sv-big {
-    font-size: 40px;
-  }
-  .sv-gem {
-    width: 36px;
-    height: 36px;
-  }
-}
-
 /* Wishlist: a face, the name and whether the pulls reach it, each on its own plate, the list in the widget's centre (at
    its top once it scrolls). */
 .wl {

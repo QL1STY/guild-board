@@ -1,6 +1,6 @@
 import { createContext, type ReactNode, useCallback, useContext, useLayoutEffect, useState } from 'react'
 import type { Live } from '../live.ts'
-import type { BoardModel, Widget } from '../types.ts'
+import type { BoardModel, Place, Widget } from '../types.ts'
 import type { QueuedChange } from '../ui/changes.tsx'
 import type { SignName } from '../ui/Sign.tsx'
 
@@ -29,6 +29,8 @@ export type WidgetContext = {
   board: BoardModel | null
   /** Sends a change that the undo history keeps, through the undo note. */
   change: QueuedChange
+  /** The place that shows the widget: the Board, or the overlay (whose Calendar is always a list). */
+  place: Place
 }
 
 export type WidgetType = {
@@ -101,7 +103,16 @@ export function useHead({ title, meta, counted, read }: Head): void {
  * padding, so a query and this agree.
  */
 export const ONE_CELL_ACROSS = 300
-const ONE_CELL_DOWN = 180
+export const ONE_CELL_DOWN = 180
+
+/**
+ * Where a frame is five cells across or more, and three cells down or more (the Calendar's wide drawing). Five cells across
+ * are 886 pixels on the overlay, and four on the Board stay just under (a column is under 213 pixels), so one width splits
+ * the sizes on every Board width; three cells down are 310 pixels and two are 204. The frame has no padding, so a container
+ * query of a widget's stylesheet at the same width agrees with this (widgetcss.test.ts sweeps it).
+ */
+export const FIVE_CELLS_ACROSS = 886
+export const THREE_CELLS_DOWN = 300
 
 /**
  * Whether the frame that holds this view is one cell wide (`narrow`) and one cell tall (`short`), kept as it is
@@ -128,4 +139,32 @@ export function useOneCell(): { ref: (element: HTMLElement | null) => (() => voi
     return () => observer.disconnect()
   }, [])
   return { ref, narrow, short }
+}
+
+/**
+ * The width and height of the frame that holds this view (without its border, as useOneCell measures), kept as it is resized
+ * and measured before it is first drawn; 0 and 0 until it is. One observer for every size the view asks about. `ref` goes on
+ * an element of the view, as useOneCell's does.
+ */
+export function useFrameSize(): {
+  ref: (element: HTMLElement | null) => (() => void) | undefined
+  width: number
+  height: number
+} {
+  const [size, setSize] = useState({ width: 0, height: 0 })
+  const ref = useCallback((element: HTMLElement | null) => {
+    if (element === null) return undefined
+    const frame = element.closest('.w') ?? element
+    const read = () =>
+      setSize((now) =>
+        now.width === frame.clientWidth && now.height === frame.clientHeight
+          ? now
+          : { width: frame.clientWidth, height: frame.clientHeight },
+      )
+    read()
+    const observer = new ResizeObserver(read)
+    observer.observe(frame)
+    return () => observer.disconnect()
+  }, [])
+  return { ref, ...size }
 }

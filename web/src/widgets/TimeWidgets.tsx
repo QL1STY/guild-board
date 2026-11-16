@@ -1,10 +1,15 @@
 import { useState } from 'react'
+import '../styles/widget-playtime.css'
+import '../styles/widget-primogems.css' // the switches of Settings are its rows
 import { duration } from '../format.ts'
 import { useTick } from '../live.ts'
 import { readyTime, timeLeft } from '../pages/timersview.ts'
 import type { Widget } from '../types.ts'
 import { Bar, Seal } from '../ui/marks.tsx'
 import { useRoving } from '../ui/roving.ts'
+import { Segmented } from '../ui/Segmented.tsx'
+import { Sign } from '../ui/Sign.tsx'
+import { PLAY_STYLES, playStyle, playTotal, type PlayStyle } from './playtimeview.ts'
 import { useHead, type WidgetContext, type WidgetType } from './widget.ts'
 import { periodProgress, playColumns, playFigure, playSession } from './widgetview.ts'
 
@@ -73,8 +78,9 @@ function PlayFigure({ minutes }: { minutes: number }) {
  * tab stop for the keyboard, whose arrows move between them. While a column is pointed at or has the focus, the heading
  * says that day's minutes instead of today's: a tooltip would be cut off by the frame. It ticks every 15 seconds.
  */
-function PlaytimeView({ ctx }: { widget: Widget; ctx: WidgetContext }) {
+function PlaytimeView({ widget, ctx }: { widget: Widget; ctx: WidgetContext }) {
   useTick(15_000)
+  const style = playStyle(widget.settings)
   const playtime = ctx.board === null ? null : ctx.board.playtime
   const columns = playColumns(playtime === null ? [] : playtime.week)
   const roving = useRoving(columns.length)
@@ -91,6 +97,72 @@ function PlaytimeView({ ctx }: { widget: Widget; ctx: WidgetContext }) {
   })
   if (playtime === null) return <p className="wid-line">Reading the play time…</p>
   const session = playSession(playtime, ctx.live.status?.game.last_session_minutes ?? null, ctx.live.now())
+  const total = playTotal(playtime)
+  const sessionWords = session.minutes === null ? null : session.playing ? 'this session' : 'last session'
+  const week =
+    columns.length > 0 ? (
+      <div className="play-week" role="group" aria-label="Playtime of the last seven days">
+        {columns.map((column, index) => {
+          const own = roving(index)
+          return (
+            <div
+              key={column.day}
+              className={`pw-col${column.today ? ' today' : ''}${column.none ? ' none' : ''}`}
+              role="img"
+              aria-label={column.tip}
+              {...own}
+              onFocus={() => {
+                own.onFocus()
+                setPointed(index)
+              }}
+              onBlur={() => leave(index)}
+              onPointerEnter={() => setPointed(index)}
+              onPointerLeave={() => leave(index)}
+            >
+              <span className="pw-plot">
+                <span className="pw-bar" style={{ height: `${Number((column.share * 100).toFixed(2))}%` }} />
+              </span>
+              <span className="pw-day">{column.label}</span>
+            </div>
+          )
+        })}
+      </div>
+    ) : null
+  if (style === 'plate') {
+    return (
+      <div className="play play-plate">
+        <div className="play-plates" data-centre>
+          <div className="pl">
+            <p>
+              <Seal quiet={!session.playing}>{session.playing ? 'Playing now' : 'Not playing'}</Seal>
+            </p>
+            {session.minutes === null ? (
+              <span className="play-what">No session yet</span>
+            ) : (
+              <>
+                <PlayFigure minutes={session.minutes} />
+                <span className="sr-only">{sessionWords}</span>
+              </>
+            )}
+          </div>
+          {total !== null && (
+            <div className="pl gold" aria-label={total.spoken} role="group">
+              <span className="lbl" aria-hidden="true">
+                <Sign name="hourglass" />
+                In all
+              </span>
+              <span className="fig" aria-hidden="true">
+                {total.value}
+                <small>{total.unit}</small>
+              </span>
+            </div>
+          )}
+        </div>
+        {week}
+        {total !== null && <p className="play-foot">Counted by Guild Board since {total.since}</p>}
+      </div>
+    )
+  }
   return (
     <div className="play">
       <div className="play-now" data-centre>
@@ -103,40 +175,63 @@ function PlaytimeView({ ctx }: { widget: Widget; ctx: WidgetContext }) {
           ) : (
             <>
               <PlayFigure minutes={session.minutes} />
-              <span className="play-what">{session.playing ? 'this session' : 'last session'}</span>
+              <span className="play-what">{sessionWords}</span>
             </>
           )}
         </p>
       </div>
-      {columns.length > 0 && (
-        <div className="play-week" role="group" aria-label="Playtime of the last seven days">
-          {columns.map((column, index) => {
-            const own = roving(index)
-            return (
-              <div
-                key={column.day}
-                className={`pw-col${column.today ? ' today' : ''}${column.none ? ' none' : ''}`}
-                role="img"
-                aria-label={column.tip}
-                {...own}
-                onFocus={() => {
-                  own.onFocus()
-                  setPointed(index)
-                }}
-                onBlur={() => leave(index)}
-                onPointerEnter={() => setPointed(index)}
-                onPointerLeave={() => leave(index)}
-              >
-                <span className="pw-plot">
-                  <span className="pw-bar" style={{ height: `${Number((column.share * 100).toFixed(2))}%` }} />
-                </span>
-                <span className="pw-day">{column.label}</span>
-              </div>
-            )
-          })}
+      {week}
+      {total !== null && (
+        <div className="play-total">
+          <span className="sr-only">{total.spoken}</span>
+          <span className="fig" aria-hidden="true">
+            {total.value}
+            <small>{total.unit}</small>
+          </span>
+          <span aria-hidden="true">in all</span>
+          <span aria-hidden="true">
+            since <b>{total.since}</b>
+          </span>
         </div>
       )}
+      {total !== null && (
+        <p className="play-foot">
+          <span className="sr-only">{total.spoken}</span>
+          <span aria-hidden="true">
+            <b>
+              {total.value} {total.unit}
+            </b>{' '}
+            in all · counted since {total.since}
+          </span>
+        </p>
+      )}
     </div>
+  )
+}
+
+/** Its style: the total beside the rest in quiet figures, or on a gold plate. */
+function PlaytimeSettingsForm({
+  widget, change,
+}: { widget: Widget; ctx: WidgetContext; change: (settings: Record<string, unknown>) => void }) {
+  const style = playStyle(widget.settings)
+  return (
+    <fieldset className="pm-set">
+      <legend>Style</legend>
+      <div className="pm-set-row">
+        <span>
+          The total in all
+          <small>{PLAY_STYLES.find((one) => one.id === style)?.about}</small>
+        </span>
+        <span className="play-styles">
+          <Segmented<PlayStyle>
+            label="Style"
+            options={PLAY_STYLES.map((one) => ({ value: one.id, label: one.name }))}
+            value={style}
+            onChange={(value) => change({ ...widget.settings, style: value })}
+          />
+        </span>
+      </div>
+    </fieldset>
   )
 }
 
@@ -155,11 +250,12 @@ export const RESETS: WidgetType = {
 export const PLAYTIME: WidgetType = {
   id: 'playtime',
   name: 'Playtime',
-  about: 'Whether the game runs, this session and today.',
+  about: 'Whether the game runs, this session, today and the time in all.',
   sign: 'play',
   min: { w: 2, h: 1 },
   max: { w: 4, h: 2 },
   start: { w: 2, h: 1 },
   settings: {},
   View: PlaytimeView,
+  Settings: PlaytimeSettingsForm,
 }

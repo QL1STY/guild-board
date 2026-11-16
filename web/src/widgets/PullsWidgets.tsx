@@ -1,4 +1,4 @@
-import { num, plural } from '../format.ts'
+import { num } from '../format.ts'
 import { useModel, useTick } from '../live.ts'
 import {
   bannerLine, bannersShown, endsIn, GUARANTEE_NOT_KNOWN, isRunning, pityWords, POOL_LABELS, sharesPity,
@@ -8,12 +8,12 @@ import { SegmentRing, Seal } from '../ui/marks.tsx'
 import { Picture } from '../ui/Picture.tsx'
 import { useHead, type WidgetContext, type WidgetType } from './widget.ts'
 import {
-  faceTitle, fiftyRecord, lastFive, LUCK_WHAT, savingsBy, savingsSet, wishShort,
+  faceTitle, fiftyRecord, lastFive, LUCK_WHAT, wishShort,
 } from './widgetview.ts'
 
 /*
  * The six Pulls widgets (the Pulls plan, Task 12; the sketch pulls-widgets.html), on the Board and on the overlay's list:
- * Wishing now, Pity, Savings, Wishlist, Last pulls and Luck. Each reads the Pulls model once for itself, and again on
+ * Wishing now, Pity, Wishlist, Last pulls and Luck (Savings is Primogems.tsx). Each reads the Pulls model once for itself, and again on
  * the core's events, as the Board's widgets read theirs. Each says so while it reads, and that there is no wish history
  * before an import. They draw with the widget roles alone (widgets.css).
  */
@@ -21,7 +21,6 @@ import {
 const MINUTE_MS = 60_000
 const READING = 'Reading the pulls…'
 const NO_HISTORY = 'No wish history yet.'
-const PRIMOGEM = '/api/icon/static.primogem'
 
 /** The sign of an item that has no picture: a character's head and shoulders, or a weapon's gem. */
 const signOf = (kind: WishKind) => (kind === 'weapon' ? 'gem' : 'person')
@@ -201,37 +200,6 @@ function PitySettings({
   )
 }
 
-// ---------------------------------------------------------------- Savings
-
-/**
- * Savings (the sketch's, without its bars: the plan's call 19): the pulls as estimated now, large, with the pulls by the
- * next version's end under them, the card's total (the second pass); the heading says when the balance was set.
- */
-function SavingsView({ ctx }: { widget: Widget; ctx: WidgetContext }) {
-  const data = usePulls(ctx)
-  const set = data === null || data.uid === null ? null : data.savings.set
-  useHead({ meta: set === null ? null : savingsSet(set, ctx.live.now()) })
-  const wait = waiting(data)
-  if (wait !== null || data === null) return wait
-  const { pulls } = data.savings
-  if (set === null || pulls === null) {
-    return (
-      <p className="wid-line" data-centre>
-        Set the balance on the Pulls page.
-      </p>
-    )
-  }
-  return (
-    <div className="sv" data-centre>
-      <p className="sv-big">
-        <Picture src={PRIMOGEM} sign="gem" className="sv-gem" />
-        {plural(pulls, 'pull')}
-      </p>
-      <p className="sv-by">{savingsBy(data.savings)}</p>
-    </div>
-  )
-}
-
 // ---------------------------------------------------------------- Wishlist
 
 type Face = { key: string; name: string; kind: WishKind; rank: number; icon: string | null; when: string }
@@ -362,18 +330,6 @@ export const PITY: WidgetType = {
   settings: { show: 'character' },
   View: PityView,
   Settings: PitySettings,
-}
-
-export const SAVINGS: WidgetType = {
-  id: 'savings',
-  name: 'Savings',
-  about: 'Your pulls now and by the end of the next version.',
-  sign: 'gem',
-  min: { w: 2, h: 2 },
-  max: { w: 4, h: 3 },
-  start: { w: 2, h: 2 },
-  settings: {},
-  View: SavingsView,
 }
 
 export const WISHLIST: WidgetType = {

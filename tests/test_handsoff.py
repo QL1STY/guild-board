@@ -415,6 +415,9 @@ WIDE_ADDRESS_NAMES = {
     # design, 3.2).
     r"\bpublic_address\b": {"characters/art.py", "views/endgame_card.py"},
     r"\bwarm_public\b": {"characters/art.py", "core.py"},
+    # The Genshin Impact Wiki on Fandom's dates of upcoming events (the widgets plan, Task 2b): its fetches and its own check are
+    # named only by the module that reads it, which the core gives no address.
+    r"\b(?:fetch_fandom_\w+|fandom_\w+_url|is_fandom_query|check_fandom|_fandom_get|FANDOM_\w+)\b": {"sources/fandom_events.py"},
     r"\bis_allowed\b": set(),
     _from_netpolicy("check"): set(),
     _from_netpolicy("_open"): set(),
@@ -439,12 +442,85 @@ def test_the_lists_address_and_the_wide_address_check_are_named_only_where_they_
     assert found == [True, True, True, False, False, False]
 
 
+async def test_each_of_the_wikis_lists_is_read_at_most_once_a_day(store):
+    """CLAUDE.md: each of the HoYoLAB wiki's lists is read at most once a day. Two readers read them (the Characters pages'
+    and the Pulls icons'), on the same store; neither, nor a new one of each (a start of Guild Board), reads a list again
+    within the day, whatever names lack their icons (the audit of 2026-11-09, H1)."""
+    import json
+    from datetime import datetime, timedelta, timezone
+
+    from guildboard.characters.wiki import CharacterWiki
+    from guildboard.pulls.wiki import WIKI_URL, WikiIcons
+    from pulls_samples import CHARACTERS, WEAPONS, wiki_page
+    from support import FakeClock
+
+    asked: list[tuple[str, int]] = []
+
+    def fetch(url, *, headers=None, body=None):
+        assert url == WIKI_URL
+        menu, page = json.loads(body)["menu_id"], json.loads(body)["page_num"]
+        asked.append((menu, page))
+        entries = {"2": CHARACTERS, "4": WEAPONS}.get(menu, [{**WEAPONS[0], "name": "A Set"}])
+        return wiki_page(entries if page == 1 else [], len(entries))
+
+    clock = FakeClock(datetime(2026, 11, 15, 9, 0, tzinfo=timezone.utc))
+    for step in range(4):
+        await CharacterWiki(store, clock, fetch, lambda: "7.1").lists()
+        await WikiIcons(store, clock, fetch).refresh([("character", f"Nobody {step}"), ("weapon", f"Nothing {step}")])
+        clock.advance(hours=5)
+    assert sorted(menu for menu, page in asked if page == 1) == ["2", "4", "5"]
+    clock.advance(hours=4)   # a day and an hour after the first read
+    await WikiIcons(store, clock, fetch).refresh([("character", "Nobody 9")])
+    assert sorted(menu for menu, page in asked if page == 1) == ["2", "2", "4", "4", "5"]
+
+
+def test_the_only_address_of_the_fandom_wiki_is_its_api_with_two_query_shapes():
+    # The widgets plan, Task 2b (the player's choice, 2026-11-15): the dates of upcoming events come from the Genshin Impact Wiki on
+    # Fandom's MediaWiki API, at one path, in the two shapes the rules line names, and nowhere else on that host. The wide checks do
+    # not let it through, and the rules line is in CLAUDE.md.
+    assert netpolicy.FANDOM_API == "https://genshin-impact.fandom.com/api.php"
+    assert netpolicy.FANDOM_UPCOMING_QUERY == (
+        ("action", "query"), ("list", "categorymembers"), ("cmtitle", "Category:Upcoming_Content"), ("cmlimit", "100"),
+        ("format", "json"), ("formatversion", "2"),
+    )
+    assert netpolicy.FANDOM_PAGES_QUERY == (
+        ("action", "query"), ("prop", "revisions"), ("rvprop", "content"), ("rvslots", "main"), ("format", "json"),
+        ("formatversion", "2"),
+    )
+    assert netpolicy.FANDOM_MAX_TITLES == 50
+    assert not netpolicy.is_allowed(netpolicy.fandom_upcoming_url()) and not netpolicy.is_allowed(netpolicy.FANDOM_API)
+    assert netpolicy.is_fandom_query(netpolicy.fandom_upcoming_url())
+    assert netpolicy.is_fandom_query(netpolicy.fandom_pages_url(["A page"]))
+    assert not netpolicy.is_fandom_query("https://genshin-impact.fandom.com/api.php?action=query&list=search&srsearch=x")
+    # The API's path is written in netpolicy.py alone, and the host's name only there, in the wiki's search link for the player's
+    # browser (achievements/notes.py) and in the price list's source note (ledger/reasons.py), which are never requested.
+    assert [name for name, text in _sources() if "/api.php" in text] == ["netpolicy.py"]
+    assert {name for name, text in _sources() if "genshin-impact.fandom.com" in text} == {
+        "netpolicy.py", "achievements/notes.py", "ledger/reasons.py",
+    }
+    rules = (SRC.parents[1] / "CLAUDE.md").read_text(encoding="utf-8")
+    assert "https://genshin-impact.fandom.com/api.php" in rules and "`netpolicy.FANDOM_API`" in rules
+    assert "at most one answered read a day; a failed read is tried again after 15 minutes, then less often, after the first run's consent and never in the demo" in rules
+
+
 def test_the_calculator_auth_names_appear_nowhere():
     # The Characters design, H2: the calculator is read as the player set it up. The name of the library's call that
     # switches its sync on, and the address it posts to, are written nowhere in src/guildboard, comments included.
     for name, text in _sources():
         for forbidden in ("_enable_calculator_sync", "avatar/auth"):
             assert forbidden not in text, f"{forbidden} appears in {name}"
+
+
+def test_the_event_calendar_is_asked_for_in_one_place_only():
+    # The widgets plan, Task 2: HoYoLAB's event calendar is read through get_genshin_event_calendar in sources/hoyolab.py alone,
+    # named in READ_METHODS and called by `_calendar`: nothing else in src/guildboard names it, comments included.
+    for name, text in _sources():
+        if name != "sources/hoyolab.py":
+            assert "get_genshin_event_calendar" not in text, f"get_genshin_event_calendar appears in {name}"
+    source = dict(_sources())["sources/hoyolab.py"]
+    assert source.count("get_genshin_event_calendar") == 2
+    assert re.search(r'READ_METHODS = frozenset\((?:[^\n]*\n)*?\s+"get_genshin_event_calendar",', source)
+    assert re.search(r'async def _calendar\((?:[^\n]*\n)*?\s+raw = await raw_of\(client, "get_genshin_event_calendar", token\.uid\)', source)
 
 
 def test_fetch_bytes_in_the_art_cache_is_used_not_forgotten():
@@ -1097,9 +1173,12 @@ PUBLIC_PICTURES = (
 
 def _beyond_the_announcements(requests: list[tuple[str, str]]) -> list[tuple[str, str]]:
     """What a live core asked for besides the announcements, the wiki's lists and entries, the art hosts' pictures and
-    the Endgame headers' public pictures."""
+    the Endgame headers' public pictures, and the Fandom wiki's dates of upcoming events: a GET at its one address in one of its
+    two query shapes (the widgets plan, Task 2b)."""
     def allowed(method: str, url: str) -> bool:
         bare = url.partition("?")[0]
+        if method == "GET" and netpolicy.is_fandom_query(url):
+            return True
         if (method, bare) in ANNOUNCEMENTS or (method, bare) == WIKI_LISTS or (method, bare) == WIKI_ENTRY:
             return True
         if (method, url) in {("GET", picture) for picture in PUBLIC_PICTURES}:
@@ -1379,6 +1458,62 @@ def test_the_gallery_reads_only_pictures_in_the_screenshot_folder_and_never_writ
     assert any(_inside(path, paths.data_dir / "gallery-thumbs") for path in _written)
     assert _files_with_times(home) == before
     assert started == [folder / "20261012211403.png"]
+
+
+def test_the_gallery_reads_only_the_pictures_and_videos_in_the_added_folders_and_never_writes_there(
+    tmp_path, clock, monkeypatch
+):
+    # Folders the player adds in Settings: the pictures (PNG, JPEG) and videos (MP4, WebM) directly inside each are listed
+    # and read, never written, moved or deleted. A subfolder's files and other files are not touched; the thumbnails and
+    # nothing else are written, in Guild Board's own folder. Nothing is read before the gallery is on.
+    global _watching, _read_under
+    from pulls_samples import picture_bytes
+
+    home = tmp_path / "home"
+    monkeypatch.setenv("USERPROFILE", str(home))
+    made_up_game(home)
+    made_up_screenshots(home)
+    added = tmp_path / "Clips"
+    (added / "inner").mkdir(parents=True)
+    (added / "20261001100000.jpg").write_bytes(picture_bytes("JPG"))
+    (added / "20261002100000.png").write_bytes(picture_bytes("PNG"))
+    (added / "20261003100000.mp4").write_bytes(b"\x00\x00\x00\x18ftypmp42" + bytes(500))
+    (added / "20261004100000.webm").write_bytes(b"\x1a\x45\xdf\xa3" + bytes(500))
+    (added / "inner" / "20250101120000.webm").write_bytes(b"\x1a\x45\xdf\xa3")
+    (added / "notes.txt").write_text("not a picture", encoding="utf-8")
+    (added / "20261005100000.gif").write_bytes(b"GIF89a")
+    listed = {_file_key(path) for path in added.iterdir() if path.suffix.lower() in (".jpg", ".png", ".mp4", ".webm")}
+    before = _files_with_times(added)
+    paths = AppPaths(tmp_path / "data")
+    core = Core(paths, demo=False, clock=clock, source=AccountSource(), sleep=FakeSleep(clock), process_lister=lambda: set())
+    _reads.clear()
+    _written.clear()
+    _read_under = _file_key(added)
+    _watching = True
+    try:
+        with TestClient(create_app(core, PORT), base_url=BASE) as client:
+            client.get("/launch", params={"k": core.launch_secret}, follow_redirects=False)
+            assert client.post("/api/gallery/folders", json={"path": str(added)}).status_code == 200
+            assert _reads == []  # adding a folder asks only what kind it is
+            assert client.put("/api/settings", json={"gallery_enabled": True}).status_code == 200
+            model = client.post("/api/gallery/rescan").json()
+            assert (model["count"], model["videos"], model["added"]) == (7, 2, 1)
+            assert _reads == []  # listing opens no file
+            for picture in (picture for month in model["months"] for picture in month["pictures"]):
+                client.get(f"/api/gallery/{picture['id']}/thumb")
+                assert client.get(f"/api/gallery/{picture['id']}/full", headers={"Range": "bytes=0-99"}).status_code in (200, 206)
+            assert client.post("/api/gallery/folders/remove", json={"path": str(added)}).status_code == 200
+            assert client.post("/api/gallery/rescan").json()["count"] == 3
+        core.store.close()
+    finally:
+        _watching = False
+        _read_under = None
+    assert {_file_key(path) for path in _reads} == listed
+    assert not any(_file_key(path).startswith(_file_key(added / "inner")) for path in _reads)
+    assert [path for path in _written if _inside(path, added)] == []
+    assert [path for path in _written if _inside(path, home)] == []
+    assert any(_inside(path, paths.data_dir / "gallery-thumbs") for path in _written)
+    assert _files_with_times(added) == before
 
 
 def _log_name(url: str) -> str:

@@ -25,6 +25,36 @@
 }
 .ga-tile:hover { border-color: var(--gold); box-shadow: 0 2px 8px color-mix(in srgb, var(--refused) 22%, transparent); }
 .ga-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* A video's tile: the window draws its first frame (it takes no click), with a play mark and its length. */
+.ga-tile video { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.ga-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding-left: 3px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .45);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  transition: background-color var(--t-hover);
+}
+.ga-tile:hover .ga-play { background: rgba(0, 0, 0, .65); }
+.ga-dur {
+  position: absolute;
+  right: 7px;
+  bottom: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .7), 0 0 6px rgba(0, 0, 0, .35);
+}
 /* White over the picture, with a shadow that keeps it readable over a light sky. */
 .ga-time {
   position: absolute;
@@ -63,7 +93,8 @@
 @keyframes ga-fade { from { opacity: 0; } }
 @keyframes ga-rise { from { opacity: 0; transform: scale(.98); } }
 .ga-big { position: relative; aspect-ratio: 16 / 9; background: #1E2230; }
-.ga-big img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ga-big img, .ga-big video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ga-big video { background: #000; }
 .ga-nav {
   position: absolute;
   top: 50%;

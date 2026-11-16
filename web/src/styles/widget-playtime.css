@@ -1,0 +1,119 @@
+/*
+ * Playtime's time in all (the widgets polish mockup, section 3): the total Guild Board counted from the process list, and
+ * the day it began counting. In quiet figures it stands at the right of the session and the week (two cells across and
+ * one down, and three across), and under them at two cells across and two down, as a line with the day; on a gold plate it
+ * is the second of two plates. The rest of the widget is widgets.css's. Only the widget roles are drawn with.
+ */
+.play-total {
+  flex: none;
+  margin-left: auto;
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+  text-align: right;
+}
+.play-total .fig {
+  font-size: 22px;
+}
+.play-total > span:not(.fig, .sr-only) {
+  font-size: 11.5px;
+  line-height: 1.15;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.play-total b {
+  color: var(--w-ink2);
+}
+.play-foot {
+  display: none;
+  flex: none;
+  margin: 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--w-line);
+  font-size: 12px;
+  color: var(--w-muted);
+}
+.play-foot b {
+  font-size: 13.5px;
+  color: var(--w-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The gold plate: the session on one plate, the total on a gold one. */
+.play-plates {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+.pl {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 3px;
+  padding: 4px 10px 5px;
+  border-radius: 9px;
+  background: var(--w-plate);
+}
+.pl p {
+  margin: 0;
+}
+.pl .fig {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pl .play-what {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pl.gold {
+  border: 1px solid color-mix(in srgb, var(--w-fill) 35%, transparent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--w-fill) 16%, var(--w-plate)), var(--w-plate) 75%);
+}
+.pl .lbl {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--w-gold-ink);
+  white-space: nowrap;
+}
+.pl .lbl .sign {
+  width: 12px;
+  height: 12px;
+}
+
+/* Three cells across or more: the plates beside the week. */
+@container (min-width: 500px) {
+  .play-plates {
+    flex: none;
+    width: 300px;
+  }
+}
+/* Two cells across and two down: the total is a line at the foot, saying from when. */
+@container (max-width: 499px) and (min-height: 180px) {
+  .play-total {
+    display: none;
+  }
+  .play-foot {
+    display: block;
+  }
+  .play-plates {
+    flex: none;
+  }
+}
+
+/* The two styles of its settings, as wide as each other. */
+.play-styles .gb-seg {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+.play-styles .gb-seg button {
+  text-align: center;
+}

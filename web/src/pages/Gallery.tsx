@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '../styles/gallery.css'
 import { api, messageOf } from '../api.ts'
 import { Frame } from '../frame/Frame.tsx'
@@ -6,14 +6,17 @@ import type { Live } from '../live.ts'
 import { hashOf } from '../route.ts'
 import { Segmented } from '../ui/Segmented.tsx'
 import {
+  bodyOf,
+  clock,
+  countText,
   type GalleryModel,
   type GalleryPicture,
   inOrder,
-  photos,
   pictureUrl,
   SHOWS,
   type Show,
   stepShown,
+  videoCount,
   visibleMonths,
   withFavourite,
 } from './galleryview.ts'
@@ -56,13 +59,16 @@ function LargeView({
   onFavourite: (on: boolean) => void
 }) {
   const [size, setSize] = useState<string | null>(null)
+  const [length, setLength] = useState<string>('')
   const [said, setSaid] = useState<string | null>(null)
   const close = useRef<HTMLButtonElement>(null)
   const dialog = useRef<HTMLElement>(null)
   const latest = useRef({ onMove, onClose })
   latest.current = { onMove, onClose }
+  const video = picture.video === true
   useEffect(() => {
     setSize(null)
+    setLength('')
     setSaid(null)
   }, [picture.id])
   useEffect(() => {
@@ -75,10 +81,12 @@ function LargeView({
         event.stopPropagation()
         latest.current.onClose()
       } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        // A video that has the focus uses the arrows to skip through itself.
+        if (event.target instanceof HTMLVideoElement) return
         event.preventDefault()
         latest.current.onMove(event.key)
       } else if (event.key === 'Tab' && dialog.current !== null) {
-        const focusable = [...dialog.current.querySelectorAll<HTMLElement>('button:not(:disabled)')]
+        const focusable = [...dialog.current.querySelectorAll<HTMLElement>('button:not(:disabled), video[controls]')]
         const first = focusable[0]
         const last = focusable[focusable.length - 1]
         if (!dialog.current.contains(document.activeElement)) {
@@ -121,15 +129,39 @@ function LargeView({
   return (
     <div className="ga-layer">
       <div className="ga-dim" data-testid="gallery-dim" onClick={onClose} />
-      <section ref={dialog} className="ga-light" role="dialog" aria-modal="true" aria-label="Photo" data-testid="gallery-view">
+      <section
+        ref={dialog}
+        className="ga-light"
+        role="dialog"
+        aria-modal="true"
+        aria-label={video ? 'Video' : 'Photo'}
+        data-testid="gallery-view"
+      >
         <div className="ga-big">
-          <img
-            key={picture.id}
-            src={full}
-            alt={`Photo taken ${picture.when}`}
-            data-testid="gallery-full"
-            onLoad={(event) => setSize(`${event.currentTarget.naturalWidth} × ${event.currentTarget.naturalHeight}`)}
-          />
+          {video ? (
+            <video
+              key={picture.id}
+              src={full}
+              controls
+              preload="metadata"
+              playsInline
+              aria-label={`Video taken ${picture.when}`}
+              data-testid="gallery-video"
+              onLoadedMetadata={(event) => {
+                setSize(`${event.currentTarget.videoWidth} × ${event.currentTarget.videoHeight}`)
+                setLength(clock(event.currentTarget.duration))
+              }}
+              onError={() => setSaid('This video could not be played here.')}
+            />
+          ) : (
+            <img
+              key={picture.id}
+              src={full}
+              alt={`Photo taken ${picture.when}`}
+              data-testid="gallery-full"
+              onLoad={(event) => setSize(`${event.currentTarget.naturalWidth} × ${event.currentTarget.naturalHeight}`)}
+            />
+          )}
           <button
             type="button"
             className="ga-nav prev"
@@ -161,6 +193,18 @@ function LargeView({
             <div className="ga-k">Size</div>
             <span data-testid="gallery-size">{size ?? '…'}</span>
           </div>
+          {video && length !== '' && (
+            <div>
+              <div className="ga-k">Length</div>
+              <span data-testid="gallery-length">{length}</span>
+            </div>
+          )}
+          {picture.folder !== undefined && (
+            <div>
+              <div className="ga-k">Folder</div>
+              <span data-testid="gallery-folder">{picture.folder}</span>
+            </div>
+          )}
           <button
             type="button"
             className={picture.favourite ? 'gb-btn quiet ga-fav on' : 'gb-btn quiet ga-fav'}
@@ -169,7 +213,7 @@ function LargeView({
           >
             {picture.favourite ? '★' : '☆'} Favourite
           </button>
-          {CAN_COPY && (
+          {CAN_COPY && !video && (
             <button type="button" className="gb-btn quiet" onClick={() => void copy()}>
               Copy picture
             </button>
@@ -185,6 +229,83 @@ function LargeView({
         </div>
       </section>
     </div>
+  )
+}
+
+/** Whether the element is on screen or near it. A tile's video is loaded only then, and let go when it is far off. */
+function useNear(ref: RefObject<HTMLElement | null>, active: boolean): boolean {
+  const [near, setNear] = useState(false)
+  useEffect(() => {
+    const element = ref.current
+    if (!active || element === null) return
+    if (typeof IntersectionObserver !== 'function') {
+      setNear(true)
+      return
+    }
+    const watch = new IntersectionObserver((entries) => setNear(entries[entries.length - 1]?.isIntersecting === true), {
+      rootMargin: '400px 0px',
+    })
+    watch.observe(element)
+    return () => watch.disconnect()
+  }, [ref, active])
+  return near
+}
+
+/**
+ * A tile: a picture's thumbnail from the core; for a video the first frame, which the window itself draws (a muted
+ * video that loads its metadata and sits a little way in, only while the tile is near the screen), with a play mark and,
+ * once the window knows it, its length.
+ */
+function Tile({ picture, onOpen }: { picture: GalleryPicture; onOpen: () => void }) {
+  const video = picture.video === true
+  const button = useRef<HTMLButtonElement>(null)
+  const near = useNear(button, video)
+  const [length, setLength] = useState('')
+  const [broken, setBroken] = useState(false)
+  return (
+    <button
+      ref={button}
+      type="button"
+      className={`${picture.favourite ? 'ga-tile fav' : 'ga-tile'}${video ? ' video' : ''}`}
+      aria-label={`${video ? 'Video' : 'Photo'} taken ${picture.when}${picture.favourite ? ', favourite' : ''}`}
+      data-testid="gallery-tile"
+      data-id={picture.id}
+      onClick={onOpen}
+    >
+      {video ? (
+        near &&
+        !broken && (
+          <video
+            src={`${pictureUrl(picture.id, 'full')}#t=0.1`}
+            preload="metadata"
+            muted
+            playsInline
+            tabIndex={-1}
+            aria-hidden="true"
+            onLoadedMetadata={(event) => setLength(clock(event.currentTarget.duration))}
+            onError={() => setBroken(true)}
+          />
+        )
+      ) : (
+        <img src={pictureUrl(picture.id, 'thumb')} alt="" loading="lazy" decoding="async" />
+      )}
+      {video && (
+        <span className="ga-play" aria-hidden="true">
+          ▶
+        </span>
+      )}
+      <span className="ga-time">{picture.time}</span>
+      {video && length !== '' && (
+        <span className="ga-dur" data-testid="gallery-duration">
+          {length}
+        </span>
+      )}
+      {picture.favourite && (
+        <span className="ga-star" aria-hidden="true">
+          ★
+        </span>
+      )}
+    </button>
   )
 }
 
@@ -244,11 +365,12 @@ export function Gallery({ live }: { live: Live }) {
     }
   }
 
+  const state = model === null ? null : bodyOf(model)
   const controls =
-    model !== null && model.enabled && !model.folder_missing ? (
+    model !== null && model.enabled && state !== 'missing' ? (
       <>
         <span className="gb-status" data-testid="gallery-count">
-          {photos(model.count)}
+          {countText(model.count, model.videos)}
         </span>
         <Segmented label="Show" options={SHOWS} value={show} onChange={setShow} />
         <button type="button" className="gb-btn quiet" disabled={looking} onClick={() => void lookAgain()}>
@@ -260,23 +382,25 @@ export function Gallery({ live }: { live: Live }) {
   let body
   if (model === null) {
     body = <div className="gb-panel gb-empty">{error ?? 'Looking at your screenshots…'}</div>
-  } else if (!model.enabled) {
+  } else if (state === 'off') {
     body = (
       <div className="gb-panel gb-empty">
         The screenshot gallery is turned off. Turn it on in <a href={hashOf('settings')}>Settings</a>.
       </div>
     )
-  } else if (model.folder_missing) {
+  } else if (state === 'missing') {
     body = (
       <div className="gb-panel gb-empty" data-testid="gallery-missing">
         The game's ScreenShot folder was not found. Choose it in <a href={hashOf('settings')}>Settings</a>, then come
-        back here.
+        back here. You can also add a folder of your own there.
       </div>
     )
-  } else if (model.count === 0) {
+  } else if (state === 'empty' && model.enabled) {
     body = (
       <div className="gb-panel gb-empty">
-        No photos yet. The pictures you take in the game show here; press Look again after taking some.
+        {model.added === 0
+          ? 'No photos yet. The pictures you take in the game show here; press Look again after taking some.'
+          : 'No photos or videos yet. The pictures and videos in the game\'s folder and in the folders you added show here; press Look again after adding some.'}
       </div>
     )
   } else if (months.length === 0) {
@@ -294,27 +418,11 @@ export function Gallery({ live }: { live: Live }) {
         {months.map((month) => (
           <section key={month.label} className="ga-month" aria-label={month.label}>
             <h2 className="ga-month-h">
-              {month.label} <span>{photos(month.pictures.length)}</span>
+              {month.label} <span>{countText(month.pictures.length, videoCount(month.pictures))}</span>
             </h2>
             <div className="ga-grid">
               {month.pictures.map((picture) => (
-                <button
-                  key={picture.id}
-                  type="button"
-                  className={picture.favourite ? 'ga-tile fav' : 'ga-tile'}
-                  aria-label={`Photo taken ${picture.when}${picture.favourite ? ', favourite' : ''}`}
-                  data-testid="gallery-tile"
-                  data-id={picture.id}
-                  onClick={() => setOpen(picture.id)}
-                >
-                  <img src={pictureUrl(picture.id, 'thumb')} alt="" loading="lazy" decoding="async" />
-                  <span className="ga-time">{picture.time}</span>
-                  {picture.favourite && (
-                    <span className="ga-star" aria-hidden="true">
-                      ★
-                    </span>
-                  )}
-                </button>
+                <Tile key={picture.id} picture={picture} onOpen={() => setOpen(picture.id)} />
               ))}
             </div>
           </section>

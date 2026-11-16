@@ -96,6 +96,19 @@ class History:
                 cursor = piece_end
         return out
 
+    def total_playtime(self, now: datetime, running: bool) -> tuple[int, datetime] | None:
+        """The minutes in all that Guild Board counted from the process list, and when it began counting (the first
+        session's start); None before any session. A session the game was already in when Guild Board first looked starts
+        at that look, so nothing before it is counted. While the game runs the session in the store was saved up to a
+        minute ago, so the time since is added; with the game gone, the saved end stands."""
+        sessions = self._store.all_sessions()
+        if not sessions:
+            return None
+        seconds = sum(max(0.0, (session.ended_at - session.started_at).total_seconds()) for session in sessions)
+        if running:
+            seconds += max(0.0, (now - sessions[-1].ended_at).total_seconds())
+        return int(seconds // 60), sessions[0].started_at
+
     def minutes_by_hour(self, first: date, last: date, tz: tzinfo | None) -> list[list[float]]:
         """The minutes played in each hour of each weekday (seven rows from Monday, 24 hours each) on the clock of `tz`,
         over the dates `first` to `last` of that clock: from midnight at the start of `first` to midnight at the end of

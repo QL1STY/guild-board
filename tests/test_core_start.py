@@ -99,6 +99,7 @@ async def test_a_start_answers_before_the_source_exists_and_the_sync_then_uses_i
         return None
 
     core.banners.run = no_banners
+    core.fandom_events.run = no_banners  # nor the Fandom wiki's dates of upcoming events
     core.characters.wanted = lambda *keys: None
     core.characters.warm_art = lambda: None
     try:

@@ -1,0 +1,399 @@
+/*
+ * The Endgame resets widget's With pictures drawing (the polish pass, mockup 2 D): the Stats card's headers in small. Each mode's
+ * picture (egx-pic) is cropped as the card crops it (cropStyle) over the mode's colour gradient, which is all that shows where the
+ * art cache keeps no picture yet or the picture fails. Every scrim and veil is made from the widget's own background (--w-bg), so
+ * the words read dark on Parchment's light scrim and light on the dark looks' and the overlay's. A mode not played this cycle
+ * (.off) has its picture greyed and dimmed. Also the settings' picker (eg-picks). Widget roles alone.
+ */
+.egx-pic {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--c) 28%, var(--w-bg)),
+    color-mix(in srgb, var(--c) 85%, var(--w-bg))
+  );
+}
+.egx-img {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+}
+.off .egx-pic {
+  filter: grayscale(1);
+  opacity: 0.3;
+}
+.egp-ic {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 16%, var(--w-bg));
+  border: 1.5px solid var(--c);
+}
+.egp-ic .sign {
+  width: 55%;
+  height: 55%;
+}
+/* With the mode's icon (the Stats card's) there is no ring: the badge is the mark, at the size of the ring it replaces. */
+.egp-ic[data-icon],
+.off .egp-ic[data-icon] {
+  border: 0;
+  background: none;
+}
+.off .egp-ic .egx-mi img {
+  opacity: 0.55;
+}
+.egp-ic .egx-mi {
+  width: 100%;
+  height: 100%;
+}
+.egp-ic .egx-mi .sign {
+  width: 55%;
+  height: 55%;
+}
+.off .egp-ic {
+  color: var(--w-muted);
+  border-color: var(--w-track);
+  background: var(--w-bg);
+}
+.egp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 19px;
+  padding: 0 7px;
+  border-radius: 99px;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--w-ink);
+  background: color-mix(in srgb, var(--w-bg) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+}
+.egp-pill small {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--w-muted);
+}
+.egp-pill .sign {
+  width: 11px;
+  height: 11px;
+  color: var(--c);
+  stroke-width: 2;
+}
+.off .egp-pill {
+  border-color: var(--w-line);
+}
+
+/* One cell tall: a picture tile for each mode, the time on a pill at the top, the name and the result over a scrim at the foot. */
+.egp3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+}
+.egp-t {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 7px 4px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--c) 40%, var(--w-line));
+}
+.egp-t::before,
+.egp-h::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--w-bg) 96%, transparent) 0%,
+    color-mix(in srgb, var(--w-bg) 84%, transparent) 52%,
+    color-mix(in srgb, var(--w-bg) 8%, transparent) 100%
+  );
+}
+.egp-t > :not(.egx-pic),
+.egp-h > :not(.egx-pic) {
+  position: relative;
+  z-index: 2;
+}
+.egp-t .egp-pill {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  height: 17px;
+  padding: 0 6px;
+  font-size: 11.5px;
+}
+.egp-k {
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--w-ink);
+}
+.off .egp-k {
+  color: var(--w-muted);
+}
+.egp-v {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 19px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-ink);
+  white-space: nowrap;
+}
+.egp-v small {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--w-muted);
+}
+.egp-v.not {
+  align-items: flex-start;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--w-muted);
+  white-space: normal;
+}
+.egp-t.off {
+  border-color: var(--w-line);
+}
+
+/* Two cells tall and two across: a band for each mode, the card's header in small: the sign and the words at the left, the picture over the right of it, fading to the left. */
+.egp-bands {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+}
+.egp-b {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  column-gap: 9px;
+  align-items: center;
+  padding: 0 7px 0 8px;
+  border-radius: 8px 8px 3px 3px;
+  background: var(--w-bg);
+  border: 1px solid var(--w-line);
+  border-bottom: 2px solid var(--c);
+}
+.egp-b .egx-pic {
+  left: 30%;
+}
+.egp-b::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    var(--w-bg) 0%,
+    var(--w-bg) 33%,
+    color-mix(in srgb, var(--w-bg) 72%, transparent) 50%,
+    transparent 82%
+  );
+}
+.egp-b > :not(.egx-pic) {
+  position: relative;
+  z-index: 2;
+}
+.egp-b.off {
+  border-bottom-color: var(--w-track);
+}
+.egp-n {
+  min-width: 0;
+  line-height: 1.15;
+}
+.egp-n b {
+  display: block;
+  overflow: hidden;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--w-ink);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.off .egp-n b {
+  color: var(--w-ink2);
+}
+.egp-n > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 19px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--w-ink);
+  white-space: nowrap;
+}
+.egp-n > span small {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--w-muted);
+}
+.egp-n > span.not {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--w-muted);
+}
+
+/* Two cells tall and three across: a column for each mode, as on Stats: the picture header with its name, then the result and the time. */
+.egp-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.egp-c {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 9px;
+  background: var(--w-plate);
+  border: 1px solid var(--w-line);
+}
+.egp-h {
+  position: relative;
+  flex: none;
+  height: 64px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 0 8px 6px;
+  border-bottom: 2px solid var(--c);
+}
+.egp-h::before {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--w-bg) 94%, transparent) 0%,
+    color-mix(in srgb, var(--w-bg) 74%, transparent) 36%,
+    transparent 78%
+  );
+}
+.egp-h .egp-ic {
+  width: 24px;
+  height: 24px;
+}
+.egp-h b {
+  min-width: 0;
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--w-ink);
+}
+.off .egp-h {
+  border-bottom-color: var(--w-track);
+}
+.egp-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 7px 9px;
+}
+.egp-r {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+}
+.egp-big {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-ink);
+  white-space: nowrap;
+}
+.egp-big.not {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--w-muted);
+  white-space: normal;
+}
+.egp-cap {
+  min-height: 1.15em;
+  margin-top: 2px;
+  overflow: hidden;
+  font-size: 11.5px;
+  color: var(--w-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.egp-foot {
+  min-height: 1.2em;
+  margin-top: auto;
+  padding-top: 5px;
+  border-top: 1px solid var(--w-line);
+  font-size: 11.5px;
+  color: var(--w-muted);
+  white-space: nowrap;
+}
+.egp-foot b {
+  font-size: 13.5px;
+  color: var(--w-ink);
+}
+
+/* The settings' picker (the form in Edit): one radio for each drawing, with the line that says what it draws. */
+.eg-picks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.eg-picks legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.eg-pick {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 1px solid var(--w-line);
+  border-radius: 9px;
+  background: var(--w-plate);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.eg-pick:has(input:checked) {
+  border-color: var(--w-fill);
+  box-shadow: 0 0 0 1px var(--w-fill);
+}
+.eg-pick input {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin: 2px 0 0;
+  accent-color: var(--w-btn);
+  cursor: pointer;
+}
+.eg-pick small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--w-muted);
+}

@@ -146,10 +146,61 @@ class DiaryRecord:
 
 
 @dataclass(frozen=True)
+class CalendarFace:
+    """A character or weapon a banner features. `icon_url` is the address in HoYoLAB's answer ("" when it gave none)."""
+
+    name: str
+    rarity: int
+    icon_url: str
+
+
+@dataclass(frozen=True)
+class CalendarBanner:
+    """A banner of the calendar: its featured 5-stars' names, its dates (UTC ISO text, None when the answer has none) and
+    its faces, 5-stars first. Character pools with the same dates are one banner."""
+
+    kind: str  # "character", "weapon" or "chronicled"
+    names: tuple[str, ...]
+    starts: str | None
+    ends: str | None
+    faces: tuple[CalendarFace, ...]
+
+
+@dataclass(frozen=True)
+class CalendarEvent:
+    """An event of the calendar's `act_list`. `status` is HoYoLAB's: 2 running, 1 announced with no dates. An event with no
+    dates (`dated` False) is "Coming soon": `starts` and `ends` are None, and `source` says whose dates they are ("hoyolab";
+    a later read of another source's dates keeps its own name here). `finished` is the player's own completion
+    (`is_finished`, confirmed by the player on 2026-11-15)."""
+
+    id: int
+    name: str
+    starts: str | None
+    ends: str | None
+    finished: bool
+    primogems: int | None  # the sum of the reward list's Primogems (item 201); None when the event has none
+    explored: float | None  # HoYoLAB's explore percentage, when the event carries one
+    double_left: int | None
+    double_total: int | None
+    status: int = 0
+    dated: bool = False
+    source: str = "hoyolab"
+
+
+@dataclass(frozen=True)
+class CalendarBoardRecord:
+    """What the Calendar widget draws, kept in the calendar document beside the counts and the Characters pages' detail."""
+
+    banners: tuple[CalendarBanner, ...] = ()
+    events: tuple[CalendarEvent, ...] = ()
+
+
+@dataclass(frozen=True)
 class CalendarRecord:
     banners: int
     events: int
     detail: CalendarDetailRecord | None = None  # the Theater's text and the banners' featured names (Part S)
+    board: CalendarBoardRecord | None = None  # the banners and events the Calendar widget draws (None before it existed)
 
 
 # The Characters plan's records (its contract, "Records"): produced by sources/hoyolab.py's reads of the detailed

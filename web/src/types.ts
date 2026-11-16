@@ -135,6 +135,8 @@ export type Settings = {
   gallery_enabled: boolean
   /** The game's ScreenShot folder, found or pasted; "" before either. */
   gallery_folder: string
+  /** The folders the player added to the gallery; changed only by adding and removing one (POST /api/gallery/folders). */
+  gallery_folders: string[]
   /** How large the Characters pages' big pictures are fetched (the Characters design, 11.7): the originals, at most 1,536 pixels, at most 1,024. */
   picture_quality: 'high' | 'medium' | 'low'
   /** The currency of the Ledger's "Spent on Genshin": 'USD' (the default), 'EUR' or 'PLN'. */
@@ -469,6 +471,9 @@ export type BoardModel = {
     today_minutes: number
     /** The minutes played on today's game day and the six before it, oldest first; `day` is "2026-10-13". */
     week: { day: string; minutes: number }[]
+    /** The minutes in all that Guild Board counted from the process list, and when it began counting; null before any session. */
+    total_minutes: number | null
+    counting_since: string | null
   }
   achievements: {
     stages: number
@@ -1128,3 +1133,121 @@ export type YearModel = {
 }
 /** The years that have enough to tell, and the chosen one; both empty while there is nothing. */
 export type YearAnswer = { years: number[]; /** The core's own year, the one still going. */ current_year: number; year: YearModel | null }
+
+/** The groups of earned primogems, as the Ledger sorts them (ledger/reasons.py, GROUPS). */
+export type SourceGroup = 'commissions' | 'welkin' | 'events' | 'endgame' | 'other'
+
+/**
+ * `GET /api/primogems` (views/primogems.py): what the Primogems widget draws besides the balance. `imported` is false until
+ * the game's primogem log was read, and the other fields are then null; `today` and `week` are null while today is not known;
+ * `month` is null while no day of it is known.
+ */
+export type PrimogemsModel = {
+  imported: boolean
+  read_at: string | null
+  today: number | null
+  week: number | null
+  /** The last seven game days, today last. A day that is not `known` is not covered by the log or the diary: 0 there is not "none earned". */
+  days: { day: string; earned: number; known: boolean }[] | null
+  month: {
+    ym: string
+    name: string
+    total: number
+    sources: { group: SourceGroup; label: string; amount: number }[]
+  } | null
+}
+
+/** One thing in `GET /api/next-up` (views/nextup.py): what is ready, or what happens at `at`. */
+export type NextUpItem = {
+  kind: 'timer' | 'resin' | 'expedition' | 'realm' | 'transformer' | 'daily' | 'weekly' | 'banner' | 'endgame' | 'event'
+  name: string
+  /** When it happens; for a ready item, when it became ready where that is known. */
+  at: string | null
+  ready: boolean
+  /** How many things the row stands for: 3 expeditions that are back are one row. */
+  count: number
+  /** The endgame mode of an endgame row; null for any other. */
+  mode: 'abyss' | 'theater' | 'stygian' | null
+  /** The endgame mode's icon, as the Stats card has it (`/api/art/<key>`); null for any other row and until the cache has one. */
+  icon: string | null
+  /** When the wait began, for the styles that draw how far along it is; null where it cannot be known (an expedition's). */
+  started_at: string | null
+}
+
+/** `GET /api/next-up`: the timeline, ready items first, then the rest by time; `ready` counts each ready thing. */
+export type NextUpModel = { items: NextUpItem[]; ready: number }
+
+/** One endgame mode in `GET /api/endgame-resets` (views/endgame_resets.py). */
+export type ResetMode = {
+  mode: 'abyss' | 'theater' | 'stygian'
+  label: string
+  short: string
+  /** Played this cycle, as the last read tells; false for a stale mode. */
+  played: boolean
+  stars: number | null
+  acts: number | null
+  /** The acts of the season, where the read carries them; null otherwise. */
+  acts_of: number | null
+  difficulty: number | null
+  /** When this cycle ends; null where the period ended since the read. */
+  ends_at: string | null
+  /** When the next season starts (the Stygian's, between seasons); null where unknown. */
+  next_starts_at: string | null
+  /** The period ended since the read: the result says nothing of the new cycle. */
+  stale: boolean
+  /** When this cycle began; null for a stale mode and for the Stygian once its season is over. */
+  starts_at: string | null
+  /** HoYoLAB's count of the Theater's medals, where the read carries it; null otherwise. */
+  medals: number | null
+  /** The mode's icon and picture as the Stats card has them (`/api/art/<key>`; the picture is null until the art cache keeps it) and the part of the picture to show. */
+  header: { icon: string | null; picture: string | null; crop: [number, number, number, number] | null }
+  /** HoYoLAB's medal, an address of the art cache: the Theater's mark once kept, and for the Stygian played this season the medal of its difficulty, the picture the Stats card draws; null for the Abyss and where there is none. */
+  medal: string | null
+}
+
+/** `GET /api/endgame-resets`: the three modes in the order Abyss, Theater, Stygian, or none before any endgame read. */
+export type EndgameResetsModel = { read_at: string | null; modes: ResetMode[]; not_played: number }
+
+/** A face on a banner (`GET /api/calendar`): `icon` is the picture's address in the icon cache, null where the answer gave none. */
+export type CalendarFace = { name: string; rarity: number; icon: string | null }
+
+/** A banner of the calendar answer; `kind` is "character", "weapon" or "chronicled", `starts` and `ends` UTC ISO text or null. */
+export type CalendarBanner = {
+  id: string
+  kind: string
+  name: string
+  starts: string | null
+  ends: string | null
+  faces: CalendarFace[]
+}
+
+/**
+ * An event of the calendar answer. `soon` is an event the answer gives no dates ("Coming soon": no start, no end); `source` says
+ * whose dates it has, HoYoLAB's or the Genshin Impact Wiki on Fandom's. `finished` is the player's own completion.
+ */
+export type CalendarEvent = {
+  id: number | string | null
+  name: string
+  starts: string | null
+  ends: string | null
+  finished: boolean
+  primogems: number | null
+  explored: number | null
+  double: { left: number; total: number } | null
+  soon: boolean
+  status: number
+  source: string
+}
+
+/** `GET /api/calendar` (views/calendar.py): `read` is false until a read kept the calendar's board. */
+export type CalendarModel = {
+  read_at: string | null
+  read: boolean
+  banners: CalendarBanner[]
+  events: CalendarEvent[]
+  endgame: ResetMode[]
+  /** The events started, not finished and ending after now. */
+  left: number
+  /** The wiki the upcoming dates came from, for the foot, where an event has them. */
+  upcoming_from: string | null
+}

@@ -21,7 +21,7 @@ CADENCE: dict[str, timedelta | str | None] = {
     "characters": timedelta(hours=6),
     "endgame": timedelta(hours=12),
     "diary": "game_day",
-    "calendar": "game_day",
+    "calendar": timedelta(minutes=30),  # the Calendar widget (the widgets design, 2.3)
 }
 
 

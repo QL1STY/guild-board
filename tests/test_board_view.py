@@ -135,3 +135,41 @@ def test_the_board_model_offers_the_newest_change_to_undo(core):
     stage = core.achievements(Query())["groups"][0]["stages"][0]["id"]
     label = core.progress.set_pinned(stage, True)
     assert core.board_model()["undo"] == label
+
+
+def test_the_board_model_counts_the_play_in_all_and_says_from_when(store):
+    # Two sessions, 90 and 45 minutes, a month apart: the total is their sum and it counts from the first one's start.
+    _play(store, datetime(2026, 9, 12, 18, 0, tzinfo=UTC), 90)
+    _play(store, datetime(2026, 10, 13, 5, 0, tzinfo=UTC), 45)
+    now = datetime(2026, 10, 13, 8, tzinfo=UTC)
+    playtime = build_board(CATALOG, store, History(store), "os_euro", now, False, None)["playtime"]
+    assert playtime["total_minutes"] == 135
+    assert playtime["counting_since"] == "2026-09-12T18:00:00+00:00"
+
+
+def test_the_board_model_has_no_total_before_any_session(store):
+    now = datetime(2026, 10, 13, 8, tzinfo=UTC)
+    playtime = build_board(CATALOG, store, History(store), "os_euro", now, False, None)["playtime"]
+    assert (playtime["total_minutes"], playtime["counting_since"]) == (None, None)
+
+
+def test_the_total_takes_in_the_session_that_runs_up_to_now(store):
+    # The session was last saved 10 minutes after it began; the game still runs 4 minutes later.
+    started = datetime(2026, 10, 13, 7, 0, tzinfo=UTC)
+    _play(store, datetime(2026, 10, 12, 18, 0, tzinfo=UTC), 60)
+    _play(store, started, 10)
+    now = datetime(2026, 10, 13, 7, 14, tzinfo=UTC)
+    running = build_board(CATALOG, store, History(store), "os_euro", now, True, started)["playtime"]
+    assert running["total_minutes"] == 60 + 14
+    # With the game not running the saved end stands: no time is added for a game that is gone.
+    stopped = build_board(CATALOG, store, History(store), "os_euro", now, False, None)["playtime"]
+    assert stopped["total_minutes"] == 70
+
+
+def test_a_session_seen_part_way_counts_only_from_when_guild_board_saw_it(store):
+    # started_before_tool: the game was already running when Guild Board looked, so the session starts at that look.
+    session = store.open_session(datetime(2026, 10, 13, 6, 0, tzinfo=UTC), True)
+    store.touch_session(session, datetime(2026, 10, 13, 6, 30, tzinfo=UTC))
+    now = datetime(2026, 10, 13, 8, tzinfo=UTC)
+    playtime = build_board(CATALOG, store, History(store), "os_euro", now, False, None)["playtime"]
+    assert (playtime["total_minutes"], playtime["counting_since"]) == (30, "2026-10-13T06:00:00+00:00")

@@ -1,6 +1,7 @@
 import http.client
 import io
 import urllib.request
+from urllib.parse import parse_qsl, urlsplit
 
 import pytest
 
@@ -74,6 +75,19 @@ def test_fetch_returns_bytes(monkeypatch):
     monkeypatch.setattr(netpolicy, "_open", fake_open)
     assert fetch_bytes("https://act-webstatic.hoyoverse.com/a.png", timeout=3.0) == b"PNGDATA"
     assert seen == [("https://act-webstatic.hoyoverse.com/a.png", 3.0)]
+
+
+def test_an_address_with_letters_of_another_script_is_sent_percent_encoded(monkeypatch):
+    # The wiki names half its weapons' icons in Chinese (Black Tassel's is 黑缨枪.png): sent as they are written, they never
+    # left the PC (UnicodeEncodeError), and those weapons showed no icon on the Pulls page.
+    seen = []
+    monkeypatch.setattr(netpolicy, "_open", lambda request, timeout: seen.append(request.full_url) or _Response(b"PNG"))
+    assert fetch_bytes("https://bbs.hoyolab.com/hoyowiki/picture/weapon/黑缨枪.png") == b"PNG"
+    assert seen == ["https://bbs.hoyolab.com/hoyowiki/picture/weapon/%E9%BB%91%E7%BC%A8%E6%9E%AA.png"]
+    # An address already encoded, or one with a space, a query or no letter outside ASCII, is sent as a browser sends it.
+    assert netpolicy.sendable("https://a.hoyoverse.com/x%20y.png") == "https://a.hoyoverse.com/x%20y.png"
+    assert netpolicy.sendable("https://a.hoyoverse.com/x y.png?v=1&w=2") == "https://a.hoyoverse.com/x%20y.png?v=1&w=2"
+    assert netpolicy.sendable("https://act-webstatic.hoyoverse.com/a.png") == "https://act-webstatic.hoyoverse.com/a.png"
 
 
 def test_fetch_rejects_oversized_responses(monkeypatch):
@@ -436,3 +450,106 @@ def test_every_request_of_netpolicy_verifies_as_the_entry_chose(monkeypatch):
         truststore.extract_from_ssl()
     netpolicy.take_the_tls_in_use()
     assert context_of_the_opener() is ssl.SSLContext
+
+
+# The dates of upcoming events, from the Genshin Impact Wiki on Fandom (the widgets plan, Task 2b): one path, two query shapes.
+
+FANDOM = "https://genshin-impact.fandom.com/api.php"
+FANDOM_UPCOMING = (
+    FANDOM + "?action=query&list=categorymembers&cmtitle=Category:Upcoming_Content&cmlimit=100&format=json&formatversion=2"
+)
+FANDOM_PAGES = (
+    FANDOM + "?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&formatversion=2&titles="
+)
+
+
+def test_the_fandom_wikis_two_query_shapes_are_the_only_addresses_it_allows():
+    assert netpolicy.is_fandom_query(FANDOM_UPCOMING) and netpolicy.is_fandom_query(netpolicy.fandom_upcoming_url())
+    assert netpolicy.is_fandom_query(FANDOM_PAGES + "Frames of Fierce Splendor|Ley Line Overflow/2026-12-07")
+    assert netpolicy.is_fandom_query(netpolicy.fandom_pages_url(["Frames of Fierce Splendor", "Ley Line Overflow/2026-12-07"]))
+    assert netpolicy.is_fandom_query(FANDOM_PAGES + "|".join(f"Page {n}" for n in range(50)))
+    refused = (
+        FANDOM,  # no query
+        FANDOM + "?action=query",  # a shape of neither kind
+        FANDOM_UPCOMING + "&extra=1",
+        FANDOM_UPCOMING.replace("cmlimit=100", "cmlimit=500"),
+        FANDOM_UPCOMING.replace("Upcoming_Content", "Other"),
+        FANDOM_UPCOMING.replace("list=categorymembers", "list=search"),
+        FANDOM_UPCOMING + "#fragment",
+        FANDOM_UPCOMING.replace("&format=json", ""),
+        FANDOM_UPCOMING.replace("action=query&", "action=query&action=query&"),
+        FANDOM_PAGES,  # no titles
+        FANDOM_PAGES + "a" * 201,
+        FANDOM_PAGES + "|".join(f"Page {n}" for n in range(51)),
+        FANDOM_PAGES + "A|",  # an empty title
+        FANDOM_PAGES + "A<script>",
+        FANDOM_PAGES + "A&titles=B",
+        FANDOM_PAGES.replace("rvprop=content", "rvprop=content|user") + "A",
+        FANDOM_PAGES.replace("action=query&", "action=parse&") + "A",
+        FANDOM_PAGES.replace("&titles=", "&pageids=") + "1",
+        "https://genshin-impact.fandom.com/wiki/Special:Search?query=a",
+        "https://genshin-impact.fandom.com/api.php/x?" + FANDOM_UPCOMING.split("?")[1],
+        FANDOM_UPCOMING.replace("https://", "http://"),
+        FANDOM_UPCOMING.replace("genshin-impact.fandom.com", "fandom.com"),
+        FANDOM_UPCOMING.replace("genshin-impact.fandom.com", "genshin-impact.fandom.com:8443"),
+        FANDOM_UPCOMING.replace("https://", "https://user@"),
+        FANDOM_UPCOMING.replace("https://genshin-impact", "https://evil.example/.genshin-impact"),
+        "https://genshin-impact.fandom.com.evil.example/api.php?" + FANDOM_UPCOMING.split("?")[1],
+        "",
+    )
+    for url in refused:
+        assert not netpolicy.is_fandom_query(url), url
+        with pytest.raises(HostNotAllowed):
+            netpolicy.check_fandom(url)
+    # No other check lets it through: the wide checks and the downloads never reach the wiki.
+    for url in (FANDOM_UPCOMING, FANDOM_PAGES + "A", FANDOM):
+        assert not is_allowed(url)
+        with pytest.raises(HostNotAllowed):
+            fetch_bytes(url)
+        with pytest.raises(HostNotAllowed):
+            netpolicy.fetch_hoyoverse(url)
+
+
+def test_pages_are_asked_for_one_to_fifty_at_a_time_by_titles_of_a_kind_a_page_can_have():
+    for titles in ([], ["A"] * 51, [""], ["  "], ["A|B"], ["A\nB"], ["A[B]"], ["A" * 201], ["{{X}}"], ["A#B"]):
+        with pytest.raises(ValueError):
+            netpolicy.fandom_pages_url(titles)
+    url = netpolicy.fandom_pages_url(["Ley Line Overflow/2026-12-07", "Frames of Fierce Splendor"])
+    assert " " not in url and "|" not in url
+    assert dict(parse_qsl(urlsplit(url).query))["titles"] == "Ley Line Overflow/2026-12-07|Frames of Fierce Splendor"
+
+
+def test_the_fandom_reads_send_a_plain_get_with_the_user_agent_alone_and_follow_no_redirect(monkeypatch):
+    seen = []
+
+    def fake_open(request, timeout):
+        seen.append((request.get_method(), request.full_url, request.data, dict(request.header_items()), request.follow_redirects))
+        return _Response(b"{}")
+
+    monkeypatch.setattr(netpolicy, "_open", fake_open)
+    assert netpolicy.fetch_fandom_upcoming() == b"{}" and netpolicy.fetch_fandom_pages(["Frames of Fierce Splendor"]) == b"{}"
+    assert [(method, data, headers, follow) for method, _, data, headers, follow in seen] == [
+        ("GET", None, {"User-agent": "GuildBoard"}, False)
+    ] * 2
+    assert all(netpolicy.is_fandom_query(url) for _, url, *_ in seen)
+    # Its answer is held to the size the caller allows.
+    monkeypatch.setattr(netpolicy, "_open", lambda request, timeout: _Response(b"x" * 11))
+    with pytest.raises(netpolicy.ResponseTooLarge):
+        netpolicy.fetch_fandom_upcoming(max_bytes=10)
+
+    # Never redirected, not even to the wiki's own other address.
+    def redirecting(request, timeout):
+        netpolicy._CheckedRedirects().redirect_request(request, None, 302, "Found", {}, "https://genshin-impact.fandom.com/wiki/X")
+        raise AssertionError("a redirect was followed")
+
+    monkeypatch.setattr(netpolicy, "_open", redirecting)
+    with pytest.raises(HostNotAllowed):
+        netpolicy.fetch_fandom_upcoming()
+    # A request that is not one of the two shapes is refused before it is opened.
+    opened = []
+    monkeypatch.setattr(netpolicy, "_open", lambda request, timeout: opened.append(request.full_url))
+    with pytest.raises(ValueError):
+        netpolicy.fetch_fandom_pages(["A|B"])
+    with pytest.raises(HostNotAllowed):
+        netpolicy._fandom_get(FANDOM + "?action=query", 10, 10)
+    assert opened == []

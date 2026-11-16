@@ -44,10 +44,15 @@ from guildboard.cloud.service import Local, Online
 from guildboard.cloud.session import CloudStore
 from guildboard.cloud.stats import collect_stats, profile_facts
 from guildboard.cloud.sync import SYNCED_SETTINGS, SyncSeam, forget_the_account
-from guildboard.config import AppPaths, Settings, load_settings, save_settings, settings_from_dict
+from guildboard.config import (
+    MAX_FOLDER_CHARS, MAX_GALLERY_FOLDERS, AppPaths, Settings, is_network_path, load_settings, save_settings, settings_from_dict,
+)
 from guildboard.events import EventBus
 from guildboard.freshness import history_notice
-from guildboard.gallery import DEMO_FOLDER, THUMBS_FOLDER, Gallery, demo_locator, find_folder
+from guildboard.gallery import (
+    DEMO_EXTRA_FOLDER, DEMO_FOLDER, THUMBS_FOLDER, Gallery, added_folders, demo_added, demo_locator, find_folder,
+    same_folder,
+)
 from guildboard.gameday import SERVER_NAMES, game_day
 from guildboard.gamewatch import GameWatch, SessionTracker, list_process_names
 from guildboard.history import History
@@ -76,6 +81,7 @@ from guildboard.sources.demo import (
     DEMO_ACCOUNT, DEMO_SERVER, DemoSource, seed_achievements, seed_appearances, seed_banners, seed_board, seed_codes, seed_history,
     seed_timers, seed_wishes,
 )
+from guildboard.sources.fandom_events import FandomEvents, live_fetchers
 from guildboard.store import Store, StoreError, iso, valid_text
 from guildboard.sync.policy import DAILY_CAP, MIN_GAP
 from guildboard.sync.runner import SyncRunner
@@ -91,6 +97,10 @@ from guildboard.views.timers import build_timers, count_ready
 from guildboard.views.commissions import build_commissions, count_left
 from guildboard.views.backlog import build_backlog
 from guildboard.views.ledger import build_history, build_ledger
+from guildboard.views.nextup import build_next_up
+from guildboard.views.primogems import build_primogems
+from guildboard.views.calendar import build_calendar
+from guildboard.views.endgame_resets import build_endgame_resets
 from guildboard.views import months, wrapped
 from guildboard.views.stats import build_stats
 from guildboard.views.endgame_card import MODE_ART, PUBLIC_INDEXES, build_endgame_card
@@ -470,6 +480,12 @@ class Core:
             level=self._adventure_rank, ready=lambda: self.settings.risk_acknowledged, named=self.icons_wanted,
         )
         self.wiki = WikiIcons(self.store, self.clock, fetch=hoyoverse)
+        # The dates of upcoming events, from the Genshin Impact Wiki on Fandom (the widgets plan, Task 2b): once a day, after the
+        # first run's consent, through netpolicy alone; the demo has no fetch and reads nothing.
+        upcoming, upcoming_pages = (None, None) if demo else live_fetchers()
+        self.fandom_events = FandomEvents(
+            self.store, self.clock, self.bus, upcoming, upcoming_pages, ready=lambda: self.settings.risk_acknowledged,
+        )
         # The Characters pages (the Characters plan): the wiki's entries and the art cache, and the service on them. The
         # wiki reads through the same seam as the icons' (none in the demo); the art cache's live download and the
         # service's methods are Part V's.
@@ -491,6 +507,7 @@ class Core:
             characters_demo.seed(self.store, DEMO_ACCOUNT.uid, self.clock.now())
         self._endgame_cycles_at_start()
         self._banners_task: asyncio.Task[None] | None = None
+        self._fandom_task: asyncio.Task[None] | None = None
         self._icons_task: asyncio.Task[None] | None = None
         # The importer's updates with the link it kept (the second pass design, 3.5): while the game runs, one task asks
         # for an update every AUTO_EVERY; when it closes, one more is asked for, in a task of its own.
@@ -512,6 +529,7 @@ class Core:
             lambda name, on: self.store.set_gallery_favourite(name, on, self.clock.now()),
             paths.data_dir / THUMBS_FOLDER,
             locate=demo_locator(paths.data_dir / DEMO_FOLDER, self.clock.now) if demo else find_folder,
+            added=demo_added(paths.data_dir / DEMO_EXTRA_FOLDER, self.clock.now) if demo else added_folders,
         )
         # The online account (the online design): nothing happens until the player signs in, and the demo has no client.
         self.online: Online | DemoOnline = DemoOnline(self.bus, self.clock) if demo else Online(
@@ -692,6 +710,33 @@ class Core:
             self.store, uid, self.server(), self.today(), self.settings, self.wish_import.ledger_import_state(),
             estimate=estimate, pity=pity,
         )
+
+    def primogems_model(self) -> dict[str, Any]:
+        """The Primogems widget's model: what the Ledger holds of today, this week and this month."""
+        return build_primogems(self.store, self.ledger_uid(), self.server(), self.today())
+
+    def calendar_model(self) -> dict[str, Any]:
+        """The Calendar widget's model: the banners and events of the last read of HoYoLAB's calendar, the endgame lane and what
+        is left to finish (views/calendar.py)."""
+        return build_calendar(self.store, self.clock.now(), self.server())
+
+    def next_up_model(self) -> dict[str, Any]:
+        """The Next up widget's model: one timeline put together from the Board model, the timers, Pulls' running banners, the
+        endgame resets and the Calendar's events, the last only once the Calendar was read (views/nextup.py)."""
+        now = self.clock.now()
+        endgame = self.endgame_resets_model()
+        calendar = build_calendar(self.store, now, self.server(), endgame["modes"])
+        return build_next_up(
+            self.board_model(), self.timers_model(), self.store.banners(), endgame,
+            calendar["events"] if calendar["read"] else None, now,
+        )
+
+    def endgame_resets_model(self) -> dict[str, Any]:
+        """The Endgame resets widget's model, from the endgame summaries the last sync kept (views/endgame_resets.py). Never
+        gated by the Characters pages' hidden features. Its pictures are the Stats card's: the art cache's addresses of the
+        mode headers and the Theater's medal, and no more than the cache keeps on disk."""
+        rows = {mode: self.store.wiki_entry(spec.wiki_entry) for mode, spec in MODE_ART.items()}
+        return build_endgame_resets(self.store, self.clock.now(), self.server(), self.art, rows)
 
     def _pulls_figures(self, uid: int | None) -> tuple[Estimate | None, dict[str, int] | None]:
         """What the Ledger takes from Pulls: the balance moved on to now, and the character banner's pity with its soft
@@ -946,6 +991,51 @@ class Core:
                 save_settings(self.paths.settings_path, self.settings)
                 self.bus.publish("settings_changed")
         return self.gallery.model()
+
+    def add_gallery_folder(self, text: Any) -> list[str]:
+        """Adds a folder of this PC to the gallery's list: the pictures and videos directly inside it are shown. Nothing in
+        it is opened, only its kind asked. SettingRefused, in plain words, for what cannot be added. The new list."""
+        if not isinstance(text, str) or not text.strip().strip('"'):
+            raise SettingRefused("Paste the path of a folder.")
+        path = text.strip().strip('"')
+        if len(path) > MAX_FOLDER_CHARS or is_network_path(path) or not Path(path).is_absolute():
+            raise SettingRefused("Paste the whole path of a folder on this PC, such as D:\\Videos.")
+        try:
+            wanted = Path(path)
+            path.encode("utf-8")  # a path the settings file could not hold is no path
+            found = wanted.is_dir()
+        except (OSError, ValueError):
+            found = False
+        if not found:
+            raise SettingRefused("That folder is not on this PC.")
+        folder = str(wanted)
+        if any(same_folder(folder, one) for one in self.settings.gallery_folders):
+            raise SettingRefused("That folder is already in the list.")
+        game = self.settings.gallery_folder or (self.gallery.folder and str(self.gallery.folder))
+        if game and same_folder(folder, game):
+            raise SettingRefused("That is the game's ScreenShot folder, which the gallery already shows.")
+        if len(self.settings.gallery_folders) >= MAX_GALLERY_FOLDERS:
+            raise SettingRefused(f"You can add up to {MAX_GALLERY_FOLDERS} folders.")
+        return self._set_gallery_folders([*self.settings.gallery_folders, folder])
+
+    def remove_gallery_folder(self, text: Any) -> list[str]:
+        """Takes a folder out of the gallery's list; its thumbnails go too. The folder itself is not touched.
+        SettingRefused when it is not in the list. The new list."""
+        kept = self.settings.gallery_folders
+        gone = [one for one in kept if isinstance(text, str) and same_folder(one, text.strip().strip('"'))]
+        if not gone:
+            raise SettingRefused("That folder is not in the list.")
+        result = self._set_gallery_folders([one for one in kept if one not in gone])
+        for one in gone:
+            self.gallery.folder_removed(Path(one))
+        return result
+
+    def _set_gallery_folders(self, folders: list[str]) -> list[str]:
+        self.settings.gallery_folders = folders
+        save_settings(self.paths.settings_path, self.settings)
+        self.gallery.forget()  # the next look lists the folders anew
+        self._settings_changed()
+        return list(folders)
 
     def _settings_changed(self) -> None:
         self.reminders.wake()  # the fishing rule moves fishing spots' ready times
@@ -1515,8 +1605,8 @@ class Core:
 
     def icons_wanted(self) -> None:
         """After a banners read that kept a new featured name, and after an entry was added to the wishlist: the icons of
-        the names the shown account's page shows are read, when one lacks its icon, at most once a day, and the pages are
-        told. A task of its own, which neither waits for; one at a time. Nothing is read before the first run's consent
+        the names the shown account's page shows are read, when one lacks its icon (each list at most once a day, as
+        every read of them), and the pages are told. A task of its own, which neither waits for; one at a time. Nothing is read before the first run's consent
         (rulings R15 and R21), whatever history is kept. The demo's wiki reads nothing."""
         if not self.settings.risk_acknowledged:
             return
@@ -1525,7 +1615,7 @@ class Core:
 
     async def _read_icons(self) -> None:
         try:
-            if await self.wiki.refresh(wanted_names(self.store, self.pulls.uid()), daily=True):
+            if await self.wiki.refresh(wanted_names(self.store, self.pulls.uid())):
                 self.pulls_changed()
         except Exception:  # the icons are asked for again at the next import
             log.exception("the icons could not be read")
@@ -1811,6 +1901,7 @@ class Core:
         self._watch_task = asyncio.create_task(self.gamewatch.run())
         self._reminders_task = asyncio.create_task(self.reminders.run())
         self._banners_task = asyncio.create_task(self.banners.run())
+        self._fandom_task = asyncio.create_task(self.fandom_events.run())
         self._update_task = asyncio.create_task(self.updater.run())
         self._codes_watch = asyncio.create_task(self._watch_codes())
         self._characters_task = asyncio.create_task(self.characters.run())
@@ -1827,7 +1918,7 @@ class Core:
             self._watch_task, self._reminders_task, self._banners_task, self._icons_task, self._auto_task,
             self._last_auto_task, self._update_task, self._codes_watch, self._codes_send,
             self._live_look, self._refresh_task, self._characters_task, self._online_task, self._daily_task,
-            self._import_task, self._endgame_art_task, self._warm_task,
+            self._import_task, self._endgame_art_task, self._warm_task, self._fandom_task,
         )
         for task in tasks:
             if task is not None:
@@ -1836,7 +1927,7 @@ class Core:
         self._watch_task = self._reminders_task = self._banners_task = self._icons_task = None
         self._auto_task = self._last_auto_task = self._update_task = self._codes_watch = self._codes_send = self._live_look = None
         self._refresh_task = self._characters_task = self._online_task = self._daily_task = self._import_task = None
-        self._endgame_art_task = self._warm_task = None
+        self._endgame_art_task = self._warm_task = self._fandom_task = None
         await self.checkin.stop()
         await self.online.stop()
         await self.characters.stop()

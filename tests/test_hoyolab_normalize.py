@@ -387,6 +387,82 @@ def test_the_calendar_gives_the_theaters_text_and_the_banners_with_their_feature
     )
 
 
+def _pool(pool_id, start, end, *avatars):
+    return {"pool_id": pool_id, "start_timestamp": str(start), "end_timestamp": str(end), "avatars": list(avatars)}
+
+
+def _face(name, rarity, icon=""):
+    return {"id": 1, "name": name, "rarity": rarity, "icon": icon}
+
+
+def test_the_calendars_banners_merge_character_pools_of_the_same_dates_and_keep_the_faces():
+    board = norm.normalize_calendar_board({
+        "avatar_card_pool_list": [
+            _pool(1, 1790000000, 1791000000, _face("Furina", 5, "https://act-webstatic.hoyoverse.com/f.png"), _face("Amber", 4)),
+            _pool(2, 1790000000, 1791000000, _face("Zhongli", 5), _face("Amber", 4), _face("Xingqiu", 4)),
+            _pool(3, 1791000000, 1792000000, _face("Raiden Shogun", 5)),
+        ],
+        "weapon_card_pool_list": [
+            {"pool_id": 4, "start_timestamp": "1790000000", "end_timestamp": "1791000000",
+             "weapon": [_face("The Four", 4), _face("A Sword", 5, "https://act-webstatic.hoyoverse.com/w.png")]},
+        ],
+        "mixed_card_pool_list": [
+            {"pool_id": 5, "start_timestamp": "1790000000", "end_timestamp": "1791000000",
+             "avatars": [_face("Skirk", 5)], "weapon": [_face("A Bow", 5)]},
+        ],
+    })
+    character, second, weapon, chronicled = board.banners
+    assert (character.kind, character.names) == ("character", ("Furina", "Zhongli"))  # one banner, 5-stars first
+    assert (character.starts, character.ends) == ("2026-09-21T14:13:20+00:00", "2026-10-03T04:00:00+00:00")
+    assert [(face.name, face.rarity) for face in character.faces] == [
+        ("Furina", 5), ("Zhongli", 5), ("Amber", 4), ("Xingqiu", 4)  # Amber once
+    ]
+    assert character.faces[0].icon_url == "https://act-webstatic.hoyoverse.com/f.png" and character.faces[1].icon_url == ""
+    assert (second.kind, second.names, second.starts) == ("character", ("Raiden Shogun",), "2026-10-03T04:00:00+00:00")
+    assert (weapon.kind, weapon.names, [face.name for face in weapon.faces]) == ("weapon", ("A Sword",), ["A Sword", "The Four"])
+    assert weapon.faces[0].icon_url == "https://act-webstatic.hoyoverse.com/w.png"
+    assert (chronicled.kind, chronicled.names) == ("chronicled", ("Skirk", "A Bow"))
+
+
+def test_the_calendars_events_keep_what_the_probe_proved_and_leave_the_challenges_out():
+    board = norm.normalize_calendar_board(samples.ACT_CALENDAR_DETAIL)
+    running, done, coming = board.events  # the Stygian entry (a challenge) and `fixed_act_list` are the Endgame lane's
+    assert (running.id, running.name, running.finished, running.status, running.dated) == (1, "An Event", False, 2, True)
+    assert (running.starts, running.ends) == ("2026-09-21T14:13:20+00:00", "2026-10-03T04:00:00+00:00")
+    assert running.primogems == 420  # the reward list's item 201 alone
+    assert (running.double_left, running.double_total, running.explored, running.source) == (2, 3, None, "hoyolab")
+    assert (done.finished, done.primogems, done.double_left, done.double_total) == (True, None, None, None)
+    assert (coming.status, coming.dated, coming.starts, coming.ends, coming.finished) == (1, False, None, None, False)
+
+
+def test_an_event_with_a_timestamp_of_zero_or_none_has_no_dates_and_one_dated_at_both_ends_is_dated():
+    def board(**stamps):
+        return norm.normalize_calendar_board({"act_list": [{"id": 1, "name": "E", **stamps}]}).events[0]
+
+    assert (board(start_timestamp="0", end_timestamp="0").dated, board().dated) == (False, False)
+    assert board(start_timestamp="1790000000", end_timestamp="0").dated is False  # a half-dated event is not dated
+    both = board(start_timestamp="1790000000", end_timestamp=1791000000)  # text or a number
+    assert (both.dated, both.starts, both.ends) == (True, "2026-09-21T14:13:20+00:00", "2026-10-03T04:00:00+00:00")
+
+
+def test_an_events_exploration_and_primogems_are_read_when_the_answer_carries_them():
+    event = norm.normalize_calendar_board({"act_list": [{
+        "id": 1, "name": "E", "is_finished": True, "explore_detail": {"explore_percent": 62.5, "is_finished": False},
+        "reward_list": [{"item_id": 201, "num": 20}, {"item_id": 201, "num": 40}, {"item_id": 202, "num": 9}],
+    }]}).events[0]
+    assert (event.explored, event.primogems, event.finished) == (62.5, 60, True)
+    bare = norm.normalize_calendar_board({"act_list": [{"id": 2, "name": "F", "reward_list": [{"item_id": 202, "num": 9}]}]}).events[0]
+    assert (bare.primogems, bare.explored) == (None, None)
+
+
+def test_a_calendar_that_is_empty_or_malformed_gives_empty_tuples():
+    for raw in ({}, {"act_list": "x", "avatar_card_pool_list": [1, None], "weapon_card_pool_list": {"a": 1}}):
+        board = norm.normalize_calendar_board(raw)
+        assert (board.banners, board.events) == ((), ())
+    odd = norm.normalize_calendar_board({"act_list": [{"id": "x", "name": "Odd", "reward_list": "none", "double_detail": 5}]})
+    assert [(e.name, e.primogems, e.double_left) for e in odd.events] == [("Odd", None, None)]
+
+
 def test_an_endgame_without_data_gives_empty_details():
     detail = norm.normalize_endgame_detail(None, {}, [])
     assert detail.abyss_stars is None and detail.abyss_halves == () and detail.abyss_ends is None
